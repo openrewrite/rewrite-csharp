@@ -1263,6 +1263,7 @@ public interface J : Rewrite.Core.Tree
                 Interface,
                 Annotation,
                 Record,
+                Value,
 
             }
 
