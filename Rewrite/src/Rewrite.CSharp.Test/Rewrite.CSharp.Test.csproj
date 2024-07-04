@@ -9,8 +9,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
       <ProjectReference Include="..\Rewrite.CSharp\Rewrite.CSharp.csproj" />
       <ProjectReference Include="..\Rewrite.Test\Rewrite.Test.csproj" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(UseProjectReference)'=='true'">
+        <ProjectReference Include="..\..\..\..\..\moderneinc\RewriteCSharp\src\Rewrite.Remote\Rewrite.Remote.csproj" />
     </ItemGroup>
 
     <Target Name="CopyCustomDirectory" BeforeTargets="CoreCompile">

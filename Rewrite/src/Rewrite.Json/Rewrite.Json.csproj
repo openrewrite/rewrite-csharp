@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(UseProjectReference)'=='true'">
-        <ProjectReference Include="$(SolutionDir)..\..\..\moderneinc\RewriteCSharp\src\Rewrite.Remote.Api\Rewrite.Remote.Api.csproj" />
+        <ProjectReference Include="..\..\..\..\..\moderneinc\RewriteCSharp\src\Rewrite.Remote.Api\Rewrite.Remote.Api.csproj" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)'=='Release' and '$(UseProjectReference)'!='true'">

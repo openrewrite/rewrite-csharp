@@ -24,6 +24,8 @@
       <ProjectReference Include="..\..\src\Rewrite.CSharp.Test\Rewrite.CSharp.Test.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.CSharp\Rewrite.CSharp.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.Test\Rewrite.Test.csproj" />
+      <ProjectReference Include="..\..\src\Rewrite.Java\Rewrite.Java.csproj" />
+      <ProjectReference Include="..\..\src\Rewrite.Core\Rewrite.Core.csproj" />
     </ItemGroup>
 
 </Project>
