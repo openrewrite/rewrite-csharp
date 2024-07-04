@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Rewrite.RewriteJson</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(UseProjectReference)'=='true'">
+        <ProjectReference Include="$(SolutionDir)..\..\..\moderneinc\RewriteCSharp\src\Rewrite.Remote.Api\Rewrite.Remote.Api.csproj" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Configuration)'=='Release' and '$(UseProjectReference)'!='true'">
+        <PackageReference Include="Rewrite.Remote.Api" Version="$(RewriteRemoteVersion)" />
+    </ItemGroup>
+
+</Project>

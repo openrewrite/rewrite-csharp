@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Rewrite.RewriteCSharp.Test</RootNamespace>
+        <IsTestProject>false</IsTestProject>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Rewrite.CSharp\Rewrite.CSharp.csproj" />
+      <ProjectReference Include="..\Rewrite.Test\Rewrite.Test.csproj" />
+    </ItemGroup>
+
+    <Target Name="CopyCustomDirectory" BeforeTargets="CoreCompile">
+        <ItemGroup>
+            <MySourceFiles Include="$(SolutionDir)/../rewrite-remote/build/install/rewrite-remote/**"/>
+        </ItemGroup>
+        <Copy
+                SourceFiles="@(MySourceFiles)"
+                DestinationFolder="$(ProjectDir)/bin/Resources/rewrite-remote/%(RecursiveDir)"
+        />
+    </Target>
+
+    <ItemGroup>
+        <EmbeddedResource Include="bin\Resources\**\*">
+            <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+        </EmbeddedResource>
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,12 @@
+<Project>
+    <ItemGroup>
+        <None Include="$(SolutionDir)resources\$(PackageIcon)" Pack="true" PackagePath="" />
+    </ItemGroup>
+
+    <Target Name="EnsuringPackageIconPresence" BeforeTargets="Pack">
+        <Copy
+                SourceFiles="$(SolutionDir)resources\$(PackageIcon)"
+                DestinationFiles="$(TargetDir)$(PackageIcon)"
+                SkipUnchangedFiles="true"/>
+    </Target>
+</Project>
