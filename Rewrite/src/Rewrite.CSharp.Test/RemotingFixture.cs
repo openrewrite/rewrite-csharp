@@ -113,7 +113,7 @@ public class RemotingFixture : IDisposable
     {
         _socket.Close();
         _process?.Kill();
-        if (_rewriteRemoteDir != null)
+        if (_rewriteRemoteDir != null && Directory.Exists(_rewriteRemoteDir))
             Directory.Delete(_rewriteRemoteDir, true);
     }
     

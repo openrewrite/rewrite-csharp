@@ -24,7 +24,7 @@
 
     <Target Name="CopyCustomDirectory" BeforeTargets="CoreCompile">
         <ItemGroup>
-            <MySourceFiles Include="$(SolutionDir)/../rewrite-remote/build/install/rewrite-remote/**"/>
+            <MySourceFiles Include="$(SolutionDir)/../../../moderneinc/rewrite-remote/rewrite-remote/build/install/rewrite-remote/**"/>
         </ItemGroup>
         <Copy
                 SourceFiles="@(MySourceFiles)"
