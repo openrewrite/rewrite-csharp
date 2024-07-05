@@ -8,6 +8,10 @@
         <IsTestProject>false</IsTestProject>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <IsPackable Condition="'$(PUBLISH_PHASE)'!='3'">false</IsPackable>
+    </PropertyGroup>
+
     <ItemGroup>
       <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
     </ItemGroup>
