@@ -224,6 +224,26 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         return usingDirective;
     }
 
+    public virtual J? VisitPropertyDeclaration(Cs.PropertyDeclaration propertyDeclaration, P p)
+    {
+        propertyDeclaration = propertyDeclaration.WithPrefix(VisitSpace(propertyDeclaration.Prefix, CsSpace.Location.PROPERTY_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(propertyDeclaration, p);
+        if (tempStatement is not Cs.PropertyDeclaration)
+        {
+            return tempStatement;
+        }
+        propertyDeclaration = (Cs.PropertyDeclaration) tempStatement;
+        propertyDeclaration = propertyDeclaration.WithMarkers(VisitMarkers(propertyDeclaration.Markers, p));
+        propertyDeclaration = propertyDeclaration.WithAttributeLists(ListUtils.Map(propertyDeclaration.AttributeLists, el => (Cs.AttributeList?)Visit(el, p)));
+        propertyDeclaration = propertyDeclaration.WithModifiers(ListUtils.Map(propertyDeclaration.Modifiers, el => (J.Modifier?)Visit(el, p)));
+        propertyDeclaration = propertyDeclaration.WithTypeExpression(VisitAndCast<TypeTree>(propertyDeclaration.TypeExpression, p)!);
+        propertyDeclaration = propertyDeclaration.Padding.WithInterfaceSpecifier(VisitRightPadded(propertyDeclaration.Padding.InterfaceSpecifier, CsRightPadded.Location.PROPERTY_DECLARATION_INTERFACE_SPECIFIER, p));
+        propertyDeclaration = propertyDeclaration.WithName(VisitAndCast<J.Identifier>(propertyDeclaration.Name, p)!);
+        propertyDeclaration = propertyDeclaration.WithAccessors(VisitAndCast<J.Block>(propertyDeclaration.Accessors, p)!);
+        propertyDeclaration = propertyDeclaration.Padding.WithInitializer(VisitLeftPadded(propertyDeclaration.Padding.Initializer, CsLeftPadded.Location.PROPERTY_DECLARATION_INITIALIZER, p));
+        return propertyDeclaration;
+    }
+
     protected JContainer<J2>? VisitContainer<J2>(JContainer<J2>? container, CsContainer.Location loc, P p) where J2 : J
     {
         if (container == null) {

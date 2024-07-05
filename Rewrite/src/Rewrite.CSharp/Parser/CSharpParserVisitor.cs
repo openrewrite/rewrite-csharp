@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -639,12 +640,50 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
 
     public override J? VisitAccessorDeclaration(AccessorDeclarationSyntax node)
     {
-        return base.VisitAccessorDeclaration(node);
+        var javaType = MapType(node);
+        return new J.MethodDeclaration(
+            Core.Tree.RandomId(),
+            Format(Leading(node)),
+            Markers.EMPTY.Add(new CompactConstructor(Core.Tree.RandomId())),
+            [],
+            MapModifiers(node.Modifiers),
+            null,
+            null,
+            new J.MethodDeclaration.IdentifierWithAnnotations(MapIdentifier(node.Keyword, javaType), []),
+            new JContainer<Statement>(
+                Space.EMPTY,
+                [],
+                Markers.EMPTY
+            ),
+            null,
+            node.ExpressionBody != null ? Convert<J.Block>(node.ExpressionBody) :
+            node.Body != null ? Convert<J.Block>(node.Body) : null,
+            null,
+            javaType as JavaType.Method
+        );
     }
 
-    public override J? VisitAccessorList(AccessorListSyntax node)
+    public override J.Block VisitAccessorList(AccessorListSyntax node)
     {
-        return base.VisitAccessorList(node);
+        return new J.Block(
+            Core.Tree.RandomId(),
+            Format(Leading(node.OpenBraceToken)),
+            Markers.EMPTY,
+            JRightPadded<bool>.Build(false),
+            node.Accessors.Select(MapAccessor).ToList(),
+            Format(Leading(node.CloseBraceToken))
+        );
+    }
+    
+    private JRightPadded<Statement> MapAccessor(AccessorDeclarationSyntax accessorDeclarationSyntax)
+    {
+        var methodDeclaration = Convert<J.MethodDeclaration>(accessorDeclarationSyntax)!;
+        var trailingSemicolon = accessorDeclarationSyntax.GetLastToken().IsKind(SyntaxKind.SemicolonToken);
+        return new JRightPadded<Statement>(
+            methodDeclaration,
+            trailingSemicolon ? Format(Leading(accessorDeclarationSyntax.SemicolonToken)) : Space.EMPTY,
+            Markers.EMPTY
+        );
     }
 
     public override J? VisitArgumentList(ArgumentListSyntax node)
@@ -2990,7 +3029,33 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
 
     public override J? VisitPropertyDeclaration(PropertyDeclarationSyntax node)
     {
-        return base.VisitPropertyDeclaration(node);
+        var typeTree = Convert<TypeTree>(node.Type)!;
+        return new Cs.PropertyDeclaration(
+            Core.Tree.RandomId(),
+            Format(Leading(node)),
+            Markers.EMPTY,
+            MapAttributes(node.AttributeLists) ?? [],
+            MapModifiers(node.Modifiers),
+            typeTree,
+            node.ExplicitInterfaceSpecifier != null
+                ? new JRightPadded<NameTree>(
+                    Convert<NameTree>(node.ExplicitInterfaceSpecifier.Name)!,
+                    Format(Leading(node.ExplicitInterfaceSpecifier.DotToken)),
+                    Markers.EMPTY
+                )
+                : null,
+            MapIdentifier(node.Identifier, typeTree.Type),
+            node.ExpressionBody != null
+                ? Convert<J.Block>(node.ExpressionBody)!
+                : Convert<J.Block>(node.AccessorList)!,
+            node.Initializer != null
+                ? new JLeftPadded<Expression>(
+                    Format(Leading(node.Initializer)),
+                    Convert<Expression>(node.Initializer.Value)!,
+                    Markers.EMPTY
+                )
+                : null
+        );
     }
 
     public override J? VisitArrowExpressionClause(ArrowExpressionClauseSyntax node)
@@ -3291,7 +3356,10 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
             );
         }
 
-        return JRightPadded<Statement>.Build(memberDeclaration);
+        return new JRightPadded<Statement>(memberDeclaration,
+            trailingSemicolon ? Format(Leading(m.GetLastToken())) : Space.EMPTY,
+            Markers.EMPTY
+        );
     }
 
     private JContainer<T>? MapParameters<T>(ParameterListSyntax? pls) where T : J
