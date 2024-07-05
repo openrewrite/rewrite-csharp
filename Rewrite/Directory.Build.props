@@ -3,8 +3,8 @@
         <Company>Moderne Inc.</Company>
         <PackageIcon>openrewrite.png</PackageIcon>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <Version>0.8.0-preview-2</Version>
+        <Version>0.8.0-preview-3</Version>
 
-        <RewriteRemoteVersion>0.8.0-preview-2</RewriteRemoteVersion>
+        <RewriteRemoteVersion>$(Version)</RewriteRemoteVersion>
     </PropertyGroup>
 </Project>

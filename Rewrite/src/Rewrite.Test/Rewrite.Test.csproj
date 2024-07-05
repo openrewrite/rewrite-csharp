@@ -21,11 +21,7 @@
       <PackageReference Include="xunit" Version="2.8.1" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)'=='Debug' and '$(IDEA_INITIAL_DIRECTORY)'!=''">
-        <ProjectReference Include="..\..\..\..\..\moderneinc\rewrite-remote\Rewrite.Remote\src\Rewrite.Remote.Api\Rewrite.Remote.Api.csproj" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(Configuration)'=='Release' and '$(UseProjectReference)'!='true'">
+    <ItemGroup>
         <PackageReference Include="Rewrite.Remote.Api" Version="$(RewriteRemoteVersion)" />
     </ItemGroup>
 </Project>

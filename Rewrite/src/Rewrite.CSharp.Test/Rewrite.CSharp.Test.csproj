@@ -18,8 +18,8 @@
       <ProjectReference Include="..\Rewrite.Test\Rewrite.Test.csproj" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)'=='Debug' and '$(IDEA_INITIAL_DIRECTORY)'!=''">
-        <ProjectReference Include="..\..\..\..\..\moderneinc\rewrite-remote\Rewrite.Remote\src\Rewrite.Remote\Rewrite.Remote.csproj" />
+    <ItemGroup>
+        <PackageReference Include="Rewrite.Remote.Api" Version="$(RewriteRemoteVersion)" />
     </ItemGroup>
 
     <Target Name="CopyCustomDirectory" BeforeTargets="CoreCompile">
