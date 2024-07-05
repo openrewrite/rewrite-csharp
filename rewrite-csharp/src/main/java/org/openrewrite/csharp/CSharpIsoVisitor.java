@@ -15,16 +15,8 @@
  */
 package org.openrewrite.csharp;
 
-import org.openrewrite.*;
-import org.openrewrite.internal.ListUtils;
-import org.openrewrite.internal.lang.Nullable;
-import org.openrewrite.marker.Markers;
-import org.openrewrite.tree.*;
-import org.openrewrite.java.JavaVisitor;
-import org.openrewrite.java.tree.*;
-import org.openrewrite.csharp.tree.*;
-
-import java.util.List;
+import org.openrewrite.csharp.tree.Cs;
+import org.openrewrite.java.tree.J;
 
 public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
 {
@@ -96,6 +88,11 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     @Override
     public Cs.UsingDirective visitUsingDirective(Cs.UsingDirective usingDirective, P p) {
         return (Cs.UsingDirective) super.visitUsingDirective(usingDirective, p);
+    }
+
+    @Override
+    public Cs.PropertyDeclaration visitPropertyDeclaration(Cs.PropertyDeclaration propertyDeclaration, P p) {
+        return (Cs.PropertyDeclaration) super.visitPropertyDeclaration(propertyDeclaration, p);
     }
 
     @Override

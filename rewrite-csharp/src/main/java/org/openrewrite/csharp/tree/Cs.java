@@ -112,19 +112,19 @@ public interface Cs extends J {
             return withCharsetName(charset.name());
         }
 
-        List<JRightPadded<Cs.UsingDirective>> usings;
+        List<JRightPadded<UsingDirective>> usings;
 
-        public List<Cs.UsingDirective> getUsings() {
+        public List<UsingDirective> getUsings() {
             return JRightPadded.getElements(usings);
         }
 
-        public Cs.CompilationUnit withUsings(List<Cs.UsingDirective> usings) {
+        public Cs.CompilationUnit withUsings(List<UsingDirective> usings) {
             return getPadding().withUsings(JRightPadded.withElements(this.usings, usings));
         }
 
         @Getter
         @With
-        List<Cs.AttributeList> attributeLists;
+        List<AttributeList> attributeLists;
 
         List<JRightPadded<Statement>> members;
 
@@ -415,7 +415,7 @@ public interface Cs extends J {
     final class AttributeList implements Cs {
         @Nullable
         @NonFinal
-        transient WeakReference<AttributeList.Padding> padding;
+        transient WeakReference<Padding> padding;
 
         @With
         @EqualsAndHashCode.Include
@@ -431,7 +431,7 @@ public interface Cs extends J {
         Markers markers;
 
         @Nullable
-        JRightPadded<J.Identifier> target;
+        JRightPadded<Identifier> target;
 
         @Nullable
         public J.Identifier getTarget() {
@@ -442,13 +442,13 @@ public interface Cs extends J {
             return getPadding().withTarget(JRightPadded.withElement(this.target, target));
         }
 
-        List<JRightPadded<J.Annotation>> attributes;
+        List<JRightPadded<Annotation>> attributes;
 
-        public List<J.Annotation> getAttributes() {
+        public List<Annotation> getAttributes() {
             return JRightPadded.getElements(attributes);
         }
 
-        public AttributeList withAttributes(List<J.Annotation> attributes) {
+        public AttributeList withAttributes(List<Annotation> attributes) {
             return getPadding().withAttributes(JRightPadded.withElements(this.attributes, attributes));
         }
 
@@ -457,15 +457,15 @@ public interface Cs extends J {
             return v.visitAttributeList(this, p);
         }
 
-        public AttributeList.Padding getPadding() {
-            AttributeList.Padding p;
+        public Padding getPadding() {
+            Padding p;
             if (this.padding == null) {
-                p = new AttributeList.Padding(this);
+                p = new Padding(this);
                 this.padding = new WeakReference<>(p);
             } else {
                 p = this.padding.get();
                 if (p == null || p.t != this) {
-                    p = new AttributeList.Padding(this);
+                    p = new Padding(this);
                     this.padding = new WeakReference<>(p);
                 }
             }
@@ -479,13 +479,13 @@ public interface Cs extends J {
 
         @RequiredArgsConstructor
         public static class Padding {
-            private final Cs.AttributeList t;
+            private final AttributeList t;
 
             public @Nullable JRightPadded<Identifier> getTarget() {
                 return t.target;
             }
 
-            public AttributeList withTarget(@Nullable JRightPadded<J.Identifier> target) {
+            public AttributeList withTarget(@Nullable JRightPadded<Identifier> target) {
                 return t.target == target ? t : new AttributeList(t.id, t.prefix, t.markers, target, t.attributes);
             }
 
@@ -557,7 +557,7 @@ public interface Cs extends J {
             return operator.getElement();
         }
 
-        public Cs.Binary withOperator(Cs.Binary.OperatorType operator) {
+        public Cs.Binary withOperator(OperatorType operator) {
             return getPadding().withOperator(this.operator.withElement(operator));
         }
 
@@ -617,11 +617,11 @@ public interface Cs extends J {
         public static class Padding {
             private final Cs.Binary t;
 
-            public JLeftPadded<Cs.Binary.OperatorType> getOperator() {
+            public JLeftPadded<OperatorType> getOperator() {
                 return t.operator;
             }
 
-            public Cs.Binary withOperator(JLeftPadded<Cs.Binary.OperatorType> operator) {
+            public Cs.Binary withOperator(JLeftPadded<OperatorType> operator) {
                 return t.operator == operator ? t : new Cs.Binary(t.id, t.prefix, t.markers, t.left, operator, t.right, t.type);
             }
         }
@@ -660,13 +660,13 @@ public interface Cs extends J {
             return getPadding().withName(JRightPadded.withElement(this.name, name));
         }
 
-        List<JRightPadded<Cs.UsingDirective>> usings;
+        List<JRightPadded<UsingDirective>> usings;
 
-        public List<Cs.UsingDirective> getUsings() {
+        public List<UsingDirective> getUsings() {
             return JRightPadded.getElements(usings);
         }
 
-        public Cs.BlockScopeNamespaceDeclaration withUsings(List<Cs.UsingDirective> usings) {
+        public BlockScopeNamespaceDeclaration withUsings(List<UsingDirective> usings) {
             return getPadding().withUsings(JRightPadded.withElements(this.usings, usings));
         }
 
@@ -676,7 +676,7 @@ public interface Cs extends J {
             return JRightPadded.getElements(members);
         }
 
-        public Cs.BlockScopeNamespaceDeclaration withMembers(List<Statement> members) {
+        public BlockScopeNamespaceDeclaration withMembers(List<Statement> members) {
             return getPadding().withMembers(JRightPadded.withElements(this.members, members));
         }
 
@@ -711,22 +711,22 @@ public interface Cs extends J {
 
         @RequiredArgsConstructor
         public static class Padding {
-            private final Cs.BlockScopeNamespaceDeclaration t;
+            private final BlockScopeNamespaceDeclaration t;
 
             public JRightPadded<Expression> getName() {
                 return t.name;
             }
 
             public BlockScopeNamespaceDeclaration withName(JRightPadded<Expression> name) {
-                return t.name == name ? t : new Cs.BlockScopeNamespaceDeclaration(t.id, t.prefix, t.markers, name, t.usings, t.members, t.end);
+                return t.name == name ? t : new BlockScopeNamespaceDeclaration(t.id, t.prefix, t.markers, name, t.usings, t.members, t.end);
             }
 
             public List<JRightPadded<UsingDirective>> getUsings() {
                 return t.usings;
             }
 
-            public Cs.BlockScopeNamespaceDeclaration withUsings(List<JRightPadded<UsingDirective>> usings) {
-                return t.usings == usings ? t : new Cs.BlockScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, usings, t.members, t.end);
+            public BlockScopeNamespaceDeclaration withUsings(List<JRightPadded<UsingDirective>> usings) {
+                return t.usings == usings ? t : new BlockScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, usings, t.members, t.end);
             }
 
             public List<JRightPadded<Statement>> getMembers() {
@@ -734,7 +734,7 @@ public interface Cs extends J {
             }
 
             public BlockScopeNamespaceDeclaration withMembers(List<JRightPadded<Statement>> members) {
-                return t.members == members ? t : new Cs.BlockScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, t.usings, members, t.end);
+                return t.members == members ? t : new BlockScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, t.usings, members, t.end);
             }
         }
     }
@@ -804,14 +804,14 @@ public interface Cs extends J {
 
         @RequiredArgsConstructor
         public static class Padding {
-            private final Cs.CollectionExpression t;
+            private final CollectionExpression t;
 
             public List<JRightPadded<Expression>> getElements() {
                 return t.elements;
             }
 
             public CollectionExpression withElements(List<JRightPadded<Expression>> elements) {
-                return t.elements == elements ? t : new Cs.CollectionExpression(t.id, t.prefix, t.markers, elements, t.type);
+                return t.elements == elements ? t : new CollectionExpression(t.id, t.prefix, t.markers, elements, t.type);
             }
         }
     }
@@ -876,13 +876,13 @@ public interface Cs extends J {
             return getPadding().withName(JRightPadded.withElement(this.name, name));
         }
 
-        List<JRightPadded<Cs.UsingDirective>> usings;
+        List<JRightPadded<UsingDirective>> usings;
 
-        public List<Cs.UsingDirective> getUsings() {
+        public List<UsingDirective> getUsings() {
             return JRightPadded.getElements(usings);
         }
 
-        public Cs.FileScopeNamespaceDeclaration withUsings(List<Cs.UsingDirective> usings) {
+        public FileScopeNamespaceDeclaration withUsings(List<UsingDirective> usings) {
             return getPadding().withUsings(JRightPadded.withElements(this.usings, usings));
         }
 
@@ -892,7 +892,7 @@ public interface Cs extends J {
             return JRightPadded.getElements(members);
         }
 
-        public Cs.FileScopeNamespaceDeclaration withMembers(List<Statement> members) {
+        public FileScopeNamespaceDeclaration withMembers(List<Statement> members) {
             return getPadding().withMembers(JRightPadded.withElements(this.members, members));
         }
 
@@ -923,22 +923,22 @@ public interface Cs extends J {
 
         @RequiredArgsConstructor
         public static class Padding {
-            private final Cs.FileScopeNamespaceDeclaration t;
+            private final FileScopeNamespaceDeclaration t;
 
             public JRightPadded<Expression> getName() {
                 return t.name;
             }
 
             public FileScopeNamespaceDeclaration withName(JRightPadded<Expression> name) {
-                return t.name == name ? t : new Cs.FileScopeNamespaceDeclaration(t.id, t.prefix, t.markers, name, t.usings, t.members);
+                return t.name == name ? t : new FileScopeNamespaceDeclaration(t.id, t.prefix, t.markers, name, t.usings, t.members);
             }
 
             public List<JRightPadded<UsingDirective>> getUsings() {
                 return t.usings;
             }
 
-            public Cs.FileScopeNamespaceDeclaration withUsings(List<JRightPadded<UsingDirective>> usings) {
-                return t.usings == usings ? t : new Cs.FileScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, usings, t.members);
+            public FileScopeNamespaceDeclaration withUsings(List<JRightPadded<UsingDirective>> usings) {
+                return t.usings == usings ? t : new FileScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, usings, t.members);
             }
 
             public List<JRightPadded<Statement>> getMembers() {
@@ -946,7 +946,7 @@ public interface Cs extends J {
             }
 
             public FileScopeNamespaceDeclaration withMembers(List<JRightPadded<Statement>> members) {
-                return t.members == members ? t : new Cs.FileScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, t.usings, members);
+                return t.members == members ? t : new FileScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, t.usings, members);
             }
         }
     }
@@ -1126,7 +1126,7 @@ public interface Cs extends J {
         }
 
         @Nullable
-        JRightPadded<J.Identifier> alias;
+        JRightPadded<Identifier> alias;
 
         @Nullable
         public J.Identifier getAlias() {
@@ -1195,12 +1195,172 @@ public interface Cs extends J {
             }
 
             @Nullable
-            public JRightPadded<J.Identifier> getAlias() {
+            public JRightPadded<Identifier> getAlias() {
                 return t.alias;
             }
 
-            public UsingDirective withAlias(JRightPadded<J.Identifier> alias) {
+            public UsingDirective withAlias(JRightPadded<Identifier> alias) {
                 return t.alias == alias ? t : new UsingDirective(t.id, t.prefix, t.markers, t.global, t.statik, t.unsafe, t.alias, t.namespaceOrType);
+            }
+        }
+    }
+
+
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    class PropertyDeclaration implements Cs, Statement, TypedTree {
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @Getter
+        @With
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @Getter
+        @With
+        Space prefix;
+
+        @Getter
+        @With
+        Markers markers;
+
+        @With
+        @Getter
+        List<AttributeList> attributeLists;
+
+        @With
+        @Getter
+        List<Modifier> modifiers;
+
+        @With
+        @Getter
+        TypeTree typeExpression;
+
+        @Nullable
+        JRightPadded<NameTree> interfaceSpecifier;
+
+        @With
+        @Getter
+        Identifier name;
+
+        @With
+        @Getter
+        Block accessors;
+
+        @Nullable
+        JLeftPadded<Expression> initializer;
+
+
+        @Override
+        public CoordinateBuilder.Statement getCoordinates() {
+            return new CoordinateBuilder.Statement(this);
+        }
+
+        public JavaType getType() {
+            return typeExpression.getType();
+        }
+
+        public PropertyDeclaration withType(@Nullable JavaType type) {
+            return getPadding().withType(this.typeExpression.withType(type));
+        }
+
+        @Nullable
+        public NameTree getInterfaceSpecifier() {
+            return interfaceSpecifier!= null ? interfaceSpecifier.getElement() : null;
+        }
+
+        public PropertyDeclaration withInterfaceSpecifier(@Nullable NameTree interfaceSpecifier) {
+            return getPadding().withInterfaceSpecifier(JRightPadded.withElement(this.interfaceSpecifier, interfaceSpecifier));
+        }
+
+        @Nullable
+        public Expression getInitializer() {
+            return initializer != null ? initializer.getElement() : null;
+        }
+
+        public PropertyDeclaration withInitializer(@Nullable Expression initializer) {
+            return getPadding().withInitializer(JLeftPadded.withElement(this.initializer, initializer));
+        }
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitPropertyDeclaration(this, p);
+        }
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.pd != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final PropertyDeclaration pd;
+
+            public TypeTree getType() {
+                return pd.typeExpression;
+            }
+
+            @Nullable
+            public JRightPadded<NameTree> getInterfaceSpecifier() {
+                return pd.interfaceSpecifier;
+            }
+
+            public PropertyDeclaration withInterfaceSpecifier(@Nullable JRightPadded<NameTree> interfaceSpecifier) {
+                return pd.interfaceSpecifier == interfaceSpecifier ? pd : new PropertyDeclaration(pd.id,
+                        pd.prefix,
+                        pd.markers,
+                        pd.attributeLists,
+                        pd.modifiers,
+                        pd.typeExpression,
+                        interfaceSpecifier,
+                        pd.name,
+                        pd.accessors,
+                        pd.initializer);
+            }
+
+            public PropertyDeclaration withType(TypeTree type) {
+                return pd.typeExpression == type ? pd : new PropertyDeclaration(pd.id,
+                        pd.prefix,
+                        pd.markers,
+                        pd.attributeLists,
+                        pd.modifiers,
+                        type,
+                        pd.interfaceSpecifier,
+                        pd.name,
+                        pd.accessors,
+                        pd.initializer);
+            }
+
+            @Nullable
+            public JLeftPadded<Expression> getInitializer() {
+                return pd.initializer;
+            }
+
+            public PropertyDeclaration withInitializer(@Nullable JLeftPadded<Expression> initializer) {
+                return pd.initializer == initializer ? pd : new PropertyDeclaration(pd.id,
+                        pd.prefix,
+                        pd.markers,
+                        pd.attributeLists,
+                        pd.modifiers,
+                        pd.typeExpression,
+                        pd.interfaceSpecifier,
+                        pd.name,
+                        pd.accessors,
+                        initializer);
             }
         }
     }

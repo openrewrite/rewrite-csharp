@@ -15,12 +15,12 @@
  */
 package org.openrewrite.csharp.marker;
 
-import java.util.UUID;
-
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import lombok.With;
 import org.openrewrite.marker.Marker;
+
+import java.util.UUID;
 
 @Value
 @With

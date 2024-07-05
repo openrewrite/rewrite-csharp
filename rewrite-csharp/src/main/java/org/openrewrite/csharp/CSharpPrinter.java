@@ -193,6 +193,28 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     }
 
     @Override
+    public J visitPropertyDeclaration(Cs.PropertyDeclaration propertyDeclaration,
+            PrintOutputCapture<P> p) {
+        beforeSyntax(propertyDeclaration, CsSpace.Location.PROPERTY_DECLARATION_PREFIX, p);
+        visit(propertyDeclaration.getAttributeLists(), p);
+        for (J.Modifier m : propertyDeclaration.getModifiers()) {
+            delegate.visitModifier(m, p);
+        }
+        visit(propertyDeclaration.getTypeExpression(), p);
+        if (propertyDeclaration.getPadding().getInterfaceSpecifier() != null) {
+            visitRightPadded(propertyDeclaration.getPadding().getInterfaceSpecifier(), CsRightPadded.Location.PROPERTY_DECLARATION_INTERFACE_SPECIFIER, p);
+            p.append('.');
+        }
+        visit(propertyDeclaration.getName(), p);
+        visit(propertyDeclaration.getAccessors(), p);
+        if(propertyDeclaration.getInitializer() != null) {
+            visitLeftPadded("=", propertyDeclaration.getPadding().getInitializer(), CsLeftPadded.Location.PROPERTY_DECLARATION_INITIALIZER, p);
+        }
+        afterSyntax(propertyDeclaration, p);
+        return propertyDeclaration;
+    }
+
+    @Override
     public J visitUsingDirective(Cs.UsingDirective usingDirective, PrintOutputCapture<P> p) {
         beforeSyntax(usingDirective, CsSpace.Location.USING_DIRECTIVE_PREFIX, p);
         if (usingDirective.isGlobal()) {
@@ -224,6 +246,17 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     @Override
     public Space visitSpace(Space space, Space.Location loc, PrintOutputCapture<P> p) {
         return delegate.visitSpace(space, loc, p);
+    }
+
+    protected void visitLeftPadded(@Nullable String prefix, @Nullable JLeftPadded<? extends J> leftPadded, CsLeftPadded.Location location, PrintOutputCapture<P> p) {
+        if (leftPadded != null) {
+            beforeSyntax(leftPadded.getBefore(), leftPadded.getMarkers(), location.getBeforeLocation(), p);
+            if (prefix != null) {
+                p.append(prefix);
+            }
+            visit(leftPadded.getElement(), p);
+            afterSyntax(leftPadded.getMarkers(), p);
+        }
     }
 
     protected void visitContainer(@Nullable String before, @Nullable JContainer<? extends J> container, CsContainer.Location location,
@@ -297,6 +330,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
             String kind = "";
             switch (classDecl.getPadding().getKind().getType()) {
                 case Class:
+                case Annotation:
                     kind = "class";
                     break;
                 case Enum:
@@ -305,11 +339,11 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
                 case Interface:
                     kind = "interface";
                     break;
-                case Annotation:
-                    kind = "@interface";
-                    break;
                 case Record:
                     kind = "record";
+                    break;
+                case Value:
+                    kind = "struct";
                     break;
             }
 
@@ -356,7 +390,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
                 p.append("=>");
                 visitStatements(block.getPadding().getStatements(), JRightPadded.Location.BLOCK_STATEMENT, p);
                 visitSpace(block.getEnd(), Space.Location.BLOCK_END, p);
-            } else if (!block.getMarkers().findFirst(OmitBraces.class).isPresent()) {
+            } else if (block.getMarkers().findFirst(OmitBraces.class).isEmpty()) {
                 p.append('{');
                 visitStatements(block.getPadding().getStatements(), JRightPadded.Location.BLOCK_STATEMENT, p);
                 visitSpace(block.getEnd(), Space.Location.BLOCK_END, p);
@@ -455,11 +489,11 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
             this.visitSpace(ctrl.getPrefix(), Space.Location.FOR_EACH_CONTROL_PREFIX, p);
             p.append('(');
             this.visitRightPadded(ctrl.getPadding().getVariable(),
-                    org.openrewrite.java.tree.JRightPadded.Location.FOREACH_VARIABLE,
+                    JRightPadded.Location.FOREACH_VARIABLE,
                     "in", p);
-            this.visitRightPadded(ctrl.getPadding().getIterable(), org.openrewrite.java.tree.JRightPadded.Location.FOREACH_ITERABLE, "", p);
+            this.visitRightPadded(ctrl.getPadding().getIterable(), JRightPadded.Location.FOREACH_ITERABLE, "", p);
             p.append(')');
-            this.visitStatement(forEachLoop.getPadding().getBody(), org.openrewrite.java.tree.JRightPadded.Location.FOR_BODY, p);
+            this.visitStatement(forEachLoop.getPadding().getBody(), JRightPadded.Location.FOR_BODY, p);
             this.afterSyntax((J) forEachLoop, p);
             return forEachLoop;
         }
@@ -573,6 +607,11 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         }
 
         @Override
+        public void visitModifier(J.Modifier mod, PrintOutputCapture<P> p) {
+            super.visitModifier(mod, p);
+        }
+
+        @Override
         public <M extends Marker> M visitMarker(Marker marker, PrintOutputCapture<P> p) {
             if (marker instanceof Semicolon) {
                 p.append(';');
@@ -595,11 +634,13 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
                 // do nothing, comma is printed at the block level
             } else if (s instanceof Cs.ExpressionStatement || s instanceof Cs.AssignmentOperation) {
                 p.append(';');
-            } else if (s instanceof J.ClassDeclaration && ((J.ClassDeclaration) s).getBody().getMarkers().findFirst(OmitBraces.class).isPresent()) {
+            } else if (s instanceof Cs.PropertyDeclaration && (((Cs.PropertyDeclaration) s).getInitializer() != null || ((Cs.PropertyDeclaration) s).getAccessors().getMarkers().findFirst(SingleExpressionBlock.class).isPresent())) {
+                p.append(';');
+            }
+            else if (s instanceof J.ClassDeclaration cd && cd.getBody().getMarkers().findFirst(OmitBraces.class).isPresent()) {
                 // class declaration without braces always require a semicolon
                 p.append(';');
-            } else if (s instanceof Cs.AnnotatedStatement && ((Cs.AnnotatedStatement) s).getStatement() instanceof J.ClassDeclaration &&
-                       ((J.ClassDeclaration) ((Cs.AnnotatedStatement) s).getStatement()).getBody().getMarkers().findFirst(OmitBraces.class).isPresent()) {
+            } else if (s instanceof Cs.AnnotatedStatement as && as.getStatement() instanceof J.ClassDeclaration cd && cd.getBody().getMarkers().findFirst(OmitBraces.class).isPresent()) {
                 // class declaration without braces always require a semicolon
                 p.append(';');
             } else {

@@ -15,8 +15,6 @@
  */
 package org.openrewrite.csharp.tree;
 
-import org.openrewrite.java.tree.Space;
-
 public interface CsRightPadded {
     enum Location {
         ARRAY_RANK_SPECIFIER_SIZE(CsSpace.Location.ARRAY_RANK_SPECIFIER_SIZE_SUFFIX),
@@ -32,9 +30,10 @@ public interface CsRightPadded {
         FILE_SCOPE_NAMESPACE_DECLARATION_NAME(CsSpace.Location.FILE_SCOPE_NAMESPACE_DECLARATION_NAME_PREFIX),
         FILE_SCOPE_NAMESPACE_DECLARATION_USINGS(CsSpace.Location.FILE_SCOPE_NAMESPACE_DECLARATION_USINGS_SUFFIX),
         NULL_SAFE_EXPRESSION_EXPRESSION(CsSpace.Location.NULL_SAFE_EXPRESSION_EXPRESSION_SUFFIX),
+        PROPERTY_DECLARATION_INTERFACE_SPECIFIER(CsSpace.Location.PROPERTY_DECLARATION_INTERFACE_SPECIFIER_PREFIX),
         USING_DIRECTIVE_ALIAS(CsSpace.Location.USING_DIRECTIVE_ALIAS_SUFFIX),
         USING_DIRECTIVE_GLOBAL(CsSpace.Location.USING_DIRECTIVE_GLOBAL_SUFFIX),
-        ;
+	    ;
 
         private final CsSpace.Location afterLocation;
 

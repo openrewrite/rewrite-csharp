@@ -18,7 +18,8 @@ package org.openrewrite.csharp.tree;
 public class CsContainer {
     @SuppressWarnings("LombokGetterMayBeUsed")
     public enum Location {
-        ARRAY_RANK_SPECIFIER_SIZES(CsSpace.Location.ARRAY_RANK_SPECIFIER_SIZES, CsRightPadded.Location.ARRAY_RANK_SPECIFIER_SIZE);
+        ARRAY_RANK_SPECIFIER_SIZES(CsSpace.Location.ARRAY_RANK_SPECIFIER_SIZES, CsRightPadded.Location.ARRAY_RANK_SPECIFIER_SIZE),
+        ;
 
         private final CsSpace.Location beforeLocation;
         private final CsRightPadded.Location elementLocation;
