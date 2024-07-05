@@ -11,7 +11,7 @@
       <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(UseProjectReference)'=='true'">
+    <ItemGroup Condition="'$(Configuration)'=='Debug' and '$(IDEA_INITIAL_DIRECTORY)'!=''">
         <ProjectReference Include="..\..\..\..\..\moderneinc\rewrite-remote\Rewrite.Remote\src\Rewrite.Remote.Api\Rewrite.Remote.Api.csproj" />
     </ItemGroup>
 
