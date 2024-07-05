@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(UseProjectReference)'=='true'">
-        <ProjectReference Include="..\..\..\..\..\moderneinc\RewriteCSharp\src\Rewrite.Remote\Rewrite.Remote.csproj" />
+        <ProjectReference Include="..\..\..\..\..\moderneinc\rewrite-remote\Rewrite.Remote\src\Rewrite.Remote\Rewrite.Remote.csproj" />
     </ItemGroup>
 
     <Target Name="CopyCustomDirectory" BeforeTargets="CoreCompile">
