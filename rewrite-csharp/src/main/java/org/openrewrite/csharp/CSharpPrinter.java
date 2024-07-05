@@ -390,7 +390,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
                 p.append("=>");
                 visitStatements(block.getPadding().getStatements(), JRightPadded.Location.BLOCK_STATEMENT, p);
                 visitSpace(block.getEnd(), Space.Location.BLOCK_END, p);
-            } else if (block.getMarkers().findFirst(OmitBraces.class).isEmpty()) {
+            } else if (!block.getMarkers().findFirst(OmitBraces.class).isPresent()) {
                 p.append('{');
                 visitStatements(block.getPadding().getStatements(), JRightPadded.Location.BLOCK_STATEMENT, p);
                 visitSpace(block.getEnd(), Space.Location.BLOCK_END, p);
@@ -634,13 +634,11 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
                 // do nothing, comma is printed at the block level
             } else if (s instanceof Cs.ExpressionStatement || s instanceof Cs.AssignmentOperation) {
                 p.append(';');
-            } else if (s instanceof Cs.PropertyDeclaration && (((Cs.PropertyDeclaration) s).getInitializer() != null || ((Cs.PropertyDeclaration) s).getAccessors().getMarkers().findFirst(SingleExpressionBlock.class).isPresent())) {
-                p.append(';');
-            }
-            else if (s instanceof J.ClassDeclaration cd && cd.getBody().getMarkers().findFirst(OmitBraces.class).isPresent()) {
+            } else if (s instanceof J.ClassDeclaration && ((J.ClassDeclaration) s).getBody().getMarkers().findFirst(OmitBraces.class).isPresent()) {
                 // class declaration without braces always require a semicolon
                 p.append(';');
-            } else if (s instanceof Cs.AnnotatedStatement as && as.getStatement() instanceof J.ClassDeclaration cd && cd.getBody().getMarkers().findFirst(OmitBraces.class).isPresent()) {
+            } else if (s instanceof Cs.AnnotatedStatement && ((Cs.AnnotatedStatement) s).getStatement() instanceof J.ClassDeclaration &&
+                       ((J.ClassDeclaration) ((Cs.AnnotatedStatement) s).getStatement()).getBody().getMarkers().findFirst(OmitBraces.class).isPresent()) {
                 // class declaration without braces always require a semicolon
                 p.append(';');
             } else {
