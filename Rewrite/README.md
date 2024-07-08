@@ -16,49 +16,42 @@ Create a directory like `~/localNuGetFeed` and add it to your `~/.nuget/NuGet/Nu
 
 This is the feed we will publish to locally.
 
-### Phase 0: Start by creating the NuGet package for `Rewrite.Remote.Api`
-
-Commands are executed from `moderneinc/rewrite-remote:Rewrite.Remote`.
-
-NOTE: So that all packages can be published in one go, we collect them in one place.
-
-1. Update `<Version>` and probably also `<RewriteVersion>` tag in `Directory.Build.props` file
-2. Run `dotnet pack`
-   ```shell
-   PUBLISH_PHASE=0 dotnet pack --output ~/localNuGetFeed
-   ```
-
-### Phase 1: Create NuGet packages for `Rewrite`
+### Phase 1: Create NuGet packages for rest of `Rewrite`
 
 Commands are executed from `openrewrite/rewrite-csharp:Rewrite`.
 
-1. Update `<Version>` and probably also `<RewriteRemoteVersion>` tag in `Directory.Build.props` file
+1. [Optionally] Restore all dependencies:
+   ```shell
+      dotnet restore
+   ```
 2. Run `dotnet pack`
    ```shell
-   PUBLISH_PHASE=1 dotnet pack --output ~/localNuGetFeed
+   dotnet pack --output ~/localNuGetFeed
    ```
 
 ### Phase 2: Create NuGet packages for rest of `Rewrite.Remote`
 
+Commands are executed from `moderneinc/rewrite-remote:rewrite-remote`.
+
+1. Build Rewrite-Remote Java Server
+   ```shell
+   ./gradlew distZip
+   ```
+
 Commands are executed from `moderneinc/rewrite-remote:Rewrite.Remote`.
 
-Run `dotnet pack`
-```shell
-PUBLISH_PHASE=2 dotnet pack --output ~/localNuGetFeed
-```
-
-### Phase 3: Create NuGet packages for rest of `Rewrite`
-
-Commands are executed from `openrewrite/rewrite-csharp:Rewrite:` unless otherwise indicated.
-
-1. Run the following build in `moderneinc/rewrite-remote:rewrite-remote` to create the binaries which will be included in `Rewrite.CSharp.Test`
+2. [Optionally] Restore all dependencies:
    ```shell
-   ./gradlew installDist
+      dotnet restore
    ```
-2. Run `dotnet pack`
+3. Check reference on the latest Rewrite dependencies & Run `dotnet pack`
    ```shell
-   PUBLISH_PHASE=3 dotnet pack --output ~/localNuGetFeed
+   dotnet pack --output ~/localNuGetFeed
    ```
+   
+Commands are executed from `openrewrite/rewrite-csharp:Rewrite`.
+
+3. Run Rewrite Integration tests with the latest `Rewrite.CShapr.Test` bundle to see all tests passes 
 
 ### Publish to NuGet
 

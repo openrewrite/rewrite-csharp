@@ -7,7 +7,7 @@ using Rewrite.RewriteJava.Tree;
 using Rewrite.Test;
 using ExecutionContext = Rewrite.Core.ExecutionContext;
 
-namespace Rewrite.RewriteCSharp.Test;
+namespace Rewrite.RewriteCSharp.Test.Api;
 
 public static class Assertions
 {

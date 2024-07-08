@@ -11,8 +11,4 @@
       <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Rewrite.Remote.Api" Version="$(RewriteRemoteVersion)" />
-    </ItemGroup>
-
 </Project>

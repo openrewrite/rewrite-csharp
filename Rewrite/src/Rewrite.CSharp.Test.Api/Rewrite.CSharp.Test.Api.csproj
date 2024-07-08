@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Rewrite.RewriteCSharp.Test.Api</RootNamespace>
+        <IsTestProject>false</IsTestProject>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
+      <ProjectReference Include="..\Rewrite.Java\Rewrite.Java.csproj" />
+      <ProjectReference Include="..\Rewrite.CSharp\Rewrite.CSharp.csproj" />
+      <ProjectReference Include="..\Rewrite.Test\Rewrite.Test.csproj" />
+    </ItemGroup>
+
+<!--    <Target Name="CopyCustomDirectory" BeforeTargets="CoreCompile">-->
+<!--        <ItemGroup>-->
+<!--            <MySourceFiles Include="$(SolutionDir)/../../../moderneinc/rewrite-remote/rewrite-remote/build/install/rewrite-remote/**"/>-->
+<!--        </ItemGroup>-->
+<!--        <Copy-->
+<!--                SourceFiles="@(MySourceFiles)"-->
+<!--                DestinationFolder="$(ProjectDir)/bin/Resources/rewrite-remote/%(RecursiveDir)"-->
+<!--        />-->
+<!--    </Target>-->
+
+
+    <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
+        <PackageReference Include="FluentAssertions" Version="7.0.0-alpha.4" />
+        <PackageReference Include="xunit" Version="2.8.1" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <EmbeddedResource Include="bin\Resources\**\*">
+            <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+        </EmbeddedResource>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Content Include="obj\project.assets.json" />
+    </ItemGroup>
+
+</Project>

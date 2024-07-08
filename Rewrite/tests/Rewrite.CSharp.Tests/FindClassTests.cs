@@ -1,4 +1,4 @@
-using Rewrite.RewriteCSharp.Test;
+using Rewrite.RewriteCSharp.Test.Api;
 using Rewrite.RewriteJava;
 using Rewrite.Test;
 

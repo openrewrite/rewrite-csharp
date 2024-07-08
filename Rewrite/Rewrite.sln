@@ -22,7 +22,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Java.Tests", "tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Test", "src\Rewrite.Test\Rewrite.Test.csproj", "{D3F48947-C702-4D1A-B6EE-96B89D13953D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.CSharp.Test", "src\Rewrite.CSharp.Test\Rewrite.CSharp.Test.csproj", "{3D70D4FA-3BA2-4230-B474-5A70DB23B8CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.CSharp.Test.Api", "src\Rewrite.CSharp.Test.Api\Rewrite.CSharp.Test.Api.csproj", "{3D70D4FA-3BA2-4230-B474-5A70DB23B8CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

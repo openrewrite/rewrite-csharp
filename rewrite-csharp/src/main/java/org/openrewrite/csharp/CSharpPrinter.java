@@ -634,6 +634,8 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
                 // do nothing, comma is printed at the block level
             } else if (s instanceof Cs.ExpressionStatement || s instanceof Cs.AssignmentOperation) {
                 p.append(';');
+            } else if (s instanceof Cs.PropertyDeclaration && (((Cs.PropertyDeclaration) s).getInitializer() != null || ((Cs.PropertyDeclaration) s).getAccessors().getMarkers().findFirst(SingleExpressionBlock.class).isPresent())) {
+                p.append(';');
             } else if (s instanceof J.ClassDeclaration && ((J.ClassDeclaration) s).getBody().getMarkers().findFirst(OmitBraces.class).isPresent()) {
                 // class declaration without braces always require a semicolon
                 p.append(';');

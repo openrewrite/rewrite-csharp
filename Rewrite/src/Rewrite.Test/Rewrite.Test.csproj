@@ -8,10 +8,6 @@
         <IsTestProject>false</IsTestProject>
     </PropertyGroup>
 
-    <PropertyGroup>
-        <IsPackable Condition="'$(PUBLISH_PHASE)'!='3'">false</IsPackable>
-    </PropertyGroup>
-
     <ItemGroup>
       <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
     </ItemGroup>
@@ -19,9 +15,5 @@
     <ItemGroup>
       <PackageReference Include="FluentAssertions" Version="7.0.0-alpha.4" />
       <PackageReference Include="xunit" Version="2.8.1" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Rewrite.Remote.Api" Version="$(RewriteRemoteVersion)" />
     </ItemGroup>
 </Project>

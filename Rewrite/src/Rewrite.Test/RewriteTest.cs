@@ -2,7 +2,6 @@ using System.Reflection;
 using System.Text;
 using Rewrite.Core;
 using Rewrite.Core.Quark;
-using Rewrite.Remote;
 using ExecutionContext = Rewrite.Core.ExecutionContext;
 
 namespace Rewrite.Test;
@@ -62,12 +61,11 @@ public class RewriteTest
 
         var ctx = testMethodSpec.ExecutionContext ??
                   testClassSpec.ExecutionContext ?? DefaultExecutionContext(sourceSpecs);
-        var remotingContext = IRemotingContext.Current();
-        if (remotingContext != null)
+        var testExecutionContext = ITestExecutionContext.Current();
+        if (testExecutionContext != null)
         {
-            remotingContext.Reset();
-            remotingContext.Client?.Reset();
-            RemotingExecutionContextView.View(ctx).RemotingContext = remotingContext;
+            testExecutionContext.Reset(ctx);
+            // RemotingExecutionContextView.View(ctx).RemotingContext = /**/testExecutionContext;
         }
 
         foreach (var sourceSpec in sourceSpecs)
@@ -218,7 +216,7 @@ public class RewriteTest
         }
 
         var beforeList = specBySourceFile.Keys.ToList();
-        var afterList = remotingContext!.Client!.RunRecipe(recipe.GetType().FullName!, recipeOptions, beforeList);
+        var afterList = testExecutionContext!.RunRecipe(recipe.GetType().FullName!, recipeOptions, beforeList);
         for (var i = 0; i < beforeList.Count; i++)
         {
             var before = beforeList[i];

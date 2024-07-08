@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
-using Rewrite.Remote;
 using FileAttributes = Rewrite.Core.FileAttributes;
 
 namespace Rewrite.RewriteJava.Tree;
@@ -1496,7 +1495,7 @@ public interface J : Rewrite.Core.Tree
 
         public ITreeVisitor<Core.Tree, PrintOutputCapture<P>> Printer<P>(Cursor cursor)
         {
-            return new RemotePrinter<P>();
+            return IPrinterFactory.Current()!.CreatePrinter<P>();
         }
     }
 

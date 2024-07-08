@@ -1,5 +1,5 @@
 using FluentAssertions;
-using Rewrite.RewriteCSharp.Test;
+using Rewrite.RewriteCSharp.Test.Api;
 using Rewrite.RewriteJava.Tree;
 using Rewrite.Test;
 

@@ -1,11 +1,11 @@
 plugins {
     id("org.openrewrite.build.recipe-library") version "latest.release"
-    application
 }
 
 // Set as appropriate for your organization
 group = "org.openrewrite"
 description = "Rewrite C#."
+version = "0.8.0-SNAPSHOT"
 
 dependencies {
     // The bom version can also be set to a specific version

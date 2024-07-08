@@ -1,3 +1,4 @@
+using Rewrite.RewriteCSharp.Test.Api;
 using Rewrite.RewriteCSharp.Test;
 
 namespace Rewrite.CSharp.Tests;
