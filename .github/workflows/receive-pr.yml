@@ -47,9 +47,9 @@ jobs:
       # Execute recipes
       - name: Apply OpenRewrite best practices
         uses: gradle/actions/setup-gradle@v3
+        working-directory: rewrite-csharp
         with:
           arguments: ${{ env.GRADLE_SWITCHES }} licenseFormat rewriteRun -Drewrite.activeRecipe=org.openrewrite.recipes.OpenRewriteBestPractices
-          build-root-directory: rewrite-csharp
 
       # Capture the diff
       - name: Create patch
