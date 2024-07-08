@@ -35,9 +35,9 @@ jobs:
       - uses: gradle/actions/wrapper-validation@v3
       - name: build
         uses: gradle/actions/setup-gradle@v3
-        build-root-directory: rewrite-csharp
         with:
           arguments: ${{ env.GRADLE_SWITCHES }} build
+          build-root-directory: rewrite-csharp
 
       - name: publish-snapshots
         if: github.event_name != 'pull_request'
