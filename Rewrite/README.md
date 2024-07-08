@@ -29,6 +29,13 @@ Commands are executed from `openrewrite/rewrite-csharp:Rewrite`.
    dotnet pack --output ~/localNuGetFeed
    ```
 
+Commands are executed from `openrewrite/rewrite-csharp:rewrite-csharp`.  
+
+3. Publish Java bits of Rewrite project
+   ```shell
+   ./gradlew publishToMavenLocal
+   ```
+
 ### Phase 2: Create NuGet packages for rest of `Rewrite.Remote`
 
 Commands are executed from `moderneinc/rewrite-remote:rewrite-remote`.
