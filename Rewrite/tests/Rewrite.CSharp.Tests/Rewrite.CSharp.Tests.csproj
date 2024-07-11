@@ -13,7 +13,6 @@
         <PackageReference Include="coverlet.collector" Version="6.0.0"/>
         <PackageReference Include="FluentAssertions" Version="7.0.0-alpha.4" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
-        <PackageReference Include="Rewrite.CSharp.Test" Version="$(RewriteRemoteVersion)" />
         <PackageReference Include="xunit" Version="2.8.1" />
     </ItemGroup>
 
@@ -27,6 +26,14 @@
       <ProjectReference Include="..\..\src\Rewrite.Test\Rewrite.Test.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.Java\Rewrite.Java.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.Core\Rewrite.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(IDEA_INITIAL_DIRECTORY)'!=''">
+      <ProjectReference Include="$(RewriteRemoteDir)\src\Rewrite.CSharp.Test\Rewrite.CSharp.Test.csproj" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(IDEA_INITIAL_DIRECTORY)'==''">
+        <PackageReference Include="Rewrite.CSharp.Test" Version="$(RewriteRemoteVersion)" />
     </ItemGroup>
 
 </Project>
