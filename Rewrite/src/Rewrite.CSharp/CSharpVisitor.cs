@@ -20,6 +20,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
     {
         compilationUnit = compilationUnit.WithPrefix(VisitSpace(compilationUnit.Prefix, Space.Location.COMPILATION_UNIT_PREFIX, p)!);
         compilationUnit = compilationUnit.WithMarkers(VisitMarkers(compilationUnit.Markers, p));
+        compilationUnit = compilationUnit.Padding.WithExterns(ListUtils.Map(compilationUnit.Padding.Externs, el => VisitRightPadded(el, CsRightPadded.Location.COMPILATION_UNIT_EXTERNS, p)));
         compilationUnit = compilationUnit.Padding.WithUsings(ListUtils.Map(compilationUnit.Padding.Usings, el => VisitRightPadded(el, CsRightPadded.Location.COMPILATION_UNIT_USINGS, p)));
         compilationUnit = compilationUnit.WithAttributeLists(ListUtils.Map(compilationUnit.AttributeLists, el => (Cs.AttributeList?)Visit(el, p)));
         compilationUnit = compilationUnit.Padding.WithMembers(ListUtils.Map(compilationUnit.Padding.Members, el => VisitRightPadded(el, CsRightPadded.Location.COMPILATION_UNIT_MEMBERS, p)));
@@ -128,6 +129,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         blockScopeNamespaceDeclaration = (Cs.BlockScopeNamespaceDeclaration) tempStatement;
         blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.WithMarkers(VisitMarkers(blockScopeNamespaceDeclaration.Markers, p));
         blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithName(VisitRightPadded(blockScopeNamespaceDeclaration.Padding.Name, CsRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_NAME, p)!);
+        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithExterns(ListUtils.Map(blockScopeNamespaceDeclaration.Padding.Externs, el => VisitRightPadded(el, CsRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_EXTERNS, p)));
         blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithUsings(ListUtils.Map(blockScopeNamespaceDeclaration.Padding.Usings, el => VisitRightPadded(el, CsRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_USINGS, p)));
         blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithMembers(ListUtils.Map(blockScopeNamespaceDeclaration.Padding.Members, el => VisitRightPadded(el, CsRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_MEMBERS, p)));
         blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.WithEnd(VisitSpace(blockScopeNamespaceDeclaration.End, CsSpace.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_END, p)!);
@@ -162,6 +164,20 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         return expressionStatement;
     }
 
+    public virtual J? VisitExternAlias(Cs.ExternAlias externAlias, P p)
+    {
+        externAlias = externAlias.WithPrefix(VisitSpace(externAlias.Prefix, CsSpace.Location.EXTERN_ALIAS_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(externAlias, p);
+        if (tempStatement is not Cs.ExternAlias)
+        {
+            return tempStatement;
+        }
+        externAlias = (Cs.ExternAlias) tempStatement;
+        externAlias = externAlias.WithMarkers(VisitMarkers(externAlias.Markers, p));
+        externAlias = externAlias.Padding.WithIdentifier(VisitLeftPadded(externAlias.Padding.Identifier, CsLeftPadded.Location.EXTERN_ALIAS_IDENTIFIER, p)!);
+        return externAlias;
+    }
+
     public virtual J? VisitFileScopeNamespaceDeclaration(Cs.FileScopeNamespaceDeclaration fileScopeNamespaceDeclaration, P p)
     {
         fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.WithPrefix(VisitSpace(fileScopeNamespaceDeclaration.Prefix, CsSpace.Location.FILE_SCOPE_NAMESPACE_DECLARATION_PREFIX, p)!);
@@ -173,6 +189,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         fileScopeNamespaceDeclaration = (Cs.FileScopeNamespaceDeclaration) tempStatement;
         fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.WithMarkers(VisitMarkers(fileScopeNamespaceDeclaration.Markers, p));
         fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithName(VisitRightPadded(fileScopeNamespaceDeclaration.Padding.Name, CsRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_NAME, p)!);
+        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithExterns(ListUtils.Map(fileScopeNamespaceDeclaration.Padding.Externs, el => VisitRightPadded(el, CsRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_EXTERNS, p)));
         fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithUsings(ListUtils.Map(fileScopeNamespaceDeclaration.Padding.Usings, el => VisitRightPadded(el, CsRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_USINGS, p)));
         fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithMembers(ListUtils.Map(fileScopeNamespaceDeclaration.Padding.Members, el => VisitRightPadded(el, CsRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_MEMBERS, p)));
         return fileScopeNamespaceDeclaration;

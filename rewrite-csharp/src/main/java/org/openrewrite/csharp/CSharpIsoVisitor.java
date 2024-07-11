@@ -79,6 +79,11 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     }
 
     @Override
+    public Cs.ExternAlias visitExternAlias(Cs.ExternAlias externAlias, P p) {
+        return (Cs.ExternAlias) super.visitExternAlias(externAlias, p);
+    }
+
+    @Override
     public Cs.FileScopeNamespaceDeclaration visitFileScopeNamespaceDeclaration(Cs.FileScopeNamespaceDeclaration fileScopeNamespaceDeclaration, P p) {
         return (Cs.FileScopeNamespaceDeclaration) super.visitFileScopeNamespaceDeclaration(fileScopeNamespaceDeclaration, p);
     }

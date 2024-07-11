@@ -49,6 +49,10 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     @Override
     public Cs visitCompilationUnit(Cs.CompilationUnit compilationUnit, PrintOutputCapture<P> p) {
         beforeSyntax(compilationUnit, Space.Location.COMPILATION_UNIT_PREFIX, p);
+        for (JRightPadded<Cs.ExternAlias> extern : compilationUnit.getPadding().getExterns()) {
+            visitRightPadded(extern, CsRightPadded.Location.COMPILATION_UNIT_EXTERNS, p);
+            p.append(';');
+        }
         for (JRightPadded<Cs.UsingDirective> using : compilationUnit.getPadding().getUsings()) {
             visitRightPadded(using, CsRightPadded.Location.COMPILATION_UNIT_USINGS, p);
             p.append(';');
@@ -94,6 +98,10 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         p.append("namespace");
         visitRightPadded(namespaceDeclaration.getPadding().getName(), CsRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_NAME, p);
         p.append('{');
+        for (JRightPadded<Cs.ExternAlias> extern : namespaceDeclaration.getPadding().getExterns()) {
+            visitRightPadded(extern, CsRightPadded.Location.COMPILATION_UNIT_EXTERNS, p);
+            p.append(';');
+        }
         for (JRightPadded<Cs.UsingDirective> using : namespaceDeclaration.getPadding().getUsings()) {
             visitRightPadded(using, CsRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_USINGS, p);
             p.append(';');
@@ -106,12 +114,25 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     }
 
     @Override
+    public J visitExternAlias(Cs.ExternAlias externAlias, PrintOutputCapture<P> p) {
+        beforeSyntax(externAlias, CsSpace.Location.EXTERN_ALIAS_PREFIX, p);
+        p.append("extern");
+        visitLeftPadded("alias", externAlias.getPadding().getIdentifier(), CsLeftPadded.Location.EXTERN_ALIAS_IDENTIFIER, p);
+        afterSyntax(externAlias, p);
+        return externAlias;
+    }
+
+    @Override
     public Cs visitFileScopeNamespaceDeclaration(Cs.FileScopeNamespaceDeclaration namespaceDeclaration,
                                                  PrintOutputCapture<P> p) {
         beforeSyntax(namespaceDeclaration, CsSpace.Location.FILE_SCOPE_NAMESPACE_DECLARATION_PREFIX, p);
         p.append("namespace");
         visitRightPadded(namespaceDeclaration.getPadding().getName(), CsRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_NAME, p);
         p.append(";");
+        for (JRightPadded<Cs.ExternAlias> extern : namespaceDeclaration.getPadding().getExterns()) {
+            visitRightPadded(extern, CsRightPadded.Location.COMPILATION_UNIT_EXTERNS, p);
+            p.append(';');
+        }
         for (JRightPadded<Cs.UsingDirective> using : namespaceDeclaration.getPadding().getUsings()) {
             visitRightPadded(using, CsRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_USINGS, p);
             p.append(';');

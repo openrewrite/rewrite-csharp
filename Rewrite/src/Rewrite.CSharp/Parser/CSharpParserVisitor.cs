@@ -33,6 +33,11 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
             null,
             false,
             null,
+            node.Externs.Select(u => new JRightPadded<Cs.ExternAlias>(
+                Convert<Cs.ExternAlias>(u)!,
+                Format(Leading(u.SemicolonToken)),
+                Markers.EMPTY
+            )).ToList(),
             node.Usings.Select(u => new JRightPadded<Cs.UsingDirective>(
                 Convert<Cs.UsingDirective>(u)!,
                 Format(Leading(u.SemicolonToken)),
@@ -71,6 +76,11 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
                 Format(Trailing(node.Name)),
                 Markers.EMPTY
             ),
+            node.Externs.Select(u => new JRightPadded<Cs.ExternAlias>(
+                Convert<Cs.ExternAlias>(u)!,
+                Format(Leading(u.SemicolonToken)),
+                Markers.EMPTY
+            )).ToList(),
             node.Usings.Select(u => new JRightPadded<Cs.UsingDirective>(
                 Convert<Cs.UsingDirective>(u)!,
                 Format(Leading(u.SemicolonToken)),
@@ -91,6 +101,11 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
                 Format(Trailing(node.Name)),
                 Markers.EMPTY
             ),
+            node.Externs.Select(u => new JRightPadded<Cs.ExternAlias>(
+                Convert<Cs.ExternAlias>(u)!,
+                Format(Leading(u.SemicolonToken)),
+                Markers.EMPTY
+            )).ToList(),
             node.Usings.Select(u => new JRightPadded<Cs.UsingDirective>(
                 Convert<Cs.UsingDirective>(u)!,
                 Format(Leading(u.SemicolonToken)),
@@ -2875,7 +2890,16 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
 
     public override J? VisitExternAliasDirective(ExternAliasDirectiveSyntax node)
     {
-        return base.VisitExternAliasDirective(node);
+        return new Cs.ExternAlias(
+            Core.Tree.RandomId(),
+            Format(Leading(node)),
+            Markers.EMPTY,
+            new JLeftPadded<J.Identifier>(
+                Format(Leading(node.AliasKeyword)),
+                MapIdentifier(node.Identifier, null),
+                Markers.EMPTY
+            )
+        );
     }
 
     public override J? VisitAttributeTargetSpecifier(AttributeTargetSpecifierSyntax node)

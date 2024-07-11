@@ -112,6 +112,16 @@ public interface Cs extends J {
             return withCharsetName(charset.name());
         }
 
+        List<JRightPadded<ExternAlias>> externs;
+
+        public List<ExternAlias> getExterns() {
+            return JRightPadded.getElements(externs);
+        }
+
+        public Cs.CompilationUnit withExterns(List<ExternAlias> externs) {
+            return getPadding().withExterns(JRightPadded.withElements(this.externs, externs));
+        }
+
         List<JRightPadded<UsingDirective>> usings;
 
         public List<UsingDirective> getUsings() {
@@ -174,7 +184,15 @@ public interface Cs extends J {
             }
 
             public Cs.CompilationUnit withMembers(List<JRightPadded<Statement>> members) {
-                return t.members == members ? t : new Cs.CompilationUnit(t.id, t.prefix, t.markers, t.sourcePath, t.fileAttributes, t.charsetName, t.charsetBomMarked, t.checksum, t.usings, t.attributeLists, members, t.eof);
+                return t.members == members ? t : new Cs.CompilationUnit(t.id, t.prefix, t.markers, t.sourcePath, t.fileAttributes, t.charsetName, t.charsetBomMarked, t.checksum, t.externs, t.usings, t.attributeLists, members, t.eof);
+            }
+
+            public List<JRightPadded<ExternAlias>> getExterns() {
+                return t.externs;
+            }
+
+            public Cs.CompilationUnit withExterns(List<JRightPadded<ExternAlias>> externs) {
+                return t.externs == externs ? t : new Cs.CompilationUnit(t.id, t.prefix, t.markers, t.sourcePath, t.fileAttributes, t.charsetName, t.charsetBomMarked, t.checksum, externs, t.usings, t.attributeLists, t.members, t.eof);
             }
 
             public List<JRightPadded<UsingDirective>> getUsings() {
@@ -182,7 +200,7 @@ public interface Cs extends J {
             }
 
             public Cs.CompilationUnit withUsings(List<JRightPadded<UsingDirective>> usings) {
-                return t.usings == usings ? t : new Cs.CompilationUnit(t.id, t.prefix, t.markers, t.sourcePath, t.fileAttributes, t.charsetName, t.charsetBomMarked, t.checksum, usings, t.attributeLists, t.members, t.eof);
+                return t.usings == usings ? t : new Cs.CompilationUnit(t.id, t.prefix, t.markers, t.sourcePath, t.fileAttributes, t.charsetName, t.charsetBomMarked, t.checksum, t.externs, usings, t.attributeLists, t.members, t.eof);
             }
         }
     }
@@ -660,6 +678,16 @@ public interface Cs extends J {
             return getPadding().withName(JRightPadded.withElement(this.name, name));
         }
 
+        List<JRightPadded<ExternAlias>> externs;
+
+        public List<ExternAlias> getExterns() {
+            return JRightPadded.getElements(externs);
+        }
+
+        public BlockScopeNamespaceDeclaration withExterns(List<ExternAlias> externs) {
+            return getPadding().withExterns(JRightPadded.withElements(this.externs, externs));
+        }
+
         List<JRightPadded<UsingDirective>> usings;
 
         public List<UsingDirective> getUsings() {
@@ -718,7 +746,15 @@ public interface Cs extends J {
             }
 
             public BlockScopeNamespaceDeclaration withName(JRightPadded<Expression> name) {
-                return t.name == name ? t : new BlockScopeNamespaceDeclaration(t.id, t.prefix, t.markers, name, t.usings, t.members, t.end);
+                return t.name == name ? t : new BlockScopeNamespaceDeclaration(t.id, t.prefix, t.markers, name, t.externs, t.usings, t.members, t.end);
+            }
+
+            public List<JRightPadded<ExternAlias>> getExterns() {
+                return t.externs;
+            }
+
+            public BlockScopeNamespaceDeclaration withExterns(List<JRightPadded<ExternAlias>> externs) {
+                return t.externs == externs ? t : new BlockScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, externs, t.usings, t.members, t.end);
             }
 
             public List<JRightPadded<UsingDirective>> getUsings() {
@@ -726,7 +762,7 @@ public interface Cs extends J {
             }
 
             public BlockScopeNamespaceDeclaration withUsings(List<JRightPadded<UsingDirective>> usings) {
-                return t.usings == usings ? t : new BlockScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, usings, t.members, t.end);
+                return t.usings == usings ? t : new BlockScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, t.externs, usings, t.members, t.end);
             }
 
             public List<JRightPadded<Statement>> getMembers() {
@@ -734,7 +770,7 @@ public interface Cs extends J {
             }
 
             public BlockScopeNamespaceDeclaration withMembers(List<JRightPadded<Statement>> members) {
-                return t.members == members ? t : new BlockScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, t.usings, members, t.end);
+                return t.members == members ? t : new BlockScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, t.externs, t.usings, members, t.end);
             }
         }
     }
@@ -848,6 +884,72 @@ public interface Cs extends J {
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
     @RequiredArgsConstructor
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    final class ExternAlias implements Cs, Statement {
+
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @Getter
+        @With
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @Getter
+        @With
+        Space prefix;
+
+        @Getter
+        @With
+        Markers markers;
+
+        JLeftPadded<J.Identifier> identifier;
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitExternAlias(this, p);
+        }
+
+        @Transient
+        @Override
+        public CoordinateBuilder.Statement getCoordinates() {
+            return new CoordinateBuilder.Statement(this);
+        }
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.t != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final ExternAlias t;
+
+            public JLeftPadded<J.Identifier> getIdentifier() {
+                return t.identifier;
+            }
+
+            public ExternAlias withIdentifier(JLeftPadded<J.Identifier> identifier) {
+                return t.identifier == identifier ? t : new ExternAlias(t.id, t.prefix, t.markers, identifier);
+            }
+        }
+    }
+
+    @ToString
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
     class FileScopeNamespaceDeclaration implements Cs, Statement {
         @Nullable
         @NonFinal
@@ -874,6 +976,16 @@ public interface Cs extends J {
 
         public FileScopeNamespaceDeclaration withName(Expression name) {
             return getPadding().withName(JRightPadded.withElement(this.name, name));
+        }
+
+        List<JRightPadded<ExternAlias>> externs;
+
+        public List<ExternAlias> getExterns() {
+            return JRightPadded.getElements(externs);
+        }
+
+        public FileScopeNamespaceDeclaration withExterns(List<ExternAlias> externs) {
+            return getPadding().withExterns(JRightPadded.withElements(this.externs, externs));
         }
 
         List<JRightPadded<UsingDirective>> usings;
@@ -930,7 +1042,15 @@ public interface Cs extends J {
             }
 
             public FileScopeNamespaceDeclaration withName(JRightPadded<Expression> name) {
-                return t.name == name ? t : new FileScopeNamespaceDeclaration(t.id, t.prefix, t.markers, name, t.usings, t.members);
+                return t.name == name ? t : new FileScopeNamespaceDeclaration(t.id, t.prefix, t.markers, name, t.externs, t.usings, t.members);
+            }
+
+            public List<JRightPadded<ExternAlias>> getExterns() {
+                return t.externs;
+            }
+
+            public FileScopeNamespaceDeclaration withExterns(List<JRightPadded<ExternAlias>> externs) {
+                return t.externs == externs ? t : new FileScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, externs, t.usings, t.members);
             }
 
             public List<JRightPadded<UsingDirective>> getUsings() {
@@ -938,7 +1058,7 @@ public interface Cs extends J {
             }
 
             public FileScopeNamespaceDeclaration withUsings(List<JRightPadded<UsingDirective>> usings) {
-                return t.usings == usings ? t : new FileScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, usings, t.members);
+                return t.usings == usings ? t : new FileScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, t.externs, usings, t.members);
             }
 
             public List<JRightPadded<Statement>> getMembers() {
@@ -946,7 +1066,7 @@ public interface Cs extends J {
             }
 
             public FileScopeNamespaceDeclaration withMembers(List<JRightPadded<Statement>> members) {
-                return t.members == members ? t : new FileScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, t.usings, members);
+                return t.members == members ? t : new FileScopeNamespaceDeclaration(t.id, t.prefix, t.markers, t.name, t.externs, t.usings, members);
             }
         }
     }

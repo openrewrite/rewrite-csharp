@@ -38,6 +38,7 @@ public interface Cs : J
         string? charsetName,
         bool charsetBomMarked,
         Checksum? checksum,
+        IList<JRightPadded<ExternAlias>> externs,
         IList<JRightPadded<UsingDirective>> usings,
         IList<AttributeList> attributeLists,
         IList<JRightPadded<Statement>> members,
@@ -78,56 +79,64 @@ public interface Cs : J
 
         public CompilationUnit WithId(Guid newId)
         {
-            return newId == id ? this : new CompilationUnit(newId, prefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _usings, attributeLists, _members, eof);
+            return newId == id ? this : new CompilationUnit(newId, prefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _externs, _usings, attributeLists, _members, eof);
         }
 
         public Space Prefix => prefix;
 
         public CompilationUnit WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new CompilationUnit(id, newPrefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _usings, attributeLists, _members, eof);
+            return newPrefix == prefix ? this : new CompilationUnit(id, newPrefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _externs, _usings, attributeLists, _members, eof);
         }
 
         public Markers Markers => markers;
 
         public CompilationUnit WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new CompilationUnit(id, prefix, newMarkers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _usings, attributeLists, _members, eof);
+            return ReferenceEquals(newMarkers, markers) ? this : new CompilationUnit(id, prefix, newMarkers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _externs, _usings, attributeLists, _members, eof);
         }
 
         public string SourcePath => sourcePath;
 
         public CompilationUnit WithSourcePath(string newSourcePath)
         {
-            return newSourcePath == sourcePath ? this : new CompilationUnit(id, prefix, markers, newSourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _usings, attributeLists, _members, eof);
+            return newSourcePath == sourcePath ? this : new CompilationUnit(id, prefix, markers, newSourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _externs, _usings, attributeLists, _members, eof);
         }
 
         public FileAttributes? FileAttributes => fileAttributes;
 
         public CompilationUnit WithFileAttributes(FileAttributes? newFileAttributes)
         {
-            return newFileAttributes == fileAttributes ? this : new CompilationUnit(id, prefix, markers, sourcePath, newFileAttributes, charsetName, charsetBomMarked, checksum, _usings, attributeLists, _members, eof);
+            return newFileAttributes == fileAttributes ? this : new CompilationUnit(id, prefix, markers, sourcePath, newFileAttributes, charsetName, charsetBomMarked, checksum, _externs, _usings, attributeLists, _members, eof);
         }
 
         public string? CharsetName => charsetName;
 
         public CompilationUnit WithCharsetName(string? newCharsetName)
         {
-            return newCharsetName == charsetName ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, newCharsetName, charsetBomMarked, checksum, _usings, attributeLists, _members, eof);
+            return newCharsetName == charsetName ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, newCharsetName, charsetBomMarked, checksum, _externs, _usings, attributeLists, _members, eof);
         }
 
         public bool CharsetBomMarked => charsetBomMarked;
 
         public CompilationUnit WithCharsetBomMarked(bool newCharsetBomMarked)
         {
-            return newCharsetBomMarked == charsetBomMarked ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, charsetName, newCharsetBomMarked, checksum, _usings, attributeLists, _members, eof);
+            return newCharsetBomMarked == charsetBomMarked ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, charsetName, newCharsetBomMarked, checksum, _externs, _usings, attributeLists, _members, eof);
         }
 
         public Checksum? Checksum => checksum;
 
         public CompilationUnit WithChecksum(Checksum? newChecksum)
         {
-            return newChecksum == checksum ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, newChecksum, _usings, attributeLists, _members, eof);
+            return newChecksum == checksum ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, newChecksum, _externs, _usings, attributeLists, _members, eof);
+        }
+
+        private readonly IList<JRightPadded<Cs.ExternAlias>> _externs = externs;
+        public IList<Cs.ExternAlias> Externs => _externs.Elements();
+
+        public CompilationUnit WithExterns(IList<Cs.ExternAlias> newExterns)
+        {
+            return Padding.WithExterns(_externs.WithElements(newExterns));
         }
 
         private readonly IList<JRightPadded<Cs.UsingDirective>> _usings = usings;
@@ -142,7 +151,7 @@ public interface Cs : J
 
         public CompilationUnit WithAttributeLists(IList<Cs.AttributeList> newAttributeLists)
         {
-            return newAttributeLists == attributeLists ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _usings, newAttributeLists, _members, eof);
+            return newAttributeLists == attributeLists ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _externs, _usings, newAttributeLists, _members, eof);
         }
 
         private readonly IList<JRightPadded<Statement>> _members = members;
@@ -157,23 +166,30 @@ public interface Cs : J
 
         public CompilationUnit WithEof(Space newEof)
         {
-            return newEof == eof ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _usings, attributeLists, _members, newEof);
+            return newEof == eof ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _externs, _usings, attributeLists, _members, newEof);
         }
 
         public sealed record PaddingHelper(Cs.CompilationUnit T)
         {
+            public IList<JRightPadded<Cs.ExternAlias>> Externs => T._externs;
+
+            public Cs.CompilationUnit WithExterns(IList<JRightPadded<Cs.ExternAlias>> newExterns)
+            {
+                return T._externs == newExterns ? T : new Cs.CompilationUnit(T.Id, T.Prefix, T.Markers, T.SourcePath, T.FileAttributes, T.CharsetName, T.CharsetBomMarked, T.Checksum, newExterns, T._usings, T.AttributeLists, T._members, T.Eof);
+            }
+
             public IList<JRightPadded<Cs.UsingDirective>> Usings => T._usings;
 
             public Cs.CompilationUnit WithUsings(IList<JRightPadded<Cs.UsingDirective>> newUsings)
             {
-                return T._usings == newUsings ? T : new Cs.CompilationUnit(T.Id, T.Prefix, T.Markers, T.SourcePath, T.FileAttributes, T.CharsetName, T.CharsetBomMarked, T.Checksum, newUsings, T.AttributeLists, T._members, T.Eof);
+                return T._usings == newUsings ? T : new Cs.CompilationUnit(T.Id, T.Prefix, T.Markers, T.SourcePath, T.FileAttributes, T.CharsetName, T.CharsetBomMarked, T.Checksum, T._externs, newUsings, T.AttributeLists, T._members, T.Eof);
             }
 
             public IList<JRightPadded<Statement>> Members => T._members;
 
             public Cs.CompilationUnit WithMembers(IList<JRightPadded<Statement>> newMembers)
             {
-                return T._members == newMembers ? T : new Cs.CompilationUnit(T.Id, T.Prefix, T.Markers, T.SourcePath, T.FileAttributes, T.CharsetName, T.CharsetBomMarked, T.Checksum, T._usings, T.AttributeLists, newMembers, T.Eof);
+                return T._members == newMembers ? T : new Cs.CompilationUnit(T.Id, T.Prefix, T.Markers, T.SourcePath, T.FileAttributes, T.CharsetName, T.CharsetBomMarked, T.Checksum, T._externs, T._usings, T.AttributeLists, newMembers, T.Eof);
             }
 
         }
@@ -752,6 +768,7 @@ public interface Cs : J
         Space prefix,
         Markers markers,
         JRightPadded<Expression> name,
+        IList<JRightPadded<ExternAlias>> externs,
         IList<JRightPadded<UsingDirective>> usings,
         IList<JRightPadded<Statement>> members,
         Space end
@@ -791,21 +808,21 @@ public interface Cs : J
 
         public BlockScopeNamespaceDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new BlockScopeNamespaceDeclaration(newId, prefix, markers, _name, _usings, _members, end);
+            return newId == id ? this : new BlockScopeNamespaceDeclaration(newId, prefix, markers, _name, _externs, _usings, _members, end);
         }
 
         public Space Prefix => prefix;
 
         public BlockScopeNamespaceDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new BlockScopeNamespaceDeclaration(id, newPrefix, markers, _name, _usings, _members, end);
+            return newPrefix == prefix ? this : new BlockScopeNamespaceDeclaration(id, newPrefix, markers, _name, _externs, _usings, _members, end);
         }
 
         public Markers Markers => markers;
 
         public BlockScopeNamespaceDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new BlockScopeNamespaceDeclaration(id, prefix, newMarkers, _name, _usings, _members, end);
+            return ReferenceEquals(newMarkers, markers) ? this : new BlockScopeNamespaceDeclaration(id, prefix, newMarkers, _name, _externs, _usings, _members, end);
         }
 
         private readonly JRightPadded<Expression> _name = name;
@@ -814,6 +831,14 @@ public interface Cs : J
         public BlockScopeNamespaceDeclaration WithName(Expression newName)
         {
             return Padding.WithName(_name.WithElement(newName));
+        }
+
+        private readonly IList<JRightPadded<Cs.ExternAlias>> _externs = externs;
+        public IList<Cs.ExternAlias> Externs => _externs.Elements();
+
+        public BlockScopeNamespaceDeclaration WithExterns(IList<Cs.ExternAlias> newExterns)
+        {
+            return Padding.WithExterns(_externs.WithElements(newExterns));
         }
 
         private readonly IList<JRightPadded<Cs.UsingDirective>> _usings = usings;
@@ -836,7 +861,7 @@ public interface Cs : J
 
         public BlockScopeNamespaceDeclaration WithEnd(Space newEnd)
         {
-            return newEnd == end ? this : new BlockScopeNamespaceDeclaration(id, prefix, markers, _name, _usings, _members, newEnd);
+            return newEnd == end ? this : new BlockScopeNamespaceDeclaration(id, prefix, markers, _name, _externs, _usings, _members, newEnd);
         }
 
         public sealed record PaddingHelper(Cs.BlockScopeNamespaceDeclaration T)
@@ -845,21 +870,28 @@ public interface Cs : J
 
             public Cs.BlockScopeNamespaceDeclaration WithName(JRightPadded<Expression> newName)
             {
-                return T._name == newName ? T : new Cs.BlockScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, newName, T._usings, T._members, T.End);
+                return T._name == newName ? T : new Cs.BlockScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, newName, T._externs, T._usings, T._members, T.End);
+            }
+
+            public IList<JRightPadded<Cs.ExternAlias>> Externs => T._externs;
+
+            public Cs.BlockScopeNamespaceDeclaration WithExterns(IList<JRightPadded<Cs.ExternAlias>> newExterns)
+            {
+                return T._externs == newExterns ? T : new Cs.BlockScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, newExterns, T._usings, T._members, T.End);
             }
 
             public IList<JRightPadded<Cs.UsingDirective>> Usings => T._usings;
 
             public Cs.BlockScopeNamespaceDeclaration WithUsings(IList<JRightPadded<Cs.UsingDirective>> newUsings)
             {
-                return T._usings == newUsings ? T : new Cs.BlockScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, newUsings, T._members, T.End);
+                return T._usings == newUsings ? T : new Cs.BlockScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, T._externs, newUsings, T._members, T.End);
             }
 
             public IList<JRightPadded<Statement>> Members => T._members;
 
             public Cs.BlockScopeNamespaceDeclaration WithMembers(IList<JRightPadded<Statement>> newMembers)
             {
-                return T._members == newMembers ? T : new Cs.BlockScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, T._usings, newMembers, T.End);
+                return T._members == newMembers ? T : new Cs.BlockScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, T._externs, T._usings, newMembers, T.End);
             }
 
         }
@@ -1022,11 +1054,100 @@ public interface Cs : J
         }
     }
 
+    public class ExternAlias(
+        Guid id,
+        Space prefix,
+        Markers markers,
+        JLeftPadded<J.Identifier> identifier
+    ) : Cs, Statement, MutableTree<ExternAlias>
+    {
+        [NonSerialized] private WeakReference<PaddingHelper>? _padding;
+
+        public PaddingHelper Padding
+        {
+            get
+            {
+                PaddingHelper? p;
+                if (_padding == null)
+                {
+                    p = new PaddingHelper(this);
+                    _padding = new WeakReference<PaddingHelper>(p);
+                }
+                else
+                {
+                    _padding.TryGetTarget(out p);
+                    if (p == null || p.T != this)
+                    {
+                        p = new PaddingHelper(this);
+                        _padding.SetTarget(p);
+                    }
+                }
+                return p;
+            }
+        }
+
+        public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
+        {
+            return v.VisitExternAlias(this, p);
+        }
+
+        public Guid Id => id;
+
+        public ExternAlias WithId(Guid newId)
+        {
+            return newId == id ? this : new ExternAlias(newId, prefix, markers, _identifier);
+        }
+
+        public Space Prefix => prefix;
+
+        public ExternAlias WithPrefix(Space newPrefix)
+        {
+            return newPrefix == prefix ? this : new ExternAlias(id, newPrefix, markers, _identifier);
+        }
+
+        public Markers Markers => markers;
+
+        public ExternAlias WithMarkers(Markers newMarkers)
+        {
+            return ReferenceEquals(newMarkers, markers) ? this : new ExternAlias(id, prefix, newMarkers, _identifier);
+        }
+
+        private readonly JLeftPadded<J.Identifier> _identifier = identifier;
+        public J.Identifier Identifier => _identifier.Element;
+
+        public ExternAlias WithIdentifier(J.Identifier newIdentifier)
+        {
+            return Padding.WithIdentifier(_identifier.WithElement(newIdentifier));
+        }
+
+        public sealed record PaddingHelper(Cs.ExternAlias T)
+        {
+            public JLeftPadded<J.Identifier> Identifier => T._identifier;
+
+            public Cs.ExternAlias WithIdentifier(JLeftPadded<J.Identifier> newIdentifier)
+            {
+                return T._identifier == newIdentifier ? T : new Cs.ExternAlias(T.Id, T.Prefix, T.Markers, newIdentifier);
+            }
+
+        }
+
+        public bool Equals(Rewrite.Core.Tree? other)
+        {
+            return other is ExternAlias && other.Id == Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+    }
+
     public class FileScopeNamespaceDeclaration(
         Guid id,
         Space prefix,
         Markers markers,
         JRightPadded<Expression> name,
+        IList<JRightPadded<ExternAlias>> externs,
         IList<JRightPadded<UsingDirective>> usings,
         IList<JRightPadded<Statement>> members
     ) : Cs, Statement, MutableTree<FileScopeNamespaceDeclaration>
@@ -1065,21 +1186,21 @@ public interface Cs : J
 
         public FileScopeNamespaceDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new FileScopeNamespaceDeclaration(newId, prefix, markers, _name, _usings, _members);
+            return newId == id ? this : new FileScopeNamespaceDeclaration(newId, prefix, markers, _name, _externs, _usings, _members);
         }
 
         public Space Prefix => prefix;
 
         public FileScopeNamespaceDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new FileScopeNamespaceDeclaration(id, newPrefix, markers, _name, _usings, _members);
+            return newPrefix == prefix ? this : new FileScopeNamespaceDeclaration(id, newPrefix, markers, _name, _externs, _usings, _members);
         }
 
         public Markers Markers => markers;
 
         public FileScopeNamespaceDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new FileScopeNamespaceDeclaration(id, prefix, newMarkers, _name, _usings, _members);
+            return ReferenceEquals(newMarkers, markers) ? this : new FileScopeNamespaceDeclaration(id, prefix, newMarkers, _name, _externs, _usings, _members);
         }
 
         private readonly JRightPadded<Expression> _name = name;
@@ -1088,6 +1209,14 @@ public interface Cs : J
         public FileScopeNamespaceDeclaration WithName(Expression newName)
         {
             return Padding.WithName(_name.WithElement(newName));
+        }
+
+        private readonly IList<JRightPadded<Cs.ExternAlias>> _externs = externs;
+        public IList<Cs.ExternAlias> Externs => _externs.Elements();
+
+        public FileScopeNamespaceDeclaration WithExterns(IList<Cs.ExternAlias> newExterns)
+        {
+            return Padding.WithExterns(_externs.WithElements(newExterns));
         }
 
         private readonly IList<JRightPadded<Cs.UsingDirective>> _usings = usings;
@@ -1112,21 +1241,28 @@ public interface Cs : J
 
             public Cs.FileScopeNamespaceDeclaration WithName(JRightPadded<Expression> newName)
             {
-                return T._name == newName ? T : new Cs.FileScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, newName, T._usings, T._members);
+                return T._name == newName ? T : new Cs.FileScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, newName, T._externs, T._usings, T._members);
+            }
+
+            public IList<JRightPadded<Cs.ExternAlias>> Externs => T._externs;
+
+            public Cs.FileScopeNamespaceDeclaration WithExterns(IList<JRightPadded<Cs.ExternAlias>> newExterns)
+            {
+                return T._externs == newExterns ? T : new Cs.FileScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, newExterns, T._usings, T._members);
             }
 
             public IList<JRightPadded<Cs.UsingDirective>> Usings => T._usings;
 
             public Cs.FileScopeNamespaceDeclaration WithUsings(IList<JRightPadded<Cs.UsingDirective>> newUsings)
             {
-                return T._usings == newUsings ? T : new Cs.FileScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, newUsings, T._members);
+                return T._usings == newUsings ? T : new Cs.FileScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, T._externs, newUsings, T._members);
             }
 
             public IList<JRightPadded<Statement>> Members => T._members;
 
             public Cs.FileScopeNamespaceDeclaration WithMembers(IList<JRightPadded<Statement>> newMembers)
             {
-                return T._members == newMembers ? T : new Cs.FileScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, T._usings, newMembers);
+                return T._members == newMembers ? T : new Cs.FileScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, T._externs, T._usings, newMembers);
             }
 
         }
