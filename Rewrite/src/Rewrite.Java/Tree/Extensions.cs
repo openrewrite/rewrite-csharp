@@ -336,7 +336,7 @@ public static class Extensions
         return method;
     }
 
-    public static J.MethodInvocation WithName(this J.MethodInvocation method, J.Identifier name)
+    public static J.MethodInvocation WithName(J.MethodInvocation method, J.Identifier name)
     {
         if (method.Name == name) return method;
         // FIXME add type attribution logic

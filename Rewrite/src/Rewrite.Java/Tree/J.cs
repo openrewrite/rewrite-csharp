@@ -1151,6 +1151,11 @@ public interface J : Rewrite.Core.Tree
 
         private readonly Kind _declarationKind = declarationKind;
 
+        public ClassDeclaration WithDeclarationKind(Kind newDeclarationKind)
+        {
+            return ReferenceEquals(newDeclarationKind, _declarationKind) ? this : new ClassDeclaration(id, prefix, markers, leadingAnnotations, modifiers, _declarationKind, name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, body, type);
+        }
+
         public J.Identifier Name => name;
 
         public ClassDeclaration WithName(J.Identifier newName)
@@ -1206,6 +1211,11 @@ public interface J : Rewrite.Core.Tree
         }
 
         public JavaType.FullyQualified? Type => type;
+
+        public ClassDeclaration WithType(JavaType.FullyQualified? newType)
+        {
+            return newType == type ? this : new ClassDeclaration(id, prefix, markers, leadingAnnotations, modifiers, _declarationKind, name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, body, newType);
+        }
 
         public class Kind(
             Guid id,
@@ -3362,6 +3372,11 @@ public interface J : Rewrite.Core.Tree
 
         public JavaType.Primitive Type => type;
 
+        public Literal WithType(JavaType.Primitive newType)
+        {
+            return newType == type ? this : new Literal(id, prefix, markers, value, valueSource, unicodeEscapes, newType);
+        }
+
         public sealed record UnicodeEscape(
             int valueSourceIndex,
             string codePoint
@@ -3688,6 +3703,11 @@ public interface J : Rewrite.Core.Tree
 
         public JavaType.Method? MethodType => methodType;
 
+        public MethodDeclaration WithMethodType(JavaType.Method? newMethodType)
+        {
+            return newMethodType == methodType ? this : new MethodDeclaration(id, prefix, markers, leadingAnnotations, modifiers, _typeParameters, returnTypeExpression, _name, _parameters, _throws, body, _defaultValue, newMethodType);
+        }
+
         public sealed record IdentifierWithAnnotations(
             J.Identifier identifier,
             IList<J.Annotation> annotations
@@ -3884,6 +3904,11 @@ public interface J : Rewrite.Core.Tree
 
         public J.Identifier Name => name;
 
+        public MethodInvocation WithName(J.Identifier newName)
+        {
+            return Extensions.WithName(this, newName);
+        }
+
         private readonly JContainer<Expression> _arguments = arguments;
         public IList<Expression> Arguments => _arguments.GetElements();
 
@@ -3893,6 +3918,11 @@ public interface J : Rewrite.Core.Tree
         }
 
         public JavaType.Method? MethodType => methodType;
+
+        public MethodInvocation WithMethodType(JavaType.Method? newMethodType)
+        {
+            return newMethodType == methodType ? this : new MethodInvocation(id, prefix, markers, _select, _typeParameters, name, _arguments, newMethodType);
+        }
 
         public sealed record PaddingHelper(J.MethodInvocation T)
         {
@@ -4937,6 +4967,11 @@ public interface J : Rewrite.Core.Tree
         }
 
         public JavaType.Primitive Type => type;
+
+        public Primitive WithType(JavaType.Primitive newType)
+        {
+            return newType == type ? this : new Primitive(id, prefix, markers, newType);
+        }
 
         public bool Equals(Rewrite.Core.Tree? other)
         {
