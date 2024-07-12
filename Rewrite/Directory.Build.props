@@ -6,5 +6,6 @@
         <Version>0.8.0-preview-3</Version>
 
         <RewriteRemoteVersion>$(Version)</RewriteRemoteVersion>
+        <RewriteRemoteDir Condition="'$(RewriteRemoteDir)'==''">..\..\..\..\..\moderneinc\rewrite-remote\Rewrite.Remote</RewriteRemoteDir>
     </PropertyGroup>
 </Project>
