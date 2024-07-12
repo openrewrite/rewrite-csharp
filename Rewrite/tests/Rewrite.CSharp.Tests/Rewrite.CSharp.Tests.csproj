@@ -28,11 +28,11 @@
       <ProjectReference Include="..\..\src\Rewrite.Core\Rewrite.Core.csproj" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(IDEA_INITIAL_DIRECTORY)'!=''">
+    <ItemGroup Condition="'$(RELEASE_BUILD)'==''">
       <ProjectReference Include="$(RewriteRemoteDir)\src\Rewrite.CSharp.Test\Rewrite.CSharp.Test.csproj" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(IDEA_INITIAL_DIRECTORY)'==''">
+    <ItemGroup Condition="'$(RELEASE_BUILD)'!=''">
         <PackageReference Include="Rewrite.CSharp.Test" Version="$(RewriteRemoteVersion)" />
     </ItemGroup>
 
