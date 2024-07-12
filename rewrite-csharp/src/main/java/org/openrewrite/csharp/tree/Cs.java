@@ -1075,6 +1075,178 @@ public interface Cs extends J {
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
     @RequiredArgsConstructor
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    class InterpolatedString implements Cs, Expression {
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @Getter
+        @With
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @Getter
+        @With
+        Space prefix;
+
+        @Getter
+        @With
+        Markers markers;
+
+        @Getter
+        @With
+        String start;
+
+        List<JRightPadded<Expression>> parts;
+
+        public List<Expression> getParts() {
+            return JRightPadded.getElements(parts);
+        }
+
+        public InterpolatedString withParts(List<Expression> parts) {
+            return getPadding().withParts(JRightPadded.withElements(this.parts, parts));
+        }
+
+        @Getter
+        @With
+        String end;
+
+        @Override
+        public JavaType getType() {
+            return JavaType.Primitive.String;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public InterpolatedString withType(@Nullable JavaType type) {
+            return this;
+        }
+
+        @Override
+        public CoordinateBuilder.Expression getCoordinates() {
+            return new CoordinateBuilder.Expression(this);
+        }
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitInterpolatedString(this, p);
+        }
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.t != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final InterpolatedString t;
+
+            public List<JRightPadded<Expression>> getParts() {
+                return t.parts;
+            }
+
+            public InterpolatedString withParts(List<JRightPadded<Expression>> parts) {
+                return t.parts == parts ? t : new InterpolatedString(t.id, t.prefix, t.markers, t.start, parts, t.end);
+            }
+        }
+    }
+
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    class Interpolation implements Cs, Expression {
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @Getter
+        @With
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @Getter
+        @With
+        Space prefix;
+
+        @Getter
+        @With
+        Markers markers;
+
+        JRightPadded<Expression> expression;
+
+        public Expression getExpression() {
+            return expression.getElement();
+        }
+
+        public Interpolation withExpression(Expression expression) {
+            return getPadding().withExpression(JRightPadded.withElement(this.expression, expression));
+        }
+
+        @Override
+        public JavaType getType() {
+            return expression.getElement().getType();
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public Interpolation withType(@Nullable JavaType type) {
+            return getPadding().withExpression(expression.withElement(expression.getElement().withType(type)));
+        }
+
+        @Override
+        public CoordinateBuilder.Expression getCoordinates() {
+            return new CoordinateBuilder.Expression(this);
+        }
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitInterpolation(this, p);
+        }
+
+                public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.t != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final Interpolation t;
+
+            public JRightPadded<Expression> getExpression() {
+                return t.expression;
+            }
+
+            public Interpolation withExpression(JRightPadded<Expression> expression) {
+                return t.expression == expression ? t : new Interpolation(t.id, t.prefix, t.markers, expression);
+            }
+        }
+    }
+
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
     class NullSafeExpression implements Cs, Expression {
         @Nullable
         @NonFinal

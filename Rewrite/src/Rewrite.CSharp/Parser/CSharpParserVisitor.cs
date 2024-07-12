@@ -639,7 +639,16 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
     public override J? VisitInterpolation(InterpolationSyntax node)
     {
         // This was added in C# 6.0
-        return base.VisitInterpolation(node);
+        return new Cs.Interpolation(
+            Core.Tree.RandomId(),
+            Format(Leading(node)),
+            Markers.EMPTY,
+            new JRightPadded<Expression>(
+                Convert<Expression>(node.Expression)!,
+                Format(Leading(node.CloseBraceToken)),
+                Markers.EMPTY
+            )
+        );
     }
 
     public override J? VisitOrdering(OrderingSyntax node)
@@ -2123,7 +2132,28 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
     public override J? VisitInterpolatedStringExpression(InterpolatedStringExpressionSyntax node)
     {
         // This was added in C# 6.0
-        return base.VisitInterpolatedStringExpression(node);
+        return new Cs.InterpolatedString(
+            Core.Tree.RandomId(),
+            Format(Leading(node)),
+            Markers.EMPTY,
+            node.StringStartToken.ToString(),
+            node.Contents.Count == 0
+                ? [new JRightPadded<Expression>(
+                    new J.Empty(
+                        Core.Tree.RandomId(),
+                        Format(Trailing(node.StringStartToken)),
+                        Markers.EMPTY
+                    ),
+                    Space.EMPTY,
+                    Markers.EMPTY
+                )]
+                : node.Contents.Select(c => new JRightPadded<Expression>(
+                    Convert<Expression>(c)!,
+                    Format(Trailing(c)),
+                    Markers.EMPTY
+                )).ToList(),
+            node.StringEndToken.ToString()
+        );
     }
 
     public override J? VisitIsPatternExpression(IsPatternExpressionSyntax node)
@@ -2250,7 +2280,15 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
 
     public override J? VisitInterpolatedStringText(InterpolatedStringTextSyntax node)
     {
-        return base.VisitInterpolatedStringText(node);
+        return new J.Literal(
+            Core.Tree.RandomId(),
+            Format(Leading(node)),
+            Markers.EMPTY,
+            node.TextToken.Text,
+            node.TextToken.Text,
+            null,
+            (JavaType.Primitive)MapType(node)
+        );
     }
 
     public override J? VisitInterpolationAlignmentClause(InterpolationAlignmentClauseSyntax node)

@@ -195,6 +195,34 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         return fileScopeNamespaceDeclaration;
     }
 
+    public virtual J? VisitInterpolatedString(Cs.InterpolatedString interpolatedString, P p)
+    {
+        interpolatedString = interpolatedString.WithPrefix(VisitSpace(interpolatedString.Prefix, CsSpace.Location.INTERPOLATED_STRING_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(interpolatedString, p);
+        if (tempExpression is not Cs.InterpolatedString)
+        {
+            return tempExpression;
+        }
+        interpolatedString = (Cs.InterpolatedString) tempExpression;
+        interpolatedString = interpolatedString.WithMarkers(VisitMarkers(interpolatedString.Markers, p));
+        interpolatedString = interpolatedString.Padding.WithParts(ListUtils.Map(interpolatedString.Padding.Parts, el => VisitRightPadded(el, CsRightPadded.Location.INTERPOLATED_STRING_PARTS, p)));
+        return interpolatedString;
+    }
+
+    public virtual J? VisitInterpolation(Cs.Interpolation interpolation, P p)
+    {
+        interpolation = interpolation.WithPrefix(VisitSpace(interpolation.Prefix, CsSpace.Location.INTERPOLATION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(interpolation, p);
+        if (tempExpression is not Cs.Interpolation)
+        {
+            return tempExpression;
+        }
+        interpolation = (Cs.Interpolation) tempExpression;
+        interpolation = interpolation.WithMarkers(VisitMarkers(interpolation.Markers, p));
+        interpolation = interpolation.Padding.WithExpression(VisitRightPadded(interpolation.Padding.Expression, CsRightPadded.Location.INTERPOLATION_EXPRESSION, p)!);
+        return interpolation;
+    }
+
     public virtual J? VisitNullSafeExpression(Cs.NullSafeExpression nullSafeExpression, P p)
     {
         nullSafeExpression = nullSafeExpression.WithPrefix(VisitSpace(nullSafeExpression.Prefix, CsSpace.Location.NULL_SAFE_EXPRESSION_PREFIX, p)!);

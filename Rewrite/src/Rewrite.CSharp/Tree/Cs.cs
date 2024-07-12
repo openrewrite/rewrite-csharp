@@ -1278,6 +1278,210 @@ public interface Cs : J
         }
     }
 
+    public class InterpolatedString(
+        Guid id,
+        Space prefix,
+        Markers markers,
+        string start,
+        IList<JRightPadded<Expression>> parts,
+        string end
+    ) : Cs, Expression, MutableTree<InterpolatedString>
+    {
+        [NonSerialized] private WeakReference<PaddingHelper>? _padding;
+
+        public PaddingHelper Padding
+        {
+            get
+            {
+                PaddingHelper? p;
+                if (_padding == null)
+                {
+                    p = new PaddingHelper(this);
+                    _padding = new WeakReference<PaddingHelper>(p);
+                }
+                else
+                {
+                    _padding.TryGetTarget(out p);
+                    if (p == null || p.T != this)
+                    {
+                        p = new PaddingHelper(this);
+                        _padding.SetTarget(p);
+                    }
+                }
+                return p;
+            }
+        }
+
+        public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
+        {
+            return v.VisitInterpolatedString(this, p);
+        }
+
+        public JavaType? Type => Extensions.GetJavaType(this);
+
+        public InterpolatedString WithType(JavaType newType)
+        {
+            return Extensions.WithJavaType(this, newType);
+        }
+        public Guid Id => id;
+
+        public InterpolatedString WithId(Guid newId)
+        {
+            return newId == id ? this : new InterpolatedString(newId, prefix, markers, start, _parts, end);
+        }
+
+        public Space Prefix => prefix;
+
+        public InterpolatedString WithPrefix(Space newPrefix)
+        {
+            return newPrefix == prefix ? this : new InterpolatedString(id, newPrefix, markers, start, _parts, end);
+        }
+
+        public Markers Markers => markers;
+
+        public InterpolatedString WithMarkers(Markers newMarkers)
+        {
+            return ReferenceEquals(newMarkers, markers) ? this : new InterpolatedString(id, prefix, newMarkers, start, _parts, end);
+        }
+
+        public string Start => start;
+
+        public InterpolatedString WithStart(string newStart)
+        {
+            return newStart == start ? this : new InterpolatedString(id, prefix, markers, newStart, _parts, end);
+        }
+
+        private readonly IList<JRightPadded<Expression>> _parts = parts;
+        public IList<Expression> Parts => _parts.Elements();
+
+        public InterpolatedString WithParts(IList<Expression> newParts)
+        {
+            return Padding.WithParts(_parts.WithElements(newParts));
+        }
+
+        public string End => end;
+
+        public InterpolatedString WithEnd(string newEnd)
+        {
+            return newEnd == end ? this : new InterpolatedString(id, prefix, markers, start, _parts, newEnd);
+        }
+
+        public sealed record PaddingHelper(Cs.InterpolatedString T)
+        {
+            public IList<JRightPadded<Expression>> Parts => T._parts;
+
+            public Cs.InterpolatedString WithParts(IList<JRightPadded<Expression>> newParts)
+            {
+                return T._parts == newParts ? T : new Cs.InterpolatedString(T.Id, T.Prefix, T.Markers, T.Start, newParts, T.End);
+            }
+
+        }
+
+        public bool Equals(Rewrite.Core.Tree? other)
+        {
+            return other is InterpolatedString && other.Id == Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+    }
+
+    public class Interpolation(
+        Guid id,
+        Space prefix,
+        Markers markers,
+        JRightPadded<Expression> expression
+    ) : Cs, Expression, MutableTree<Interpolation>
+    {
+        [NonSerialized] private WeakReference<PaddingHelper>? _padding;
+
+        public PaddingHelper Padding
+        {
+            get
+            {
+                PaddingHelper? p;
+                if (_padding == null)
+                {
+                    p = new PaddingHelper(this);
+                    _padding = new WeakReference<PaddingHelper>(p);
+                }
+                else
+                {
+                    _padding.TryGetTarget(out p);
+                    if (p == null || p.T != this)
+                    {
+                        p = new PaddingHelper(this);
+                        _padding.SetTarget(p);
+                    }
+                }
+                return p;
+            }
+        }
+
+        public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
+        {
+            return v.VisitInterpolation(this, p);
+        }
+
+        public JavaType? Type => Extensions.GetJavaType(this);
+
+        public Interpolation WithType(JavaType newType)
+        {
+            return Extensions.WithJavaType(this, newType);
+        }
+        public Guid Id => id;
+
+        public Interpolation WithId(Guid newId)
+        {
+            return newId == id ? this : new Interpolation(newId, prefix, markers, _expression);
+        }
+
+        public Space Prefix => prefix;
+
+        public Interpolation WithPrefix(Space newPrefix)
+        {
+            return newPrefix == prefix ? this : new Interpolation(id, newPrefix, markers, _expression);
+        }
+
+        public Markers Markers => markers;
+
+        public Interpolation WithMarkers(Markers newMarkers)
+        {
+            return ReferenceEquals(newMarkers, markers) ? this : new Interpolation(id, prefix, newMarkers, _expression);
+        }
+
+        private readonly JRightPadded<Expression> _expression = expression;
+        public Expression Expression => _expression.Element;
+
+        public Interpolation WithExpression(Expression newExpression)
+        {
+            return Padding.WithExpression(_expression.WithElement(newExpression));
+        }
+
+        public sealed record PaddingHelper(Cs.Interpolation T)
+        {
+            public JRightPadded<Expression> Expression => T._expression;
+
+            public Cs.Interpolation WithExpression(JRightPadded<Expression> newExpression)
+            {
+                return T._expression == newExpression ? T : new Cs.Interpolation(T.Id, T.Prefix, T.Markers, newExpression);
+            }
+
+        }
+
+        public bool Equals(Rewrite.Core.Tree? other)
+        {
+            return other is Interpolation && other.Id == Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+    }
+
     public class NullSafeExpression(
         Guid id,
         Space prefix,

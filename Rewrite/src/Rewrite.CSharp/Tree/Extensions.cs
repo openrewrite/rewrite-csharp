@@ -38,4 +38,24 @@ internal static class Extensions
     {
         return expr;
     }
+
+    public static JavaType? GetJavaType(Cs.InterpolatedString expr)
+    {
+        return new JavaType.Primitive(JavaType.Primitive.PrimitiveType.String);
+    }
+
+    public static Cs.InterpolatedString WithJavaType(Cs.InterpolatedString expr, JavaType newType)
+    {
+        return expr;
+    }
+
+    public static JavaType? GetJavaType(Cs.Interpolation expr)
+    {
+        return expr.Type;
+    }
+
+    public static Cs.Interpolation WithJavaType(Cs.Interpolation expr, JavaType newType)
+    {
+        return expr.WithExpression(expr.Expression.WithType<Expression>(newType));
+    }
 }

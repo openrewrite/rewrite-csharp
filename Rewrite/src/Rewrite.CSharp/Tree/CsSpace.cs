@@ -38,6 +38,10 @@ public interface CsSpace
         public static readonly Location FILE_SCOPE_NAMESPACE_DECLARATION_NAME = new();
         public static readonly Location FILE_SCOPE_NAMESPACE_DECLARATION_PREFIX = new();
         public static readonly Location FILE_SCOPE_NAMESPACE_DECLARATION_USINGS = new();
+        public static readonly Location INTERPOLATED_STRING_PARTS_SUFFIX = new();
+        public static readonly Location INTERPOLATED_STRING_PREFIX = new();
+        public static readonly Location INTERPOLATION_EXPRESSION_SUFFIX = new();
+        public static readonly Location INTERPOLATION_PREFIX = new();
         public static readonly Location NULL_SAFE_EXPRESSION_EXPRESSION_SUFFIX = new();
         public static readonly Location NULL_SAFE_EXPRESSION_PREFIX = new();
         public static readonly Location PROPERTY_DECLARATION_ACCESSORS = new();

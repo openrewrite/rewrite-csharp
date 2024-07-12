@@ -89,6 +89,16 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     }
 
     @Override
+    public Cs.InterpolatedString visitInterpolatedString(Cs.InterpolatedString interpolatedString, P p) {
+        return (Cs.InterpolatedString) super.visitInterpolatedString(interpolatedString, p);
+    }
+
+    @Override
+    public Cs.Interpolation visitInterpolation(Cs.Interpolation interpolation, P p) {
+        return (Cs.Interpolation) super.visitInterpolation(interpolation, p);
+    }
+
+    @Override
     public Cs.NullSafeExpression visitNullSafeExpression(Cs.NullSafeExpression nullSafeExpression, P p) {
         return (Cs.NullSafeExpression) super.visitNullSafeExpression(nullSafeExpression, p);
     }

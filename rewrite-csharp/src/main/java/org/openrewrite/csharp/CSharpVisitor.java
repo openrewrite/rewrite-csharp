@@ -200,6 +200,32 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         return fileScopeNamespaceDeclaration;
     }
 
+    public J visitInterpolatedString(Cs.InterpolatedString interpolatedString, P p) {
+        interpolatedString = interpolatedString.withPrefix(visitSpace(interpolatedString.getPrefix(), CsSpace.Location.INTERPOLATED_STRING_PREFIX, p));
+        Expression tempExpression = (Expression) visitExpression(interpolatedString, p);
+        if (!(tempExpression instanceof Cs.InterpolatedString))
+        {
+            return tempExpression;
+        }
+        interpolatedString = (Cs.InterpolatedString) tempExpression;
+        interpolatedString = interpolatedString.withMarkers(visitMarkers(interpolatedString.getMarkers(), p));
+        interpolatedString = interpolatedString.getPadding().withParts(ListUtils.map(interpolatedString.getPadding().getParts(), el -> visitRightPadded(el, CsRightPadded.Location.INTERPOLATED_STRING_PARTS, p)));
+        return interpolatedString;
+    }
+
+    public J visitInterpolation(Cs.Interpolation interpolation, P p) {
+        interpolation = interpolation.withPrefix(visitSpace(interpolation.getPrefix(), CsSpace.Location.INTERPOLATION_PREFIX, p));
+        Expression tempExpression = (Expression) visitExpression(interpolation, p);
+        if (!(tempExpression instanceof Cs.Interpolation))
+        {
+            return tempExpression;
+        }
+        interpolation = (Cs.Interpolation) tempExpression;
+        interpolation = interpolation.withMarkers(visitMarkers(interpolation.getMarkers(), p));
+        interpolation = interpolation.getPadding().withExpression(visitRightPadded(interpolation.getPadding().getExpression(), CsRightPadded.Location.INTERPOLATION_EXPRESSION, p));
+        return interpolation;
+    }
+
     public J visitNullSafeExpression(Cs.NullSafeExpression nullSafeExpression, P p) {
         nullSafeExpression = nullSafeExpression.withPrefix(visitSpace(nullSafeExpression.getPrefix(), CsSpace.Location.NULL_SAFE_EXPRESSION_PREFIX, p));
         Expression tempExpression = (Expression) visitExpression(nullSafeExpression, p);

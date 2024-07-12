@@ -93,6 +93,51 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     }
 
     @Override
+    public J visitArrayRankSpecifier(Cs.ArrayRankSpecifier arrayRankSpecifier, PrintOutputCapture<P> p) {
+        beforeSyntax(arrayRankSpecifier, CsSpace.Location.ARRAY_RANK_SPECIFIER_PREFIX, p);
+        visitContainer("", arrayRankSpecifier.getPadding().getSizes(), CsContainer.Location.ARRAY_RANK_SPECIFIER_SIZES, ",", "", p);
+        afterSyntax(arrayRankSpecifier, p);
+        return arrayRankSpecifier;
+    }
+
+    @Override
+    public J visitAssignmentOperation(Cs.AssignmentOperation assignmentOperation, PrintOutputCapture<P> p) {
+        beforeSyntax(assignmentOperation, CsSpace.Location.ASSIGNMENT_OPERATION_PREFIX, p);
+        visit(assignmentOperation.getVariable(), p);
+        visitLeftPadded(assignmentOperation.getPadding().getOperator(), CsLeftPadded.Location.ASSIGNMENT_OPERATION_OPERATOR, p);
+        if (assignmentOperation.getOperator() == Cs.AssignmentOperation.OperatorType.NullCoalescing) {
+            p.append("??=");
+        }
+        visit(assignmentOperation.getAssignment(), p);
+        afterSyntax(assignmentOperation, p);
+        return assignmentOperation;
+    }
+
+    @Override
+    public J visitAwaitExpression(Cs.AwaitExpression awaitExpression, PrintOutputCapture<P> p) {
+        beforeSyntax(awaitExpression, CsSpace.Location.AWAIT_EXPRESSION_PREFIX, p);
+        p.append("await");
+        visit(awaitExpression.getExpression(), p);
+        afterSyntax(awaitExpression, p);
+        return awaitExpression;
+    }
+
+    @Override
+    public J visitBinary(Cs.Binary binary, PrintOutputCapture<P> p) {
+        beforeSyntax(binary, CsSpace.Location.BINARY_PREFIX, p);
+        visit(binary.getLeft(), p);
+        visitSpace(binary.getPadding().getOperator().getBefore(), Space.Location.BINARY_OPERATOR, p);
+        if (binary.getOperator() == Cs.Binary.OperatorType.As) {
+            p.append("as");
+        } else if (binary.getOperator() == Cs.Binary.OperatorType.NullCoalescing) {
+            p.append("??");
+        }
+        visit(binary.getRight(), p);
+        afterSyntax(binary, p);
+        return binary;
+    }
+
+    @Override
     public Cs visitBlockScopeNamespaceDeclaration(Cs.BlockScopeNamespaceDeclaration namespaceDeclaration, PrintOutputCapture<P> p) {
         beforeSyntax(namespaceDeclaration, CsSpace.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_PREFIX, p);
         p.append("namespace");
@@ -111,6 +156,24 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         p.append('}');
         afterSyntax(namespaceDeclaration, p);
         return namespaceDeclaration;
+    }
+
+    @Override
+    public J visitCollectionExpression(Cs.CollectionExpression collectionExpression, PrintOutputCapture<P> p) {
+        beforeSyntax(collectionExpression, CsSpace.Location.COLLECTION_EXPRESSION_PREFIX, p);
+        p.append('[');
+        visitRightPadded(collectionExpression.getPadding().getElements(), CsRightPadded.Location.COLLECTION_EXPRESSION_ELEMENTS, ",", p);
+        p.append(']');
+        afterSyntax(collectionExpression, p);
+        return collectionExpression;
+    }
+
+    @Override
+    public J visitExpressionStatement(Cs.ExpressionStatement expressionStatement, PrintOutputCapture<P> p) {
+        beforeSyntax(expressionStatement, CsSpace.Location.AWAIT_EXPRESSION_PREFIX, p);
+        visit(expressionStatement.getExpression(), p);
+        afterSyntax(expressionStatement, p);
+        return expressionStatement;
     }
 
     @Override
@@ -142,66 +205,23 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     }
 
     @Override
-    public J visitAwaitExpression(Cs.AwaitExpression awaitExpression, PrintOutputCapture<P> p) {
-        beforeSyntax(awaitExpression, CsSpace.Location.AWAIT_EXPRESSION_PREFIX, p);
-        p.append("await");
-        visit(awaitExpression.getExpression(), p);
-        afterSyntax(awaitExpression, p);
-        return awaitExpression;
+    public J visitInterpolatedString(Cs.InterpolatedString interpolatedString, PrintOutputCapture<P> p) {
+        beforeSyntax(interpolatedString, CsSpace.Location.INTERPOLATED_STRING_PREFIX, p);
+        p.append(interpolatedString.getStart());
+        visitRightPadded(interpolatedString.getPadding().getParts(), CsRightPadded.Location.INTERPOLATED_STRING_PARTS, "", p);
+        p.append(interpolatedString.getEnd());
+        afterSyntax(interpolatedString, p);
+        return interpolatedString;
     }
 
     @Override
-    public J visitExpressionStatement(Cs.ExpressionStatement expressionStatement, PrintOutputCapture<P> p) {
-        beforeSyntax(expressionStatement, CsSpace.Location.AWAIT_EXPRESSION_PREFIX, p);
-        visit(expressionStatement.getExpression(), p);
-        afterSyntax(expressionStatement, p);
-        return expressionStatement;
-    }
-
-    @Override
-    public J visitArrayRankSpecifier(Cs.ArrayRankSpecifier arrayRankSpecifier, PrintOutputCapture<P> p) {
-        beforeSyntax(arrayRankSpecifier, CsSpace.Location.ARRAY_RANK_SPECIFIER_PREFIX, p);
-        visitContainer("", arrayRankSpecifier.getPadding().getSizes(), CsContainer.Location.ARRAY_RANK_SPECIFIER_SIZES, ",", "", p);
-        afterSyntax(arrayRankSpecifier, p);
-        return arrayRankSpecifier;
-    }
-
-    @Override
-    public J visitAssignmentOperation(Cs.AssignmentOperation assignmentOperation, PrintOutputCapture<P> p) {
-        beforeSyntax(assignmentOperation, CsSpace.Location.ASSIGNMENT_OPERATION_PREFIX, p);
-        visit(assignmentOperation.getVariable(), p);
-        visitLeftPadded(assignmentOperation.getPadding().getOperator(), CsLeftPadded.Location.ASSIGNMENT_OPERATION_OPERATOR, p);
-        if (assignmentOperation.getOperator() == Cs.AssignmentOperation.OperatorType.NullCoalescing) {
-            p.append("??=");
-        }
-        visit(assignmentOperation.getAssignment(), p);
-        afterSyntax(assignmentOperation, p);
-        return assignmentOperation;
-    }
-
-    @Override
-    public J visitBinary(Cs.Binary binary, PrintOutputCapture<P> p) {
-        beforeSyntax(binary, CsSpace.Location.BINARY_PREFIX, p);
-        visit(binary.getLeft(), p);
-        visitSpace(binary.getPadding().getOperator().getBefore(), Space.Location.BINARY_OPERATOR, p);
-        if (binary.getOperator() == Cs.Binary.OperatorType.As) {
-            p.append("as");
-        } else if (binary.getOperator() == Cs.Binary.OperatorType.NullCoalescing) {
-            p.append("??");
-        }
-        visit(binary.getRight(), p);
-        afterSyntax(binary, p);
-        return binary;
-    }
-
-    @Override
-    public J visitCollectionExpression(Cs.CollectionExpression collectionExpression, PrintOutputCapture<P> p) {
-        beforeSyntax(collectionExpression, CsSpace.Location.COLLECTION_EXPRESSION_PREFIX, p);
-        p.append('[');
-        visitRightPadded(collectionExpression.getPadding().getElements(), CsRightPadded.Location.COLLECTION_EXPRESSION_ELEMENTS, ",", p);
-        p.append(']');
-        afterSyntax(collectionExpression, p);
-        return collectionExpression;
+    public J visitInterpolation(Cs.Interpolation interpolation, PrintOutputCapture<P> p) {
+        beforeSyntax(interpolation, CsSpace.Location.INTERPOLATION_PREFIX, p);
+        p.append('{');
+        visitRightPadded(interpolation.getPadding().getExpression(), CsRightPadded.Location.INTERPOLATION_EXPRESSION, p);
+        p.append('}');
+        afterSyntax(interpolation, p);
+        return interpolation;
     }
 
     @Override

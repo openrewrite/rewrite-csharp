@@ -182,7 +182,6 @@ public class ForLoopTests : RewriteTest
     void MultiInitExpressions()
     {
         RewriteRun(
-            spec => spec.TypeValidation = new TypeValidation(Unknowns: false), // TODO support interpolated strings
             CSharp(
                 """
                 class Test {
