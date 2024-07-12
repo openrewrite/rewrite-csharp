@@ -35,11 +35,11 @@ jobs:
       - uses: gradle/actions/wrapper-validation@v3
       - uses: gradle/actions/setup-gradle@v3
       - name: build
-        run: (cd rewrite-remote && ./gradlew ${{ env.GRADLE_SWITCHES }} build)
+        run: (cd rewrite-csharp && ./gradlew ${{ env.GRADLE_SWITCHES }} build)
 
       - name: publish-snapshots
         if: github.event_name != 'pull_request'
-        run: (cd rewrite-remote && ./gradlew ${{ env.GRADLE_SWITCHES }} snapshot publish -PforceSigning -x test)
+        run: (cd rewrite-csharp && ./gradlew ${{ env.GRADLE_SWITCHES }} snapshot publish -PforceSigning -x test)
         env:
           ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.OSSRH_USERNAME }}
           ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.OSSRH_TOKEN }}
