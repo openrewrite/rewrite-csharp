@@ -1193,6 +1193,30 @@ public interface Cs extends J {
             return getPadding().withExpression(JRightPadded.withElement(this.expression, expression));
         }
 
+        @Nullable
+        JRightPadded<Expression> alignment;
+
+        @Nullable
+        public Expression getAlignment() {
+            return alignment != null ? alignment.getElement() : null;
+        }
+
+        public Interpolation withAlignment(@Nullable Expression alignment) {
+            return getPadding().withAlignment(JRightPadded.withElement(this.alignment, alignment));
+        }
+
+        @Nullable
+        JRightPadded<Expression> format;
+
+        @Nullable
+        public Expression getFormat() {
+            return format != null ? format.getElement() : null;
+        }
+
+        public Interpolation withFormat(@Nullable Expression format) {
+            return getPadding().withFormat(JRightPadded.withElement(this.format, format));
+        }
+
         @Override
         public JavaType getType() {
             return expression.getElement().getType();
@@ -1238,7 +1262,25 @@ public interface Cs extends J {
             }
 
             public Interpolation withExpression(JRightPadded<Expression> expression) {
-                return t.expression == expression ? t : new Interpolation(t.id, t.prefix, t.markers, expression);
+                return t.expression == expression ? t : new Interpolation(t.id, t.prefix, t.markers, expression, t.alignment, t.format);
+            }
+
+            @Nullable
+            public JRightPadded<Expression> getAlignment() {
+                return t.alignment;
+            }
+
+            public Interpolation withAlignment(@Nullable JRightPadded<Expression> alignment) {
+                return t.alignment == alignment ? t : new Interpolation(t.id, t.prefix, t.markers, t.expression, alignment, t.format);
+            }
+
+            @Nullable
+            public JRightPadded<Expression> getFormat() {
+                return t.format;
+            }
+
+            public Interpolation withFormat(@Nullable JRightPadded<Expression> format) {
+                return t.format == format ? t : new Interpolation(t.id, t.prefix, t.markers, t.expression, t.alignment, format);
             }
         }
     }

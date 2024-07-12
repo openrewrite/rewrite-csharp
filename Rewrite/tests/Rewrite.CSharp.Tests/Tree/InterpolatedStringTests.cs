@@ -54,4 +54,34 @@ public class InterpolatedStringTests : RewriteTest
             )
         );
     }
+
+    [Fact]
+    public void Alignment()
+    {
+        RewriteRun(
+            CSharp(
+                """"
+                public class Foo
+                {
+                    string M(string s) => $"""Hello { s, 10  }""";
+                }
+                """"
+            )
+        );
+    }
+
+    [Fact]
+    public void AlignmentAndFormat()
+    {
+        RewriteRun(
+            CSharp(
+                """"
+                public class Foo
+                {
+                    string M(string s) => $"""Hello { s, 10  :C   }""";
+                }
+                """"
+            )
+        );
+    }
 }

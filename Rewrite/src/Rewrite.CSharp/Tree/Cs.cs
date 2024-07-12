@@ -1392,7 +1392,9 @@ public interface Cs : J
         Guid id,
         Space prefix,
         Markers markers,
-        JRightPadded<Expression> expression
+        JRightPadded<Expression> expression,
+        JRightPadded<Expression>? alignment,
+        JRightPadded<Expression>? format
     ) : Cs, Expression, MutableTree<Interpolation>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
@@ -1435,21 +1437,21 @@ public interface Cs : J
 
         public Interpolation WithId(Guid newId)
         {
-            return newId == id ? this : new Interpolation(newId, prefix, markers, _expression);
+            return newId == id ? this : new Interpolation(newId, prefix, markers, _expression, _alignment, _format);
         }
 
         public Space Prefix => prefix;
 
         public Interpolation WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Interpolation(id, newPrefix, markers, _expression);
+            return newPrefix == prefix ? this : new Interpolation(id, newPrefix, markers, _expression, _alignment, _format);
         }
 
         public Markers Markers => markers;
 
         public Interpolation WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Interpolation(id, prefix, newMarkers, _expression);
+            return ReferenceEquals(newMarkers, markers) ? this : new Interpolation(id, prefix, newMarkers, _expression, _alignment, _format);
         }
 
         private readonly JRightPadded<Expression> _expression = expression;
@@ -1460,13 +1462,43 @@ public interface Cs : J
             return Padding.WithExpression(_expression.WithElement(newExpression));
         }
 
+        private readonly JRightPadded<Expression>? _alignment = alignment;
+        public Expression? Alignment => _alignment?.Element;
+
+        public Interpolation WithAlignment(Expression? newAlignment)
+        {
+            return Padding.WithAlignment(JRightPadded<Expression>.WithElement(_alignment, newAlignment));
+        }
+
+        private readonly JRightPadded<Expression>? _format = format;
+        public Expression? Format => _format?.Element;
+
+        public Interpolation WithFormat(Expression? newFormat)
+        {
+            return Padding.WithFormat(JRightPadded<Expression>.WithElement(_format, newFormat));
+        }
+
         public sealed record PaddingHelper(Cs.Interpolation T)
         {
             public JRightPadded<Expression> Expression => T._expression;
 
             public Cs.Interpolation WithExpression(JRightPadded<Expression> newExpression)
             {
-                return T._expression == newExpression ? T : new Cs.Interpolation(T.Id, T.Prefix, T.Markers, newExpression);
+                return T._expression == newExpression ? T : new Cs.Interpolation(T.Id, T.Prefix, T.Markers, newExpression, T._alignment, T._format);
+            }
+
+            public JRightPadded<Expression>? Alignment => T._alignment;
+
+            public Cs.Interpolation WithAlignment(JRightPadded<Expression>? newAlignment)
+            {
+                return T._alignment == newAlignment ? T : new Cs.Interpolation(T.Id, T.Prefix, T.Markers, T._expression, newAlignment, T._format);
+            }
+
+            public JRightPadded<Expression>? Format => T._format;
+
+            public Cs.Interpolation WithFormat(JRightPadded<Expression>? newFormat)
+            {
+                return T._format == newFormat ? T : new Cs.Interpolation(T.Id, T.Prefix, T.Markers, T._expression, T._alignment, newFormat);
             }
 
         }

@@ -219,6 +219,14 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         beforeSyntax(interpolation, CsSpace.Location.INTERPOLATION_PREFIX, p);
         p.append('{');
         visitRightPadded(interpolation.getPadding().getExpression(), CsRightPadded.Location.INTERPOLATION_EXPRESSION, p);
+        if (interpolation.getAlignment() != null) {
+            p.append(',');
+            visitRightPadded(interpolation.getPadding().getAlignment(), CsRightPadded.Location.INTERPOLATION_ALIGNMENT, p);
+        }
+        if (interpolation.getFormat() != null) {
+            p.append(':');
+            visitRightPadded(interpolation.getPadding().getFormat(), CsRightPadded.Location.INTERPOLATION_FORMAT, p);
+        }
         p.append('}');
         afterSyntax(interpolation, p);
         return interpolation;

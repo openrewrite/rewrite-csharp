@@ -20,7 +20,9 @@ public interface CsRightPadded
         public static readonly Location FILE_SCOPE_NAMESPACE_DECLARATION_NAME = new(CsSpace.Location.FILE_SCOPE_NAMESPACE_DECLARATION_NAME);
         public static readonly Location FILE_SCOPE_NAMESPACE_DECLARATION_USINGS = new(CsSpace.Location.FILE_SCOPE_NAMESPACE_DECLARATION_USINGS);
         public static readonly Location INTERPOLATED_STRING_PARTS = new(CsSpace.Location.INTERPOLATED_STRING_PARTS_SUFFIX);
+        public static readonly Location INTERPOLATION_ALIGNMENT = new(CsSpace.Location.INTERPOLATION_ALIGNMENT_SUFFIX);
         public static readonly Location INTERPOLATION_EXPRESSION = new(CsSpace.Location.INTERPOLATION_EXPRESSION_SUFFIX);
+        public static readonly Location INTERPOLATION_FORMAT = new(CsSpace.Location.INTERPOLATION_FORMAT_SUFFIX);
         public static readonly Location NULL_SAFE_EXPRESSION_EXPRESSION = new(CsSpace.Location.NULL_SAFE_EXPRESSION_EXPRESSION_SUFFIX);
         public static readonly Location PROPERTY_DECLARATION_ACCESSORS = new(CsSpace.Location.PROPERTY_DECLARATION_ACCESSORS_PREFIX);
         public static readonly Location PROPERTY_DECLARATION_INTERFACE_SPECIFIER = new(CsSpace.Location.PROPERTY_DECLARATION_INTERFACE_SPECIFIER_PREFIX);

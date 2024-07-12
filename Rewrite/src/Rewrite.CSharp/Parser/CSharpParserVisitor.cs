@@ -645,9 +645,23 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
             Markers.EMPTY,
             new JRightPadded<Expression>(
                 Convert<Expression>(node.Expression)!,
-                Format(Leading(node.CloseBraceToken)),
+                Format(Trailing(node.Expression)),
                 Markers.EMPTY
-            )
+            ),
+            node.AlignmentClause != null
+                ? new JRightPadded<Expression>(
+                    Convert<Expression>(node.AlignmentClause)!,
+                    Format(Trailing(node.AlignmentClause.Value)),
+                    Markers.EMPTY
+                )
+                : null,
+            node.FormatClause != null
+                ? new JRightPadded<Expression>(
+                    Convert<Expression>(node.FormatClause)!,
+                    Format(Trailing(node.FormatClause.FormatStringToken)),
+                    Markers.EMPTY
+                )
+                : null
         );
     }
 
@@ -2293,12 +2307,20 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
 
     public override J? VisitInterpolationAlignmentClause(InterpolationAlignmentClauseSyntax node)
     {
-        return base.VisitInterpolationAlignmentClause(node);
+        return Convert<Expression>(node.Value);
     }
 
     public override J? VisitInterpolationFormatClause(InterpolationFormatClauseSyntax node)
     {
-        return base.VisitInterpolationFormatClause(node);
+        return new J.Literal(
+            Core.Tree.RandomId(),
+            Format(Leading(node)),
+            Markers.EMPTY,
+            node.FormatStringToken.Text,
+            node.FormatStringToken.Text,
+            null,
+            (JavaType.Primitive)MapType(node)
+        );
     }
 
     public override J? VisitGlobalStatement(GlobalStatementSyntax node)

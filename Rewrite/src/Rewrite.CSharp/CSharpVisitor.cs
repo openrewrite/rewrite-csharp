@@ -220,6 +220,8 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         interpolation = (Cs.Interpolation) tempExpression;
         interpolation = interpolation.WithMarkers(VisitMarkers(interpolation.Markers, p));
         interpolation = interpolation.Padding.WithExpression(VisitRightPadded(interpolation.Padding.Expression, CsRightPadded.Location.INTERPOLATION_EXPRESSION, p)!);
+        interpolation = interpolation.Padding.WithAlignment(VisitRightPadded(interpolation.Padding.Alignment, CsRightPadded.Location.INTERPOLATION_ALIGNMENT, p));
+        interpolation = interpolation.Padding.WithFormat(VisitRightPadded(interpolation.Padding.Format, CsRightPadded.Location.INTERPOLATION_FORMAT, p));
         return interpolation;
     }
 

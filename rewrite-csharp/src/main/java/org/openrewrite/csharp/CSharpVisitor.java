@@ -223,6 +223,8 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         interpolation = (Cs.Interpolation) tempExpression;
         interpolation = interpolation.withMarkers(visitMarkers(interpolation.getMarkers(), p));
         interpolation = interpolation.getPadding().withExpression(visitRightPadded(interpolation.getPadding().getExpression(), CsRightPadded.Location.INTERPOLATION_EXPRESSION, p));
+        interpolation = interpolation.getPadding().withAlignment(visitRightPadded(interpolation.getPadding().getAlignment(), CsRightPadded.Location.INTERPOLATION_ALIGNMENT, p));
+        interpolation = interpolation.getPadding().withFormat(visitRightPadded(interpolation.getPadding().getFormat(), CsRightPadded.Location.INTERPOLATION_FORMAT, p));
         return interpolation;
     }
 
