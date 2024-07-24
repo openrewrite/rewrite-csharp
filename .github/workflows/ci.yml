@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  GRADLE_SWITCHES: --console=plain --info --stacktrace --warning-mode=all --no-daemon -Pgit.root=$(realpath ..)
+  GRADLE_SWITCHES: --console=plain --info --stacktrace --warning-mode=all --no-daemon
   GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.gradle_enterprise_access_key }}
   GRADLE_ENTERPRISE_CACHE_USERNAME: ${{ secrets.gradle_enterprise_cache_username }}
   GRADLE_ENTERPRISE_CACHE_PASSWORD: ${{ secrets.gradle_enterprise_cache_password }}
