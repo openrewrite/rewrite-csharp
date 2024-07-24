@@ -23,17 +23,21 @@ import org.openrewrite.csharp.CSharpPrinter;
 import org.openrewrite.csharp.CSharpVisitor;
 import org.openrewrite.internal.lang.Nullable;
 import org.openrewrite.java.JavaPrinter;
+import org.openrewrite.java.internal.TypesInUse;
 import org.openrewrite.java.tree.*;
 import org.openrewrite.marker.Markers;
 
 import java.beans.Transient;
+import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 
@@ -60,10 +64,15 @@ public interface Cs extends J {
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
     @RequiredArgsConstructor
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    final class CompilationUnit implements Cs, SourceFile {
+    final class CompilationUnit implements Cs, JavaSourceFile {
+
         @Nullable
         @NonFinal
-        transient WeakReference<Padding> padding;
+        transient SoftReference<TypesInUse> typesInUse;
+
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding>    padding;
 
         @Getter
         @With
@@ -112,6 +121,15 @@ public interface Cs extends J {
             return withCharsetName(charset.name());
         }
 
+        @Nullable
+        public Package getPackageDeclaration() {
+            return null;
+        }
+
+        public Cs.CompilationUnit withPackageDeclaration(Package packageDeclaration) {
+            return this;
+        }
+
         List<JRightPadded<ExternAlias>> externs;
 
         public List<ExternAlias> getExterns() {
@@ -146,6 +164,25 @@ public interface Cs extends J {
             return getPadding().withMembers(JRightPadded.withElements(this.members, members));
         }
 
+        @Transient
+        public List<Import> getImports() {
+            return Collections.emptyList();
+        }
+
+        public Cs.CompilationUnit withImports(List<Import> imports) {
+            return this;
+        }
+
+        @Transient
+        public List<ClassDeclaration> getClasses() {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public JavaSourceFile withClasses(List<ClassDeclaration> classes) {
+            return this;
+        }
+
         @Getter
         @With
         Space eof;
@@ -158,6 +195,22 @@ public interface Cs extends J {
         @Override
         public <P> TreeVisitor<?, PrintOutputCapture<P>> printer(Cursor cursor) {
             return new CSharpPrinter<>();
+        }
+
+        @Override
+        public TypesInUse getTypesInUse() {
+            TypesInUse cache;
+            if (this.typesInUse == null) {
+                cache = TypesInUse.build(this);
+                this.typesInUse = new SoftReference<>(cache);
+            } else {
+                cache = this.typesInUse.get();
+                if (cache == null || cache.getCu() != this) {
+                    cache = TypesInUse.build(this);
+                    this.typesInUse = new SoftReference<>(cache);
+                }
+            }
+            return cache;
         }
 
         public Padding getPadding() {
@@ -176,8 +229,18 @@ public interface Cs extends J {
         }
 
         @RequiredArgsConstructor
-        public static class Padding {
+        public static class Padding implements JavaSourceFile.Padding  {
             private final Cs.CompilationUnit t;
+
+            @Override
+            public List<JRightPadded<Import>> getImports() {
+                return Collections.emptyList();
+            }
+
+            @Override
+            public JavaSourceFile withImports(List<JRightPadded<Import>> imports) {
+                return t;
+            }
 
             public List<JRightPadded<Statement>> getMembers() {
                 return t.members;

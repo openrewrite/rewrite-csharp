@@ -5,12 +5,11 @@ plugins {
 // Set as appropriate for your organization
 group = "org.openrewrite"
 description = "Rewrite C#."
-version = "0.8.0-SNAPSHOT"
 
 dependencies {
     // The bom version can also be set to a specific version
     // https://github.com/openrewrite/rewrite-recipe-bom/releases
-    implementation(platform("org.openrewrite:rewrite-bom:latest.integration"))
+    implementation(platform("org.openrewrite:rewrite-bom:latest.release"))
 
     implementation("org.openrewrite:rewrite-core")
     implementation("org.openrewrite:rewrite-java")

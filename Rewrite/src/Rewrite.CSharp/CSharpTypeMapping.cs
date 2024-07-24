@@ -71,7 +71,7 @@ public partial class CSharpTypeMapping : JavaTypeMapping<ISymbol>
         return new JavaType.Method(
             null,
             0,
-            null,
+            Type(methodSymbol.ReceiverType) as JavaType.FullyQualified,
             methodSymbol.Name,
             Type(methodSymbol.ReturnType),
             methodSymbol.Parameters.Select(p => p.Name).ToList(),
