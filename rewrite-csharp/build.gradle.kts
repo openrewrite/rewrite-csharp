@@ -1,10 +1,6 @@
 plugins {
-    id("org.openrewrite.build.recipe-library") version "latest.release"
+    id("org.openrewrite.build.language-library")
 }
-
-// Set as appropriate for your organization
-group = "org.openrewrite"
-description = "Rewrite C#."
 
 dependencies {
     // The bom version can also be set to a specific version
@@ -20,12 +16,9 @@ dependencies {
 
     // Need to have a slf4j binding to see any output enabled from the parser.
     runtimeOnly("ch.qos.logback:logback-classic:1.2.+")
+    testImplementation("org.openrewrite:rewrite-test")
 
     testRuntimeOnly("org.openrewrite:rewrite-java-17")
-}
-
-repositories {
-    mavenCentral()
 }
 
 // We don't care about publishing javadocs anywhere, so don't waste time building them

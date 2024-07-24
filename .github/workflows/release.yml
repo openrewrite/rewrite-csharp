@@ -9,7 +9,12 @@ on:
 
 env:
   GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
-  GRADLE_SWITCHES: "-s --console=plain --info --stacktrace"
+  GRADLE_SWITCHES: --console=plain --info --stacktrace --warning-mode=all --no-daemon
+  GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.gradle_enterprise_access_key }}
+  ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ossrh_username }}
+  ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.ossrh_token }}
+  ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ossrh_signing_key }}
+  ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.ossrh_signing_password }}
 
 jobs:
   release:
@@ -28,10 +33,24 @@ jobs:
 
       - name: publish-candidate
         if: contains(github.ref, '-rc.')
-        timeout-minutes: 30
-        run: (cd rewrite-csharp && ./gradlew ${{ env.GRADLE_SWITCHES }} -Preleasing -Prelease.disableGitChecks=true -Prelease.useLastTag=true candidate publish)
+        run: |
+          ./gradlew \
+          ${{ env.GRADLE_SWITCHES }} \
+          -Preleasing \
+          -Prelease.disableGitChecks=true \
+          -Prelease.useLastTag=true \
+          candidate \
+          publish \
+          closeAndReleaseSonatypeStagingRepository
 
       - name: publish-release
         if: (!contains(github.ref, '-rc.'))
-        timeout-minutes: 30
-        run: (cd rewrite-csharp && ./gradlew ${{ env.GRADLE_SWITCHES }} -Preleasing -Prelease.disableGitChecks=true -Prelease.useLastTag=true final publish)
+        run: |
+          ./gradlew \
+          ${{ env.GRADLE_SWITCHES }} \
+          -Preleasing \
+          -Prelease.disableGitChecks=true \
+          -Prelease.useLastTag=true \
+          final \
+          publish \
+          closeAndReleaseSonatypeStagingRepository
