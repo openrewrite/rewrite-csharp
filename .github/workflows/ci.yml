@@ -33,9 +33,15 @@ jobs:
           fetch-depth: 0
           show-progress: false
       - uses: gradle/actions/wrapper-validation@v3
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
       - uses: gradle/actions/setup-gradle@v3
+
       - name: build
         run: ./gradlew ${{ env.GRADLE_SWITCHES }} build
+      - name: test-cs
+        run: (cd Rewrite.Remote && dotnet test)
 
       - name: publish-snapshots
         if: github.event_name != 'pull_request'
