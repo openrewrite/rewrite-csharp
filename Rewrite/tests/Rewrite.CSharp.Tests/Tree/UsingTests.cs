@@ -51,6 +51,30 @@ public class UsingTests : RewriteTest
             )
         );
     }
+    
+    [Fact]
+    public void Multiple2()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                using System.IO;
+
+                class Foo
+                {
+                    void M()
+                    {
+                        using (StreamReader reader1 = new StreamReader("file1.txt"))
+                        using (StreamReader reader2 = new StreamReader("file2.txt"))
+                        {
+                            // code
+                        }
+                    }
+                }
+                """
+            )
+        );
+    }
 
     [Fact]
     public void NoBraces()

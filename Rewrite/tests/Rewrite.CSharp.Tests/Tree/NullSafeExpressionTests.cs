@@ -62,6 +62,28 @@ public class NullSafeExpressionTests : RewriteTest
             )
         );
     }
+    
+    [Fact]
+    public void SequentialFieldAccess()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                public class Foo
+                {
+                    Foo? foo_;
+                    Foo? baz_;
+                    Foo? bar_;
+                    public object M()
+                    {
+                        return this.foo_?.baz_?.bar_;
+                    }
+                }
+                """
+            )
+        );
+    }
+
 
     [Fact]
     public void ArrayAccess()
