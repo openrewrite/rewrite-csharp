@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Linq.Expressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -1264,6 +1263,10 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
 
     public override J? VisitPrefixUnaryExpression(PrefixUnaryExpressionSyntax node)
     {
+        if (node.OperatorToken.IsKind(SyntaxKind.CaretToken))
+            // TODO implement C# 8.0 "index from the end" operator `^`
+            return base.VisitPrefixUnaryExpression(node);
+
         return new J.Unary(
             Core.Tree.RandomId(),
             Format(Leading(node)),
