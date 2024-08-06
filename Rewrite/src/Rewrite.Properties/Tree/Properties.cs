@@ -226,7 +226,7 @@ public interface Properties : Rewrite.Core.Tree
         string text
     )
     {
-        public Properties.Value AcceptProperties<P>(PropertiesVisitor<P> v, P p)
+        public Properties.Value? AcceptProperties<P>(PropertiesVisitor<P> v, P p)
         {
             return v.VisitValue(this, p);
         }

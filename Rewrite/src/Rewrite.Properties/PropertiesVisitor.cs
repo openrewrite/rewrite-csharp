@@ -6,6 +6,7 @@ namespace Rewrite.RewriteProperties;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "ReturnTypeCanBeNotNullable")]
+[SuppressMessage("ReSharper", "MergeCastWithTypeCheck")]
 public class PropertiesVisitor<P> : TreeVisitor<Properties, P>
 {
     public override bool IsAcceptable(SourceFile sourceFile, P p)
