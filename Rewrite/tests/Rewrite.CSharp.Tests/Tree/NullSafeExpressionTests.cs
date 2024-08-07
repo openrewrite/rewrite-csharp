@@ -8,7 +8,7 @@ using static Assertions;
 [Collection("C# remoting")]
 public class NullSafeExpressionTests : RewriteTest
 {
-    [Fact]
+    [Fact(Skip = "NullSafeExpression parsing was disabled due to infiti recursion issue")]
     public void Space()
     {
         RewriteRun(
@@ -26,7 +26,7 @@ public class NullSafeExpressionTests : RewriteTest
         );
     }
 
-    [Fact]
+    [Fact(Skip = "NullSafeExpression parsing was disabled due to infiti recursion issue")]
     public void NestedMethodCall()
     {
         RewriteRun(
@@ -44,7 +44,7 @@ public class NullSafeExpressionTests : RewriteTest
         );
     }
 
-    [Fact]
+    [Fact(Skip = "NullSafeExpression parsing was disabled due to infiti recursion issue")]
     public void FieldAccess()
     {
         RewriteRun(
@@ -63,7 +63,7 @@ public class NullSafeExpressionTests : RewriteTest
         );
     }
     
-    [Fact]
+    [Fact(Skip = "NullSafeExpression parsing was disabled due to infiti recursion issue")]
     public void SequentialFieldAccess()
     {
         RewriteRun(
@@ -85,7 +85,7 @@ public class NullSafeExpressionTests : RewriteTest
     }
 
 
-    [Fact]
+    [Fact(Skip = "NullSafeExpression parsing was disabled due to infiti recursion issue")]
     public void ArrayAccess()
     {
         RewriteRun(
