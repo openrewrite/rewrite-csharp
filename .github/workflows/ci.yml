@@ -33,7 +33,6 @@ jobs:
         with:
           fetch-depth: 0
           show-progress: false
-      - uses: gradle/actions/wrapper-validation@v4
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
