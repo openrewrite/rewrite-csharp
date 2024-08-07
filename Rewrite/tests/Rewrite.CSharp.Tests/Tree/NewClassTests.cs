@@ -236,6 +236,32 @@ public class NewClassTests : RewriteTest
             )
         );
     }
+    
+    
+
+    [Fact]
+    void ComplexAnonymousObjectCreationWithFieldAccess()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                public class Test 
+                {
+                    class ClassWithProps 
+                    {
+                        int Age = 10;
+                        string Name = "Test";
+                    }
+                    public void TestMethod()
+                    {
+                        var cls = new ClassWithProps();
+                        var pet = new { cls.Age, cls.Name };
+                    }      
+                }
+                """
+            )
+        );
+    }
 
     [Fact]
     void DictionaryCreation()

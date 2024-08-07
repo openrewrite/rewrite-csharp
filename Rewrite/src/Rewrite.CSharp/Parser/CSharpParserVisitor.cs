@@ -711,7 +711,7 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
             Format(Leading(node.CloseBraceToken))
         );
     }
-    
+
     private JRightPadded<Statement> MapAccessor(AccessorDeclarationSyntax accessorDeclarationSyntax)
     {
         var methodDeclaration = Convert<J.MethodDeclaration>(accessorDeclarationSyntax)!;
@@ -1396,7 +1396,8 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
     {
         // the AST hierarchy in Roslyn is very different from that with `J.FieldAccess`
         // see `VisitMemberBindingExpression()` for more details
-        return Convert<Expression>(node.WhenNotNull)!;
+        // return Convert<Expression>(node.WhenNotNull)!;
+        return base.VisitConditionalAccessExpression(node);
     }
 
     public override J? VisitMemberBindingExpression(MemberBindingExpressionSyntax node)
@@ -1912,13 +1913,17 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
     private JRightPadded<J.VariableDeclarations.NamedVariable> MapNamedVariableFromExpression(
         ExpressionSyntax expression)
     {
-        var identifier = Convert<J.Identifier>(expression)!;
+        var identifierOrFieldAccess = Convert<Expression>(expression)!;
+        var identifier = identifierOrFieldAccess is J.Identifier i
+            ? i
+            : (identifierOrFieldAccess as J.FieldAccess).Name;
         return new JRightPadded<J.VariableDeclarations.NamedVariable>(
             new J.VariableDeclarations.NamedVariable(
                 Core.Tree.RandomId(),
                 Format(Leading(expression)),
                 Markers.EMPTY,
-                identifier,
+                new J.Identifier(Core.Tree.RandomId(), identifierOrFieldAccess.Prefix, identifierOrFieldAccess.Markers,
+                    identifier.Annotations, expression.ToString(), identifier.Type, identifier.FieldType),
                 [],
                 null,
                 identifier.Type as JavaType.Variable
@@ -2155,15 +2160,18 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
             Markers.EMPTY,
             node.StringStartToken.ToString(),
             node.Contents.Count == 0
-                ? [new JRightPadded<Expression>(
-                    new J.Empty(
-                        Core.Tree.RandomId(),
-                        Format(Trailing(node.StringStartToken)),
+                ?
+                [
+                    new JRightPadded<Expression>(
+                        new J.Empty(
+                            Core.Tree.RandomId(),
+                            Format(Trailing(node.StringStartToken)),
+                            Markers.EMPTY
+                        ),
+                        Space.EMPTY,
                         Markers.EMPTY
-                    ),
-                    Space.EMPTY,
-                    Markers.EMPTY
-                )]
+                    )
+                ]
                 : node.Contents.Select(c => new JRightPadded<Expression>(
                     Convert<Expression>(c)!,
                     Format(Trailing(c)),
@@ -2676,35 +2684,48 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
 
     public override J? VisitUsingStatement(UsingStatementSyntax node)
     {
+        var jContainer = new JContainer<J.Try.Resource>(
+            Format(Leading(node.OpenParenToken)),
+            node.Declaration != null
+                ?
+                [
+                    new JRightPadded<J.Try.Resource>(
+                        new J.Try.Resource(
+                            Core.Tree.RandomId(),
+                            Format(Leading(node.Declaration)),
+                            Markers.EMPTY,
+                            Convert<TypedTree>(node.Declaration)!,
+                            false
+                        ),
+                        Format(Trailing(node.Declaration)),
+                        Markers.EMPTY
+                    )
+                ]
+                : [],
+            Markers.EMPTY
+        );
+        var s = Convert<Statement>(node.Statement);
+        
         return new J.Try(
             Core.Tree.RandomId(),
             Format(Leading(node)),
             Markers.EMPTY,
-            new JContainer<J.Try.Resource>(
-                Format(Leading(node.OpenParenToken)),
-                node.Declaration != null
-                    ?
+            jContainer,
+             s is not J.Block block 
+                ? new J.Block(
+                    Core.Tree.RandomId(),
+                    Space.EMPTY,
+                    Markers.EMPTY.Add(new OmitBraces(Core.Tree.RandomId())),
+                    JRightPadded<bool>.Build(false),
                     [
-                        new JRightPadded<J.Try.Resource>(
-                            new J.Try.Resource(
-                                Core.Tree.RandomId(),
-                                Format(Leading(node.Declaration)),
-                                Markers.EMPTY,
-                                Convert<TypedTree>(node.Declaration)!,
-                                false
-                            ),
-                            Format(Trailing(node.Declaration)),
-                            Markers.EMPTY
-                        )
-                    ]
-                    : [],
-                Markers.EMPTY
-            ),
-            Convert<J.Block>(node.Statement)!,
+                        JRightPadded<Statement>.Build(s),
+                    ],
+                    Space.EMPTY
+                )
+                : block,
             [],
             null
         );
-        return base.VisitUsingStatement(node);
     }
 
     public override J? VisitFixedStatement(FixedStatementSyntax node)
@@ -3426,6 +3447,7 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
                 statement
             ) as T;
         }
+
         return (T?)visit;
     }
 
