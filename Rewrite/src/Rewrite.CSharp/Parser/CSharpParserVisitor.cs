@@ -1913,13 +1913,14 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
         var identifierOrFieldAccess = Convert<Expression>(expression)!;
         var identifier = identifierOrFieldAccess is J.Identifier i
             ? i
-            : (identifierOrFieldAccess as J.FieldAccess).Name; 
+            : (identifierOrFieldAccess as J.FieldAccess).Name;
         return new JRightPadded<J.VariableDeclarations.NamedVariable>(
             new J.VariableDeclarations.NamedVariable(
                 Core.Tree.RandomId(),
                 Format(Leading(expression)),
                 Markers.EMPTY,
-                identifier,
+                new J.Identifier(Core.Tree.RandomId(), identifierOrFieldAccess.Prefix, identifierOrFieldAccess.Markers,
+                    identifier.Annotations, expression.ToString(), identifier.Type, identifier.FieldType),
                 [],
                 null,
                 identifier.Type as JavaType.Variable
