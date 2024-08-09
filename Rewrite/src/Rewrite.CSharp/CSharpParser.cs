@@ -33,6 +33,7 @@ public class CSharpParser : Core.Parser
             _references = references;
             return this;
         }
+
         public override Core.Parser.Builder Clone()
         {
             return new Builder();
@@ -58,17 +59,26 @@ public class CSharpParser : Core.Parser
         var sourceFiles = new List<SourceFile>();
         foreach (var source in sources)
         {
-            var sourceText = SourceText.From(source.GetSource(ctx), encoding);
-            var syntaxTree = CSharpSyntaxTree.ParseText(sourceText, path: source.GetRelativePath(relativeTo));
-            var root = syntaxTree.GetRoot();
-            var compilation = CSharpCompilation.Create("Dummy")
-                .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
-                .AddReferences(references)
-                .AddSyntaxTrees(syntaxTree);
-            var semanticModel = compilation.GetSemanticModel(syntaxTree);
+            SourceFile cs;
+            try
+            {
+                var sourceText = SourceText.From(source.GetSource(ctx), encoding);
+                var syntaxTree = CSharpSyntaxTree.ParseText(sourceText, path: source.GetRelativePath(relativeTo));
+                var root = syntaxTree.GetRoot();
+                var compilation = CSharpCompilation.Create("Dummy")
+                    .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
+                    .AddReferences(references)
+                    .AddSyntaxTrees(syntaxTree);
+                var semanticModel = compilation.GetSemanticModel(syntaxTree);
 
-            var visitor = new CSharpParserVisitor(semanticModel);
-            var cs = visitor.Visit(root) as Cs.CompilationUnit;
+                var visitor = new CSharpParserVisitor(semanticModel);
+                cs = visitor.Visit(root) as Cs.CompilationUnit;
+            }
+            catch (Exception t)
+            {
+                // ctx.OnError.accept(t);
+                cs = ParseError.Build(this, source, relativeTo, ctx, t);
+            }
 
             sourceFiles.Add(cs!);
         }
