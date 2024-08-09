@@ -43,10 +43,10 @@ jobs:
       - name: Remove pr_number.txt
         run: rm -f pr_number.txt
 
-      # Execute recipes
+      # Apply license headers only (for now)
       - uses: gradle/actions/setup-gradle@v4
-      - name: Apply OpenRewrite best practices
-        run: gradle ${{ env.GRADLE_SWITCHES }} licenseFormat rewriteRun -Drewrite.activeRecipe=org.openrewrite.recipes.OpenRewriteBestPractices
+      - name: Apply license headers
+        run: gradle ${{ env.GRADLE_SWITCHES }} licenseFormat
 
       # Capture the diff
       - name: Create patch
