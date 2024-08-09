@@ -44,10 +44,9 @@ jobs:
         run: rm -f pr_number.txt
 
       # Execute recipes
+      - uses: gradle/actions/setup-gradle@v4
       - name: Apply OpenRewrite best practices
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          arguments: ${{ env.GRADLE_SWITCHES }} licenseFormat rewriteRun -Drewrite.activeRecipe=org.openrewrite.recipes.OpenRewriteBestPractices
+        run: gradle ${{ env.GRADLE_SWITCHES }} licenseFormat rewriteRun -Drewrite.activeRecipe=org.openrewrite.recipes.OpenRewriteBestPractices
 
       # Capture the diff
       - name: Create patch
