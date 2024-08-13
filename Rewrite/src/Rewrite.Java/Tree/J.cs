@@ -6526,7 +6526,7 @@ public interface J : Rewrite.Core.Tree
         Space prefix,
         Markers markers,
         Unknown.Source unknownSource
-    ) : J, Statement, Expression, TypeTree, TypedTree, NameTree, MutableTree<Unknown>
+    ) : J, Statement, Expression, TypeTree, MutableTree<Unknown>
     {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {

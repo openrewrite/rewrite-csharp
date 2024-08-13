@@ -234,6 +234,10 @@ public interface Yaml : Rewrite.Core.Tree
         }
     }
 
+    public interface Block : Yaml
+    {
+    }
+
     public sealed class Scalar(
         Guid id,
         string prefix,
@@ -687,10 +691,6 @@ public interface Yaml : Rewrite.Core.Tree
         {
             return Id.GetHashCode();
         }
-    }
-
-    public interface Block : Yaml
-    {
     }
 
 }

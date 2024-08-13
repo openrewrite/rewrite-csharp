@@ -119,6 +119,11 @@ public interface Xml : Rewrite.Core.Tree
 
         public string Eof => eof;
 
+        public Document WithEof(string newEof)
+        {
+            return newEof == eof ? this : new Document(id, sourcePath, prefix, markers, charsetName, charsetBomMarked, checksum, fileAttributes, prolog, root, newEof);
+        }
+
         public bool Equals(Rewrite.Core.Tree? other)
         {
             return other is Document && other.Id == Id;
@@ -375,6 +380,11 @@ public interface Xml : Rewrite.Core.Tree
 
         public string Name => name;
 
+        public Tag WithName(string newName)
+        {
+            return newName == name ? this : new Tag(id, prefix, markers, newName, attributes, content, closingTag, beforeTagDelimiterPrefix);
+        }
+
         public IList<Xml.Attribute> Attributes => attributes;
 
         public Tag WithAttributes(IList<Xml.Attribute> newAttributes)
@@ -383,6 +393,11 @@ public interface Xml : Rewrite.Core.Tree
         }
 
         public IList<Content>? Content => content;
+
+        public Tag WithContent(IList<Content>? newContent)
+        {
+            return newContent == content ? this : new Tag(id, prefix, markers, name, attributes, newContent, closingTag, beforeTagDelimiterPrefix);
+        }
 
         public Closing? ClosingTag => closingTag;
 
@@ -1007,6 +1022,11 @@ public interface Xml : Rewrite.Core.Tree
         }
 
         public string Type => type;
+
+        public JspDirective WithType(string newType)
+        {
+            return newType == type ? this : new JspDirective(id, prefix, markers, beforeTypePrefix, newType, attributes, beforeDirectiveEndPrefix);
+        }
 
         public IList<Xml.Attribute> Attributes => attributes;
 
