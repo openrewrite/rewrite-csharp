@@ -15,9 +15,9 @@
  */
 package org.openrewrite.csharp;
 
+import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.internal.ListUtils;
-import org.openrewrite.internal.lang.Nullable;
 import org.openrewrite.marker.Markers;
 import org.openrewrite.tree.*;
 import org.openrewrite.java.JavaVisitor;

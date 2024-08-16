@@ -15,9 +15,9 @@
  */
 package org.openrewrite.csharp;
 
+import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.internal.ListUtils;
-import org.openrewrite.internal.lang.Nullable;
 import org.openrewrite.marker.Markers;
 import org.openrewrite.tree.*;
 import org.openrewrite.java.JavaVisitor;
@@ -176,11 +176,6 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     @Override
     public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDeclaration, P p) {
         return (J.ClassDeclaration) super.visitClassDeclaration(classDeclaration, p);
-    }
-
-    @Override
-    public J.CompilationUnit visitCompilationUnit(J.CompilationUnit compilationUnit, P p) {
-        return (J.CompilationUnit) super.visitCompilationUnit(compilationUnit, p);
     }
 
     @Override
