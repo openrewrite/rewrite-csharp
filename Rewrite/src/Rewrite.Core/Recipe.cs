@@ -1,7 +1,38 @@
+using System.Runtime.CompilerServices;
+using Rewrite.Core.Config;
+
 namespace Rewrite.Core;
 
 public abstract class Recipe
 {
+    private RecipeDescriptor? _descriptor;
+
+    public RecipeDescriptor Descriptor
+    {
+        get
+        {
+            return _descriptor ?? (_descriptor = new RecipeDescriptor(GetType().FullName, GetType().FullName, "",
+                new HashSet<string>(), null,
+                GetType().GetConstructors()[0].GetParameters().Select(parameterInfo =>
+                {
+                    return new OptionDescriptor(parameterInfo.Name, parameterInfo.ParameterType.FullName, null,
+                        null,
+                        null,
+                        null,
+                        !(parameterInfo.IsOptional || parameterInfo.HasDefaultValue ||
+                          parameterInfo.CustomAttributes.FirstOrDefault(data =>
+                              data.AttributeType == typeof(NullableAttribute)) != null),
+                        parameterInfo.DefaultValue
+                    );
+                }).ToList(),
+                [],
+                new Uri($"recipe://{GetType().FullName}")
+            ));
+        }
+
+        set => _descriptor = value;
+    }
+
     public static Recipe Noop()
     {
         return new NoopRecipe();

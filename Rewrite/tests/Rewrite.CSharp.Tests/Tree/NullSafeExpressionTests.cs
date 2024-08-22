@@ -8,7 +8,7 @@ using static Assertions;
 [Collection("C# remoting")]
 public class NullSafeExpressionTests : RewriteTest
 {
-    [Fact(Skip = "NullSafeExpression parsing was disabled due to infiti recursion issue")]
+    [Fact(Skip = "NullSafeExpression parsing was disabled due to infinite recursion issue")]
     public void Space()
     {
         RewriteRun(
