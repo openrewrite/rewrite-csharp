@@ -3,7 +3,7 @@
         <Company>Moderne Inc.</Company>
         <PackageIcon>openrewrite.png</PackageIcon>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <Version>0.8.0-preview-6</Version>
+        <Version>0.8.0-preview-7</Version>
 
         <RewriteRemoteVersion>0.8.0-preview-5</RewriteRemoteVersion>
         <RewriteRemoteDir Condition="'$(RewriteRemoteDir)'==''">..\..\..\..\..\moderneinc\rewrite-remote\Rewrite.Remote</RewriteRemoteDir>

@@ -8,8 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Yaml", "src\Rewrite
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Xml", "src\Rewrite.Xml\Rewrite.Xml.csproj", "{D38BB305-3276-4AE1-87B1-C19C7A9F3840}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.MSBuild", "src\Rewrite.MSBuild\Rewrite.MSBuild.csproj", "{DA9A6E30-7207-43DD-8A0E-73D5B97023D5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Json", "src\Rewrite.Json\Rewrite.Json.csproj", "{5DD7D88A-5A10-457D-B1A2-30F7CF67AD9F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Java", "src\Rewrite.Java\Rewrite.Java.csproj", "{06BCC1C7-9D8C-4D3B-934D-072C35A5C984}"
@@ -46,10 +44,6 @@ Global
 		{D38BB305-3276-4AE1-87B1-C19C7A9F3840}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D38BB305-3276-4AE1-87B1-C19C7A9F3840}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D38BB305-3276-4AE1-87B1-C19C7A9F3840}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA9A6E30-7207-43DD-8A0E-73D5B97023D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA9A6E30-7207-43DD-8A0E-73D5B97023D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA9A6E30-7207-43DD-8A0E-73D5B97023D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA9A6E30-7207-43DD-8A0E-73D5B97023D5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5DD7D88A-5A10-457D-B1A2-30F7CF67AD9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5DD7D88A-5A10-457D-B1A2-30F7CF67AD9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DD7D88A-5A10-457D-B1A2-30F7CF67AD9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
