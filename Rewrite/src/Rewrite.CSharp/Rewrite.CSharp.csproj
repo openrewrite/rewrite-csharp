@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>Rewrite.RewriteCSharp</RootNamespace>
+        <Description>C# language support for the automated code refactoring framework OpenRewrite.</Description>
     </PropertyGroup>
 
     <ItemGroup>

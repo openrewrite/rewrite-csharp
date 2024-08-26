@@ -6,6 +6,7 @@
         <Nullable>enable</Nullable>
         <!-- explicitly set to false as project contains `xUnit` dependency -->
         <IsTestProject>false</IsTestProject>
+        <Description>Test harness for the automated code refactoring framework OpenRewrite.</Description>
     </PropertyGroup>
 
     <ItemGroup>

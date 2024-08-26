@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>Rewrite.RewriteXml</RootNamespace>
+        <Description>XML language support for the automated code refactoring framework OpenRewrite.</Description>
     </PropertyGroup>
 
     <ItemGroup>

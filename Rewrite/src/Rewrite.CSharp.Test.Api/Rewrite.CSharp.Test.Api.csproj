@@ -6,6 +6,7 @@
         <Nullable>enable</Nullable>
         <RootNamespace>Rewrite.RewriteCSharp.Test.Api</RootNamespace>
         <IsTestProject>false</IsTestProject>
+        <Description>C# recipe test support for the automated code refactoring framework OpenRewrite.</Description>
     </PropertyGroup>
     
     <ItemGroup>
