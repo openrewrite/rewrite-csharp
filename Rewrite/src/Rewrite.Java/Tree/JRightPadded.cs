@@ -86,7 +86,7 @@ public sealed class JRightPadded<T>(
             new Dictionary<Guid, JRightPadded<J2>>((int)Math.Ceiling(elements.Count / 0.75));
         foreach (var j in before)
         {
-            if ((beforeById[j.Element.Id] = j) != null)
+            if (!beforeById.TryAdd(j.Element.Id, j))
             {
                 throw new ArgumentException("Duplicate key");
             }
