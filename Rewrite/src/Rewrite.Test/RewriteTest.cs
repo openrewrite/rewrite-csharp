@@ -216,7 +216,7 @@ public class RewriteTest
         }
 
         var beforeList = specBySourceFile.Keys.ToList();
-        var afterList = testExecutionContext!.RunRecipe(recipe.GetType().FullName!, recipeOptions, beforeList);
+        var afterList = testExecutionContext!.RunRecipe(recipe, recipeOptions, beforeList);
         for (var i = 0; i < beforeList.Count; i++)
         {
             var before = beforeList[i];

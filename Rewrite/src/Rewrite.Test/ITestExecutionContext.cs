@@ -12,5 +12,5 @@ public interface ITestExecutionContext
     
     string Print(Cursor cursor);
     void Reset(ExecutionContext ctx);
-    IList<SourceFile?> RunRecipe(string recipe, IDictionary<string, object?> options, IList<SourceFile> sourceFiles);
+    IList<SourceFile?> RunRecipe(Recipe recipe, IDictionary<string, object?> options, IList<SourceFile> sourceFiles);
 }
