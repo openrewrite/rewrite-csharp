@@ -1,3 +1,4 @@
-## Rewrite Remote
+## Rewrite C#
 
-Building a over-the-wire mechanism that shares changes in LSTs between processes (e.g. Java to C# runtime).
+Implements OpenRewrite support for the C# language.
+Most of OpenRewrite including the core framework is Java-based, so a remoting mechanism is used to communicate between the Java and C# runtimes.
