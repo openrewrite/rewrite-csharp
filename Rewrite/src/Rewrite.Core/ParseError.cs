@@ -118,6 +118,17 @@ public class ParseError(
     {
         return v.IsAdaptableTo(typeof(ParseErrorVisitor<P>));
     }
+    
+    R? Tree.Accept<R, P>(ITreeVisitor<R, P> v, P p) where R : class
+    {
+        return (R?)Accept(v.Adapt<Tree, ParseErrorVisitor<P>>(), p);
+    }
+
+    Tree Accept<P>(ParseErrorVisitor<P> v, P p)
+    {
+        return v.VisitParseError(this, p);
+    }
+
 
     public ITreeVisitor<Tree, PrintOutputCapture<P>> Printer<P>(Cursor cursor)
     {
