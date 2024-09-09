@@ -18,10 +18,10 @@ package org.openrewrite.csharp.tree;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
+import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.csharp.CSharpPrinter;
 import org.openrewrite.csharp.CSharpVisitor;
-import org.openrewrite.internal.lang.Nullable;
 import org.openrewrite.java.JavaPrinter;
 import org.openrewrite.java.internal.TypesInUse;
 import org.openrewrite.java.tree.*;
@@ -54,8 +54,7 @@ public interface Cs extends J {
         return v.isAdaptableTo(CSharpVisitor.class);
     }
 
-    @Nullable
-    default <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+    default <P> @Nullable J acceptCSharp(CSharpVisitor<P> v, P p) {
         return v.defaultValue(this, p);
     }
 
@@ -121,11 +120,12 @@ public interface Cs extends J {
             return withCharsetName(charset.name());
         }
 
-        @Nullable
-        public Package getPackageDeclaration() {
+        @Override
+        public @Nullable Package getPackageDeclaration() {
             return null;
         }
 
+        @Override
         public Cs.CompilationUnit withPackageDeclaration(Package packageDeclaration) {
             return this;
         }
@@ -164,15 +164,18 @@ public interface Cs extends J {
             return getPadding().withMembers(JRightPadded.withElements(this.members, members));
         }
 
+        @Override
         @Transient
         public List<Import> getImports() {
             return Collections.emptyList();
         }
 
+        @Override
         public Cs.CompilationUnit withImports(List<Import> imports) {
             return this;
         }
 
+        @Override
         @Transient
         public List<ClassDeclaration> getClasses() {
             return Collections.emptyList();
@@ -213,6 +216,7 @@ public interface Cs extends J {
             return cache;
         }
 
+        @Override
         public Padding getPadding() {
             Padding p;
             if (this.padding == null) {
@@ -378,8 +382,7 @@ public interface Cs extends J {
         public static class Padding {
             private final ArrayRankSpecifier t;
 
-            @Nullable
-            public JContainer<Expression> getSizes() {
+            public @Nullable JContainer<Expression> getSizes() {
                 return t.sizes;
             }
 
@@ -514,12 +517,12 @@ public interface Cs extends J {
         @Nullable
         JRightPadded<Identifier> target;
 
-        @Nullable
-        public J.Identifier getTarget() {
+
+        public J.@Nullable Identifier getTarget() {
             return target == null ? null : target.getElement();
         }
 
-        public AttributeList withTarget(@Nullable J.Identifier target) {
+        public AttributeList withTarget(J.@Nullable Identifier target) {
             return getPadding().withTarget(JRightPadded.withElement(this.target, target));
         }
 
@@ -1259,8 +1262,7 @@ public interface Cs extends J {
         @Nullable
         JRightPadded<Expression> alignment;
 
-        @Nullable
-        public Expression getAlignment() {
+        public @Nullable Expression getAlignment() {
             return alignment != null ? alignment.getElement() : null;
         }
 
@@ -1271,8 +1273,7 @@ public interface Cs extends J {
         @Nullable
         JRightPadded<Expression> format;
 
-        @Nullable
-        public Expression getFormat() {
+        public @Nullable Expression getFormat() {
             return format != null ? format.getElement() : null;
         }
 
@@ -1328,8 +1329,7 @@ public interface Cs extends J {
                 return t.expression == expression ? t : new Interpolation(t.id, t.prefix, t.markers, expression, t.alignment, t.format);
             }
 
-            @Nullable
-            public JRightPadded<Expression> getAlignment() {
+            public @Nullable JRightPadded<Expression> getAlignment() {
                 return t.alignment;
             }
 
@@ -1337,8 +1337,7 @@ public interface Cs extends J {
                 return t.alignment == alignment ? t : new Interpolation(t.id, t.prefix, t.markers, t.expression, alignment, t.format);
             }
 
-            @Nullable
-            public JRightPadded<Expression> getFormat() {
+            public @Nullable JRightPadded<Expression> getFormat() {
                 return t.format;
             }
 
@@ -1525,12 +1524,12 @@ public interface Cs extends J {
         @Nullable
         JRightPadded<Identifier> alias;
 
-        @Nullable
-        public J.Identifier getAlias() {
+
+        public J.@Nullable Identifier getAlias() {
             return alias != null ? alias.getElement() : null;
         }
 
-        public UsingDirective withAlias(@Nullable J.Identifier alias) {
+        public UsingDirective withAlias(J.@Nullable Identifier alias) {
             return getPadding().withAlias(JRightPadded.withElement(this.alias, alias));
         }
 
@@ -1591,8 +1590,7 @@ public interface Cs extends J {
                 return t.unsafe == unsafe ? t : new UsingDirective(t.id, t.prefix, t.markers, t.global, t.statik, unsafe, t.alias, t.namespaceOrType);
             }
 
-            @Nullable
-            public JRightPadded<Identifier> getAlias() {
+            public @Nullable JRightPadded<Identifier> getAlias() {
                 return t.alias;
             }
 
@@ -1657,16 +1655,17 @@ public interface Cs extends J {
             return new CoordinateBuilder.Statement(this);
         }
 
+        @Override
         public JavaType getType() {
             return typeExpression.getType();
         }
 
+        @Override
         public PropertyDeclaration withType(@Nullable JavaType type) {
             return getPadding().withType(this.typeExpression.withType(type));
         }
 
-        @Nullable
-        public NameTree getInterfaceSpecifier() {
+        public @Nullable NameTree getInterfaceSpecifier() {
             return interfaceSpecifier!= null ? interfaceSpecifier.getElement() : null;
         }
 
@@ -1674,8 +1673,7 @@ public interface Cs extends J {
             return getPadding().withInterfaceSpecifier(JRightPadded.withElement(this.interfaceSpecifier, interfaceSpecifier));
         }
 
-        @Nullable
-        public Expression getInitializer() {
+        public @Nullable Expression getInitializer() {
             return initializer != null ? initializer.getElement() : null;
         }
 
@@ -1711,8 +1709,7 @@ public interface Cs extends J {
                 return pd.typeExpression;
             }
 
-            @Nullable
-            public JRightPadded<NameTree> getInterfaceSpecifier() {
+            public @Nullable JRightPadded<NameTree> getInterfaceSpecifier() {
                 return pd.interfaceSpecifier;
             }
 
@@ -1742,8 +1739,7 @@ public interface Cs extends J {
                         pd.initializer);
             }
 
-            @Nullable
-            public JLeftPadded<Expression> getInitializer() {
+            public @Nullable JLeftPadded<Expression> getInitializer() {
                 return pd.initializer;
             }
 
