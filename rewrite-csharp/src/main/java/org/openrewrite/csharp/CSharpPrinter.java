@@ -15,13 +15,13 @@
  */
 package org.openrewrite.csharp;
 
+import org.jspecify.annotations.Nullable;
 import org.openrewrite.Cursor;
 import org.openrewrite.PrintOutputCapture;
 import org.openrewrite.Tree;
 import org.openrewrite.csharp.marker.OmitBraces;
 import org.openrewrite.csharp.marker.SingleExpressionBlock;
 import org.openrewrite.csharp.tree.*;
-import org.openrewrite.internal.lang.Nullable;
 import org.openrewrite.java.JavaPrinter;
 import org.openrewrite.java.marker.CompactConstructor;
 import org.openrewrite.java.marker.Semicolon;
@@ -714,7 +714,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         beforeSyntax(cs.getPrefix(), cs.getMarkers(), loc, p);
     }
 
-    private void beforeSyntax(Space prefix, Markers markers, @Nullable CsSpace.Location loc, PrintOutputCapture<P> p) {
+    private void beforeSyntax(Space prefix, Markers markers, CsSpace.@Nullable Location loc, PrintOutputCapture<P> p) {
         for (Marker marker : markers.getMarkers()) {
             p.append(p.getMarkerPrinter().beforePrefix(marker, new Cursor(getCursor(), marker), JAVA_MARKER_WRAPPER));
         }
@@ -727,7 +727,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         }
     }
 
-    private void beforeSyntax(Space prefix, Markers markers, @Nullable Space.Location loc, PrintOutputCapture<P> p) {
+    private void beforeSyntax(Space prefix, Markers markers, Space.@Nullable Location loc, PrintOutputCapture<P> p) {
         for (Marker marker : markers.getMarkers()) {
             p.append(p.getMarkerPrinter().beforePrefix(marker, new Cursor(getCursor(), marker), JAVA_MARKER_WRAPPER));
         }
