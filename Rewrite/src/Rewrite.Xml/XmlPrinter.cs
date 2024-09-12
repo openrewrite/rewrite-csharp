@@ -9,7 +9,7 @@ public class XmlPrinter<P> : XmlVisitor<PrintOutputCapture<P>>
     public override Tree.Xml VisitDocument(Tree.Xml.Document document, PrintOutputCapture<P> p)
     {
         BeforeSyntax(document, p);
-        document = (Tree.Xml.Document)base.VisitDocument(document, p);
+        document = (Tree.Xml.Document)base.VisitDocument(document, p)!;
         AfterSyntax(document, p);
         p.Append(document.Eof);
         return document;
@@ -18,7 +18,7 @@ public class XmlPrinter<P> : XmlVisitor<PrintOutputCapture<P>>
     public override Tree.Xml VisitProlog(Tree.Xml.Prolog prolog, PrintOutputCapture<P> p)
     {
         BeforeSyntax(prolog, p);
-        prolog = (Tree.Xml.Prolog)base.VisitProlog(prolog, p);
+        prolog = (Tree.Xml.Prolog)base.VisitProlog(prolog, p)!;
         AfterSyntax(prolog, p);
         return prolog;
     }

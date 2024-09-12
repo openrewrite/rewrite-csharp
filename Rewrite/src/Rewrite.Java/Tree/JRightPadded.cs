@@ -94,7 +94,7 @@ public sealed class JRightPadded<T>(
 
         foreach (var t in elements)
         {
-            after.Add(beforeById.TryGetValue(t.Id, out JRightPadded<J2> found)
+            after.Add(beforeById.TryGetValue(t.Id, out var found)
                 ? found.WithElement(t)
                 : new JRightPadded<J2>(t, Space.EMPTY, Markers.EMPTY));
         }

@@ -6,7 +6,7 @@ public interface Parser
     {
         public abstract Builder Clone();
 
-        public Type SourceFileType { get; set; }
+        public Type? SourceFileType { get; set; }
 
         public abstract Parser Build();
     }

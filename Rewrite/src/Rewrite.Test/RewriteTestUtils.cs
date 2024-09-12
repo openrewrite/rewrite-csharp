@@ -19,7 +19,7 @@ internal static class RewriteTestUtils
 
         foreach (var parser in parserBuilders)
         {
-            if (parser.SourceFileType.Equals(sourceSpec.SourceFileType))
+            if (parser.SourceFileType?.Equals(sourceSpec.SourceFileType) ?? false)
             {
                 if (!sourceSpecsByParser.ContainsKey(parser))
                     sourceSpecsByParser[parser] = [];

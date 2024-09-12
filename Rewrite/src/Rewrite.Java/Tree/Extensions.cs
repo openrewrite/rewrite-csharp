@@ -27,8 +27,8 @@ public static class Extensions
     public static JavaType? GetJavaType(J.IntersectionType expr)
     {
         return new JavaType.Intersection(expr.Bounds
-            .Where(b => b != null)
             .Select(b => b.Type)
+            .Cast<JavaType>()
             .ToList());
     }
 
@@ -42,11 +42,12 @@ public static class Extensions
         return expr.MethodType?.ReturnType;
     }
 
-    public static JavaType? GetJavaType(J.MultiCatch expr)
+    public static JavaType GetJavaType(J.MultiCatch expr)
     {
         return new JavaType.MultiCatch(expr.Alternatives
-            .Where(b => b != null)
             .Select(alt => alt.Type)
+            .Where(x => x != null)
+            .Cast<JavaType>()
             .ToList());
     }
 

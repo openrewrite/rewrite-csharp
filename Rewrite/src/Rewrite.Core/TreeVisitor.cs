@@ -1,9 +1,11 @@
+using Rewrite.Core.Marker;
+
 namespace Rewrite.Core;
 
 public abstract class TreeVisitor<T, P> : ITreeVisitor<T, P> where T : class, Tree
 {
 
-    public Cursor Cursor { get; set; }
+    public Cursor Cursor { get; set; } = null!;
 
     public bool IsAdaptableTo(Type adaptTo)
     {
@@ -95,20 +97,22 @@ public abstract class TreeVisitor<T, P> : ITreeVisitor<T, P> where T : class, Tr
         return (T2?)Visit(tree, p);
     }
 
-    public virtual Marker.Markers VisitMarkers(Marker.Markers? markers, P p)
+    [Pure]
+    public virtual Markers VisitMarkers(Marker.Markers? markers, P p)
     {
         if (markers == null || ReferenceEquals(markers, Marker.Markers.EMPTY))
         {
             return Marker.Markers.EMPTY;
         }
-        else if (markers.MarkerList.Count == 0)
+
+        if (markers.MarkerList.Count == 0)
         {
             return markers;
         }
 
         return markers with
         {
-            MarkerList = ListUtils.Map(markers.MarkerList, m => VisitMarker(m, p))
+            MarkerList = ListUtils.Map(markers.MarkerList, m => VisitMarker(m, p))!
         };
     }
 

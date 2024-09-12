@@ -11,11 +11,11 @@ public abstract class Recipe
     {
         get
         {
-            return _descriptor ?? (_descriptor = new RecipeDescriptor(GetType().FullName, GetType().FullName, "",
+            return _descriptor ??= new RecipeDescriptor(GetType().FullName!, GetType().FullName!, "",
                 new HashSet<string>(), null,
                 GetType().GetConstructors()[0].GetParameters().Select(parameterInfo =>
                 {
-                    return new OptionDescriptor(parameterInfo.Name, parameterInfo.ParameterType.FullName, null,
+                    return new OptionDescriptor(parameterInfo.Name!, parameterInfo.ParameterType.FullName!, null,
                         null,
                         null,
                         null,
@@ -27,7 +27,7 @@ public abstract class Recipe
                 }).ToList(),
                 [],
                 new Uri($"recipe://{GetType().FullName}")
-            ));
+            );
         }
 
         set => _descriptor = value;
@@ -72,7 +72,7 @@ public abstract class Recipe
 
     public Validated<object> Validate()
     {
-        var validated = Validated<object>.None<object>();
+        var validated = Validated<object>.None();
         // Class<? extends Recipe> clazz = this.getClass();
         // List<Field> requiredFields = NullUtils.findNonNullFields(clazz);
         // for (Field field : requiredFields) {

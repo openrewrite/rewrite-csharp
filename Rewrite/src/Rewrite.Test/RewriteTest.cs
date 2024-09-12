@@ -119,7 +119,7 @@ public class RewriteTest
                     continue;
                 }
 
-                var beforeTrimmed = sourceSpec.NoTrim ? sourceSpec.Before : TrimIndentPreserveCrLf(sourceSpec.Before);
+                var beforeTrimmed = sourceSpec.NoTrim ? sourceSpec.Before : TrimIndentPreserveCrLf(sourceSpec.Before) ?? "";
 
                 var sourcePath = sourceSpec.SourcePath != null
                     ? Path.Combine(sourceSpec.Dir, sourceSpec.SourcePath)
@@ -202,7 +202,7 @@ public class RewriteTest
                     }
                 }
 
-                var mapped = nextSpec.BeforeRecipe(sourceFile);
+                var mapped = nextSpec.BeforeRecipe(sourceFile!);
                 specBySourceFile[mapped] = nextSpec;
             }
         }
@@ -243,7 +243,7 @@ public class RewriteTest
             }
 
             // TODO figure out how to do this without reflection
-            var afterRecipe = sourceSpec.GetType().GetProperty("AfterRecipe").GetValue(sourceSpec);
+            var afterRecipe = sourceSpec.GetType()?.GetProperty("AfterRecipe")?.GetValue(sourceSpec);
             if (afterRecipe != null)
             {
                 var methodInfo = afterRecipe.GetType().GetMethod("Invoke");
@@ -274,7 +274,7 @@ public class RewriteTest
         return new InMemoryExecutionContext(e => Assert.Fail("The recipe threw an exception: " + e));
     }
 
-    public virtual void Defaults(RecipeSpec spec)
+    protected virtual void Defaults(RecipeSpec spec)
     {
         spec.Recipe = Recipe.Noop();
     }

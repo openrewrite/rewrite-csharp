@@ -10,22 +10,24 @@ public static class Extensions
         return eof == document.Eof ? document : new Xml.Document(document.Id, document.SourcePath, document.Prefix, document.Markers, document.CharsetName, document.CharsetBomMarked, document.Checksum, document.FileAttributes, document.Prolog, document.Root, eof);
     }
 
-    public static Xml.Tag WithContent(this Xml.Tag tag, IList<Content?>? content)
+    public static Xml.Tag WithContent(this Xml.Tag tag, IList<Content>? content)
     {
-        if (tag.Content == content) {
+        if (ReferenceEquals(tag.Content, content)) {
             return tag;
         }
+
+        content ??= [];
 
         tag = new Xml.Tag(tag.Id, tag.Prefix, tag.Markers, tag.Name, tag.Attributes, content, tag.ClosingTag, tag.BeforeTagDelimiterPrefix);
 
         if (tag.ClosingTag == null) {
-            if (content != null && content.Count > 0) {
+            if (tag.Content != null && tag.Content.Count > 0) {
                 // TODO test this
                 string indentedClosingTagPrefix = tag.Prefix.Substring(Math.Max(0, tag.Prefix.LastIndexOf('\n')));
 
                 if (tag.Content[0] is Xml.CharData) {
                     return tag.WithClosingTag(new Xml.Tag.Closing(Core.Tree.RandomId(),
-                        content[0].GetPrefix().Contains('\n') ?
+                        tag.Content[0].GetPrefix().Contains('\n') ?
                             indentedClosingTagPrefix : "",
                         Markers.EMPTY,
                         tag.Name, ""));

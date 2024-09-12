@@ -2,8 +2,6 @@ namespace Rewrite.RewriteJava;
 
 using System;
 
-using System;
-
 /// <summary>
 /// In addition to the signature formats described below, implementations should provide a way of retrieving method
 /// and variable signatures, but they may have different numbers of input arguments depending on the implementation.
@@ -23,7 +21,7 @@ public interface JavaTypeSignatureBuilder<T>
     /// <param name="type">A type object.</param>
     /// <returns>The type signature. If <paramref name="type"/> is null, the signature is {undefined}.</returns>
     string Signature(T type);
-    
+
     /// <summary>
     /// Formats an array type.
     /// </summary>

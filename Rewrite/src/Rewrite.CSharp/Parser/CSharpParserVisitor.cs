@@ -267,7 +267,7 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
                 null
             ) : null*/
             Convert<TypeTree>(p.Type),
-            null,
+            null!,
             [],
             [
                 new JRightPadded<J.VariableDeclarations.NamedVariable>(
@@ -858,7 +858,8 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
                     node.OperatorToken.Kind() switch
                     {
                         SyntaxKind.QuestionQuestionToken => Cs.Binary.OperatorType.NullCoalescing,
-                        SyntaxKind.AsKeyword => Cs.Binary.OperatorType.As
+                        SyntaxKind.AsKeyword => Cs.Binary.OperatorType.As,
+                        _ => throw new ArgumentOutOfRangeException()
                     },
                     Markers.EMPTY),
                 Convert<Expression>(node.Right)!,
@@ -978,7 +979,7 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
                             [],
                             [],
                             null,
-                            null,
+                            null!,
                             [],
                             []
                         ),
@@ -999,7 +1000,7 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
             [],
             [],
             Convert<TypeTree>(node.Type),
-            null,
+            null!,
             [],
             node.Identifier.IsKind(SyntaxKind.None)
                 ? []
@@ -1878,7 +1879,7 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
             [],
             [],
             null,
-            null,
+            null!,
             [],
             [
                 node.NameEquals != null
@@ -1916,7 +1917,7 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
         var identifierOrFieldAccess = Convert<Expression>(expression)!;
         var identifier = identifierOrFieldAccess is J.Identifier i
             ? i
-            : (identifierOrFieldAccess as J.FieldAccess).Name;
+            : (identifierOrFieldAccess as J.FieldAccess)?.Name ?? throw new InvalidOperationException("Can't determine identifier");
         return new JRightPadded<J.VariableDeclarations.NamedVariable>(
             new J.VariableDeclarations.NamedVariable(
                 Core.Tree.RandomId(),
@@ -2390,7 +2391,7 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
             [],
             usingModifier != null ? [usingModifier, .. MapModifiers(node.Modifiers)] : MapModifiers(node.Modifiers),
             Visit(node.Declaration.Type) as TypeTree,
-            null,
+            null!,
             [],
             node.Declaration.Variables.Select(MapVariable).ToList()
         );
@@ -2415,7 +2416,7 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
             [],
             [],
             Visit(node.Type) as TypeTree,
-            null,
+            null!,
             [],
             node.Variables.Select(MapVariable).ToList()
         );
@@ -2642,7 +2643,7 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
                         [],
                         [],
                         Convert<TypeTree>(node.Type),
-                        null,
+                        null!,
                         [],
                         [
                             new JRightPadded<J.VariableDeclarations.NamedVariable>(
@@ -2704,14 +2705,14 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
                 : [],
             Markers.EMPTY
         );
-        var s = Convert<Statement>(node.Statement);
-        
+        var s = Convert<Statement>(node.Statement) ?? throw new InvalidOperationException("Statement is empty after conversion");
+
         return new J.Try(
             Core.Tree.RandomId(),
             Format(Leading(node)),
             Markers.EMPTY,
             jContainer,
-             s is not J.Block block 
+             s is not J.Block block
                 ? new J.Block(
                     Core.Tree.RandomId(),
                     Space.EMPTY,
@@ -3546,7 +3547,7 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
 
     private List<Cs.AttributeList>? MapAttributes(SyntaxList<AttributeListSyntax> m)
     {
-        return m.Count == 0 ? null : m.Select(Convert<Cs.AttributeList>).ToList();
+        return m.Count == 0 ? null : m.Select(x => Convert<Cs.AttributeList>(x)!).ToList();
     }
 
     private JavaType MapType(ExpressionSyntax ins)

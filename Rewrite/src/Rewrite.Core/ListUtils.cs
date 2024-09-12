@@ -4,9 +4,10 @@ namespace Rewrite.Core;
 
 public static class ListUtils
 {
-    public static IList<T> Map<T>(IList<T>? list, Func<T, T?> map)
+    // todo: AS: this method is used in contexts where tree is changed in immutable way. this immutability is broken by how this method tries to optimize as it sometimes reuses same list when a copy should have been made. since this collection is writable, it's possible that changes mutation in one set affects it in other place, which is not the intent of immutable copy
+    public static IList<T> Map<T>(this IList<T> list, Func<T, T?> map)
     {
-        if (list == null || list.Count == 0)
+        if (list.Count == 0)
         {
             return list;
         }

@@ -9,6 +9,6 @@ internal class JavaTypeCache
     public JavaType? this[string typeName]
     {
         get => _cache.TryGetValue(typeName, out var type) ? type : null;
-        set => _cache[typeName] = value;
+        set => _cache[typeName] = value ?? JavaType.Unknown.Instance;
     }
 }

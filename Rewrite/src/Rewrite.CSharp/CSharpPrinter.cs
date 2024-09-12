@@ -115,16 +115,19 @@ public class CSharpPrinter<P> : CSharpVisitor<PrintOutputCapture<P>>
             }
         }
 
-        return markers;
+        return Markers.EMPTY;
     }
 
-    public Space VisitSpace(Space space, CsSpace.Location loc, PrintOutputCapture<P> p)
+    //todo: AS: review if base method can be virtual and this one should just be override
+    protected override Space VisitSpace(Space space, CsSpace.Location loc, PrintOutputCapture<P> p)
     {
         return VisitSpace(space, Space.Location.LANGUAGE_EXTENSION, p);
     }
 
     public override Space VisitSpace(Space? space, Space.Location? loc, PrintOutputCapture<P> p)
     {
+        if (space == null)
+            return Space.EMPTY;
         p.Append(space.Whitespace);
         foreach (var comment in space.Comments)
         {

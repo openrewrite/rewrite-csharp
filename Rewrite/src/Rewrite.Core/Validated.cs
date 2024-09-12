@@ -2,7 +2,7 @@ namespace Rewrite.Core;
 
 public interface Validated<out T>
 {
-    static Validated<T> None<T>()
+    static Validated<T> None()
     {
         return new ValidatedNone<T>();
     }

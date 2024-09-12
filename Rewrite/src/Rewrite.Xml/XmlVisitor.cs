@@ -26,15 +26,15 @@ public class XmlVisitor<P> : TreeVisitor<Xml, P>
     {
         prolog = prolog.WithMarkers(VisitMarkers(prolog.Markers, p));
         prolog = prolog.WithXmlDecl(VisitAndCast<Xml.XmlDecl>(prolog.XmlDecl, p));
-        prolog = prolog.WithMisc(ListUtils.Map(prolog.Misc, el => (Misc?)Visit(el, p)));
-        prolog = prolog.WithJspDirectives(ListUtils.Map(prolog.JspDirectives, el => (Xml.JspDirective?)Visit(el, p)));
+        prolog = prolog.WithMisc(prolog.Misc.Map(el => (Misc?)Visit(el, p)));
+        prolog = prolog.WithJspDirectives(prolog.JspDirectives.Map(el => (Xml.JspDirective?)Visit(el, p)));
         return prolog;
     }
 
     public virtual Xml? VisitXmlDecl(Xml.XmlDecl xmlDecl, P p)
     {
         xmlDecl = xmlDecl.WithMarkers(VisitMarkers(xmlDecl.Markers, p));
-        xmlDecl = xmlDecl.WithAttributes(ListUtils.Map(xmlDecl.Attributes, el => (Xml.Attribute?)Visit(el, p)));
+        xmlDecl = xmlDecl.WithAttributes(xmlDecl.Attributes.Map(el => (Xml.Attribute?)Visit(el, p)));
         return xmlDecl;
     }
 
@@ -48,8 +48,8 @@ public class XmlVisitor<P> : TreeVisitor<Xml, P>
     public virtual Xml? VisitTag(Xml.Tag tag, P p)
     {
         tag = tag.WithMarkers(VisitMarkers(tag.Markers, p));
-        tag = tag.WithAttributes(ListUtils.Map(tag.Attributes, el => (Xml.Attribute?)Visit(el, p)));
-        tag = tag.WithContent(ListUtils.Map(tag.Content, el => (Content?)Visit(el, p)));
+        tag = tag.WithAttributes(tag.Attributes.Map(el => (Xml.Attribute?)Visit(el, p)));
+        tag = tag.WithContent(tag.Content.Map(el => (Content?)Visit(el, p)));
         tag = tag.WithClosingTag(VisitAndCast<Xml.Tag.Closing>(tag.ClosingTag, p));
         return tag;
     }
@@ -91,7 +91,7 @@ public class XmlVisitor<P> : TreeVisitor<Xml, P>
         docTypeDecl = docTypeDecl.WithMarkers(VisitMarkers(docTypeDecl.Markers, p));
         docTypeDecl = docTypeDecl.WithName(VisitAndCast<Xml.Ident>(docTypeDecl.Name, p)!);
         docTypeDecl = docTypeDecl.WithExternalId(VisitAndCast<Xml.Ident>(docTypeDecl.ExternalId, p));
-        docTypeDecl = docTypeDecl.WithInternalSubset(ListUtils.Map(docTypeDecl.InternalSubset, el => (Xml.Ident?)Visit(el, p)));
+        docTypeDecl = docTypeDecl.WithInternalSubset(docTypeDecl.InternalSubset.Map(el => (Xml.Ident?)Visit(el, p)));
         docTypeDecl = docTypeDecl.WithSubsets(VisitAndCast<Xml.DocTypeDecl.ExternalSubsets>(docTypeDecl.Subsets, p));
         return docTypeDecl;
     }
@@ -99,14 +99,14 @@ public class XmlVisitor<P> : TreeVisitor<Xml, P>
     public virtual Xml? VisitDocTypeDeclExternalSubsets(Xml.DocTypeDecl.ExternalSubsets externalSubsets, P p)
     {
         externalSubsets = externalSubsets.WithMarkers(VisitMarkers(externalSubsets.Markers, p));
-        externalSubsets = externalSubsets.WithElements(ListUtils.Map(externalSubsets.Elements, el => (Xml.Element?)Visit(el, p)));
+        externalSubsets = externalSubsets.WithElements(externalSubsets.Elements.Map(el => (Xml.Element?)Visit(el, p)));
         return externalSubsets;
     }
 
     public virtual Xml? VisitElement(Xml.Element element, P p)
     {
         element = element.WithMarkers(VisitMarkers(element.Markers, p));
-        element = element.WithSubset(ListUtils.Map(element.Subset, el => (Xml.Ident?)Visit(el, p)));
+        element = element.WithSubset(element.Subset.Map(el => (Xml.Ident?)Visit(el, p)));
         return element;
     }
 
@@ -119,7 +119,7 @@ public class XmlVisitor<P> : TreeVisitor<Xml, P>
     public virtual Xml? VisitJspDirective(Xml.JspDirective jspDirective, P p)
     {
         jspDirective = jspDirective.WithMarkers(VisitMarkers(jspDirective.Markers, p));
-        jspDirective = jspDirective.WithAttributes(ListUtils.Map(jspDirective.Attributes, el => (Xml.Attribute?)Visit(el, p)));
+        jspDirective = jspDirective.WithAttributes(jspDirective.Attributes.Map(el => (Xml.Attribute?)Visit(el, p)));
         return jspDirective;
     }
 

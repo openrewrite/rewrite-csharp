@@ -78,7 +78,7 @@ public class JavaVisitor<P> : TreeVisitor<J, P>
         arrayType = (J.ArrayType) tempExpression;
         arrayType = arrayType.WithMarkers(VisitMarkers(arrayType.Markers, p));
         arrayType = arrayType.WithElementType(VisitAndCast<TypeTree>(arrayType.ElementType, p)!);
-        arrayType = arrayType.WithAnnotations(ListUtils.Map(arrayType.Annotations, el => (J.Annotation?)Visit(el, p)));
+        arrayType = arrayType.WithAnnotations(arrayType.Annotations?.Map(el => (J.Annotation?)Visit(el, p)));
         arrayType = arrayType.WithDimension(arrayType.Dimension?.WithBefore(VisitSpace(arrayType.Dimension.Before, Space.Location.DIMENSION_PREFIX, p)).WithElement(VisitSpace(arrayType.Dimension.Element, Space.Location.DIMENSION, p)));
         return arrayType;
     }
@@ -953,7 +953,7 @@ public class JavaVisitor<P> : TreeVisitor<J, P>
         variableDeclarations = variableDeclarations.WithLeadingAnnotations(ListUtils.Map(variableDeclarations.LeadingAnnotations, el => (J.Annotation?)Visit(el, p)));
         variableDeclarations = variableDeclarations.WithModifiers(ListUtils.Map(variableDeclarations.Modifiers, el => (J.Modifier?)Visit(el, p)));
         variableDeclarations = variableDeclarations.WithTypeExpression(VisitAndCast<TypeTree>(variableDeclarations.TypeExpression, p));
-        variableDeclarations = variableDeclarations.WithVarargs(VisitSpace(variableDeclarations.Varargs, Space.Location.VARARGS, p));
+        variableDeclarations = variableDeclarations.WithVarargs(VisitSpace(variableDeclarations.Varargs!, Space.Location.VARARGS, p));
         variableDeclarations = variableDeclarations.WithDimensionsBeforeName(ListUtils.Map(variableDeclarations.DimensionsBeforeName, el => el.WithBefore(VisitSpace(el.Before, Space.Location.DIMENSION_PREFIX, p)).WithElement(VisitSpace(el.Element, Space.Location.DIMENSION, p))));
         variableDeclarations = variableDeclarations.Padding.WithVariables(ListUtils.Map(variableDeclarations.Padding.Variables, el => VisitRightPadded(el, JRightPadded.Location.NAMED_VARIABLE, p)));
         return variableDeclarations;
@@ -1040,7 +1040,7 @@ public class JavaVisitor<P> : TreeVisitor<J, P>
         return source;
     }
 
-    public virtual JContainer<T> VisitContainer<T>(JContainer<T>? container, JContainer.Location loc, P p)
+    public virtual JContainer<T>? VisitContainer<T>(JContainer<T>? container, JContainer.Location loc, P p)
     {
         if (container == null) {
             return null;
@@ -1109,7 +1109,7 @@ public class JavaVisitor<P> : TreeVisitor<J, P>
         return right;
     }
 
-    public virtual Space VisitSpace(Space? space, Space.Location? loc, P p)
+    public virtual Space VisitSpace(Space space, Space.Location? loc, P p)
     {
         // FIXME add Javadoc support
         return space;

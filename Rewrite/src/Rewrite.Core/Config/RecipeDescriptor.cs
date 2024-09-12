@@ -41,7 +41,7 @@ public class RecipeDescriptor
     }
 
     // Override Equals and GetHashCode to handle equality based on Name and Options
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is RecipeDescriptor other)
         {
@@ -58,18 +58,18 @@ public class RecipeDescriptor
 
     // With pattern for immutability
     public RecipeDescriptor With(
-        string name = null,
-        string displayName = null,
-        string description = null,
-        HashSet<string> tags = null,
+        string? name = null,
+        string? displayName = null,
+        string? description = null,
+        HashSet<string>? tags = null,
         TimeSpan? estimatedEffortPerOccurrence = null,
-        List<OptionDescriptor> options = null,
-        List<RecipeDescriptor> recipeList = null,
+        List<OptionDescriptor>? options = null,
+        List<RecipeDescriptor>? recipeList = null,
         // List<DataTableDescriptor> dataTables = null,
         // List<Maintainer> maintainers = null,
         // List<Contributor> contributors = null,
         // List<RecipeExample> examples = null,
-        Uri source = null)
+        Uri? source = null)
     {
         return new RecipeDescriptor(
             name ?? this.Name,
