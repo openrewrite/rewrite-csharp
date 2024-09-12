@@ -28,7 +28,7 @@ public interface Cs : J
     {
         return v.DefaultValue(this, p);
     }
-
+#pragma warning disable CS0108
     public class CompilationUnit(
         Guid id,
         Space prefix,
@@ -44,6 +44,7 @@ public interface Cs : J
         IList<JRightPadded<Statement>> members,
         Space eof
     ) : Cs, MutableSourceFile<CompilationUnit>, JavaSourceFile<CompilationUnit>, MutableTree<CompilationUnit>
+#pragma warning restore CS0108
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -93,6 +94,7 @@ public interface Cs : J
 
         public CompilationUnit WithMarkers(Markers newMarkers)
         {
+            // todo: AS: review if this should be reference equality or value equality check
             return ReferenceEquals(newMarkers, markers) ? this : new CompilationUnit(id, prefix, newMarkers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _externs, _usings, attributeLists, _members, eof);
         }
 
@@ -362,7 +364,7 @@ public interface Cs : J
             return Id.GetHashCode();
         }
     }
-
+#pragma warning disable CS0108
     public class AssignmentOperation(
         Guid id,
         Space prefix,
@@ -372,6 +374,7 @@ public interface Cs : J
         Expression assignment,
         JavaType? type
     ) : Cs, Statement, Expression, TypedTree, MutableTree<AssignmentOperation>
+#pragma warning restore CS0108
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -643,7 +646,7 @@ public interface Cs : J
             return Id.GetHashCode();
         }
     }
-
+#pragma warning disable CS0108
     public class Binary(
         Guid id,
         Space prefix,
@@ -653,6 +656,7 @@ public interface Cs : J
         Expression right,
         JavaType? type
     ) : Cs, Expression, TypedTree, MutableTree<Binary>
+#pragma warning restore CS0108
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

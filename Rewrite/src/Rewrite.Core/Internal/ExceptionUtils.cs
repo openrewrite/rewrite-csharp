@@ -1,16 +1,20 @@
+using System.Diagnostics;
+
 namespace Rewrite.Core.Internal;
 
-public class ExceptionUtils
+public static class ExceptionUtils
 {
-    public static string SanitizeStackTrace(Exception t, Type until)
+    public static string SanitizeStackTrace(this Exception exception, Type until)
     {
-        var cause = t;
         var sanitized = "";
-        sanitized = string.Join("\n", sanitized, cause.GetType().Name + ": " + cause.Message);
+        sanitized = string.Join("\n", sanitized, exception.GetType().Name + ": " + exception.Message);
 
         var i = 0;
-        foreach (var stackTraceElement in cause.StackTrace.TakeWhile(stackTraceElement =>
-                     !stackTraceElement.Equals(until.Name)))
+        foreach (var stackTraceElement in new StackTrace(exception).GetFrames()
+                     .Select(x => x.GetMethod()?.DeclaringType)
+                     .Where(x => x != null)
+                     .Cast<Type>()
+                     .TakeWhile(originatingClass => originatingClass != until))
         {
             if (i++ >= 16)
             {

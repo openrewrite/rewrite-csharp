@@ -38,7 +38,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         p.Append(after ?? "");
     }
 
-    public override Space VisitSpace(Space? space, Space.Location? loc, PrintOutputCapture<P> p)
+    public override Space VisitSpace(Space space, Space.Location? loc, PrintOutputCapture<P> p)
     {
         p.Append(space.Whitespace);
 
@@ -86,7 +86,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
     }
 
-    protected void VisitModifier(J.Modifier mod, PrintOutputCapture<P> p)
+    public override J VisitModifier(J.Modifier mod, PrintOutputCapture<P> p)
     {
         Visit(mod.Annotations, p);
         var keyword = "";
@@ -139,6 +139,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         BeforeSyntax(mod, Space.Location.MODIFIER_PREFIX, p);
         p.Append(keyword);
         AfterSyntax(mod, p);
+        return mod;
     }
 
 
@@ -202,9 +203,9 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     {
         BeforeSyntax(arrayType, Space.Location.ARRAY_TYPE_PREFIX, p);
         Visit(arrayType.Annotations, p);
-        VisitSpace(arrayType.Dimension.Before, Space.Location.DIMENSION_PREFIX, p);
+        VisitSpace(arrayType.Dimension?.Before ?? Space.EMPTY, Space.Location.DIMENSION_PREFIX, p);
         p.Append('[');
-        VisitSpace(arrayType.Dimension.Element, Space.Location.DIMENSION, p);
+        VisitSpace(arrayType.Dimension?.Element ?? Space.EMPTY, Space.Location.DIMENSION, p);
         p.Append(']');
         if (arrayType.ElementType is J.ArrayType)
         {
@@ -431,11 +432,11 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
             // This section may need to change depending on the actual representation of these objects
             if (Cursor.Value is J.Case)
             {
-                object aSwitch = Cursor
+                var aSwitch = Cursor
                     .DropParentUntil(c =>
                         c is J.Switch ||
                         c is J.SwitchExpression ||
-                        c == Cursor.ROOT_VALUE)
+                        c?.ToString() == Cursor.ROOT_VALUE)
                     .Value;
 
                 if (aSwitch is J.SwitchExpression)
@@ -499,7 +500,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         AfterSyntax(catch_, p);
         return catch_;
     }
-    
+
     public override J VisitClassDeclaration(J.ClassDeclaration classDecl, PrintOutputCapture<P> p)
     {
         string kind = "";
@@ -755,7 +756,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     public override J VisitLiteral(J.Literal literal, PrintOutputCapture<P> p)
     {
         BeforeSyntax(literal, Space.Location.LITERAL_PREFIX, p);
-        IList<J.Literal.UnicodeEscape> unicodeEscapes = literal.UnicodeEscapes;
+        var unicodeEscapes = literal.UnicodeEscapes;
         if (unicodeEscapes == null)
         {
             p.Append(literal.ValueSource);
@@ -763,8 +764,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         else if (literal.ValueSource != null)
         {
             var surrogateEnum = unicodeEscapes.GetEnumerator();
-            J.Literal.UnicodeEscape surrogate = surrogateEnum.MoveNext() ?
-                    surrogateEnum.Current : null;
+            var surrogate = surrogateEnum.MoveNext() ? surrogateEnum.Current : null;
             int i = 0;
             if (surrogate != null && surrogate.ValueSourceIndex == 0)
             {
@@ -804,7 +804,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         AfterSyntax(memberRef, p);
         return memberRef;
     }
-    
+
     public override J VisitMethodDeclaration(J.MethodDeclaration method, PrintOutputCapture<P> p)
     {
         BeforeSyntax(method, Space.Location.METHOD_DECLARATION_PREFIX, p);
@@ -837,7 +837,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         AfterSyntax(method, p);
         return method;
     }
-    
+
     public override J VisitMethodInvocation(J.MethodInvocation method, PrintOutputCapture<P> p)
     {
         BeforeSyntax(method, Space.Location.METHOD_INVOCATION_PREFIX, p);
@@ -956,13 +956,6 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
 
     public override J VisitPrimitive(J.Primitive primitive, PrintOutputCapture<P> p)
     {
-        if (true)
-        {
-            BeforeSyntax(primitive, Space.Location.PRIMITIVE_PREFIX, p);
-            p.Append("foo");
-            AfterSyntax(primitive, p);
-            return primitive;
-        }
         string keyword;
         switch (primitive.Type.Kind)
         {

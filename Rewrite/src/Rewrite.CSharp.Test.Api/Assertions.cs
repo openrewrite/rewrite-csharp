@@ -84,7 +84,7 @@ internal class UnknownDetector : JavaVisitor<int>
     public override J VisitUnknown(J.Unknown unknown, int p)
     {
         var parentCursor = Cursor.Parent!;
-        object container = unknown;
+        object? container = unknown;
         while (parentCursor.Value is not Core.Tree)
         {
             container = parentCursor.Value;

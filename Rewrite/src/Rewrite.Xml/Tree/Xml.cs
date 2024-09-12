@@ -347,7 +347,7 @@ public interface Xml : Rewrite.Core.Tree
         Markers markers,
         string name,
         IList<Attribute> attributes,
-        IList<Content>? content,
+        IList<Content> content,
         Tag.Closing? closingTag,
         string beforeTagDelimiterPrefix
     ) : Xml, Content, MutableTree<Tag>
@@ -392,9 +392,9 @@ public interface Xml : Rewrite.Core.Tree
             return newAttributes == attributes ? this : new Tag(id, prefix, markers, name, newAttributes, content, closingTag, beforeTagDelimiterPrefix);
         }
 
-        public IList<Content>? Content => content;
+        public IList<Content> Content => content;
 
-        public Tag WithContent(IList<Content>? newContent)
+        public Tag WithContent(IList<Content> newContent)
         {
             return newContent == content ? this : new Tag(id, prefix, markers, name, attributes, newContent, closingTag, beforeTagDelimiterPrefix);
         }

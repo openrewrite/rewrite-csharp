@@ -43,7 +43,7 @@ public class OptionDescriptor
                    DisplayName == other.DisplayName &&
                    Description == other.Description &&
                    Example == other.Example &&
-                   Valid?.SequenceEqual(other.Valid) == true &&
+                   Valid.SafeSequenceEqual(other.Valid) &&
                    Required == other.Required &&
                    Equals(Value, other.Value);
         }

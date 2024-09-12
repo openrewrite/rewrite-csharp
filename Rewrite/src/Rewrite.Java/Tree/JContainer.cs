@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core.Marker;
-
 namespace Rewrite.RewriteJava.Tree;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -75,14 +74,14 @@ public class JContainer<T>(
         return before.Padding.WithElements(JRightPadded<T>.WithElements(before.Elements, elements));
     }
 
-    public static JContainer<T> Build<T>(Space before, IList<JRightPadded<T>> elements, Markers markers)
+    public static JContainer<T1> Build<T1>(Space before, IList<JRightPadded<T1>> elements, Markers markers)
     {
-        return new JContainer<T>(before, elements, markers);
+        return new JContainer<T1>(before, elements, markers);
     }
 
-    public static JContainer<T> Build<T>(List<JRightPadded<T>> elements)
+    public static JContainer<T1> Build<T1>(List<JRightPadded<T1>> elements)
     {
-        return new JContainer<T>(Space.EMPTY, elements, Markers.EMPTY);
+        return new JContainer<T1>(Space.EMPTY, elements, Markers.EMPTY);
     }
 
     public sealed record PaddingHelper(JContainer<T> c)

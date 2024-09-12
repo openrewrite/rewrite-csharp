@@ -1,3 +1,5 @@
+using Rewrite.Core.Marker;
+
 namespace Rewrite.Core;
 
 public interface ITreeVisitor<out T, P> where T : class, Tree
@@ -22,8 +24,8 @@ public interface ITreeVisitor<out T, P> where T : class, Tree
     T? Visit(Tree? tree, P p);
     T? Visit(Tree? tree, P p, Cursor parent);
     T? PostVisit(Tree tree, P p);
-    Marker.Markers VisitMarkers(Marker.Markers? markers, P p);
-    M VisitMarker<M>(M marker, P p) where M : Marker.Marker;
+    Markers? VisitMarkers(Marker.Markers? markers, P p);
+    TMarker VisitMarker<TMarker>(TMarker marker, P p) where TMarker : Marker.Marker;
 }
 
 internal class NoopVisitor : TreeVisitor<Tree, ExecutionContext>

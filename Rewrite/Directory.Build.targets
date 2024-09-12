@@ -2,7 +2,12 @@
     <ItemGroup>
         <None Include="$(SolutionDir)resources\$(PackageIcon)" Pack="true" PackagePath="" />
     </ItemGroup>
-
+    <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" PrivateAssets="all"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Using Include="JetBrains.Annotations" />
+    </ItemGroup>
     <Target Name="EnsuringPackageIconPresence" BeforeTargets="Pack">
         <Copy
                 SourceFiles="$(SolutionDir)resources\$(PackageIcon)"

@@ -1,4 +1,5 @@
 using Rewrite.Recipes;
+using Rewrite.RewriteCSharp.Test;
 using Rewrite.RewriteCSharp.Test.Api;
 using Rewrite.RewriteJava;
 using Rewrite.Test;
@@ -10,7 +11,7 @@ using static Assertions;
 [Collection("C# remoting")]
 public class FindClassTests : RewriteTest
 {
-    public override void Defaults(RecipeSpec spec)
+    protected override void Defaults(RecipeSpec spec)
     {
         spec.Recipe = new FindClass(null);
     }
@@ -29,7 +30,7 @@ public class FindClassTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     public void FindInterfaceTest()
     {
@@ -44,7 +45,7 @@ public class FindClassTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     public void FindRecordTest()
     {

@@ -145,7 +145,7 @@ public class ParseError(
         using var readableStream = new StreamReader(stream, Encoding.UTF8);
         return new ParseError(
             Tree.RandomId(),
-            new Markers(Tree.RandomId(), [ParseExceptionResult.build(parser, t)]),
+            new Markers(Tree.RandomId(), [ParseExceptionResult.Build(parser, t)]),
             input.GetRelativePath(relativeTo),
             null, // FIXME: need real file attr
             parser.GetCharset(ctx),

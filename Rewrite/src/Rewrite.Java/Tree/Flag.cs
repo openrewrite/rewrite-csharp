@@ -1,5 +1,4 @@
 namespace Rewrite.RewriteJava.Tree;
-
 public enum Flag : long
 {
     Public = 1,
@@ -26,7 +25,7 @@ public enum Flag : long
 
 internal static class FlagExtensions
 {
-    
+
     public static ISet<Flag> BitMapToFlags(long flagsBitMap)
     {
         var flags = new HashSet<Flag>();

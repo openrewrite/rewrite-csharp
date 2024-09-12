@@ -38,7 +38,7 @@ public class PrintOutputCapture<P>(P p, PrintOutputCapture<P>.IMarkerPrinter mar
 
     public PrintOutputCapture<P> Clone()
     {
-        return new PrintOutputCapture<P>(p, markerPrinter);
+        return new PrintOutputCapture<P>(Context, MarkerPrinter);
     }
 
     public interface IMarkerPrinter

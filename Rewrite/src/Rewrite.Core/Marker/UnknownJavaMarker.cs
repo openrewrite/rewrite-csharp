@@ -1,6 +1,6 @@
 namespace Rewrite.Core.Marker;
 
-public record UnknownJavaMarker(Guid Id, IDictionary<string, object> Data) : Marker
+public record UnknownJavaMarker(Guid Id, IDictionary<string, object?> Data) : Marker
 {
     public bool Equals(Marker? other)
     {

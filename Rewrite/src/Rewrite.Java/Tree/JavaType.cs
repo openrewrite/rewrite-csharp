@@ -67,7 +67,7 @@ public interface JavaType
             this._bounds = bounds ?? EMPTY_JAVA_TYPE_ARRAY;
         }
 
-        public IList<JavaType?> Bounds => _bounds;
+        public IList<JavaType> Bounds => _bounds;
     }
 
     public abstract class FullyQualified : JavaType
@@ -151,11 +151,14 @@ public interface JavaType
         }
 
         private class FullyQualifiedEnumerator<E>(
+#pragma warning disable  // TODO: needs to be fully implemented
             FullyQualified fq,
+
             string packageName,
             Func<E, long> flagsFn,
             Func<FullyQualified, IList<E>> baseFn,
             Func<FullyQualified, IEnumerator<E>> recursiveFn) : IEnumerator<E>
+
         {
             public bool MoveNext()
             {
@@ -167,7 +170,7 @@ public interface JavaType
                 throw new NotImplementedException();
             }
 
-            public E Current { get; }
+            public E Current { get; } = default!;
 
             object IEnumerator.Current => Current;
 
@@ -187,12 +190,14 @@ public interface JavaType
             Value
         }
     }
+#pragma warning restore
 
     public class Class : FullyQualified
     {
         internal Class()
         {
         }
+
 
         public Class(
             int? managedReference,
@@ -239,29 +244,29 @@ public interface JavaType
             FlagsBitMap = flagsBitMap;
             FullyQualifiedName = fullyQualifiedName;
             Kind = kind;
-            TypeParameters = typeParameters;
+            TypeParameters = typeParameters ?? EMPTY_JAVA_TYPE_ARRAY;
             Supertype = supertype;
             OwningClass = owningClass;
-            Annotations = annotations;
-            Interfaces = interfaces;
-            Members = members;
-            Methods = methods;
+            Annotations = annotations ?? EMPTY_FULLY_QUALIFIED_ARRAY;
+            Interfaces = interfaces ?? EMPTY_FULLY_QUALIFIED_ARRAY;
+            Members = members ?? EMPTY_VARIABLE_ARRAY;
+            Methods = methods ?? EMPTY_METHOD_ARRAY;
         }
 
         public int? ManagedReference { get; internal set; }
         public long FlagsBitMap { get; internal set; }
-        public override string FullyQualifiedName { get; internal set; }
+        public override string FullyQualifiedName { get; internal set; } = null!;
         public override TypeKind Kind { get; internal set; }
 
-        public override IList<JavaType> TypeParameters { get; internal set; }
+        public override IList<JavaType> TypeParameters { get; internal set; } = EMPTY_JAVA_TYPE_ARRAY;
         public override FullyQualified? Supertype { get; internal set; }
         public override FullyQualified? OwningClass { get; internal set; }
 
-        public override IList<FullyQualified> Annotations { get; internal set; }
+        public override IList<FullyQualified> Annotations { get; internal set; } = EMPTY_FULLY_QUALIFIED_ARRAY;
 
-        public override IList<FullyQualified> Interfaces { get; internal set; }
-        public override IList<Variable> Members { get; internal set; }
-        public override IList<Method> Methods { get; internal set; }
+        public override IList<FullyQualified> Interfaces { get; internal set; } = EMPTY_FULLY_QUALIFIED_ARRAY;
+        public override IList<Variable> Members { get; internal set; } = EMPTY_VARIABLE_ARRAY;
+        public override IList<Method> Methods { get; internal set; } = EMPTY_METHOD_ARRAY;
 
         public override ISet<Flag> GetFlags() => FlagExtensions.BitMapToFlags(FlagsBitMap);
 
@@ -382,7 +387,7 @@ public interface JavaType
             return new Parameterized(ManagedReference, newType, TypeParameters);
         }
 
-        public override IList<FullyQualified> Annotations { get; internal set; }
+        public override IList<FullyQualified> Annotations { get; internal set; } = EMPTY_FULLY_QUALIFIED_ARRAY;
 
         public override bool HasFlags(params Flag[] test)
         {
@@ -394,11 +399,11 @@ public interface JavaType
             return Type!.GetFlags();
         }
 
-        public override IList<FullyQualified> Interfaces { get; internal set; }
+        public override IList<FullyQualified> Interfaces { get; internal set; } = EMPTY_FULLY_QUALIFIED_ARRAY;
         public override TypeKind Kind { get; internal set; }
-        public override IList<Variable> Members { get; internal set; }
-        public override IList<Method> Methods { get; internal set; }
-        public override IList<JavaType> TypeParameters { get; internal set; }
+        public override IList<Variable> Members { get; internal set; } = EMPTY_VARIABLE_ARRAY;
+        public override IList<Method> Methods { get; internal set; } = EMPTY_METHOD_ARRAY;
+        public override IList<JavaType> TypeParameters { get; internal set; } = EMPTY_JAVA_TYPE_ARRAY;
         public override FullyQualified? Supertype { get; internal set; }
         public override FullyQualified? OwningClass { get; internal set; }
     }
@@ -427,7 +432,7 @@ public interface JavaType
             CONTRAVARIANT
         }
 
-        public IList<JavaType> Bounds { get; internal set; }
+        public IList<JavaType> Bounds { get; internal set; } = EMPTY_JAVA_TYPE_ARRAY;
 
         public GenericTypeVariable WithBounds(IList<JavaType>? bounds)
         {
@@ -444,7 +449,7 @@ public interface JavaType
 
         public VarianceType Variance { get; internal set; }
 
-        public string Name { get; internal set; }
+        public string Name { get; internal set; } = null!;
     }
 
     public sealed class Array : JavaType
@@ -462,9 +467,9 @@ public interface JavaType
 
         internal int? ManagedReference { get; set; }
 
-        public JavaType ElementType { get; internal set; }
+        public JavaType ElementType { get; internal set; } = Unknown.Instance;
 
-        public IList<FullyQualified> Annotations { get; internal set; }
+        public IList<FullyQualified> Annotations { get; internal set; } = EMPTY_FULLY_QUALIFIED_ARRAY;
 
         public void UnsafeSet(JavaType elementType, IList<FullyQualified>? annotations)
         {
@@ -542,26 +547,26 @@ public interface JavaType
 
         public ISet<Flag> GetFlags() => FlagExtensions.BitMapToFlags(FlagsBitMap);
 
-        public FullyQualified DeclaringType { get; internal set; }
+        public FullyQualified DeclaringType { get; internal set; } = Unknown.Instance;
 
-        public string Name { get; internal set; }
+        public string Name { get; internal set; } = null!;
 
-        public JavaType ReturnType { get; internal set; }
+        public JavaType ReturnType { get; internal set; } = Unknown.Instance;
 
-        public IList<string> ParameterNames { get; internal set; }
+        public IList<string> ParameterNames { get; internal set; } = [];
 
-        public IList<JavaType> ParameterTypes { get; internal set; }
+        public IList<JavaType> ParameterTypes { get; internal set; } = EMPTY_JAVA_TYPE_ARRAY;
 
         public bool isConstructor()
         {
             return "<constructor>".Equals(Name);
         }
 
-        public IList<FullyQualified> ThrownExceptions { get; set; }
+        public IList<FullyQualified> ThrownExceptions { get; set; } = [];
 
-        public IList<FullyQualified> Annotations { get; internal set; }
+        public IList<FullyQualified> Annotations { get; internal set; } = [];
 
-        public IList<string>? DefaultValue { get; internal set; }
+        public IList<string>? DefaultValue { get; internal set; } = [];
     }
 
     public sealed class Variable : JavaType
@@ -592,11 +597,11 @@ public interface JavaType
 
         public bool HasFlags(params Flag[] flags) => FlagExtensions.HasFlags(FlagsBitMap, flags);
 
-        public string Name { get; internal set; }
+        public string Name { get; internal set; } = null!;
 
         public JavaType? Owner { get; internal set; }
 
-        public JavaType Type { get; internal set; }
+        public JavaType Type { get; internal set; } = Unknown.Instance;
 
         public Variable WithType(JavaType? javaType)
         {
@@ -606,7 +611,7 @@ public interface JavaType
                 : new Variable(ManagedReference, FlagsBitMap, Name, Owner, jType, Annotations);
         }
 
-        public IList<FullyQualified> Annotations { get; internal set; }
+        public IList<FullyQualified> Annotations { get; internal set; } = EMPTY_FULLY_QUALIFIED_ARRAY;
 
         public void UnsafeSet(JavaType? owner, JavaType? type, IList<FullyQualified>? annotations)
         {

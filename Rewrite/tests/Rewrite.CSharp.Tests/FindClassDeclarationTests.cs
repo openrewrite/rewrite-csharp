@@ -1,4 +1,5 @@
 using Rewrite.Recipes;
+using Rewrite.RewriteCSharp.Test;
 using Rewrite.RewriteCSharp.Test.Api;
 using Rewrite.RewriteJava;
 using Rewrite.Test;
@@ -10,7 +11,7 @@ using static Assertions;
 [Collection("C# remoting")]
 public class FindClassDeclarationTests : RewriteTest
 {
-    public override void Defaults(RecipeSpec spec)
+    protected override void Defaults(RecipeSpec spec)
     {
         spec.Recipe = new FindClass(null);
     }
@@ -31,7 +32,7 @@ public class FindClassDeclarationTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     public void ClassWithoutBody()
     {
@@ -48,9 +49,9 @@ public class FindClassDeclarationTests : RewriteTest
             )
         );
     }
-    
-    
-    
+
+
+
     [Fact]
     public void ClassWithEmptyPrimaryCtorWithoutBody()
     {
@@ -67,7 +68,7 @@ public class FindClassDeclarationTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     public void ClassWithEmptyPrimaryCtorWithEmptyBody()
     {
@@ -77,20 +78,20 @@ public class FindClassDeclarationTests : RewriteTest
                 // comment
                     class Foo()
                     {
-                        
+
                     }
                 ",
                 @"
                 // comment
                     /*~~>*/class Foo()
                     {
-                        
+
                     }
                 "
             )
         );
     }
-    
+
     [Fact(Skip = "For now we dont extract types")]
     public void ClassWithoutBody2()
     {

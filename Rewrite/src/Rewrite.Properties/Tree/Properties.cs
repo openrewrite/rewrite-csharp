@@ -259,10 +259,16 @@ public interface Properties : Rewrite.Core.Tree
             return newText == text ? this : new Value(id, prefix, markers, newText);
         }
 
-        public bool Equals(Rewrite.Core.Tree? other)
+        private bool Equals(Value other)
         {
-            return other is Value && other.Id == Id;
+            return Id.Equals(other.Id);
         }
+
+        public override bool Equals(object? obj)
+        {
+            return ReferenceEquals(this, obj) || obj is Value other && Equals(other);
+        }
+
 
         public override int GetHashCode()
         {

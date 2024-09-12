@@ -1,6 +1,6 @@
 namespace Rewrite.Core;
 
-public record Cursor(Cursor? Parent, object Value)
+public record Cursor(Cursor? Parent, object? Value)
 {
     public const string ROOT_VALUE = "root";
 
@@ -28,9 +28,9 @@ public record Cursor(Cursor? Parent, object Value)
         return c;
     }
 
-    public T GetValue<T>()
+    public T? GetValue<T>() where T : class
     {
-        return (T)Value;
+        return Value as T;
     }
     public Cursor GetParentOrThrow(int levels = 1)
     {
@@ -62,7 +62,7 @@ public record Cursor(Cursor? Parent, object Value)
         return default;
     }
 
-    public Cursor DropParentUntil(Func<object, bool> predicate)
+    public Cursor DropParentUntil(Func<object?, bool> predicate)
     {
         var c = this;
         while (c != null)
@@ -87,7 +87,7 @@ public record Cursor(Cursor? Parent, object Value)
 
     public T? GetMessage<T>(string key, T? defaultValue = default)
     {
-        return _messages is null ? defaultValue : 
+        return _messages is null ? defaultValue :
             _messages.TryGetValue(key, out var value) ? (T?)value : defaultValue;
     }
 }

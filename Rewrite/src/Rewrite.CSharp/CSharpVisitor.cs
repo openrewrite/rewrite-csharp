@@ -360,7 +360,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         return right;
     }
 
-    protected Space VisitSpace(Space space, CsSpace.Location loc, P p)
+    protected virtual Space VisitSpace(Space space, CsSpace.Location loc, P p)
     {
         return VisitSpace(space, Space.Location.LANGUAGE_EXTENSION, p);
     }
