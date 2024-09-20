@@ -49,7 +49,7 @@ jobs:
       - name: build
         run: ./gradlew ${{ env.GRADLE_SWITCHES }} build
       - name: test-cs
-        run: (cd Rewrite && dotnet test)
+        run: (cd Rewrite && dotnet test Rewrite.sln)
 
       - name: publish-snapshots
         if: github.event_name != 'pull_request'
