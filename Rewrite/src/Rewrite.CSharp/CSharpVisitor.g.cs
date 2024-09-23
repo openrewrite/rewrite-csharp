@@ -36,6 +36,21 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         return compilationUnit;
     }
 
+    public virtual J? VisitNamedArgument(Cs.NamedArgument namedArgument, P p)
+    {
+        namedArgument = namedArgument.WithPrefix(VisitSpace(namedArgument.Prefix, CsSpace.Location.NAMED_ARGUMENT_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(namedArgument, p);
+        if (tempExpression is not Cs.NamedArgument)
+        {
+            return tempExpression;
+        }
+        namedArgument = (Cs.NamedArgument) tempExpression;
+        namedArgument = namedArgument.WithMarkers(VisitMarkers(namedArgument.Markers, p));
+        namedArgument = namedArgument.Padding.WithNameColumn(VisitRightPadded(namedArgument.Padding.NameColumn, CsRightPadded.Location.NAMED_ARGUMENT_NAME_COLUMN, p));
+        namedArgument = namedArgument.WithExpression(VisitAndCast<Expression>(namedArgument.Expression, p)!);
+        return namedArgument;
+    }
+
     public virtual J? VisitAnnotatedStatement(Cs.AnnotatedStatement annotatedStatement, P p)
     {
         annotatedStatement = annotatedStatement.WithPrefix(VisitSpace(annotatedStatement.Prefix, CsSpace.Location.ANNOTATED_STATEMENT_PREFIX, p)!);

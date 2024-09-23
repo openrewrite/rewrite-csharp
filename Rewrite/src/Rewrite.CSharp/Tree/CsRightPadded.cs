@@ -4,6 +4,7 @@ public interface CsRightPadded
 {
     public record Location(CsSpace.Location AfterLocation)
     {
+        public static readonly Location NAMED_ARGUMENT_NAME_COLUMN = new(CsSpace.Location.NAMED_ARGUMENT_NAME_COLUMN_SUFFIX);
         public static readonly Location ARRAY_RANK_SPECIFIER_SIZE = new(CsSpace.Location.ARRAY_RANK_SPECIFIER_SIZE_SUFFIX);
         public static readonly Location ATTRIBUTE_LIST_ATTRIBUTES = new(CsSpace.Location.ATTRIBUTE_LIST_ATTRIBUTE_SUFFIX);
         public static readonly Location ATTRIBUTE_LIST_TARGET = new(CsSpace.Location.ATTRIBUTE_LIST_TARGET_SUFFIX);

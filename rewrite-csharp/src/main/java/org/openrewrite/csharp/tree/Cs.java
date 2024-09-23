@@ -276,6 +276,96 @@ public interface Cs extends J {
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
     @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    final class NamedArgument implements Cs, Expression {
+        @Nullable
+        @NonFinal
+        transient WeakReference<NamedArgument.Padding> padding;
+
+        @With
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @With
+        Space prefix;
+
+        @With
+        Markers markers;
+
+        @Nullable
+        JRightPadded<Identifier> nameColumn;
+
+        public J.@Nullable Identifier getNameColumn() { return nameColumn == null ? null : nameColumn.getElement(); }
+
+        public NamedArgument withNameColumn(J.@Nullable Identifier nameColumn) {
+            return getPadding().withNameColumn(JRightPadded.withElement(this.nameColumn, nameColumn));
+        }
+
+        @With
+        Expression expression;
+
+        @Override
+        public @Nullable JavaType getType() {
+            return expression.getType();
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public NamedArgument withType(@Nullable JavaType type) {
+            return expression.getType() == type ? this : new NamedArgument(id, prefix, markers, nameColumn, expression.withType(type));
+        }
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitNamedArgument(this, p);
+        }
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.t != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @Override
+        @Transient
+        public CoordinateBuilder.Expression getCoordinates() {
+            return new CoordinateBuilder.Expression(this);
+        }
+
+        @Override
+        public String toString() {
+            return withPrefix(Space.EMPTY).printTrimmed(new CSharpPrinter<>());
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final NamedArgument t;
+
+            public @Nullable JRightPadded<Identifier> getNameColumn() {
+                return t.nameColumn;
+            }
+
+            public NamedArgument withNameColumn(@Nullable JRightPadded<Identifier> target) {
+                return t.nameColumn == target ? t : new NamedArgument(t.id, t.prefix, t.markers, target, t.expression);
+            }
+
+        }
+    }
+
+
+    @Getter
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
     final class AnnotatedStatement implements Cs, Statement {
         @With
         @EqualsAndHashCode.Include

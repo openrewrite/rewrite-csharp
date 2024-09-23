@@ -468,8 +468,8 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
     private JRightPadded<Expression> MapArgument(ArgumentSyntax argument)
     {
         return new JRightPadded<Expression>(
-            Convert<Expression>(argument.Expression)!,
-            Format(Trailing(argument.Expression)),
+            Convert<Expression>(argument)!,
+            Format(Trailing(argument)),
             Markers.EMPTY
         );
     }
@@ -617,8 +617,23 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
 
     public override J? VisitArgument(ArgumentSyntax node)
     {
-        // TODO support named arguments
-        return Convert<Expression>(node.Expression);
+        if (node.NameColon == null)
+        {
+            return Convert<Expression>(node.Expression);
+        }
+        else
+        {
+            //
+            return new Cs.NamedArgument(
+                Core.Tree.RandomId(),
+                Format(Leading(node.NameColon)),
+                Markers.EMPTY,
+                new JRightPadded<J.Identifier>(
+                    MapIdentifier(node.NameColon.Name.Identifier, null),
+                    Format(Trailing(node.NameColon.Name)), Markers.EMPTY),
+                Convert<Expression>(node.Expression)!
+                );
+        }
     }
 
     public override J.Block VisitBlock(BlockSyntax node)

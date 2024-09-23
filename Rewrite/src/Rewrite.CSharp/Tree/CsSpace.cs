@@ -7,6 +7,8 @@ public interface CsSpace
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public record Location
     {
+        public static readonly Location NAMED_ARGUMENT_NAME_COLUMN_SUFFIX = new();
+        public static readonly Location NAMED_ARGUMENT_PREFIX = new();
         public static readonly Location ANNOTATED_STATEMENT_PREFIX = new();
         public static readonly Location ARRAY_RANK_SPECIFIER_PREFIX = new();
         public static readonly Location ARRAY_RANK_SPECIFIER_SIZES = new();

@@ -58,4 +58,14 @@ internal static class Extensions
     {
         return expr.WithExpression(expr.Expression.WithType<Expression>(newType));
     }
+
+    public static JavaType? GetJavaType(Cs.NamedArgument expr)
+    {
+        return expr.Type;
+    }
+
+    public static Cs.NamedArgument WithJavaType(Cs.NamedArgument expr, JavaType newType)
+    {
+        return expr.WithExpression(expr.Expression.WithType<Expression>(newType));
+    }
 }

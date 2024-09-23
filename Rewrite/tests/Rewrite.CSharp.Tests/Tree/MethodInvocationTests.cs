@@ -39,6 +39,21 @@ public class MethodInvocationTests : RewriteTest
     }
 
     [Fact]
+    public void InvocationWithNamedParameters()
+    {
+        RewriteRun(
+            CSharp(
+                @"
+                public class T
+                {
+                    string s = this.Equals(obj: null);
+                }
+                "
+            )
+        );
+    }
+
+    [Fact]
     public void InvocationWithGenerics()
     {
         RewriteRun(
