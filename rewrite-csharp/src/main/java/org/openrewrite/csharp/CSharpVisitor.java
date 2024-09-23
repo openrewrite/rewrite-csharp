@@ -17,12 +17,12 @@ package org.openrewrite.csharp;
 
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
-import org.openrewrite.csharp.tree.*;
 import org.openrewrite.internal.ListUtils;
-import org.openrewrite.java.JavaVisitor;
-import org.openrewrite.java.tree.*;
 import org.openrewrite.marker.Markers;
 import org.openrewrite.tree.*;
+import org.openrewrite.java.JavaVisitor;
+import org.openrewrite.java.tree.*;
+import org.openrewrite.csharp.tree.*;
 
 import java.util.List;
 
@@ -42,6 +42,20 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         compilationUnit = compilationUnit.getPadding().withMembers(ListUtils.map(compilationUnit.getPadding().getMembers(), el -> visitRightPadded(el, CsRightPadded.Location.COMPILATION_UNIT_MEMBERS, p)));
         compilationUnit = compilationUnit.withEof(visitSpace(compilationUnit.getEof(), Space.Location.COMPILATION_UNIT_EOF, p));
         return compilationUnit;
+    }
+
+    public J visitNamedArgument(Cs.NamedArgument namedArgument, P p) {
+        namedArgument = namedArgument.withPrefix(visitSpace(namedArgument.getPrefix(), CsSpace.Location.NAMED_ARGUMENT_PREFIX, p));
+        Expression tempExpression = (Expression) visitExpression(namedArgument, p);
+        if (!(tempExpression instanceof Cs.NamedArgument))
+        {
+            return tempExpression;
+        }
+        namedArgument = (Cs.NamedArgument) tempExpression;
+        namedArgument = namedArgument.withMarkers(visitMarkers(namedArgument.getMarkers(), p));
+        namedArgument = namedArgument.getPadding().withNameColumn(visitRightPadded(namedArgument.getPadding().getNameColumn(), CsRightPadded.Location.NAMED_ARGUMENT_NAME_COLUMN, p));
+        namedArgument = namedArgument.withExpression(visitAndCast(namedArgument.getExpression(), p));
+        return namedArgument;
     }
 
     public J visitAnnotatedStatement(Cs.AnnotatedStatement annotatedStatement, P p) {

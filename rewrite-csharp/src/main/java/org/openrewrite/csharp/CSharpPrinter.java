@@ -47,6 +47,18 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     }
 
     @Override
+    public J visitNamedArgument(Cs.NamedArgument namedArgument, PrintOutputCapture<P> p) {
+        beforeSyntax(namedArgument, CsSpace.Location.NAMED_ARGUMENT_PREFIX, p);
+        Cs.NamedArgument.Padding padding = namedArgument.getPadding();
+
+        visitRightPadded(padding.getNameColumn(), CsRightPadded.Location.NAMED_ARGUMENT_NAME_COLUMN, p);
+        p.append(':');
+        visit(namedArgument.getExpression(), p);
+        afterSyntax(namedArgument, p);
+        return namedArgument;
+    }
+
+    @Override
     public Cs visitCompilationUnit(Cs.CompilationUnit compilationUnit, PrintOutputCapture<P> p) {
         beforeSyntax(compilationUnit, Space.Location.COMPILATION_UNIT_PREFIX, p);
         for (JRightPadded<Cs.ExternAlias> extern : compilationUnit.getPadding().getExterns()) {

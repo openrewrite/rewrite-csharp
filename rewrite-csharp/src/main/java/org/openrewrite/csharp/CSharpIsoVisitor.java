@@ -15,14 +15,27 @@
  */
 package org.openrewrite.csharp;
 
+import org.jspecify.annotations.Nullable;
+import org.openrewrite.*;
+import org.openrewrite.internal.ListUtils;
+import org.openrewrite.marker.Markers;
 import org.openrewrite.csharp.tree.Cs;
+import org.openrewrite.java.JavaVisitor;
 import org.openrewrite.java.tree.J;
+import org.openrewrite.csharp.tree.*;
+
+import java.util.List;
 
 public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
 {
     @Override
     public Cs.CompilationUnit visitCompilationUnit(Cs.CompilationUnit compilationUnit, P p) {
         return (Cs.CompilationUnit) super.visitCompilationUnit(compilationUnit, p);
+    }
+
+    @Override
+    public Cs.NamedArgument visitNamedArgument(Cs.NamedArgument namedArgument, P p) {
+        return (Cs.NamedArgument) super.visitNamedArgument(namedArgument, p);
     }
 
     @Override
