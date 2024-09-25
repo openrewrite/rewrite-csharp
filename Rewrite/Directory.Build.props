@@ -9,8 +9,8 @@
         <Company>Moderne Inc.</Company>
         <PackageIcon>openrewrite.png</PackageIcon>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <Version>0.8.4</Version>
-        <RewriteRemoteVersion>0.8.0-preview-10</RewriteRemoteVersion>
+        <Version>0.8.5</Version>
+        <RewriteRemoteVersion>0.8.1</RewriteRemoteVersion>
         <RewriteRemoteDir Condition="'$(RewriteRemoteDir)'==''">..\..\..\..\..\moderneinc\rewrite-remote\Rewrite.Remote</RewriteRemoteDir>
     </PropertyGroup>
 </Project>
