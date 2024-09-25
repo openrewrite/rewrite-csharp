@@ -10,7 +10,7 @@ public class RecipeDescriptor
     public string Name { get; }
     public string DisplayName { get; }
     public string Description { get; }
-    public HashSet<string> Tags { get; }
+    public ISet<string> Tags { get; }
     public TimeSpan? EstimatedEffortPerOccurrence { get; }
     public List<OptionDescriptor> Options { get; }
     public List<RecipeDescriptor> RecipeList { get; }
@@ -21,7 +21,7 @@ public class RecipeDescriptor
     public Uri Source { get; }
 
     // Constructor to initialize the properties
-    public RecipeDescriptor(string name, string displayName, string description, HashSet<string> tags,
+    public RecipeDescriptor(string name, string displayName, string description, ISet<string> tags,
         TimeSpan? estimatedEffortPerOccurrence, List<OptionDescriptor> options, List<RecipeDescriptor> recipeList,
         /*List<DataTableDescriptor> dataTables, List<Maintainer> maintainers, List<Contributor> contributors,
         List<RecipeExample> examples,*/ Uri source)

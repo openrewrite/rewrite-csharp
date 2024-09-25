@@ -11,27 +11,43 @@ public abstract class Recipe
     {
         get
         {
-            return _descriptor ??= new RecipeDescriptor(GetType().FullName!, GetType().FullName!, "",
-                new HashSet<string>(), null,
+            return _descriptor ??= new RecipeDescriptor(
+                Name,
+                DisplayName,
+                Description,
+                Tags,
+                EstimatedEffortPerOccurrence,
                 GetType().GetConstructors()[0].GetParameters().Select(parameterInfo =>
                 {
-                    return new OptionDescriptor(parameterInfo.Name!, parameterInfo.ParameterType.FullName!, null,
-                        null,
-                        null,
+                    var option = ((OptionAttribute[])parameterInfo.GetCustomAttributes(typeof(OptionAttribute), false)).FirstOrDefault();
+                    return new OptionDescriptor(parameterInfo.Name!, parameterInfo.ParameterType.FullName!, option?.DisplayName ?? parameterInfo.Name, option?.Description ?? null,
+                        option?.Example,
                         null,
                         !(parameterInfo.IsOptional || parameterInfo.HasDefaultValue ||
-                          parameterInfo.CustomAttributes.FirstOrDefault(data =>
+                          parameterInfo.ParameterType.CustomAttributes.FirstOrDefault(data =>
                               data.AttributeType == typeof(NullableAttribute)) != null),
                         parameterInfo.DefaultValue
                     );
                 }).ToList(),
                 [],
-                new Uri($"recipe://{GetType().FullName}")
+                new Uri($"recipe://{GetType().Name}")
             );
         }
 
         set => _descriptor = value;
     }
+
+    public string Name => GetType().Name!;
+
+    public string InstanceName => GetType().FullName!;
+
+    public abstract string DisplayName { get; }
+
+    public abstract string Description { get; }
+
+    public ISet<string> Tags => new HashSet<string>();
+
+    public TimeSpan? EstimatedEffortPerOccurrence => TimeSpan.FromMinutes(5);
 
     public static Recipe Noop()
     {
@@ -40,6 +56,10 @@ public abstract class Recipe
 
     private class NoopRecipe : Recipe
     {
+        public override string DisplayName => "NoopRecipe";
+
+        public override string Description => "NoopRecipe";
+
         public override ITreeVisitor<Tree, ExecutionContext> GetVisitor()
         {
             return ITreeVisitor<Tree, ExecutionContext>.Noop();
