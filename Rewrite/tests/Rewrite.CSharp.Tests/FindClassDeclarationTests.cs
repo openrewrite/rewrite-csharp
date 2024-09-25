@@ -1,7 +1,4 @@
-using Rewrite.Recipes;
-using Rewrite.RewriteCSharp.Test;
 using Rewrite.RewriteCSharp.Test.Api;
-using Rewrite.RewriteJava;
 using Rewrite.Test;
 
 namespace Rewrite.CSharp.Tests;
@@ -13,7 +10,7 @@ public class FindClassDeclarationTests : RewriteTest
 {
     protected override void Defaults(RecipeSpec spec)
     {
-        spec.Recipe = new FindClass(null);
+        spec.Recipe = new FindClass();
     }
 
     [Fact]
