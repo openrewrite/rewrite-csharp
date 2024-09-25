@@ -28,10 +28,10 @@ public class CSharpVisitor<P> : JavaVisitor<P>
     {
         compilationUnit = compilationUnit.WithPrefix(VisitSpace(compilationUnit.Prefix, Space.Location.COMPILATION_UNIT_PREFIX, p)!);
         compilationUnit = compilationUnit.WithMarkers(VisitMarkers(compilationUnit.Markers, p));
-        compilationUnit = compilationUnit.Padding.WithExterns(ListUtils.Map(compilationUnit.Padding.Externs, el => VisitRightPadded(el, CsRightPadded.Location.COMPILATION_UNIT_EXTERNS, p)));
-        compilationUnit = compilationUnit.Padding.WithUsings(ListUtils.Map(compilationUnit.Padding.Usings, el => VisitRightPadded(el, CsRightPadded.Location.COMPILATION_UNIT_USINGS, p)));
-        compilationUnit = compilationUnit.WithAttributeLists(ListUtils.Map(compilationUnit.AttributeLists, el => (Cs.AttributeList?)Visit(el, p)));
-        compilationUnit = compilationUnit.Padding.WithMembers(ListUtils.Map(compilationUnit.Padding.Members, el => VisitRightPadded(el, CsRightPadded.Location.COMPILATION_UNIT_MEMBERS, p)));
+        compilationUnit = compilationUnit.Padding.WithExterns(compilationUnit.Padding.Externs.Map(el => VisitRightPadded(el, CsRightPadded.Location.COMPILATION_UNIT_EXTERNS, p)));
+        compilationUnit = compilationUnit.Padding.WithUsings(compilationUnit.Padding.Usings.Map(el => VisitRightPadded(el, CsRightPadded.Location.COMPILATION_UNIT_USINGS, p)));
+        compilationUnit = compilationUnit.WithAttributeLists(compilationUnit.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
+        compilationUnit = compilationUnit.Padding.WithMembers(compilationUnit.Padding.Members.Map(el => VisitRightPadded(el, CsRightPadded.Location.COMPILATION_UNIT_MEMBERS, p)));
         compilationUnit = compilationUnit.WithEof(VisitSpace(compilationUnit.Eof, Space.Location.COMPILATION_UNIT_EOF, p)!);
         return compilationUnit;
     }
@@ -46,7 +46,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         namedArgument = (Cs.NamedArgument) tempExpression;
         namedArgument = namedArgument.WithMarkers(VisitMarkers(namedArgument.Markers, p));
-        namedArgument = namedArgument.Padding.WithNameColumn(VisitRightPadded(namedArgument.Padding.NameColumn, CsRightPadded.Location.NAMED_ARGUMENT_NAME_COLUMN, p));
+        namedArgument = namedArgument.Padding.WithNameColumn(namedArgument.Padding.NameColumn == null ? null : VisitRightPadded(namedArgument.Padding.NameColumn, CsRightPadded.Location.NAMED_ARGUMENT_NAME_COLUMN, p));
         namedArgument = namedArgument.WithExpression(VisitAndCast<Expression>(namedArgument.Expression, p)!);
         return namedArgument;
     }
@@ -61,7 +61,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         annotatedStatement = (Cs.AnnotatedStatement) tempStatement;
         annotatedStatement = annotatedStatement.WithMarkers(VisitMarkers(annotatedStatement.Markers, p));
-        annotatedStatement = annotatedStatement.WithAttributeLists(ListUtils.Map(annotatedStatement.AttributeLists, el => (Cs.AttributeList?)Visit(el, p)));
+        annotatedStatement = annotatedStatement.WithAttributeLists(annotatedStatement.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
         annotatedStatement = annotatedStatement.WithStatement(VisitAndCast<Statement>(annotatedStatement.Statement, p)!);
         return annotatedStatement;
     }
@@ -106,8 +106,8 @@ public class CSharpVisitor<P> : JavaVisitor<P>
     {
         attributeList = attributeList.WithPrefix(VisitSpace(attributeList.Prefix, CsSpace.Location.ATTRIBUTE_LIST_PREFIX, p)!);
         attributeList = attributeList.WithMarkers(VisitMarkers(attributeList.Markers, p));
-        attributeList = attributeList.Padding.WithTarget(VisitRightPadded(attributeList.Padding.Target, CsRightPadded.Location.ATTRIBUTE_LIST_TARGET, p));
-        attributeList = attributeList.Padding.WithAttributes(ListUtils.Map(attributeList.Padding.Attributes, el => VisitRightPadded(el, CsRightPadded.Location.ATTRIBUTE_LIST_ATTRIBUTES, p)));
+        attributeList = attributeList.Padding.WithTarget(attributeList.Padding.Target == null ? null : VisitRightPadded(attributeList.Padding.Target, CsRightPadded.Location.ATTRIBUTE_LIST_TARGET, p));
+        attributeList = attributeList.Padding.WithAttributes(attributeList.Padding.Attributes.Map(el => VisitRightPadded(el, CsRightPadded.Location.ATTRIBUTE_LIST_ATTRIBUTES, p)));
         return attributeList;
     }
 
@@ -152,9 +152,9 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         blockScopeNamespaceDeclaration = (Cs.BlockScopeNamespaceDeclaration) tempStatement;
         blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.WithMarkers(VisitMarkers(blockScopeNamespaceDeclaration.Markers, p));
         blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithName(VisitRightPadded(blockScopeNamespaceDeclaration.Padding.Name, CsRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_NAME, p)!);
-        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithExterns(ListUtils.Map(blockScopeNamespaceDeclaration.Padding.Externs, el => VisitRightPadded(el, CsRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_EXTERNS, p)));
-        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithUsings(ListUtils.Map(blockScopeNamespaceDeclaration.Padding.Usings, el => VisitRightPadded(el, CsRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_USINGS, p)));
-        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithMembers(ListUtils.Map(blockScopeNamespaceDeclaration.Padding.Members, el => VisitRightPadded(el, CsRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_MEMBERS, p)));
+        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithExterns(blockScopeNamespaceDeclaration.Padding.Externs.Map(el => VisitRightPadded(el, CsRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_EXTERNS, p)));
+        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithUsings(blockScopeNamespaceDeclaration.Padding.Usings.Map(el => VisitRightPadded(el, CsRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_USINGS, p)));
+        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithMembers(blockScopeNamespaceDeclaration.Padding.Members.Map(el => VisitRightPadded(el, CsRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_MEMBERS, p)));
         blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.WithEnd(VisitSpace(blockScopeNamespaceDeclaration.End, CsSpace.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_END, p)!);
         return blockScopeNamespaceDeclaration;
     }
@@ -169,7 +169,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         collectionExpression = (Cs.CollectionExpression) tempExpression;
         collectionExpression = collectionExpression.WithMarkers(VisitMarkers(collectionExpression.Markers, p));
-        collectionExpression = collectionExpression.Padding.WithElements(ListUtils.Map(collectionExpression.Padding.Elements, el => VisitRightPadded(el, CsRightPadded.Location.COLLECTION_EXPRESSION_ELEMENTS, p)));
+        collectionExpression = collectionExpression.Padding.WithElements(collectionExpression.Padding.Elements.Map(el => VisitRightPadded(el, CsRightPadded.Location.COLLECTION_EXPRESSION_ELEMENTS, p)));
         return collectionExpression;
     }
 
@@ -212,9 +212,9 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         fileScopeNamespaceDeclaration = (Cs.FileScopeNamespaceDeclaration) tempStatement;
         fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.WithMarkers(VisitMarkers(fileScopeNamespaceDeclaration.Markers, p));
         fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithName(VisitRightPadded(fileScopeNamespaceDeclaration.Padding.Name, CsRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_NAME, p)!);
-        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithExterns(ListUtils.Map(fileScopeNamespaceDeclaration.Padding.Externs, el => VisitRightPadded(el, CsRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_EXTERNS, p)));
-        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithUsings(ListUtils.Map(fileScopeNamespaceDeclaration.Padding.Usings, el => VisitRightPadded(el, CsRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_USINGS, p)));
-        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithMembers(ListUtils.Map(fileScopeNamespaceDeclaration.Padding.Members, el => VisitRightPadded(el, CsRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_MEMBERS, p)));
+        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithExterns(fileScopeNamespaceDeclaration.Padding.Externs.Map(el => VisitRightPadded(el, CsRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_EXTERNS, p)));
+        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithUsings(fileScopeNamespaceDeclaration.Padding.Usings.Map(el => VisitRightPadded(el, CsRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_USINGS, p)));
+        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithMembers(fileScopeNamespaceDeclaration.Padding.Members.Map(el => VisitRightPadded(el, CsRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_MEMBERS, p)));
         return fileScopeNamespaceDeclaration;
     }
 
@@ -228,7 +228,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         interpolatedString = (Cs.InterpolatedString) tempExpression;
         interpolatedString = interpolatedString.WithMarkers(VisitMarkers(interpolatedString.Markers, p));
-        interpolatedString = interpolatedString.Padding.WithParts(ListUtils.Map(interpolatedString.Padding.Parts, el => VisitRightPadded(el, CsRightPadded.Location.INTERPOLATED_STRING_PARTS, p)));
+        interpolatedString = interpolatedString.Padding.WithParts(interpolatedString.Padding.Parts.Map(el => VisitRightPadded(el, CsRightPadded.Location.INTERPOLATED_STRING_PARTS, p)));
         return interpolatedString;
     }
 
@@ -243,8 +243,8 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         interpolation = (Cs.Interpolation) tempExpression;
         interpolation = interpolation.WithMarkers(VisitMarkers(interpolation.Markers, p));
         interpolation = interpolation.Padding.WithExpression(VisitRightPadded(interpolation.Padding.Expression, CsRightPadded.Location.INTERPOLATION_EXPRESSION, p)!);
-        interpolation = interpolation.Padding.WithAlignment(VisitRightPadded(interpolation.Padding.Alignment, CsRightPadded.Location.INTERPOLATION_ALIGNMENT, p));
-        interpolation = interpolation.Padding.WithFormat(VisitRightPadded(interpolation.Padding.Format, CsRightPadded.Location.INTERPOLATION_FORMAT, p));
+        interpolation = interpolation.Padding.WithAlignment(interpolation.Padding.Alignment == null ? null : VisitRightPadded(interpolation.Padding.Alignment, CsRightPadded.Location.INTERPOLATION_ALIGNMENT, p));
+        interpolation = interpolation.Padding.WithFormat(interpolation.Padding.Format == null ? null : VisitRightPadded(interpolation.Padding.Format, CsRightPadded.Location.INTERPOLATION_FORMAT, p));
         return interpolation;
     }
 
@@ -289,7 +289,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         usingDirective = usingDirective.Padding.WithGlobal(VisitRightPadded(usingDirective.Padding.Global, CsRightPadded.Location.USING_DIRECTIVE_GLOBAL, p)!);
         usingDirective = usingDirective.Padding.WithStatic(VisitLeftPadded(usingDirective.Padding.Static, CsLeftPadded.Location.USING_DIRECTIVE_STATIC, p)!);
         usingDirective = usingDirective.Padding.WithUnsafe(VisitLeftPadded(usingDirective.Padding.Unsafe, CsLeftPadded.Location.USING_DIRECTIVE_UNSAFE, p)!);
-        usingDirective = usingDirective.Padding.WithAlias(VisitRightPadded(usingDirective.Padding.Alias, CsRightPadded.Location.USING_DIRECTIVE_ALIAS, p));
+        usingDirective = usingDirective.Padding.WithAlias(usingDirective.Padding.Alias == null ? null : VisitRightPadded(usingDirective.Padding.Alias, CsRightPadded.Location.USING_DIRECTIVE_ALIAS, p));
         usingDirective = usingDirective.WithNamespaceOrType(VisitAndCast<TypeTree>(usingDirective.NamespaceOrType, p)!);
         return usingDirective;
     }
@@ -304,13 +304,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         propertyDeclaration = (Cs.PropertyDeclaration) tempStatement;
         propertyDeclaration = propertyDeclaration.WithMarkers(VisitMarkers(propertyDeclaration.Markers, p));
-        propertyDeclaration = propertyDeclaration.WithAttributeLists(ListUtils.Map(propertyDeclaration.AttributeLists, el => (Cs.AttributeList?)Visit(el, p)));
-        propertyDeclaration = propertyDeclaration.WithModifiers(ListUtils.Map(propertyDeclaration.Modifiers, el => (J.Modifier?)Visit(el, p)));
+        propertyDeclaration = propertyDeclaration.WithAttributeLists(propertyDeclaration.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
+        propertyDeclaration = propertyDeclaration.WithModifiers(propertyDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
         propertyDeclaration = propertyDeclaration.WithTypeExpression(VisitAndCast<TypeTree>(propertyDeclaration.TypeExpression, p)!);
-        propertyDeclaration = propertyDeclaration.Padding.WithInterfaceSpecifier(VisitRightPadded(propertyDeclaration.Padding.InterfaceSpecifier, CsRightPadded.Location.PROPERTY_DECLARATION_INTERFACE_SPECIFIER, p));
+        propertyDeclaration = propertyDeclaration.Padding.WithInterfaceSpecifier(propertyDeclaration.Padding.InterfaceSpecifier == null ? null : VisitRightPadded(propertyDeclaration.Padding.InterfaceSpecifier, CsRightPadded.Location.PROPERTY_DECLARATION_INTERFACE_SPECIFIER, p));
         propertyDeclaration = propertyDeclaration.WithName(VisitAndCast<J.Identifier>(propertyDeclaration.Name, p)!);
         propertyDeclaration = propertyDeclaration.WithAccessors(VisitAndCast<J.Block>(propertyDeclaration.Accessors, p)!);
-        propertyDeclaration = propertyDeclaration.Padding.WithInitializer(VisitLeftPadded(propertyDeclaration.Padding.Initializer, CsLeftPadded.Location.PROPERTY_DECLARATION_INITIALIZER, p));
+        propertyDeclaration = propertyDeclaration.Padding.WithInitializer(propertyDeclaration.Padding.Initializer == null ? null : VisitLeftPadded(propertyDeclaration.Padding.Initializer, CsLeftPadded.Location.PROPERTY_DECLARATION_INITIALIZER, p));
         return propertyDeclaration;
     }
 
