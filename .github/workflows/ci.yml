@@ -47,11 +47,15 @@ jobs:
         run: java --version
 
       - name: build
-        run: ./gradlew ${{ env.GRADLE_SWITCHES }} build
+        run: |
+          ./gradlew ${{ env.GRADLE_SWITCHES }} build
+          (cd Rewrite && nuget restore Rewrite.sln -NoCache)
+          (cd Rewrite && dotnet build Rewrite.sln)
       - name: test-cs
+        if: "!startsWith(github.event.head_commit.message, '[lst-change]')"
         run: (cd Rewrite && dotnet test Rewrite.sln)
 
-      - name: publish-snapshots
+      - name: publish-java-snapshots
         if: github.event_name != 'pull_request'
         run: ./gradlew ${{ env.GRADLE_SWITCHES }} snapshot publish -PforceSigning -x test
         env:
@@ -59,3 +63,13 @@ jobs:
           ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.OSSRH_TOKEN }}
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.OSSRH_SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.OSSRH_SIGNING_PASSWORD }}
+          
+      - name: publish-dotnet-snapshots
+        if: github.event_name != 'pull_request'
+        run: |
+          cd Rewrite
+          mkdir ~/localNugetFeed
+          dotnet pack --version-suffix rc.${{ github.run_number }} --output ~/localNuGetFeed Rewrite.sln
+          dotnet nuget push ~/localNuGetFeed/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{env.NUGET_API_KEY}} 
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
