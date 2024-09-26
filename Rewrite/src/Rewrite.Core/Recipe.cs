@@ -37,7 +37,7 @@ public abstract class Recipe
         set => _descriptor = value;
     }
 
-    public string Name => GetType().Name!;
+    public string Name => GetType().FullName!;
 
     public string InstanceName => GetType().FullName!;
 
