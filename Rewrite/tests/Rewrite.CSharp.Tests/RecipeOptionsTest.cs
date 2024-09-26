@@ -14,7 +14,7 @@ public class RecipeOptionsTest
 
         var findClassDescriptor = findClass.Descriptor;
         findClassDescriptor.Should().BeEquivalentTo(new RecipeDescriptor(
-            "TestRecipe",
+            "Rewrite.CSharp.Tests.RecipeOptionsTest+TestRecipe",
             "Test Recipe",
             "Test Recipe Description",
             new HashSet<string>(),
