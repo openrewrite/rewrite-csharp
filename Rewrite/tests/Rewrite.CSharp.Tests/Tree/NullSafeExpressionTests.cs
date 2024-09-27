@@ -62,7 +62,7 @@ public class NullSafeExpressionTests : RewriteTest
             )
         );
     }
-    
+
     [Fact(Skip = "NullSafeExpression parsing was disabled due to infiti recursion issue")]
     public void SequentialFieldAccess()
     {
@@ -91,13 +91,14 @@ public class NullSafeExpressionTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                public class Foo
+                public static class A
                 {
-                    public object? M(int[]? i)
+                    public static void Method(string p)
                     {
-                        return i?[0].ToString();
+                         A.Method("hi");
                     }
                 }
+
                 """
             )
         );

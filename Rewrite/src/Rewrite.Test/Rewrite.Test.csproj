@@ -11,6 +11,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
+      <ProjectReference Include="..\Rewrite.CSharp\Rewrite.CSharp.csproj" />
     </ItemGroup>
 
     <ItemGroup>

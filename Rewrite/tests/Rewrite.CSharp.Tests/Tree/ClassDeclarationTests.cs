@@ -53,7 +53,7 @@ public class ClassDeclarationTests : RewriteTest
                 """
                 class Foo()
                 {
-                    
+
                 }
                 """
             )
@@ -94,6 +94,66 @@ public class ClassDeclarationTests : RewriteTest
             CSharp(
                 """
                 class Foo<T>;
+                """
+            )
+        );
+    }
+
+    [Fact(Skip = SkipReason.NotYetImplemented)]
+    public void TypeParameterWithTypeConstraint()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                class Foo<T> where T : System.String;
+                """
+            )
+        );
+    }
+
+    [Fact(Skip = SkipReason.NotYetImplemented)]
+    public void TypeParameterWithClassConstraint()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                class Foo<T> where T : class;
+                """
+            )
+        );
+    }
+
+    [Fact(Skip = SkipReason.NotYetImplemented)]
+    public void TypeParameterWithEnumConstraint()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                class Foo<T> where T : enum;
+                """
+            )
+        );
+    }
+
+    [Fact(Skip = SkipReason.NotYetImplemented)]
+    public void TypeParameterWithNewConstraint()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                class Foo<T> where T : new();
+                """
+            )
+        );
+    }
+
+    [Fact(Skip = SkipReason.NotYetImplemented)]
+    public void TypeParameterWithMultipleConstraints()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                class Foo<T> where T : IList<int>, IEnumerable<int>, new();
                 """
             )
         );

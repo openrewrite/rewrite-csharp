@@ -269,7 +269,7 @@ public class RewriteTest
         return text;
     }
 
-    public virtual ExecutionContext DefaultExecutionContext(SourceSpec[] sourceSpecs)
+    public virtual ExecutionContext DefaultExecutionContext(params SourceSpec[] sourceSpecs)
     {
         return new InMemoryExecutionContext(e => Assert.Fail("The recipe threw an exception: " + e));
     }

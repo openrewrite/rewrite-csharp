@@ -39,10 +39,16 @@ public class CSharpParser : Core.Parser
             return new Builder();
         }
 
-        public override Core.Parser Build()
+        public override CSharpParser Build()
         {
             return new CSharpParser(_references);
         }
+    }
+
+    public SourceFile Parse([LanguageInjection("C#")]string source)
+    {
+        var input = new Core.Parser.Input(SourcePathFromSourceText("", source), () => new MemoryStream(Encoding.UTF8.GetBytes(source)));
+        return ParseInputs([input], null, new InMemoryExecutionContext()).Single();
     }
 
     public string SourcePathFromSourceText(string prefix, string sourceCode)
@@ -62,7 +68,8 @@ public class CSharpParser : Core.Parser
             SourceFile cs;
             try
             {
-                var sourceText = SourceText.From(source.GetSource(ctx), encoding);
+                using var stream = source.GetSource(ctx);
+                var sourceText = SourceText.From(stream, encoding);
                 var syntaxTree = CSharpSyntaxTree.ParseText(sourceText, path: source.GetRelativePath(relativeTo));
                 var root = syntaxTree.GetRoot();
                 var compilation = CSharpCompilation.Create("Dummy")

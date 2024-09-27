@@ -85,12 +85,12 @@ public class MethodDeclarationTests : RewriteTest
         RewriteRun(
             CSharp(
                 @"
-                public class Foo 
+                public class Foo
                 {
-                    public void Test() 
+                    public void Test()
                     {
                         // hello world
-                    }    
+                    }
                 }
                 "
             )
@@ -103,7 +103,7 @@ public class MethodDeclarationTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                public class T 
+                public class T
                 {
                     public void M(bool b = true)
                     {
@@ -130,7 +130,7 @@ public class MethodDeclarationTests : RewriteTest
         RewriteRun(
             CSharp(
                 @"
-                public class T 
+                public class T
                 {
                     public void M(params bool bs)
                     {
@@ -173,7 +173,7 @@ public class MethodDeclarationTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     public void ArrowLocalFunctionDeclaration()
     {
@@ -187,15 +187,15 @@ public class MethodDeclarationTests : RewriteTest
                         return nthFactorial(n);
 
                         int nthFactorial(int number) => number < 2
-                            ? 1 
+                            ? 1
                             : number * nthFactorial(number - 1);
-                    } 
+                    }
                 }
                 "
             )
         );
     }
-    
+
     [Fact]
     public void LocalFunctionDeclaration()
     {
@@ -208,13 +208,13 @@ public class MethodDeclarationTests : RewriteTest
                     {
                         return nthFactorial(n);
 
-                        int nthFactorial(int number) 
+                        int nthFactorial(int number)
                             {
                                 return number < 2
-                                        ?  1 
+                                        ?  1
                                         : number * nthFactorial(number - 1);
                             }
-                    } 
+                    }
                 }
                 "
             )
@@ -228,9 +228,81 @@ public class MethodDeclarationTests : RewriteTest
             CSharp(
                 """
                 class Test {
-                    System.Func<double, double> anonymousM = delegate(double val) { 
-                        return val; 
+                    System.Func<double, double> anonymousM = delegate(double val) {
+                        return val;
                     };
+                }
+                """
+            )
+        );
+    }
+
+    [Fact(Skip = SkipReason.NotYetImplemented)]
+    void GenericMethodDeclarationWithSingleTypeConstraint()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                class Test {
+                    void Method<T>() where T : System.String
+                }
+                """
+            )
+        );
+    }
+
+
+
+    [Fact(Skip = SkipReason.NotYetImplemented)]
+    public void GenericMethodDeclarationWithClassConstraint()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                class Test {
+                    void Method<T>() where T : class
+                }
+                """
+            )
+        );
+    }
+
+    [Fact(Skip = SkipReason.NotYetImplemented)]
+    public void GenericMethodDeclarationWithEnumConstraint()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                class Test {
+                    void Method<T>() where T : enum
+                }
+                """
+            )
+        );
+    }
+
+    [Fact(Skip = SkipReason.NotYetImplemented)]
+    public void GenericMethodDeclarationWithNewConstraint()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                class Test {
+                    void Method<T>() where T : new()
+                }
+                """
+            )
+        );
+    }
+
+    [Fact(Skip = SkipReason.NotYetImplemented)]
+    public void TypeParameterWithMultipleConstraints()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                class Test {
+                    void Method<T>() where T : IList<int>, IEnumerable<int>, new();
                 }
                 """
             )

@@ -1,4 +1,7 @@
+using System.Diagnostics;
 using Rewrite.RewriteCSharp.Test.Api;
+using Rewrite.RewriteCSharp.Tree;
+using Rewrite.RewriteJava.Tree;
 using Rewrite.Test;
 
 namespace Rewrite.CSharp.Tests.Tree;
@@ -8,7 +11,7 @@ using static Assertions;
 [Collection("C# remoting")]
 public class PropertyDeclarationTests : RewriteTest
 {
-    
+
     [Fact]
     void SimpleAutoPropertyDeclaration()
     {
@@ -27,7 +30,7 @@ public class PropertyDeclarationTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     void AutoPropertyWithInitializerDeclaration()
     {
@@ -47,7 +50,7 @@ public class PropertyDeclarationTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     void SimpleExplicitPropertyDeclaration()
     {
@@ -57,19 +60,19 @@ public class PropertyDeclarationTests : RewriteTest
                 class Person
                 {
                     private string _name = "N/A";
-                
+
                     // Declare a Name property of type string:
                     public string Name
                     {
                         /*space*/ get // comment
-                        /*space*/   {      // comment 
+                        /*space*/   {      // comment
                             return _name;
-                       /*space*/  }   // comment 
-                        
+                       /*space*/  }   // comment
+
                         // space comment
                         // space comment 2
                         // space comment 3
-                        
+
                           /*space*/       set       // comment
                         {
                             _name = value;
@@ -80,7 +83,7 @@ public class PropertyDeclarationTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     void ExpressionBodyAccessorsPropertyDeclaration()
     {
@@ -90,7 +93,7 @@ public class PropertyDeclarationTests : RewriteTest
                 public class Date
                 {
                     private int _month = 7;  // Backing store
-                
+
                     public int Month
                     {
                         get => _month    /*space*/   ; // comment
@@ -108,7 +111,7 @@ public class PropertyDeclarationTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     void ExpressionBodyPropertyDeclaration()
     {
@@ -124,5 +127,21 @@ public class PropertyDeclarationTests : RewriteTest
             )
         );
     }
+
+    [Fact]
+    void BinaryExpressionProperty()
+    {
+        var sourceSpec = CSharp(
+            """
+            class Test
+            {
+                static bool Is64Bit => true || true;
+            }
+            """).First();
+        var compilationUnit = sourceSpec.Parse<Cs.CompilationUnit>();
+        RewriteRun(sourceSpec);
+    }
+
+    //
 
 }

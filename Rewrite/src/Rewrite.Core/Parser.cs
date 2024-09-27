@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace Rewrite.Core;
 
 public interface Parser
@@ -27,6 +29,12 @@ public interface Parser
 
     string SourcePathFromSourceText(string prefix, string sourceCode);
     IEnumerable<SourceFile> ParseInputs(IEnumerable<Input> sources, string? relativeTo, ExecutionContext ctx);
+
+    SourceFile Parse(string source)
+    {
+        var input = new Core.Parser.Input(SourcePathFromSourceText("", source), () => new MemoryStream(Encoding.UTF8.GetBytes(source)));
+        return ParseInputs([input], null, new InMemoryExecutionContext()).Single();
+    }
 
     string GetCharset(ExecutionContext ctx)
     {

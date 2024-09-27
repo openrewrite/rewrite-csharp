@@ -31,4 +31,15 @@ public class CompilationUnitTests : RewriteTest
             )
         );
     }
+
+    [Fact]
+    public void EndsWithCrlf()
+    {
+        RewriteRun(
+            CSharp(
+                "class A{}\r\n")
+        );
+    }
+
+
 }
