@@ -21,7 +21,7 @@ public abstract class SourceSpec : SourceSpecs
     public string? SourcePath { get; set; }
     public string Dir { get; }
     public bool Skip { get; }
-    public bool NoTrim { get; }
+    public bool NoTrim { get; set; }
 
     protected SourceSpec(Type sourceFileType,
         Parser.Builder parser,
@@ -32,7 +32,7 @@ public abstract class SourceSpec : SourceSpecs
         string? sourcePath = null,
         string dir = "",
         bool skip = false,
-        bool noTrim = false)
+        bool noTrim = true)
     {
         this.SourceFileType = sourceFileType;
         this.Parser = parser;

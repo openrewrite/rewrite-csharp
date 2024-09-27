@@ -19,4 +19,12 @@ public static class SourceSpecExtensions
             yield return spec.Parse<T>();
         }
     }
+
+    public static IEnumerable<T> Parse<T>(this SourceSpecs<T> sourceSpec) where T : SourceFile
+    {
+        foreach (var spec in sourceSpec)
+        {
+            yield return spec.Parse<T>();
+        }
+    }
 }

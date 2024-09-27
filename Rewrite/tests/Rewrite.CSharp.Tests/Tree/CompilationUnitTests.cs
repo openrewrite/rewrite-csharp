@@ -1,4 +1,5 @@
 using Rewrite.RewriteCSharp.Test.Api;
+using Rewrite.RewriteCSharp.Tree;
 using Rewrite.Test;
 
 namespace Rewrite.CSharp.Tests.Tree;
@@ -35,10 +36,7 @@ public class CompilationUnitTests : RewriteTest
     [Fact]
     public void EndsWithCrlf()
     {
-        RewriteRun(
-            CSharp(
-                "class A{}\r\n")
-        );
+        RewriteRun(CSharp("class A{} \r\n"));
     }
 
 
