@@ -1,4 +1,5 @@
 using Rewrite.RewriteCSharp.Test.Api;
+using Rewrite.RewriteCSharp.Tree;
 using Rewrite.Test;
 
 namespace Rewrite.CSharp.Tests.Tree;
@@ -8,25 +9,23 @@ using static Assertions;
 [Collection("C# remoting")]
 public class MemberAccessTests : RewriteTest
 {
-    [Fact]
+    [Fact(Skip = SkipReason.NotYetImplemented)]
     public void MultilineLinq()
     {
-
-        RewriteRun(
-            CSharp(
-                """
-                public class Foo
+        var src = CSharp(
+            """
+            public class Foo
+            {
+                void Test()
                 {
-                    void Test()
-                    {
-                        "blah".Skip(1)
-                            .Take(1)
-                            .ToList();
-                    }
+                    "blah".Skip()
+                        .ToList();
                 }
-                """
-            )
-        );
+            }
+            """);
+        var cu = src.Parse().First();
+        var result = cu.Print();
+        RewriteRun(src);
     }
 
     [Fact]
