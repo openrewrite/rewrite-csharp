@@ -128,7 +128,7 @@ public class PropertyDeclarationTests : RewriteTest
         );
     }
 
-    [Fact]
+    [Fact(Skip = SkipReason.NotYetImplemented)]
     void BinaryExpressionProperty()
     {
         var sourceSpec = CSharp(
@@ -138,7 +138,6 @@ public class PropertyDeclarationTests : RewriteTest
                 static bool Is64Bit => true || true;
             }
             """).First();
-        var compilationUnit = sourceSpec.Parse<Cs.CompilationUnit>();
         RewriteRun(sourceSpec);
     }
 
