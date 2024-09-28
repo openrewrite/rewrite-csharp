@@ -27,4 +27,10 @@ public static class SourceSpecExtensions
             yield return spec.Parse<T>();
         }
     }
+
+    public static string Print<T>(this T source) where T : SourceFile
+    {
+        ITestExecutionContext.Current()?.Reset(new InMemoryExecutionContext());
+        return source.PrintAll();
+    }
 }
