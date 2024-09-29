@@ -78,7 +78,7 @@ public class CSharpParser : Core.Parser
                     .AddSyntaxTrees(syntaxTree);
                 var semanticModel = compilation.GetSemanticModel(syntaxTree);
 
-                var visitor = new CSharpParserVisitor(semanticModel);
+                var visitor = new CSharpParserVisitor(this, semanticModel);
                 cs = visitor.Visit(root) as Cs.CompilationUnit ?? throw new InvalidOperationException("Visitor.Visit returned null instead of Compilation Unit");
             }
             catch (Exception t)
