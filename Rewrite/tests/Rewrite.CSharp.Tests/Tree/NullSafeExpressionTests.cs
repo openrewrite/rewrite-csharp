@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class NullSafeExpressionTests : RewriteTest
 {
     [Fact(Skip = "NullSafeExpression parsing was disabled due to infinite recursion issue")]

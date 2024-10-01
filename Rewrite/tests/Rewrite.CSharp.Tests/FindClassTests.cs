@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class FindClassTests : RewriteTest
 {
     protected override void Defaults(RecipeSpec spec)

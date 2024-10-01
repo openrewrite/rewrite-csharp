@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class UsingDirectiveTests : RewriteTest
 {
     [Fact]
@@ -15,7 +15,7 @@ public class UsingDirectiveTests : RewriteTest
             CSharp(
                 """
                 using System.Collections.Generic;
-                
+
                 public class Foo
                 {
                     List<int> _l;
@@ -34,7 +34,7 @@ public class UsingDirectiveTests : RewriteTest
                 namespace Foo;
 
                 using System.Collections.Generic;
-                
+
                 class Foo;
                 """
             )
@@ -63,7 +63,7 @@ public class UsingDirectiveTests : RewriteTest
             CSharp(
                 """
                 global using System.Collections.Generic;
-                
+
                 public class Foo
                 {
                     List<int> _l;
@@ -80,7 +80,7 @@ public class UsingDirectiveTests : RewriteTest
             CSharp(
                 """
                 using static System.Math;
-                
+
                 public class Foo
                 {
                     double _d = Sqrt(1);
@@ -97,7 +97,7 @@ public class UsingDirectiveTests : RewriteTest
             CSharp(
                 """
                 using M = System.Math;
-                
+
                 public class Foo
                 {
                     double _d = M.Sqrt(1);
@@ -115,7 +115,7 @@ public class UsingDirectiveTests : RewriteTest
             CSharp(
                 """
                 using Person = (string First, string Last);
-                
+
                 public class Foo
                 {
                     Person _p = ("John", "Doe");

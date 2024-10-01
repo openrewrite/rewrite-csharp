@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class ThrowTests : RewriteTest
 {
     [Fact]
@@ -16,14 +16,14 @@ public class ThrowTests : RewriteTest
                 """
                 class Test {
                     void M() {
-                        throw new ArgumentException(); 
+                        throw new ArgumentException();
                     }
                 }
                 """
             )
         );
-    } 
-    
+    }
+
     [Fact]
     void EmptyThrowStatement()
     {

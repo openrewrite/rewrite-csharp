@@ -1,4 +1,4 @@
-using Rewrite.Core;
+﻿using Rewrite.Core;
 using Rewrite.Core.Marker;
 using Rewrite.RewriteJava.Marker;
 using Rewrite.RewriteJava.Tree;
@@ -7,10 +7,17 @@ namespace Rewrite.RewriteJava;
 
 public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
 {
+    private static readonly Func<string, string> JAVA_MARKER_WRAPPER =
+        o => $"/*~~{o}{(string.IsNullOrEmpty(o) ? "" : "~~")}*/";
+
+    public JavaPrinter()
+    {
+    }
+
     protected void VisitRightPadded<T>(IList<JRightPadded<T>> nodes, JRightPadded.Location location,
         string suffixBetween, PrintOutputCapture<P> p) where T : J
     {
-        for (var i = 0; i < nodes.Count; i++)
+        for (int i = 0; i < nodes.Count; ++i)
         {
             var node = nodes[i];
             Visit(node.Element, p);
@@ -26,26 +33,25 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     protected void VisitContainer<T>(string before, JContainer<T>? container, JContainer.Location location,
         string suffixBetween, string? after, PrintOutputCapture<P> p) where T : J
     {
-        if (container == null)
+        if (container != null)
         {
-            return;
+            BeforeSyntax(container.Before, container.Markers, location.BeforeLocation, p);
+            p.Append(before);
+            VisitRightPadded(container.Padding.Elements, location.ElementLocation, suffixBetween, p);
+            AfterSyntax(container.Markers, p);
+            p.Append(after ?? "");
         }
-
-        BeforeSyntax(container.Before, container.Markers, location.BeforeLocation, p);
-        p.Append(before);
-        VisitRightPadded(container.Padding.Elements, location.ElementLocation, suffixBetween, p);
-        AfterSyntax(container.Markers, p);
-        p.Append(after ?? "");
     }
+
 
     public override Space VisitSpace(Space space, Space.Location? loc, PrintOutputCapture<P> p)
     {
         p.Append(space.Whitespace);
-
         var comments = space.Comments;
-        for (var i = 0; i < comments.Count; i++)
+
+        for (int i = 0; i < comments.Count; ++i)
         {
-            Comment comment = comments[i];
+            var comment = comments[i];
             VisitMarkers(comment.Markers, p);
             comment.PrintComment(Cursor, p);
             p.Append(comment.Suffix);
@@ -86,55 +92,30 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
     }
 
-    public override J VisitModifier(J.Modifier mod, PrintOutputCapture<P> p)
+    public override J? VisitModifier(J.Modifier mod, PrintOutputCapture<P> p)
     {
         Visit(mod.Annotations, p);
-        var keyword = "";
-        switch (mod.ModifierType)
+        var keyword = mod.ModifierType switch
         {
-            case J.Modifier.Type.Default:
-                keyword = "default";
-                break;
-            case J.Modifier.Type.Public:
-                keyword = "public";
-                break;
-            case J.Modifier.Type.Protected:
-                keyword = "protected";
-                break;
-            case J.Modifier.Type.Private:
-                keyword = "private";
-                break;
-            case J.Modifier.Type.Abstract:
-                keyword = "abstract";
-                break;
-            case J.Modifier.Type.Static:
-                keyword = "static";
-                break;
-            case J.Modifier.Type.Final:
-                keyword = "sealed";
-                break;
-            case J.Modifier.Type.Native:
-                keyword = "native";
-                break;
-            case J.Modifier.Type.NonSealed:
-                keyword = "non-sealed";
-                break;
-            case J.Modifier.Type.Sealed:
-                keyword = "sealed";
-                break;
-            case J.Modifier.Type.Strictfp:
-                keyword = "strictfp";
-                break;
-            case J.Modifier.Type.Synchronized:
-                keyword = "synchronized";
-                break;
-            case J.Modifier.Type.Transient:
-                keyword = "transient";
-                break;
-            case J.Modifier.Type.Volatile:
-                keyword = "volatile";
-                break;
-        }
+            J.Modifier.Type.Default => "default",
+            J.Modifier.Type.Public => "public",
+            J.Modifier.Type.Protected => "protected",
+            J.Modifier.Type.Private => "private",
+            J.Modifier.Type.Abstract => "abstract",
+            J.Modifier.Type.Static => "static",
+            J.Modifier.Type.Final => "final",
+            J.Modifier.Type.Native => "native",
+            J.Modifier.Type.NonSealed => "non-sealed",
+            J.Modifier.Type.Sealed => "sealed",
+            J.Modifier.Type.Strictfp => "strictfp",
+            J.Modifier.Type.Synchronized => "synchronized",
+            J.Modifier.Type.Transient => "transient",
+            J.Modifier.Type.Volatile => "volatile",
+            J.Modifier.Type.Async => "async",
+            J.Modifier.Type.Reified => "reified",
+            J.Modifier.Type.Inline => "inline",
+            _ => mod.Keyword
+        };
 
         BeforeSyntax(mod, Space.Location.MODIFIER_PREFIX, p);
         p.Append(keyword);
@@ -142,8 +123,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return mod;
     }
 
-
-    public override J VisitAnnotation(J.Annotation annotation, PrintOutputCapture<P> p)
+    public override J? VisitAnnotation(J.Annotation annotation, PrintOutputCapture<P> p)
     {
         BeforeSyntax(annotation, Space.Location.ANNOTATION_PREFIX, p);
         p.Append('@');
@@ -174,10 +154,11 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     public override J VisitArrayType(J.ArrayType arrayType, PrintOutputCapture<P> p)
     {
         BeforeSyntax(arrayType, Space.Location.ARRAY_TYPE_PREFIX, p);
+
         TypeTree type = arrayType;
-        while (type is J.ArrayType)
+        while (type is J.ArrayType arrayTypeElement)
         {
-            type = ((J.ArrayType)type).ElementType;
+            type = arrayTypeElement.ElementType;
         }
 
         Visit(type, p);
@@ -188,7 +169,6 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
             p.Append('[');
             VisitSpace(arrayType.Dimension.Element, Space.Location.DIMENSION, p);
             p.Append(']');
-
             if (arrayType.ElementType is J.ArrayType)
             {
                 PrintDimensions((J.ArrayType)arrayType.ElementType, p);
@@ -215,14 +195,14 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         AfterSyntax(arrayType, p);
     }
 
-    public override J VisitAssert(J.Assert assert_, PrintOutputCapture<P> p)
+    public override J VisitAssert(J.Assert assert, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(assert_, Space.Location.ASSERT_PREFIX, p);
+        BeforeSyntax(assert, Space.Location.ASSERT_PREFIX, p);
         p.Append("assert");
-        Visit(assert_.Condition, p);
-        VisitLeftPadded(":", assert_.Detail, JLeftPadded.Location.ASSERT_DETAIL, p);
-        AfterSyntax(assert_, p);
-        return assert_;
+        Visit(assert.Condition, p);
+        VisitLeftPadded(":", assert.Detail, JLeftPadded.Location.ASSERT_DETAIL, p);
+        AfterSyntax(assert, p);
+        return assert;
     }
 
     public override J VisitAssignment(J.Assignment assignment, PrintOutputCapture<P> p)
@@ -236,43 +216,21 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
 
     public override J VisitAssignmentOperation(J.AssignmentOperation assignOp, PrintOutputCapture<P> p)
     {
-        var keyword = "";
-        switch (assignOp.Operator)
+        string keyword = assignOp.Operator switch
         {
-            case J.AssignmentOperation.Type.Addition:
-                keyword = "+=";
-                break;
-            case J.AssignmentOperation.Type.Subtraction:
-                keyword = "-=";
-                break;
-            case J.AssignmentOperation.Type.Multiplication:
-                keyword = "*=";
-                break;
-            case J.AssignmentOperation.Type.Division:
-                keyword = "/=";
-                break;
-            case J.AssignmentOperation.Type.Modulo:
-                keyword = "%=";
-                break;
-            case J.AssignmentOperation.Type.BitAnd:
-                keyword = "&=";
-                break;
-            case J.AssignmentOperation.Type.BitOr:
-                keyword = "|=";
-                break;
-            case J.AssignmentOperation.Type.BitXor:
-                keyword = "^=";
-                break;
-            case J.AssignmentOperation.Type.LeftShift:
-                keyword = "<<=";
-                break;
-            case J.AssignmentOperation.Type.RightShift:
-                keyword = ">>=";
-                break;
-            case J.AssignmentOperation.Type.UnsignedRightShift:
-                keyword = ">>>=";
-                break;
-        }
+            J.AssignmentOperation.Type.Addition => "+=",
+            J.AssignmentOperation.Type.Subtraction => "-=",
+            J.AssignmentOperation.Type.Multiplication => "*=",
+            J.AssignmentOperation.Type.Division => "/=",
+            J.AssignmentOperation.Type.Modulo => "%=",
+            J.AssignmentOperation.Type.BitAnd => "&=",
+            J.AssignmentOperation.Type.BitOr => "|=",
+            J.AssignmentOperation.Type.BitXor => "^=",
+            J.AssignmentOperation.Type.LeftShift => "<<=",
+            J.AssignmentOperation.Type.RightShift => ">>=",
+            J.AssignmentOperation.Type.UnsignedRightShift => ">>>=",
+            _ => ""
+        };
 
         BeforeSyntax(assignOp, Space.Location.ASSIGNMENT_OPERATION_PREFIX, p);
         Visit(assignOp.Variable, p);
@@ -285,67 +243,29 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
 
     public override J VisitBinary(J.Binary binary, PrintOutputCapture<P> p)
     {
-        string keyword = "";
-        switch (binary.Operator)
+        string keyword = binary.Operator switch
         {
-            case J.Binary.Type.Addition:
-                keyword = "+";
-                break;
-            case J.Binary.Type.Subtraction:
-                keyword = "-";
-                break;
-            case J.Binary.Type.Multiplication:
-                keyword = "*";
-                break;
-            case J.Binary.Type.Division:
-                keyword = "/";
-                break;
-            case J.Binary.Type.Modulo:
-                keyword = "%";
-                break;
-            case J.Binary.Type.LessThan:
-                keyword = "<";
-                break;
-            case J.Binary.Type.GreaterThan:
-                keyword = ">";
-                break;
-            case J.Binary.Type.LessThanOrEqual:
-                keyword = "<=";
-                break;
-            case J.Binary.Type.GreaterThanOrEqual:
-                keyword = ">=";
-                break;
-            case J.Binary.Type.Equal:
-                keyword = "==";
-                break;
-            case J.Binary.Type.NotEqual:
-                keyword = "!=";
-                break;
-            case J.Binary.Type.BitAnd:
-                keyword = "&";
-                break;
-            case J.Binary.Type.BitOr:
-                keyword = "|";
-                break;
-            case J.Binary.Type.BitXor:
-                keyword = "^";
-                break;
-            case J.Binary.Type.LeftShift:
-                keyword = "<<";
-                break;
-            case J.Binary.Type.RightShift:
-                keyword = ">>";
-                break;
-            case J.Binary.Type.UnsignedRightShift:
-                keyword = ">>>";
-                break;
-            case J.Binary.Type.Or:
-                keyword = "||";
-                break;
-            case J.Binary.Type.And:
-                keyword = "&&";
-                break;
-        }
+            J.Binary.Type.Addition => "+",
+            J.Binary.Type.Subtraction => "-",
+            J.Binary.Type.Multiplication => "*",
+            J.Binary.Type.Division => "/",
+            J.Binary.Type.Modulo => "%",
+            J.Binary.Type.LessThan => "<",
+            J.Binary.Type.GreaterThan => ">",
+            J.Binary.Type.LessThanOrEqual => "<=",
+            J.Binary.Type.GreaterThanOrEqual => ">=",
+            J.Binary.Type.Equal => "==",
+            J.Binary.Type.NotEqual => "!=",
+            J.Binary.Type.BitAnd => "&",
+            J.Binary.Type.BitOr => "|",
+            J.Binary.Type.BitXor => "^",
+            J.Binary.Type.LeftShift => "<<",
+            J.Binary.Type.RightShift => ">>",
+            J.Binary.Type.UnsignedRightShift => ">>>",
+            J.Binary.Type.Or => "||",
+            J.Binary.Type.And => "&&",
+            _ => ""
+        };
 
         BeforeSyntax(binary, Space.Location.BINARY_PREFIX, p);
         Visit(binary.Left, p);
@@ -356,10 +276,10 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return binary;
     }
 
+
     public override J VisitBlock(J.Block block, PrintOutputCapture<P> p)
     {
         BeforeSyntax(block, Space.Location.BLOCK_PREFIX, p);
-
         if (block.Static)
         {
             p.Append("static");
@@ -374,7 +294,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return block;
     }
 
-    protected void VisitStatements(IList<JRightPadded<Statement>> statements, JRightPadded.Location location,
+    protected virtual void VisitStatements(IList<JRightPadded<Statement>> statements, JRightPadded.Location location,
         PrintOutputCapture<P> p)
     {
         foreach (var paddedStat in statements)
@@ -383,74 +303,57 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
     }
 
-    protected void VisitStatement<T>(JRightPadded<T> paddedStat, JRightPadded.Location location,
-        PrintOutputCapture<P> p) where T : J
+    protected void VisitStatement(JRightPadded<Statement>? paddedStat, JRightPadded.Location location,
+        PrintOutputCapture<P> p)
     {
-        if (paddedStat == null)
+        if (paddedStat != null)
         {
-            return;
+            Visit(paddedStat.Element, p);
+            VisitSpace(paddedStat.After, location.AfterLocation, p);
+            VisitMarkers(paddedStat.Markers, p);
+            PrintStatementTerminator(paddedStat.Element, p);
         }
+    }
 
-        Visit(paddedStat.Element, p);
-        VisitSpace(paddedStat.After, location.AfterLocation, p);
-
-        J s = paddedStat.Element;
+    public virtual void PrintStatementTerminator(Statement s, PrintOutputCapture<P> p)
+    {
         while (true)
         {
-            if (s is J.Assert ||
-                s is J.Assignment ||
-                s is J.AssignmentOperation ||
-                s is J.Break ||
-                s is J.Continue ||
-                s is J.DoWhileLoop ||
-                s is J.Empty ||
-                s is J.MethodInvocation ||
-                s is J.NewClass ||
-                s is J.Return ||
-                s is J.Throw ||
-                s is J.Unary ||
-                s is J.VariableDeclarations ||
-                s is J.Yield)
+            if (s is not J.Assert and not J.Assignment and not J.AssignmentOperation and not J.Break and not J.Continue
+                and not J.DoWhileLoop and not J.Empty and not J.MethodInvocation and not J.NewClass and not J.Return
+                and not J.Throw and not J.Unary and not J.VariableDeclarations and not J.Yield)
             {
-                p.Append(';');
-                return;
-            }
-
-            if (s is J.MethodDeclaration declaration && declaration.Body == null)
-            {
-                p.Append(';');
-                return;
-            }
-
-            if (s is J.Label)
-            {
-                s = ((J.Label)s).Statement;
-                continue;
-            }
-
-            // Assuming GetCursor() returns a Value type which has a GetValue() method
-            // This section may need to change depending on the actual representation of these objects
-            if (Cursor.Value is J.Case)
-            {
-                var aSwitch = Cursor
-                    .DropParentUntil(c =>
-                        c is J.Switch ||
-                        c is J.SwitchExpression ||
-                        c?.ToString() == Cursor.ROOT_VALUE)
-                    .Value;
-
-                if (aSwitch is J.SwitchExpression)
+                if (s is J.MethodDeclaration methodDecl && methodDecl.Body == null)
                 {
-                    J.Case aCase = (J.Case)Cursor.Value;
-                    if (!(aCase.Body is J.Block))
-                    {
-                        p.Append(';');
-                    }
-
+                    p.Append(';');
                     return;
                 }
+
+                if (s is J.Label label)
+                {
+                    s = label.Statement;
+                    continue;
+                }
+
+                if (Cursor.Value is J.Case)
+                {
+                    var aSwitch = Cursor.DropParentUntil(c => c is J.Switch or J.SwitchExpression or "root").Value;
+                    if (aSwitch is J.SwitchExpression)
+                    {
+                        var aCase = (J.Case)Cursor.Value;
+                        if (aCase.Body is not J.Block)
+                        {
+                            p.Append(';');
+                        }
+
+                        return;
+                    }
+                }
+
+                return;
             }
 
+            p.Append(';');
             return;
         }
     }
@@ -464,31 +367,30 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return breakStatement;
     }
 
-    public override J VisitCase(J.Case case_, PrintOutputCapture<P> p)
+    public override J VisitCase(J.Case @case, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(case_, Space.Location.CASE_PREFIX, p);
-        Expression elem = case_.Expressions[0];
-        if (!(elem is J.Identifier) || !((J.Identifier)elem).SimpleName.Equals("default"))
+        BeforeSyntax(@case, Space.Location.CASE_PREFIX, p);
+        Expression elem = @case.Expressions[0];
+        if (elem is not J.Identifier identifier || !identifier.SimpleName.Equals("default"))
         {
             p.Append("case");
         }
 
-        VisitContainer("", case_.Padding.Expressions, JContainer.Location.CASE_EXPRESSION, ",", "", p);
-        VisitSpace(case_.Padding.Statements.Before, Space.Location.CASE, p);
-        p.Append(case_.CaseType == J.Case.Type.Statement ? ":" : "->");
-        VisitStatements(case_.Padding.Statements.Padding
-            .Elements, JRightPadded.Location.CASE, p);
-        if (case_.Body is Statement)
+        VisitContainer("", @case.Padding.Expressions, JContainer.Location.CASE_EXPRESSION, ",", "", p);
+        VisitSpace(@case.Padding.Statements.Before, Space.Location.CASE, p);
+        p.Append(@case.CaseType == J.Case.Type.Statement ? ":" : "->");
+        VisitStatements(@case.Padding.Statements.Padding.Elements, JRightPadded.Location.CASE, p);
+        if (@case.Body is Statement)
         {
-            VisitStatement(case_.Padding.Body!, JRightPadded.Location.CASE_BODY, p);
+            VisitStatement(@case.Padding.Body?.Cast<Statement>(), JRightPadded.Location.CASE_BODY, p);
         }
         else
         {
-            VisitRightPadded(case_.Padding.Body, JRightPadded.Location.CASE_BODY, ";", p);
+            VisitRightPadded(@case.Padding.Body!, JRightPadded.Location.CASE_BODY, ";", p);
         }
 
-        AfterSyntax(case_, p);
-        return case_;
+        AfterSyntax(@case, p);
+        return @case;
     }
 
     public override J VisitCatch(J.Try.Catch catch_, PrintOutputCapture<P> p)
@@ -503,33 +405,24 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
 
     public override J VisitClassDeclaration(J.ClassDeclaration classDecl, PrintOutputCapture<P> p)
     {
-        string kind = "";
-        switch (classDecl.Padding.DeclarationKind.KindType)
+        var kind = classDecl.GetKind() switch
         {
-            case J.ClassDeclaration.Kind.Type.Class:
-                kind = "class";
-                break;
-            case J.ClassDeclaration.Kind.Type.Enum:
-                kind = "enum";
-                break;
-            case J.ClassDeclaration.Kind.Type.Interface:
-                kind = "interface";
-                break;
-            case J.ClassDeclaration.Kind.Type.Annotation:
-                kind = "@interface";
-                break;
-            case J.ClassDeclaration.Kind.Type.Record:
-                kind = "record";
-                break;
-        }
+            J.ClassDeclaration.Kind.Type.Class => "class",
+            J.ClassDeclaration.Kind.Type.Enum => "enum",
+            J.ClassDeclaration.Kind.Type.Interface => "interface",
+            J.ClassDeclaration.Kind.Type.Annotation => "@interface",
+            J.ClassDeclaration.Kind.Type.Record => "record",
+            _ => ""
+        };
 
         BeforeSyntax(classDecl, Space.Location.CLASS_DECLARATION_PREFIX, p);
         VisitSpace(Space.EMPTY, Space.Location.ANNOTATIONS, p);
         Visit(classDecl.LeadingAnnotations, p);
-        foreach (J.Modifier m in classDecl.Modifiers)
+        foreach (var m in classDecl.Modifiers)
         {
             VisitModifier(m, p);
         }
+
         Visit(classDecl.Padding.DeclarationKind.Annotations, p);
         VisitSpace(classDecl.Padding.DeclarationKind.Prefix, Space.Location.CLASS_KIND, p);
         p.Append(kind);
@@ -537,7 +430,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         VisitContainer("<", classDecl.Padding.TypeParameters, JContainer.Location.TYPE_PARAMETERS, ",", ">", p);
         VisitContainer("(", classDecl.Padding.PrimaryConstructor, JContainer.Location.RECORD_STATE_VECTOR, ",", ")", p);
         VisitLeftPadded("extends", classDecl.Padding.Extends, JLeftPadded.Location.EXTENDS, p);
-        VisitContainer(classDecl.Padding.DeclarationKind.KindType.Equals(J.ClassDeclaration.Kind.Type.Interface) ? "extends" : "implements",
+        VisitContainer(classDecl.GetKind().Equals(J.ClassDeclaration.Kind.Type.Interface) ? "extends" : "implements",
             classDecl.Padding.Implements, JContainer.Location.IMPLEMENTS, ",", null, p);
         VisitContainer("permits", classDecl.Padding.Permits, JContainer.Location.PERMITS, ",", null, p);
         Visit(classDecl.Body, p);
@@ -550,7 +443,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         BeforeSyntax(cu, Space.Location.COMPILATION_UNIT_PREFIX, p);
         VisitRightPadded(cu.Padding.PackageDeclaration, JRightPadded.Location.PACKAGE, ";", p);
         VisitRightPadded(cu.Padding.Imports, JRightPadded.Location.IMPORT, ";", p);
-        if (cu.Imports.Any())
+        if (cu.Imports.Count > 0)
         {
             p.Append(';');
         }
@@ -615,7 +508,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         {
             VisitSpace(initializer.Prefix, Space.Location.NEW_CLASS_PREFIX, p);
             VisitSpace(initializer.New, Space.Location.NEW_PREFIX, p);
-            if (initializer.Padding.Arguments.Markers.FindFirst<OmitParentheses>() == null)
+            if (!initializer.Padding.Arguments.Markers.Any(m => m is OmitParentheses))
             {
                 VisitContainer("(", initializer.Padding.Arguments, JContainer.Location.NEW_CLASS_ARGUMENTS, ",", ")",
                     p);
@@ -654,7 +547,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     {
         BeforeSyntax(forLoop, Space.Location.FOR_PREFIX, p);
         p.Append("for");
-        J.ForLoop.Control ctrl = forLoop.LoopControl;
+        var ctrl = forLoop.LoopControl;
         VisitSpace(ctrl.Prefix, Space.Location.FOR_CONTROL_PREFIX, p);
         p.Append('(');
         VisitRightPadded(ctrl.Padding.Init, JRightPadded.Location.FOR_INIT, ",", p);
@@ -671,7 +564,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     {
         BeforeSyntax(forEachLoop, Space.Location.FOR_EACH_LOOP_PREFIX, p);
         p.Append("for");
-        J.ForEachLoop.Control ctrl = forEachLoop.LoopControl;
+        var ctrl = forEachLoop.LoopControl;
         VisitSpace(ctrl.Prefix, Space.Location.FOR_EACH_CONTROL_PREFIX, p);
         p.Append('(');
         VisitRightPadded(ctrl.Padding.Variable, JRightPadded.Location.FOREACH_VARIABLE, ":", p);
@@ -701,6 +594,21 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         Visit(iff.ElsePart, p);
         AfterSyntax(iff, p);
         return iff;
+    }
+
+    public override J VisitImport(J.Import import, PrintOutputCapture<P> p)
+    {
+        BeforeSyntax(import, Space.Location.IMPORT_PREFIX, p);
+        p.Append("import");
+        if (import.Static)
+        {
+            VisitSpace(import.Padding.Static.Before, Space.Location.STATIC_IMPORT, p);
+            p.Append("static");
+        }
+
+        Visit(import.Qualid, p);
+        AfterSyntax(import, p);
+        return import;
     }
 
     public override J VisitInstanceOf(J.InstanceOf instanceOf, PrintOutputCapture<P> p)
@@ -763,33 +671,39 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
         else if (literal.ValueSource != null)
         {
-            var surrogateEnum = unicodeEscapes.GetEnumerator();
-            var surrogate = surrogateEnum.MoveNext() ? surrogateEnum.Current : null;
+            var surrogateIter = unicodeEscapes.GetEnumerator();
+            var surrogate = surrogateIter.MoveNext() ? surrogateIter.Current : null;
             int i = 0;
             if (surrogate != null && surrogate.ValueSourceIndex == 0)
             {
                 p.Append("\\u").Append(surrogate.CodePoint);
-                if (surrogateEnum.MoveNext())
+                if (surrogateIter.MoveNext())
                 {
-                    surrogate = surrogateEnum.Current;
+                    surrogate = surrogateIter.Current;
                 }
             }
 
             string valueSource = literal.ValueSource;
-            for (int j = 0; j < valueSource.Length; j++)
+            for (int j = 0; j < valueSource.Length; ++j)
             {
                 char c = valueSource[j];
                 p.Append(c);
-                if (surrogate != null && surrogate.ValueSourceIndex == ++i)
+                if (surrogate != null)
                 {
-                    while (surrogate != null && surrogate.ValueSourceIndex == i)
+                    int var10000 = surrogate.ValueSourceIndex;
+                    ++i;
+                    if (var10000 == i)
                     {
-                        p.Append("\\u").Append(surrogate.CodePoint);
-                        surrogate = surrogateEnum.MoveNext() ? surrogateEnum.Current : null;
+                        while (surrogate != null && surrogate.ValueSourceIndex == i)
+                        {
+                            p.Append("\\u").Append(surrogate.CodePoint);
+                            surrogate = surrogateIter.MoveNext() ? surrogateIter.Current : null;
+                        }
                     }
                 }
             }
         }
+
         AfterSyntax(literal, p);
         return literal;
     }
@@ -810,10 +724,12 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         BeforeSyntax(method, Space.Location.METHOD_DECLARATION_PREFIX, p);
         VisitSpace(Space.EMPTY, Space.Location.ANNOTATIONS, p);
         Visit(method.LeadingAnnotations, p);
-        foreach (var m in method.Modifiers)
+
+        foreach (var modifier in method.Modifiers)
         {
-            VisitModifier(m, p);
+            VisitModifier(modifier, p);
         }
+
         var typeParameters = method.Annotations.TypeParameters;
         if (typeParameters != null)
         {
@@ -824,16 +740,21 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
             VisitRightPadded(typeParameters.Padding.Parameters, JRightPadded.Location.TYPE_PARAMETER, ",", p);
             p.Append('>');
         }
+
         Visit(method.ReturnTypeExpression, p);
         Visit(method.Annotations.Name.Annotations, p);
-        Visit(method.Padding.Name.Identifier, p);
-        if (method.Markers.FindFirst<CompactConstructor>() == null)
+        Visit(method.Name, p);
+
+        if (!method.Markers.Any(marker => marker is CompactConstructor))
         {
-            VisitContainer("(", method.Padding.Parameters, JContainer.Location.METHOD_DECLARATION_PARAMETERS, ",", ")", p);
+            VisitContainer("(", method.Padding.Parameters, JContainer.Location.METHOD_DECLARATION_PARAMETERS, ",", ")",
+                p);
         }
+
         VisitContainer("throws", method.Padding.Throws, JContainer.Location.THROWS, ",", null, p);
         Visit(method.Body, p);
-        VisitLeftPadded("default", method.Padding.DefaultValue, JLeftPadded.Location.METHOD_DECLARATION_DEFAULT_VALUE, p);
+        VisitLeftPadded("default", method.Padding.DefaultValue, JLeftPadded.Location.METHOD_DECLARATION_DEFAULT_VALUE,
+            p);
         AfterSyntax(method, p);
         return method;
     }
@@ -862,19 +783,19 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         BeforeSyntax(multiVariable, Space.Location.VARIABLE_DECLARATIONS_PREFIX, p);
         VisitSpace(Space.EMPTY, Space.Location.ANNOTATIONS, p);
         Visit(multiVariable.LeadingAnnotations, p);
-        foreach (var m in multiVariable.Modifiers)
+
+        foreach (var modifier in multiVariable.Modifiers)
         {
-            VisitModifier(m, p);
+            VisitModifier(modifier, p);
         }
 
         Visit(multiVariable.TypeExpression, p);
 
-        //For backwards compatibility.
-        foreach (var dim in multiVariable.DimensionsBeforeName)
+        foreach (var dimension in multiVariable.DimensionsBeforeName)
         {
-            VisitSpace(dim.Before, Space.Location.DIMENSION_PREFIX, p);
+            VisitSpace(dimension.Before, Space.Location.DIMENSION_PREFIX, p);
             p.Append('[');
-            VisitSpace(dim.Element, Space.Location.DIMENSION, p);
+            VisitSpace(dimension.Element, Space.Location.DIMENSION, p);
             p.Append(']');
         }
 
@@ -911,7 +832,8 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         VisitSpace(newClass.New, Space.Location.NEW_PREFIX, p);
         p.Append("new");
         Visit(newClass.Clazz, p);
-        if (newClass.Padding.Arguments.Markers.FindFirst<OmitParentheses>() == null)
+
+        if (!newClass.Padding.Arguments.Markers.Any(marker => marker is OmitParentheses))
         {
             VisitContainer("(", newClass.Padding.Arguments, JContainer.Location.NEW_CLASS_ARGUMENTS, ",", ")", p);
         }
@@ -933,9 +855,9 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
 
     public override J VisitPackage(J.Package pkg, PrintOutputCapture<P> p)
     {
-        foreach (var a in pkg.Annotations)
+        foreach (var annotation in pkg.Annotations)
         {
-            VisitAnnotation(a, p);
+            VisitAnnotation(annotation, p);
         }
 
         BeforeSyntax(pkg, Space.Location.PACKAGE_PREFIX, p);
@@ -956,46 +878,20 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
 
     public override J VisitPrimitive(J.Primitive primitive, PrintOutputCapture<P> p)
     {
-        string keyword;
-        switch (primitive.Type.Kind)
+        var keyword = primitive.Type.Kind switch
         {
-            case JavaType.Primitive.PrimitiveType.Boolean:
-                keyword = "bool";
-                break;
-            case JavaType.Primitive.PrimitiveType.Byte:
-                keyword = "byte";
-                break;
-            case JavaType.Primitive.PrimitiveType.Char:
-                keyword = "char";
-                break;
-            case JavaType.Primitive.PrimitiveType.Double:
-                keyword = "double";
-                break;
-            case JavaType.Primitive.PrimitiveType.Float:
-                keyword = "float";
-                break;
-            case JavaType.Primitive.PrimitiveType.Int:
-                keyword = "int";
-                break;
-            case JavaType.Primitive.PrimitiveType.Long:
-                keyword = "long";
-                break;
-            case JavaType.Primitive.PrimitiveType.Short:
-                keyword = "short";
-                break;
-            case JavaType.Primitive.PrimitiveType.Void:
-                keyword = "void";
-                break;
-            case JavaType.Primitive.PrimitiveType.String:
-                keyword = "string";
-                break;
-            case JavaType.Primitive.PrimitiveType.None:
-                throw new InvalidOperationException("Unable to print None primitive");
-            case JavaType.Primitive.PrimitiveType.Null:
-                throw new InvalidOperationException("Unable to print Null primitive");
-            default:
-                throw new InvalidOperationException("Unable to print non-primitive type");
-        }
+            JavaType.Primitive.PrimitiveType.Boolean => "boolean",
+            JavaType.Primitive.PrimitiveType.Byte => "byte",
+            JavaType.Primitive.PrimitiveType.Char => "char",
+            JavaType.Primitive.PrimitiveType.Double => "double",
+            JavaType.Primitive.PrimitiveType.Float => "float",
+            JavaType.Primitive.PrimitiveType.Int => "int",
+            JavaType.Primitive.PrimitiveType.Long => "long",
+            JavaType.Primitive.PrimitiveType.Short => "short",
+            JavaType.Primitive.PrimitiveType.Void => "void",
+            JavaType.Primitive.PrimitiveType.String => "String",
+            _ => throw new InvalidOperationException("Unable to print unknown primitive type")
+        };
 
         BeforeSyntax(primitive, Space.Location.PRIMITIVE_PREFIX, p);
         p.Append(keyword);
@@ -1074,14 +970,16 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     {
         BeforeSyntax(tryable, Space.Location.TRY_PREFIX, p);
         p.Append("try");
+
         if (tryable.Padding.Resources != null)
         {
-            //Note: we do not call VisitContainer here because the last resource may or may not be semicolon terminated.
             VisitSpace(tryable.Padding.Resources.Before, Space.Location.TRY_RESOURCES, p);
             p.Append('(');
             var resources = tryable.Padding.Resources.Padding.Elements;
+
             foreach (var resource in resources)
             {
+                VisitSpace(resource.After, Space.Location.TRY_RESOURCE_SUFFIX, p);
                 VisitSpace(resource.Element.Prefix, Space.Location.TRY_RESOURCE, p);
                 VisitMarkers(resource.Element.Markers, p);
                 Visit(resource.Element.VariableDeclarations, p);
@@ -1090,8 +988,6 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
                 {
                     p.Append(';');
                 }
-
-                VisitSpace(resource.After, Space.Location.TRY_RESOURCE_SUFFIX, p);
             }
 
             p.Append(')');
@@ -1158,7 +1054,6 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
                 p.Append('~');
                 Visit(unary.Expression, p);
                 break;
-            case J.Unary.Type.Not:
             default:
                 p.Append('!');
                 Visit(unary.Expression, p);
@@ -1189,6 +1084,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     {
         BeforeSyntax(variable, Space.Location.VARIABLE_PREFIX, p);
         Visit(variable.Name, p);
+
         foreach (var dimension in variable.DimensionsAfterName)
         {
             VisitSpace(dimension.Before, Space.Location.DIMENSION_PREFIX, p);
@@ -1216,6 +1112,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     {
         BeforeSyntax(wildcard, Space.Location.WILDCARD_PREFIX, p);
         p.Append('?');
+
         if (wildcard.Padding.WildcardBound != null)
         {
             switch (wildcard.WildcardBound)
@@ -1249,9 +1146,6 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return yield;
     }
 
-    private static readonly Func<string, string> MARKER_WRAPPER =
-        o => "/*~~" + o + (o.Length == 0 ? "" : "~~") + ">*/";
-
     protected void BeforeSyntax(J j, Space.Location loc, PrintOutputCapture<P> p)
     {
         BeforeSyntax(j.Prefix, j.Markers, loc, p);
@@ -1259,16 +1153,21 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
 
     protected void BeforeSyntax(Space prefix, Markers markers, Space.Location? loc, PrintOutputCapture<P> p)
     {
-        foreach (var marker in markers.MarkerList)
+        foreach (var marker in markers)
         {
-            p.Append(p.MarkerPrinter.BeforePrefix(marker, new Cursor(Cursor, marker), MARKER_WRAPPER));
+            p.Append(p.MarkerPrinter.BeforePrefix(marker, new Cursor(Cursor, marker), JAVA_MARKER_WRAPPER));
         }
 
-        VisitSpace(prefix, loc, p);
-        VisitMarkers(markers, p);
-        foreach (var marker in markers.MarkerList)
+        if (loc != null)
         {
-            p.Append(p.MarkerPrinter.BeforeSyntax(marker, new Cursor(Cursor, marker), MARKER_WRAPPER));
+            VisitSpace(prefix, loc, p);
+        }
+
+        VisitMarkers(markers, p);
+
+        foreach (var marker in markers)
+        {
+            p.Append(p.MarkerPrinter.BeforeSyntax(marker, new Cursor(Cursor, marker), JAVA_MARKER_WRAPPER));
         }
     }
 
@@ -1279,9 +1178,9 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
 
     protected void AfterSyntax(Markers markers, PrintOutputCapture<P> p)
     {
-        foreach (var marker in markers.MarkerList)
+        foreach (var marker in markers)
         {
-            p.Append(p.MarkerPrinter.AfterSyntax(marker, new Cursor(Cursor, marker), MARKER_WRAPPER));
+            p.Append(p.MarkerPrinter.AfterSyntax(marker, new Cursor(Cursor, marker), JAVA_MARKER_WRAPPER));
         }
     }
 }

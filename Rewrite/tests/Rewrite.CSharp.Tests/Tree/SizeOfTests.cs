@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class SizeOfTests : RewriteTest
 {
     [Fact]
@@ -23,7 +23,7 @@ public class SizeOfTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     public void SimpleSizeOfWithComments()
     {

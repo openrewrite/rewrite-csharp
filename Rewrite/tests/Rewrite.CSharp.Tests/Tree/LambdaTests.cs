@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class LambdaTests : RewriteTest
 {
 
@@ -35,8 +35,8 @@ public class LambdaTests : RewriteTest
             )
         );
     }
-    
-    
+
+
     [Fact]
     void SimpleLambdaWithBlockBody()
     {
@@ -44,7 +44,7 @@ public class LambdaTests : RewriteTest
             CSharp(
                 """
                 class Test {
-                    Func<double, double> square = x => 
+                    Func<double, double> square = x =>
                         {
                             return x * x;
                           };
@@ -53,7 +53,7 @@ public class LambdaTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     void ParenthesizedMultiArgsLambda()
     {
@@ -67,7 +67,7 @@ public class LambdaTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     void ParenthesizedMultiArgsLambdaWithComments()
     {
@@ -81,7 +81,7 @@ public class LambdaTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     void ParenthesizedMultiArgsLambdaWithBlockBody()
     {
@@ -89,7 +89,7 @@ public class LambdaTests : RewriteTest
             CSharp(
                 """
                 class Test {
-                    System.Func<double, double> square =  /*1*/   (  /*2*/ x, /*3*/       y,       /*4*/ z)  /*5*/    =>      /*6*/  
+                    System.Func<double, double> square =  /*1*/   (  /*2*/ x, /*3*/       y,       /*4*/ z)  /*5*/    =>      /*6*/
                         {
                             return x * x;
                         };
@@ -98,5 +98,5 @@ public class LambdaTests : RewriteTest
             )
         );
     }
-    
+
 }

@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class IfTests : RewriteTest
 {
     [Fact]
@@ -78,7 +78,7 @@ public class IfTests : RewriteTest
                     void test() {
                         if (true) {
                         }
-                        else{ 
+                        else{
                             Console.WriteLine("test");
                         }
                     }

@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class UnaryTests : RewriteTest
 {
     [Fact]
@@ -15,7 +15,7 @@ public class UnaryTests : RewriteTest
           CSharp(
             """
               class Test {
-                  void test() 
+                  void test()
                   {
                       int i = 0;
                       int j = ++i;
@@ -31,7 +31,7 @@ public class UnaryTests : RewriteTest
           )
         );
     }
-    
+
     [Fact]
     void Negation()
     {

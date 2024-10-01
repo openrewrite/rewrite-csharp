@@ -6,7 +6,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class MemberAccessTests : RewriteTest
 {
     [Fact(Skip = SkipReason.NotYetImplemented)]

@@ -118,6 +118,11 @@ public sealed class JRightPadded<T>(
     {
         return new JRightPadded<T>(t, Space.EMPTY, Markers.EMPTY);
     }
+
+    public JRightPadded<TNew> Cast<TNew>() where TNew : T
+    {
+        return new JRightPadded<TNew>((TNew)Element!, after, markers);
+    }
 }
 
 public static class JRightPadded

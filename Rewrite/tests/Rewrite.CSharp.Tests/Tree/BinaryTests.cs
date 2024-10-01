@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class BinaryTests : RewriteTest
 {
     [Fact]
@@ -14,9 +14,9 @@ public class BinaryTests : RewriteTest
         RewriteRun(
           CSharp(
             """
-              class Test 
+              class Test
               {
-                  void M() 
+                  void M()
                   {
                       int n;
                       n = 0 + 1;
@@ -33,16 +33,16 @@ public class BinaryTests : RewriteTest
           )
         );
     }
-    
+
     [Fact]
     void BooleanLogic()
     {
         RewriteRun(
             CSharp(
                 """
-                class Test 
+                class Test
                 {
-                    void test() 
+                    void test()
                     {
                         bool b = 1 == 2 //
                                  && 3 == 4 //
