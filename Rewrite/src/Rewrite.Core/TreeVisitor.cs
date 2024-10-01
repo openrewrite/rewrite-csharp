@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Rewrite.Core.Marker;
 
 namespace Rewrite.Core;
@@ -5,7 +6,7 @@ namespace Rewrite.Core;
 public abstract class TreeVisitor<T, P> : ITreeVisitor<T, P> where T : class, Tree
 {
 
-    public Cursor Cursor { get; set; } = null!;
+    public Cursor Cursor { get; set; } = new (null, Cursor.ROOT_VALUE);
 
     public bool IsAdaptableTo(Type adaptTo)
     {
@@ -51,6 +52,7 @@ public abstract class TreeVisitor<T, P> : ITreeVisitor<T, P> where T : class, Tr
         return (T?)tree;
     }
 
+    [DebuggerHidden]
     public virtual T? Visit(Tree? tree, P p)
     {
         if (tree is null)
@@ -97,7 +99,6 @@ public abstract class TreeVisitor<T, P> : ITreeVisitor<T, P> where T : class, Tr
         return (T2?)Visit(tree, p);
     }
 
-    [Pure]
     public virtual Markers VisitMarkers(Marker.Markers? markers, P p)
     {
         if (markers == null || ReferenceEquals(markers, Marker.Markers.EMPTY))

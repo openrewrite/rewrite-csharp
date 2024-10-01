@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class SwitchStatementTests : RewriteTest
 {
     [Fact]
@@ -33,7 +33,7 @@ public class SwitchStatementTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     void SimpleSwitch()
     {
@@ -48,7 +48,7 @@ public class SwitchStatementTests : RewriteTest
                             case < 0.0:
                                 Console.WriteLine("Measured value is too low.");
                                 break;
-                    
+
                             case > 15.0:
                                 Console.WriteLine("Measured value is too high.");
                                 break;
@@ -57,7 +57,7 @@ public class SwitchStatementTests : RewriteTest
                             case double.NaN:
                                 Console.WriteLine("Failed measurement.");
                                 break;
-                    
+
                             default:
                                 Console.WriteLine("Measured value is " + measurement);
                                 break;

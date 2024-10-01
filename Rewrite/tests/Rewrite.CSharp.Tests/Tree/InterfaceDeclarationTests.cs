@@ -7,7 +7,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class InterfaceDeclarationTests : RewriteTest
 {
 
@@ -64,7 +64,7 @@ public class InterfaceDeclarationTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     public void ClassWithoutBody()
     {
@@ -77,9 +77,9 @@ public class InterfaceDeclarationTests : RewriteTest
             )
         );
     }
-    
-    
-    
+
+
+
     [Fact]
     public void InterfaceWithWithoutBodyWithTypeParams()
     {
@@ -92,7 +92,7 @@ public class InterfaceDeclarationTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     public void InterfaceWithEmptyBody()
     {
@@ -102,7 +102,7 @@ public class InterfaceDeclarationTests : RewriteTest
                 // comment
                     interface Foo
                     {
-                        
+
                     }
                 "
             )

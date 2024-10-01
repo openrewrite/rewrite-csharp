@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class ForLoopTests : RewriteTest
 {
     [Fact]
@@ -151,7 +151,7 @@ public class ForLoopTests : RewriteTest
                 """
                 class Test {
                     void test() {
-                    
+
                         int[] a;
                         int i=0;
                         for(i=0; i<a.length; i++) {}

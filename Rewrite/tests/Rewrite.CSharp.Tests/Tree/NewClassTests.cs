@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class NewClassTests : RewriteTest
 {
     [Fact]
@@ -48,7 +48,7 @@ public class NewClassTests : RewriteTest
                     {
                         //Nested() { }
                     }
-                    
+
                     private Container.Nested cn = new Container.Nested();
                 }
                 """
@@ -68,7 +68,7 @@ public class NewClassTests : RewriteTest
                     {
                         //Nested() { }
                     }
-                    
+
                     private Container.Nested cn = new Container /*12*/.   Nested(/*1233*/)   ; // asda
                 }
                 """
@@ -88,7 +88,7 @@ public class NewClassTests : RewriteTest
                     {
                         //Nested() { }
                     }
-                    
+
                     private Container.Nested cn = new Container /*12*/.   Nested   /*1233*/ < /*1233*/      double  /*1233*/   , /*1233*/   double> (/*1233*/)   ; // asda
                 }
                 """
@@ -206,11 +206,11 @@ public class NewClassTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                public class Test 
+                public class Test
                 {
                     public void TestMethod() {
                         var pet = new { Age = 10, Name = "Fluffy" };
-                    }      
+                    }
                 }
                 """
             )
@@ -223,21 +223,21 @@ public class NewClassTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                public class Test 
+                public class Test
                 {
                     public void TestMethod()
                     {
                         var age = 10;
                         var name = "Fluffy";
                         var pet = new { age, name };
-                    }      
+                    }
                 }
                 """
             )
         );
     }
-    
-    
+
+
 
     [Fact]
     void ComplexAnonymousObjectCreationWithFieldAccess()
@@ -245,9 +245,9 @@ public class NewClassTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                public class Test 
+                public class Test
                 {
-                    class ClassWithProps 
+                    class ClassWithProps
                     {
                         int Age = 10;
                         string Name = "Test";
@@ -256,7 +256,7 @@ public class NewClassTests : RewriteTest
                     {
                         var cls = new ClassWithProps();
                         var pet = new { cls.Age, cls.Name };
-                    }      
+                    }
                 }
                 """
             )
@@ -269,14 +269,14 @@ public class NewClassTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                public class Test 
+                public class Test
                 {
                     public void Test() {
-                        var pet = new Dictionary<string, int> { 
-                            { "test1", 1 }, 
-                            { "test2", 2, }, 
+                        var pet = new Dictionary<string, int> {
+                            { "test1", 1 },
+                            { "test2", 2, },
                         };
-                    }      
+                    }
                 }
                 """
             )
@@ -297,7 +297,7 @@ public class NewClassTests : RewriteTest
                            { new Dictionary<int, int>
                                {
                                    {1, 1}
-                               }, 
+                               },
                                1
                            },
                         };

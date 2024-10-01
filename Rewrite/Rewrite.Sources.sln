@@ -40,12 +40,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Remote", "..\..\..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.MSBuild", "..\..\..\moderneinc\rewrite-remote\Rewrite.Remote\src\Rewrite.MSBuild\Rewrite.MSBuild.csproj", "{DE03049F-95A3-483F-939C-C2325548D590}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "..\_build\_build.csproj", "{C714F4F1-E2DF-4B29-A277-9B40BD7DE406}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C714F4F1-E2DF-4B29-A277-9B40BD7DE406}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C714F4F1-E2DF-4B29-A277-9B40BD7DE406}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB30394C-7930-4BFF-97E2-400CFADE92C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FB30394C-7930-4BFF-97E2-400CFADE92C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB30394C-7930-4BFF-97E2-400CFADE92C2}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class UsingTests : RewriteTest
 {
     [Fact]
@@ -51,7 +51,7 @@ public class UsingTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     public void Multiple2()
     {

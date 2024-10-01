@@ -393,11 +393,12 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
         var select = Convert<J>(node.Expression);
         if (select is J.FieldAccess fa)
         {
+            var mae = (MemberAccessExpressionSyntax)node.Expression;
             return new J.MethodInvocation(
                 Core.Tree.RandomId(),
                 prefix,
                 Markers.EMPTY,
-                new JRightPadded<Expression>(fa.Target, Format(Leading(node.ArgumentList)), Markers.EMPTY),
+                new JRightPadded<Expression>(fa.Target, Format(mae.OperatorToken.LeadingTrivia), Markers.EMPTY),
                 null,
                 fa.Name,
                 MapArgumentList(node.ArgumentList),
@@ -1370,9 +1371,10 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
     public override J? VisitMemberAccessExpression(MemberAccessExpressionSyntax node)
     {
         var name = Convert<Expression>(node.Name)!;
-        if (name is J.Identifier id)
+        J result;
+        result = name switch
         {
-            return new J.FieldAccess(
+            J.Identifier id => new J.FieldAccess(
                 Core.Tree.RandomId(),
                 Format(Leading(node)),
                 Markers.EMPTY,
@@ -1382,30 +1384,58 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
                     id,
                     Markers.EMPTY
                 ),
-                MapType(node)
-            );
-        }
-
-        if (name is J.ParameterizedType pi)
-        {
-            var identifier = (pi.Clazz as J.Identifier)!;
-            // return pi.WithPrefix(Format(Leading(node))).WithSelect(Convert<Expression>(node.Expression)!);
-            var parameterizedType = pi.WithClazz(new J.FieldAccess(
+                MapType(node)),
+            J.ParameterizedType pi => pi.WithClazz(new J.FieldAccess(
                 Core.Tree.RandomId(),
                 Format(Leading(node)),
                 Markers.EMPTY,
                 Convert<Expression>(node.Expression)!,
                 new JLeftPadded<J.Identifier>(
                     Format(Leading(node.OperatorToken)),
-                    identifier,
+                    (J.Identifier)pi.Clazz,
                     Markers.EMPTY
                 ),
                 MapType(node)
-            ));
-            return parameterizedType;
-        }
+            )),
+            _ => throw new NotImplementedException()
+        };
 
-        throw new NotImplementedException();
+        // if (name is J.Identifier id)
+        // {
+        //     return new J.FieldAccess(
+        //         Core.Tree.RandomId(),
+        //         Format(Leading(node)),
+        //         Markers.EMPTY,
+        //         Convert<Expression>(node.Expression)!,
+        //         new JLeftPadded<J.Identifier>(
+        //             Format(Leading(node.OperatorToken)),
+        //             id,
+        //             Markers.EMPTY
+        //         ),
+        //         MapType(node)
+        //     );
+        // }
+        //
+        // if (name is J.ParameterizedType pi)
+        // {
+        //     var identifier = (pi.Clazz as J.Identifier)!;
+        //     // return pi.WithPrefix(Format(Leading(node))).WithSelect(Convert<Expression>(node.Expression)!);
+        //     var parameterizedType = pi.WithClazz(new J.FieldAccess(
+        //         Core.Tree.RandomId(),
+        //         Format(Leading(node)),
+        //         Markers.EMPTY,
+        //         Convert<Expression>(node.Expression)!,
+        //         new JLeftPadded<J.Identifier>(
+        //             Format(Leading(node.OperatorToken)),
+        //             identifier,
+        //             Markers.EMPTY
+        //         ),
+        //         MapType(node)
+        //     ));
+        //     return parameterizedType;
+        // }
+
+        return result;
     }
 
     public override J? VisitConditionalAccessExpression(ConditionalAccessExpressionSyntax node)

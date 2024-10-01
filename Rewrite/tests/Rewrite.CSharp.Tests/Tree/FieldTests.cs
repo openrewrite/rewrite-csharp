@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class FieldTests : RewriteTest
 {
     [Fact]
@@ -70,7 +70,7 @@ public class FieldTests : RewriteTest
                 """
                 class Test {
                     public class TestAction {
-                        public class InnerTestAction<T1, T2> 
+                        public class InnerTestAction<T1, T2>
                         {
                         }
                     }

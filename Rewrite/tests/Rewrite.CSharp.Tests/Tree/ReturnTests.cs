@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class ReturnTests : RewriteTest
 {
     [Fact]
@@ -14,12 +14,12 @@ public class ReturnTests : RewriteTest
         RewriteRun(
             CSharp(
                 @"
-                public class Foo 
+                public class Foo
                 {
-                    public int M() 
+                    public int M()
                     {
                         return 1;
-                    }    
+                    }
                 }
                 "
             )
@@ -32,7 +32,7 @@ public class ReturnTests : RewriteTest
         RewriteRun(
             CSharp(
                 @"
-                public class T 
+                public class T
                 {
                     public void M()
                     {

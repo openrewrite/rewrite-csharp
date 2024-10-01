@@ -1,8 +1,9 @@
+using System.Collections;
 using System.Collections.Immutable;
 
 namespace Rewrite.Core.Marker;
 
-public record Markers(Guid Id, IList<Marker> MarkerList)
+public record Markers(Guid Id, IList<Marker> MarkerList) : IReadOnlyCollection<Marker>
 {
     public static readonly Markers EMPTY = new(Tree.RandomId(), ImmutableList<Marker>.Empty);
 
@@ -21,9 +22,19 @@ public record Markers(Guid Id, IList<Marker> MarkerList)
         return other != null && other.Id == Id;
     }
 
+    public IEnumerator<Marker> GetEnumerator()
+    {
+        return MarkerList.GetEnumerator();
+    }
+
     public override int GetHashCode()
     {
         return Id.GetHashCode();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return ((IEnumerable)MarkerList).GetEnumerator();
     }
 
     public Markers Add<T>(T marker) where T : Marker
@@ -58,4 +69,6 @@ public record Markers(Guid Id, IList<Marker> MarkerList)
     {
         throw new NotImplementedException();
     }
+
+    public int Count => MarkerList.Count;
 }

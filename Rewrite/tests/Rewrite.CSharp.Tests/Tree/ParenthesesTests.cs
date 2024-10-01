@@ -5,10 +5,10 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class ParenthesesTests : RewriteTest
 {
-    
+
     [Fact]
     void Parentheses() {
         RewriteRun(
@@ -21,7 +21,7 @@ public class ParenthesesTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     void ParenthesesWithComments() {
         RewriteRun(
@@ -34,5 +34,5 @@ public class ParenthesesTests : RewriteTest
             )
         );
     }
-    
+
 }

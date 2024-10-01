@@ -68,4 +68,6 @@ public class PrintOutputCapture<P>(P p, PrintOutputCapture<P>.IMarkerPrinter mar
             return "";
         }
     }
+
+    public override string ToString() => Out.ToString();
 }

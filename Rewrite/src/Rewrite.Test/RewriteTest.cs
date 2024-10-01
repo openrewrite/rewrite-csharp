@@ -276,7 +276,7 @@ public class RewriteTest
 
     protected virtual void Defaults(RecipeSpec spec)
     {
-        spec.Recipe = Recipe.Noop();
+        spec.Recipe = Recipe.Noop;
     }
 }
 

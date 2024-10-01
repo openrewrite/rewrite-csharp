@@ -1,21 +1,31 @@
 namespace Rewrite.Core;
 
-public record Cursor(Cursor? Parent, object? Value)
+public class Cursor
 {
+    private readonly Cursor? _parent;
     public const string ROOT_VALUE = "root";
 
     private Dictionary<string, object>? _messages;
+
+    public Cursor(Cursor? parent, object? value)
+    {
+        _parent = parent;
+        Value = value;
+    }
 
     public Cursor? GetParent(int levels = 1)
     {
         var cursor = this;
         for (var i = 0; i < levels && cursor != null; i++)
         {
-            cursor = cursor.Parent;
+            cursor = cursor._parent;
         }
 
         return cursor;
     }
+
+    public Cursor? Parent => GetParent(1);
+    public object? Value { get; init; }
 
     public Cursor GetRoot()
     {
@@ -89,5 +99,11 @@ public record Cursor(Cursor? Parent, object? Value)
     {
         return _messages is null ? defaultValue :
             _messages.TryGetValue(key, out var value) ? (T?)value : defaultValue;
+    }
+
+    public void Deconstruct(out Cursor? Parent, out object? Value)
+    {
+        Parent = this.Parent;
+        Value = this.Value;
     }
 }

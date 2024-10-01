@@ -5,13 +5,13 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection("C# remoting")]
+[Collection(Collections.PrinterAccess)]
 public class NullableTypeTests : RewriteTest
 {
     [Fact]
     void NullableFieldDeclaration()
     {
-        
+
         RewriteRun(
             CSharp(
                 """
@@ -22,11 +22,11 @@ public class NullableTypeTests : RewriteTest
             )
         );
     }
-    
+
     [Fact]
     void CommentsOnNullableFieldDeclaration()
     {
-        
+
         RewriteRun(
             CSharp(
                 """

@@ -15,4 +15,8 @@
     <PackageReference Include="Nuke.Common" Version="8.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageDownload Include="nbgv" Version="[3.6.143]" />
+  </ItemGroup>
+
 </Project>
