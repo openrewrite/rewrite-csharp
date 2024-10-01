@@ -398,7 +398,7 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
                 Core.Tree.RandomId(),
                 prefix,
                 Markers.EMPTY,
-                new JRightPadded<Expression>(fa.Target, Format(mae.OperatorToken.LeadingTrivia), Markers.EMPTY),
+                new JRightPadded<Expression>(fa.Target, fa.Padding.Name.Before, Markers.EMPTY),
                 null,
                 fa.Name,
                 MapArgumentList(node.ArgumentList),
