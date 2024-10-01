@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using Rewrite.Core;
 using Rewrite.Core.Marker;
 using Rewrite.RewriteCSharp.Marker;
 using Rewrite.RewriteCSharp.Tree;
@@ -13,7 +14,7 @@ using Expression = Rewrite.RewriteJava.Tree.Expression;
 namespace Rewrite.RewriteCSharp.Parser;
 
 [SuppressMessage("ReSharper", "RedundantOverriddenMember")]
-public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisitor<J>
+public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticModel) : CSharpSyntaxVisitor<J>
 {
     private readonly CSharpTypeMapping _typeMapping = new();
     private readonly List<TextSpan> _seenTriviaSpans = [];
@@ -58,7 +59,12 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
             new J.Unknown.Source(
                 Core.Tree.RandomId(),
                 Space.EMPTY,
-                Markers.EMPTY,
+                new Markers(Core.Tree.RandomId(),
+                    [
+                        ParseExceptionResult.Build(parser, new InvalidOperationException("Unsupported AST type."))
+                            .WithTreeType(node.Kind().ToString())
+                    ]
+                ),
                 node.ToString()
             )
         );
@@ -441,8 +447,8 @@ public class CSharpParserVisitor(SemanticModel semanticModel) : CSharpSyntaxVisi
                     : null, // TODO type parameters
                 pt.Clazz is J.Identifier i
                     ? i
-                    : ((pt.Clazz as J.FieldAccess)?.Name ??
-                       MapIdentifier(node.Expression.GetFirstToken(), MapType(node.Expression))),
+                    : (pt.Clazz as J.FieldAccess)?.Name ??
+                      MapIdentifier(node.Expression.GetFirstToken(), MapType(node.Expression)),
                 MapArgumentList(node.ArgumentList),
                 MapType(node) as JavaType.Method
             );
