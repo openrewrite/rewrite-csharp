@@ -18,7 +18,7 @@ public class LocalTestExecutionContext : ITestExecutionContext
 
     public IList<SourceFile?> RunRecipe(Recipe recipe, IDictionary<string, object?> options, IList<SourceFile> sourceFiles)
     {
-        if(recipe == Recipe.Noop)
+        if(recipe == Recipe.Noop())
             return sourceFiles.Cast<SourceFile?>().ToList();
         throw new NotImplementedException();
     }

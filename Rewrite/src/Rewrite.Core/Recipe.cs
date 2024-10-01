@@ -49,8 +49,9 @@ public abstract class Recipe
 
     public TimeSpan? EstimatedEffortPerOccurrence => TimeSpan.FromMinutes(5);
 
-    public static Recipe Noop { get; } = new NoopRecipe();
+    private static Recipe _noop = new NoopRecipe();
 
+    public static Recipe Noop() => _noop;
     private class NoopRecipe : Recipe
     {
         public override string DisplayName => "NoopRecipe";
