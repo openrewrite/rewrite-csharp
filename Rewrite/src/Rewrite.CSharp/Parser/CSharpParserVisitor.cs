@@ -3715,6 +3715,10 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 #endif
     private JavaType MapType(ExpressionSyntax ins)
     {
+        if (ins.IsKind(SyntaxKind.NullLiteralExpression))
+        {
+            return new JavaType.Primitive(JavaType.Primitive.PrimitiveType.Null);
+        }
         return _typeMapping.Type(semanticModel.GetTypeInfo(ins).Type);
     }
 #if DEBUG_VISITOR
