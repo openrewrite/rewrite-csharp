@@ -1,4 +1,6 @@
+using FluentAssertions;
 using Rewrite.RewriteCSharp.Test.Api;
+using Rewrite.RewriteJava.Tree;
 using Rewrite.Test;
 
 namespace Rewrite.CSharp.Tests.Tree;
@@ -61,6 +63,29 @@ public class LiteralTests : RewriteTest
                     nuint _nui = 1;
                 }
                 """
+            )
+        );
+    }
+
+    [Fact]
+    private void Null()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                public class T
+                {
+                    object _o = null;
+                }
+                """,
+                spec: spec => spec.AfterRecipe = cu =>
+                {
+                    var o = (J.VariableDeclarations)((J.ClassDeclaration)cu.Members[0]).Body.Statements[0];
+                    o.Should().NotBeNull();
+                    var nullLiteral = (J.Literal)o.Variables[0].Initializer!;
+                    nullLiteral.Type.Should().BeOfType<JavaType.Primitive>();
+                    nullLiteral.Type.Kind.Should().Be(JavaType.Primitive.PrimitiveType.Null);
+                }
             )
         );
     }
