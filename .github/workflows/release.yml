@@ -31,6 +31,14 @@ jobs:
       - name: set-up-gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: build
+        run: |
+          (cd Rewrite && dotnet publish Rewrite.sln)
+
       - name: publish-candidate
         if: contains(github.ref, '-rc.')
         run: |
@@ -43,7 +51,7 @@ jobs:
           publish \
           closeAndReleaseSonatypeStagingRepository
 
-      - name: publish-release
+      - name: publish-java-release
         if: (!contains(github.ref, '-rc.'))
         run: |
           ./gradlew \
@@ -54,3 +62,13 @@ jobs:
           final \
           publish \
           closeAndReleaseSonatypeStagingRepository
+
+      - name: publish-dotnet-release
+        if: (!contains(github.ref, '-rc.'))
+        run: |
+          cd Rewrite
+          mkdir ~/localNugetFeed
+          dotnet pack --output ~/localNuGetFeed Rewrite.sln
+          dotnet nuget push ~/localNuGetFeed/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{env.NUGET_API_KEY}}
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
