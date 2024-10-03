@@ -6,6 +6,7 @@
 //------------------------------------------------------------------------------
 #nullable enable
 #pragma warning disable CS0108
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
 using Rewrite.Core.Marker;

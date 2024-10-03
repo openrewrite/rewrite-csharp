@@ -6,6 +6,7 @@
 //------------------------------------------------------------------------------
 #nullable enable
 #pragma warning disable CS0108
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
@@ -21,6 +22,9 @@ namespace Rewrite.RewriteJava.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface J : Rewrite.Core.Tree
 {
+    #if DEBUG_VISITOR
+    [DebuggerStepThrough]
+    #endif
     public partial class VariableDeclarations(
     Guid id,
     Space prefix,
@@ -118,6 +122,9 @@ public partial interface J : Rewrite.Core.Tree
         {
             return Padding.WithVariables(_variables.WithElements(newVariables));
         }
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public partial class NamedVariable(
     Guid id,
     Space prefix,
