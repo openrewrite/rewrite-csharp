@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Rewrite.RewriteCSharp.Test.Api;
 using Rewrite.Test;
 

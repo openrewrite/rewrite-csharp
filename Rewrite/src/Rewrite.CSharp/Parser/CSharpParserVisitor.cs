@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -3587,7 +3588,9 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     {
         return base.VisitNullableDirectiveTrivia(node);
     }
-
+#if DEBUG_VISITOR
+    [DebuggerStepThrough]
+#endif
     T? Convert<T>(SyntaxNode? node) where T : class, J
     {
         if (node == null) return default;
@@ -3699,21 +3702,30 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         )).ToList();
     }
 
+#if DEBUG_VISITOR
+    [DebuggerStepThrough]
+#endif
     private List<Cs.AttributeList>? MapAttributes(SyntaxList<AttributeListSyntax> m)
     {
         return m.Count == 0 ? null : m.Select(x => Convert<Cs.AttributeList>(x)!).ToList();
     }
-
+#if DEBUG_VISITOR
+    [DebuggerStepThrough]
+#endif
     private JavaType MapType(ExpressionSyntax ins)
     {
         return _typeMapping.Type(semanticModel.GetTypeInfo(ins).Type);
     }
-
+#if DEBUG_VISITOR
+    [DebuggerStepThrough]
+#endif
     private JavaType MapType(SyntaxNode ins)
     {
         return _typeMapping.Type(semanticModel.GetDeclaredSymbol(ins) ?? semanticModel.GetTypeInfo(ins).Type);
     }
-
+// #if DEBUG_VISITOR
+//     [DebuggerStepThrough]
+// #endif
     private JRightPadded<Statement> MapStatement(StatementSyntax statementSyntax)
     {
         var statement = (Visit(statementSyntax) as Statement)!;
@@ -3731,18 +3743,26 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                 : Markers.EMPTY
         );
     }
-
+#if DEBUG_VISITOR
+    [DebuggerStepThrough]
+#endif
     private SyntaxTriviaList Leading<T>(SyntaxList<T> list) where T : SyntaxNode
     {
         return list.Count == 0 ? SyntaxTriviaList.Empty : Leading(list.First());
     }
 
+#if DEBUG_VISITOR
+    [DebuggerStepThrough]
+#endif
     private SyntaxTriviaList Leading(SyntaxNode node)
     {
         var firstToken = node.GetFirstToken();
         return Leading(firstToken);
     }
 
+#if DEBUG_VISITOR
+    [DebuggerStepThrough]
+#endif
     private SyntaxTriviaList Leading(SyntaxToken token)
     {
         var previousToken = token.GetPreviousToken();
@@ -3755,6 +3775,9 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         return OnlyUnseenTrivia(trailing, leading);
     }
 
+#if DEBUG_VISITOR
+    [DebuggerStepThrough]
+#endif
     private SyntaxTriviaList OnlyUnseenTrivia(SyntaxTriviaList trivia)
     {
         var span = trivia.Span;
@@ -3768,7 +3791,9 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         _seenTriviaSpans.Sort();
         return trivia;
     }
-
+#if DEBUG_VISITOR
+    [DebuggerStepThrough]
+#endif
     private SyntaxTriviaList OnlyUnseenTrivia(SyntaxTriviaList trivia1, SyntaxTriviaList trivia2)
     {
         var span = new TextSpan(trivia1.Span.Start, trivia2.Span.End - trivia1.Span.Start);
@@ -3782,17 +3807,23 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         _seenTriviaSpans.Sort();
         return trivia1.AddRange(trivia2);
     }
-
+#if DEBUG_VISITOR
+    [DebuggerStepThrough]
+#endif
     private SyntaxTriviaList Trailing(SyntaxNode node)
     {
         return Trailing(node.GetLastToken());
     }
-
+#if DEBUG_VISITOR
+    [DebuggerStepThrough]
+#endif
     private SyntaxTriviaList Trailing(SyntaxToken token)
     {
         return Leading(token.GetNextToken());
     }
-
+#if DEBUG_VISITOR
+    [DebuggerStepThrough]
+#endif
     private static Space Format(SyntaxTriviaList trivia)
     {
         // FIXME optimize

@@ -6,6 +6,7 @@
 //------------------------------------------------------------------------------
 #nullable enable
 #pragma warning disable CS0108
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
@@ -21,6 +22,9 @@ namespace Rewrite.RewriteJava.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface J : Rewrite.Core.Tree
 {
+    #if DEBUG_VISITOR
+    [DebuggerStepThrough]
+    #endif
     public partial class Try(
     Guid id,
     Space prefix,
@@ -105,6 +109,9 @@ public partial interface J : Rewrite.Core.Tree
         {
             return Padding.WithFinally(JLeftPadded<J.Block>.WithElement(_finally, newFinally));
         }
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public partial class Resource(
     Guid id,
     Space prefix,
@@ -158,6 +165,9 @@ public partial interface J : Rewrite.Core.Tree
                 return Id.GetHashCode();
             }
         }
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public partial class Catch(
     Guid id,
     Space prefix,

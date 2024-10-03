@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
@@ -7,6 +8,9 @@ namespace Rewrite.RewriteJava.Tree;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "PossibleUnintendedReferenceComparison")]
+#if DEBUG_VISITOR
+[DebuggerStepThrough]
+#endif
 public sealed class JRightPadded<T>(
     T element,
     Space after,

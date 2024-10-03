@@ -6,6 +6,7 @@
 //------------------------------------------------------------------------------
 #nullable enable
 #pragma warning disable CS0108
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
@@ -21,6 +22,9 @@ namespace Rewrite.RewriteJava.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface J : Rewrite.Core.Tree
 {
+    #if DEBUG_VISITOR
+    [DebuggerStepThrough]
+    #endif
     public partial class ClassDeclaration(
     Guid id,
     Space prefix,
@@ -157,6 +161,9 @@ public partial interface J : Rewrite.Core.Tree
         {
             return newType == type ? this : new ClassDeclaration(id, prefix, markers, leadingAnnotations, modifiers, _declarationKind, name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, body, newType);
         }
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public partial class Kind(
     Guid id,
     Space prefix,

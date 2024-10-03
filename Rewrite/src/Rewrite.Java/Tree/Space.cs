@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Rewrite.Core.Marker;
@@ -10,6 +11,9 @@ namespace Rewrite.RewriteJava.Tree;
 [SuppressMessage("ReSharper", "RedundantExtendsListEntry")]
 [SuppressMessage("ReSharper", "UnusedMember.Global")]
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
+#if DEBUG_VISITOR
+[DebuggerStepThrough]
+#endif
 public class Space(
     IList<Comment> comments,
     string? whitespace
