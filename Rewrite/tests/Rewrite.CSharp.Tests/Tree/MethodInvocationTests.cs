@@ -92,4 +92,26 @@ public class MethodInvocationTests : RewriteTest
             )
         );
     }
+
+    [Fact]
+    public void InvocationOfDelegateReturnedByMethod()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                public class T
+                {
+                    void Main()
+                    {
+                        Something()();
+                    }
+                    public static Func<string> Something()
+                    {
+                        return () => "hello";
+                    }
+                }
+                """
+            )
+        );
+    }
 }

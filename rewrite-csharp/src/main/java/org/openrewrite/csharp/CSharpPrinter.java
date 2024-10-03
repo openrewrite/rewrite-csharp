@@ -521,7 +521,8 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         @Override
         public J visitMethodInvocation(J.MethodInvocation method, PrintOutputCapture<P> p) {
             beforeSyntax(method, Space.Location.METHOD_INVOCATION_PREFIX, p);
-            visitRightPadded(method.getPadding().getSelect(), JRightPadded.Location.METHOD_SELECT, ".", p);
+            String prefix = !method.getSimpleName().isEmpty() ? "." : "";
+            visitRightPadded(method.getPadding().getSelect(), JRightPadded.Location.METHOD_SELECT, prefix, p);
             visit(method.getName(), p);
             visitContainer("<", method.getPadding().getTypeParameters(), JContainer.Location.TYPE_PARAMETERS, ",", ">", p);
             visitContainer("(", method.getPadding().getArguments(), JContainer.Location.METHOD_INVOCATION_ARGUMENTS, ",", ")", p);

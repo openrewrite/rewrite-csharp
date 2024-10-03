@@ -60,10 +60,17 @@ public record Markers(Guid Id, IList<Marker> MarkerList) : IReadOnlyCollection<M
         return this with { MarkerList = updated };
     }
 
-    public M? FindFirst<M>() where M : Marker
+    public T? FindFirst<T>() where T : Marker
     {
-        return MarkerList.OfType<M>().FirstOrDefault();
+        return MarkerList.OfType<T>().FirstOrDefault();
     }
+    public T? FindFirst<T>(Func<T, bool> predicate) where T : Marker
+    {
+        return MarkerList.OfType<T>().FirstOrDefault(predicate);
+    }
+
+    public bool Contains<T>() where T : Marker => FindFirst<T>() != null;
+    public bool Contains<T>(Func<T, bool> predicate) where T : Marker => FindFirst(predicate) != null;
 
     public Markers SetByType(Marker marker)
     {

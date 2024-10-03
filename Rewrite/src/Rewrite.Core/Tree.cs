@@ -4,6 +4,13 @@ namespace Rewrite.Core;
 
 public interface Tree : IEquatable<Tree>
 {
+    internal static string? ToString(Tree node)
+    {
+        var output = new PrintOutputCapture<object?>(null);
+        IPrinterFactory.Current()?.CreatePrinter<object?>().Visit(node, output);
+
+        return output.ToString();
+    }
     public static Guid RandomId()
     {
         return Guid.NewGuid();
@@ -14,7 +21,7 @@ public interface Tree : IEquatable<Tree>
 
     bool IsAcceptable<R, P>(ITreeVisitor<R, P> v, P p) where R : class, Tree;
 
-    R? Accept<R, P>(ITreeVisitor<R, P> v, P p) where R : class, Tree
+    TNodeType? Accept<TNodeType, TState>(ITreeVisitor<TNodeType, TState> v, TState p) where TNodeType : class, Tree
     {
         return v.DefaultValue(this, p);
     }
