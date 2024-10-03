@@ -399,12 +399,18 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         var select = Convert<J>(node.Expression);
         if (select is J.FieldAccess fa)
         {
-            var mae = (MemberAccessExpressionSyntax)node.Expression;
+            var operatorToken = node.Expression switch
+            {
+                MemberAccessExpressionSyntax mae => mae.OperatorToken,
+                MemberBindingExpressionSyntax mbe => mbe.OperatorToken,
+                _ => throw new InvalidOperationException($"Unexpected node of type {node.Expression.GetType()} encountered.")
+            };
+
             return new J.MethodInvocation(
                 Core.Tree.RandomId(),
                 prefix,
-                Markers.EMPTY,
-                new JRightPadded<Expression>(fa.Target, fa.Padding.Name.Before, Markers.EMPTY),
+                fa.Markers,
+                new JRightPadded<Expression>(fa.Target, Format(operatorToken.LeadingTrivia), Markers.EMPTY),
                 null,
                 fa.Name,
                 MapArgumentList(node.ArgumentList),
@@ -444,11 +450,32 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                         pt.TypeParameters.Select(JRightPadded<Expression>.Build).ToList(),
                         Markers.EMPTY
                     )
-                    : null, // TODO type parameters
+                    : null, // TODO: type parameters
                 pt.Clazz is J.Identifier i
                     ? i
                     : (pt.Clazz as J.FieldAccess)?.Name ??
                       MapIdentifier(node.Expression.GetFirstToken(), MapType(node.Expression)),
+                MapArgumentList(node.ArgumentList),
+                MapType(node) as JavaType.Method
+            );
+        }
+        else if (select is J.MethodInvocation mi) // chained method invocation (method returns a delegate). ex. Something()()
+        {
+
+            return new J.MethodInvocation(
+                Core.Tree.RandomId(),
+                prefix,
+                Markers.EMPTY,
+                JRightPadded<Expression>.Build(mi),
+                null,
+                new J.Identifier(
+                    Core.Tree.RandomId(),
+                    Space.EMPTY,
+                    Markers.EMPTY,
+                    new List<J.Annotation>(),
+                    "",
+                    null,
+                    null),
                 MapArgumentList(node.ArgumentList),
                 MapType(node) as JavaType.Method
             );
@@ -1446,40 +1473,116 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitConditionalAccessExpression(ConditionalAccessExpressionSyntax node)
     {
-        // the AST hierarchy in Roslyn is very different from that with `J.FieldAccess`
-        // see `VisitMemberBindingExpression()` for more details
-        // return Convert<Expression>(node.WhenNotNull)!;
-        return base.VisitConditionalAccessExpression(node);
+        // conditional expressions appear in their "natural order"
+        // meaning for an expression like this "a?.b", node a will be at the top of hierarchy
+        // vs in normal expression such as "a.b", b will be at the top of hierarchy
+
+        // LST doesn't reverse this order, so we need to traverse down any chain of nullable expression tree, and then
+        // process them in reverse
+        var conditionalExpressions = new List<(ExpressionSyntax, Space)>();
+        ExpressionSyntax currentNode = node;
+        while(currentNode is ConditionalAccessExpressionSyntax conditionalNode)
+        {
+            conditionalExpressions.Add((conditionalNode.Expression, Format(Leading(conditionalNode.OperatorToken))));
+            currentNode = conditionalNode.WhenNotNull;
+        }
+        conditionalExpressions.Add((currentNode, Format(Leading(currentNode))));
+        // at this point conditionalExpressions for something like this: a?.b?.c
+        // would look like this ['a','.b','.c']
+
+        Expression currentExpression = null!;// = Convert<Expression>(conditionalExpressions[0].Item1)!;
+        // each item in list will be individual expressions that form null access path, last one being the "normal"
+        // expression that is at
+        var i = 0;
+        foreach (var (expressionPortion, afterSpace) in conditionalExpressions)
+        {
+            var isLastSegment = i == conditionalExpressions.Count - 1;
+            var lstNode = Convert<Expression>(expressionPortion)!;
+            // somewhere in this node, a MemberBindingExpression got converted to either FieldAccess or MethodInvocation
+            // the expression is "fake" and needs to be adjusted. luckly we got a marker to locate this special node that needs to be
+            // fixed up. The expression for it will become lhs from previous loop iteration (stored in currentExpression)
+            // ps: god help you if you need to fix this logic :)
+            var bindingNode = lstNode.Descendents()
+                .FirstOrDefault(x => x.Markers.Contains<MemberBinding>());
+            if (bindingNode != null)
+            {
+                if (bindingNode is J.MethodInvocation methodNode)
+                {
+                    var newMethod = methodNode.WithSelect(currentExpression);
+                    lstNode = methodNode.Equals(lstNode) ? newMethod : lstNode.ReplaceNode(methodNode, newMethod);
+                }
+                else if (bindingNode is J.FieldAccess fieldAccess)
+                {
+                    var newFieldAccess = fieldAccess.WithTarget(currentExpression);
+                    lstNode = fieldAccess.Equals(lstNode) ? newFieldAccess : lstNode.ReplaceNode(fieldAccess, newFieldAccess);
+                }
+            }
+
+            // right hand side is the root and doesn't get wrapped
+            if (!isLastSegment)
+            {
+                lstNode = new Cs.NullSafeExpression(
+                    Core.Tree.RandomId(),
+                    Format(Leading(expressionPortion)),
+                    Markers.EMPTY,
+                    new JRightPadded<Expression>(
+                        lstNode!,
+                        afterSpace,
+                        Markers.EMPTY
+                    )
+                );
+            }
+
+            currentExpression = lstNode;
+
+            i++;
+        }
+
+        // var result = Convert<Expression>(node.WhenNotNull)!;
+        return currentExpression;
+
+        // return base.VisitConditionalAccessExpression(node);
     }
 
+    /// <summary>
+    /// Very similar to MemberAccessExpression, but doesn't have an expression portion - just identifier
+    /// Used in ConditionalAccessExpression since they are constructed left to right, then right to left like normal field access
+    /// </summary>
     public override J? VisitMemberBindingExpression(MemberBindingExpressionSyntax node)
     {
+
+
         // due to the fact that the `ConditionalAccessExpressionSyntax` is at the root of an expression like `foo?.Bar.Baz`
         // we need to find that root here, as the containment hierarchy using `J.FieldAccess` and `Cs.NullSafeExpression`
         // ends up being very different
-        ExpressionSyntax? parent = node;
-        while (parent is not ConditionalAccessExpressionSyntax)
-            if ((parent = parent.Parent as ExpressionSyntax) == null)
-                throw new InvalidOperationException(
-                    "Cannot find a `ConditionalAccessExpressionSyntax` in the containment hierarchy.");
-
-        var conditionalAccess = (ConditionalAccessExpressionSyntax)parent;
-        var lhs = new Cs.NullSafeExpression(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new JRightPadded<Expression>(
-                Convert<Expression>(conditionalAccess.Expression)!,
-                Format(Leading(conditionalAccess.OperatorToken)),
-                Markers.EMPTY
-            )
-        );
+        // ExpressionSyntax? parent = node;
+        // while (parent is not ConditionalAccessExpressionSyntax)
+        //     if ((parent = parent.Parent as ExpressionSyntax) == null)
+        //         throw new InvalidOperationException(
+        //             "Cannot find a `ConditionalAccessExpressionSyntax` in the containment hierarchy.");
+        //
+        // var conditionalAccess = (ConditionalAccessExpressionSyntax)parent;
+        // var lhs = new Cs.NullSafeExpression(
+        //     Core.Tree.RandomId(),
+        //     Format(Leading(node)),
+        //     Markers.EMPTY,
+        //     new JRightPadded<Expression>(
+        //         Convert<Expression>(conditionalAccess.Expression)!,
+        //         Format(Leading(conditionalAccess.OperatorToken)),
+        //         Markers.EMPTY
+        //     )
+        // );
 
         return new J.FieldAccess(
             Core.Tree.RandomId(),
             Format(Leading(node)),
-            Markers.EMPTY,
-            lhs,
+            new Markers(
+                Core.Tree.RandomId(),
+                new List<Core.Marker.Marker>
+                {
+                    new MemberBinding(Core.Tree.RandomId())
+                }),
+            Convert<Expression>(node.Name)!,
             new JLeftPadded<J.Identifier>(
                 Format(Leading(node.OperatorToken)),
                 Convert<J.Identifier>(node.Name)!,

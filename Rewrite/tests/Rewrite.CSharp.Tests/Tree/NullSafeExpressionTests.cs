@@ -1,5 +1,7 @@
 using Rewrite.RewriteCSharp.Test.Api;
 using Rewrite.Test;
+using Rewrite.RewriteCSharp;
+using Rewrite.RewriteJava;
 
 namespace Rewrite.CSharp.Tests.Tree;
 
@@ -8,7 +10,7 @@ using static Assertions;
 [Collection(Collections.PrinterAccess)]
 public class NullSafeExpressionTests : RewriteTest
 {
-    [Fact(Skip = "NullSafeExpression parsing was disabled due to infinite recursion issue")]
+    [Fact(Skip = "not yet working")]
     public void Space()
     {
         RewriteRun(
@@ -26,7 +28,7 @@ public class NullSafeExpressionTests : RewriteTest
         );
     }
 
-    [Fact(Skip = "NullSafeExpression parsing was disabled due to infiti recursion issue")]
+    [Fact]
     public void NestedMethodCall()
     {
         RewriteRun(
@@ -44,7 +46,7 @@ public class NullSafeExpressionTests : RewriteTest
         );
     }
 
-    [Fact(Skip = "NullSafeExpression parsing was disabled due to infiti recursion issue")]
+    [Fact]
     public void FieldAccess()
     {
         RewriteRun(
@@ -52,18 +54,24 @@ public class NullSafeExpressionTests : RewriteTest
                 """
                 public class Foo
                 {
-                    Foo? foo_;
+                    A a = new A(new B(new C()));
                     public object M()
                     {
-                        return this.foo_?.foo_;
+                        a?.b?.c().ToString();
                     }
                 }
-                """
-            )
+                record C();
+                record B(C c);
+                record A(B b);
+                """,
+                a => a.AfterRecipe = c =>
+                {
+                    c.ToString();
+                })
         );
     }
 
-    [Fact(Skip = "NullSafeExpression parsing was disabled due to infiti recursion issue")]
+    [Fact]
     public void SequentialFieldAccess()
     {
         RewriteRun(
@@ -85,7 +93,7 @@ public class NullSafeExpressionTests : RewriteTest
     }
 
 
-    [Fact(Skip = "NullSafeExpression parsing was disabled due to infiti recursion issue")]
+    [Fact]
     public void ArrayAccess()
     {
         RewriteRun(

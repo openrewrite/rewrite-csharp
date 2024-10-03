@@ -45,4 +45,22 @@ public class MemberAccessTests : RewriteTest
             )
         );
     }
+
+    [Fact]
+    public void SimpleFieldAccess()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                public class Foo
+                {
+                    int M()
+                    {
+                        var a = a.b.c;
+                    }
+                }
+                """
+            , s => s.AfterRecipe = c => Console.WriteLine(c))
+        );
+    }
 }

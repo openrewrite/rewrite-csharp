@@ -3,15 +3,15 @@ using System.Text;
 
 namespace Rewrite.Core;
 
-public class PrintOutputCapture<P>(P p, PrintOutputCapture<P>.IMarkerPrinter markerPrinter)
+public class PrintOutputCapture<TState>(TState p, PrintOutputCapture<TState>.IMarkerPrinter markerPrinter)
 {
-    public P Context { get; } = p;
+    public TState Context { get; } = p;
 
     public IMarkerPrinter MarkerPrinter { get; } = markerPrinter;
 
     public StringBuilder Out { get; } = new StringBuilder();
 
-    public PrintOutputCapture(P p) : this(p, IMarkerPrinter.Default)
+    public PrintOutputCapture(TState p) : this(p, IMarkerPrinter.Default)
     {
     }
 
@@ -20,7 +20,7 @@ public class PrintOutputCapture<P>(P p, PrintOutputCapture<P>.IMarkerPrinter mar
         return Out.ToString();
     }
 
-    public PrintOutputCapture<P> Append(string? text)
+    public PrintOutputCapture<TState> Append(string? text)
     {
         if (text is { Length: > 0 })
         {
@@ -30,22 +30,22 @@ public class PrintOutputCapture<P>(P p, PrintOutputCapture<P>.IMarkerPrinter mar
         return this;
     }
 
-    public PrintOutputCapture<P> Append(char c)
+    public PrintOutputCapture<TState> Append(char c)
     {
         Out.Append(c);
         return this;
     }
 
-    public PrintOutputCapture<P> Clone()
+    public PrintOutputCapture<TState> Clone()
     {
-        return new PrintOutputCapture<P>(Context, MarkerPrinter);
+        return new PrintOutputCapture<TState>(Context, MarkerPrinter);
     }
 
     public interface IMarkerPrinter
     {
         static readonly IMarkerPrinter Default = new DefaultMarkerPrinter();
 
-        internal class DefaultMarkerPrinter : PrintOutputCapture<P>.IMarkerPrinter
+        internal class DefaultMarkerPrinter : PrintOutputCapture<TState>.IMarkerPrinter
         {
             public string BeforeSyntax(Marker.Marker marker, Cursor cursor, Func<string, string> commentWrapper)
             {

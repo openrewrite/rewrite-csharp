@@ -12,5 +12,7 @@
         <VersionPrefix>0.8.7</VersionPrefix>
         <RewriteRemoteVersion>0.8.2-rc.*</RewriteRemoteVersion>
         <RewriteRemoteDir Condition="'$(RewriteRemoteDir)'==''">..\..\..\..\..\moderneinc\rewrite-remote\Rewrite.Remote</RewriteRemoteDir>
+        <DefineConstants>TRACE;DEBUG;REMOTE_PRINTER</DefineConstants>
     </PropertyGroup>
+    <Import Project="Directory.Build.props.user" Condition="Exists('Directory.Build.props.user')"/>
 </Project>
