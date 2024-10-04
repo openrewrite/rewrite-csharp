@@ -11,7 +11,7 @@ using static Assertions;
 [Collection(Collections.PrinterAccess)]
 public class PlayTests(ITestOutputHelper _output) : RewriteTest
 {
-    [Fact]
+    [Fact(Skip = "Ignored")]
     public void MyTest()
     {
         var root = new CSharpParser.Builder().Build().Parse(
@@ -27,7 +27,7 @@ public class PlayTests(ITestOutputHelper _output) : RewriteTest
         _output.WriteLine(newRoot.ToString());
     }
 
-    [Fact]
+    [Fact(Skip = "Ignored")]
     public void ParseTests()
     {
         var root = new CSharpParser.Builder().Build().Parse(

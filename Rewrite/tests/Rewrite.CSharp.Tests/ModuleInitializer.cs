@@ -8,7 +8,10 @@ public class ModuleInitializer
     [ModuleInitializer]
     internal static void OnAssemblyLoad()
     {
-        ITestExecutionContext.SetCurrent(new LocalTestExecutionContext());
-        IPrinterFactory.Set(new LocalPrinterFactory());
+        if (ITestExecutionContext.Current() == null)
+        {
+            ITestExecutionContext.SetCurrent(new LocalTestExecutionContext());
+            IPrinterFactory.Set(new LocalPrinterFactory());
+        }
     }
 }
