@@ -16,6 +16,7 @@ env:
   ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ossrh_signing_key }}
   ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.ossrh_signing_password }}
   RELEASE_BUILD: "true"
+  RELEASE_PUBLICATION: "true"
 
 jobs:
   release:
