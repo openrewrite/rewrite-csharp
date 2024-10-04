@@ -93,7 +93,7 @@ public class MethodInvocationTests : RewriteTest
         );
     }
 
-    [Fact]
+    [Fact(Skip = "Skip until new remoting package is published")]
     public void InvocationOfDelegateReturnedByMethod()
     {
         RewriteRun(
