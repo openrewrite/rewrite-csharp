@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using Nuke.Common;
 using Nuke.Common.CI;
@@ -7,6 +8,7 @@ using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.Git;
 using Nuke.Common.Tools.NerdbankGitVersioning;
 using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.EnvironmentInfo;
@@ -57,5 +59,31 @@ class Build : NukeBuild
                 .SetSymbolPackageFormat(DotNetSymbolPackageFormat.snupkg)
                 .SetVersion(Version.NuGetPackageVersion)
                 .SetOutputDirectory(ArtifactsDirectory));
+        });
+
+    Target DownloadTestFixtures => _ => _
+        .Executes(() =>
+        {
+            var fixturesDirectory = Solution.Directory / "tests" / "fixtures";
+            var fixturesFile = fixturesDirectory / "fixtures.txt";
+            var fixtures = fixturesFile.ReadAllLines()
+                .Select(url => new 
+                {
+                    Name = url.Split('/').Last(x => !string.IsNullOrEmpty(x)).Replace(".git",""),
+                    Url = url 
+                })
+                .ToList();
+            foreach (var fixture in fixtures)
+            {
+                var fixtureDirectory = fixturesDirectory / fixture.Name;
+                if (fixtureDirectory.Exists())
+                {
+                    GitTasks.Git("pull", fixtureDirectory);
+                }
+                else
+                {
+                    GitTasks.Git($"clone --depth 1 {fixture.Url}", fixturesDirectory);
+                }
+            }
         });
 }

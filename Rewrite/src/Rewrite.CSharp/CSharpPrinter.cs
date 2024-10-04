@@ -22,6 +22,7 @@ using Rewrite.RewriteCSharp.Tree;
 using Rewrite.RewriteJava;
 using Rewrite.RewriteJava.Marker;
 using Rewrite.RewriteJava.Tree;
+using ExecutionContext = Rewrite.Core.ExecutionContext;
 
 // using Rewrite.RewriteJava.Tree;
 using Tree = Rewrite.Core.Tree;
@@ -480,10 +481,21 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
                 // Re-route printing back up to C#
                 return _parent.Visit(tree, p);
             }
-            else
+            else if(tree is null or J)
             {
                 return base.Visit(tree, p);
             }
+            else if (tree is ParseError parseError)
+            {
+                p.Out.Append("/* LST PARSER ERROR\n");
+                var parseExceptionResult = (ParseExceptionResult)parseError.Markers.First();
+                p.Out.Append(parseExceptionResult.Message);
+                p.Out.Append('\n');
+                p.Out.Append("*/\n");
+                p.Out.Append(parseError.Text);
+            }
+
+            return base.Visit(tree, p);
         }
 
         public override J VisitClassDeclaration(J.ClassDeclaration classDecl, PrintOutputCapture<TState> p)

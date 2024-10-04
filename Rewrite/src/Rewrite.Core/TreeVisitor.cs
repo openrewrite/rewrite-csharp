@@ -51,8 +51,9 @@ public abstract class TreeVisitor<T, P> : ITreeVisitor<T, P> where T : class, Tr
     {
         return (T?)tree;
     }
-
-    [DebuggerHidden]
+#if DEBUG_VISITOR
+    [DebuggerStepThrough]
+#endif
     public virtual T? Visit(Tree? tree, P p)
     {
         if (tree is null)
@@ -80,7 +81,7 @@ public abstract class TreeVisitor<T, P> : ITreeVisitor<T, P> where T : class, Tr
 
         Cursor = Cursor.Parent!;
 
-        return isAcceptable ? t : (T?) tree;
+        return isAcceptable ? t :  tree as T; // todo: some serious issue here because in case of ParseError node, it will return null. JavaVisitor returns J for every visit, so it's impossible to properly return a ParseError
     }
 
     public void Visit<T2>(IList<T2>? nodes, P p) where T2 : T

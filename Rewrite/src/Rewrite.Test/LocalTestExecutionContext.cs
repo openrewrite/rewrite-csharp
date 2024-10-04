@@ -18,8 +18,8 @@ public class LocalTestExecutionContext : ITestExecutionContext
 
     public IList<SourceFile?> RunRecipe(Recipe recipe, IDictionary<string, object?> options, IList<SourceFile> sourceFiles)
     {
-        if(recipe == Recipe.Noop())
-            return sourceFiles.Cast<SourceFile?>().ToList();
-        throw new NotImplementedException();
+        return sourceFiles.Select(x => (SourceFile?)recipe.GetVisitor().Visit(x, new InMemoryExecutionContext())).ToList();
     }
+
+
 }

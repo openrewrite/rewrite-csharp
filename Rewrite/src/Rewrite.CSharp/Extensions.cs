@@ -9,6 +9,8 @@ public static class Extensions
     public static IEnumerable<Core.Tree> Descendents<TNode>(this TNode source) where TNode : Core.Tree
     {
         var searchVisitor = new SearchVisitor();
+        if (!source.IsAcceptable(searchVisitor, null))
+            return new Core.Tree[] { source };
         searchVisitor.Visit(source, null);
         return searchVisitor.Visited;
     }

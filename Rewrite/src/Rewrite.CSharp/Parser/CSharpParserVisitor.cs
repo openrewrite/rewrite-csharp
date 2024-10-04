@@ -1507,14 +1507,15 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                 .FirstOrDefault(x => x.Markers.Contains<MemberBinding>());
             if (bindingNode != null)
             {
+                var newMarkers = bindingNode.Markers.WithMarkers(bindingNode.Markers.MarkerList.Where(x => x is not MemberBinding).ToList());
                 if (bindingNode is J.MethodInvocation methodNode)
                 {
-                    var newMethod = methodNode.WithSelect(currentExpression);
+                    var newMethod = methodNode.WithSelect(currentExpression).WithMarkers(newMarkers);
                     lstNode = methodNode.Equals(lstNode) ? newMethod : lstNode.ReplaceNode(methodNode, newMethod);
                 }
                 else if (bindingNode is J.FieldAccess fieldAccess)
                 {
-                    var newFieldAccess = fieldAccess.WithTarget(currentExpression);
+                    var newFieldAccess = fieldAccess.WithTarget(currentExpression).WithMarkers(newMarkers);;
                     lstNode = fieldAccess.Equals(lstNode) ? newFieldAccess : lstNode.ReplaceNode(fieldAccess, newFieldAccess);
                 }
             }
