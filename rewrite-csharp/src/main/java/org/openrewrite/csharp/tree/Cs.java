@@ -23,9 +23,6 @@ import org.openrewrite.*;
 import org.openrewrite.csharp.CSharpPrinter;
 import org.openrewrite.csharp.CSharpVisitor;
 import org.openrewrite.java.JavaPrinter;
-import org.openrewrite.java.JavaTypeVisitor;
-import org.openrewrite.java.JavaVisitor;
-import org.openrewrite.java.JavadocVisitor;
 import org.openrewrite.java.internal.TypesInUse;
 import org.openrewrite.java.tree.*;
 import org.openrewrite.marker.Markers;
@@ -40,8 +37,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
@@ -219,37 +214,6 @@ public interface Cs extends J {
                 }
             }
             return cache;
-        }
-
-        @Transient
-        @Override
-        public long getWeight(Predicate<Object> uniqueIdentity) {
-            AtomicInteger n = new AtomicInteger();
-            new CSharpVisitor<AtomicInteger>() {
-                final JavaTypeVisitor<AtomicInteger> typeVisitor = new JavaTypeVisitor<AtomicInteger>() {
-                    @Override
-                    public JavaType visit(@Nullable JavaType javaType, AtomicInteger n) {
-                        if (javaType != null && uniqueIdentity.test(javaType)) {
-                            n.incrementAndGet();
-                            return super.visit(javaType, n);
-                        }
-                        //noinspection ConstantConditions
-                        return javaType;
-                    }
-                };
-
-                @Override
-                public J preVisit(J tree, AtomicInteger n) {
-                    n.incrementAndGet();
-                    return tree;
-                }
-
-                @Override
-                public JavaType visitType(@Nullable JavaType javaType, AtomicInteger n) {
-                    return typeVisitor.visit(javaType, n);
-                }
-            }.visit(this, n);
-            return n.get();
         }
 
         @Override
