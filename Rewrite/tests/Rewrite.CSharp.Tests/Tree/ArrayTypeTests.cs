@@ -23,7 +23,8 @@ public class ArrayTypeTests : RewriteTest
         );
     }
 
-    [Fact(Skip = "Still work in progress")]
+    [Fact]
+    [KnownBug]
     public void TwoDimensional()
     {
         RewriteRun(

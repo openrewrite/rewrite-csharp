@@ -9,9 +9,10 @@ namespace Rewrite.CSharp.Tests.Tree;
 using static Assertions;
 
 [Collection(Collections.PrinterAccess)]
+[Exploratory]
 public class PlayTests(ITestOutputHelper _output) : RewriteTest
 {
-    [Fact(Skip = "Ignored")]
+    [Fact]
     public void MyTest()
     {
         var root = new CSharpParser.Builder().Build().Parse(
@@ -27,7 +28,7 @@ public class PlayTests(ITestOutputHelper _output) : RewriteTest
         _output.WriteLine(newRoot.ToString());
     }
 
-    [Fact(Skip = "Ignored")]
+    [Fact]
     public void ParseTests()
     {
         var root = new CSharpParser.Builder().Build().Parse(

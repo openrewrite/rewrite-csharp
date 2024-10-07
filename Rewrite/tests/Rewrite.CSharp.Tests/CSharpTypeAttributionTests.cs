@@ -9,23 +9,24 @@ using static Rewrite.RewriteJava.Tree.JavaType;
 
 namespace Rewrite.CSharp.Tests;
 
-using static Assertions;
+using static Rewrite.RewriteCSharp.Test.Api.Assertions;
 
 public class CSharpTypeAttributionTests : RewriteTest
 {
-    [Fact(Skip = "For now we dont support Methods")]
+    [Fact]
+    [KnownBug]
     void ClosureImplicitParameterAttributed()
     {
         RewriteRun(
             CSharp(
                 """
-                public class Program 
+                public class Program
                 {
                     public T? register<T>(String name, Type type, Action<T> configurationAction)
                     {
                         return default;
                     }
-                    
+
                     public void Main()
                     {
                         register("test", typeof(Program), (string t) => { });

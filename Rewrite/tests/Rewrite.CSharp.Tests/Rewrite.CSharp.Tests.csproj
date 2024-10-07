@@ -12,14 +12,32 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="FluentAssertions" Version="7.0.0-alpha.4" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.0-release-24352-06" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
         <PackageReference Include="Nuke.Common" Version="8.1.0" />
-        <PackageReference Include="xunit" Version="2.8.1" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1"/>
+        <PackageReference Include="xunit" Version="2.9.2" />
+        <PackageReference Include="Xunit.OpenCategories" Version="1.1.0.4" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
+        <Using Include="Xunit.Assert" Alias="Assert"/>
+        <Using Include="Nuke.Common"/>
+        <Using Include="Nuke.Common"/>
+        <Using Include="Nuke.Common.IO"/>
+        <Using Include="FluentAssertions"/>
+        <Using Include="Rewrite.Core"/>
+        <Using Include="Rewrite.Test"/>
+        <Using Include="Rewrite.MSBuild"/>
+        <Using Include="Rewrite.RewriteCSharp"/>
+        <Using Include="Rewrite.RewriteJava.Tree"/>
+        <Using Include="Rewrite.RewriteCSharp.Tree"/>
+        <Using Include="Rewrite.RewriteCSharp.Test.Api"/>
         <Using Include="Xunit"/>
+        <Using Include="Xunit.Abstractions"/>
+        <Using Include="Xunit.OpenCategories"/>
     </ItemGroup>
 
     <ItemGroup>

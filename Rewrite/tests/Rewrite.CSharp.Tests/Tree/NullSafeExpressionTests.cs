@@ -10,7 +10,8 @@ using static Assertions;
 [Collection(Collections.PrinterAccess)]
 public class NullSafeExpressionTests : RewriteTest
 {
-    [Fact(Skip = "not yet working")]
+    [Fact]
+    [KnownBug]
     public void Space()
     {
         RewriteRun(

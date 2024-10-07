@@ -30,6 +30,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution", "_solution", "{
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 		README.md = README.md
+		Directory.Build.props.user = Directory.Build.props.user
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.CSharp.Test", "..\..\..\moderneinc\rewrite-remote\Rewrite.Remote\src\Rewrite.CSharp.Test\Rewrite.CSharp.Test.csproj", "{E3A7B93C-310E-4109-8F80-C469215FB93B}"

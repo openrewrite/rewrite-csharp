@@ -53,7 +53,7 @@ jobs:
           (cd Rewrite && dotnet build Rewrite.sln --no-restore)
       - name: test-cs
         if: "!startsWith(github.event.head_commit.message, '[lst-change]')"
-        run: (cd Rewrite && dotnet test Rewrite.sln)
+        run: (cd Rewrite && dotnet test Rewrite.sln --filter "Category!=KnownBug & Category!=Exploratory")
 
       - name: publish-java-snapshots
         if: github.event_name != 'pull_request'

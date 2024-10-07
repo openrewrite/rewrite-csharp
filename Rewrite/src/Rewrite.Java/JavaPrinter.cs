@@ -8,7 +8,7 @@ namespace Rewrite.RewriteJava;
 public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
 {
     private static readonly Func<string, string> JAVA_MARKER_WRAPPER =
-        o => $"/*~~{o}{(string.IsNullOrEmpty(o) ? "" : "~~")}*/";
+        o => $"/*~~{o}{(string.IsNullOrEmpty(o) ? "" : "~~")}>*/";
 
     public JavaPrinter()
     {

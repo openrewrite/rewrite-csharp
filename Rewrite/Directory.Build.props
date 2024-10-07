@@ -12,7 +12,9 @@
         <VersionPrefix>0.8.7</VersionPrefix>
         <RewriteRemoteVersion>0.8.4-rc.*</RewriteRemoteVersion>
         <RewriteRemoteDir Condition="'$(RewriteRemoteDir)'==''">..\..\..\..\..\moderneinc\rewrite-remote\Rewrite.Remote</RewriteRemoteDir>
-        <DefineConstants>TRACE;DEBUG;REMOTE_PRINTER</DefineConstants>
+        <RemotePrinter>True</RemotePrinter>
+        <DebugVisitor>False</DebugVisitor>
+        <SanitizeStackTrace>True</SanitizeStackTrace>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(RELEASE_PUBLICATION)'!=''">
@@ -23,4 +25,10 @@
     </PropertyGroup>
 
     <Import Project="Directory.Build.props.user" Condition="Exists('Directory.Build.props.user')"/>
+
+    <PropertyGroup>
+      <DefineConstants Condition="'$(RemotePrinter)'">$(DefineConstants);REMOTE_PRINTER</DefineConstants>
+      <DefineConstants Condition="'$(DebugVisitor)'">$(DefineConstants);DEBUG_VISITOR</DefineConstants>
+      <DefineConstants Condition="'$(SanitizeStackTrace)'">$(DefineConstants);SANITIZE_STACK_TRACE</DefineConstants>
+    </PropertyGroup>
 </Project>

@@ -6,6 +6,7 @@ public static class ExceptionUtils
 {
     public static string SanitizeStackTrace(this Exception exception, Type until)
     {
+#if SANITIZE_STACK_TRACE
         var sanitized = "";
         sanitized = string.Join("\n", sanitized, exception.GetType().Name + ": " + exception.Message);
 
@@ -26,5 +27,8 @@ public static class ExceptionUtils
         }
 
         return sanitized;
+#else
+        return exception.ToString();
+#endif
     }
 }

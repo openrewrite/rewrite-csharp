@@ -89,7 +89,8 @@ public class FindClassDeclarationTests : RewriteTest
         );
     }
 
-    [Fact(Skip = "For now we dont extract types")]
+    [Fact]
+    [KnownBug]
     public void ClassWithoutBody2()
     {
         RewriteRun(

@@ -128,7 +128,8 @@ public class PropertyDeclarationTests : RewriteTest
         );
     }
 
-    [Fact(Skip = SkipReason.NotYetImplemented)]
+    [Fact]
+    [KnownBug]
     void BinaryExpressionProperty()
     {
         var sourceSpec = CSharp(

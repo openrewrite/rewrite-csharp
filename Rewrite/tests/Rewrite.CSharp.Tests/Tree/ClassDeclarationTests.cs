@@ -99,7 +99,8 @@ public class ClassDeclarationTests : RewriteTest
         );
     }
 
-    [Fact(Skip = SkipReason.NotYetImplemented)]
+    [Fact]
+    [KnownBug]
     public void TypeParameterWithTypeConstraint()
     {
         RewriteRun(
@@ -111,7 +112,8 @@ public class ClassDeclarationTests : RewriteTest
         );
     }
 
-    [Fact(Skip = SkipReason.NotYetImplemented)]
+    [Fact]
+    [KnownBug]
     public void TypeParameterWithClassConstraint()
     {
         RewriteRun(
@@ -123,7 +125,8 @@ public class ClassDeclarationTests : RewriteTest
         );
     }
 
-    [Fact(Skip = SkipReason.NotYetImplemented)]
+    [Fact]
+    [KnownBug]
     public void TypeParameterWithEnumConstraint()
     {
         RewriteRun(
@@ -135,7 +138,8 @@ public class ClassDeclarationTests : RewriteTest
         );
     }
 
-    [Fact(Skip = SkipReason.NotYetImplemented)]
+    [Fact]
+    [KnownBug]
     public void TypeParameterWithNewConstraint()
     {
         RewriteRun(
@@ -147,7 +151,8 @@ public class ClassDeclarationTests : RewriteTest
         );
     }
 
-    [Fact(Skip = SkipReason.NotYetImplemented)]
+    [Fact]
+    [KnownBug]
     public void TypeParameterWithMultipleConstraints()
     {
         RewriteRun(

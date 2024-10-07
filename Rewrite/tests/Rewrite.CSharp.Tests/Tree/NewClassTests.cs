@@ -283,7 +283,8 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Fact(Skip="We don't support GlobalStatementSyntax")]
+    [Fact]
+    [KnownBug]
     void DictionaryDictionaryCreation()
     {
         RewriteRun(

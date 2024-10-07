@@ -237,7 +237,8 @@ public class MethodDeclarationTests : RewriteTest
         );
     }
 
-    [Fact(Skip = SkipReason.NotYetImplemented)]
+    [Fact]
+    [KnownBug]
     void GenericMethodDeclarationWithSingleTypeConstraint()
     {
         RewriteRun(
@@ -253,7 +254,8 @@ public class MethodDeclarationTests : RewriteTest
 
 
 
-    [Fact(Skip = SkipReason.NotYetImplemented)]
+    [Fact]
+    [KnownBug]
     public void GenericMethodDeclarationWithClassConstraint()
     {
         RewriteRun(
@@ -267,7 +269,8 @@ public class MethodDeclarationTests : RewriteTest
         );
     }
 
-    [Fact(Skip = SkipReason.NotYetImplemented)]
+    [Fact]
+    [KnownBug]
     public void GenericMethodDeclarationWithEnumConstraint()
     {
         RewriteRun(
@@ -281,7 +284,8 @@ public class MethodDeclarationTests : RewriteTest
         );
     }
 
-    [Fact(Skip = SkipReason.NotYetImplemented)]
+    [Fact]
+    [KnownBug]
     public void GenericMethodDeclarationWithNewConstraint()
     {
         RewriteRun(
@@ -295,7 +299,8 @@ public class MethodDeclarationTests : RewriteTest
         );
     }
 
-    [Fact(Skip = SkipReason.NotYetImplemented)]
+    [Fact]
+    [KnownBug]
     public void TypeParameterWithMultipleConstraints()
     {
         RewriteRun(

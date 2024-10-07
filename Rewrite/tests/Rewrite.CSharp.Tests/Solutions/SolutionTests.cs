@@ -1,17 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Text.RegularExpressions;
-using FluentAssertions;
-using Nuke.Common;
-using Nuke.Common.IO;
-using Rewrite.Core;
-using Rewrite.MSBuild;
-using Rewrite.RewriteCSharp;
-using Rewrite.RewriteCSharp.Test;
 using Rewrite.RewriteCSharp.Test.Api;
-using Rewrite.Test;
-using Xunit.Abstractions;
-using Assert = Xunit.Assert;
 
 namespace Rewrite.CSharp.Tests.Solutions;
 
@@ -27,8 +17,9 @@ public class SolutionTests// : RewriteTest
         _output = output;
     }
 
-    [Theory(Skip = "Run manually")]
+    [Theory]
     [MemberData(nameof(Fixtures))]
+    [Exploratory]
     public async Task ParseSolution(AbsolutePath solutionPath)
     {
         var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(1000)).Token;

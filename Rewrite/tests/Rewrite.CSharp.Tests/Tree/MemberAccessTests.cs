@@ -9,7 +9,8 @@ using static Assertions;
 [Collection(Collections.PrinterAccess)]
 public class MemberAccessTests : RewriteTest
 {
-    [Fact(Skip = SkipReason.NotYetImplemented)]
+    [Fact]
+    [KnownBug]
     public void MultilineLinq()
     {
         var src = CSharp(
