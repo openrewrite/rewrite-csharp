@@ -300,6 +300,24 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     }
 
     @Override
+    public Cs visitLambda(Cs.Lambda lambda, PrintOutputCapture<P> p)
+    {
+        J.Lambda javaLambda = lambda.getLambdaExpression();
+        beforeSyntax(javaLambda, Space.Location.LAMBDA_PREFIX, p);
+        visitSpace(javaLambda.getPrefix(), Space.Location.LAMBDA_PARAMETERS_PREFIX, p);
+        visitMarkers(javaLambda.getMarkers(), p);
+        // _delegate.VisitContainer(lambda.Modifiers, JContainer.Location.ANY, p);
+        for(J.Modifier modifier : lambda.getModifiers())
+        {
+            delegate.visitModifier(modifier, p);
+        }
+
+        visit(javaLambda, p);
+        afterSyntax(lambda, p);
+        return lambda;
+    }
+
+    @Override
     public Space visitSpace(Space space, CsSpace.Location loc, PrintOutputCapture<P> p) {
         return delegate.visitSpace(space, Space.Location.LANGUAGE_EXTENSION, p);
     }
@@ -719,12 +737,12 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     private static final UnaryOperator<String> JAVA_MARKER_WRAPPER =
             out -> "/*~~" + out + (out.isEmpty() ? "" : "~~") + ">*/";
 
-    private void beforeSyntax(Cs cs, Space.Location loc, PrintOutputCapture<P> p) {
-        beforeSyntax(cs.getPrefix(), cs.getMarkers(), loc, p);
+    private void beforeSyntax(J j, Space.Location loc, PrintOutputCapture<P> p) {
+        beforeSyntax(j.getPrefix(), j.getMarkers(), loc, p);
     }
 
-    private void beforeSyntax(Cs cs, CsSpace.Location loc, PrintOutputCapture<P> p) {
-        beforeSyntax(cs.getPrefix(), cs.getMarkers(), loc, p);
+    private void beforeSyntax(J j, CsSpace.Location loc, PrintOutputCapture<P> p) {
+        beforeSyntax(j.getPrefix(), j.getMarkers(), loc, p);
     }
 
     private void beforeSyntax(Space prefix, Markers markers, CsSpace.@Nullable Location loc, PrintOutputCapture<P> p) {

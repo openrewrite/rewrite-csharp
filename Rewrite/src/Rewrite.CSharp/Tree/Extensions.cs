@@ -5,6 +5,10 @@ namespace Rewrite.RewriteCSharp.Tree;
 
 internal static class Extensions
 {
+    public static JavaType? GetJavaType(Cs.Lambda expr)
+    {
+        return expr.LambdaExpression.Type;
+    }
     public static JavaType? GetJavaType(Cs.ArrayRankSpecifier expr)
     {
         return expr.Sizes.Count == 0 ? null : expr.Sizes[0].Type;
@@ -18,6 +22,17 @@ internal static class Extensions
     public static JavaType? GetJavaType(Cs.NullSafeExpression expr)
     {
         return expr.Expression.Type;
+    }
+
+    public static Cs.Lambda WithJavaType(Cs.Lambda expr, JavaType newType)
+    {
+        return new Cs.Lambda(
+            expr.Id,
+            expr.Prefix,
+            expr.Markers,
+            expr.LambdaExpression.WithType(newType),
+            expr.Modifiers
+        );
     }
 
     public static Cs.ArrayRankSpecifier WithJavaType(Cs.ArrayRankSpecifier expr, JavaType newType)

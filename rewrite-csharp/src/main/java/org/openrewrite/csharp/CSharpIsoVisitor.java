@@ -124,6 +124,11 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     }
 
     @Override
+    public Cs.Lambda visitLambda(Cs.Lambda lambda, P p) {
+        return (Cs.Lambda) super.visitLambda(lambda, p);
+    }
+
+    @Override
     public J.AnnotatedType visitAnnotatedType(J.AnnotatedType annotatedType, P p) {
         return (J.AnnotatedType) super.visitAnnotatedType(annotatedType, p);
     }

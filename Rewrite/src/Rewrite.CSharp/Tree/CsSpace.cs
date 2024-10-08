@@ -60,5 +60,6 @@ public interface CsSpace
         public static readonly Location USING_DIRECTIVE_PREFIX = new();
         public static readonly Location USING_DIRECTIVE_STATIC = new();
         public static readonly Location USING_DIRECTIVE_UNSAFE = new();
+        public static readonly Location LAMBDA_PREFIX = new();
     }
 }

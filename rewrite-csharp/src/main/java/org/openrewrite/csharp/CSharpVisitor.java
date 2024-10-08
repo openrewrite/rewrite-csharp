@@ -304,6 +304,26 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         return propertyDeclaration;
     }
 
+    public J visitLambda(Cs.Lambda lambda, P p) {
+        lambda = lambda.withPrefix(visitSpace(lambda.getPrefix(), CsSpace.Location.LAMBDA_PREFIX, p));
+        Statement tempStatement = (Statement) visitStatement(lambda, p);
+        if (!(tempStatement instanceof Cs.Lambda))
+        {
+            return tempStatement;
+        }
+        lambda = (Cs.Lambda) tempStatement;
+        Expression tempExpression = (Expression) visitExpression(lambda, p);
+        if (!(tempExpression instanceof Cs.Lambda))
+        {
+            return tempExpression;
+        }
+        lambda = (Cs.Lambda) tempExpression;
+        lambda = lambda.withMarkers(visitMarkers(lambda.getMarkers(), p));
+        lambda = lambda.withLambdaExpression(visitAndCast(lambda.getLambdaExpression(), p));
+        lambda = lambda.withModifiers(ListUtils.map(lambda.getModifiers(), el -> (J.Modifier)visit(el, p)));
+        return lambda;
+    }
+
     public <J2 extends J> JContainer<J2> visitContainer(@Nullable JContainer<J2> container,
                                                         CsContainer.Location loc, P p) {
         if (container == null) {

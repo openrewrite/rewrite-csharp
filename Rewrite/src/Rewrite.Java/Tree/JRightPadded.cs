@@ -131,6 +131,10 @@ public sealed class JRightPadded<T>(
 
 public static class JRightPadded
 {
+    public static JRightPadded<T> Create<T>(T t)
+    {
+        return new JRightPadded<T>(t, Space.EMPTY, Markers.EMPTY);
+    }
     public record Location(Space.Location AfterLocation)
     {
         public static readonly Location ANY = new(Space.Location.ANY);
