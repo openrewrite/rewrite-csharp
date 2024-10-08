@@ -1883,4 +1883,65 @@ public interface Cs extends J {
             }
         }
     }
+
+
+
+
+    @Getter
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    final class Lambda implements Cs, Statement, Expression {
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitLambda(this, p);
+        }
+
+        @With
+        @Getter
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        @With
+        @Getter
+        J.Lambda lambdaExpression;
+
+        @With
+        @Getter
+        List<Modifier> modifiers;
+
+        @Override
+        public CoordinateBuilder.Statement getCoordinates() {
+            return new CoordinateBuilder.Statement(this);
+        }
+
+        @Override
+        public @Nullable JavaType getType() {
+            return lambdaExpression.getType();
+        }
+
+        @Override
+        public Cs.Lambda withType(@Nullable JavaType type) {
+            return this.getType() == type ? this :  new Cs.Lambda(
+                    id,
+                    prefix,
+                    markers,
+                    lambdaExpression.withType(type),
+                    modifiers);
+        }
+
+        @Override
+        public String toString() {
+            return withPrefix(Space.EMPTY).printTrimmed(new CSharpPrinter<>());
+        }
+    }
+
 }

@@ -1865,49 +1865,57 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitSimpleLambdaExpression(SimpleLambdaExpressionSyntax node)
-    {
-        return new J.Lambda(
-            Core.Tree.RandomId(),
-            Format((Leading(node))),
-            Markers.EMPTY,
-            new J.Lambda.Parameters(
-                Core.Tree.RandomId(),
-                Space.EMPTY,
-                Markers.EMPTY,
-                false,
-                [
-                    MapParameter<J>(node.Parameter)
-                ]
-            ),
-            Format(Leading(node.ArrowToken)),
-            Convert<J>(node.Body)!,
-            MapType(node)
-        );
-    }
-
     public override J? VisitRefExpression(RefExpressionSyntax node)
     {
         return base.VisitRefExpression(node);
     }
 
+    public override J? VisitSimpleLambdaExpression(SimpleLambdaExpressionSyntax node)
+    {
+        return VisitLambdaExpressionSyntax(node);
+    }
+
     public override J? VisitParenthesizedLambdaExpression(ParenthesizedLambdaExpressionSyntax node)
     {
-        return new J.Lambda(
-            Core.Tree.RandomId(),
-            Format((Leading(node))),
-            Markers.EMPTY,
-            new J.Lambda.Parameters(
+        return VisitLambdaExpressionSyntax(node);
+    }
+
+    private J? VisitLambdaExpressionSyntax(LambdaExpressionSyntax node)
+    {
+        J.Lambda.Parameters parameters = node switch
+        {
+            ParenthesizedLambdaExpressionSyntax parenthesizedLambdaExpression => new J.Lambda.Parameters(
                 Core.Tree.RandomId(),
-                Space.EMPTY,
+                Format(Trailing(node.AsyncKeyword)),
                 Markers.EMPTY,
                 true,
-                MapParameters<J>(node.ParameterList)!.Elements
-            ),
+                MapParameters<J>(parenthesizedLambdaExpression.ParameterList)!.Elements),
+            SimpleLambdaExpressionSyntax simpleLambdaExpression => new J.Lambda.Parameters(
+                Core.Tree.RandomId(),
+                Format(Trailing(node.AsyncKeyword)),
+                Markers.EMPTY,
+                false,
+                [MapParameter<J>(simpleLambdaExpression.Parameter)]),
+            _ => throw new NotSupportedException($"Unsupported type {node.GetType()}")
+        };
+
+        var jLambda = new J.Lambda(
+            Core.Tree.RandomId(),
+            Space.EMPTY,
+            Markers.EMPTY,
+            parameters,
             Format(Leading(node.ArrowToken)),
             Convert<J>(node.Body)!,
             MapType(node)
         );
+        var csLambda = new Cs.Lambda(
+            Core.Tree.RandomId(),
+            Format((Leading(node))),
+            Markers.EMPTY,
+            jLambda,
+            MapModifiers(node.Modifiers)
+        );
+        return csLambda;
     }
 
     public override J? VisitInitializerExpression(InitializerExpressionSyntax node)
@@ -3702,6 +3710,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             []
         )).ToList();
     }
+
 
 #if DEBUG_VISITOR
     [DebuggerStepThrough]

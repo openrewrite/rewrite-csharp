@@ -369,6 +369,23 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         return usingDirective;
     }
 
+    public override Cs VisitLambda(Cs.Lambda lambda, PrintOutputCapture<TState> p)
+    {
+        var javaLambda = lambda.LambdaExpression;
+        BeforeSyntax(javaLambda, Space.Location.LAMBDA_PREFIX, p);
+        VisitSpace(javaLambda.Prefix, Space.Location.LAMBDA_PARAMETERS_PREFIX, p);
+        VisitMarkers(javaLambda.Markers, p);
+        // _delegate.VisitContainer(lambda.Modifiers, JContainer.Location.ANY, p);
+        foreach (var modifier in lambda.Modifiers)
+        {
+            _delegate.VisitModifier(modifier, p);
+        }
+
+        Visit(javaLambda, p);
+        AfterSyntax(lambda, p);
+        return lambda;
+    }
+
     protected override Space VisitSpace(Space space, CsSpace.Location loc, PrintOutputCapture<TState> p)
     {
         return _delegate.VisitSpace(space, Space.Location.LANGUAGE_EXTENSION, p);
@@ -471,9 +488,12 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         _delegate.PrintStatementTerminator(paddedStat.Element, p);
     }
 
+
     private class CSharpJavaPrinter(CSharpPrinter<TState> _parent) : JavaPrinter<TState>
     {
-        [DebuggerHidden]
+#if DEBUG_VISITOR
+        [DebuggerStepThrough]
+#endif
         public override J? Visit(Rewrite.Core.Tree? tree, PrintOutputCapture<TState> p)
         {
             if (tree is Cs)
@@ -844,12 +864,12 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
     private static readonly Func<string, string> JAVA_MARKER_WRAPPER =
         o => "/*~~" + o + (string.IsNullOrEmpty(o) ? "" : "~~") + ">*/";
 
-    private void BeforeSyntax(Cs cs, Space.Location loc, PrintOutputCapture<TState> p)
+    private void BeforeSyntax(J cs, Space.Location loc, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(cs.Prefix, cs.Markers, loc, p);
     }
 
-    private void BeforeSyntax(Cs cs, CsSpace.Location loc, PrintOutputCapture<TState> p)
+    private void BeforeSyntax(J cs, CsSpace.Location loc, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(cs.Prefix, cs.Markers, loc, p);
     }

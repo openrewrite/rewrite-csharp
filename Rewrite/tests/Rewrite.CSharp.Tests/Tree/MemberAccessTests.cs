@@ -23,8 +23,6 @@ public class MemberAccessTests : RewriteTest
                 }
             }
             """);
-        var cu = src.First().Parse<Cs.CompilationUnit>();
-        var result = cu.Print();
         RewriteRun(src);
     }
 

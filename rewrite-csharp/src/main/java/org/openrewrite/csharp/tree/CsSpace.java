@@ -67,5 +67,6 @@ public class CsSpace {
         USING_DIRECTIVE_STATIC,
         USING_DIRECTIVE_UNSAFE,
         NAMED_ARGUMENT_NAME_COLUMN_SUFFIX,
+        LAMBDA_PREFIX
     }
 }

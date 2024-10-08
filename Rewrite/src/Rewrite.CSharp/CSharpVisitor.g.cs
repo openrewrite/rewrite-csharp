@@ -314,6 +314,27 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         return propertyDeclaration;
     }
 
+    public virtual J? VisitLambda(Cs.Lambda lambda, P p)
+    {
+        lambda = lambda.WithPrefix(VisitSpace(lambda.Prefix, CsSpace.Location.LAMBDA_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(lambda, p);
+        if (tempStatement is not Cs.Lambda)
+        {
+            return tempStatement;
+        }
+        lambda = (Cs.Lambda) tempStatement;
+        var tempExpression = (Expression) VisitExpression(lambda, p);
+        if (tempExpression is not Cs.Lambda)
+        {
+            return tempExpression;
+        }
+        lambda = (Cs.Lambda) tempExpression;
+        lambda = lambda.WithMarkers(VisitMarkers(lambda.Markers, p));
+        lambda = lambda.WithLambdaExpression(VisitAndCast<J.Lambda>(lambda.LambdaExpression, p)!);
+        lambda = lambda.WithModifiers(lambda.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
+        return lambda;
+    }
+
     protected virtual JContainer<J2>? VisitContainer<J2>(JContainer<J2>? container, CsContainer.Location loc, P p) where J2 : J
     {
         if (container == null) {

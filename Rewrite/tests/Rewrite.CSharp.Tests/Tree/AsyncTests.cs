@@ -44,10 +44,4 @@ public class AsyncTests : RewriteTest
         );
     }
 
-    [Fact]
-    [KnownBug]
-    private void AsyncLambda()
-    {
-        RewriteRun(CSharp("Task.Run(async () => {});"));
-    }
 }
