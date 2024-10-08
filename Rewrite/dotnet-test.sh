@@ -1,0 +1,1 @@
+dotnet test Rewrite.Sources.sln --filter "Category!=KnownBug & Category!=Exploratory"

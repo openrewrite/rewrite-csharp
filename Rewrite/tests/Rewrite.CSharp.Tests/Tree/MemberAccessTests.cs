@@ -10,7 +10,6 @@ using static Assertions;
 public class MemberAccessTests : RewriteTest
 {
     [Fact]
-    [KnownBug]
     public void MultilineLinq()
     {
         var src = CSharp(
@@ -19,12 +18,12 @@ public class MemberAccessTests : RewriteTest
             {
                 void Test()
                 {
-                    "blah".Skip()
+                 /*1*/   "blah".Skip()/*2*/
                         .ToList();
                 }
             }
             """);
-        var cu = src.Parse().First();
+        var cu = src.First().Parse<Cs.CompilationUnit>();
         var result = cu.Print();
         RewriteRun(src);
     }

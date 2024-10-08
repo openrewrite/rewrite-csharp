@@ -411,7 +411,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                 Core.Tree.RandomId(),
                 prefix,
                 fa.Markers,
-                new JRightPadded<Expression>(fa.Target, Format(operatorToken.LeadingTrivia), Markers.EMPTY),
+                new JRightPadded<Expression>(fa.Target, fa.Padding.Name.Before, Markers.EMPTY),
                 null,
                 fa.Name,
                 MapArgumentList(node.ArgumentList),
@@ -494,7 +494,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     private JContainer<Expression> MapArgumentList(ArgumentListSyntax argumentList)
     {
         return new JContainer<Expression>(
-            Format(Trailing(argumentList.OpenParenToken)),
+            Format(Leading(argumentList.OpenParenToken)),
             argumentList.Arguments.Select(MapArgument).ToList(),
             Markers.EMPTY
         );
@@ -2493,7 +2493,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitGlobalStatement(GlobalStatementSyntax node)
     {
-        return base.VisitGlobalStatement(node);
+        return node.Statement.Accept(this);
     }
 
     public override J? VisitLocalFunctionStatement(LocalFunctionStatementSyntax node)

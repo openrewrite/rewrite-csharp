@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Rewrite.RewriteCSharp.Test.Api;
 using Rewrite.Test;
 
@@ -112,6 +113,25 @@ public class MethodInvocationTests : RewriteTest
                 }
                 """
             )
+        );
+
+    }
+
+    [Fact]
+    public void ArgumentOnNewLine()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                public class T
+                {
+                    void Main()
+                    {
+                      /*1*/  Something(
+                      /*2*/      there);
+                    }
+                }
+                """)
         );
     }
 }
