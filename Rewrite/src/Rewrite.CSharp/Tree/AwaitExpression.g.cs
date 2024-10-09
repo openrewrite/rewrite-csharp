@@ -69,11 +69,16 @@ public partial interface Cs : J
         {
             return newType == type ? this : new AwaitExpression(id, prefix, markers, expression, newType);
         }
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
             return other is AwaitExpression && other.Id == Id;
         }
-
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public override int GetHashCode()
         {
             return Id.GetHashCode();

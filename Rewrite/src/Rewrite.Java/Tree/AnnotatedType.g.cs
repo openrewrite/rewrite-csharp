@@ -74,11 +74,16 @@ public partial interface J : Rewrite.Core.Tree
         {
             return ReferenceEquals(newTypeExpression, typeExpression) ? this : new AnnotatedType(id, prefix, markers, annotations, newTypeExpression);
         }
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
             return other is AnnotatedType && other.Id == Id;
         }
-
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public override int GetHashCode()
         {
             return Id.GetHashCode();

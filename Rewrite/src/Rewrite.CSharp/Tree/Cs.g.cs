@@ -23,16 +23,23 @@ namespace Rewrite.RewriteCSharp.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface Cs : J
 {
+    #if DEBUG_VISITOR
+    [DebuggerStepThrough]
+    #endif
     bool Core.Tree.IsAcceptable<R, P>(ITreeVisitor<R, P> v, P p)
     {
         return v.IsAdaptableTo(typeof(CSharpVisitor<>));
     }
-
+    #if DEBUG_VISITOR
+    [DebuggerStepThrough]
+    #endif
     R? Core.Tree.Accept<R, P>(ITreeVisitor<R, P> v, P p) where R : class
     {
         return (R?)AcceptCSharp(v.Adapt<J, CSharpVisitor<P>>(), p);
     }
-
+    #if DEBUG_VISITOR
+    [DebuggerStepThrough]
+    #endif
     J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
     {
         return v.DefaultValue(this, p);

@@ -68,11 +68,16 @@ public partial interface J : Rewrite.Core.Tree
         {
             return newDetail == detail ? this : new Assert(id, prefix, markers, condition, newDetail);
         }
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
             return other is Assert && other.Id == Id;
         }
-
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public override int GetHashCode()
         {
             return Id.GetHashCode();

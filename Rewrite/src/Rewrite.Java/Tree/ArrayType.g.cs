@@ -82,11 +82,16 @@ public partial interface J : Rewrite.Core.Tree
         {
             return newType == type ? this : new ArrayType(id, prefix, markers, elementType, annotations, dimension, newType);
         }
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
             return other is ArrayType && other.Id == Id;
         }
-
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public override int GetHashCode()
         {
             return Id.GetHashCode();

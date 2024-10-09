@@ -68,11 +68,16 @@ public partial interface J : Rewrite.Core.Tree
         {
             return ReferenceEquals(newValue, value) ? this : new Yield(id, prefix, markers, @implicit, newValue);
         }
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
             return other is Yield && other.Id == Id;
         }
-
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public override int GetHashCode()
         {
             return Id.GetHashCode();

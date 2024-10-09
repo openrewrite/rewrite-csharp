@@ -68,11 +68,16 @@ public partial interface Cs : J
         {
             return ReferenceEquals(newStatement, statement) ? this : new StatementExpression(id, prefix, markers, newStatement);
         }
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
             return other is StatementExpression && other.Id == Id;
         }
-
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public override int GetHashCode()
         {
             return Id.GetHashCode();
