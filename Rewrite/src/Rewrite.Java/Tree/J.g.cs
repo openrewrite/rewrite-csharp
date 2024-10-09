@@ -24,16 +24,23 @@ public partial interface J : Rewrite.Core.Tree
 {
     Space Prefix { get; }
 
+    #if DEBUG_VISITOR
+    [DebuggerStepThrough]
+    #endif
     bool Core.Tree.IsAcceptable<R, P>(ITreeVisitor<R, P> v, P p)
     {
         return v.IsAdaptableTo(typeof(JavaVisitor<>));
     }
-
+    #if DEBUG_VISITOR
+    [DebuggerStepThrough]
+    #endif
     R? Core.Tree.Accept<R, P>(ITreeVisitor<R, P> v, P p) where R : class
     {
         return (R?)AcceptJava(v.Adapt<J, JavaVisitor<P>>(), p);
     }
-
+    #if DEBUG_VISITOR
+    [DebuggerStepThrough]
+    #endif
     J? AcceptJava<P>(JavaVisitor<P> v, P p)
     {
         return v.DefaultValue(this, p);

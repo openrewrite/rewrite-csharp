@@ -75,11 +75,16 @@ public partial interface J : Rewrite.Core.Tree
         {
             return newType == type ? this : new ArrayAccess(id, prefix, markers, indexed, dimension, newType);
         }
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
             return other is ArrayAccess && other.Id == Id;
         }
-
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public override int GetHashCode()
         {
             return Id.GetHashCode();

@@ -1,5 +1,10 @@
+using System.Diagnostics;
+
 namespace Rewrite.Core;
 
+#if DEBUG_VISITOR
+[DebuggerStepThrough]
+#endif
 public class Cursor
 {
     private readonly Cursor? _parent;

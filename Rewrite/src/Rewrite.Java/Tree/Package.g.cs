@@ -68,11 +68,16 @@ public partial interface J : Rewrite.Core.Tree
         {
             return newAnnotations == annotations ? this : new Package(id, prefix, markers, expression, newAnnotations);
         }
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
             return other is Package && other.Id == Id;
         }
-
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public override int GetHashCode()
         {
             return Id.GetHashCode();

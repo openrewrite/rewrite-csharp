@@ -60,11 +60,16 @@ public partial interface J : Rewrite.Core.Tree
         {
             return ReferenceEquals(newMarkers, markers) ? this : new Empty(id, prefix, newMarkers);
         }
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
             return other is Empty && other.Id == Id;
         }
-
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public override int GetHashCode()
         {
             return Id.GetHashCode();

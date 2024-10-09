@@ -75,11 +75,16 @@ public partial interface Cs : J
         {
             return newModifiers == modifiers ? this : new Lambda(id, prefix, markers, lambdaExpression, newModifiers);
         }
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
             return other is Lambda && other.Id == Id;
         }
-
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public override int GetHashCode()
         {
             return Id.GetHashCode();

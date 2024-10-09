@@ -155,11 +155,16 @@ public partial interface J : Rewrite.Core.Tree
             {
                 return newTerminatedWithSemicolon == terminatedWithSemicolon ? this : new Resource(id, prefix, markers, variableDeclarations, newTerminatedWithSemicolon);
             }
+            #if DEBUG_VISITOR
+            [DebuggerStepThrough]
+            #endif
             public bool Equals(Rewrite.Core.Tree? other)
             {
                 return other is Resource && other.Id == Id;
             }
-
+            #if DEBUG_VISITOR
+            [DebuggerStepThrough]
+            #endif
             public override int GetHashCode()
             {
                 return Id.GetHashCode();
@@ -211,11 +216,16 @@ public partial interface J : Rewrite.Core.Tree
             {
                 return ReferenceEquals(newBody, body) ? this : new Catch(id, prefix, markers, parameter, newBody);
             }
+            #if DEBUG_VISITOR
+            [DebuggerStepThrough]
+            #endif
             public bool Equals(Rewrite.Core.Tree? other)
             {
                 return other is Catch && other.Id == Id;
             }
-
+            #if DEBUG_VISITOR
+            [DebuggerStepThrough]
+            #endif
             public override int GetHashCode()
             {
                 return Id.GetHashCode();
@@ -239,11 +249,16 @@ public partial interface J : Rewrite.Core.Tree
 
         }
 
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
             return other is Try && other.Id == Id;
         }
-
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public override int GetHashCode()
         {
             return Id.GetHashCode();

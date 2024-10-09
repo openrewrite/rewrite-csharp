@@ -185,11 +185,16 @@ public partial interface J : Rewrite.Core.Tree
 
             }
 
+            #if DEBUG_VISITOR
+            [DebuggerStepThrough]
+            #endif
             public bool Equals(Rewrite.Core.Tree? other)
             {
                 return other is Control && other.Id == Id;
             }
-
+            #if DEBUG_VISITOR
+            [DebuggerStepThrough]
+            #endif
             public override int GetHashCode()
             {
                 return Id.GetHashCode();
@@ -206,11 +211,16 @@ public partial interface J : Rewrite.Core.Tree
 
         }
 
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
             return other is ForEachLoop && other.Id == Id;
         }
-
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public override int GetHashCode()
         {
             return Id.GetHashCode();

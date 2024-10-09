@@ -2,7 +2,9 @@ using System.Diagnostics;
 using Rewrite.Core.Marker;
 
 namespace Rewrite.Core;
-
+#if DEBUG_VISITOR
+[DebuggerStepThrough]
+#endif
 public abstract class TreeVisitor<T, P> : ITreeVisitor<T, P> where T : class, Tree
 {
 

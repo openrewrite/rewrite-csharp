@@ -106,21 +106,31 @@ public partial interface J : Rewrite.Core.Tree
             {
                 return newText == text ? this : new Source(id, prefix, markers, newText);
             }
+            #if DEBUG_VISITOR
+            [DebuggerStepThrough]
+            #endif
             public bool Equals(Rewrite.Core.Tree? other)
             {
                 return other is Source && other.Id == Id;
             }
-
+            #if DEBUG_VISITOR
+            [DebuggerStepThrough]
+            #endif
             public override int GetHashCode()
             {
                 return Id.GetHashCode();
             }
         }
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
             return other is Unknown && other.Id == Id;
         }
-
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public override int GetHashCode()
         {
             return Id.GetHashCode();

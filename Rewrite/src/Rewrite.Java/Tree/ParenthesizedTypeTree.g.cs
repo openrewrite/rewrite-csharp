@@ -74,11 +74,16 @@ public partial interface J : Rewrite.Core.Tree
         {
             return ReferenceEquals(newParenthesizedType, parenthesizedType) ? this : new ParenthesizedTypeTree(id, prefix, markers, annotations, newParenthesizedType);
         }
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
             return other is ParenthesizedTypeTree && other.Id == Id;
         }
-
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public override int GetHashCode()
         {
             return Id.GetHashCode();

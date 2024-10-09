@@ -68,11 +68,16 @@ public partial interface J : Rewrite.Core.Tree
         {
             return ReferenceEquals(newCases, cases) ? this : new Switch(id, prefix, markers, selector, newCases);
         }
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
             return other is Switch && other.Id == Id;
         }
-
+        #if DEBUG_VISITOR
+        [DebuggerStepThrough]
+        #endif
         public override int GetHashCode()
         {
             return Id.GetHashCode();

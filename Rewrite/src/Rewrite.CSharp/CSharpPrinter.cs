@@ -38,8 +38,9 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         _delegate = new CSharpJavaPrinter(this);
     }
 
-    // [DebuggerNonUserCode]
-    // [DebuggerStepperBoundary]
+#if DEBUG_VISITOR
+    [DebuggerStepThrough]
+#endif
     public override J? Visit(Rewrite.Core.Tree? tree, PrintOutputCapture<TState> p)
     {
         if (!(tree is Cs))
