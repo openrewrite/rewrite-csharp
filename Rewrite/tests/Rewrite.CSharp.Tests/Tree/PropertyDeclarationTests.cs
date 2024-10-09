@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using Rewrite.RewriteCSharp.Test.Api;
+using Rewrite.Test.CSharp;
 using Rewrite.RewriteCSharp.Tree;
 using Rewrite.RewriteJava.Tree;
 using Rewrite.Test;

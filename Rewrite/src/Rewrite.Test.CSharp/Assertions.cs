@@ -1,13 +1,14 @@
 using FluentAssertions;
 using JetBrains.Annotations;
 using Rewrite.Core;
+using Rewrite.RewriteCSharp;
 using Rewrite.RewriteCSharp.Tree;
 using Rewrite.RewriteJava;
 using Rewrite.RewriteJava.Tree;
 using Rewrite.Test;
 using ExecutionContext = Rewrite.Core.ExecutionContext;
 
-namespace Rewrite.RewriteCSharp.Test.Api;
+namespace Rewrite.Test.CSharp;
 
 public static class Assertions
 {

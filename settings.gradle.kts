@@ -8,6 +8,8 @@ rootProject.name = "rewrite-csharp"
 
 val allProjects = listOf(
     "rewrite-csharp",
+    "rewrite-csharp-remote",
+    "rewrite-test-engine-remote",
 )
 
 val includedProjects = file("IDE.properties").let {

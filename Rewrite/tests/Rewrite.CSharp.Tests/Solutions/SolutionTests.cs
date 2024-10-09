@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Text.RegularExpressions;
-using Rewrite.RewriteCSharp.Test.Api;
+using Rewrite.Test.CSharp;
 
 namespace Rewrite.CSharp.Tests.Solutions;
 

@@ -13,7 +13,7 @@
             <_Parameter1>Rewrite.CSharp</_Parameter1>
         </AssemblyAttribute>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>Rewrite.Remote</_Parameter1>
+            <_Parameter1>Rewrite.Remote.Codec</_Parameter1>
         </AssemblyAttribute>
     </ItemGroup>
 

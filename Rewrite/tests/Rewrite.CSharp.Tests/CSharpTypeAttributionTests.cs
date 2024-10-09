@@ -1,6 +1,6 @@
 using FluentAssertions;
-using Rewrite.RewriteCSharp.Test;
-using Rewrite.RewriteCSharp.Test.Api;
+using Rewrite.Test.Remote;
+using Rewrite.Test.CSharp;
 using Rewrite.RewriteCSharp.Tree;
 using Rewrite.RewriteJava;
 using Rewrite.RewriteJava.Tree;
@@ -9,7 +9,7 @@ using static Rewrite.RewriteJava.Tree.JavaType;
 
 namespace Rewrite.CSharp.Tests;
 
-using static Rewrite.RewriteCSharp.Test.Api.Assertions;
+using static Assertions;
 
 public class CSharpTypeAttributionTests : RewriteTest
 {

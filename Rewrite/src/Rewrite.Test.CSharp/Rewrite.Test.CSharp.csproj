@@ -4,7 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>Rewrite.RewriteCSharp.Test.Api</RootNamespace>
+        <RootNamespace>Rewrite.Test.CSharp</RootNamespace>
         <IsTestProject>false</IsTestProject>
         <Description>C# recipe test support for the automated code refactoring framework OpenRewrite.</Description>
     </PropertyGroup>

@@ -11,6 +11,11 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+
+        <PackageReference Include="Microsoft.Build" Version="17.10.4" ExcludeAssets="runtime"/>
+        <PackageReference Include="Microsoft.Build.Locator" Version="1.7.8"/>
+        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.12.0-1.final" NoWarn="NU5104"  />
+        <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.12.0-1.final" NoWarn="NU5104"  />
         <PackageReference Include="FluentAssertions" Version="7.0.0-alpha.4" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
         <PackageReference Include="Nuke.Common" Version="8.1.0" />
@@ -30,11 +35,10 @@
         <Using Include="FluentAssertions"/>
         <Using Include="Rewrite.Core"/>
         <Using Include="Rewrite.Test"/>
-        <Using Include="Rewrite.MSBuild"/>
         <Using Include="Rewrite.RewriteCSharp"/>
         <Using Include="Rewrite.RewriteJava.Tree"/>
         <Using Include="Rewrite.RewriteCSharp.Tree"/>
-        <Using Include="Rewrite.RewriteCSharp.Test.Api"/>
+        <Using Include="Rewrite.Test.CSharp"/>
         <Using Include="Xunit"/>
         <Using Include="Xunit.Abstractions"/>
         <Using Include="Xunit.OpenCategories"/>
@@ -42,18 +46,11 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Rewrite.CSharp\Rewrite.CSharp.csproj" />
-      <ProjectReference Include="..\..\src\Rewrite.CSharp.Test.Api\Rewrite.CSharp.Test.Api.csproj" />
+      <ProjectReference Include="..\..\src\Rewrite.Test.CSharp\Rewrite.Test.CSharp.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.Test\Rewrite.Test.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.Java\Rewrite.Java.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.Core\Rewrite.Core.csproj" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(RELEASE_BUILD)'==''">
-      <ProjectReference Include="$(RewriteRemoteDir)\src\Rewrite.CSharp.Test\Rewrite.CSharp.Test.csproj" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(RELEASE_BUILD)'!=''">
-        <PackageReference Include="Rewrite.CSharp.Test" Version="$(RewriteRemoteVersion)" />
+      <ProjectReference Include="..\..\src\Rewrite.Test.Engine.Remote\Rewrite.Test.Engine.Remote.csproj" />
     </ItemGroup>
 
 </Project>

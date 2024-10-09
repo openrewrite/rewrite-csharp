@@ -1,6 +1,6 @@
 ﻿using Rewrite.Core.Marker;
 using Rewrite.RewriteCSharp;
-using Rewrite.RewriteCSharp.Test.Api;
+using Rewrite.Test.CSharp;
 using Rewrite.Test;
 using Xunit.Abstractions;
 

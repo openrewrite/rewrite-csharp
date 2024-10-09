@@ -19,8 +19,4 @@ dependencies {
     testImplementation("org.openrewrite:rewrite-test")
 
     testRuntimeOnly("org.openrewrite:rewrite-java-17")
-
-//    implementation("org.openrewrite:rewrite-remote-java:latest.integration") {
-//        exclude(group = "org.openrewrite", module = "rewrite-csharp")
-//    }
 }

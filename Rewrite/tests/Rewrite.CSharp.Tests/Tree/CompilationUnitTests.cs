@@ -1,4 +1,4 @@
-using Rewrite.RewriteCSharp.Test.Api;
+using Rewrite.Test.CSharp;
 using Rewrite.RewriteCSharp.Tree;
 using Rewrite.Test;
 
