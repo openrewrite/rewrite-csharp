@@ -2,6 +2,8 @@ plugins {
     id("org.openrewrite.build.language-library")
 }
 
+val latest = if (System.getenv("RELEASE_PUBLICATION") != null) "latest.release" else "latest.integration"
+
 dependencies {
 
     compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
@@ -16,7 +18,7 @@ dependencies {
 
     implementation(project(":rewrite-csharp"))
 
-    implementation("org.openrewrite:rewrite-remote:latest.release") {
+    implementation("org.openrewrite:rewrite-remote:${latest}") {
         exclude(group = "org.openrewrite", module = "rewrite-remote-java")
     }
 

@@ -7,6 +7,8 @@ application {
     mainClass = "org.openrewrite.remote.java.RemotingServer"
 }
 
+val latest = if (System.getenv("RELEASE_PUBLICATION") != null) "latest.release" else "latest.integration"
+
 dependencies {
 
     // The bom version can also be set to a specific version
@@ -19,10 +21,10 @@ dependencies {
     implementation(project(":rewrite-csharp"))
     implementation(project(":rewrite-csharp-remote"))
 
-    implementation("org.openrewrite:rewrite-remote:latest.release") {
+    implementation("org.openrewrite:rewrite-remote:${latest}") {
         exclude(group = "org.openrewrite", module = "rewrite-remote-java")
     }
-    implementation("org.openrewrite:rewrite-remote-java:latest.release") {
+    implementation("org.openrewrite:rewrite-remote-java:${latest}") {
         exclude(group = "org.openrewrite", module = "rewrite-remote-java")
     }
 
