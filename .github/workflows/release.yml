@@ -63,7 +63,7 @@ jobs:
           -Prelease.useLastTag=true \
           final \
           publish \
-          closeAndReleaseSonatypeStagingRepository
+          closeAndReleaseSonatypeStagingRepository --info
 
       - name: publish-dotnet-release
         if: (!contains(github.ref, '-rc.'))
