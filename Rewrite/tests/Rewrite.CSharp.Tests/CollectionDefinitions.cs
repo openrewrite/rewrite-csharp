@@ -1,5 +1,5 @@
 using Rewrite.Test.CSharp;
-using Rewrite.Test.Remote;
+using Rewrite.Test.Engine.Remote;
 using Rewrite.Test;
 
 namespace Rewrite.CSharp.Tests;

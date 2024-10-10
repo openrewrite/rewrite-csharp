@@ -9,7 +9,7 @@ using Rewrite.Remote;
 using Rewrite.Test;
 using Xunit;
 
-namespace Rewrite.Test.Remote;
+namespace Rewrite.Test.Engine.Remote;
 
 public class RemotingFixture : IAsyncLifetime
 {

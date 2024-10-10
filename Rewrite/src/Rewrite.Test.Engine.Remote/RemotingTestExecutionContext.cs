@@ -3,7 +3,7 @@ using Rewrite.Remote;
 using Rewrite.Test;
 using ExecutionContext = Rewrite.Core.ExecutionContext;
 
-namespace Rewrite.Test.Remote;
+namespace Rewrite.Test.Engine.Remote;
 
 public class RemotingTestExecutionContext(IRemotingContext remotingContext) : ITestExecutionContext
 {
