@@ -302,11 +302,13 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     @Override
     public Cs visitLambda(Cs.Lambda lambda, PrintOutputCapture<P> p)
     {
+        if (!lambda.getModifiers().isEmpty()) // only put space in front if current node actually has anything to contribute
+        {
+            beforeSyntax(lambda, Space.Location.LAMBDA_PREFIX, p);
+        }
         J.Lambda javaLambda = lambda.getLambdaExpression();
-        beforeSyntax(javaLambda, Space.Location.LAMBDA_PREFIX, p);
-        visitSpace(javaLambda.getPrefix(), Space.Location.LAMBDA_PARAMETERS_PREFIX, p);
-        visitMarkers(javaLambda.getMarkers(), p);
-        // _delegate.VisitContainer(lambda.Modifiers, JContainer.Location.ANY, p);
+        visitSpace(lambda.getPrefix(), Space.Location.LAMBDA_PARAMETERS_PREFIX, p);
+        visitMarkers(lambda.getMarkers(), p);
         for(J.Modifier modifier : lambda.getModifiers())
         {
             delegate.visitModifier(modifier, p);

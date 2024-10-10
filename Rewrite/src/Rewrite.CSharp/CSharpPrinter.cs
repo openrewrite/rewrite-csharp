@@ -372,11 +372,15 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
 
     public override Cs VisitLambda(Cs.Lambda lambda, PrintOutputCapture<TState> p)
     {
+        if (lambda.Modifiers.Any()) // only put space in front if current node actually has anything to contribute
+        {
+            BeforeSyntax(lambda, Space.Location.LAMBDA_PREFIX, p);
+        }
+
         var javaLambda = lambda.LambdaExpression;
-        BeforeSyntax(javaLambda, Space.Location.LAMBDA_PREFIX, p);
-        VisitSpace(javaLambda.Prefix, Space.Location.LAMBDA_PARAMETERS_PREFIX, p);
-        VisitMarkers(javaLambda.Markers, p);
-        // _delegate.VisitContainer(lambda.Modifiers, JContainer.Location.ANY, p);
+
+        VisitSpace(lambda.Prefix, Space.Location.LAMBDA_PARAMETERS_PREFIX, p);
+        VisitMarkers(lambda.Markers, p);
         foreach (var modifier in lambda.Modifiers)
         {
             _delegate.VisitModifier(modifier, p);

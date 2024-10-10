@@ -100,7 +100,6 @@ public class LambdaTests : RewriteTest
     }
 
     [Fact]
-    [KnownBug]
     private void AsyncLambda()
     {
         RewriteRun(CSharp("Task.Run(async () => {});"));

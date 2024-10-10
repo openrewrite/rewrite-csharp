@@ -1882,22 +1882,27 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     private J? VisitLambdaExpressionSyntax(LambdaExpressionSyntax node)
     {
+        var leadingNodeSpace = Format(Leading(node));
+        var parametersSpace = node.AsyncKeyword.IsKind(SyntaxKind.AsyncKeyword)
+            ? Format(Trailing(node.AsyncKeyword))
+            : Space.EMPTY;
         J.Lambda.Parameters parameters = node switch
         {
             ParenthesizedLambdaExpressionSyntax parenthesizedLambdaExpression => new J.Lambda.Parameters(
                 Core.Tree.RandomId(),
-                Format(Trailing(node.AsyncKeyword)),
+                parametersSpace,
                 Markers.EMPTY,
                 true,
                 MapParameters<J>(parenthesizedLambdaExpression.ParameterList)!.Elements),
             SimpleLambdaExpressionSyntax simpleLambdaExpression => new J.Lambda.Parameters(
                 Core.Tree.RandomId(),
-                Format(Trailing(node.AsyncKeyword)),
+                parametersSpace,
                 Markers.EMPTY,
                 false,
                 [MapParameter<J>(simpleLambdaExpression.Parameter)]),
             _ => throw new NotSupportedException($"Unsupported type {node.GetType()}")
         };
+
 
         var jLambda = new J.Lambda(
             Core.Tree.RandomId(),
@@ -1910,7 +1915,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
         var csLambda = new Cs.Lambda(
             Core.Tree.RandomId(),
-            Format((Leading(node))),
+            leadingNodeSpace,
             Markers.EMPTY,
             jLambda,
             MapModifiers(node.Modifiers)
