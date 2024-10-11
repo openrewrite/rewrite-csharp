@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Text.RegularExpressions;
+using Rewrite.MSBuild;
 using Rewrite.Test.CSharp;
 
 namespace Rewrite.CSharp.Tests.Solutions;
