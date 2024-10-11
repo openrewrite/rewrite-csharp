@@ -1,4 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
+using Microsoft.Build.Locator;
+using Rewrite.MSBuild;
 using Rewrite.Remote;
 using Rewrite.Remote.Codec.CSharp;
 using Rewrite.Remote.Codec.Java;
@@ -19,6 +21,7 @@ public class ModuleInitializer
     [ModuleInitializer]
     internal static void OnAssemblyLoad()
     {
+        ProjectParser.Init();
         if (ITestExecutionContext.Current() == null)
         {
             ITestExecutionContext.SetCurrent(new LocalTestExecutionContext());
