@@ -22,30 +22,27 @@ public class ParseTests : RewriteTest
         _parser = new CSharpParser.Builder().Build();
     }
 
-    [Fact]
+    [Theory]
     [Exploratory]
-    public void Delta()
+    [InlineData("abc\n123","abc123")]
+    [InlineData("abc123","abc134")]
+    [InlineData("""
+                one
+                two
+                three
+                four
+                NOT five
+                """,
+                """
+                one
+                two
+                four
+                five
+                six
+                """)]
+    public void Delta(string before, string after)
     {
-        string before = @"
-    one two three
-    same
-    123
-    def
-    another
-    same
-    diff1
-    @";
-
-        string after = @"
-    two two
-    same
-    13
-    another
-    added
-    same
-    diff2
-    @";
-        before.ShouldBeSameAs(after);
+        after.ShouldBeSameAs(before);
     }
 
     [Fact]
