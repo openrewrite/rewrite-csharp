@@ -42,9 +42,23 @@ public sealed class JLeftPadded<T>(
         return ReferenceEquals(newMarkers, markers) ? this : new JLeftPadded<T>(before, element, newMarkers);
     }
 }
-
+[PublicAPI]
 public static class JLeftPadded
 {
+    [PublicAPI]
+    public static JLeftPadded<T> AsLeftPadded<T>(this T element, Space before) => element.AsLeftPadded(before, Markers.EMPTY);
+
+    [PublicAPI]
+    public static JLeftPadded<T> AsLeftPadded<T>(this T element, Space before, Markers markers)
+    {
+        return new JLeftPadded<T>(before, element, markers);
+    }
+
+    [PublicAPI]
+    public static JLeftPadded<T> Create<T>(T element, Space before, Markers markers)
+    {
+        return new JLeftPadded<T>(before, element, markers);
+    }
     public record Location(Space.Location BeforeLocation)
     {
         public static readonly Location ASSERT_DETAIL = new(Space.Location.ASSERT_DETAIL_PREFIX);

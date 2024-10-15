@@ -7,6 +7,11 @@ public record Markers(Guid Id, IList<Marker> MarkerList) : IReadOnlyCollection<M
 {
     public static readonly Markers EMPTY = new(Tree.RandomId(), ImmutableList<Marker>.Empty);
 
+    public static Markers Create(params Marker[] markers)
+    {
+        return new Markers( Core.Tree.RandomId(), markers.ToImmutableList());
+    }
+
     public Markers WithId(Guid id)
     {
         return id == Id ? this : this with { Id = id };

@@ -10,563 +10,562 @@ public class CSharpSyntaxFragments  : IEnumerable<object[]>
 class C<T> where T : allows ref struct
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_Single_MissingRefAndStruct",@"
 class C<T> where T : allows
 {}")
         };
-
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_TwoInARow",@"
 class C<T> where T : allows ref struct, ref struct
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_TwoInARow_MissingRef",@"
 class C<T> where T : allows ref struct, struct
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_TwoAllowsInARow",@"
 class C<T> where T : allows ref struct, allows ref struct
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_FollowedByWhere_01",@"
 class C<T, S> where T : allows ref struct where S : class
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_FollowedByWhere_02",@"
 class C<T, S> where T : struct, allows ref struct where S : class
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_AfterStruct",@"
 class C<T> where T : struct, allows ref struct
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_AfterClass",@"
 class C<T> where T : class, allows ref struct
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_AfterDefault",@"
 class C<T> where T : default, allows ref struct
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_AfterUnmanaged",@"
 class C<T> where T : unmanaged, allows ref struct
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_AfterNotNull",@"
 class C<T> where T : notnull, allows ref struct
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_AfterTypeConstraint",@"
 class C<T> where T : SomeType, allows ref struct
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_AfterNew",@"
 class C<T> where T : new(), allows ref struct
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_AfterMultiple",@"
 class C<T> where T : struct, SomeType, new(), allows ref struct
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_BeforeClass",@"
 class C<T> where T : allows ref struct, class
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_BeforeDefault",@"
 class C<T> where T : allows ref struct, default
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_BeforeUnmanaged",@"
 class C<T> where T : allows ref struct, unmanaged
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_BeforeNotNull",@"
 class C<T> where T : allows ref struct, notnull
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_BeforeTypeConstraint",@"
 class C<T> where T : allows ref struct, SomeType
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AllowsConstraintParsing.RefStruct_BeforeNew",@"
 class C<T> where T : allows ref struct, new()
 {}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("AsyncParsingTests.AsyncAsType_Indexer_ExpressionBody_ErrorCase","interface async { async this[async i] => null; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestExternAlias","extern alias a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestUsing","using a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestUsingStatic","using static a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestUsingDottedName","using a.b;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestUsingStaticDottedName","using static a.b;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestUsingStaticGenericName","using static a<int?>;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestUsingAliasName","using a = b;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestUsingAliasGenericName","using a = b<c>;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestGlobalAttribute","[assembly:a]")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestGlobalAttribute_Verbatim","[@assembly:a]")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestGlobalAttribute_Escape",@"[as\u0073embly:a]")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestGlobalModuleAttribute","[module:a]")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestGlobalModuleAttribute_Verbatim","[@module:a]")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestGlobalAttributeWithParentheses","[assembly:a()]")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestGlobalAttributeWithMultipleArguments","[assembly:a(b, c)]")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestGlobalAttributeWithNamedArguments","[assembly:a(b = c)]")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestGlobalAttributeWithMultipleAttributes","[assembly:a, b]")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestMultipleGlobalAttributeDeclarations","[assembly:a] [assembly:b]")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNamespace","namespace a { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestFileScopedNamespace","namespace a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNamespaceWithDottedName","namespace a.b.c { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNamespaceWithUsing","namespace a { using b.c; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestFileScopedNamespaceWithUsing","namespace a; using b.c;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNamespaceWithExternAlias","namespace a { extern alias b; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestFileScopedNamespaceWithExternAlias","namespace a; extern alias b;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNamespaceWithNestedNamespace","namespace a { namespace b { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClass","class a { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithPublic","public class a { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithInternal","internal class a { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithStatic","static class a { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithSealed","sealed class a { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithAbstract","abstract class a { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithPartial","partial class a { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithAttribute","[attr] class a { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithMultipleAttributes","[attr1] [attr2] class a { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithMultipleAttributesInAList","[attr1, attr2] class a { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithBaseType","class a : b { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithMultipleBases","class a : b, c { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithTypeConstraintBound","class a<b> where b : c { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNonGenericClassWithTypeConstraintBound","class a where b : c { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNonGenericMethodWithTypeConstraintBound","class a { void M() where b : c { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithNewConstraintBound","class a<b> where b : new() { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithClassConstraintBound","class a<b> where b : class { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithStructConstraintBound","class a<b> where b : struct { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithMultipleConstraintBounds","class a<b> where b : class, c, new() { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithMultipleConstraints","class a<b> where b : c where b : new() { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassWithMultipleBasesAndConstraints","class a<b> : c, d where b : class, e, new() { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestInterface","interface a { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestGenericInterface","interface A<B> { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestGenericInterfaceWithAttributesAndVariance","interface A<[B] out C> { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestStruct","struct a { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNestedClass","class a { class b { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNestedPrivateClass","class a { private class b { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNestedProtectedClass","class a { protected class b { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNestedProtectedInternalClass","class a { protected internal class b { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNestedInternalProtectedClass","class a { internal protected class b { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNestedPublicClass","class a { public class b { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNestedInternalClass","class a { internal class b { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestDelegate","delegate a b();")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestDelegateWithRefReturnType","delegate ref a b();")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestDelegateWithRefReadonlyReturnType","delegate ref readonly a b();")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestDelegateWithParameter","delegate a b(c d);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestDelegateWithMultipleParameters","delegate a b(c d, e f);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestDelegateWithRefParameter","delegate a b(ref c d);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestDelegateWithOutParameter","delegate a b(out c d);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestDelegateWithParamsParameter","delegate a b(params c d);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestDelegateWithArgListParameter","delegate a b(__arglist);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestDelegateWithParameterAttribute","delegate a b([attr] c d);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNestedDelegate","class a { delegate b c(); }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassMethod","class a { b X() { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassMethodWithRefReturn","class a { ref b X() { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassMethodWithRefReadonlyReturn","class a { ref readonly b X() { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassMethodWithPartial","class a { partial void M() { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestStructMethodWithReadonly","struct a { readonly void M() { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestReadOnlyRefReturning","struct a { readonly ref readonly int M() { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestStructExpressionPropertyWithReadonly","struct a { readonly int M => 42; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestStructGetterPropertyWithReadonly","struct a { int P { readonly get { return 42; } } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassMethodWithParameter","class a { b X(c d) { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassMethodWithMultipleParameters","class a { b X(c d, e f) { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassMethodWithArgListParameter","class a { b X(__arglist) { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestGenericClassMethod","class a { b<c> M() { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestGenericClassMethodWithTypeConstraintBound","class a { b X<c>() where b : d { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestGenericClassConstructor",@"
@@ -575,167 +574,167 @@ class Class1<T>{
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassConstructor","class a { a() { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassDestructor","class a { ~a() { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassField","class a { b c; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassConstField","class a { const b c = d; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassFieldWithInitializer","class a { b c = e; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassFieldWithArrayInitializer","class a { b c = { }; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassFieldWithMultipleVariables","class a { b c, d, e; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassFieldWithMultipleVariablesAndInitializers","class a { b c = x, d = y, e = z; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassFixedField","class a { fixed b c[10]; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassProperty","class a { b c { get; set; } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassPropertyWithRefReturn","class a { ref b c { get; set; } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassPropertyWithRefReadonlyReturn","class a { ref readonly b c { get; set; } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassPropertyWithBodies","class a { b c { get { } set { } } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassAutoPropertyWithInitializer","class a { b c { get; set; } = d; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.InitializerOnNonAutoProp","class C { int P { set {} } = 0; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassPropertyExplicit","class a { b I.c { get; set; } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassEventProperty","class a { event b c { add { } remove { } } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassEventPropertyExplicit","class a { event b I.c { add { } remove { } } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassIndexer","class a { b this[c d] { get; set; } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassIndexerWithRefReturn","class a { ref b this[c d] { get; set; } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassIndexerWithRefReadonlyReturn","class a { ref readonly b this[c d] { get; set; } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassIndexerWithMultipleParameters","class a { b this[c d, e f] { get; set; } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassIndexerExplicit","class a { b I.this[c d] { get; set; } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassRightShiftOperatorMethod","class a { b operator >> (c d, e f) { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassUnsignedRightShiftOperatorMethod","class a { b operator >>> (c d, e f) { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassImplicitConversionOperatorMethod","class a { implicit operator b (c d) { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestClassExplicitConversionOperatorMethod","class a { explicit operator b (c d) { } }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNamespaceDeclarationsBadNames","namespace A::B { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNamespaceDeclarationsBadNames1",@"namespace A::B { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNamespaceDeclarationsBadNames2",@"namespace A<B> { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestNamespaceDeclarationsBadNames3",@"namespace A<,> { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestPartialEnum",@"partial enum E{}")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestEscapedConstructor",@"
@@ -747,7 +746,7 @@ class @class
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TestAnonymousMethodWithDefaultParameter",@"
@@ -759,7 +758,7 @@ class C {
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.RegressIfDevTrueUnicode",@"
@@ -776,7 +775,7 @@ System.Console.WriteLine(""Bad, breaking change"");
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.RegressLongDirectiveIdentifierDefn",@"
@@ -796,7 +795,7 @@ System.Console.WriteLine(""Bad, breaking change"");
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.RegressLongDirectiveIdentifierUse",@"
@@ -816,7 +815,7 @@ System.Console.WriteLine(""Bad, breaking change"");
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.ValidFixedBufferTypes",@"
@@ -826,11 +825,11 @@ unsafe struct s
     internal fixed int _Type3[10];
     private fixed short _Type4[10];
     unsafe fixed long _Type5[10];
-    new fixed char _Type6[10];
+    new fixed char _Type6[10];    
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.ValidFixedBufferTypesMultipleDeclarationsOnSameLine",@"
@@ -840,7 +839,7 @@ unsafe struct s
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.ValidFixedBufferTypesWithCountFromConstantOrLiteral",@"
@@ -852,30 +851,30 @@ unsafe struct s
     }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.ValidFixedBufferTypesAllValidTypes",@"
 unsafe struct s
 {
-    public fixed bool _Type1[10];
-    public fixed byte _Type12[10];
-    public fixed int _Type2[10];
-    public fixed short _Type3[10];
-    public fixed long _Type4[10];
-    public fixed char _Type5[10];
-    public fixed sbyte _Type6[10];
-    public fixed ushort _Type7[10];
-    public fixed uint _Type8[10];
-    public fixed ulong _Type9[10];
-    public fixed float _Type10[10];
-    public fixed double _Type11[10];
+    public fixed bool _Type1[10]; 
+    public fixed byte _Type12[10]; 
+    public fixed int _Type2[10]; 
+    public fixed short _Type3[10]; 
+    public fixed long _Type4[10]; 
+    public fixed char _Type5[10]; 
+    public fixed sbyte _Type6[10]; 
+    public fixed ushort _Type7[10]; 
+    public fixed uint _Type8[10]; 
+    public fixed ulong _Type9[10]; 
+    public fixed float _Type10[10]; 
+    public fixed double _Type11[10];     
  }
 
 
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TupleArgument01",@"
@@ -893,7 +892,7 @@ class C1
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.TupleArgument02",@"
@@ -911,102 +910,141 @@ class C1
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.Interface_SemicolonBody",@"
 interface C
 ;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.Interface_SemicolonBodyAfterBase_01",@"
 interface C : I1
 ;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.Interface_SemicolonBodyAfterBase_02",@"
 interface C : I1, I2
 ;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.Interface_SemicolonBodyAfterConstraint_01",@"
 interface C where T1 : U1
 ;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeclarationParsingTests.Interface_SemicolonBodyAfterConstraint_02",@"
 interface C where T1 : U1 where T2 : U2
 ;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeconstructionTests.TupleArray","(T, T)[] id;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeconstructionTests.ParenthesizedExpression","(x).ToString();")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeconstructionTests.TupleLiteralStatement","(x, x).ToString();")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeconstructionTests.Statement4","((x)).ToString();")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeconstructionTests.Statement5","((x, y) = M()).ToString();")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeconstructionTests.CastWithTupleType","(((x, y))z).Goo();")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeconstructionTests.NotACast","((Int32.MaxValue, Int32.MaxValue)).ToString();")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeconstructionTests.AlsoNotACast","((x, y)).ToString();")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeconstructionTests.StillNotACast","((((x, y)))).ToString();")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeconstructionTests.LambdaInExpressionStatement","(a) => a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeconstructionTests.LambdaWithBodyInExpressionStatement","(a, b) => { };")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("DeconstructionTests.NullableTuple","(x, y)? z = M();")
         };
-
+        
+        yield return new object[]
+        {
+            new SourceTestCase("ExpressionParsingTests.TestAltInterpolatedVerbatimString_CSharp8",@"@$""hello""")
+        };
+        
+        yield return new object[]
+        {
+            new SourceTestCase("ExpressionParsingTests.TestNestedAltInterpolatedVerbatimString_CSharp73","$@\"aaa{@$\"bbb\nccc\"}ddd\"")
+        };
+        
+        yield return new object[]
+        {
+            new SourceTestCase("ExpressionParsingTests.TestNestedAltInterpolatedVerbatimString_CSharp8","$@\"aaa{@$\"bbb\nccc\"}ddd\"")
+        };
+        
+        yield return new object[]
+        {
+            new SourceTestCase("ExpressionParsingTests.TestInterpolatedStringWithNewLinesInExpression",@"$""Text with {
+    new[] {
+        1, 2, 3
+    }[2]
+} parts and new line expressions!""")
+        };
+        
+        yield return new object[]
+        {
+            new SourceTestCase("ExpressionParsingTests.TestName","goo")
+        };
+        
+        yield return new object[]
+        {
+            new SourceTestCase("ExpressionParsingTests.TestConditionalAccessNotVersion5","a.b?.c.d?[1]?.e()?.f")
+        };
+        
+        yield return new object[]
+        {
+            new SourceTestCase("ExpressionParsingTests.TestConditionalAccess","a.b?.c.d?[1]?.e()?.f")
+        };
+        
         yield return new object[]
         {
             new SourceTestCase("ExpressionParsingTests.TypeArgumentShiftAmbiguity_01",@"
@@ -1021,7 +1059,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ExpressionParsingTests.TypeArgumentShiftAmbiguity_02",@"
@@ -1039,7 +1077,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ExpressionParsingTests.TypeArgumentShiftAmbiguity_03",@"
@@ -1052,7 +1090,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ExpressionParsingTests.TypeArgumentShiftAmbiguity_04",@"
@@ -1066,7 +1104,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ExpressionParsingTests.TypeArgumentShiftAmbiguity_05",@"
@@ -1079,7 +1117,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ExpressionParsingTests.TypeArgumentShiftAmbiguity_08",@"
@@ -1092,7 +1130,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ExpressionParsingTests.TypeArgumentShiftAmbiguity_09",@"
@@ -1110,7 +1148,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ExpressionParsingTests.TypeArgumentShiftAmbiguity_10",@"
@@ -1125,12 +1163,12 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("FunctionPointerTests.LangVersion8","delegate* unmanaged[cdecl]<string, Goo, int> ptr;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("LocalFunctionParsingTests.DiagnosticsWithoutExperimental",@"
@@ -1146,7 +1184,7 @@ class c
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("LocalFunctionParsingTests.StaticFunctions",@"class Program
@@ -1157,7 +1195,7 @@ class c
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("LocalFunctionParsingTests.AsyncStaticFunctions",@"class Program
@@ -1169,37 +1207,37 @@ class c
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("MemberDeclarationParsingTests.OperatorDeclaration_ExplicitImplementation_01","public int N.I.operator +(int x, int y) => x + y;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("MemberDeclarationParsingTests.OperatorDeclaration_ExplicitImplementation_11","public int N.I.operator +(int x, int y) => x + y;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("MemberDeclarationParsingTests.OperatorDeclaration_ExplicitImplementation_23","int N.I.operator +(int x, int y) => x + y;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("MemberDeclarationParsingTests.OperatorDeclaration_ExplicitImplementation_33","int N.I.operator +(int x, int y) => x + y;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("MemberDeclarationParsingTests.ConversionDeclaration_ExplicitImplementation_01","implicit N.I.operator int(int x) => x;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("MemberDeclarationParsingTests.ConversionDeclaration_ExplicitImplementation_11","explicit N.I.operator int(int x) => x;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.CS1031ERR_TypeExpected02_Tuple",@"namespace x
@@ -1214,7 +1252,7 @@ class c
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.CS1031ERR_TypeExpected02WithCSharp6_Tuple",@"namespace x
@@ -1229,7 +1267,7 @@ class c
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.CS1031ERR_TypeExpected02WithCSharp7_Tuple",@"namespace x
@@ -1244,7 +1282,7 @@ class c
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.PartialTypesBeforeVersionTwo",@"
@@ -1253,7 +1291,7 @@ partial class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.PartialMethodsVersionThree",@"
@@ -1263,7 +1301,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.QueryBeforeVersionThree",@"
@@ -1277,7 +1315,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.AnonymousTypeBeforeVersionThree",@"
@@ -1290,7 +1328,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.ImplicitArrayBeforeVersionThree",@"
@@ -1303,7 +1341,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.ObjectInitializerBeforeVersionThree",@"
@@ -1316,7 +1354,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.LambdaBeforeVersionThree",@"
@@ -1329,11 +1367,11 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.ExceptionFilterBeforeVersionSix",@"
-public class C
+public class C 
 {
     public static int Main()
     {
@@ -1342,7 +1380,7 @@ public class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.InterpolatedStringBeforeCSharp6",@"
@@ -1354,7 +1392,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.InterpolatedStringWithReplacementBeforeCSharp6",@"
@@ -1367,7 +1405,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.AsyncBeforeCSharp5",@"
@@ -1377,7 +1415,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.AsyncWithOtherModifiersBeforeCSharp5",@"
@@ -1387,7 +1425,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.AsyncLambdaBeforeCSharp5",@"
@@ -1400,7 +1438,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.AsyncDelegateBeforeCSharp5",@"
@@ -1413,7 +1451,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.NamedArgumentBeforeCSharp4",@"
@@ -1427,7 +1465,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.GlobalKeywordBeforeCSharp2",@"
@@ -1436,7 +1474,7 @@ class C : global::B
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.AliasQualifiedNameBeforeCSharp2",@"
@@ -1445,7 +1483,7 @@ class C : A::B
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.OptionalParameterBeforeCSharp4",@"
@@ -1455,33 +1493,33 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.ObjectInitializerBeforeCSharp3",@"
 class C
 {
-    void M()
+    void M() 
     {
-        return new C { Goo = 1 };
+        return new C { Goo = 1 }; 
     }
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.CollectionInitializerBeforeCSharp3",@"
 class C
 {
-    void M()
+    void M() 
     {
-        return new C { 1, 2, 3 };
+        return new C { 1, 2, 3 }; 
     }
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.CrefGenericBeforeCSharp2",@"
@@ -1491,7 +1529,7 @@ class C
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.CrefAliasQualifiedNameBeforeCSharp2",@"
@@ -1500,8 +1538,7 @@ class C
 class C { }
 ")
         };
-
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.PragmaBeforeCSharp2",@"
@@ -1510,7 +1547,7 @@ class C { }
 class C { }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ParserErrorMessageTests.PragmaBeforeCSharp2_InDisabledCode",@"
@@ -1521,7 +1558,7 @@ class C { }
 class C { }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("PatternParsingTests.ParenthesizedSwitchCase",@"
@@ -1534,7 +1571,7 @@ switch (e)
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLine1",@"
@@ -1546,7 +1583,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineSingleQuoteInside",@"
@@ -1558,7 +1595,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineDoubleQuoteInside",@"
@@ -1570,7 +1607,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationInside",@"
@@ -1582,7 +1619,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationInsideSpacesOutside",@"
@@ -1594,7 +1631,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationInsideSpacesInside",@"
@@ -1606,7 +1643,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationInsideSpacesInsideAndOutside",@"
@@ -1618,7 +1655,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationMultipleCurliesAllowed1",@"
@@ -1630,7 +1667,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationMultipleCurliesAllowed2",@"
@@ -1642,7 +1679,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationMultipleCurliesAllowed4",@"
@@ -1654,7 +1691,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingNormalString",@"
@@ -1666,7 +1703,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingVerbatimString1",@"
@@ -1678,7 +1715,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingVerbatimString2",@"
@@ -1691,7 +1728,7 @@ a""}"""""";
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingInterpolatedString1",@"
@@ -1703,7 +1740,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingInterpolatedString2",@"
@@ -1715,7 +1752,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingVerbatimInterpolatedString1",@"
@@ -1727,7 +1764,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingVerbatimInterpolatedString2",@"
@@ -1739,7 +1776,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingVerbatimInterpolatedString3",@"
@@ -1752,7 +1789,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingVerbatimInterpolatedString4",@"
@@ -1766,7 +1803,7 @@ $@""{
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingRawStringLiteral1",@"
@@ -1778,7 +1815,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingRawStringLiteral2",@"
@@ -1792,7 +1829,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingRawInterpolatedStringLiteral1",@"
@@ -1804,7 +1841,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingRawInterpolatedStringLiteral2",@"
@@ -1816,7 +1853,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingRawInterpolatedStringLiteral3",@"
@@ -1828,7 +1865,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingRawInterpolatedStringLiteral4",@"
@@ -1841,7 +1878,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingRawInterpolatedStringLiteral5",@"
@@ -1855,7 +1892,7 @@ $""""""{
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingRawInterpolatedStringLiteral6",@"
@@ -1867,7 +1904,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingRawInterpolatedStringLiteral7",@"
@@ -1879,7 +1916,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingRawInterpolatedStringLiteral8",@"
@@ -1891,7 +1928,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingClosingBraceAsCharacterLiteral",@"
@@ -1903,7 +1940,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingClosingBraceAsRegularStringLiteral",@"
@@ -1915,7 +1952,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingClosingBraceAsVerbatimStringLiteral",@"
@@ -1927,7 +1964,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.SingleLineInterpolationContainingClosingBraceAsRawStringLiteral",@"
@@ -1939,7 +1976,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterNormalMiddleNormalInnerNormal",@"
@@ -1951,7 +1988,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterNormalMiddleNormalInnerVerbatim",@"
@@ -1963,7 +2000,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterNormalMiddleNormalInnerRaw",@"
@@ -1975,7 +2012,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterNormalMiddleVerbatimInnerNormal",@"
@@ -1987,7 +2024,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterNormalMiddleVerbatimInnerVerbatim",@"
@@ -1999,7 +2036,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterNormalMiddleVerbatimInnerRaw",@"
@@ -2011,7 +2048,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterNormalMiddleRawInnerNormal",@"
@@ -2023,7 +2060,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterNormalMiddleRawInnerVerbatim",@"
@@ -2035,7 +2072,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterNormalMiddleRawInnerRaw",@"
@@ -2047,7 +2084,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterVerbatimMiddleNormalInnerNormal",@"
@@ -2059,7 +2096,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterVerbatimMiddleNormalInnerVerbatim",@"
@@ -2071,7 +2108,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterVerbatimMiddleNormalInnerRaw",@"
@@ -2083,7 +2120,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterVerbatimMiddleVerbatimInnerNormal",@"
@@ -2095,7 +2132,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterVerbatimMiddleVerbatimInnerVerbatim",@"
@@ -2107,7 +2144,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterVerbatimMiddleVerbatimInnerRaw",@"
@@ -2119,7 +2156,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterVerbatimMiddleRawInnerNormal",@"
@@ -2131,7 +2168,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterVerbatimMiddleRawInnerVerbatim",@"
@@ -2143,7 +2180,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterVerbatimMiddleRawInnerRaw",@"
@@ -2155,7 +2192,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterRawMiddleNormalInnerNormal",@"
@@ -2167,7 +2204,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterRawMiddleNormalInnerVerbatim",@"
@@ -2179,7 +2216,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterRawMiddleNormalInnerRaw",@"
@@ -2191,7 +2228,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterRawMiddleVerbatimInnerNormal",@"
@@ -2203,7 +2240,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterRawMiddleVerbatimInnerVerbatim",@"
@@ -2215,7 +2252,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterRawMiddleVerbatimInnerRaw",@"
@@ -2227,7 +2264,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterRawMiddleRawInnerNormal",@"
@@ -2239,7 +2276,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterRawMiddleRawInnerVerbatim",@"
@@ -2251,7 +2288,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RawInterpolatedStringLiteralParsingTests.OuterRawMiddleRawInnerRaw",@"
@@ -2263,7 +2300,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ReadOnlyStructs.ReadOnlyStructSimple",@"
@@ -2277,7 +2314,7 @@ class Program
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ReadOnlyStructs.ReadOnlyStructSimpleLangVer",@"
@@ -2291,7 +2328,7 @@ class Program
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ReadOnlyStructs.ReadOnlyClassErr",@"
@@ -2305,7 +2342,7 @@ class Program
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ReadOnlyStructs.ReadOnlyRefStruct",@"
@@ -2317,7 +2354,7 @@ class Program
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ReadOnlyStructs.ReadOnlyStructPartialMatchingModifiers",@"
@@ -2333,7 +2370,7 @@ class Program
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("ReadOnlyStructs.ReadOnlyStructPartialNotMatchingModifiers",@"
@@ -2353,7 +2390,7 @@ class Program
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.FieldNamedData",@"
@@ -2362,42 +2399,42 @@ class C
     int data;
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordParsing01","record C(int X, int Y);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordParsing02","record C(int X, int Y);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordParsing03","record C;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordParsing04","record C { public int record; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordParsing05","record Point;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordParsing07","interface P(int x, int y);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordParsing_BlockBodyAndSemiColon","record C { };")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.WithParsingLangVer",@"
@@ -2406,7 +2443,7 @@ class C
     int x = 0 with {};
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.WithParsing2",@"
@@ -2418,112 +2455,112 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.WithParsing17",@"x = x with { X = ""2"" };")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.Base_03","interface C : B;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.Base_04","interface C(int X, int Y) : B;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.Base_05","interface C : B(X, Y);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordStructParsing","record struct C(int X, int Y);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordStructParsing_WithBody","record struct C(int X, int Y) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordClassParsing","record class C(int X, int Y);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.StructNamedRecord_CSharp8","struct record { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.StructNamedRecord_CSharp9","struct record { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.StructNamedRecord_CSharp10","struct record { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordStructParsing_Partial","partial record struct S;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordClassParsing_Partial","partial record class S;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordParsing_Partial","partial record S;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordStructParsing_Partial_WithParameterList","partial record struct S(int X);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordStructParsing_Partial_WithParameterList_AndMembers","partial record struct S(int X) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordStructParsing_Readonly","readonly record struct S;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordStructParsing_ReadonlyPartial","readonly partial record struct S;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordStructParsing_Ref","ref record struct S;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordParsing_Ref","ref record R;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordStructParsing_BaseListWithParens","record struct S : Base(1);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RecordParsingTests.RecordStructParsing_BaseListWithParens_WithPositionalParameterList","record struct S(int X) : Base(1);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RefReadonlyTests.RefReadonlyReturn_CSharp7",@"
@@ -2542,7 +2579,7 @@ unsafe class Program
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RefReadonlyTests.InArgs_CSharp7",@"
@@ -2570,7 +2607,7 @@ class Program
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RefReadonlyTests.RefReadonlyReturn_UnexpectedBindTime",@"
@@ -2596,7 +2633,7 @@ class Program
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RefStructs.RefStructSimple",@"
@@ -2608,7 +2645,7 @@ class Program
 }
 ")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("RefStructs.RefStructSimpleLangVer",@"
@@ -2620,511 +2657,516 @@ class Program
 }
 ")
         };
-
+        
+        yield return new object[]
+        {
+            new SourceTestCase("StatementParsingTests.TestName","a();")
+        };
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestDottedName","a.b();")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestGenericName","a<b>();")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestGenericDotName","a<b>.c();")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestDotGenericName","a.b<c>();")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestLocalDeclarationStatement","T a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestLocalDeclarationStatementWithVar","var a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestLocalDeclarationStatementWithTuple","(int, int) a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestLocalDeclarationStatementWithNamedTuple","(T x, (U k, V l, W m) y) a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestLocalDeclarationStatementWithDynamic","dynamic a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestLocalDeclarationStatementWithGenericType","T<a> b;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestLocalDeclarationStatementWithDottedType","T.X.Y a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestLocalDeclarationStatementWithMixedType","T<t>.X<x>.Y<y> a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestLocalDeclarationStatementWithArrayType","T[][,][,,] a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestLocalDeclarationStatementWithPointerType","T* a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestLocalDeclarationStatementWithNullableType","T? a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestLocalDeclarationStatementWithMultipleVariables","T a, b, c;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestLocalDeclarationStatementWithInitializer","T a = b;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestLocalDeclarationStatementWithMultipleVariablesAndInitializers","T a = va, b = vb, c = vc;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestLocalDeclarationStatementWithArrayInitializer","T a = {b, c};")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestConstLocalDeclarationStatement","const T a = b;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestRefLocalDeclarationStatement","ref T a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestRefLocalDeclarationStatementWithInitializer","ref T a = ref b;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestRefLocalDeclarationStatementWithMultipleInitializers","ref T a = ref b, c = ref d;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestFixedStatement","fixed(T a = b) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestFixedVarStatement","fixed(var a = b) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestFixedStatementWithMultipleVariables","fixed(T a = b, c = d) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestEmptyStatement",";")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestLabeledStatement","label: ;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestBreakStatement","break;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestContinueStatement","continue;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestGotoStatement","goto label;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestGotoCaseStatement","goto case label;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestGotoDefault","goto default;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestReturn","return;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestReturnExpression","return a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestYieldReturnExpression","yield return a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestYieldBreakExpression","yield break;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestThrow","throw;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestThrowExpression","throw a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestTryCatch","try { } catch(T e) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestTryCatchWithNoExceptionName","try { } catch(T) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestTryCatchWithNoExceptionDeclaration","try { } catch { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestTryCatchWithMultipleCatches","try { } catch(T e) { } catch(T2) { } catch { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestTryFinally","try { } finally { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestTryCatchWithMultipleCatchesAndFinally","try { } catch(T e) { } catch(T2) { } catch { } finally { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestChecked","checked { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestUnchecked","unchecked { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestUnsafe","unsafe { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestWhile","while(a) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestDoWhile","do { } while (a);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestFor","for(;;) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestForWithVariableDeclaration","for(T a = 0;;) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestForWithVarDeclaration","for(var a = 0;;) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestForWithMultipleVariableDeclarations","for(T a = 0, b = 1;;) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestForWithRefVariableDeclaration","for(ref T a = ref b, c = ref d;;) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestForWithVariableInitializer","for(a = 0;;) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestForWithMultipleVariableInitializers","for(a = 0, b = 1;;) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestForWithCondition","for(; a;) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestForWithIncrementor","for(; ; a++) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestForWithMultipleIncrementors","for(; ; a++, b++) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestForWithDeclarationConditionAndIncrementor","for(T a = 0; a < 10; a++) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestForEach","foreach(T a in b) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestForEachWithVar","foreach(var a in b) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestIf","if (a) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestIfElse","if (a) { } else { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestIfElseIf","if (a) { } else if (b) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestLock","lock (a) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestSwitch","switch (a) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestSwitchWithCase","switch (a) { case b:; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestSwitchWithMultipleCases","switch (a) { case b:; case c:; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestSwitchWithDefaultCase","switch (a) { default:; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestSwitchWithMultipleLabelsOnOneCase","switch (a) { case b: case c:; }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestSwitchWithMultipleStatementsOnOneCase","switch (a) { case b: s1(); s2(); }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestUsingWithExpression","using (a) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestUsingWithDeclaration","using (T a = b) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestUsingVarWithDeclaration","using T a = b;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestUsingWithVarDeclaration","using (var a = b) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestUsingVarWithVarDeclaration","using var a = b;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestAwaitUsingWithVarDeclaration","await using var a = b;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestUsingWithDeclarationWithMultipleVariables","using (T a = b, c = d) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestUsingVarWithDeclarationWithMultipleVariables","using T a = b, c = d;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestUsingSpecialCase1","using (f ? x = a : x = b) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestUsingVarSpecialCase1","using var x = f ? a : b;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestUsingSpecialCase2","using (f ? x = a) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestUsingVarSpecialCase2","using f ? x = a;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestUsingSpecialCase3","using (f ? x, y) { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("StatementParsingTests.TestUsingVarSpecialCase3","using f ? x, y;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.StaticUsingDirectiveRefType",@"using static x = ref int;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectiveNamePointer1",@"using x = A*;
 
 struct A { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectiveNamePointer2",@"using unsafe x = A*;
 
 struct A { }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectiveFunctionPointer1",@"using x = delegate*<int, void>;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectiveFunctionPointer2",@"using unsafe x = delegate*<int, void>;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.UsingUnsafeNonAlias",@"using unsafe System;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectivePredefinedType_CSharp11",@"using x = int;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectivePredefinedType_CSharp12",@"using x = int;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectivePredefinedType_Preview",@"using x = int;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectiveRefType",@"using x = ref int;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectiveRefReadonlyType",@"using x = ref readonly int;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectivePredefinedTypePointer1",@"using x = int*;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectivePredefinedTypePointer2",@"using unsafe x = int*;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectivePredefinedTypePointer3",@"
@@ -3135,7 +3177,7 @@ namespace N
     using Y = X;
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectivePredefinedTypePointer4",@"
@@ -3146,7 +3188,7 @@ namespace N
     using unsafe Y = X;
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectivePredefinedTypePointer5",@"
@@ -3157,7 +3199,7 @@ namespace N
     using unsafe Y = X;
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectivePredefinedTypePointer6",@"
@@ -3168,7 +3210,7 @@ namespace N
     using Y = X[];
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectivePredefinedTypePointer7",@"
@@ -3179,12 +3221,12 @@ namespace N
     using unsafe Y = X[];
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectiveTuple1",@"using x = (int, int);")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectiveTuple2","""
@@ -3196,7 +3238,7 @@ namespace N
             }
             """)
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectiveTuple3","""
@@ -3208,17 +3250,17 @@ namespace N
             }
             """)
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingNullableValueType",@"using x = int?;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingNullableReferenceType1",@"using x = string?;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingNullableReferenceType2","""
@@ -3226,7 +3268,7 @@ namespace N
             using X = string?;
             """)
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingNullableReferenceType3","""
@@ -3237,7 +3279,7 @@ namespace N
             }
             """)
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingNullableReferenceType4","""
@@ -3249,7 +3291,7 @@ namespace N
             }
             """)
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingVoidPointer1",@"using unsafe VP = void*;
@@ -3259,7 +3301,7 @@ class C
     void M(VP vp) { }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingVoidPointer2",@"using unsafe VP = void*;
@@ -3269,7 +3311,7 @@ class C
     unsafe void M(VP vp) { }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingVoidPointer3",@"using VP = void*;
@@ -3279,13 +3321,13 @@ class C
     unsafe void M(VP vp) { }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.UsingDirectiveDynamic1",@"
 using dynamic;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectiveDynamic1",@"
@@ -3299,7 +3341,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectiveDynamic2",@"
@@ -3313,7 +3355,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectiveDynamic3",@"
@@ -3327,7 +3369,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectiveDynamic4",@"
@@ -3341,7 +3383,7 @@ class dynamic
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDirectiveDynamic5",@"
@@ -3356,7 +3398,7 @@ class C
     }
 }")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDuplicate1","""
@@ -3364,7 +3406,7 @@ class C
             using X = System;
             """)
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDuplicate2","""
@@ -3372,7 +3414,7 @@ class C
             using X = int;
             """)
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingDuplicate3","""
@@ -3380,7 +3422,7 @@ class C
             using X = System.Int32;
             """)
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.AliasUsingNotDuplicate1","""
@@ -3389,7 +3431,7 @@ class C
             using X = int;
             """)
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.TestObsolete1","""
@@ -3408,7 +3450,7 @@ class C
             }
             """)
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.TestObsolete2","""
@@ -3427,67 +3469,67 @@ class C
             }
             """)
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.UsingStaticUnsafe_SafeType_CSharp11_NoUnsafeFlag",@"using static unsafe System.Console;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.UsingStaticUnsafe_SafeType_CSharp11_UnsafeFlag",@"using static unsafe System.Console;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.UsingStaticUnsafe_SafeType_CSharp12_NoUnsafeFlag",@"using static unsafe System.Console;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.UsingStaticUnsafe_SafeType_CSharp12_UnsafeFlag",@"using static unsafe System.Console;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.UsingStaticUnsafe_UnsafeType_CSharp11_NoUnsafeFlag",@"using static unsafe System.Collections.Generic.List<int*[]>;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.UsingStaticUnsafe_UnsafeType_CSharp11_UnsafeFlag",@"using static unsafe System.Collections.Generic.List<int*[]>;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.UsingStaticUnsafe_UnsafeType_CSharp12_NoUnsafeFlag",@"using static unsafe System.Collections.Generic.List<int*[]>;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.UsingStaticUnsafe_UnsafeType_CSharp12_UnsafeFlag",@"using static unsafe System.Collections.Generic.List<int*[]>;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.UsingStatic_UnsafeType_CSharp11_NoUnsafeFlag",@"using static System.Collections.Generic.List<int*[]>;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.UsingStatic_UnsafeType_CSharp11_UnsafeFlag",@"using static System.Collections.Generic.List<int*[]>;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.UsingStatic_UnsafeType_CSharp12_NoUnsafeFlag",@"using static System.Collections.Generic.List<int*[]>;")
         };
-
+        
         yield return new object[]
         {
             new SourceTestCase("UsingDirectiveParsingTests.UsingStatic_UnsafeType_CSharp12_UnsafeFlag",@"using static System.Collections.Generic.List<int*[]>;")
         };
-
+        
     }
 
     IEnumerator IEnumerable.GetEnumerator()

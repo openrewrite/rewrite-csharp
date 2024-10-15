@@ -1507,16 +1507,25 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                 .FirstOrDefault(x => x.Markers.Contains<MemberBinding>());
             if (bindingNode != null)
             {
-                var newMarkers = bindingNode.Markers.WithMarkers(bindingNode.Markers.MarkerList.Where(x => x is not MemberBinding).ToList());
+                var newMarkers = bindingNode.Markers
+                    .WithMarkers(bindingNode.Markers.MarkerList.Where(x => x is not MemberBinding).ToList());
                 if (bindingNode is J.MethodInvocation methodNode)
                 {
-                    var newMethod = methodNode.WithSelect(currentExpression).WithMarkers(newMarkers);
+                    var newMethod = methodNode
+                        .WithSelect(currentExpression)
+                        .WithMarkers(newMarkers);
                     lstNode = methodNode.Equals(lstNode) ? newMethod : lstNode.ReplaceNode(methodNode, newMethod);
                 }
                 else if (bindingNode is J.FieldAccess fieldAccess)
                 {
-                    var newFieldAccess = fieldAccess.WithTarget(currentExpression).WithMarkers(newMarkers);;
+                    var newFieldAccess = fieldAccess.WithTarget(currentExpression).WithMarkers(newMarkers);
                     lstNode = fieldAccess.Equals(lstNode) ? newFieldAccess : lstNode.ReplaceNode(fieldAccess, newFieldAccess);
+                } else if (bindingNode is J.ArrayAccess arrayAccess)
+                {
+                    var newArrayAccess = arrayAccess
+                        .WithIndexed(currentExpression)
+                        .WithMarkers(newMarkers);
+                    lstNode = newArrayAccess.Equals(lstNode) ? newArrayAccess : lstNode.ReplaceNode(lstNode, newArrayAccess);
                 }
             }
 
@@ -1546,17 +1555,28 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         // return base.VisitConditionalAccessExpression(node);
     }
 
+
     /// <summary>
     /// Very similar to MemberAccessExpression, but doesn't have an expression portion - just identifier
     /// Used in ConditionalAccessExpression since they are constructed left to right, then right to left like normal field access
     /// </summary>
     public override J? VisitMemberBindingExpression(MemberBindingExpressionSyntax node)
     {
+        return new J.FieldAccess(
+            Core.Tree.RandomId(),
+            Format(Leading(node)),
+            Markers.Create(new MemberBinding()),
+            Convert<Expression>(node.Name)!,
+            Convert<J.Identifier>(node.Name)!.AsLeftPadded(Format(Leading(node.OperatorToken))),
+            MapType(node)
+        );
+    }
 
-
-        // due to the fact that the `ConditionalAccessExpressionSyntax` is at the root of an expression like `foo?.Bar.Baz`
-        // we need to find that root here, as the containment hierarchy using `J.FieldAccess` and `Cs.NullSafeExpression`
-        // ends up being very different
+    public override J? VisitElementBindingExpression(ElementBindingExpressionSyntax node)
+    {
+        // // due to the fact that the `ConditionalAccessExpressionSyntax` is at the root of an expression like `foo?.Bar.Baz`
+        // // we need to find that root here, as the containment hierarchy using `J.FieldAccess` and `Cs.NullSafeExpression`
+        // // ends up being very different
         // ExpressionSyntax? parent = node;
         // while (parent is not ConditionalAccessExpressionSyntax)
         //     if ((parent = parent.Parent as ExpressionSyntax) == null)
@@ -1575,53 +1595,34 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         //     )
         // );
 
-        return new J.FieldAccess(
+        var placeholderExpression = new J.Empty(
             Core.Tree.RandomId(),
             Format(Leading(node)),
-            new Markers(
-                Core.Tree.RandomId(),
-                new List<Core.Marker.Marker>
-                {
-                    new MemberBinding(Core.Tree.RandomId())
-                }),
-            Convert<Expression>(node.Name)!,
-            new JLeftPadded<J.Identifier>(
-                Format(Leading(node.OperatorToken)),
-                Convert<J.Identifier>(node.Name)!,
-                Markers.EMPTY
-            ),
-            MapType(node)
-        );
-    }
+            Markers.Create(new MemberBinding()));
 
-    public override J? VisitElementBindingExpression(ElementBindingExpressionSyntax node)
-    {
-        // due to the fact that the `ConditionalAccessExpressionSyntax` is at the root of an expression like `foo?.Bar.Baz`
-        // we need to find that root here, as the containment hierarchy using `J.FieldAccess` and `Cs.NullSafeExpression`
-        // ends up being very different
-        ExpressionSyntax? parent = node;
-        while (parent is not ConditionalAccessExpressionSyntax)
-            if ((parent = parent.Parent as ExpressionSyntax) == null)
-                throw new InvalidOperationException(
-                    "Cannot find a `ConditionalAccessExpressionSyntax` in the containment hierarchy.");
-
-        var conditionalAccess = (ConditionalAccessExpressionSyntax)parent;
-        var lhs = new Cs.NullSafeExpression(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new JRightPadded<Expression>(
-                Convert<Expression>(conditionalAccess.Expression)!,
-                Format(Leading(conditionalAccess.OperatorToken)),
-                Markers.EMPTY
-            )
-        );
+        // return new J.FieldAccess(
+        //     Core.Tree.RandomId(),
+        //     Format(Leading(node)),
+        //     new Markers(
+        //         Core.Tree.RandomId(),
+        //         new List<Core.Marker.Marker>
+        //         {
+        //             new MemberBinding(Core.Tree.RandomId())
+        //         }),
+        //     Convert<Expression>(node.Name)!,
+        //     new JLeftPadded<J.Identifier>(
+        //         Format(Leading(node.OperatorToken)),
+        //         Convert<J.Identifier>(node.Name)!,
+        //         Markers.EMPTY
+        //     ),
+        //     MapType(node)
+        // );
 
         return new J.ArrayAccess(
             Core.Tree.RandomId(),
             Format(Leading(node)),
             Markers.EMPTY,
-            lhs,
+            placeholderExpression,
             new J.ArrayDimension(
                 Core.Tree.RandomId(),
                 Format(Leading(node.ArgumentList.OpenBracketToken)),

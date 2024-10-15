@@ -12,6 +12,32 @@ using static Assertions;
 [Exploratory]
 public class PlayTests(ITestOutputHelper _output) : RewriteTest
 {
+    /// <summary>
+    /// Some pretty print tests for string delta report
+    /// </summary>
+    [Theory]
+    [Exploratory]
+    [InlineData("abc\n123","abc123")]
+    [InlineData("abc123","abc134")]
+    [InlineData("""
+                one
+                two
+                three
+                four
+                NOT five
+                """,
+        """
+        one
+        two
+        four
+        five
+        six
+        """)]
+    public void Delta(string before, string after)
+    {
+        after.ShouldBeSameAs(before);
+    }
+
     [Fact]
     public void MyTest()
     {

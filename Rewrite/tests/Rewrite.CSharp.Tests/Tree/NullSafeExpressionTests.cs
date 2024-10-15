@@ -73,6 +73,23 @@ public class NullSafeExpressionTests : RewriteTest
     }
 
     [Fact]
+    public void NullSafeArrayAccess()
+    {
+        var src = CSharp(
+            """
+            public class Foo
+            {
+                public object M()
+                {
+                    a?.b?[0]?.c
+                }
+            }
+            """);
+        var lst = src.Parse().First();
+
+    }
+
+    [Fact]
     public void SequentialFieldAccess()
     {
         RewriteRun(

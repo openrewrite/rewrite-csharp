@@ -22,29 +22,6 @@ public class ParseTests : RewriteTest
         _parser = new CSharpParser.Builder().Build();
     }
 
-    [Theory]
-    [Exploratory]
-    [InlineData("abc\n123","abc123")]
-    [InlineData("abc123","abc134")]
-    [InlineData("""
-                one
-                two
-                three
-                four
-                NOT five
-                """,
-                """
-                one
-                two
-                four
-                five
-                six
-                """)]
-    public void Delta(string before, string after)
-    {
-        after.ShouldBeSameAs(before);
-    }
-
     [Fact]
     [Exploratory]
     public void TestReport()
@@ -58,7 +35,6 @@ public class ParseTests : RewriteTest
             if (roslynDiagnostics.Any())
             {
                 badTestCases.Add((testCase,roslynDiagnostics));
-                // report.Add(testCase.Fail("Original.Parse.RoslynIssues"));
                 continue;
             }
 
@@ -111,11 +87,11 @@ public class ParseTests : RewriteTest
             _output.WriteLine($"    {failureReason}: {count}");
         }
 
+        _output.WriteLine("The following input testcases were skipped because they are not a fully valid syntax");
         foreach (var (testCase, diagnostics) in badTestCases)
         {
             _output.WriteLine($"\"{testCase.Name}\",");
-            // _output.WriteLine(testCase.SourceText);
-            // _output.WriteLine(string.Join("\n", diagnostics.Select(x => x.ToString())));
+            _output.WriteLine(diagnostics.Select(x => x.GetMessage()).FirstOrDefault());
         }
     }
 
