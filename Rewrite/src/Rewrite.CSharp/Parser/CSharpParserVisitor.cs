@@ -1574,54 +1574,18 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitElementBindingExpression(ElementBindingExpressionSyntax node)
     {
-        // // due to the fact that the `ConditionalAccessExpressionSyntax` is at the root of an expression like `foo?.Bar.Baz`
-        // // we need to find that root here, as the containment hierarchy using `J.FieldAccess` and `Cs.NullSafeExpression`
-        // // ends up being very different
-        // ExpressionSyntax? parent = node;
-        // while (parent is not ConditionalAccessExpressionSyntax)
-        //     if ((parent = parent.Parent as ExpressionSyntax) == null)
-        //         throw new InvalidOperationException(
-        //             "Cannot find a `ConditionalAccessExpressionSyntax` in the containment hierarchy.");
-        //
-        // var conditionalAccess = (ConditionalAccessExpressionSyntax)parent;
-        // var lhs = new Cs.NullSafeExpression(
-        //     Core.Tree.RandomId(),
-        //     Format(Leading(node)),
-        //     Markers.EMPTY,
-        //     new JRightPadded<Expression>(
-        //         Convert<Expression>(conditionalAccess.Expression)!,
-        //         Format(Leading(conditionalAccess.OperatorToken)),
-        //         Markers.EMPTY
-        //     )
-        // );
+
 
         var placeholderExpression = new J.Empty(
             Core.Tree.RandomId(),
             Format(Leading(node)),
-            Markers.Create(new MemberBinding()));
+            Markers.EMPTY);
 
-        // return new J.FieldAccess(
-        //     Core.Tree.RandomId(),
-        //     Format(Leading(node)),
-        //     new Markers(
-        //         Core.Tree.RandomId(),
-        //         new List<Core.Marker.Marker>
-        //         {
-        //             new MemberBinding(Core.Tree.RandomId())
-        //         }),
-        //     Convert<Expression>(node.Name)!,
-        //     new JLeftPadded<J.Identifier>(
-        //         Format(Leading(node.OperatorToken)),
-        //         Convert<J.Identifier>(node.Name)!,
-        //         Markers.EMPTY
-        //     ),
-        //     MapType(node)
-        // );
 
         return new J.ArrayAccess(
             Core.Tree.RandomId(),
             Format(Leading(node)),
-            Markers.EMPTY,
+            Markers.Create(new MemberBinding()),
             placeholderExpression,
             new J.ArrayDimension(
                 Core.Tree.RandomId(),
