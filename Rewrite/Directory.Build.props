@@ -9,7 +9,7 @@
         <Company>Moderne Inc.</Company>
         <PackageIcon>openrewrite.png</PackageIcon>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <VersionPrefix>0.9.2</VersionPrefix>
+        <VersionPrefix>0.9.3</VersionPrefix>
         <RewriteRemoteDir Condition="'$(RewriteRemoteDir)'==''">..\..\..\..\..\moderneinc\rewrite-remote\Rewrite.Remote</RewriteRemoteDir>
         <RemotePrinter>True</RemotePrinter>
         <DebugVisitor>False</DebugVisitor>
@@ -17,10 +17,10 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(RELEASE_PUBLICATION)'!=''">
-        <RewriteRemoteVersion>0.9.6</RewriteRemoteVersion>
+        <RewriteRemoteVersion>0.9.7</RewriteRemoteVersion>
     </PropertyGroup>
     <PropertyGroup Condition="'$(RELEASE_PUBLICATION)'==''">
-        <RewriteRemoteVersion>0.9.6</RewriteRemoteVersion>
+        <RewriteRemoteVersion>0.9.7</RewriteRemoteVersion>
     </PropertyGroup>
 
     <Import Project="Directory.Build.props.user" Condition="Exists('Directory.Build.props.user')"/>
