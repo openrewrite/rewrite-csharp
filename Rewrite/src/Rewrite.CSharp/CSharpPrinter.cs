@@ -126,6 +126,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         return methodDeclaration;
     }
 
+
     public override J? VisitAnnotatedStatement(Cs.AnnotatedStatement annotatedStatement, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(annotatedStatement, CsSpace.Location.ANNOTATED_STATEMENT_PREFIX, p);
@@ -659,7 +660,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
 
                 VisitSpace(block.End, Space.Location.BLOCK_END, p);
             }
-            else if (!block.Markers.OfType<OmitBraces>().Any() || block.Statements.Any())
+            else if (block.Markers.FirstOrDefault(m => m is OmitBraces) == null)
             {
                 p.Append('{');
                 VisitStatements(block.Padding.Statements, JRightPadded.Location.BLOCK_STATEMENT, p);
