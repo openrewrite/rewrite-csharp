@@ -100,7 +100,6 @@ public class ClassDeclarationTests : RewriteTest
     }
 
     [Fact]
-    [KnownBug]
     public void TypeParameterWithTypeConstraint()
     {
         RewriteRun(
@@ -113,26 +112,26 @@ public class ClassDeclarationTests : RewriteTest
     }
 
     [Fact]
-    [KnownBug]
     public void TypeParameterWithClassConstraint()
     {
+        var src = CSharp(
+            """
+            class Foo<T> where T : class;
+            """
+        );
+        var lst = src.First().Parse<Cs.CompilationUnit>();
         RewriteRun(
-            CSharp(
-                """
-                class Foo<T> where T : class;
-                """
-            )
+            src
         );
     }
 
     [Fact]
-    [KnownBug]
-    public void TypeParameterWithEnumConstraint()
+    public void TypeParameterWithStructConstraint()
     {
         RewriteRun(
             CSharp(
                 """
-                class Foo<T> where T : enum;
+                class Foo<T> where T : struct;
                 """
             )
         );

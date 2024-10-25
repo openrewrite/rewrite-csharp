@@ -11,7 +11,6 @@ using static Assertions;
 public class NullSafeExpressionTests : RewriteTest
 {
     [Fact]
-    [KnownBug]
     public void Space()
     {
         RewriteRun(

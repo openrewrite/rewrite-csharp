@@ -3,6 +3,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+      <WarningsNotAsErrors>CS0618</WarningsNotAsErrors>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
     <PropertyGroup>
@@ -17,10 +18,10 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(RELEASE_PUBLICATION)'!=''">
-        <RewriteRemoteVersion>0.9.7</RewriteRemoteVersion>
+        <RewriteRemoteVersion>0.9.10</RewriteRemoteVersion>
     </PropertyGroup>
     <PropertyGroup Condition="'$(RELEASE_PUBLICATION)'==''">
-        <RewriteRemoteVersion>0.9.7</RewriteRemoteVersion>
+        <RewriteRemoteVersion>0.9.10</RewriteRemoteVersion>
     </PropertyGroup>
 
     <Import Project="Directory.Build.props.user" Condition="Exists('Directory.Build.props.user')"/>

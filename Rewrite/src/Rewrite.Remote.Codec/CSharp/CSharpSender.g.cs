@@ -259,6 +259,87 @@ public record CSharpSender : Sender
             return lambda;
         }
 
+        public override J VisitClassDeclaration(Cs.ClassDeclaration classDeclaration, SenderContext ctx)
+        {
+            ctx.SendValue(classDeclaration, v => v.Id);
+            ctx.SendNode(classDeclaration, v => v.Prefix, SendSpace);
+            ctx.SendNode(classDeclaration, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(classDeclaration, v => v.ClassDeclarationCore, ctx.SendTree);
+            ctx.SendNode(classDeclaration, v => v.Padding.TypeParameterConstraintClauses, SendContainer);
+            return classDeclaration;
+        }
+
+        public override J VisitMethodDeclaration(Cs.MethodDeclaration methodDeclaration, SenderContext ctx)
+        {
+            ctx.SendValue(methodDeclaration, v => v.Id);
+            ctx.SendNode(methodDeclaration, v => v.Prefix, SendSpace);
+            ctx.SendNode(methodDeclaration, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(methodDeclaration, v => v.MethodDeclarationCore, ctx.SendTree);
+            ctx.SendNode(methodDeclaration, v => v.Padding.TypeParameterConstraintClauses, SendContainer);
+            return methodDeclaration;
+        }
+
+        public override J VisitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, SenderContext ctx)
+        {
+            ctx.SendValue(typeParameterConstraintClause, v => v.Id);
+            ctx.SendNode(typeParameterConstraintClause, v => v.Prefix, SendSpace);
+            ctx.SendNode(typeParameterConstraintClause, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(typeParameterConstraintClause, v => v.Padding.TypeParameter, SendRightPadded);
+            ctx.SendNode(typeParameterConstraintClause, v => v.Padding.TypeParameterConstraints, SendContainer);
+            return typeParameterConstraintClause;
+        }
+
+        public override J VisitTypeConstraint(Cs.TypeConstraint typeConstraint, SenderContext ctx)
+        {
+            ctx.SendValue(typeConstraint, v => v.Id);
+            ctx.SendNode(typeConstraint, v => v.Prefix, SendSpace);
+            ctx.SendNode(typeConstraint, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(typeConstraint, v => v.TypeExpression, ctx.SendTree);
+            return typeConstraint;
+        }
+
+        public override J VisitAllowsConstraintClause(Cs.AllowsConstraintClause allowsConstraintClause, SenderContext ctx)
+        {
+            ctx.SendValue(allowsConstraintClause, v => v.Id);
+            ctx.SendNode(allowsConstraintClause, v => v.Prefix, SendSpace);
+            ctx.SendNode(allowsConstraintClause, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(allowsConstraintClause, v => v.Padding.Expressions, SendContainer);
+            return allowsConstraintClause;
+        }
+
+        public override J VisitRefStructConstraint(Cs.RefStructConstraint refStructConstraint, SenderContext ctx)
+        {
+            ctx.SendValue(refStructConstraint, v => v.Id);
+            ctx.SendNode(refStructConstraint, v => v.Prefix, SendSpace);
+            ctx.SendNode(refStructConstraint, v => v.Markers, ctx.SendMarkers);
+            return refStructConstraint;
+        }
+
+        public override J VisitClassOrStructConstraint(Cs.ClassOrStructConstraint classOrStructConstraint, SenderContext ctx)
+        {
+            ctx.SendValue(classOrStructConstraint, v => v.Id);
+            ctx.SendNode(classOrStructConstraint, v => v.Prefix, SendSpace);
+            ctx.SendNode(classOrStructConstraint, v => v.Markers, ctx.SendMarkers);
+            ctx.SendValue(classOrStructConstraint, v => v.Kind);
+            return classOrStructConstraint;
+        }
+
+        public override J VisitConstructorConstraint(Cs.ConstructorConstraint constructorConstraint, SenderContext ctx)
+        {
+            ctx.SendValue(constructorConstraint, v => v.Id);
+            ctx.SendNode(constructorConstraint, v => v.Prefix, SendSpace);
+            ctx.SendNode(constructorConstraint, v => v.Markers, ctx.SendMarkers);
+            return constructorConstraint;
+        }
+
+        public override J VisitDefaultConstraint(Cs.DefaultConstraint defaultConstraint, SenderContext ctx)
+        {
+            ctx.SendValue(defaultConstraint, v => v.Id);
+            ctx.SendNode(defaultConstraint, v => v.Prefix, SendSpace);
+            ctx.SendNode(defaultConstraint, v => v.Markers, ctx.SendMarkers);
+            return defaultConstraint;
+        }
+
         public override J VisitAnnotatedType(J.AnnotatedType annotatedType, SenderContext ctx)
         {
             ctx.SendValue(annotatedType, v => v.Id);

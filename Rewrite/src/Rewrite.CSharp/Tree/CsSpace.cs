@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Rewrite.RewriteJava.Tree;
 
 namespace Rewrite.RewriteCSharp.Tree;
 
@@ -7,6 +8,25 @@ public interface CsSpace
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public record Location
     {
+        public static readonly Location TYPE_PARAMETERS_CONSTRAINT_PREFIX = new();
+        public static readonly Location TYPE_PARAMETERS_CONSTRAINT_CLAUSE_PREFIX = new();
+        public static readonly Location METHOD_DECLARATION_PREFIX = new();
+        public static readonly Location METHOD_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES = new();
+        public static readonly Location REF_STRUCT_CONSTRAINT_PREFIX = new();
+        public static readonly Location ALLOWS_CONSTRAINT_CLAUSE_EXPRESSIONS = new();
+        public static readonly Location ALLOWS_CONSTRAINT_CLAUSE_PREFIX = new();
+        public static readonly Location DEFAULT_CONSTRAINT_PREFIX = new();
+        public static readonly Location CONSTRUCTOR_CONSTRAINT_PREFIX = new();
+        public static readonly Location TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER_CONSTRAINTS = new();
+        public static readonly Location CLASS_OR_STRUCT_CONSTRAINT_PREFIX = new();
+        public static readonly Location ALLOWS_CONSTRAINT_EXPRESSIONS = new();
+        public static readonly Location ALLOWS_CONSTRAINT_PREFIX = new();
+        public static readonly Location TYPE_CONSTRAINT_PREFIX = new();
+        public static readonly Location TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_CONSTRAINTS = new();
+        public static readonly Location TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER = new();
+        public static readonly Location TYPE_PARAMETER_CONSTRAINT_CLAUSE_PREFIX = new();
+        public static readonly Location CLASS_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES = new();
+        public static readonly Location CLASS_DECLARATION_PREFIX = new();
         public static readonly Location NAMED_ARGUMENT_NAME_COLUMN_SUFFIX = new();
         public static readonly Location NAMED_ARGUMENT_PREFIX = new();
         public static readonly Location ANNOTATED_STATEMENT_PREFIX = new();

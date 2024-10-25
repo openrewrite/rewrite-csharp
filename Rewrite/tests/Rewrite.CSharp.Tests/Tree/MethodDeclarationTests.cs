@@ -25,8 +25,7 @@ public class MethodDeclarationTests : RewriteTest
                 """,
                 spec => spec.AfterRecipe = cu =>
                 {
-                    var cd = (cu.Members[0] as J.ClassDeclaration)!;
-                    var ctor = (cd.Body.Statements[0] as J.MethodDeclaration)!;
+                    var ctor = cu.Descendents().OfType<J.MethodDeclaration>().First();
                     ctor.Parameters.Should().HaveCount(1);
                     ctor.Modifiers.Should().BeEmpty();
                     ctor.Body.Should().NotBeNull();
@@ -71,8 +70,7 @@ public class MethodDeclarationTests : RewriteTest
                 """,
                 spec => spec.AfterRecipe = cu =>
                 {
-                    var cd = (cu.Members[0] as J.ClassDeclaration)!;
-                    var ctor = (cd.Body.Statements[0] as J.MethodDeclaration)!;
+                    var ctor = cu.Descendents().OfType<J.MethodDeclaration>().First();
                     ctor.Modifiers.Should().Contain(m => m.ModifierType == J.Modifier.Type.Static);
                 }
             )
@@ -112,8 +110,7 @@ public class MethodDeclarationTests : RewriteTest
                 """,
                 spec => spec.AfterRecipe = cu =>
                 {
-                    var cd = (cu.Members[0] as J.ClassDeclaration)!;
-                    var ctor = (cd.Body.Statements[0] as J.MethodDeclaration)!;
+                    var ctor = cu.Descendents().OfType<J.MethodDeclaration>().First();
                     ctor.Parameters.Should().HaveCount(1);
                     var vd = (ctor.Parameters[0] as J.VariableDeclarations)!;
                     vd.Variables.Should().HaveCount(1);
@@ -173,6 +170,7 @@ public class MethodDeclarationTests : RewriteTest
             )
         );
     }
+
 
     [Fact]
     public void ArrowLocalFunctionDeclaration()
@@ -238,14 +236,13 @@ public class MethodDeclarationTests : RewriteTest
     }
 
     [Fact]
-    [KnownBug]
     void GenericMethodDeclarationWithSingleTypeConstraint()
     {
         RewriteRun(
             CSharp(
                 """
                 class Test {
-                    void Method<T>() where T : System.String
+                    void Method<T>() where T : System.String;
                 }
                 """
             )
@@ -255,44 +252,28 @@ public class MethodDeclarationTests : RewriteTest
 
 
     [Fact]
-    [KnownBug]
     public void GenericMethodDeclarationWithClassConstraint()
     {
         RewriteRun(
             CSharp(
                 """
                 class Test {
-                    void Method<T>() where T : class
+                    void Method<T>() where T : class;
                 }
                 """
             )
         );
     }
 
-    [Fact]
-    [KnownBug]
-    public void GenericMethodDeclarationWithEnumConstraint()
-    {
-        RewriteRun(
-            CSharp(
-                """
-                class Test {
-                    void Method<T>() where T : enum
-                }
-                """
-            )
-        );
-    }
 
     [Fact]
-    [KnownBug]
     public void GenericMethodDeclarationWithNewConstraint()
     {
         RewriteRun(
             CSharp(
                 """
                 class Test {
-                    void Method<T>() where T : new()
+                    void Method<T>() where T : new();
                 }
                 """
             )
@@ -300,7 +281,6 @@ public class MethodDeclarationTests : RewriteTest
     }
 
     [Fact]
-    [KnownBug]
     public void TypeParameterWithMultipleConstraints()
     {
         RewriteRun(

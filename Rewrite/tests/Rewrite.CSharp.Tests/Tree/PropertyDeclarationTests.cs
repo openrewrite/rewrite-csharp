@@ -142,6 +142,20 @@ public class PropertyDeclarationTests : RewriteTest
         RewriteRun(sourceSpec);
     }
 
+    [Fact]
+    [KnownBug]
+    void UnaryExpressionProperty()
+    {
+        var sourceSpec = CSharp(
+            """
+            class Test
+            {
+                static bool Is64Bit => true;
+            }
+            """).First();
+        RewriteRun(sourceSpec);
+    }
+
     //
 
 }

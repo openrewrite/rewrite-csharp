@@ -35,7 +35,7 @@ public class InterfaceDeclarationTests : RewriteTest
                 ",
                 spec => spec.AfterRecipe = cu =>
                 {
-                    var bar = (cu.Members.Last() as J.ClassDeclaration)!;
+                    var bar = cu.Descendents().OfType<J.ClassDeclaration>().First(x => x.Name == "Baz");
                     bar.GetKind().Should().Be(J.ClassDeclaration.Kind.Type.Interface);
                     bar.Extends.Should().BeNull();
                     bar.Implements.Should().NotBeNull();
@@ -56,7 +56,7 @@ public class InterfaceDeclarationTests : RewriteTest
                 ",
                 spec => spec.AfterRecipe = cu =>
                 {
-                    var bar = (cu.Members.Last() as J.ClassDeclaration)!;
+                    var bar = cu.Descendents().OfType<J.ClassDeclaration>().First(x => x.Name == "Baz");
                     bar.GetKind().Should().Be(J.ClassDeclaration.Kind.Type.Interface);
                     bar.Extends.Should().BeNull();
                     bar.Implements.Should().NotBeNull();

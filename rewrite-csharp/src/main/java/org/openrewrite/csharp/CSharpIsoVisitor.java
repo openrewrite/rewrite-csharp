@@ -136,6 +136,51 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     }
 
     @Override
+    public Cs.ClassDeclaration visitClassDeclaration(Cs.ClassDeclaration classDeclaration, P p) {
+        return (Cs.ClassDeclaration) super.visitClassDeclaration(classDeclaration, p);
+    }
+
+    @Override
+    public Cs.MethodDeclaration visitMethodDeclaration(Cs.MethodDeclaration methodDeclaration, P p) {
+        return (Cs.MethodDeclaration) super.visitMethodDeclaration(methodDeclaration, p);
+    }
+
+    @Override
+    public Cs.TypeParameterConstraintClause visitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, P p) {
+        return (Cs.TypeParameterConstraintClause) super.visitTypeParameterConstraintClause(typeParameterConstraintClause, p);
+    }
+
+    @Override
+    public Cs.TypeConstraint visitTypeConstraint(Cs.TypeConstraint typeConstraint, P p) {
+        return (Cs.TypeConstraint) super.visitTypeConstraint(typeConstraint, p);
+    }
+
+    @Override
+    public Cs.AllowsConstraintClause visitAllowsConstraintClause(Cs.AllowsConstraintClause allowsConstraintClause, P p) {
+        return (Cs.AllowsConstraintClause) super.visitAllowsConstraintClause(allowsConstraintClause, p);
+    }
+
+    @Override
+    public Cs.RefStructConstraint visitRefStructConstraint(Cs.RefStructConstraint refStructConstraint, P p) {
+        return (Cs.RefStructConstraint) super.visitRefStructConstraint(refStructConstraint, p);
+    }
+
+    @Override
+    public Cs.ClassOrStructConstraint visitClassOrStructConstraint(Cs.ClassOrStructConstraint classOrStructConstraint, P p) {
+        return (Cs.ClassOrStructConstraint) super.visitClassOrStructConstraint(classOrStructConstraint, p);
+    }
+
+    @Override
+    public Cs.ConstructorConstraint visitConstructorConstraint(Cs.ConstructorConstraint constructorConstraint, P p) {
+        return (Cs.ConstructorConstraint) super.visitConstructorConstraint(constructorConstraint, p);
+    }
+
+    @Override
+    public Cs.DefaultConstraint visitDefaultConstraint(Cs.DefaultConstraint defaultConstraint, P p) {
+        return (Cs.DefaultConstraint) super.visitDefaultConstraint(defaultConstraint, p);
+    }
+
+    @Override
     public J.AnnotatedType visitAnnotatedType(J.AnnotatedType annotatedType, P p) {
         return (J.AnnotatedType) super.visitAnnotatedType(annotatedType, p);
     }

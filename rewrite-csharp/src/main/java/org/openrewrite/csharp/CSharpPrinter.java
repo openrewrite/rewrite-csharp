@@ -79,6 +79,24 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     }
 
     @Override
+    public J visitClassDeclaration(Cs.ClassDeclaration classDeclaration, PrintOutputCapture<P> p)
+    {
+        delegate.visitClassDeclaration(classDeclaration.getClassDeclarationCore(), p);
+        return classDeclaration;
+    }
+
+    @Override
+    public J visitMethodDeclaration(Cs.MethodDeclaration methodDeclaration, PrintOutputCapture<P> p)
+    {
+        super.visitMethodDeclaration(methodDeclaration, p);
+        if (methodDeclaration.getMethodDeclarationCore().getBody() == null)
+        {
+            p.append(";");
+        }
+        return methodDeclaration;
+    }
+
+    @Override
     public J visitAnnotatedStatement(Cs.AnnotatedStatement annotatedStatement, PrintOutputCapture<P> p) {
         beforeSyntax(annotatedStatement, CsSpace.Location.ANNOTATED_STATEMENT_PREFIX, p);
         for (Cs.AttributeList attributeList : annotatedStatement.getAttributeLists()) {
@@ -395,6 +413,42 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         delegate.printStatementTerminator(paddedStat.getElement(), p);
     }
 
+    @Override
+    public J visitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, PrintOutputCapture<P> p)
+    {
+        beforeSyntax(typeParameterConstraintClause, CsSpace.Location.TYPE_PARAMETERS_CONSTRAINT_CLAUSE_PREFIX, p);
+        p.append("where");
+        visitRightPadded(typeParameterConstraintClause.getPadding().getTypeParameter(), CsRightPadded.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER,  p);
+        p.append(":");
+        visitContainer("", typeParameterConstraintClause.getPadding().getTypeParameterConstraints(), CsContainer.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_CONSTRAINTS, ",", "", p);
+        afterSyntax(typeParameterConstraintClause, p);
+        return typeParameterConstraintClause;
+    }
+
+    @Override
+    public J visitClassOrStructConstraint(Cs.ClassOrStructConstraint classOrStructConstraint, PrintOutputCapture<P> p)
+    {
+        beforeSyntax(classOrStructConstraint, CsSpace.Location.TYPE_PARAMETERS_CONSTRAINT_PREFIX, p);
+        p.append(classOrStructConstraint.getKind().equals(Cs.ClassOrStructConstraint.TypeKind.Class) ? "class" : "struct");
+        return classOrStructConstraint;
+    }
+
+    @Override
+    public J visitConstructorConstraint(Cs.ConstructorConstraint constructorConstraint, PrintOutputCapture<P> p)
+    {
+        beforeSyntax(constructorConstraint, CsSpace.Location.TYPE_PARAMETERS_CONSTRAINT_PREFIX, p);
+        p.append("new()");
+        return constructorConstraint;
+    }
+
+    @Override
+    public J visitDefaultConstraint(Cs.DefaultConstraint defaultConstraint, PrintOutputCapture<P> p)
+    {
+        beforeSyntax(defaultConstraint, CsSpace.Location.TYPE_PARAMETERS_CONSTRAINT_PREFIX, p);
+        p.append("default");
+        return defaultConstraint;
+    }
+
     private class CSharpJavaPrinter extends JavaPrinter<P> {
         @Override
         public J visit(@Nullable Tree tree, PrintOutputCapture<P> p) {
@@ -408,6 +462,8 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
 
         @Override
         public J visitClassDeclaration(J.ClassDeclaration classDecl, PrintOutputCapture<P> p) {
+            J csParent = CSharpPrinter.this.getCursor().getValue();
+            Cs.ClassDeclaration csClassDeclaration = csParent instanceof Cs.ClassDeclaration ? (Cs.ClassDeclaration) csParent : null;
             String kind = "";
             switch (classDecl.getPadding().getKind().getType()) {
                 case Class:
@@ -444,6 +500,12 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
             visitContainer(classDecl.getPadding().getExtends() == null ? ":" : ",",
                     classDecl.getPadding().getImplements(), JContainer.Location.IMPLEMENTS, ",", null, p);
             visitContainer("permits", classDecl.getPadding().getPermits(), JContainer.Location.PERMITS, ",", null, p);
+            if(csClassDeclaration != null) {
+                for (Cs.TypeParameterConstraintClause typeParameterClause : csClassDeclaration.getTypeParameterConstraintClauses())
+                {
+                    CSharpPrinter.this.visitTypeParameterConstraintClause(typeParameterClause, p);
+                }
+            }
             visit(classDecl.getBody(), p);
             afterSyntax(classDecl, p);
             return classDecl;
@@ -470,6 +532,10 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
             if (block.getMarkers().findFirst(SingleExpressionBlock.class).isPresent()) {
                 p.append("=>");
                 visitStatements(block.getPadding().getStatements(), JRightPadded.Location.BLOCK_STATEMENT, p);
+                if (!(block.getStatements().get(0) instanceof Cs.ExpressionStatement)) // expression statements print their own semicolon
+                {
+                    p.append(";");
+                }
                 visitSpace(block.getEnd(), Space.Location.BLOCK_END, p);
             } else if (!block.getMarkers().findFirst(OmitBraces.class).isPresent()) {
                 p.append('{');
@@ -477,7 +543,12 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
                 visitSpace(block.getEnd(), Space.Location.BLOCK_END, p);
                 p.append('}');
             } else {
-                visitStatements(block.getPadding().getStatements(), JRightPadded.Location.BLOCK_STATEMENT, p);
+                if (!block.getStatements().isEmpty()) {
+                    visitStatements(block.getPadding().getStatements(), JRightPadded.Location.BLOCK_STATEMENT, p);
+                }
+                else {
+                    p.append(";");
+                }
                 visitSpace(block.getEnd(), Space.Location.BLOCK_END, p);
             }
 
@@ -711,15 +782,9 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
                 // do nothing, comma is printed at the block level
             } else if (s instanceof Cs.ExpressionStatement || s instanceof Cs.AssignmentOperation) {
                 p.append(';');
-            } else if (s instanceof Cs.PropertyDeclaration && (((Cs.PropertyDeclaration) s).getInitializer() != null || ((Cs.PropertyDeclaration) s).getAccessors().getMarkers().findFirst(SingleExpressionBlock.class).isPresent())) {
+            } else if (s instanceof Cs.PropertyDeclaration && (((Cs.PropertyDeclaration) s).getInitializer() != null)) {
                 p.append(';');
-            } else if (s instanceof J.ClassDeclaration && ((J.ClassDeclaration) s).getBody().getMarkers().findFirst(OmitBraces.class).isPresent()) {
-                // class declaration without braces always require a semicolon
-                p.append(';');
-            } else if (s instanceof Cs.AnnotatedStatement && ((Cs.AnnotatedStatement) s).getStatement() instanceof J.ClassDeclaration &&
-                       ((J.ClassDeclaration) ((Cs.AnnotatedStatement) s).getStatement()).getBody().getMarkers().findFirst(OmitBraces.class).isPresent()) {
-                // class declaration without braces always require a semicolon
-                p.append(';');
+
             } else {
                 super.printStatementTerminator(s, p);
             }

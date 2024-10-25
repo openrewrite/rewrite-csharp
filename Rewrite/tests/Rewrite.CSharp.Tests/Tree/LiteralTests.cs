@@ -80,7 +80,7 @@ public class LiteralTests : RewriteTest
                 """,
                 spec: spec => spec.AfterRecipe = cu =>
                 {
-                    var o = (J.VariableDeclarations)((J.ClassDeclaration)cu.Members[0]).Body.Statements[0];
+                    var o = cu.Descendents().OfType<J.VariableDeclarations>().First();
                     o.Should().NotBeNull();
                     var nullLiteral = (J.Literal)o.Variables[0].Initializer!;
                     nullLiteral.Type.Should().BeOfType<JavaType.Primitive>();

@@ -77,9 +77,7 @@ public class TryTests : RewriteTest
                 ",
                 spec => spec.AfterRecipe = cu =>
                 {
-                    var cd = (cu.Members[0] as J.ClassDeclaration)!;
-                    var md = (cd.Body.Statements[0] as J.MethodDeclaration)!;
-                    var @try = (md.Body!.Statements[0] as J.Try)!;
+                    var @try = cu.Descendents().OfType<J.Try>().First();
                     var vd = @try.Catches[0].Parameter.Tree;
                     vd.TypeExpression.Should().NotBeNull();
                     vd.Variables.Should().BeEmpty();
@@ -109,9 +107,7 @@ public class TryTests : RewriteTest
                 ",
                 spec => spec.AfterRecipe = cu =>
                 {
-                    var cd = (cu.Members[0] as J.ClassDeclaration)!;
-                    var md = (cd.Body.Statements[0] as J.MethodDeclaration)!;
-                    var @try = (md.Body!.Statements[0] as J.Try)!;
+                    var @try = cu.Descendents().OfType<J.Try>().First();
                     var vd = @try.Catches[0].Parameter.Tree;
                     vd.TypeExpression.Should().BeNull();
                     vd.Variables.Should().BeEmpty();

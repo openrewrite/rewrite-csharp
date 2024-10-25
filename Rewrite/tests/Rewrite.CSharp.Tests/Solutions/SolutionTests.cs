@@ -2,6 +2,8 @@
 using System.Runtime.ExceptionServices;
 using System.Text.RegularExpressions;
 using Rewrite.MSBuild;
+using Rewrite.RewriteCSharp.Marker;
+using Rewrite.RewriteJson.Tree;
 using Rewrite.Test.CSharp;
 
 namespace Rewrite.CSharp.Tests.Solutions;
@@ -32,10 +34,13 @@ public class SolutionTests// : RewriteTest
         var projectPaths = solution.Projects.Select(x => x.FilePath).ToList();
         foreach (var projectPath in projectPaths.Where(x => x != null).Cast<string>())
         {
-            var sources = solutionParser.ParseProjectSources(solution, projectPath, root, executionContext).ToList();
+            var sources = solutionParser.ParseProjectSources(solution, projectPath, root, executionContext);
             foreach (var source in sources)
             {
-
+                if (source.Descendents().Any(x => x.Markers.Any(y => y is MemberBinding)))
+                {
+                    throw new Exception(source.SourcePath);
+                }
                 var filePath = Path.Combine(root, source.SourcePath);
                 var parseError = source.Descendents().OfType<ParseError>().FirstOrDefault();
                 if (parseError != null)
@@ -43,8 +48,6 @@ public class SolutionTests// : RewriteTest
                     var parseExceptionResult = (ParseExceptionResult)parseError.Markers.First();
                     _output.WriteLine("=======Parser Error==========");
                     _output.WriteLine(parseExceptionResult.Message);
-                    // parseError.
-                    Debugger.Break();
                 }
                 var originalSourceText = await File.ReadAllTextAsync(filePath, cancellationToken);
                 try
@@ -68,6 +71,7 @@ public class SolutionTests// : RewriteTest
                         new Exception($"Failure parsing {source.SourcePath}\n{e.Message}"), e.StackTrace!);
                     ExceptionDispatchInfo.Throw(exception);
                 }
+#pragma warning restore CS0162 // Unreachable code detected
             }
         }
     }
