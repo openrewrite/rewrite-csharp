@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Rewrite.Test.CSharp;
 using Rewrite.Test;
 
@@ -6,8 +8,10 @@ namespace Rewrite.CSharp.Tests.Tree;
 using static Assertions;
 
 [Collection(Collections.PrinterAccess)]
-public class UsingTests : RewriteTest
+public class UsingTests(ITestOutputHelper output) : RewriteTest
 {
+    private readonly ITestOutputHelper _output = output;
+
     [Fact]
     public void Simple()
     {
@@ -55,25 +59,27 @@ public class UsingTests : RewriteTest
     [Fact]
     public void Multiple2()
     {
-        RewriteRun(
-            CSharp(
-                """
-                using System.IO;
+        var src = CSharp(
+            """
+            using System.IO;
 
-                class Foo
+            class Foo
+            {
+                void M()
                 {
-                    void M()
+                    using /*1%*/ (/*2%*/ StreamReader reader1 = new StreamReader("file1.txt") /*3%*/ )
+                    using (StreamReader reader2 = new StreamReader("file2.txt")) /*4%*/
                     {
-                        using (StreamReader reader1 = new StreamReader("file1.txt"))
-                        using (StreamReader reader2 = new StreamReader("file2.txt"))
-                        {
-                            // code
-                        }
+                        // code
                     }
                 }
-                """
-            )
-        );
+            }
+            """).First();
+
+        var lst = src.Parse<Cs.CompilationUnit>();
+        var body = lst.Descendents().OfType<J.MethodDeclaration>().First().Body!;
+        _output.WriteLine(lst.ToString());
+        lst.ToString().ShouldBeSameAs(src.Before);
     }
 
     [Fact]
@@ -88,7 +94,7 @@ public class UsingTests : RewriteTest
                 {
                     void M()
                     {
-                        using StreamReader reader = new StreamReader("file1.txt");
+                        using /*1%*/ StreamReader reader = new StreamReader("file1.txt")/*2%*/ ;
                     }
                 }
                 """

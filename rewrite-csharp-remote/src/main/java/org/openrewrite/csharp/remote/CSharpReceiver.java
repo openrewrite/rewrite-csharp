@@ -316,6 +316,17 @@ public class CSharpReceiver implements Receiver<Cs> {
         }
 
         @Override
+        public Cs.UsingStatement visitUsingStatement(Cs.UsingStatement usingStatement, ReceiverContext ctx) {
+            usingStatement = usingStatement.withId(ctx.receiveNonNullValue(usingStatement.getId(), UUID.class));
+            usingStatement = usingStatement.withPrefix(ctx.receiveNonNullNode(usingStatement.getPrefix(), CSharpReceiver::receiveSpace));
+            usingStatement = usingStatement.withMarkers(ctx.receiveNonNullNode(usingStatement.getMarkers(), ctx::receiveMarkers));
+            usingStatement = usingStatement.withAwaitKeyword(ctx.receiveNode(usingStatement.getAwaitKeyword(), CSharpReceiver::receiveSpace));
+            usingStatement = usingStatement.getPadding().withExpression(ctx.receiveNonNullNode(usingStatement.getPadding().getExpression(), CSharpReceiver::receiveContainer));
+            usingStatement = usingStatement.withStatement(ctx.receiveNonNullNode(usingStatement.getStatement(), ctx::receiveTree));
+            return usingStatement;
+        }
+
+        @Override
         public Cs.TypeParameterConstraintClause visitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, ReceiverContext ctx) {
             typeParameterConstraintClause = typeParameterConstraintClause.withId(ctx.receiveNonNullValue(typeParameterConstraintClause.getId(), UUID.class));
             typeParameterConstraintClause = typeParameterConstraintClause.withPrefix(ctx.receiveNonNullNode(typeParameterConstraintClause.getPrefix(), CSharpReceiver::receiveSpace));
@@ -1315,6 +1326,17 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
+                );
+            }
+
+            if (type == Cs.UsingStatement.class) {
+                return (T) new Cs.UsingStatement(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree)
                 );
             }
 

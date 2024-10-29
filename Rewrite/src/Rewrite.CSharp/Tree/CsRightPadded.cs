@@ -4,6 +4,8 @@ public interface CsRightPadded
 {
     public record Location(CsSpace.Location AfterLocation)
     {
+        public static readonly Location USING_STATEMENT_AWAIT_KEYWORD = new (CsSpace.Location.USING_STATEMENT_AWAIT_KEYWORD);
+        public static readonly Location USING_STATEMENT_EXPRESSION = new (CsSpace.Location.USING_STATEMENT_EXPRESSION);
         public static readonly Location METHOD_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES = new (CsSpace.Location.METHOD_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES);
         public static readonly Location ALLOWS_CONSTRAINT_CLAUSE_EXPRESSIONS = new (CsSpace.Location.ALLOWS_CONSTRAINT_CLAUSE_EXPRESSIONS);
         public static readonly Location TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER_CONSTRAINTS = new(CsSpace.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER_CONSTRAINTS);

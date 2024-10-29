@@ -59,6 +59,21 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     }
 
     @Override
+    public J visitUsingStatement(Cs.UsingStatement usingStatement, PrintOutputCapture<P> p)
+    {
+        beforeSyntax(usingStatement, CsSpace.Location.NAMED_ARGUMENT_PREFIX, p);
+        p.append("using");
+        if (usingStatement.getAwaitKeyword() != null)
+        {
+            visitSpace(usingStatement.getAwaitKeyword(), CsSpace.Location.USING_STATEMENT_AWAIT_KEYWORD, p);
+        }
+
+        visitContainer("(", usingStatement.getPadding().getExpression(), CsContainer.Location.USING_STATEMENT_EXPRESSION, "", ")", p);
+        visit(usingStatement.getStatement(), p);
+        afterSyntax(usingStatement, p);
+        return usingStatement;
+    }
+    @Override
     public Cs visitCompilationUnit(Cs.CompilationUnit compilationUnit, PrintOutputCapture<P> p) {
         beforeSyntax(compilationUnit, Space.Location.COMPILATION_UNIT_PREFIX, p);
         for (JRightPadded<Cs.ExternAlias> extern : compilationUnit.getPadding().getExterns()) {
@@ -88,7 +103,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     @Override
     public J visitMethodDeclaration(Cs.MethodDeclaration methodDeclaration, PrintOutputCapture<P> p)
     {
-        super.visitMethodDeclaration(methodDeclaration, p);
+        delegate.visitMethodDeclaration(methodDeclaration.getMethodDeclarationCore(), p);
         if (methodDeclaration.getMethodDeclarationCore().getBody() == null)
         {
             p.append(";");
@@ -537,7 +552,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
                     p.append(";");
                 }
                 visitSpace(block.getEnd(), Space.Location.BLOCK_END, p);
-            } else if (!block.getMarkers().findFirst(OmitBraces.class).isPresent()) {
+            } else if (!block.getMarkers().findFirst(OmitBraces.class).isPresent() || !block.getStatements().isEmpty()) {
                 p.append('{');
                 visitStatements(block.getPadding().getStatements(), JRightPadded.Location.BLOCK_STATEMENT, p);
                 visitSpace(block.getEnd(), Space.Location.BLOCK_END, p);
@@ -602,6 +617,12 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
             if (!method.getMarkers().findFirst(CompactConstructor.class).isPresent()) {
                 visitContainer("(", method.getPadding().getParameters(), JContainer.Location.METHOD_DECLARATION_PARAMETERS, ",", ")", p);
             }
+
+            if(CSharpPrinter.this.getCursor().getValue() instanceof Cs.MethodDeclaration) {
+                Cs.MethodDeclaration csMethod = CSharpPrinter.this.getCursor().getValue();
+                visit(csMethod.getTypeParameterConstraintClauses(), p);
+            }
+
             visitContainer("throws", method.getPadding().getThrows(), JContainer.Location.THROWS, ",", null, p);
             visit(method.getBody(), p);
             visitLeftPadded("default", method.getPadding().getDefaultValue(), JLeftPadded.Location.METHOD_DECLARATION_DEFAULT_VALUE, p);
@@ -725,38 +746,6 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
             p.append(keyword);
             afterSyntax(primitive, p);
             return primitive;
-        }
-
-        @Override
-        public J visitTry(J.Try tryable, PrintOutputCapture<P> p) {
-            if (tryable.getPadding().getResources() != null) {
-                // this is a `using` statement
-                beforeSyntax(tryable, Space.Location.TRY_PREFIX, p);
-                p.append("using");
-
-                //Note: we do not call visitContainer here because the last resource may or may not be semicolon terminated.
-                //      Doing this means that visitTryResource is not called, therefore this logiJ must visit the resources.
-                visitSpace(tryable.getPadding().getResources().getBefore(), Space.Location.TRY_RESOURCES, p);
-                p.append('(');
-                List<JRightPadded<J.Try.Resource>> resources = tryable.getPadding().getResources().getPadding().getElements();
-                for (JRightPadded<J.Try.Resource> resource : resources) {
-                    visitSpace(resource.getElement().getPrefix(), Space.Location.TRY_RESOURCE, p);
-                    visitMarkers(resource.getElement().getMarkers(), p);
-                    visit(resource.getElement().getVariableDeclarations(), p);
-
-                    if (resource.getElement().isTerminatedWithSemicolon()) {
-                        p.append(';');
-                    }
-
-                    visitSpace(resource.getAfter(), Space.Location.TRY_RESOURCE_SUFFIX, p);
-                }
-                p.append(')');
-
-                visit(tryable.getBody(), p);
-                afterSyntax(tryable, p);
-                return tryable;
-            }
-            return super.visitTry(tryable, p);
         }
 
         @Override

@@ -6,6 +6,10 @@ namespace Rewrite.RewriteCSharp.Tree
 {
     public partial interface Cs
     {
+        partial class UsingStatement
+        {
+            public override string? ToString() => Core.Tree.ToString(this) ?? base.ToString();
+        }
         partial class AnnotatedStatement
         {
             public override string? ToString() => Core.Tree.ToString(this) ?? base.ToString();

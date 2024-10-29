@@ -26,7 +26,7 @@ public class ClassDeclarationTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                class Foo;
+                class Foo /*1*/ ;
                 """
             )
         );

@@ -249,7 +249,19 @@ public class MethodDeclarationTests : RewriteTest
         );
     }
 
-
+    [Fact]
+    public void NoBodyClass()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                class Test {
+                    void Method() /*1*/ ;
+                }
+                """
+            )
+        );
+    }
 
     [Fact]
     public void GenericMethodDeclarationWithClassConstraint()
@@ -258,7 +270,7 @@ public class MethodDeclarationTests : RewriteTest
             CSharp(
                 """
                 class Test {
-                    void Method<T>() where T : class;
+                    void Method<T>() /*1*/ where /*2*/  T /*3*/  : /*4*/  class /*5*/ ;
                 }
                 """
             )

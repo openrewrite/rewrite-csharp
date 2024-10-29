@@ -279,6 +279,17 @@ public record CSharpSender : Sender
             return methodDeclaration;
         }
 
+        public override J VisitUsingStatement(Cs.UsingStatement usingStatement, SenderContext ctx)
+        {
+            ctx.SendValue(usingStatement, v => v.Id);
+            ctx.SendNode(usingStatement, v => v.Prefix, SendSpace);
+            ctx.SendNode(usingStatement, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(usingStatement, v => v.AwaitKeyword, SendSpace);
+            ctx.SendNode(usingStatement, v => v.Padding.Expression, SendContainer);
+            ctx.SendNode(usingStatement, v => v.Statement, ctx.SendTree);
+            return usingStatement;
+        }
+
         public override J VisitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, SenderContext ctx)
         {
             ctx.SendValue(typeParameterConstraintClause, v => v.Id);

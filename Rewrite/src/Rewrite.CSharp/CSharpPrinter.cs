@@ -15,6 +15,7 @@
  */
 
 using System.Diagnostics;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
 using Rewrite.RewriteCSharp.Marker;
@@ -66,6 +67,21 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         return namedArgument;
     }
 
+    public override J? VisitUsingStatement(Cs.UsingStatement usingStatement, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(usingStatement, CsSpace.Location.NAMED_ARGUMENT_PREFIX, p);
+        p.Append("using");
+        if (usingStatement.AwaitKeyword != null)
+        {
+            VisitSpace(usingStatement.AwaitKeyword, CsSpace.Location.USING_STATEMENT_AWAIT_KEYWORD, p);
+        }
+
+        VisitContainer("(", usingStatement.Padding.Expression, CsContainer.Location.USING_STATEMENT_EXPRESSION, "", ")", p);
+        Visit(usingStatement.Statement, p);
+        AfterSyntax(usingStatement, p);
+        return usingStatement;
+    }
+
     public override Cs VisitCompilationUnit(Cs.CompilationUnit compilationUnit, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(compilationUnit, Space.Location.COMPILATION_UNIT_PREFIX, p);
@@ -102,7 +118,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
 
     public override J? VisitMethodDeclaration(Cs.MethodDeclaration methodDeclaration, PrintOutputCapture<TState> p)
     {
-        base.VisitMethodDeclaration(methodDeclaration, p);
+        _delegate.Visit(methodDeclaration.MethodDeclarationCore, p);
         if (methodDeclaration.MethodDeclarationCore.Body == null)
         {
             p.Append(";");
@@ -643,7 +659,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
 
                 VisitSpace(block.End, Space.Location.BLOCK_END, p);
             }
-            else if (!block.Markers.OfType<OmitBraces>().Any())
+            else if (!block.Markers.OfType<OmitBraces>().Any() || block.Statements.Any())
             {
                 p.Append('{');
                 VisitStatements(block.Padding.Statements, JRightPadded.Location.BLOCK_STATEMENT, p);
@@ -716,6 +732,12 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
             {
                 VisitContainer("(", method.Padding.Parameters, JContainer.Location.METHOD_DECLARATION_PARAMETERS, ",",
                     ")", p);
+            }
+
+            var csMethod = _parent.Cursor.GetValue<Cs.MethodDeclaration>();
+            if (csMethod != null)
+            {
+                Visit(csMethod.TypeParameterConstraintClauses, p);
             }
 
             VisitContainer("throws", method.Padding.Throws, JContainer.Location.THROWS, ",", null, p);
@@ -827,49 +849,6 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
             AfterSyntax(primitive, p);
             return primitive;
         }
-
-        public override J VisitTry(J.Try tryable, PrintOutputCapture<TState> p)
-        {
-            if (tryable.Padding.Resources != null)
-            {
-                // this is a `using` statement
-                BeforeSyntax(tryable, Space.Location.TRY_PREFIX, p);
-                p.Append("using");
-
-                // Note: we do not call VisitContainer here because the last resource may or may not be semicolon-terminated.
-                // Doing this means that VisitTryResource is not called, therefore this logic must visit the resources.
-                VisitSpace(tryable.Padding.Resources.Before, Space.Location.TRY_RESOURCES, p);
-                p.Append('(');
-                var resources = tryable.Padding.Resources.Padding.Elements;
-
-                foreach (var resource in resources)
-                {
-                    VisitSpace(resource.Element.Prefix, Space.Location.TRY_RESOURCE, p);
-                    VisitMarkers(resource.Element.Markers, p);
-                    Visit(resource.Element.VariableDeclarations, p);
-
-                    if (resource.Element.TerminatedWithSemicolon)
-                    {
-                        p.Append(';');
-                    }
-
-                    VisitSpace(resource.After, Space.Location.TRY_RESOURCE_SUFFIX, p);
-                }
-
-                p.Append(')');
-                Visit(tryable.Body, p);
-                AfterSyntax(tryable, p);
-                return tryable;
-            }
-
-            return base.VisitTry(tryable, p);
-        }
-
-        public override J? VisitModifier(J.Modifier mod, PrintOutputCapture<TState> p)
-        {
-            return base.VisitModifier(mod, p);
-        }
-
 
         public override M VisitMarker<M>(M marker, PrintOutputCapture<TState> p)
         {

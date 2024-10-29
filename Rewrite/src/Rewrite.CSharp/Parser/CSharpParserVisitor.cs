@@ -63,7 +63,8 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                 new Markers(Core.Tree.RandomId(),
                     [
                         ParseExceptionResult.Build(parser, new InvalidOperationException("Unsupported AST type."))
-                            .WithTreeType(node.Kind().ToString())
+                            // .WithTreeType(node.Kind().ToString())
+                            .WithTreeType(node.GetType().Name)
                     ]
                 ),
                 node.ToString()
@@ -155,6 +156,9 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         var hasBaseClass = node.BaseList is { Types.Count: > 0 } &&
                            semanticModel.GetTypeInfo(node.BaseList.Types[0].Type).Type?.TypeKind == TypeKind.Class;
         var hasBaseInterfaces = node.BaseList != null && node.BaseList.Types.Count > (hasBaseClass ? 1 : 0);
+
+        var isEmptyBody = node.OpenBraceToken.IsKind(SyntaxKind.None);
+
         var classDeclaration = new J.ClassDeclaration(
             Core.Tree.RandomId(),
             Format(Leading(node)),
@@ -193,11 +197,9 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             null,
             new J.Block(
                 Core.Tree.RandomId(),
-                Format(Leading(node.OpenBraceToken)),
-                node.OpenBraceToken.IsKind(SyntaxKind.None)
-                    ? Markers.EMPTY.Add(new OmitBraces(Core.Tree.RandomId()))
-                    : Markers.EMPTY,
-                JRightPadded<bool>.Build(false),
+                Format(Leading(isEmptyBody ? node.SemicolonToken : node.OpenBraceToken)),
+                isEmptyBody ? Markers.Create(new OmitBraces()) : Markers.EMPTY,
+                JRightPadded.Create(false),
                 node.Members.Select(MapMemberDeclaration).ToList(),
                 Format(Leading(node.CloseBraceToken))
             ),
@@ -594,6 +596,25 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitMethodDeclaration(MethodDeclarationSyntax node)
     {
+        J.Block body;
+        if (node.Body != null)
+        {
+            body = Convert<J.Block>(node.Body)!;
+        }
+        else if (node.ExpressionBody != null)
+        {
+            body = Convert<J.Block>(node.ExpressionBody)!;
+        }
+        else
+        {
+            body = new J.Block(
+                Core.Tree.RandomId(),
+                Format(Leading(node.SemicolonToken)),
+                Markers.Create(new OmitBraces()),
+                JRightPadded.Create(false),
+                new List<JRightPadded<Statement>>(),
+                Format(Trailing(node.SemicolonToken)));
+        }
         var attributeLists = MapAttributes(node.AttributeLists);
         var methodDeclaration = new J.MethodDeclaration(
             Core.Tree.RandomId(),
@@ -617,7 +638,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             ),
             MapParameters<Statement>(node.ParameterList)!,
             null,
-            node.Body != null ? Convert<J.Block>(node.Body) : node.ExpressionBody != null ? Convert<J.Block>(node.ExpressionBody) : null,
+            body,
             null,
             MapType(node) as JavaType.Method
         );
@@ -1347,18 +1368,27 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitPrefixUnaryExpression(PrefixUnaryExpressionSyntax node)
     {
-        if (node.OperatorToken.IsKind(SyntaxKind.CaretToken))
+        if (node.OperatorToken.IsKind(SyntaxKind.CaretToken) || node.OperatorToken.IsKind(SyntaxKind.AsteriskToken) )
             // TODO implement C# 8.0 "index from the end" operator `^`
             return base.VisitPrefixUnaryExpression(node);
 
-        return new J.Unary(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            MapPrefixUnaryOperator(node.OperatorToken),
-            Convert<Expression>(node.Operand)!,
-            MapType(node)
-        );
+        try
+        {
+            return new J.Unary(
+                Core.Tree.RandomId(),
+                Format(Leading(node)),
+                Markers.EMPTY,
+                MapPrefixUnaryOperator(node.OperatorToken),
+                Convert<Expression>(node.Operand)!,
+                MapType(node)
+            );
+        }
+        catch (NotImplementedException)
+        {
+            // todo: temporary stopgap until all cases can be covered. known gaps are pointers (*something), and "from-end" [^3]
+            return base.VisitPrefixUnaryExpression(node);
+        }
+
     }
 
     private JLeftPadded<J.Unary.Type> MapPrefixUnaryOperator(SyntaxToken operatorToken)
@@ -2854,48 +2884,20 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitUsingStatement(UsingStatementSyntax node)
     {
-        var jContainer = new JContainer<J.Try.Resource>(
-            Format(Leading(node.OpenParenToken)),
-            node.Declaration != null
-                ?
-                [
-                    new JRightPadded<J.Try.Resource>(
-                        new J.Try.Resource(
-                            Core.Tree.RandomId(),
-                            Format(Leading(node.Declaration)),
-                            Markers.EMPTY,
-                            Convert<TypedTree>(node.Declaration)!,
-                            false
-                        ),
-                        Format(Trailing(node.Declaration)),
-                        Markers.EMPTY
-                    )
-                ]
-                : [],
-            Markers.EMPTY
-        );
-        var s = Convert<Statement>(node.Statement) ?? throw new InvalidOperationException("Statement is empty after conversion");
-
-        return new J.Try(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            jContainer,
-             s is not J.Block block
-                ? new J.Block(
-                    Core.Tree.RandomId(),
-                    Space.EMPTY,
-                    Markers.EMPTY.Add(new OmitBraces(Core.Tree.RandomId())),
-                    JRightPadded<bool>.Build(false),
-                    [
-                        JRightPadded<Statement>.Build(s),
-                    ],
-                    Space.EMPTY
-                )
-                : block,
-            [],
-            null
-        );
+        var statement = Convert<Statement>(node.Statement) ?? throw new InvalidOperationException("Statement is empty after conversion");
+        JRightPadded<Expression> expression = JRightPadded.Create(Convert<Expression>((SyntaxNode?)node.Expression ?? node.Declaration)!, Format(Leading(node.CloseParenToken)));
+        var usingStatement =
+            new Cs.UsingStatement(
+                Core.Tree.RandomId(),
+                Format(Leading(node)),
+                Markers.EMPTY,
+                node.AwaitKeyword.IsKeyword() ? Format(Trailing(node.AwaitKeyword)) : null,
+                JContainer.Create(new List<JRightPadded<Expression>>
+                {
+                    expression
+                }, Format(Leading(node.OpenParenToken))),
+                statement);
+        return usingStatement;
     }
 
     public override J? VisitFixedStatement(FixedStatementSyntax node)

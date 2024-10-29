@@ -4,6 +4,7 @@ public interface CsContainer
 {
     public record Location(CsSpace.Location BeforeLocation, CsRightPadded.Location ElementLocation)
     {
+        public static readonly Location USING_STATEMENT_EXPRESSION = new(CsSpace.Location.USING_STATEMENT_EXPRESSION, CsRightPadded.Location.USING_STATEMENT_EXPRESSION);
         public static readonly Location METHOD_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES = new(CsSpace.Location.METHOD_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, CsRightPadded.Location.METHOD_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES);
         public static readonly Location ALLOWS_CONSTRAINT_CLAUSE_EXPRESSIONS = new(CsSpace.Location.ALLOWS_CONSTRAINT_CLAUSE_EXPRESSIONS, CsRightPadded.Location.ALLOWS_CONSTRAINT_CLAUSE_EXPRESSIONS);
         public static readonly Location TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER_CONSTRAINTS = new(CsSpace.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER_CONSTRAINTS, CsRightPadded.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER_CONSTRAINTS);

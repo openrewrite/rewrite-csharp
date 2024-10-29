@@ -288,6 +288,17 @@ public record CSharpReceiver : Receiver
             return methodDeclaration;
         }
 
+        public override J VisitUsingStatement(Cs.UsingStatement usingStatement, ReceiverContext ctx)
+        {
+            usingStatement = usingStatement.WithId(ctx.ReceiveValue(usingStatement.Id)!);
+            usingStatement = usingStatement.WithPrefix(ctx.ReceiveNode(usingStatement.Prefix, ReceiveSpace)!);
+            usingStatement = usingStatement.WithMarkers(ctx.ReceiveNode(usingStatement.Markers, ctx.ReceiveMarkers)!);
+            usingStatement = usingStatement.WithAwaitKeyword(ctx.ReceiveNode(usingStatement.AwaitKeyword, ReceiveSpace));
+            usingStatement = usingStatement.Padding.WithExpression(ctx.ReceiveNode(usingStatement.Padding.Expression, ReceiveContainer)!);
+            usingStatement = usingStatement.WithStatement(ctx.ReceiveNode(usingStatement.Statement, ctx.ReceiveTree)!);
+            return usingStatement;
+        }
+
         public override J VisitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, ReceiverContext ctx)
         {
             typeParameterConstraintClause = typeParameterConstraintClause.WithId(ctx.ReceiveValue(typeParameterConstraintClause.Id)!);
@@ -1341,6 +1352,18 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(J.MethodDeclaration), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(JContainer<Cs.TypeParameterConstraintClause>), ReceiveContainer)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.UsingStatement" or "org.openrewrite.csharp.tree.Cs$UsingStatement")
+            {
+                return new Cs.UsingStatement(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace),
+                    ctx.ReceiveNode(default(JContainer<Expression>), ReceiveContainer)!,
+                    ctx.ReceiveNode(default(Statement), ctx.ReceiveTree)!
                 );
             }
 

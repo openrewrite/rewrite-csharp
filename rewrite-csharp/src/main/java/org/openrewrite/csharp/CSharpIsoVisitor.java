@@ -146,6 +146,11 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     }
 
     @Override
+    public Cs.UsingStatement visitUsingStatement(Cs.UsingStatement usingStatement, P p) {
+        return (Cs.UsingStatement) super.visitUsingStatement(usingStatement, p);
+    }
+
+    @Override
     public Cs.TypeParameterConstraintClause visitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, P p) {
         return (Cs.TypeParameterConstraintClause) super.visitTypeParameterConstraintClause(typeParameterConstraintClause, p);
     }

@@ -365,6 +365,22 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         return methodDeclaration;
     }
 
+    public virtual J? VisitUsingStatement(Cs.UsingStatement usingStatement, P p)
+    {
+        usingStatement = usingStatement.WithPrefix(VisitSpace(usingStatement.Prefix, CsSpace.Location.USING_STATEMENT_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(usingStatement, p);
+        if (tempStatement is not Cs.UsingStatement)
+        {
+            return tempStatement;
+        }
+        usingStatement = (Cs.UsingStatement) tempStatement;
+        usingStatement = usingStatement.WithMarkers(VisitMarkers(usingStatement.Markers, p));
+        usingStatement = usingStatement.WithAwaitKeyword(usingStatement.AwaitKeyword == null ? null : VisitSpace(usingStatement.AwaitKeyword, CsSpace.Location.USING_STATEMENT_AWAIT_KEYWORD, p));
+        usingStatement = usingStatement.Padding.WithExpression(VisitContainer(usingStatement.Padding.Expression, CsContainer.Location.USING_STATEMENT_EXPRESSION, p)!);
+        usingStatement = usingStatement.WithStatement(VisitAndCast<Statement>(usingStatement.Statement, p)!);
+        return usingStatement;
+    }
+
     public virtual J? VisitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, P p)
     {
         typeParameterConstraintClause = typeParameterConstraintClause.WithPrefix(VisitSpace(typeParameterConstraintClause.Prefix, CsSpace.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_PREFIX, p)!);

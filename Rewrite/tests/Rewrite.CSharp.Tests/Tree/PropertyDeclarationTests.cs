@@ -129,7 +129,6 @@ public class PropertyDeclarationTests : RewriteTest
     }
 
     [Fact]
-    [KnownBug]
     void BinaryExpressionProperty()
     {
         var sourceSpec = CSharp(
@@ -143,19 +142,16 @@ public class PropertyDeclarationTests : RewriteTest
     }
 
     [Fact]
-    [KnownBug]
     void UnaryExpressionProperty()
     {
         var sourceSpec = CSharp(
             """
             class Test
             {
-                static bool Is64Bit => true;
+                static bool Is64Bit => true /*1*/ ;
             }
             """).First();
         RewriteRun(sourceSpec);
     }
-
-    //
 
 }

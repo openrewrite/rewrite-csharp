@@ -2095,6 +2095,94 @@ public interface Cs extends J {
         }
     }
 
+    //region UsingStatement
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    final class UsingStatement implements Cs, Statement {
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @With
+        @EqualsAndHashCode.Include
+        @Getter
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        @With
+        @Nullable
+        @Getter
+        Space awaitKeyword;
+
+
+        JContainer<Expression> expression;
+
+        public List<Expression> getExpression() {
+            return expression.getElements();
+        }
+
+        public UsingStatement withExpression(List<Expression> expression) {
+            return getPadding().withExpression(JContainer.withElements(this.expression, expression));
+        }
+
+        /**
+         * The block is null for using declaration form.
+         */
+        @With
+        @Getter
+        Statement statement;
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitUsingStatement(this, p);
+        }
+
+        @Override
+        @Transient
+        public CoordinateBuilder.Statement getCoordinates() {
+            return new CoordinateBuilder.Statement(this);
+        }
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.t != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final UsingStatement t;
+
+
+            public JContainer<Expression> getExpression() {
+                return t.expression;
+            }
+
+            public UsingStatement withExpression(JContainer<Expression> expression) {
+                return t.expression == expression ? t : new UsingStatement(t.id, t.prefix, t.markers, t.awaitKeyword, expression, t.statement);
+            }
+        }
+    }
+    //endregion
+
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
     @RequiredArgsConstructor
@@ -2121,8 +2209,6 @@ public interface Cs extends J {
         /**
          * class A&lt;T&gt; where <b><i>T</i></b> : class
          */
-        @With
-        @Getter
         JRightPadded<Identifier> typeParameter;
         /**
          * class A&lt;T&gt; where T : <b><i>class, ISomething</i></b>
@@ -2268,6 +2354,9 @@ public interface Cs extends J {
     }
 
     /* ------------------ */
+
+
+
 
     interface AllowsConstraint extends J {}
 

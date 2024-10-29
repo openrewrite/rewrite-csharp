@@ -299,6 +299,17 @@ public class CSharpSender implements Sender<Cs> {
         }
 
         @Override
+        public Cs.UsingStatement visitUsingStatement(Cs.UsingStatement usingStatement, SenderContext ctx) {
+            ctx.sendValue(usingStatement, Cs.UsingStatement::getId);
+            ctx.sendNode(usingStatement, Cs.UsingStatement::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(usingStatement, Cs.UsingStatement::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(usingStatement, Cs.UsingStatement::getAwaitKeyword, CSharpSender::sendSpace);
+            ctx.sendNode(usingStatement, e -> e.getPadding().getExpression(), CSharpSender::sendContainer);
+            ctx.sendNode(usingStatement, Cs.UsingStatement::getStatement, ctx::sendTree);
+            return usingStatement;
+        }
+
+        @Override
         public Cs.TypeParameterConstraintClause visitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, SenderContext ctx) {
             ctx.sendValue(typeParameterConstraintClause, Cs.TypeParameterConstraintClause::getId);
             ctx.sendNode(typeParameterConstraintClause, Cs.TypeParameterConstraintClause::getPrefix, CSharpSender::sendSpace);

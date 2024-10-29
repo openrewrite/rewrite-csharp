@@ -359,6 +359,21 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         return methodDeclaration;
     }
 
+    public J visitUsingStatement(Cs.UsingStatement usingStatement, P p) {
+        usingStatement = usingStatement.withPrefix(visitSpace(usingStatement.getPrefix(), CsSpace.Location.USING_STATEMENT_PREFIX, p));
+        Statement tempStatement = (Statement) visitStatement(usingStatement, p);
+        if (!(tempStatement instanceof Cs.UsingStatement))
+        {
+            return tempStatement;
+        }
+        usingStatement = (Cs.UsingStatement) tempStatement;
+        usingStatement = usingStatement.withMarkers(visitMarkers(usingStatement.getMarkers(), p));
+        usingStatement = usingStatement.withAwaitKeyword(visitSpace(usingStatement.getAwaitKeyword(), CsSpace.Location.USING_STATEMENT_AWAIT_KEYWORD, p));
+        usingStatement = usingStatement.getPadding().withExpression(visitContainer(usingStatement.getPadding().getExpression(), CsContainer.Location.USING_STATEMENT_EXPRESSION, p));
+        usingStatement = usingStatement.withStatement(visitAndCast(usingStatement.getStatement(), p));
+        return usingStatement;
+    }
+
     public J visitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, P p) {
         typeParameterConstraintClause = typeParameterConstraintClause.withPrefix(visitSpace(typeParameterConstraintClause.getPrefix(), CsSpace.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_PREFIX, p));
         typeParameterConstraintClause = typeParameterConstraintClause.withMarkers(visitMarkers(typeParameterConstraintClause.getMarkers(), p));
@@ -405,7 +420,7 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         return defaultConstraint;
     }
 
-    public <J2 extends J> @Nullable JContainer<J2> visitContainer(@Nullable JContainer<J2> container,
+    public <J2 extends J> JContainer<J2> visitContainer(@Nullable JContainer<J2> container,
                                                         CsContainer.Location loc, P p) {
         if (container == null) {
             //noinspection ConstantConditions
@@ -423,7 +438,7 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
                 JContainer.build(before, js, container.getMarkers());
     }
 
-    public <T> @Nullable JLeftPadded<T> visitLeftPadded(@Nullable JLeftPadded<T> left, CsLeftPadded.Location loc, P p) {
+    public <T> JLeftPadded<T> visitLeftPadded(@Nullable JLeftPadded<T> left, CsLeftPadded.Location loc, P p) {
         if (left == null) {
             //noinspection ConstantConditions
             return null;
@@ -452,7 +467,7 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         return (before == left.getBefore() && t == left.getElement()) ? left : new JLeftPadded<>(before, t, left.getMarkers());
     }
 
-    public <T> @Nullable JRightPadded<T> visitRightPadded(@Nullable JRightPadded<T> right, CsRightPadded.Location loc, P p) {
+    public <T> JRightPadded<T> visitRightPadded(@Nullable JRightPadded<T> right, CsRightPadded.Location loc, P p) {
         if (right == null) {
             //noinspection ConstantConditions
             return null;

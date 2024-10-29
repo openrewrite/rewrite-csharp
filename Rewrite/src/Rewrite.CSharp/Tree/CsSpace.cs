@@ -8,6 +8,10 @@ public interface CsSpace
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public record Location
     {
+        public static readonly Location USING_STATEMENT_AWAIT_KEYWORD = new();
+        public static readonly Location USING_STATEMENT_EXPRESSION = new();
+        public static readonly Location USING_STATEMENT_RESOURCE = new();
+        public static readonly Location USING_STATEMENT_PREFIX = new();
         public static readonly Location TYPE_PARAMETERS_CONSTRAINT_PREFIX = new();
         public static readonly Location TYPE_PARAMETERS_CONSTRAINT_CLAUSE_PREFIX = new();
         public static readonly Location METHOD_DECLARATION_PREFIX = new();
