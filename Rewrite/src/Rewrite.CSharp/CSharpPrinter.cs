@@ -660,7 +660,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
 
                 VisitSpace(block.End, Space.Location.BLOCK_END, p);
             }
-            else if (block.Markers.FirstOrDefault(m => m is OmitBraces) == null)
+            else if (!block.Markers.OfType<OmitBraces>().Any() || block.Statements.Any())
             {
                 p.Append('{');
                 VisitStatements(block.Padding.Statements, JRightPadded.Location.BLOCK_STATEMENT, p);
