@@ -24,8 +24,6 @@ import org.openrewrite.csharp.CSharpPrinter;
 import org.openrewrite.csharp.CSharpVisitor;
 import org.openrewrite.java.JavaPrinter;
 import org.openrewrite.java.JavaTypeVisitor;
-import org.openrewrite.java.JavaVisitor;
-import org.openrewrite.java.JavadocVisitor;
 import org.openrewrite.java.internal.TypesInUse;
 import org.openrewrite.java.tree.*;
 import org.openrewrite.marker.Markers;
@@ -42,7 +40,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 
@@ -182,12 +179,12 @@ public interface Cs extends J {
 
         @Override
         @Transient
-        public List<ClassDeclaration> getClasses() {
+        public List<J.ClassDeclaration> getClasses() {
             return Collections.emptyList();
         }
 
         @Override
-        public JavaSourceFile withClasses(List<ClassDeclaration> classes) {
+        public JavaSourceFile withClasses(List<J.ClassDeclaration> classes) {
             return this;
         }
 
@@ -1944,4 +1941,611 @@ public interface Cs extends J {
         }
     }
 
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    final class ClassDeclaration implements Cs, Statement {
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @With
+        @Getter
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+
+        @With
+        @Getter
+        J.ClassDeclaration classDeclarationCore;
+
+        JContainer<TypeParameterConstraintClause> typeParameterConstraintClauses;
+
+        public List<TypeParameterConstraintClause> getTypeParameterConstraintClauses() {
+            return typeParameterConstraintClauses.getElements();
+        }
+
+        public Cs.ClassDeclaration withTypeParameterConstraintClauses(List<TypeParameterConstraintClause> typeParameterConstraintClauses) {
+            return getPadding().withTypeParameterConstraintClauses(JContainer.withElementsNullable(this.typeParameterConstraintClauses, typeParameterConstraintClauses));
+        }
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitClassDeclaration(this, p);
+        }
+
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.t != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @Override
+        public CoordinateBuilder.Statement getCoordinates() {
+            return new CoordinateBuilder.Statement(this);
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final Cs.ClassDeclaration t;
+
+            public @Nullable JContainer<TypeParameterConstraintClause> getTypeParameterConstraintClauses() {
+                return t.typeParameterConstraintClauses;
+            }
+
+            public Cs.ClassDeclaration withTypeParameterConstraintClauses(@Nullable JContainer<TypeParameterConstraintClause> typeParameterConstraintClauses) {
+                return t.typeParameterConstraintClauses == typeParameterConstraintClauses ? t : new Cs.ClassDeclaration(t.id, t.prefix, t.markers, t.classDeclarationCore, typeParameterConstraintClauses);
+            }
+        }
+    }
+
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    final class MethodDeclaration implements Cs, Statement {
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @With
+        @Getter
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+
+        @With
+        @Getter
+        J.MethodDeclaration methodDeclarationCore;
+
+        JContainer<TypeParameterConstraintClause> typeParameterConstraintClauses;
+
+        public List<TypeParameterConstraintClause> getTypeParameterConstraintClauses() {
+            return typeParameterConstraintClauses.getElements();
+        }
+
+        public Cs.MethodDeclaration withTypeParameterConstraintClauses(List<TypeParameterConstraintClause> typeParameterConstraintClauses) {
+            return getPadding().withTypeParameterConstraintClauses(JContainer.withElementsNullable(this.typeParameterConstraintClauses, typeParameterConstraintClauses));
+        }
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitMethodDeclaration(this, p);
+        }
+
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.t != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @Override
+        public CoordinateBuilder.Statement getCoordinates() {
+            return new CoordinateBuilder.Statement(this);
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final Cs.MethodDeclaration t;
+
+            public @Nullable JContainer<TypeParameterConstraintClause> getTypeParameterConstraintClauses() {
+                return t.typeParameterConstraintClauses;
+            }
+
+            public Cs.MethodDeclaration withTypeParameterConstraintClauses(@Nullable JContainer<TypeParameterConstraintClause> typeParameterConstraintClauses) {
+                return t.typeParameterConstraintClauses == typeParameterConstraintClauses ? t : new Cs.MethodDeclaration(t.id, t.prefix, t.markers, t.methodDeclarationCore, typeParameterConstraintClauses);
+            }
+        }
+    }
+
+    //region UsingStatement
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    final class UsingStatement implements Cs, Statement {
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @With
+        @EqualsAndHashCode.Include
+        @Getter
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        @With
+        @Nullable
+        @Getter
+        Space awaitKeyword;
+
+
+        JContainer<Expression> expression;
+
+        public List<Expression> getExpression() {
+            return expression.getElements();
+        }
+
+        public UsingStatement withExpression(List<Expression> expression) {
+            return getPadding().withExpression(JContainer.withElements(this.expression, expression));
+        }
+
+        /**
+         * The block is null for using declaration form.
+         */
+        @With
+        @Getter
+        Statement statement;
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitUsingStatement(this, p);
+        }
+
+        @Override
+        @Transient
+        public CoordinateBuilder.Statement getCoordinates() {
+            return new CoordinateBuilder.Statement(this);
+        }
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.t != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final UsingStatement t;
+
+
+            public JContainer<Expression> getExpression() {
+                return t.expression;
+            }
+
+            public UsingStatement withExpression(JContainer<Expression> expression) {
+                return t.expression == expression ? t : new UsingStatement(t.id, t.prefix, t.markers, t.awaitKeyword, expression, t.statement);
+            }
+        }
+    }
+    //endregion
+
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    final class TypeParameterConstraintClause implements Cs {
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @With
+        @EqualsAndHashCode.Include
+        @Getter
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+
+        /**
+         * class A&lt;T&gt; where <b><i>T</i></b> : class
+         */
+        JRightPadded<Identifier> typeParameter;
+        /**
+         * class A&lt;T&gt; where T : <b><i>class, ISomething</i></b>
+         */
+        JContainer<Cs.TypeParameterConstraint> typeParameterConstraints;
+
+        public Identifier getTypeParameter() {
+            return typeParameter.getElement();
+        }
+
+        public Cs.TypeParameterConstraintClause withTypeParameter(Identifier typeParameter) {
+            return getPadding().withTypeParameter(JRightPadded.withElement(this.typeParameter, typeParameter));
+        }
+
+        public List<Cs.TypeParameterConstraint> getTypeParameterConstraints() {
+            return typeParameterConstraints.getElements();
+        }
+
+        public Cs.TypeParameterConstraintClause withTypeParameterConstraints(List<Cs.TypeParameterConstraint> typeParameterConstraints) {
+            return getPadding().withTypeParameterConstraints(JContainer.withElementsNullable(this.typeParameterConstraints, typeParameterConstraints));
+        }
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitTypeParameterConstraintClause(this, p);
+        }
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.t != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final Cs.TypeParameterConstraintClause t;
+
+            public @Nullable JRightPadded<Identifier> getTypeParameter() {
+                return t.typeParameter;
+            }
+
+            public Cs.TypeParameterConstraintClause withTypeParameter(@Nullable JRightPadded<Identifier> typeParameter) {
+                return t.typeParameter == typeParameter ? t : new TypeParameterConstraintClause(t.id, t.prefix, t.markers, typeParameter, t.typeParameterConstraints);
+            }
+
+            public @Nullable JContainer<Cs.TypeParameterConstraint> getTypeParameterConstraints() {
+                return t.typeParameterConstraints;
+            }
+
+            public Cs.TypeParameterConstraintClause withTypeParameterConstraints(@Nullable JContainer<Cs.TypeParameterConstraint> typeConstraints) {
+                return t.typeParameterConstraints == typeConstraints ? t : new TypeParameterConstraintClause(t.id, t.prefix, t.markers, t.typeParameter, typeConstraints);
+            }
+        }
+    }
+
+    interface TypeParameterConstraint extends J {}
+
+    /**
+     * Represents a type constraint in a type parameter's constraint clause.
+     * Example: where T : SomeClass
+     *          where T : IInterface
+     */
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    final class TypeConstraint implements Cs, TypeParameterConstraint, TypedTree {
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @With
+        @Getter
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        @With
+        @Getter
+        TypeTree typeExpression;
+
+        @Override
+        public JavaType getType() {
+            return typeExpression.getType();
+        }
+
+        @Override
+        public TypeConstraint withType(@Nullable JavaType type) {
+            return getPadding().withType(this.typeExpression.withType(type));
+        }
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitTypeConstraint(this, p);
+        }
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.pd != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final TypeConstraint pd;
+
+            public TypeTree getType() {
+                return pd.typeExpression;
+            }
+
+            public TypeConstraint withType(TypeTree type) {
+                return pd.typeExpression == type ? pd : new TypeConstraint(pd.id,
+                        pd.prefix,
+                        pd.markers,
+                        type);
+            }
+        }
+    }
+
+    /* ------------------ */
+
+
+
+
+    interface AllowsConstraint extends J {}
+
+    /**
+     * Represents an `allows` constraint in a where clause.
+     * Example: where T : allows operator +
+     */
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    final class AllowsConstraintClause implements Cs, TypeParameterConstraint {
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @With
+        @Getter
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        JContainer<AllowsConstraint> expressions;
+
+        public List<AllowsConstraint> getExpressions() {
+            return expressions.getElements();
+        }
+
+        public AllowsConstraintClause withExpressions(List<AllowsConstraint> expressions) {
+            return getPadding().withExpressions(JContainer.withElements(this.expressions, expressions));
+        }
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitAllowsConstraintClause(this, p);
+        }
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.t != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final AllowsConstraintClause t;
+
+            public JContainer<AllowsConstraint> getExpressions() {
+                return t.expressions;
+            }
+
+            public AllowsConstraintClause withExpressions(JContainer<AllowsConstraint> expressions) {
+                return t.expressions == expressions ? t : new AllowsConstraintClause(t.id, t.prefix, t.markers, expressions);
+            }
+        }
+    }
+
+    /**
+     * Represents a ref struct constraint in a where clause.
+     * Example: where T : allows ref struct
+     */
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    final class RefStructConstraint implements Cs, AllowsConstraint {
+        @With
+        @Getter
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitRefStructConstraint(this, p);
+        }
+    }
+
+
+    /**
+     * Represents a class/struct constraint in a where clause.
+     * Example: where T : class, where T : struct
+     */
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    final class ClassOrStructConstraint implements Cs, TypeParameterConstraint {
+        @With
+        @Getter
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        @With
+        @Getter
+        TypeKind kind;
+
+        public enum TypeKind
+        {
+            Class,
+            Struct
+        }
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitClassOrStructConstraint(this, p);
+        }
+    }
+
+    /**
+     * Represents a constructor constraint in a where clause.
+     * Example: where T : new()
+     */
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    final class ConstructorConstraint implements Cs, TypeParameterConstraint {
+        @With
+        @Getter
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitConstructorConstraint(this, p);
+        }
+    }
+
+    /**
+     * Represents a default constraint in a where clause.
+     * Example: where T : default
+     */
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    final class DefaultConstraint implements Cs, TypeParameterConstraint {
+        @With
+        @Getter
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitDefaultConstraint(this, p);
+        }
+    }
 }

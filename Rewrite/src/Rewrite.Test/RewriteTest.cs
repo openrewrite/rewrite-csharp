@@ -177,12 +177,9 @@ public class RewriteTest
                 {
                     if (j++ == i && sourceFile is not Quark)
                     {
-                        AssertContentEquals(
-                            sourceFile,
-                            StringUtils.ReadFully(input.GetSource(ctx), Encoding.GetEncoding(parser.GetCharset(ctx))),
-                            sourceFile!.PrintAll(capture.Clone()),
-                            "When parsing..."
-                        );
+                        var before = StringUtils.ReadFully(input.GetSource(ctx), Encoding.GetEncoding(parser.GetCharset(ctx)));
+                        var after = sourceFile!.PrintAll(capture.Clone());
+                        after.ShouldBeSameAs(before);
 
                         // FIXME implement
                         // try

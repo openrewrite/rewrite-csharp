@@ -6,4 +6,7 @@ plugins {
 allprojects {
     group = "org.openrewrite"
     description = "OpenRewrite C# language module."
+    repositories {
+        mavenCentral()
+    }
 }

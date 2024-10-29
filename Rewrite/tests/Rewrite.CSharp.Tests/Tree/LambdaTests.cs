@@ -75,7 +75,7 @@ public class LambdaTests : RewriteTest
             CSharp(
                 """
                 class Test {
-                    Func<double, double> square =  /*1*/   (  /*2*/ x, /*3*/       y,       /*4*/ z)  /*5*/    =>      /*6*/  x * x;
+                    Func<double, double> square =  /*1*/   (  /*2*/ x, /*3*/       y,       /*4*/ z)  /*5*/    =>      /*6*/  x * x /*7*/;
                 }
                 """
             )

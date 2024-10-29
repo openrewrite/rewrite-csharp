@@ -118,6 +118,7 @@ public sealed class JRightPadded<T>(
         return ReferenceEquals(newMarkers, markers) ? this : new JRightPadded<T>(element, after, newMarkers);
     }
 
+    [Obsolete($"Use {nameof(JRightPadded)}.{nameof(JRightPadded.Create)} instead")]
     public static JRightPadded<T> Build(T t)
     {
         return new JRightPadded<T>(t, Space.EMPTY, Markers.EMPTY);
@@ -131,10 +132,10 @@ public sealed class JRightPadded<T>(
 
 public static class JRightPadded
 {
-    public static JRightPadded<T> Create<T>(T t)
-    {
-        return new JRightPadded<T>(t, Space.EMPTY, Markers.EMPTY);
-    }
+    public static JRightPadded<T> Create<T>(T element) => new (element, Space.EMPTY, Markers.EMPTY);
+    public static JRightPadded<T> Create<T>(T element, Space after) => new (element, after, Markers.EMPTY);
+    public static JRightPadded<T> Create<T>(T element, Space after, Markers markers) => new (element, after, markers);
+
     public record Location(Space.Location AfterLocation)
     {
         public static readonly Location ANY = new(Space.Location.ANY);

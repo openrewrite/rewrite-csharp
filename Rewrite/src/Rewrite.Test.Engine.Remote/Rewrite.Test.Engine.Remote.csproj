@@ -12,14 +12,18 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
         <ProjectReference Include="..\Rewrite.Test\Rewrite.Test.csproj" />
-        <ProjectReference Include="..\Rewrite.Test.CSharp\Rewrite.Test.CSharp.csproj" />
         <ProjectReference Include="..\Rewrite.Remote.Codec\Rewrite.Remote.Codec.csproj" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="PeterO.Cbor" Version="5.0.0-alpha1" NoWarn="NU5104"  />
-        <PackageReference Include="Rewrite.Remote" Version="$(RewriteRemoteVersion)"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(RELEASE_PUBLICATION)'==''">
+      <ProjectReference Include="$(RewriteRemoteDir)\src\Rewrite.Remote\Rewrite.Remote.csproj" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(RELEASE_PUBLICATION)'!=''">
+      <PackageReference Include="Rewrite.Remote" Version="$(RewriteRemoteVersion)"/>
     </ItemGroup>
 </Project>

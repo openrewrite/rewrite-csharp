@@ -284,7 +284,6 @@ public class NewClassTests : RewriteTest
     }
 
     [Fact]
-    [KnownBug]
     void DictionaryDictionaryCreation()
     {
         RewriteRun(

@@ -112,6 +112,10 @@ public class JContainer<T>(
 
 public static class JContainer
 {
+
+    public static JContainer<T> Create<T>(IList<JRightPadded<T>> elements) => new (Space.EMPTY, elements, Markers.EMPTY);
+    public static JContainer<T> Create<T>(IList<JRightPadded<T>> elements, Space space) => new (space, elements, Markers.EMPTY);
+    public static JContainer<T> Create<T>(IList<JRightPadded<T>> elements, Space before, Markers markers) => new (before, elements, markers);
     public record Location(Space.Location BeforeLocation, JRightPadded.Location ElementLocation)
     {
         public static readonly Location ANY = new(Space.Location.ANY, JRightPadded.Location.ANY);

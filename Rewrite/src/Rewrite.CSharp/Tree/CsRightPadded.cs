@@ -4,6 +4,15 @@ public interface CsRightPadded
 {
     public record Location(CsSpace.Location AfterLocation)
     {
+        public static readonly Location USING_STATEMENT_AWAIT_KEYWORD = new (CsSpace.Location.USING_STATEMENT_AWAIT_KEYWORD);
+        public static readonly Location USING_STATEMENT_EXPRESSION = new (CsSpace.Location.USING_STATEMENT_EXPRESSION);
+        public static readonly Location METHOD_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES = new (CsSpace.Location.METHOD_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES);
+        public static readonly Location ALLOWS_CONSTRAINT_CLAUSE_EXPRESSIONS = new (CsSpace.Location.ALLOWS_CONSTRAINT_CLAUSE_EXPRESSIONS);
+        public static readonly Location TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER_CONSTRAINTS = new(CsSpace.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER_CONSTRAINTS);
+        public static readonly Location ALLOWS_CONSTRAINT_EXPRESSIONS = new(CsSpace.Location.ALLOWS_CONSTRAINT_EXPRESSIONS);
+        public static readonly Location TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_CONSTRAINTS = new(CsSpace.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_CONSTRAINTS);
+        public static readonly Location TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER = new(CsSpace.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER);
+        public static readonly Location CLASS_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES = new(CsSpace.Location.CLASS_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES);
         public static readonly Location NAMED_ARGUMENT_NAME_COLUMN = new(CsSpace.Location.NAMED_ARGUMENT_NAME_COLUMN_SUFFIX);
         public static readonly Location ARRAY_RANK_SPECIFIER_SIZE = new(CsSpace.Location.ARRAY_RANK_SPECIFIER_SIZE_SUFFIX);
         public static readonly Location ATTRIBUTE_LIST_ATTRIBUTES = new(CsSpace.Location.ATTRIBUTE_LIST_ATTRIBUTE_SUFFIX);

@@ -268,6 +268,98 @@ public record CSharpReceiver : Receiver
             return lambda;
         }
 
+        public override J VisitClassDeclaration(Cs.ClassDeclaration classDeclaration, ReceiverContext ctx)
+        {
+            classDeclaration = classDeclaration.WithId(ctx.ReceiveValue(classDeclaration.Id)!);
+            classDeclaration = classDeclaration.WithPrefix(ctx.ReceiveNode(classDeclaration.Prefix, ReceiveSpace)!);
+            classDeclaration = classDeclaration.WithMarkers(ctx.ReceiveNode(classDeclaration.Markers, ctx.ReceiveMarkers)!);
+            classDeclaration = classDeclaration.WithClassDeclarationCore(ctx.ReceiveNode(classDeclaration.ClassDeclarationCore, ctx.ReceiveTree)!);
+            classDeclaration = classDeclaration.Padding.WithTypeParameterConstraintClauses(ctx.ReceiveNode(classDeclaration.Padding.TypeParameterConstraintClauses, ReceiveContainer)!);
+            return classDeclaration;
+        }
+
+        public override J VisitMethodDeclaration(Cs.MethodDeclaration methodDeclaration, ReceiverContext ctx)
+        {
+            methodDeclaration = methodDeclaration.WithId(ctx.ReceiveValue(methodDeclaration.Id)!);
+            methodDeclaration = methodDeclaration.WithPrefix(ctx.ReceiveNode(methodDeclaration.Prefix, ReceiveSpace)!);
+            methodDeclaration = methodDeclaration.WithMarkers(ctx.ReceiveNode(methodDeclaration.Markers, ctx.ReceiveMarkers)!);
+            methodDeclaration = methodDeclaration.WithMethodDeclarationCore(ctx.ReceiveNode(methodDeclaration.MethodDeclarationCore, ctx.ReceiveTree)!);
+            methodDeclaration = methodDeclaration.Padding.WithTypeParameterConstraintClauses(ctx.ReceiveNode(methodDeclaration.Padding.TypeParameterConstraintClauses, ReceiveContainer)!);
+            return methodDeclaration;
+        }
+
+        public override J VisitUsingStatement(Cs.UsingStatement usingStatement, ReceiverContext ctx)
+        {
+            usingStatement = usingStatement.WithId(ctx.ReceiveValue(usingStatement.Id)!);
+            usingStatement = usingStatement.WithPrefix(ctx.ReceiveNode(usingStatement.Prefix, ReceiveSpace)!);
+            usingStatement = usingStatement.WithMarkers(ctx.ReceiveNode(usingStatement.Markers, ctx.ReceiveMarkers)!);
+            usingStatement = usingStatement.WithAwaitKeyword(ctx.ReceiveNode(usingStatement.AwaitKeyword, ReceiveSpace));
+            usingStatement = usingStatement.Padding.WithExpression(ctx.ReceiveNode(usingStatement.Padding.Expression, ReceiveContainer)!);
+            usingStatement = usingStatement.WithStatement(ctx.ReceiveNode(usingStatement.Statement, ctx.ReceiveTree)!);
+            return usingStatement;
+        }
+
+        public override J VisitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, ReceiverContext ctx)
+        {
+            typeParameterConstraintClause = typeParameterConstraintClause.WithId(ctx.ReceiveValue(typeParameterConstraintClause.Id)!);
+            typeParameterConstraintClause = typeParameterConstraintClause.WithPrefix(ctx.ReceiveNode(typeParameterConstraintClause.Prefix, ReceiveSpace)!);
+            typeParameterConstraintClause = typeParameterConstraintClause.WithMarkers(ctx.ReceiveNode(typeParameterConstraintClause.Markers, ctx.ReceiveMarkers)!);
+            typeParameterConstraintClause = typeParameterConstraintClause.Padding.WithTypeParameter(ctx.ReceiveNode(typeParameterConstraintClause.Padding.TypeParameter, ReceiveRightPadded)!);
+            typeParameterConstraintClause = typeParameterConstraintClause.Padding.WithTypeParameterConstraints(ctx.ReceiveNode(typeParameterConstraintClause.Padding.TypeParameterConstraints, ReceiveContainer)!);
+            return typeParameterConstraintClause;
+        }
+
+        public override J VisitTypeConstraint(Cs.TypeConstraint typeConstraint, ReceiverContext ctx)
+        {
+            typeConstraint = typeConstraint.WithId(ctx.ReceiveValue(typeConstraint.Id)!);
+            typeConstraint = typeConstraint.WithPrefix(ctx.ReceiveNode(typeConstraint.Prefix, ReceiveSpace)!);
+            typeConstraint = typeConstraint.WithMarkers(ctx.ReceiveNode(typeConstraint.Markers, ctx.ReceiveMarkers)!);
+            typeConstraint = typeConstraint.WithTypeExpression(ctx.ReceiveNode(typeConstraint.TypeExpression, ctx.ReceiveTree)!);
+            return typeConstraint;
+        }
+
+        public override J VisitAllowsConstraintClause(Cs.AllowsConstraintClause allowsConstraintClause, ReceiverContext ctx)
+        {
+            allowsConstraintClause = allowsConstraintClause.WithId(ctx.ReceiveValue(allowsConstraintClause.Id)!);
+            allowsConstraintClause = allowsConstraintClause.WithPrefix(ctx.ReceiveNode(allowsConstraintClause.Prefix, ReceiveSpace)!);
+            allowsConstraintClause = allowsConstraintClause.WithMarkers(ctx.ReceiveNode(allowsConstraintClause.Markers, ctx.ReceiveMarkers)!);
+            allowsConstraintClause = allowsConstraintClause.Padding.WithExpressions(ctx.ReceiveNode(allowsConstraintClause.Padding.Expressions, ReceiveContainer)!);
+            return allowsConstraintClause;
+        }
+
+        public override J VisitRefStructConstraint(Cs.RefStructConstraint refStructConstraint, ReceiverContext ctx)
+        {
+            refStructConstraint = refStructConstraint.WithId(ctx.ReceiveValue(refStructConstraint.Id)!);
+            refStructConstraint = refStructConstraint.WithPrefix(ctx.ReceiveNode(refStructConstraint.Prefix, ReceiveSpace)!);
+            refStructConstraint = refStructConstraint.WithMarkers(ctx.ReceiveNode(refStructConstraint.Markers, ctx.ReceiveMarkers)!);
+            return refStructConstraint;
+        }
+
+        public override J VisitClassOrStructConstraint(Cs.ClassOrStructConstraint classOrStructConstraint, ReceiverContext ctx)
+        {
+            classOrStructConstraint = classOrStructConstraint.WithId(ctx.ReceiveValue(classOrStructConstraint.Id)!);
+            classOrStructConstraint = classOrStructConstraint.WithPrefix(ctx.ReceiveNode(classOrStructConstraint.Prefix, ReceiveSpace)!);
+            classOrStructConstraint = classOrStructConstraint.WithMarkers(ctx.ReceiveNode(classOrStructConstraint.Markers, ctx.ReceiveMarkers)!);
+            classOrStructConstraint = classOrStructConstraint.WithKind(ctx.ReceiveValue(classOrStructConstraint.Kind)!);
+            return classOrStructConstraint;
+        }
+
+        public override J VisitConstructorConstraint(Cs.ConstructorConstraint constructorConstraint, ReceiverContext ctx)
+        {
+            constructorConstraint = constructorConstraint.WithId(ctx.ReceiveValue(constructorConstraint.Id)!);
+            constructorConstraint = constructorConstraint.WithPrefix(ctx.ReceiveNode(constructorConstraint.Prefix, ReceiveSpace)!);
+            constructorConstraint = constructorConstraint.WithMarkers(ctx.ReceiveNode(constructorConstraint.Markers, ctx.ReceiveMarkers)!);
+            return constructorConstraint;
+        }
+
+        public override J VisitDefaultConstraint(Cs.DefaultConstraint defaultConstraint, ReceiverContext ctx)
+        {
+            defaultConstraint = defaultConstraint.WithId(ctx.ReceiveValue(defaultConstraint.Id)!);
+            defaultConstraint = defaultConstraint.WithPrefix(ctx.ReceiveNode(defaultConstraint.Prefix, ReceiveSpace)!);
+            defaultConstraint = defaultConstraint.WithMarkers(ctx.ReceiveNode(defaultConstraint.Markers, ctx.ReceiveMarkers)!);
+            return defaultConstraint;
+        }
+
         public override J VisitAnnotatedType(J.AnnotatedType annotatedType, ReceiverContext ctx)
         {
             annotatedType = annotatedType.WithId(ctx.ReceiveValue(annotatedType.Id)!);
@@ -1238,6 +1330,108 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(J.Lambda), ctx.ReceiveTree)!,
                     ctx.ReceiveNodes(default(IList<J.Modifier>), ctx.ReceiveTree)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.ClassDeclaration" or "org.openrewrite.csharp.tree.Cs$ClassDeclaration")
+            {
+                return new Cs.ClassDeclaration(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(J.ClassDeclaration), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(JContainer<Cs.TypeParameterConstraintClause>), ReceiveContainer)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.MethodDeclaration" or "org.openrewrite.csharp.tree.Cs$MethodDeclaration")
+            {
+                return new Cs.MethodDeclaration(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(J.MethodDeclaration), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(JContainer<Cs.TypeParameterConstraintClause>), ReceiveContainer)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.UsingStatement" or "org.openrewrite.csharp.tree.Cs$UsingStatement")
+            {
+                return new Cs.UsingStatement(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace),
+                    ctx.ReceiveNode(default(JContainer<Expression>), ReceiveContainer)!,
+                    ctx.ReceiveNode(default(Statement), ctx.ReceiveTree)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.TypeParameterConstraintClause" or "org.openrewrite.csharp.tree.Cs$TypeParameterConstraintClause")
+            {
+                return new Cs.TypeParameterConstraintClause(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(JRightPadded<J.Identifier>), ReceiveRightPadded)!,
+                    ctx.ReceiveNode(default(JContainer<Cs.TypeParameterConstraint>), ReceiveContainer)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.TypeConstraint" or "org.openrewrite.csharp.tree.Cs$TypeConstraint")
+            {
+                return new Cs.TypeConstraint(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(TypeTree), ctx.ReceiveTree)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.AllowsConstraintClause" or "org.openrewrite.csharp.tree.Cs$AllowsConstraintClause")
+            {
+                return new Cs.AllowsConstraintClause(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(JContainer<Cs.AllowsConstraint>), ReceiveContainer)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.RefStructConstraint" or "org.openrewrite.csharp.tree.Cs$RefStructConstraint")
+            {
+                return new Cs.RefStructConstraint(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.ClassOrStructConstraint" or "org.openrewrite.csharp.tree.Cs$ClassOrStructConstraint")
+            {
+                return new Cs.ClassOrStructConstraint(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveValue(default(Cs.ClassOrStructConstraint.TypeKind))!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.ConstructorConstraint" or "org.openrewrite.csharp.tree.Cs$ConstructorConstraint")
+            {
+                return new Cs.ConstructorConstraint(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.DefaultConstraint" or "org.openrewrite.csharp.tree.Cs$DefaultConstraint")
+            {
+                return new Cs.DefaultConstraint(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!
                 );
             }
 

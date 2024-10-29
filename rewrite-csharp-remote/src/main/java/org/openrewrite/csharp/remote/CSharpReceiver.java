@@ -296,6 +296,98 @@ public class CSharpReceiver implements Receiver<Cs> {
         }
 
         @Override
+        public Cs.ClassDeclaration visitClassDeclaration(Cs.ClassDeclaration classDeclaration, ReceiverContext ctx) {
+            classDeclaration = classDeclaration.withId(ctx.receiveNonNullValue(classDeclaration.getId(), UUID.class));
+            classDeclaration = classDeclaration.withPrefix(ctx.receiveNonNullNode(classDeclaration.getPrefix(), CSharpReceiver::receiveSpace));
+            classDeclaration = classDeclaration.withMarkers(ctx.receiveNonNullNode(classDeclaration.getMarkers(), ctx::receiveMarkers));
+            classDeclaration = classDeclaration.withClassDeclarationCore(ctx.receiveNonNullNode(classDeclaration.getClassDeclarationCore(), ctx::receiveTree));
+            classDeclaration = classDeclaration.getPadding().withTypeParameterConstraintClauses(ctx.receiveNonNullNode(classDeclaration.getPadding().getTypeParameterConstraintClauses(), CSharpReceiver::receiveContainer));
+            return classDeclaration;
+        }
+
+        @Override
+        public Cs.MethodDeclaration visitMethodDeclaration(Cs.MethodDeclaration methodDeclaration, ReceiverContext ctx) {
+            methodDeclaration = methodDeclaration.withId(ctx.receiveNonNullValue(methodDeclaration.getId(), UUID.class));
+            methodDeclaration = methodDeclaration.withPrefix(ctx.receiveNonNullNode(methodDeclaration.getPrefix(), CSharpReceiver::receiveSpace));
+            methodDeclaration = methodDeclaration.withMarkers(ctx.receiveNonNullNode(methodDeclaration.getMarkers(), ctx::receiveMarkers));
+            methodDeclaration = methodDeclaration.withMethodDeclarationCore(ctx.receiveNonNullNode(methodDeclaration.getMethodDeclarationCore(), ctx::receiveTree));
+            methodDeclaration = methodDeclaration.getPadding().withTypeParameterConstraintClauses(ctx.receiveNonNullNode(methodDeclaration.getPadding().getTypeParameterConstraintClauses(), CSharpReceiver::receiveContainer));
+            return methodDeclaration;
+        }
+
+        @Override
+        public Cs.UsingStatement visitUsingStatement(Cs.UsingStatement usingStatement, ReceiverContext ctx) {
+            usingStatement = usingStatement.withId(ctx.receiveNonNullValue(usingStatement.getId(), UUID.class));
+            usingStatement = usingStatement.withPrefix(ctx.receiveNonNullNode(usingStatement.getPrefix(), CSharpReceiver::receiveSpace));
+            usingStatement = usingStatement.withMarkers(ctx.receiveNonNullNode(usingStatement.getMarkers(), ctx::receiveMarkers));
+            usingStatement = usingStatement.withAwaitKeyword(ctx.receiveNode(usingStatement.getAwaitKeyword(), CSharpReceiver::receiveSpace));
+            usingStatement = usingStatement.getPadding().withExpression(ctx.receiveNonNullNode(usingStatement.getPadding().getExpression(), CSharpReceiver::receiveContainer));
+            usingStatement = usingStatement.withStatement(ctx.receiveNonNullNode(usingStatement.getStatement(), ctx::receiveTree));
+            return usingStatement;
+        }
+
+        @Override
+        public Cs.TypeParameterConstraintClause visitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, ReceiverContext ctx) {
+            typeParameterConstraintClause = typeParameterConstraintClause.withId(ctx.receiveNonNullValue(typeParameterConstraintClause.getId(), UUID.class));
+            typeParameterConstraintClause = typeParameterConstraintClause.withPrefix(ctx.receiveNonNullNode(typeParameterConstraintClause.getPrefix(), CSharpReceiver::receiveSpace));
+            typeParameterConstraintClause = typeParameterConstraintClause.withMarkers(ctx.receiveNonNullNode(typeParameterConstraintClause.getMarkers(), ctx::receiveMarkers));
+            typeParameterConstraintClause = typeParameterConstraintClause.getPadding().withTypeParameter(ctx.receiveNonNullNode(typeParameterConstraintClause.getPadding().getTypeParameter(), CSharpReceiver::receiveRightPaddedTree));
+            typeParameterConstraintClause = typeParameterConstraintClause.getPadding().withTypeParameterConstraints(ctx.receiveNonNullNode(typeParameterConstraintClause.getPadding().getTypeParameterConstraints(), CSharpReceiver::receiveContainer));
+            return typeParameterConstraintClause;
+        }
+
+        @Override
+        public Cs.TypeConstraint visitTypeConstraint(Cs.TypeConstraint typeConstraint, ReceiverContext ctx) {
+            typeConstraint = typeConstraint.withId(ctx.receiveNonNullValue(typeConstraint.getId(), UUID.class));
+            typeConstraint = typeConstraint.withPrefix(ctx.receiveNonNullNode(typeConstraint.getPrefix(), CSharpReceiver::receiveSpace));
+            typeConstraint = typeConstraint.withMarkers(ctx.receiveNonNullNode(typeConstraint.getMarkers(), ctx::receiveMarkers));
+            typeConstraint = typeConstraint.withTypeExpression(ctx.receiveNonNullNode(typeConstraint.getTypeExpression(), ctx::receiveTree));
+            return typeConstraint;
+        }
+
+        @Override
+        public Cs.AllowsConstraintClause visitAllowsConstraintClause(Cs.AllowsConstraintClause allowsConstraintClause, ReceiverContext ctx) {
+            allowsConstraintClause = allowsConstraintClause.withId(ctx.receiveNonNullValue(allowsConstraintClause.getId(), UUID.class));
+            allowsConstraintClause = allowsConstraintClause.withPrefix(ctx.receiveNonNullNode(allowsConstraintClause.getPrefix(), CSharpReceiver::receiveSpace));
+            allowsConstraintClause = allowsConstraintClause.withMarkers(ctx.receiveNonNullNode(allowsConstraintClause.getMarkers(), ctx::receiveMarkers));
+            allowsConstraintClause = allowsConstraintClause.getPadding().withExpressions(ctx.receiveNonNullNode(allowsConstraintClause.getPadding().getExpressions(), CSharpReceiver::receiveContainer));
+            return allowsConstraintClause;
+        }
+
+        @Override
+        public Cs.RefStructConstraint visitRefStructConstraint(Cs.RefStructConstraint refStructConstraint, ReceiverContext ctx) {
+            refStructConstraint = refStructConstraint.withId(ctx.receiveNonNullValue(refStructConstraint.getId(), UUID.class));
+            refStructConstraint = refStructConstraint.withPrefix(ctx.receiveNonNullNode(refStructConstraint.getPrefix(), CSharpReceiver::receiveSpace));
+            refStructConstraint = refStructConstraint.withMarkers(ctx.receiveNonNullNode(refStructConstraint.getMarkers(), ctx::receiveMarkers));
+            return refStructConstraint;
+        }
+
+        @Override
+        public Cs.ClassOrStructConstraint visitClassOrStructConstraint(Cs.ClassOrStructConstraint classOrStructConstraint, ReceiverContext ctx) {
+            classOrStructConstraint = classOrStructConstraint.withId(ctx.receiveNonNullValue(classOrStructConstraint.getId(), UUID.class));
+            classOrStructConstraint = classOrStructConstraint.withPrefix(ctx.receiveNonNullNode(classOrStructConstraint.getPrefix(), CSharpReceiver::receiveSpace));
+            classOrStructConstraint = classOrStructConstraint.withMarkers(ctx.receiveNonNullNode(classOrStructConstraint.getMarkers(), ctx::receiveMarkers));
+            classOrStructConstraint = classOrStructConstraint.withKind(ctx.receiveNonNullValue(classOrStructConstraint.getKind(), Cs.ClassOrStructConstraint.TypeKind.class));
+            return classOrStructConstraint;
+        }
+
+        @Override
+        public Cs.ConstructorConstraint visitConstructorConstraint(Cs.ConstructorConstraint constructorConstraint, ReceiverContext ctx) {
+            constructorConstraint = constructorConstraint.withId(ctx.receiveNonNullValue(constructorConstraint.getId(), UUID.class));
+            constructorConstraint = constructorConstraint.withPrefix(ctx.receiveNonNullNode(constructorConstraint.getPrefix(), CSharpReceiver::receiveSpace));
+            constructorConstraint = constructorConstraint.withMarkers(ctx.receiveNonNullNode(constructorConstraint.getMarkers(), ctx::receiveMarkers));
+            return constructorConstraint;
+        }
+
+        @Override
+        public Cs.DefaultConstraint visitDefaultConstraint(Cs.DefaultConstraint defaultConstraint, ReceiverContext ctx) {
+            defaultConstraint = defaultConstraint.withId(ctx.receiveNonNullValue(defaultConstraint.getId(), UUID.class));
+            defaultConstraint = defaultConstraint.withPrefix(ctx.receiveNonNullNode(defaultConstraint.getPrefix(), CSharpReceiver::receiveSpace));
+            defaultConstraint = defaultConstraint.withMarkers(ctx.receiveNonNullNode(defaultConstraint.getMarkers(), ctx::receiveMarkers));
+            return defaultConstraint;
+        }
+
+        @Override
         public J.AnnotatedType visitAnnotatedType(J.AnnotatedType annotatedType, ReceiverContext ctx) {
             annotatedType = annotatedType.withId(ctx.receiveNonNullValue(annotatedType.getId(), UUID.class));
             annotatedType = annotatedType.withPrefix(ctx.receiveNonNullNode(annotatedType.getPrefix(), CSharpReceiver::receiveSpace));
@@ -1214,6 +1306,98 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveModifier)
+                );
+            }
+
+            if (type == Cs.ClassDeclaration.class) {
+                return (T) new Cs.ClassDeclaration(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
+                );
+            }
+
+            if (type == Cs.MethodDeclaration.class) {
+                return (T) new Cs.MethodDeclaration(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
+                );
+            }
+
+            if (type == Cs.UsingStatement.class) {
+                return (T) new Cs.UsingStatement(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree)
+                );
+            }
+
+            if (type == Cs.TypeParameterConstraintClause.class) {
+                return (T) new Cs.TypeParameterConstraintClause(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
+                );
+            }
+
+            if (type == Cs.TypeConstraint.class) {
+                return (T) new Cs.TypeConstraint(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree)
+                );
+            }
+
+            if (type == Cs.AllowsConstraintClause.class) {
+                return (T) new Cs.AllowsConstraintClause(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
+                );
+            }
+
+            if (type == Cs.RefStructConstraint.class) {
+                return (T) new Cs.RefStructConstraint(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers)
+                );
+            }
+
+            if (type == Cs.ClassOrStructConstraint.class) {
+                return (T) new Cs.ClassOrStructConstraint(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullValue(null, Cs.ClassOrStructConstraint.TypeKind.class)
+                );
+            }
+
+            if (type == Cs.ConstructorConstraint.class) {
+                return (T) new Cs.ConstructorConstraint(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers)
+                );
+            }
+
+            if (type == Cs.DefaultConstraint.class) {
+                return (T) new Cs.DefaultConstraint(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers)
                 );
             }
 

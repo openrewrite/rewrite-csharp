@@ -335,6 +335,105 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         return lambda;
     }
 
+    public virtual J? VisitClassDeclaration(Cs.ClassDeclaration classDeclaration, P p)
+    {
+        classDeclaration = classDeclaration.WithPrefix(VisitSpace(classDeclaration.Prefix, CsSpace.Location.CLASS_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(classDeclaration, p);
+        if (tempStatement is not Cs.ClassDeclaration)
+        {
+            return tempStatement;
+        }
+        classDeclaration = (Cs.ClassDeclaration) tempStatement;
+        classDeclaration = classDeclaration.WithMarkers(VisitMarkers(classDeclaration.Markers, p));
+        classDeclaration = classDeclaration.WithClassDeclarationCore(VisitAndCast<J.ClassDeclaration>(classDeclaration.ClassDeclarationCore, p)!);
+        classDeclaration = classDeclaration.Padding.WithTypeParameterConstraintClauses(VisitContainer(classDeclaration.Padding.TypeParameterConstraintClauses, CsContainer.Location.CLASS_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, p)!);
+        return classDeclaration;
+    }
+
+    public virtual J? VisitMethodDeclaration(Cs.MethodDeclaration methodDeclaration, P p)
+    {
+        methodDeclaration = methodDeclaration.WithPrefix(VisitSpace(methodDeclaration.Prefix, CsSpace.Location.METHOD_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(methodDeclaration, p);
+        if (tempStatement is not Cs.MethodDeclaration)
+        {
+            return tempStatement;
+        }
+        methodDeclaration = (Cs.MethodDeclaration) tempStatement;
+        methodDeclaration = methodDeclaration.WithMarkers(VisitMarkers(methodDeclaration.Markers, p));
+        methodDeclaration = methodDeclaration.WithMethodDeclarationCore(VisitAndCast<J.MethodDeclaration>(methodDeclaration.MethodDeclarationCore, p)!);
+        methodDeclaration = methodDeclaration.Padding.WithTypeParameterConstraintClauses(VisitContainer(methodDeclaration.Padding.TypeParameterConstraintClauses, CsContainer.Location.METHOD_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, p)!);
+        return methodDeclaration;
+    }
+
+    public virtual J? VisitUsingStatement(Cs.UsingStatement usingStatement, P p)
+    {
+        usingStatement = usingStatement.WithPrefix(VisitSpace(usingStatement.Prefix, CsSpace.Location.USING_STATEMENT_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(usingStatement, p);
+        if (tempStatement is not Cs.UsingStatement)
+        {
+            return tempStatement;
+        }
+        usingStatement = (Cs.UsingStatement) tempStatement;
+        usingStatement = usingStatement.WithMarkers(VisitMarkers(usingStatement.Markers, p));
+        usingStatement = usingStatement.WithAwaitKeyword(usingStatement.AwaitKeyword == null ? null : VisitSpace(usingStatement.AwaitKeyword, CsSpace.Location.USING_STATEMENT_AWAIT_KEYWORD, p));
+        usingStatement = usingStatement.Padding.WithExpression(VisitContainer(usingStatement.Padding.Expression, CsContainer.Location.USING_STATEMENT_EXPRESSION, p)!);
+        usingStatement = usingStatement.WithStatement(VisitAndCast<Statement>(usingStatement.Statement, p)!);
+        return usingStatement;
+    }
+
+    public virtual J? VisitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, P p)
+    {
+        typeParameterConstraintClause = typeParameterConstraintClause.WithPrefix(VisitSpace(typeParameterConstraintClause.Prefix, CsSpace.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_PREFIX, p)!);
+        typeParameterConstraintClause = typeParameterConstraintClause.WithMarkers(VisitMarkers(typeParameterConstraintClause.Markers, p));
+        typeParameterConstraintClause = typeParameterConstraintClause.Padding.WithTypeParameter(VisitRightPadded(typeParameterConstraintClause.Padding.TypeParameter, CsRightPadded.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER, p)!);
+        typeParameterConstraintClause = typeParameterConstraintClause.Padding.WithTypeParameterConstraints(VisitContainer(typeParameterConstraintClause.Padding.TypeParameterConstraints, CsContainer.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER_CONSTRAINTS, p)!);
+        return typeParameterConstraintClause;
+    }
+
+    public virtual J? VisitTypeConstraint(Cs.TypeConstraint typeConstraint, P p)
+    {
+        typeConstraint = typeConstraint.WithPrefix(VisitSpace(typeConstraint.Prefix, CsSpace.Location.TYPE_CONSTRAINT_PREFIX, p)!);
+        typeConstraint = typeConstraint.WithMarkers(VisitMarkers(typeConstraint.Markers, p));
+        typeConstraint = typeConstraint.WithTypeExpression(VisitAndCast<TypeTree>(typeConstraint.TypeExpression, p)!);
+        return typeConstraint;
+    }
+
+    public virtual J? VisitAllowsConstraintClause(Cs.AllowsConstraintClause allowsConstraintClause, P p)
+    {
+        allowsConstraintClause = allowsConstraintClause.WithPrefix(VisitSpace(allowsConstraintClause.Prefix, CsSpace.Location.ALLOWS_CONSTRAINT_CLAUSE_PREFIX, p)!);
+        allowsConstraintClause = allowsConstraintClause.WithMarkers(VisitMarkers(allowsConstraintClause.Markers, p));
+        allowsConstraintClause = allowsConstraintClause.Padding.WithExpressions(VisitContainer(allowsConstraintClause.Padding.Expressions, CsContainer.Location.ALLOWS_CONSTRAINT_CLAUSE_EXPRESSIONS, p)!);
+        return allowsConstraintClause;
+    }
+
+    public virtual J? VisitRefStructConstraint(Cs.RefStructConstraint refStructConstraint, P p)
+    {
+        refStructConstraint = refStructConstraint.WithPrefix(VisitSpace(refStructConstraint.Prefix, CsSpace.Location.REF_STRUCT_CONSTRAINT_PREFIX, p)!);
+        refStructConstraint = refStructConstraint.WithMarkers(VisitMarkers(refStructConstraint.Markers, p));
+        return refStructConstraint;
+    }
+
+    public virtual J? VisitClassOrStructConstraint(Cs.ClassOrStructConstraint classOrStructConstraint, P p)
+    {
+        classOrStructConstraint = classOrStructConstraint.WithPrefix(VisitSpace(classOrStructConstraint.Prefix, CsSpace.Location.CLASS_OR_STRUCT_CONSTRAINT_PREFIX, p)!);
+        classOrStructConstraint = classOrStructConstraint.WithMarkers(VisitMarkers(classOrStructConstraint.Markers, p));
+        return classOrStructConstraint;
+    }
+
+    public virtual J? VisitConstructorConstraint(Cs.ConstructorConstraint constructorConstraint, P p)
+    {
+        constructorConstraint = constructorConstraint.WithPrefix(VisitSpace(constructorConstraint.Prefix, CsSpace.Location.CONSTRUCTOR_CONSTRAINT_PREFIX, p)!);
+        constructorConstraint = constructorConstraint.WithMarkers(VisitMarkers(constructorConstraint.Markers, p));
+        return constructorConstraint;
+    }
+
+    public virtual J? VisitDefaultConstraint(Cs.DefaultConstraint defaultConstraint, P p)
+    {
+        defaultConstraint = defaultConstraint.WithPrefix(VisitSpace(defaultConstraint.Prefix, CsSpace.Location.DEFAULT_CONSTRAINT_PREFIX, p)!);
+        defaultConstraint = defaultConstraint.WithMarkers(VisitMarkers(defaultConstraint.Markers, p));
+        return defaultConstraint;
+    }
+
     protected virtual JContainer<J2>? VisitContainer<J2>(JContainer<J2>? container, CsContainer.Location loc, P p) where J2 : J
     {
         if (container == null) {

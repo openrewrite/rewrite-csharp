@@ -15,6 +15,7 @@
  */
 
 using System.Diagnostics;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
 using Rewrite.RewriteCSharp.Marker;
@@ -66,6 +67,21 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         return namedArgument;
     }
 
+    public override J? VisitUsingStatement(Cs.UsingStatement usingStatement, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(usingStatement, CsSpace.Location.NAMED_ARGUMENT_PREFIX, p);
+        p.Append("using");
+        if (usingStatement.AwaitKeyword != null)
+        {
+            VisitSpace(usingStatement.AwaitKeyword, CsSpace.Location.USING_STATEMENT_AWAIT_KEYWORD, p);
+        }
+
+        VisitContainer("(", usingStatement.Padding.Expression, CsContainer.Location.USING_STATEMENT_EXPRESSION, "", ")", p);
+        Visit(usingStatement.Statement, p);
+        AfterSyntax(usingStatement, p);
+        return usingStatement;
+    }
+
     public override Cs VisitCompilationUnit(Cs.CompilationUnit compilationUnit, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(compilationUnit, Space.Location.COMPILATION_UNIT_PREFIX, p);
@@ -92,6 +108,22 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         AfterSyntax(compilationUnit, p);
 
         return compilationUnit;
+    }
+
+    public override J? VisitClassDeclaration(Cs.ClassDeclaration classDeclaration, PrintOutputCapture<TState> p)
+    {
+        _delegate.VisitClassDeclaration(classDeclaration.ClassDeclarationCore, p);
+        return classDeclaration;
+    }
+
+    public override J? VisitMethodDeclaration(Cs.MethodDeclaration methodDeclaration, PrintOutputCapture<TState> p)
+    {
+        _delegate.Visit(methodDeclaration.MethodDeclarationCore, p);
+        if (methodDeclaration.MethodDeclarationCore.Body == null)
+        {
+            p.Append(";");
+        }
+        return methodDeclaration;
     }
 
     public override J? VisitAnnotatedStatement(Cs.AnnotatedStatement annotatedStatement, PrintOutputCapture<TState> p)
@@ -493,6 +525,38 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         _delegate.PrintStatementTerminator(paddedStat.Element, p);
     }
 
+    public override J? VisitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(typeParameterConstraintClause, CsSpace.Location.TYPE_PARAMETERS_CONSTRAINT_CLAUSE_PREFIX, p);
+        p.Append("where");
+        VisitRightPadded(typeParameterConstraintClause.Padding.TypeParameter, CsRightPadded.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER,  p);
+        p.Append(":");
+        VisitContainer("", typeParameterConstraintClause.Padding.TypeParameterConstraints, CsContainer.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_CONSTRAINTS, ",", "", p);
+        AfterSyntax(typeParameterConstraintClause, p);
+        return typeParameterConstraintClause;
+    }
+
+    public override J? VisitClassOrStructConstraint(Cs.ClassOrStructConstraint classOrStructConstraint, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(classOrStructConstraint, CsSpace.Location.TYPE_PARAMETERS_CONSTRAINT_PREFIX, p);
+        p.Append(classOrStructConstraint.Kind == Cs.ClassOrStructConstraint.TypeKind.Class ? "class" : "struct");
+        return classOrStructConstraint;
+    }
+
+    public override J? VisitConstructorConstraint(Cs.ConstructorConstraint constructorConstraint, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(constructorConstraint, CsSpace.Location.TYPE_PARAMETERS_CONSTRAINT_PREFIX, p);
+        p.Append("new()");
+        return constructorConstraint;
+    }
+
+    public override J? VisitDefaultConstraint(Cs.DefaultConstraint defaultConstraint, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(defaultConstraint, CsSpace.Location.TYPE_PARAMETERS_CONSTRAINT_PREFIX, p);
+        p.Append("default");
+        return defaultConstraint;
+    }
+
 
     private class CSharpJavaPrinter(CSharpPrinter<TState> _parent) : JavaPrinter<TState>
     {
@@ -523,8 +587,10 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
             return base.Visit(tree, p);
         }
 
+
         public override J VisitClassDeclaration(J.ClassDeclaration classDecl, PrintOutputCapture<TState> p)
         {
+            var csClassDeclaration = _parent.Cursor.Value as Cs.ClassDeclaration;
             string kind = classDecl.Padding.DeclarationKind.KindType switch
             {
                 J.ClassDeclaration.Kind.Type.Class => "class",
@@ -552,9 +618,11 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
             VisitContainer("(", classDecl.Padding.PrimaryConstructor, JContainer.Location.RECORD_STATE_VECTOR, ",", ")",
                 p);
             VisitLeftPadded(":", classDecl.Padding.Extends, JLeftPadded.Location.EXTENDS, p);
-            VisitContainer(classDecl.Padding.Extends == null ? ":" : ",",
-                classDecl.Padding.Implements, JContainer.Location.IMPLEMENTS, ",", null, p);
-            VisitContainer("permits", classDecl.Padding.Permits, JContainer.Location.PERMITS, ",", null, p);
+            VisitContainer(classDecl.Padding.Extends == null ? ":" : ",", classDecl.Padding.Implements, JContainer.Location.IMPLEMENTS, ",", null, p);
+            foreach (var typeParameterClause in csClassDeclaration?.TypeParameterConstraintClauses ?? [])
+            {
+                _parent.VisitTypeParameterConstraintClause(typeParameterClause, p);
+            }
             Visit(classDecl.Body, p);
             AfterSyntax(classDecl, p);
             return classDecl;
@@ -584,9 +652,14 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
             {
                 p.Append("=>");
                 VisitStatements(block.Padding.Statements, JRightPadded.Location.BLOCK_STATEMENT, p);
+                if (block.Statements.FirstOrDefault() is not Cs.ExpressionStatement) // expression statements print their own semicolon
+                {
+                    p.Append(";");
+                }
+
                 VisitSpace(block.End, Space.Location.BLOCK_END, p);
             }
-            else if (block.Markers.FirstOrDefault(m => m is OmitBraces) == null)
+            else if (!block.Markers.OfType<OmitBraces>().Any() || block.Statements.Any())
             {
                 p.Append('{');
                 VisitStatements(block.Padding.Statements, JRightPadded.Location.BLOCK_STATEMENT, p);
@@ -595,7 +668,15 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
             }
             else
             {
-                VisitStatements(block.Padding.Statements, JRightPadded.Location.BLOCK_STATEMENT, p);
+                if (block.Padding.Statements.Any())
+                {
+                    VisitStatements(block.Padding.Statements, JRightPadded.Location.BLOCK_STATEMENT, p);
+                }
+                else
+                {
+                    p.Append(";");
+                }
+
                 VisitSpace(block.End, Space.Location.BLOCK_END, p);
             }
 
@@ -651,6 +732,12 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
             {
                 VisitContainer("(", method.Padding.Parameters, JContainer.Location.METHOD_DECLARATION_PARAMETERS, ",",
                     ")", p);
+            }
+
+            var csMethod = _parent.Cursor.GetValue<Cs.MethodDeclaration>();
+            if (csMethod != null)
+            {
+                Visit(csMethod.TypeParameterConstraintClauses, p);
             }
 
             VisitContainer("throws", method.Padding.Throws, JContainer.Location.THROWS, ",", null, p);
@@ -763,49 +850,6 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
             return primitive;
         }
 
-        public override J VisitTry(J.Try tryable, PrintOutputCapture<TState> p)
-        {
-            if (tryable.Padding.Resources != null)
-            {
-                // this is a `using` statement
-                BeforeSyntax(tryable, Space.Location.TRY_PREFIX, p);
-                p.Append("using");
-
-                // Note: we do not call VisitContainer here because the last resource may or may not be semicolon-terminated.
-                // Doing this means that VisitTryResource is not called, therefore this logic must visit the resources.
-                VisitSpace(tryable.Padding.Resources.Before, Space.Location.TRY_RESOURCES, p);
-                p.Append('(');
-                var resources = tryable.Padding.Resources.Padding.Elements;
-
-                foreach (var resource in resources)
-                {
-                    VisitSpace(resource.Element.Prefix, Space.Location.TRY_RESOURCE, p);
-                    VisitMarkers(resource.Element.Markers, p);
-                    Visit(resource.Element.VariableDeclarations, p);
-
-                    if (resource.Element.TerminatedWithSemicolon)
-                    {
-                        p.Append(';');
-                    }
-
-                    VisitSpace(resource.After, Space.Location.TRY_RESOURCE_SUFFIX, p);
-                }
-
-                p.Append(')');
-                Visit(tryable.Body, p);
-                AfterSyntax(tryable, p);
-                return tryable;
-            }
-
-            return base.VisitTry(tryable, p);
-        }
-
-        public override J? VisitModifier(J.Modifier mod, PrintOutputCapture<TState> p)
-        {
-            return base.VisitModifier(mod, p);
-        }
-
-
         public override M VisitMarker<M>(M marker, PrintOutputCapture<TState> p)
         {
             if (marker is Semicolon)
@@ -835,25 +879,22 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
             {
                 p.Append(';');
             }
-            else if (s is Cs.PropertyDeclaration propertyDeclaration &&
-                     (propertyDeclaration.Initializer != null ||
-                      propertyDeclaration.Accessors.Markers.FirstOrDefault(m => m is SingleExpressionBlock) != null))
+            else if (s is Cs.PropertyDeclaration propertyDeclaration && propertyDeclaration.Initializer != null)
             {
                 p.Append(';');
             }
-            else if (s is J.ClassDeclaration classDeclaration &&
-                     classDeclaration.Body.Markers.FirstOrDefault(m => m is OmitBraces) != null)
-            {
-                // class declaration without braces always requires a semicolon
-                p.Append(';');
-            }
-            else if (s is Cs.AnnotatedStatement annotatedStatement &&
-                     annotatedStatement.Statement is J.ClassDeclaration innerClassDeclaration &&
-                     innerClassDeclaration.Body.Markers.FirstOrDefault(m => m is OmitBraces) != null)
-            {
-                // class declaration without braces always requires a semicolon
-                p.Append(';');
-            }
+            // else if (s is J.ClassDeclaration classDeclaration && classDeclaration.Body.Markers.FirstOrDefault(m => m is OmitBraces) != null)
+            // {
+            //     // class declaration without braces always requires a semicolon
+            //     p.Append(';');
+            // }
+            // else if (s is Cs.AnnotatedStatement annotatedStatement &&
+            //          annotatedStatement.Statement is J.ClassDeclaration innerClassDeclaration &&
+            //          innerClassDeclaration.Body.Markers.FirstOrDefault(m => m is OmitBraces) != null)
+            // {
+            //     // class declaration without braces always requires a semicolon
+            //     p.Append(';');
+            // }
             else
             {
                 base.PrintStatementTerminator(s, p);

@@ -279,6 +279,98 @@ public class CSharpSender implements Sender<Cs> {
         }
 
         @Override
+        public Cs.ClassDeclaration visitClassDeclaration(Cs.ClassDeclaration classDeclaration, SenderContext ctx) {
+            ctx.sendValue(classDeclaration, Cs.ClassDeclaration::getId);
+            ctx.sendNode(classDeclaration, Cs.ClassDeclaration::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(classDeclaration, Cs.ClassDeclaration::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(classDeclaration, Cs.ClassDeclaration::getClassDeclarationCore, ctx::sendTree);
+            ctx.sendNode(classDeclaration, e -> e.getPadding().getTypeParameterConstraintClauses(), CSharpSender::sendContainer);
+            return classDeclaration;
+        }
+
+        @Override
+        public Cs.MethodDeclaration visitMethodDeclaration(Cs.MethodDeclaration methodDeclaration, SenderContext ctx) {
+            ctx.sendValue(methodDeclaration, Cs.MethodDeclaration::getId);
+            ctx.sendNode(methodDeclaration, Cs.MethodDeclaration::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(methodDeclaration, Cs.MethodDeclaration::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(methodDeclaration, Cs.MethodDeclaration::getMethodDeclarationCore, ctx::sendTree);
+            ctx.sendNode(methodDeclaration, e -> e.getPadding().getTypeParameterConstraintClauses(), CSharpSender::sendContainer);
+            return methodDeclaration;
+        }
+
+        @Override
+        public Cs.UsingStatement visitUsingStatement(Cs.UsingStatement usingStatement, SenderContext ctx) {
+            ctx.sendValue(usingStatement, Cs.UsingStatement::getId);
+            ctx.sendNode(usingStatement, Cs.UsingStatement::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(usingStatement, Cs.UsingStatement::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(usingStatement, Cs.UsingStatement::getAwaitKeyword, CSharpSender::sendSpace);
+            ctx.sendNode(usingStatement, e -> e.getPadding().getExpression(), CSharpSender::sendContainer);
+            ctx.sendNode(usingStatement, Cs.UsingStatement::getStatement, ctx::sendTree);
+            return usingStatement;
+        }
+
+        @Override
+        public Cs.TypeParameterConstraintClause visitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, SenderContext ctx) {
+            ctx.sendValue(typeParameterConstraintClause, Cs.TypeParameterConstraintClause::getId);
+            ctx.sendNode(typeParameterConstraintClause, Cs.TypeParameterConstraintClause::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(typeParameterConstraintClause, Cs.TypeParameterConstraintClause::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(typeParameterConstraintClause, e -> e.getPadding().getTypeParameter(), CSharpSender::sendRightPadded);
+            ctx.sendNode(typeParameterConstraintClause, e -> e.getPadding().getTypeParameterConstraints(), CSharpSender::sendContainer);
+            return typeParameterConstraintClause;
+        }
+
+        @Override
+        public Cs.TypeConstraint visitTypeConstraint(Cs.TypeConstraint typeConstraint, SenderContext ctx) {
+            ctx.sendValue(typeConstraint, Cs.TypeConstraint::getId);
+            ctx.sendNode(typeConstraint, Cs.TypeConstraint::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(typeConstraint, Cs.TypeConstraint::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(typeConstraint, Cs.TypeConstraint::getTypeExpression, ctx::sendTree);
+            return typeConstraint;
+        }
+
+        @Override
+        public Cs.AllowsConstraintClause visitAllowsConstraintClause(Cs.AllowsConstraintClause allowsConstraintClause, SenderContext ctx) {
+            ctx.sendValue(allowsConstraintClause, Cs.AllowsConstraintClause::getId);
+            ctx.sendNode(allowsConstraintClause, Cs.AllowsConstraintClause::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(allowsConstraintClause, Cs.AllowsConstraintClause::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(allowsConstraintClause, e -> e.getPadding().getExpressions(), CSharpSender::sendContainer);
+            return allowsConstraintClause;
+        }
+
+        @Override
+        public Cs.RefStructConstraint visitRefStructConstraint(Cs.RefStructConstraint refStructConstraint, SenderContext ctx) {
+            ctx.sendValue(refStructConstraint, Cs.RefStructConstraint::getId);
+            ctx.sendNode(refStructConstraint, Cs.RefStructConstraint::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(refStructConstraint, Cs.RefStructConstraint::getMarkers, ctx::sendMarkers);
+            return refStructConstraint;
+        }
+
+        @Override
+        public Cs.ClassOrStructConstraint visitClassOrStructConstraint(Cs.ClassOrStructConstraint classOrStructConstraint, SenderContext ctx) {
+            ctx.sendValue(classOrStructConstraint, Cs.ClassOrStructConstraint::getId);
+            ctx.sendNode(classOrStructConstraint, Cs.ClassOrStructConstraint::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(classOrStructConstraint, Cs.ClassOrStructConstraint::getMarkers, ctx::sendMarkers);
+            ctx.sendValue(classOrStructConstraint, Cs.ClassOrStructConstraint::getKind);
+            return classOrStructConstraint;
+        }
+
+        @Override
+        public Cs.ConstructorConstraint visitConstructorConstraint(Cs.ConstructorConstraint constructorConstraint, SenderContext ctx) {
+            ctx.sendValue(constructorConstraint, Cs.ConstructorConstraint::getId);
+            ctx.sendNode(constructorConstraint, Cs.ConstructorConstraint::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(constructorConstraint, Cs.ConstructorConstraint::getMarkers, ctx::sendMarkers);
+            return constructorConstraint;
+        }
+
+        @Override
+        public Cs.DefaultConstraint visitDefaultConstraint(Cs.DefaultConstraint defaultConstraint, SenderContext ctx) {
+            ctx.sendValue(defaultConstraint, Cs.DefaultConstraint::getId);
+            ctx.sendNode(defaultConstraint, Cs.DefaultConstraint::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(defaultConstraint, Cs.DefaultConstraint::getMarkers, ctx::sendMarkers);
+            return defaultConstraint;
+        }
+
+        @Override
         public J.AnnotatedType visitAnnotatedType(J.AnnotatedType annotatedType, SenderContext ctx) {
             ctx.sendValue(annotatedType, J.AnnotatedType::getId);
             ctx.sendNode(annotatedType, J.AnnotatedType::getPrefix, CSharpSender::sendSpace);

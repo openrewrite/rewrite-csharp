@@ -1,12 +1,4 @@
-﻿using Rewrite.Core.Marker;
-using Rewrite.RewriteCSharp;
-using Rewrite.Test.CSharp;
-using Rewrite.Test;
-using Xunit.Abstractions;
-
-namespace Rewrite.CSharp.Tests.Tree;
-
-using static Assertions;
+﻿namespace Rewrite.CSharp.Tests;
 
 [Collection(Collections.PrinterAccess)]
 [Exploratory]

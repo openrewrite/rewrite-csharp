@@ -46,6 +46,7 @@ public sealed class JLeftPadded<T>(
 public static class JLeftPadded
 {
     [PublicAPI]
+    public static JLeftPadded<T> AsLeftPadded<T>(this T element) => Create(element, Space.EMPTY, Markers.EMPTY);
     public static JLeftPadded<T> AsLeftPadded<T>(this T element, Space before) => element.AsLeftPadded(before, Markers.EMPTY);
 
     [PublicAPI]

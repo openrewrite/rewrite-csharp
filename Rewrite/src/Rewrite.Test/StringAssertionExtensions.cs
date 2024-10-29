@@ -5,14 +5,14 @@ using DiffPlex.Chunkers;
 using DiffPlex.DiffBuilder.Model;
 using Socolin.ANSITerminalColor;
 
-namespace Rewrite.CSharp.Tests;
+namespace Rewrite.Test;
 
 public static class StringAssertionExtensions
 {
 
-    public static void ShouldBeSameAs(this string newText, string oldText)
+    public static void ShouldBeSameAs(this string? newText, string? oldText)
     {
-        var result = GetDifferences(oldText, newText);
+        var result = GetDifferences(oldText ?? "", newText ?? "");
         if (result != null)
         {
             Assert.Fail($"Expected string to be the same but are different\n{result}");
