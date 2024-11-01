@@ -63,7 +63,7 @@ public class CSharpParser : Core.Parser
         var encoding = Encoding.GetEncoding((this as Core.Parser).GetCharset(ctx));
 
         var sourceFiles = new List<SourceFile>();
-        foreach (var source in sources)
+        Parallel.ForEach(sources,source =>
         {
             SourceFile cs;
             try
@@ -88,7 +88,33 @@ public class CSharpParser : Core.Parser
             }
 
             sourceFiles.Add(cs!);
-        }
+        });
+        // foreach (var source in sources)
+        // {
+        //     SourceFile cs;
+        //     try
+        //     {
+        //         using var stream = source.GetSource(ctx);
+        //         var sourceText = SourceText.From(stream, encoding);
+        //         var syntaxTree = CSharpSyntaxTree.ParseText(sourceText, path: source.GetRelativePath(relativeTo));
+        //         var root = syntaxTree.GetRoot();
+        //         var compilation = CSharpCompilation.Create("Dummy")
+        //             .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
+        //             .AddReferences(references)
+        //             .AddSyntaxTrees(syntaxTree);
+        //         var semanticModel = compilation.GetSemanticModel(syntaxTree);
+        //
+        //         var visitor = new CSharpParserVisitor(this, semanticModel);
+        //         cs = visitor.Visit(root) as Cs.CompilationUnit ?? throw new InvalidOperationException("Visitor.Visit returned null instead of Compilation Unit");
+        //     }
+        //     catch (Exception t)
+        //     {
+        //         // ctx.OnError.accept(t);
+        //         cs = ParseError.Build(this, source, relativeTo, ctx, t);
+        //     }
+        //
+        //     sourceFiles.Add(cs!);
+        // }
 
         return sourceFiles;
     }

@@ -24,6 +24,7 @@ import org.openrewrite.csharp.CSharpPrinter;
 import org.openrewrite.csharp.CSharpVisitor;
 import org.openrewrite.java.JavaPrinter;
 import org.openrewrite.java.JavaTypeVisitor;
+import org.openrewrite.java.JavaVisitor;
 import org.openrewrite.java.internal.TypesInUse;
 import org.openrewrite.java.tree.*;
 import org.openrewrite.marker.Markers;
@@ -310,27 +311,35 @@ public interface Cs extends J {
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
     @RequiredArgsConstructor
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    final class NamedArgument implements Cs, Expression {
+    final class Argument implements Cs, Expression {
         @Nullable
         @NonFinal
-        transient WeakReference<NamedArgument.Padding> padding;
+        transient WeakReference<Argument.Padding> padding;
 
         @With
+        @Getter
         @EqualsAndHashCode.Include
         UUID id;
 
         @With
+        @Getter
         Space prefix;
 
         @With
+        @Getter
         Markers markers;
 
         @Nullable
         JRightPadded<Identifier> nameColumn;
 
+        @Nullable
+        @Getter
+        @With
+        Keyword refKindKeyword;
+
         public J.@Nullable Identifier getNameColumn() { return nameColumn == null ? null : nameColumn.getElement(); }
 
-        public NamedArgument withNameColumn(J.@Nullable Identifier nameColumn) {
+        public Argument withNameColumn(J.@Nullable Identifier nameColumn) {
             return getPadding().withNameColumn(JRightPadded.withElement(this.nameColumn, nameColumn));
         }
 
@@ -344,13 +353,13 @@ public interface Cs extends J {
 
         @SuppressWarnings("unchecked")
         @Override
-        public NamedArgument withType(@Nullable JavaType type) {
-            return expression.getType() == type ? this : new NamedArgument(id, prefix, markers, nameColumn, expression.withType(type));
+        public Argument withType(@Nullable JavaType type) {
+            return expression.getType() == type ? this : new Argument(id, prefix, markers, nameColumn, refKindKeyword, expression.withType(type));
         }
 
         @Override
         public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
-            return v.visitNamedArgument(this, p);
+            return v.visitArgument(this, p);
         }
 
         public Padding getPadding() {
@@ -381,14 +390,14 @@ public interface Cs extends J {
 
         @RequiredArgsConstructor
         public static class Padding {
-            private final NamedArgument t;
+            private final Argument t;
 
             public @Nullable JRightPadded<Identifier> getNameColumn() {
                 return t.nameColumn;
             }
 
-            public NamedArgument withNameColumn(@Nullable JRightPadded<Identifier> target) {
-                return t.nameColumn == target ? t : new NamedArgument(t.id, t.prefix, t.markers, target, t.expression);
+            public Argument withNameColumn(@Nullable JRightPadded<Identifier> target) {
+                return t.nameColumn == target ? t : new Argument(t.id, t.prefix, t.markers, target, t.refKindKeyword, t.expression);
             }
 
         }
@@ -1881,7 +1890,38 @@ public interface Cs extends J {
         }
     }
 
+    enum KeywordKind
+    {
+        Ref,
+        Out,
+        Await,
+        Base,
+        This
+    }
 
+    @Getter
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    final class Keyword implements Cs
+    {
+        @With
+        @Getter
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        @With
+        @Getter
+        KeywordKind kind;
+    }
 
 
     @Getter
@@ -2121,7 +2161,7 @@ public interface Cs extends J {
         @With
         @Nullable
         @Getter
-        Space awaitKeyword;
+        Keyword awaitKeyword;
 
 
         JContainer<Expression> expression;
@@ -2546,6 +2586,644 @@ public interface Cs extends J {
         @Override
         public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
             return v.visitDefaultConstraint(this, p);
+        }
+    }
+
+    /**
+     * A declaration expression node represents a local variable declaration in an expression context.
+     * This is used in two primary scenarios in C#:
+     * <ul>
+     *     <li>Out variable declarations: {@code Method(out int x)}</li>
+     *     <li>Deconstruction declarations: {@code (int x, string y) = GetPoint()}</li>
+     * </ul>
+     * Example 1: Out variable declaration:
+     * <pre>
+     * if(int.TryParse(s, out int result)) {
+     *     // use result
+     * }
+     * </pre>
+     *
+     * Example 2: Deconstruction declaration:
+     * <pre>
+     * (int x, string y) = point;
+     * (int count, (string name, int age)) = GetPersonDetails();
+     * </pre>
+     */
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
+    public final class DeclarationExpression implements Cs, Expression, TypedTree {
+
+        @With
+        @EqualsAndHashCode.Include
+        @Getter
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+
+        @With
+        @Getter
+        @Nullable
+        TypeTree typeExpression;
+
+        @With
+        @Getter
+        VariableDesignation variables;
+
+
+        @Override
+        public @Nullable JavaType getType() {
+            return variables.getType();
+        }
+
+        @Override
+        public DeclarationExpression withType(@Nullable JavaType type) {
+            return withType(type == null ? null : this.variables.withType(type));
+        }
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitDeclarationExpression(this, p);
+        }
+
+        @Override
+        @Transient
+        public CoordinateBuilder.Expression getCoordinates() {
+            return new CoordinateBuilder.Expression(this);
+        }
+    }
+
+    /**
+     * Interface for variable designators in declaration expressions.
+     * This can be either a single variable name or a parenthesized list of designators for deconstruction.
+     * @see SingleVariableDesignation
+     * @see ParenthesizedVariableDesignation
+     */
+    interface VariableDesignation extends Expression, Cs {
+    }
+
+    /**
+     * Represents a single variable declaration within a declaration expression.
+     * Used both for simple out variable declarations and as elements within deconstruction declarations.
+     *
+     * Example in out variable:
+     * <pre>
+     * int.TryParse(s, out int x)  // 'int x' is the SingleVariable
+     * </pre>
+     *
+     * Example in deconstruction:
+     * <pre>
+     * (int x, string y) = point;  // both 'int x' and 'string y' are SingleVariables
+     * </pre>
+     */
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
+    public final class SingleVariableDesignation implements VariableDesignation, Cs {
+        @With
+        @EqualsAndHashCode.Include
+        @Getter
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        @With
+        @Getter
+        J.Identifier name;
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitSingleVariableDesignation(this, p);
+        }
+
+        @Override
+        public @Nullable JavaType getType() {
+            return name.getType();
+        }
+
+        @Override
+        public SingleVariableDesignation withType(@Nullable JavaType type) {
+            return this.getType() == type ? this :  new Cs.SingleVariableDesignation(
+                    id,
+                    prefix,
+                    markers,
+                    name.withType(type));
+        }
+
+        @Override
+        @Transient
+        public CoordinateBuilder.Expression getCoordinates() {
+            return new CoordinateBuilder.Expression(this);
+        }
+    }
+
+    /**
+     * Represents a parenthesized list of variable declarations used in deconstruction patterns.
+     * Can contain both single variables and nested deconstruction patterns.
+     *
+     * Example of simple deconstruction:
+     * <pre>
+     * (int x, string y) = point;
+     * </pre>
+     *
+     * Example of nested deconstruction:
+     * <pre>
+     * (int count, (string name, int age)) = GetPersonDetails();
+     *                 // ^^^^^^^^^^^^^^^^^^ nested ParenthesizedVariable
+     * //    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ outer ParenthesizedVariable
+     * </pre>
+     */
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @RequiredArgsConstructor
+    public final class ParenthesizedVariableDesignation implements VariableDesignation, Cs {
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @With
+        @EqualsAndHashCode.Include
+        @Getter
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        JContainer<VariableDesignation> variables;
+
+        public List<VariableDesignation> getVariables() {
+            return variables.getElements();
+        }
+
+        public ParenthesizedVariableDesignation withVariables(List<VariableDesignation> variables) {
+            return getPadding().withVariables(JContainer.withElements(this.variables, variables));
+        }
+
+        @With
+        @Getter
+        @Nullable
+        JavaType type;
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitParenthesizedVariableDesignation(this, p);
+        }
+
+        @Override
+        @Transient
+        public CoordinateBuilder.Expression getCoordinates() {
+            return new CoordinateBuilder.Expression(this);
+        }
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.t != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @RequiredArgsConstructor
+        public class Padding {
+            private final ParenthesizedVariableDesignation t;
+
+            public JContainer<VariableDesignation> getVariables() {
+                return t.variables;
+            }
+
+            public ParenthesizedVariableDesignation withVariables(JContainer<VariableDesignation> variables) {
+                return t.variables == variables ? t : new ParenthesizedVariableDesignation(t.id, t.prefix, t.markers, variables, t.type);
+            }
+        }
+    }
+
+    /**
+     * Represents a discard designation in pattern matching expressions, indicated by an underscore (_).
+     * For example in pattern matching:
+     * ```csharp
+     * if (obj is _) // discard pattern
+     * ```
+     * Or in deconstruction:
+     * ```csharp
+     * var (x, _, z) = tuple; // discards second element
+     * ```
+     */
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
+    final class DiscardVariableDesignation implements VariableDesignation, Cs {
+        @With
+        @EqualsAndHashCode.Include
+        @Getter
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        @With
+        @Getter
+        J.Identifier discard;
+
+        @Override
+        public @Nullable JavaType getType() {
+            return discard.getType();
+        }
+
+        @Override
+        public <J2 extends J> J2 withType(@Nullable JavaType type) {
+            return (J2) withDiscard(discard.withType(type));
+        }
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitDiscardVariableDesignation(this, p);
+        }
+
+        @Override
+        @Transient
+        public CoordinateBuilder.Expression getCoordinates() {
+            return new CoordinateBuilder.Expression(this);
+        }
+    }
+
+    /**
+     * Represents a tuple expression in C#.
+     * Can be used in tuple construction, deconstruction and tuple literals.
+     *
+     * Examples:
+     * ```csharp
+     * // Tuple construction
+     * var point = (1, 2);
+     *
+     * // Named tuple elements
+     * var person = (name: "John", age: 25);
+     *
+     * // Nested tuples
+     * var nested = (1, (2, 3));
+     *
+     * // Tuple type with multiple elements
+     * (string name, int age) person = ("John", 25);
+     * ```
+     */
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    final class TupleExpression implements Cs, Expression {
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @With
+        @EqualsAndHashCode.Include
+        @Getter
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        JContainer<Cs.Argument> arguments;
+
+        public List<Cs.Argument> getArguments() {
+            return arguments.getElements();
+        }
+
+        public TupleExpression withArguments(List<Cs.Argument> arguments) {
+            return getPadding().withArguments(JContainer.withElements(this.arguments, arguments));
+        }
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitTupleExpression(this, p);
+        }
+
+        @Override
+        public @Nullable JavaType getType() {
+            return null;
+        }
+
+        @Override
+        public TupleExpression withType(@Nullable JavaType type) {
+            return this;
+        }
+
+        @Override
+        @Transient
+        public CoordinateBuilder.Expression getCoordinates() {
+            return new CoordinateBuilder.Expression(this);
+        }
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.t != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final TupleExpression t;
+
+            public JContainer<Cs.Argument> getArguments() {
+                return t.arguments;
+            }
+
+            public TupleExpression withArguments(JContainer<Cs.Argument> arguments) {
+                return t.arguments == arguments ? t : new TupleExpression(t.id, t.prefix, t.markers, arguments);
+            }
+        }
+    }
+
+    /**
+     * Represents a C# constructor declaration which may include an optional constructor initializer.
+     * <p>
+     * For example:
+     * <pre>
+     *   // Constructor with no initializer
+     *   public MyClass() {
+     *   }
+     *
+     *   // Constructor with base class initializer
+     *   public MyClass(int x) : base(x) {
+     *   }
+     *
+     *   // Constructor with this initializer
+     *   public MyClass(string s) : this(int.Parse(s)) {
+     *   }
+     * </pre>
+     */
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
+    public class Constructor implements Cs, Statement {
+        @Getter
+        @With
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @Getter
+        @With
+        Space prefix;
+
+        @Getter
+        @With
+        Markers markers;
+
+        @Getter
+        @With
+        @Nullable
+        ConstructorInitializer initializer;
+
+        @Getter
+        @With
+        J.MethodDeclaration constructorCore;
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitConstructor(this, p);
+        }
+
+        @Override
+        @Transient
+        public CoordinateBuilder.Statement getCoordinates() {
+            return new CoordinateBuilder.Statement(this);
+        }
+    }
+
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    final class Unary implements Cs, Statement, Expression, TypedTree {
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @With
+        @EqualsAndHashCode.Include
+        @Getter
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        JLeftPadded<Type> operator;
+
+        public Type getOperator() {
+            return operator.getElement();
+        }
+
+        public Cs.Unary withOperator(Type operator) {
+            return getPadding().withOperator(this.operator.withElement(operator));
+        }
+
+        @With
+        @Getter
+        Expression expression;
+
+        @With
+        @Nullable
+        @Getter
+        JavaType type;
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitUnary(this, p);
+        }
+
+        @Override
+        @Transient
+        public CoordinateBuilder.Statement getCoordinates() {
+            return new CoordinateBuilder.Statement(this);
+        }
+
+        @Override
+        @Transient
+        public List<J> getSideEffects() {
+            return getOperator().isModifying() ? singletonList(this) : expression.getSideEffects();
+        }
+
+        public enum Type {
+
+            /**
+             * Represent x! syntax
+             */
+            SuppressNullableWarning;
+
+            public boolean isModifying() {
+                switch (this) {
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.t != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @Override
+        public String toString() {
+            return withPrefix(Space.EMPTY).printTrimmed(new JavaPrinter<>());
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final Cs.Unary t;
+
+            public JLeftPadded<Cs.Unary.Type> getOperator() {
+                return t.operator;
+            }
+
+            public Cs.Unary withOperator(JLeftPadded<Cs.Unary.Type> operator) {
+                return t.operator == operator ? t : new Cs.Unary(t.id, t.prefix, t.markers, operator, t.expression, t.type);
+            }
+        }
+    }
+
+
+    /**
+     * Represents a constructor initializer which is a call to another constructor, either in the same class (this)
+     * or in the base class (base).
+     *
+     * Examples:
+     * ```csharp
+     * class Person {
+     *     // Constructor with 'this' initializer
+     *     public Person(string name) : this(name, 0) { }
+     *
+     *     // Constructor with 'base' initializer
+     *     public Person(string name, int age) : base(name) { }
+     * }
+     * ```
+     */
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    final class ConstructorInitializer implements Cs {
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @With
+        @EqualsAndHashCode.Include
+        @Getter
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        @With
+        @Getter
+        Cs.Keyword keyword;
+
+        JContainer<Cs.Argument> arguments;
+
+        public List<Cs.Argument> getArguments() {
+            return arguments.getElements();
+        }
+
+        public ConstructorInitializer withArguments(List<Cs.Argument> arguments) {
+            return getPadding().withArguments(JContainer.withElements(this.arguments, arguments));
+        }
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitConstructorInitializer(this, p);
+        }
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.t != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final ConstructorInitializer t;
+
+            public JContainer<Cs.Argument> getArguments() {
+                return t.arguments;
+            }
+
+            public ConstructorInitializer withArguments(JContainer<Cs.Argument> arguments) {
+                return t.arguments == arguments ? t : new ConstructorInitializer(t.id, t.prefix, t.markers, t.keyword, arguments);
+            }
         }
     }
 }

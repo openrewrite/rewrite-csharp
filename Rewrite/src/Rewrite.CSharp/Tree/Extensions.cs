@@ -5,6 +5,21 @@ namespace Rewrite.RewriteCSharp.Tree;
 
 internal static class Extensions
 {
+
+
+
+    public static JavaType? GetJavaType(Cs.DeclarationExpression expr)
+    {
+        // todo: not implemented properly
+        return null;
+    }
+    public static Cs.DeclarationExpression WithJavaType(Cs.DeclarationExpression expr, JavaType newType)
+    {
+        // todo: not implemented properly
+        return expr;
+    }
+
+
     public static JavaType? GetJavaType(Cs.Lambda expr)
     {
         return expr.LambdaExpression.Type;
@@ -74,13 +89,41 @@ internal static class Extensions
         return expr.WithExpression(expr.Expression.WithType<Expression>(newType));
     }
 
-    public static JavaType? GetJavaType(Cs.NamedArgument expr)
+    public static JavaType? GetJavaType(Cs.Argument expr)
     {
-        return expr.Type;
+        return expr.Expression.Type;
     }
 
-    public static Cs.NamedArgument WithJavaType(Cs.NamedArgument expr, JavaType newType)
+    public static Cs.Argument WithJavaType(Cs.Argument expr, JavaType newType)
     {
         return expr.WithExpression(expr.Expression.WithType<Expression>(newType));
+    }
+
+    public static JavaType? GetJavaType(Cs.SingleVariableDesignation expr)
+    {
+        return expr.Name.Type;
+    }
+    public static Cs.SingleVariableDesignation WithJavaType(Cs.SingleVariableDesignation expr, JavaType newType)
+    {
+        return expr.WithName(expr.Name.WithType(newType));
+    }
+
+    public static JavaType? GetJavaType(Cs.DiscardVariableDesignation expr)
+    {
+        return expr.Discard.Type;
+    }
+    public static Cs.DiscardVariableDesignation WithJavaType(Cs.DiscardVariableDesignation expr, JavaType newType)
+    {
+        return expr.WithDiscard(expr.Discard.WithType(newType));
+    }
+
+    public static JavaType? GetJavaType(Cs.TupleExpression expr)
+    {
+        return null;
+    }
+
+    public static Cs.TupleExpression WithJavaType(Cs.TupleExpression expr, JavaType newType)
+    {
+        return expr;
     }
 }

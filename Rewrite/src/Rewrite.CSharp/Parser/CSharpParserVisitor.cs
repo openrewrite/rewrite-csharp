@@ -596,6 +596,11 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitMethodDeclaration(MethodDeclarationSyntax node)
     {
+        // DeclarationExpressionSyntax f;
+        // SingleVariableDesignationSyntax s;
+        // ArgumentSyntax s;
+        // J.VariableDeclarations;
+
         J.Block body;
         if (node.Body != null)
         {
@@ -707,23 +712,26 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitArgument(ArgumentSyntax node)
     {
-        if (node.NameColon == null)
-        {
-            return Convert<Expression>(node.Expression);
-        }
-        else
-        {
-            //
-            return new Cs.NamedArgument(
-                Core.Tree.RandomId(),
-                Format(Leading(node.NameColon)),
-                Markers.EMPTY,
-                new JRightPadded<J.Identifier>(
+        // if (node.NameColon == null && node.RefKindKeyword.IsKind(SyntaxKind.None))
+        // {
+        //     return Convert<Expression>(node.Expression);
+        // }
+        // else
+        // {
+            var nameColumn = node.NameColon != null
+                ? new JRightPadded<J.Identifier>(
                     MapIdentifier(node.NameColon.Name.Identifier, null),
-                    Format(Trailing(node.NameColon.Name)), Markers.EMPTY),
+                    Format(Trailing(node.NameColon.Name)), Markers.EMPTY)
+                : null;
+            return new Cs.Argument(
+                Core.Tree.RandomId(),
+                Format(Leading(node)),
+                Markers.EMPTY,
+                nameColumn,
+                VisitKeyword(node.RefKindKeyword),
                 Convert<Expression>(node.Expression)!
                 );
-        }
+        // }
     }
 
     public override J.Block VisitBlock(BlockSyntax node)
@@ -1362,8 +1370,11 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitTupleExpression(TupleExpressionSyntax node)
     {
-        // This was added in C# 7.0
-        return base.VisitTupleExpression(node);
+        return new Cs.TupleExpression(
+            Core.Tree.RandomId(),
+            Format(Leading(node.OpenParenToken)),
+            Markers.EMPTY,
+            ToJContainer<ArgumentSyntax, Cs.Argument>(node.Arguments, node.OpenParenToken));
     }
 
     public override J? VisitPrefixUnaryExpression(PrefixUnaryExpressionSyntax node)
@@ -1431,39 +1442,59 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitPostfixUnaryExpression(PostfixUnaryExpressionSyntax node)
     {
-        // TODO remove `if` once we support all
-        if (!node.OperatorToken.IsKind(SyntaxKind.PlusPlusToken) &&
-            !node.OperatorToken.IsKind(SyntaxKind.MinusMinusToken))
-            return DefaultVisit(node);
-
-        return new J.Unary(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            MapPostfixUnaryOperator(node.OperatorToken),
-            Convert<Expression>(node.Operand)!,
-            MapType(node)
-        );
-    }
-
-    private JLeftPadded<J.Unary.Type> MapPostfixUnaryOperator(SyntaxToken operatorToken)
-    {
-        return operatorToken.Kind() switch
+        var operatorEnum = MapPostfixUnaryOperator(node.OperatorToken);
+        if (operatorEnum is J.Unary.Type jOperator)
         {
-            SyntaxKind.PlusPlusToken => new JLeftPadded<J.Unary.Type>(
-                Format(Leading(operatorToken)),
-                J.Unary.Type.PostIncrement,
-                Markers.EMPTY
-            ),
-            SyntaxKind.MinusMinusToken => new JLeftPadded<J.Unary.Type>(
-                Format(Leading(operatorToken)),
-                J.Unary.Type.PostDecrement,
-                Markers.EMPTY
-            ),
-            // TODO implement all
-            _ => throw new NotImplementedException(operatorToken.ToString())
-        };
+            return new J.Unary(
+                Core.Tree.RandomId(),
+                Format(Leading(node)),
+                Markers.EMPTY,
+                new JLeftPadded<J.Unary.Type>(
+                    Format(Leading(node.OperatorToken)),
+                    jOperator,
+                    Markers.EMPTY
+                ),
+                Convert<Expression>(node.Operand)!,
+                MapType(node));
+        }
+        else
+        {
+            return new Cs.Unary(
+                Core.Tree.RandomId(),
+                Format(Leading(node)),
+                Markers.EMPTY,
+                JLeftPadded.Create(
+                    (Cs.Unary.Type)operatorEnum,
+                    Format(Leading(node.OperatorToken)),
+                    Markers.EMPTY
+                ),
+                Convert<Expression>(node.Operand)!,
+                MapType(node));
+        }
     }
+
+    private Enum MapPostfixUnaryOperator(SyntaxToken operatorToken)
+    {
+        Enum type = operatorToken.Kind() switch
+        {
+            SyntaxKind.PlusPlusToken => J.Unary.Type.PostIncrement,
+            SyntaxKind.MinusMinusToken => J.Unary.Type.PostDecrement,
+            SyntaxKind.ExclamationToken => Cs.Unary.Type.SuppressNullableWarning,
+            _ => throw new InvalidOperationException($"Unsupported token type {operatorToken} in PostfixUnaryExpression")
+        };
+        return type;
+    }
+
+    // private Cs.Unary.Type MapPostfixUnaryOperatorToJ(SyntaxToken operatorToken)
+    // {
+    //     J.Unary.Type? type = operatorToken.Kind() switch
+    //     {
+    //         SyntaxKind.PlusPlusToken => J.Unary.Type.PostIncrement,
+    //         SyntaxKind.MinusMinusToken => J.Unary.Type.PostDecrement,
+    //         _ => null
+    //     };
+    //     return type;
+    // }
 
     public override J? VisitMemberAccessExpression(MemberAccessExpressionSyntax node)
     {
@@ -1854,7 +1885,13 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitDeclarationExpression(DeclarationExpressionSyntax node)
     {
-        return base.VisitDeclarationExpression(node);
+        var result = new Cs.DeclarationExpression(
+            Core.Tree.RandomId(),
+            Format(Leading(node)),
+            Markers.EMPTY,
+            Convert<TypeTree>(node.Type),
+            Convert<Cs.VariableDesignation>(node.Designation)!);
+        return result;
     }
 
     public override J? VisitAnonymousMethodExpression(AnonymousMethodExpressionSyntax node)
@@ -2216,8 +2253,33 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitImplicitArrayCreationExpression(ImplicitArrayCreationExpressionSyntax node)
     {
-        // This was added in C# 3.0
-        return base.VisitImplicitArrayCreationExpression(node);
+        return new J.NewArray(
+            Core.Tree.RandomId(),
+            Format(Leading(node)),
+            Markers.EMPTY,
+            null,
+            [ new J.ArrayDimension(
+                Core.Tree.RandomId(),
+                Format(Leading(node.OpenBracketToken)),
+                Markers.EMPTY,
+                JRightPadded.Create<Expression>(new Cs.ArrayRankSpecifier(
+                    Core.Tree.RandomId(),
+                    Space.EMPTY,
+                    Markers.EMPTY,
+                    JContainer.Create(node.Commas.Select(c => JRightPadded.Create<Expression>(new J.Empty(Core.Tree.RandomId(), Format(Leading(c)), Markers.EMPTY), Format(Trailing(c)))).ToList())))) ],
+                // node.Commas.Select(c => new J.ArrayDimension(
+                // Core.Tree.RandomId(),
+                // Format(Leading(c)),
+                // Markers.EMPTY,
+                // JRightPadded.Create<Expression>(new J.Empty(Core.Tree.RandomId(), Space.EMPTY, Markers.EMPTY)))).ToList(),
+            new JContainer<Expression>(
+                Format(Leading(node.Initializer.OpenBraceToken)),
+                node.Initializer.Expressions.Select(e =>
+                        new JRightPadded<Expression>(Convert<Expression>(e)!, Format(Trailing(e)), Markers.EMPTY))
+                    .ToList(),
+                Markers.EMPTY),
+            MapType(node)
+        );
     }
 
     public override J? VisitStackAllocArrayCreationExpression(StackAllocArrayCreationExpressionSyntax node)
@@ -2661,17 +2723,30 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitSingleVariableDesignation(SingleVariableDesignationSyntax node)
     {
-        return MapIdentifier(node.Identifier, MapType(node));
+        return new Cs.SingleVariableDesignation(
+            Core.Tree.RandomId(),
+            Space.EMPTY,
+            Markers.EMPTY,
+            MapIdentifier(node.Identifier, MapType(node)));
     }
 
     public override J? VisitDiscardDesignation(DiscardDesignationSyntax node)
     {
-        return MapIdentifier(node.UnderscoreToken, MapType(node));
+        return new Cs.DiscardVariableDesignation(
+            Core.Tree.RandomId(),
+            Space.EMPTY,
+            Markers.EMPTY,
+            MapIdentifier(node.UnderscoreToken, MapType(node)));
     }
 
     public override J? VisitParenthesizedVariableDesignation(ParenthesizedVariableDesignationSyntax node)
     {
-        return base.VisitParenthesizedVariableDesignation(node);
+        return new Cs.ParenthesizedVariableDesignation(
+            Core.Tree.RandomId(),
+            Space.EMPTY,
+            Markers.EMPTY,
+            ToJContainer<VariableDesignationSyntax, Cs.VariableDesignation>(node.Variables, node.OpenParenToken),
+            MapType(node));
     }
 
     public override J? VisitExpressionStatement(ExpressionStatementSyntax node)
@@ -2891,13 +2966,32 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                 Core.Tree.RandomId(),
                 Format(Leading(node)),
                 Markers.EMPTY,
-                node.AwaitKeyword.IsKeyword() ? Format(Trailing(node.AwaitKeyword)) : null,
+                VisitKeyword(node.AwaitKeyword),
                 JContainer.Create(new List<JRightPadded<Expression>>
                 {
                     expression
                 }, Format(Leading(node.OpenParenToken))),
                 statement);
         return usingStatement;
+    }
+
+    public Cs.Keyword? VisitKeyword(SyntaxToken token)
+    {
+        if (token.IsKind(SyntaxKind.None))
+            return null;
+        var kind = token.Kind() switch
+        {
+            SyntaxKind.AwaitKeyword => Cs.KeywordKind.Await,
+            SyntaxKind.RefKeyword => Cs.KeywordKind.Ref,
+            SyntaxKind.OutKeyword => Cs.KeywordKind.Out,
+            _ => throw new NotSupportedException($"Keyword is {token} supported.")
+        };
+        return new Cs.Keyword(
+            Core.Tree.RandomId(),
+            Format(Leading(token)),
+            Markers.EMPTY,
+            kind);
+
     }
 
     public override J? VisitFixedStatement(FixedStatementSyntax node)
@@ -3279,11 +3373,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitConstructorDeclaration(ConstructorDeclarationSyntax node)
     {
-        if (node.Initializer != null)
-        {
-            // TODO support constructor delegation
-            return base.VisitConstructorDeclaration(node);
-        }
+
 
         var attributeLists = MapAttributes(node.AttributeLists);
 
@@ -3306,20 +3396,39 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             MapType(node) as JavaType.Method
         );
 
+
+        var constructor = new Cs.Constructor(
+            Core.Tree.RandomId(),
+            Space.EMPTY,
+            Markers.EMPTY,
+            Convert<Cs.ConstructorInitializer>(node.Initializer),
+            methodDeclaration);
+
         return attributeLists != null
             ? new Cs.AnnotatedStatement(
                 Core.Tree.RandomId(),
                 Format(Leading(node)),
                 Markers.EMPTY,
                 attributeLists,
-                methodDeclaration
+                constructor
             )
-            : methodDeclaration;
+            : constructor;
     }
 
     public override J? VisitConstructorInitializer(ConstructorInitializerSyntax node)
     {
-        return base.VisitConstructorInitializer(node);
+        return new Cs.ConstructorInitializer(
+            Core.Tree.RandomId(),
+            Format(Leading(node)),
+            Markers.EMPTY,
+            new Cs.Keyword(
+                Core.Tree.RandomId(),
+                Format(Leading(node.ThisOrBaseKeyword)),
+                Markers.EMPTY,
+                node.ThisOrBaseKeyword.IsKind(SyntaxKind.BaseKeyword) ? Cs.KeywordKind.Base : Cs.KeywordKind.This
+            ),
+            ToJContainer<ArgumentSyntax, Cs.Argument>(node.ArgumentList.Arguments, node.ArgumentList.OpenParenToken)
+        );
     }
 
     public override J? VisitDestructorDeclaration(DestructorDeclarationSyntax node)
@@ -3629,7 +3738,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
 #endif
-    T? Convert<T>(SyntaxNode? node) where T : class, J
+    internal T? Convert<T>(SyntaxNode? node) where T : class, J
     {
         if (node == null) return default;
 
@@ -3783,7 +3892,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
 #endif
-    private SyntaxTriviaList Leading<T>(SyntaxList<T> list) where T : SyntaxNode
+    internal  SyntaxTriviaList Leading<T>(SyntaxList<T> list) where T : SyntaxNode
     {
         return list.Count == 0 ? SyntaxTriviaList.Empty : Leading(list.First());
     }
@@ -3791,7 +3900,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
 #endif
-    private SyntaxTriviaList Leading(SyntaxNode node)
+    internal SyntaxTriviaList Leading(SyntaxNode node)
     {
         var firstToken = node.GetFirstToken();
         return Leading(firstToken);
@@ -3800,7 +3909,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
 #endif
-    private SyntaxTriviaList Leading(SyntaxToken token)
+    internal SyntaxTriviaList Leading(SyntaxToken token)
     {
         var previousToken = token.GetPreviousToken();
         var leading = token.LeadingTrivia;
@@ -3847,21 +3956,21 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
 #endif
-    private SyntaxTriviaList Trailing(SyntaxNode node)
+    internal  SyntaxTriviaList Trailing(SyntaxNode node)
     {
         return Trailing(node.GetLastToken());
     }
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
 #endif
-    private SyntaxTriviaList Trailing(SyntaxToken token)
+    internal  SyntaxTriviaList Trailing(SyntaxToken token)
     {
         return Leading(token.GetNextToken());
     }
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
 #endif
-    private static Space Format(SyntaxTriviaList trivia)
+    internal static Space Format(SyntaxTriviaList trivia)
     {
         // FIXME optimize
         return Space.Format(trivia.ToString());
@@ -3872,5 +3981,12 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         where TTo : class, J
     {
         return syntaxList.Select(x => JRightPadded.Create(Convert<TTo>(x)!, Format(Trailing(x)))).ToList();
+    }
+
+    private JContainer<TTo> ToJContainer<TFrom, TTo>(SeparatedSyntaxList<TFrom> syntaxList, SyntaxToken openingToken)
+        where TFrom : SyntaxNode
+        where TTo : class, J
+    {
+        return JContainer.Create(ToRightPadded<TFrom, TTo>(syntaxList), Format(Leading(openingToken)));
     }
 }

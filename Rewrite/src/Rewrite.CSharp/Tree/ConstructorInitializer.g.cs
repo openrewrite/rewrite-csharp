@@ -26,13 +26,13 @@ public partial interface Cs : J
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif
-    public partial class NamedArgument(
+    public partial class ConstructorInitializer(
     Guid id,
     Space prefix,
     Markers markers,
-    JRightPadded<J.Identifier>? nameColumn,
-    Expression expression
-    ) : Cs, Expression, MutableTree<NamedArgument>
+    Keyword keyword,
+    JContainer<Argument> arguments
+    ) : Cs, MutableTree<ConstructorInitializer>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -61,53 +61,47 @@ public partial interface Cs : J
 
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
-            return v.VisitNamedArgument(this, p);
+            return v.VisitConstructorInitializer(this, p);
         }
 
-        public JavaType? Type => Extensions.GetJavaType(this);
-
-        public NamedArgument WithType(JavaType newType)
-        {
-            return Extensions.WithJavaType(this, newType);
-        }
         public Guid Id => id;
 
-        public NamedArgument WithId(Guid newId)
+        public ConstructorInitializer WithId(Guid newId)
         {
-            return newId == id ? this : new NamedArgument(newId, prefix, markers, _nameColumn, expression);
+            return newId == id ? this : new ConstructorInitializer(newId, prefix, markers, keyword, _arguments);
         }
         public Space Prefix => prefix;
 
-        public NamedArgument WithPrefix(Space newPrefix)
+        public ConstructorInitializer WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new NamedArgument(id, newPrefix, markers, _nameColumn, expression);
+            return newPrefix == prefix ? this : new ConstructorInitializer(id, newPrefix, markers, keyword, _arguments);
         }
         public Markers Markers => markers;
 
-        public NamedArgument WithMarkers(Markers newMarkers)
+        public ConstructorInitializer WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new NamedArgument(id, prefix, newMarkers, _nameColumn, expression);
+            return ReferenceEquals(newMarkers, markers) ? this : new ConstructorInitializer(id, prefix, newMarkers, keyword, _arguments);
         }
-        private readonly JRightPadded<J.Identifier>? _nameColumn = nameColumn;
-        public J.Identifier? NameColumn => _nameColumn?.Element;
+        public Cs.Keyword Keyword => keyword;
 
-        public NamedArgument WithNameColumn(J.Identifier? newNameColumn)
+        public ConstructorInitializer WithKeyword(Cs.Keyword newKeyword)
         {
-            return Padding.WithNameColumn(JRightPadded<J.Identifier>.WithElement(_nameColumn, newNameColumn));
+            return ReferenceEquals(newKeyword, keyword) ? this : new ConstructorInitializer(id, prefix, markers, newKeyword, _arguments);
         }
-        public Expression Expression => expression;
+        private readonly JContainer<Cs.Argument> _arguments = arguments;
+        public IList<Cs.Argument> Arguments => _arguments.GetElements();
 
-        public NamedArgument WithExpression(Expression newExpression)
+        public ConstructorInitializer WithArguments(IList<Cs.Argument> newArguments)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new NamedArgument(id, prefix, markers, _nameColumn, newExpression);
+            return Padding.WithArguments(JContainer<Cs.Argument>.WithElements(_arguments, newArguments));
         }
-        public sealed record PaddingHelper(Cs.NamedArgument T)
+        public sealed record PaddingHelper(Cs.ConstructorInitializer T)
         {
-            public JRightPadded<J.Identifier>? NameColumn => T._nameColumn;
+            public JContainer<Cs.Argument> Arguments => T._arguments;
 
-            public Cs.NamedArgument WithNameColumn(JRightPadded<J.Identifier>? newNameColumn)
+            public Cs.ConstructorInitializer WithArguments(JContainer<Cs.Argument> newArguments)
             {
-                return T._nameColumn == newNameColumn ? T : new Cs.NamedArgument(T.Id, T.Prefix, T.Markers, newNameColumn, T.Expression);
+                return T._arguments == newArguments ? T : new Cs.ConstructorInitializer(T.Id, T.Prefix, T.Markers, T.Keyword, newArguments);
             }
 
         }
@@ -117,7 +111,7 @@ public partial interface Cs : J
         #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
-            return other is NamedArgument && other.Id == Id;
+            return other is ConstructorInitializer && other.Id == Id;
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

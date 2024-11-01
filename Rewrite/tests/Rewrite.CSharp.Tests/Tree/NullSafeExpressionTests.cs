@@ -7,7 +7,6 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection(Collections.PrinterAccess)]
 public class NullSafeExpressionTests : RewriteTest
 {
     [Fact]
@@ -84,8 +83,6 @@ public class NullSafeExpressionTests : RewriteTest
                 }
             }
             """);
-        var lst = src.Parse().First();
-
     }
 
     [Fact]

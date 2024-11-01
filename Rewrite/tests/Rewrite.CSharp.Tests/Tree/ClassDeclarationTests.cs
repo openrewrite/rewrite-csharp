@@ -5,7 +5,6 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection(Collections.PrinterAccess)]
 public class ClassDeclarationTests : RewriteTest
 {
     [Fact]
@@ -138,7 +137,6 @@ public class ClassDeclarationTests : RewriteTest
     }
 
     [Fact]
-    [KnownBug]
     public void TypeParameterWithNewConstraint()
     {
         RewriteRun(
@@ -151,7 +149,6 @@ public class ClassDeclarationTests : RewriteTest
     }
 
     [Fact]
-    [KnownBug]
     public void TypeParameterWithMultipleConstraints()
     {
         RewriteRun(

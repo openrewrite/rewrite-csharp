@@ -6,7 +6,6 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection(Collections.PrinterAccess)]
 public class MemberAccessTests : RewriteTest
 {
     [Fact]

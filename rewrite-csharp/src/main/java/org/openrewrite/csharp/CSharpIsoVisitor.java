@@ -41,8 +41,8 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     }
 
     @Override
-    public Cs.NamedArgument visitNamedArgument(Cs.NamedArgument namedArgument, P p) {
-        return (Cs.NamedArgument) super.visitNamedArgument(namedArgument, p);
+    public Cs.Argument visitArgument(Cs.Argument argument, P p) {
+        return (Cs.Argument) super.visitArgument(argument, p);
     }
 
     @Override
@@ -131,6 +131,11 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     }
 
     @Override
+    public Cs.Keyword visitKeyword(Cs.Keyword keyword, P p) {
+        return (Cs.Keyword) super.visitKeyword(keyword, p);
+    }
+
+    @Override
     public Cs.Lambda visitLambda(Cs.Lambda lambda, P p) {
         return (Cs.Lambda) super.visitLambda(lambda, p);
     }
@@ -183,6 +188,46 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     @Override
     public Cs.DefaultConstraint visitDefaultConstraint(Cs.DefaultConstraint defaultConstraint, P p) {
         return (Cs.DefaultConstraint) super.visitDefaultConstraint(defaultConstraint, p);
+    }
+
+    @Override
+    public Cs.DeclarationExpression visitDeclarationExpression(Cs.DeclarationExpression declarationExpression, P p) {
+        return (Cs.DeclarationExpression) super.visitDeclarationExpression(declarationExpression, p);
+    }
+
+    @Override
+    public Cs.SingleVariableDesignation visitSingleVariableDesignation(Cs.SingleVariableDesignation singleVariableDesignation, P p) {
+        return (Cs.SingleVariableDesignation) super.visitSingleVariableDesignation(singleVariableDesignation, p);
+    }
+
+    @Override
+    public Cs.ParenthesizedVariableDesignation visitParenthesizedVariableDesignation(Cs.ParenthesizedVariableDesignation parenthesizedVariableDesignation, P p) {
+        return (Cs.ParenthesizedVariableDesignation) super.visitParenthesizedVariableDesignation(parenthesizedVariableDesignation, p);
+    }
+
+    @Override
+    public Cs.DiscardVariableDesignation visitDiscardVariableDesignation(Cs.DiscardVariableDesignation discardVariableDesignation, P p) {
+        return (Cs.DiscardVariableDesignation) super.visitDiscardVariableDesignation(discardVariableDesignation, p);
+    }
+
+    @Override
+    public Cs.TupleExpression visitTupleExpression(Cs.TupleExpression tupleExpression, P p) {
+        return (Cs.TupleExpression) super.visitTupleExpression(tupleExpression, p);
+    }
+
+    @Override
+    public Cs.Constructor visitConstructor(Cs.Constructor constructor, P p) {
+        return (Cs.Constructor) super.visitConstructor(constructor, p);
+    }
+
+    @Override
+    public Cs.Unary visitUnary(Cs.Unary unary, P p) {
+        return (Cs.Unary) super.visitUnary(unary, p);
+    }
+
+    @Override
+    public Cs.ConstructorInitializer visitConstructorInitializer(Cs.ConstructorInitializer constructorInitializer, P p) {
+        return (Cs.ConstructorInitializer) super.visitConstructorInitializer(constructorInitializer, p);
     }
 
     @Override

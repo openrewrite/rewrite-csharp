@@ -45,4 +45,12 @@ public partial interface Cs : J
         return v.DefaultValue(this, p);
     }
 
+    public enum KeywordKind
+    {
+        Ref,
+        Out,
+        Await,
+        Base,
+        This,
+    }
 }
