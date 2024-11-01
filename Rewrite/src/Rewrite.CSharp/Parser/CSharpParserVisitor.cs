@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis;
@@ -130,9 +131,103 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitEnumDeclaration(EnumDeclarationSyntax node)
     {
-        return base.VisitEnumDeclaration(node);
+        var attributeLists = MapAttributes(node.AttributeLists);
+        var javaType = MapType(node);
+        var hasBaseClass = node.BaseList is { Types.Count: > 0 };
+
+        var isEmptyBody = node.OpenBraceToken.IsKind(SyntaxKind.None);
+
+        var classDeclaration = new J.ClassDeclaration(
+            Core.Tree.RandomId(),
+            Format(Leading(node)),
+            Markers.EMPTY,
+            [],
+            MapModifiers(node.Modifiers),
+            new J.ClassDeclaration.Kind(
+                Core.Tree.RandomId(),
+                Format(Leading(node.EnumKeyword)),
+                Markers.EMPTY,
+                [],
+                J.ClassDeclaration.Kind.Type.Enum
+            ),
+            new J.Identifier(
+                Core.Tree.RandomId(),
+                Format(Leading(node.Identifier)),
+                Markers.EMPTY,
+                [],
+                node.Identifier.Text,
+                javaType,
+                null
+            ),
+            null,
+            null,
+            hasBaseClass
+                ? new JLeftPadded<TypeTree>(Format(Leading(node.BaseList!)),
+                    (Visit(node.BaseList!.Types[0]) as TypeTree)!, Markers.EMPTY)
+                : null,
+            null,
+            null,
+            new J.Block(
+                Core.Tree.RandomId(),
+                Format(Leading(isEmptyBody ? node.SemicolonToken : node.OpenBraceToken)),
+                isEmptyBody ? Markers.Create(new OmitBraces()) : Markers.EMPTY,
+                JRightPadded.Create(false),
+                [JRightPadded.Create<Statement>(MapEnumMembers(node.Members))],
+                Format(Leading(node.CloseBraceToken))
+            ),
+            javaType as JavaType.FullyQualified
+        );
+
+        if(attributeLists != null)
+        {
+            return new Cs.AnnotatedStatement(
+                Core.Tree.RandomId(),
+                Format(Leading(node)),
+                Markers.EMPTY,
+                attributeLists,
+                classDeclaration);
+        }
+
+
+
+        return classDeclaration;
     }
 
+    J.EnumValueSet MapEnumMembers(SeparatedSyntaxList<EnumMemberDeclarationSyntax> members)
+    {
+        return new J.EnumValueSet(
+            Core.Tree.RandomId(),
+            Space.EMPTY,
+            Markers.EMPTY,
+            members.Select(x => JRightPadded.Create(new J.EnumValue(
+                Core.Tree.RandomId(),
+                Space.EMPTY,
+                Markers.EMPTY,
+                [], // todo: figure out how to make c# attributes map here
+                ToJIdentifier(x.Identifier),
+                null
+            ), Format(Trailing(x)))).ToList(),
+            false
+        );
+    }
+
+    J.Identifier ToJIdentifier(SyntaxToken token, JavaType? type = null)
+    {
+        if (type == null && token.Parent != null)
+        {
+            type = MapType(token.Parent);
+        }
+
+        return new J.Identifier(
+            Core.Tree.RandomId(),
+            Format(Leading(token)),
+            Markers.EMPTY,
+            [],
+            token.Text,
+            type,
+            null
+        );
+    }
     public override J? VisitRecordDeclaration(RecordDeclarationSyntax node)
     {
         return VisitTypeDeclaration(node, J.ClassDeclaration.Kind.Type.Record);
