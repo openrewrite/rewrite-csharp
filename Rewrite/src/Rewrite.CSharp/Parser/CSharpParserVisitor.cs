@@ -204,30 +204,13 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                 Space.EMPTY,
                 Markers.EMPTY,
                 [], // todo: figure out how to make c# attributes map here
-                ToJIdentifier(x.Identifier),
+                MapIdentifier(x.Identifier, MapType(x.Parent!)),
                 null
             ), Format(Trailing(x)))).ToList(),
             false
         );
     }
 
-    J.Identifier ToJIdentifier(SyntaxToken token, JavaType? type = null)
-    {
-        if (type == null && token.Parent != null)
-        {
-            type = MapType(token.Parent);
-        }
-
-        return new J.Identifier(
-            Core.Tree.RandomId(),
-            Format(Leading(token)),
-            Markers.EMPTY,
-            [],
-            token.Text,
-            type,
-            null
-        );
-    }
     public override J? VisitRecordDeclaration(RecordDeclarationSyntax node)
     {
         return VisitTypeDeclaration(node, J.ClassDeclaration.Kind.Type.Record);
@@ -1042,7 +1025,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitBaseExpression(BaseExpressionSyntax node)
     {
-        return base.VisitBaseExpression(node);
+        return MapIdentifier(node.Token, null);
     }
 
     public override J? VisitBaseList(BaseListSyntax node)
