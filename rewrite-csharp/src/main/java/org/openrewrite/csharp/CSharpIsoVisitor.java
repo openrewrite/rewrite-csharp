@@ -18,17 +18,14 @@
  * -------------------THIS FILE IS AUTO GENERATED--------------------------
  * Changes to this file may cause incorrect behavior and will be lost if
  * the code is regenerated.
-*/
+ */
 
 package org.openrewrite.csharp;
 
 import org.openrewrite.csharp.tree.Cs;
 import org.openrewrite.java.tree.J;
-import org.openrewrite.java.tree.ControlParentheses;
-import org.openrewrite.java.tree.Parentheses;
 
-public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
-{
+public class CSharpIsoVisitor<P> extends CSharpVisitor<P> {
     @Override
     public Cs.CompilationUnit visitCompilationUnit(Cs.CompilationUnit compilationUnit, P p) {
         return (Cs.CompilationUnit) super.visitCompilationUnit(compilationUnit, p);

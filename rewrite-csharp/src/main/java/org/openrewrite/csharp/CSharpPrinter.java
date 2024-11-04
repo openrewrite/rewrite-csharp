@@ -59,12 +59,10 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     }
 
     @Override
-    public J visitUsingStatement(Cs.UsingStatement usingStatement, PrintOutputCapture<P> p)
-    {
+    public J visitUsingStatement(Cs.UsingStatement usingStatement, PrintOutputCapture<P> p) {
         beforeSyntax(usingStatement, CsSpace.Location.NAMED_ARGUMENT_PREFIX, p);
         p.append("using");
-        if (usingStatement.getAwaitKeyword() != null)
-        {
+        if (usingStatement.getAwaitKeyword() != null) {
             visitSpace(usingStatement.getAwaitKeyword(), CsSpace.Location.USING_STATEMENT_AWAIT_KEYWORD, p);
         }
 
@@ -73,6 +71,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         afterSyntax(usingStatement, p);
         return usingStatement;
     }
+
     @Override
     public Cs visitCompilationUnit(Cs.CompilationUnit compilationUnit, PrintOutputCapture<P> p) {
         beforeSyntax(compilationUnit, Space.Location.COMPILATION_UNIT_PREFIX, p);
@@ -94,18 +93,15 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     }
 
     @Override
-    public J visitClassDeclaration(Cs.ClassDeclaration classDeclaration, PrintOutputCapture<P> p)
-    {
+    public J visitClassDeclaration(Cs.ClassDeclaration classDeclaration, PrintOutputCapture<P> p) {
         delegate.visitClassDeclaration(classDeclaration.getClassDeclarationCore(), p);
         return classDeclaration;
     }
 
     @Override
-    public J visitMethodDeclaration(Cs.MethodDeclaration methodDeclaration, PrintOutputCapture<P> p)
-    {
+    public J visitMethodDeclaration(Cs.MethodDeclaration methodDeclaration, PrintOutputCapture<P> p) {
         delegate.visitMethodDeclaration(methodDeclaration.getMethodDeclarationCore(), p);
-        if (methodDeclaration.getMethodDeclarationCore().getBody() == null)
-        {
+        if (methodDeclaration.getMethodDeclarationCore().getBody() == null) {
             p.append(";");
         }
         return methodDeclaration;
@@ -288,7 +284,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
 
     @Override
     public J visitPropertyDeclaration(Cs.PropertyDeclaration propertyDeclaration,
-            PrintOutputCapture<P> p) {
+                                      PrintOutputCapture<P> p) {
         beforeSyntax(propertyDeclaration, CsSpace.Location.PROPERTY_DECLARATION_PREFIX, p);
         visit(propertyDeclaration.getAttributeLists(), p);
         for (J.Modifier m : propertyDeclaration.getModifiers()) {
@@ -301,7 +297,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         }
         visit(propertyDeclaration.getName(), p);
         visit(propertyDeclaration.getAccessors(), p);
-        if(propertyDeclaration.getInitializer() != null) {
+        if (propertyDeclaration.getInitializer() != null) {
             visitLeftPadded("=", propertyDeclaration.getPadding().getInitializer(), CsLeftPadded.Location.PROPERTY_DECLARATION_INITIALIZER, p);
         }
         afterSyntax(propertyDeclaration, p);
@@ -333,8 +329,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     }
 
     @Override
-    public Cs visitLambda(Cs.Lambda lambda, PrintOutputCapture<P> p)
-    {
+    public Cs visitLambda(Cs.Lambda lambda, PrintOutputCapture<P> p) {
         if (!lambda.getModifiers().isEmpty()) // only put space in front if current node actually has anything to contribute
         {
             beforeSyntax(lambda, Space.Location.LAMBDA_PREFIX, p);
@@ -342,8 +337,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         J.Lambda javaLambda = lambda.getLambdaExpression();
         visitSpace(lambda.getPrefix(), Space.Location.LAMBDA_PARAMETERS_PREFIX, p);
         visitMarkers(lambda.getMarkers(), p);
-        for(J.Modifier modifier : lambda.getModifiers())
-        {
+        for (J.Modifier modifier : lambda.getModifiers()) {
             delegate.visitModifier(modifier, p);
         }
 
@@ -429,11 +423,10 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     }
 
     @Override
-    public J visitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, PrintOutputCapture<P> p)
-    {
+    public J visitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, PrintOutputCapture<P> p) {
         beforeSyntax(typeParameterConstraintClause, CsSpace.Location.TYPE_PARAMETERS_CONSTRAINT_CLAUSE_PREFIX, p);
         p.append("where");
-        visitRightPadded(typeParameterConstraintClause.getPadding().getTypeParameter(), CsRightPadded.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER,  p);
+        visitRightPadded(typeParameterConstraintClause.getPadding().getTypeParameter(), CsRightPadded.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER, p);
         p.append(":");
         visitContainer("", typeParameterConstraintClause.getPadding().getTypeParameterConstraints(), CsContainer.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_CONSTRAINTS, ",", "", p);
         afterSyntax(typeParameterConstraintClause, p);
@@ -441,24 +434,21 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     }
 
     @Override
-    public J visitClassOrStructConstraint(Cs.ClassOrStructConstraint classOrStructConstraint, PrintOutputCapture<P> p)
-    {
+    public J visitClassOrStructConstraint(Cs.ClassOrStructConstraint classOrStructConstraint, PrintOutputCapture<P> p) {
         beforeSyntax(classOrStructConstraint, CsSpace.Location.TYPE_PARAMETERS_CONSTRAINT_PREFIX, p);
         p.append(classOrStructConstraint.getKind().equals(Cs.ClassOrStructConstraint.TypeKind.Class) ? "class" : "struct");
         return classOrStructConstraint;
     }
 
     @Override
-    public J visitConstructorConstraint(Cs.ConstructorConstraint constructorConstraint, PrintOutputCapture<P> p)
-    {
+    public J visitConstructorConstraint(Cs.ConstructorConstraint constructorConstraint, PrintOutputCapture<P> p) {
         beforeSyntax(constructorConstraint, CsSpace.Location.TYPE_PARAMETERS_CONSTRAINT_PREFIX, p);
         p.append("new()");
         return constructorConstraint;
     }
 
     @Override
-    public J visitDefaultConstraint(Cs.DefaultConstraint defaultConstraint, PrintOutputCapture<P> p)
-    {
+    public J visitDefaultConstraint(Cs.DefaultConstraint defaultConstraint, PrintOutputCapture<P> p) {
         beforeSyntax(defaultConstraint, CsSpace.Location.TYPE_PARAMETERS_CONSTRAINT_PREFIX, p);
         p.append("default");
         return defaultConstraint;
@@ -515,9 +505,8 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
             visitContainer(classDecl.getPadding().getExtends() == null ? ":" : ",",
                     classDecl.getPadding().getImplements(), JContainer.Location.IMPLEMENTS, ",", null, p);
             visitContainer("permits", classDecl.getPadding().getPermits(), JContainer.Location.PERMITS, ",", null, p);
-            if(csClassDeclaration != null) {
-                for (Cs.TypeParameterConstraintClause typeParameterClause : csClassDeclaration.getTypeParameterConstraintClauses())
-                {
+            if (csClassDeclaration != null) {
+                for (Cs.TypeParameterConstraintClause typeParameterClause : csClassDeclaration.getTypeParameterConstraintClauses()) {
                     CSharpPrinter.this.visitTypeParameterConstraintClause(typeParameterClause, p);
                 }
             }
@@ -560,8 +549,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
             } else {
                 if (!block.getStatements().isEmpty()) {
                     visitStatements(block.getPadding().getStatements(), JRightPadded.Location.BLOCK_STATEMENT, p);
-                }
-                else {
+                } else {
                     p.append(";");
                 }
                 visitSpace(block.getEnd(), Space.Location.BLOCK_END, p);
@@ -618,7 +606,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
                 visitContainer("(", method.getPadding().getParameters(), JContainer.Location.METHOD_DECLARATION_PARAMETERS, ",", ")", p);
             }
 
-            if(CSharpPrinter.this.getCursor().getValue() instanceof Cs.MethodDeclaration) {
+            if (CSharpPrinter.this.getCursor().getValue() instanceof Cs.MethodDeclaration) {
                 Cs.MethodDeclaration csMethod = CSharpPrinter.this.getCursor().getValue();
                 visit(csMethod.getTypeParameterConstraintClauses(), p);
             }

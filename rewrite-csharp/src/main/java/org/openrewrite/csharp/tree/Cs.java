@@ -19,7 +19,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.jspecify.annotations.Nullable;
-import org.openrewrite.*;
 import org.openrewrite.csharp.CSharpPrinter;
 import org.openrewrite.csharp.CSharpVisitor;
 import org.openrewrite.java.JavaPrinter;
@@ -73,7 +72,7 @@ public interface Cs extends J {
 
         @Nullable
         @NonFinal
-        transient WeakReference<Padding>    padding;
+        transient WeakReference<Padding> padding;
 
         @Getter
         @With
@@ -266,7 +265,7 @@ public interface Cs extends J {
         }
 
         @RequiredArgsConstructor
-        public static class Padding implements JavaSourceFile.Padding  {
+        public static class Padding implements JavaSourceFile.Padding {
             private final Cs.CompilationUnit t;
 
             @Override
@@ -328,7 +327,9 @@ public interface Cs extends J {
         @Nullable
         JRightPadded<Identifier> nameColumn;
 
-        public J.@Nullable Identifier getNameColumn() { return nameColumn == null ? null : nameColumn.getElement(); }
+        public J.@Nullable Identifier getNameColumn() {
+            return nameColumn == null ? null : nameColumn.getElement();
+        }
 
         public NamedArgument withNameColumn(J.@Nullable Identifier nameColumn) {
             return getPadding().withNameColumn(JRightPadded.withElement(this.nameColumn, nameColumn));
@@ -1425,7 +1426,7 @@ public interface Cs extends J {
             return v.visitInterpolation(this, p);
         }
 
-                public Padding getPadding() {
+        public Padding getPadding() {
             Padding p;
             if (this.padding == null) {
                 p = new Padding(this);
@@ -1789,7 +1790,7 @@ public interface Cs extends J {
         }
 
         public @Nullable NameTree getInterfaceSpecifier() {
-            return interfaceSpecifier!= null ? interfaceSpecifier.getElement() : null;
+            return interfaceSpecifier != null ? interfaceSpecifier.getElement() : null;
         }
 
         public PropertyDeclaration withInterfaceSpecifier(@Nullable NameTree interfaceSpecifier) {
@@ -1882,8 +1883,6 @@ public interface Cs extends J {
     }
 
 
-
-
     @Getter
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -1927,7 +1926,7 @@ public interface Cs extends J {
 
         @Override
         public Cs.Lambda withType(@Nullable JavaType type) {
-            return this.getType() == type ? this :  new Cs.Lambda(
+            return this.getType() == type ? this : new Cs.Lambda(
                     id,
                     prefix,
                     markers,
@@ -2273,12 +2272,13 @@ public interface Cs extends J {
         }
     }
 
-    interface TypeParameterConstraint extends J {}
+    interface TypeParameterConstraint extends J {
+    }
 
     /**
      * Represents a type constraint in a type parameter's constraint clause.
      * Example: where T : SomeClass
-     *          where T : IInterface
+     * where T : IInterface
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -2356,9 +2356,8 @@ public interface Cs extends J {
     /* ------------------ */
 
 
-
-
-    interface AllowsConstraint extends J {}
+    interface AllowsConstraint extends J {
+    }
 
     /**
      * Represents an `allows` constraint in a where clause.
@@ -2483,8 +2482,7 @@ public interface Cs extends J {
         @Getter
         TypeKind kind;
 
-        public enum TypeKind
-        {
+        public enum TypeKind {
             Class,
             Struct
         }
