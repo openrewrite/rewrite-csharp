@@ -28,18 +28,26 @@ import org.openrewrite.Checksum;
 import org.openrewrite.Cursor;
 import org.openrewrite.FileAttributes;
 import org.openrewrite.Tree;
-import org.openrewrite.marker.Markers;
 import org.openrewrite.csharp.CSharpVisitor;
-import org.openrewrite.csharp.tree.*;
-import org.openrewrite.java.*;
-import org.openrewrite.java.tree.*;
+import org.openrewrite.csharp.tree.Cs;
+import org.openrewrite.java.tree.Expression;
+import org.openrewrite.java.tree.J;
+import org.openrewrite.java.tree.JContainer;
+import org.openrewrite.java.tree.JLeftPadded;
+import org.openrewrite.java.tree.JRightPadded;
+import org.openrewrite.java.tree.JavaType;
+import org.openrewrite.java.tree.NameTree;
+import org.openrewrite.java.tree.Space;
+import org.openrewrite.java.tree.Statement;
+import org.openrewrite.java.tree.TypeTree;
+import org.openrewrite.java.tree.TypedTree;
+import org.openrewrite.marker.Markers;
 import org.openrewrite.remote.Receiver;
 import org.openrewrite.remote.ReceiverContext;
 import org.openrewrite.remote.ReceiverFactory;
 
 import java.nio.charset.Charset;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.UUID;
 
 @Value
@@ -2260,10 +2268,6 @@ public class CSharpReceiver implements Receiver<Cs> {
 
     private static Space receiveSpace(@Nullable Space space, @Nullable Class<?> type, ReceiverContext ctx) {
         return Extensions.receiveSpace(space, type, ctx);
-    }
-
-    private static Comment receiveComment(@Nullable Comment comment, @Nullable Class<Comment> type, ReceiverContext ctx) {
-        return Extensions.receiveComment(comment, type, ctx);
     }
 
 }

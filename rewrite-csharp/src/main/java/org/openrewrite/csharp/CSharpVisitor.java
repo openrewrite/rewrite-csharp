@@ -24,12 +24,12 @@ package org.openrewrite.csharp;
 
 import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
+import org.openrewrite.csharp.tree.*;
 import org.openrewrite.internal.ListUtils;
-import org.openrewrite.marker.Markers;
-import org.openrewrite.tree.*;
 import org.openrewrite.java.JavaVisitor;
 import org.openrewrite.java.tree.*;
-import org.openrewrite.csharp.tree.*;
+import org.openrewrite.marker.Markers;
+import org.openrewrite.tree.*;
 
 import java.util.List;
 
@@ -420,7 +420,7 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         return defaultConstraint;
     }
 
-    public <J2 extends J> JContainer<J2> visitContainer(@Nullable JContainer<J2> container,
+    public <J2 extends J> @Nullable JContainer<J2> visitContainer(@Nullable JContainer<J2> container,
                                                         CsContainer.Location loc, P p) {
         if (container == null) {
             //noinspection ConstantConditions
@@ -438,7 +438,7 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
                 JContainer.build(before, js, container.getMarkers());
     }
 
-    public <T> JLeftPadded<T> visitLeftPadded(@Nullable JLeftPadded<T> left, CsLeftPadded.Location loc, P p) {
+    public <T> @Nullable JLeftPadded<T> visitLeftPadded(@Nullable JLeftPadded<T> left, CsLeftPadded.Location loc, P p) {
         if (left == null) {
             //noinspection ConstantConditions
             return null;
@@ -467,7 +467,7 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         return (before == left.getBefore() && t == left.getElement()) ? left : new JLeftPadded<>(before, t, left.getMarkers());
     }
 
-    public <T> JRightPadded<T> visitRightPadded(@Nullable JRightPadded<T> right, CsRightPadded.Location loc, P p) {
+    public <T> @Nullable JRightPadded<T> visitRightPadded(@Nullable JRightPadded<T> right, CsRightPadded.Location loc, P p) {
         if (right == null) {
             //noinspection ConstantConditions
             return null;

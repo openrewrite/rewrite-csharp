@@ -27,9 +27,18 @@ import org.jspecify.annotations.Nullable;
 import org.openrewrite.Cursor;
 import org.openrewrite.Tree;
 import org.openrewrite.csharp.CSharpVisitor;
-import org.openrewrite.csharp.tree.*;
-import org.openrewrite.java.*;
-import org.openrewrite.java.tree.*;
+import org.openrewrite.csharp.tree.Cs;
+import org.openrewrite.java.tree.Expression;
+import org.openrewrite.java.tree.J;
+import org.openrewrite.java.tree.JContainer;
+import org.openrewrite.java.tree.JLeftPadded;
+import org.openrewrite.java.tree.JRightPadded;
+import org.openrewrite.java.tree.JavaType;
+import org.openrewrite.java.tree.NameTree;
+import org.openrewrite.java.tree.Space;
+import org.openrewrite.java.tree.Statement;
+import org.openrewrite.java.tree.TypeTree;
+import org.openrewrite.java.tree.TypedTree;
 import org.openrewrite.remote.Sender;
 import org.openrewrite.remote.SenderContext;
 
@@ -1117,10 +1126,6 @@ public class CSharpSender implements Sender<Cs> {
 
     private static void sendSpace(Space space, SenderContext ctx) {
         Extensions.sendSpace(space, ctx);
-    }
-
-    private static void sendComment(Comment comment, SenderContext ctx) {
-        Extensions.sendComment(comment, ctx);
     }
 
 }
