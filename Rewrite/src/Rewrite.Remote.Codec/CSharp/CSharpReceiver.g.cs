@@ -448,6 +448,26 @@ public record CSharpReceiver : Receiver
             return constructorInitializer;
         }
 
+        public override J VisitTupleType(Cs.TupleType tupleType, ReceiverContext ctx)
+        {
+            tupleType = tupleType.WithId(ctx.ReceiveValue(tupleType.Id)!);
+            tupleType = tupleType.WithPrefix(ctx.ReceiveNode(tupleType.Prefix, ReceiveSpace)!);
+            tupleType = tupleType.WithMarkers(ctx.ReceiveNode(tupleType.Markers, ctx.ReceiveMarkers)!);
+            tupleType = tupleType.Padding.WithElements(ctx.ReceiveNode(tupleType.Padding.Elements, ReceiveContainer)!);
+            tupleType = tupleType.WithType(ctx.ReceiveValue(tupleType.Type));
+            return tupleType;
+        }
+
+        public override J VisitTupleElement(Cs.TupleElement tupleElement, ReceiverContext ctx)
+        {
+            tupleElement = tupleElement.WithId(ctx.ReceiveValue(tupleElement.Id)!);
+            tupleElement = tupleElement.WithPrefix(ctx.ReceiveNode(tupleElement.Prefix, ReceiveSpace)!);
+            tupleElement = tupleElement.WithMarkers(ctx.ReceiveNode(tupleElement.Markers, ctx.ReceiveMarkers)!);
+            tupleElement = tupleElement.WithType(ctx.ReceiveNode(tupleElement.Type, ctx.ReceiveTree)!);
+            tupleElement = tupleElement.WithName(ctx.ReceiveNode(tupleElement.Name, ctx.ReceiveTree));
+            return tupleElement;
+        }
+
         public override J VisitAnnotatedType(J.AnnotatedType annotatedType, ReceiverContext ctx)
         {
             annotatedType = annotatedType.WithId(ctx.ReceiveValue(annotatedType.Id)!);
@@ -1617,6 +1637,28 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(Cs.Keyword), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(JContainer<Cs.Argument>), ReceiveContainer)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.TupleType" or "org.openrewrite.csharp.tree.Cs$TupleType")
+            {
+                return new Cs.TupleType(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(JContainer<Cs.TupleElement>), ReceiveContainer)!,
+                    ctx.ReceiveValue(default(JavaType))
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.TupleElement" or "org.openrewrite.csharp.tree.Cs$TupleElement")
+            {
+                return new Cs.TupleElement(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(TypeTree), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(J.Identifier), ctx.ReceiveTree)
                 );
             }
 

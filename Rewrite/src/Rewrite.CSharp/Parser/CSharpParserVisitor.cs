@@ -1325,6 +1325,11 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitPredefinedType(PredefinedTypeSyntax node)
     {
+        return MapTypeTree(node);
+    }
+
+    public TypeTree MapTypeTree(SyntaxNode node)
+    {
         var type = MapType(node);
         if (type is JavaType.Primitive)
             return new J.Primitive(
@@ -1410,14 +1415,25 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitTupleType(TupleTypeSyntax node)
     {
-        // This was added in C# 7.0
-        return base.VisitTupleType(node);
+        return new Cs.TupleType(
+            Core.Tree.RandomId(),
+            Format(Leading(node)),
+            Markers.EMPTY,
+            JContainer.Create(node.Elements.Select(x => JRightPadded.Create(Convert<Cs.TupleElement>(x)!, Format(Trailing(x)))).ToList()),
+            MapType(node)
+            );
     }
 
-    public override J? VisitTupleElement(TupleElementSyntax node)
+    public override Cs VisitTupleElement(TupleElementSyntax node)
     {
-        // This was added in C# 7.0
-        return base.VisitTupleElement(node);
+        var type = MapType(node.Type);
+        return new Cs.TupleElement(
+            Core.Tree.RandomId(),
+            Format(Leading(node)),
+            Markers.EMPTY,
+            MapTypeTree(node.Type),
+            MapIdentifier(node.Identifier, type));
+
     }
 
     public override J? VisitOmittedTypeArgument(OmittedTypeArgumentSyntax node)
@@ -1563,16 +1579,6 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         return type;
     }
 
-    // private Cs.Unary.Type MapPostfixUnaryOperatorToJ(SyntaxToken operatorToken)
-    // {
-    //     J.Unary.Type? type = operatorToken.Kind() switch
-    //     {
-    //         SyntaxKind.PlusPlusToken => J.Unary.Type.PostIncrement,
-    //         SyntaxKind.MinusMinusToken => J.Unary.Type.PostDecrement,
-    //         _ => null
-    //     };
-    //     return type;
-    // }
 
     public override J? VisitMemberAccessExpression(MemberAccessExpressionSyntax node)
     {
@@ -2523,6 +2529,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitIsPatternExpression(IsPatternExpressionSyntax node)
     {
+        // todo: handle  ConstantPatternSyntax (such as "something is true")
         if (node.Pattern is DeclarationPatternSyntax dp)
         {
             return new J.InstanceOf(

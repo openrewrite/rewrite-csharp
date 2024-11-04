@@ -43,7 +43,44 @@ public class TupleTests : RewriteTest
         );
 
         var lst = src.Parse();
-        var statement = lst.Descendents().OfType<J.MethodDeclaration>().First().Body!.Statements.First();
+        lst.ToString().ShouldBeSameAs(src.Before);
+    }
+
+    [Fact]
+    public void NamedTupleType()
+    {
+        var src = CSharp(
+            """
+            public class T
+            {
+                void M()
+                {
+                    (int x, int y) myTuple;
+                }
+            }
+            """
+        );
+
+        var lst = src.Parse();
+        lst.ToString().ShouldBeSameAs(src.Before);
+    }
+
+    [Fact]
+    public void BasicTupleType()
+    {
+        var src = CSharp(
+            """
+            public class T
+            {
+                void M()
+                {
+                    (int, int) myTuple;
+                }
+            }
+            """
+        );
+
+        var lst = src.Parse();
         lst.ToString().ShouldBeSameAs(src.Before);
     }
 }

@@ -63,6 +63,26 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         return tupleExpression;
     }
 
+    public override J? VisitTupleType(Cs.TupleType node, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(node, CsSpace.Location.TUPLE_TYPE_PREFIX, p);
+        VisitContainer("(", node.Padding.Elements, CsContainer.Location.TUPLE_TYPE_ELEMENTS, ",", ")", p);
+        AfterSyntax(node, p);
+        return node;
+    }
+
+    public override J? VisitTupleElement(Cs.TupleElement node, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(node, CsSpace.Location.TUPLE_ELEMENT_PREFIX, p);
+        Visit(node.Type, p);
+        if (node.Name != null)
+        {
+            Visit(node.Name, p);
+        }
+        AfterSyntax(node, p);
+        return node;
+    }
+
     public override J? VisitParenthesizedVariableDesignation(Cs.ParenthesizedVariableDesignation node, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(node, CsSpace.Location.NAMED_ARGUMENT_PREFIX, p);
@@ -676,6 +696,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
 
             return base.Visit(tree, p);
         }
+
 
         public override J VisitNewArray(J.NewArray newArray, PrintOutputCapture<TState> p)
         {

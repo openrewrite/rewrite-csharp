@@ -459,6 +459,26 @@ public class CSharpSender implements Sender<Cs> {
         }
 
         @Override
+        public Cs.TupleType visitTupleType(Cs.TupleType tupleType, SenderContext ctx) {
+            ctx.sendValue(tupleType, Cs.TupleType::getId);
+            ctx.sendNode(tupleType, Cs.TupleType::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(tupleType, Cs.TupleType::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(tupleType, e -> e.getPadding().getElements(), CSharpSender::sendContainer);
+            ctx.sendTypedValue(tupleType, Cs.TupleType::getType);
+            return tupleType;
+        }
+
+        @Override
+        public Cs.TupleElement visitTupleElement(Cs.TupleElement tupleElement, SenderContext ctx) {
+            ctx.sendValue(tupleElement, Cs.TupleElement::getId);
+            ctx.sendNode(tupleElement, Cs.TupleElement::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(tupleElement, Cs.TupleElement::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(tupleElement, Cs.TupleElement::getType, ctx::sendTree);
+            ctx.sendNode(tupleElement, Cs.TupleElement::getName, ctx::sendTree);
+            return tupleElement;
+        }
+
+        @Override
         public J.AnnotatedType visitAnnotatedType(J.AnnotatedType annotatedType, SenderContext ctx) {
             ctx.sendValue(annotatedType, J.AnnotatedType::getId);
             ctx.sendNode(annotatedType, J.AnnotatedType::getPrefix, CSharpSender::sendSpace);

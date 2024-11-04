@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Rewrite.Test.Engine.Remote;
 
-public class RemotingFixture : IAsyncLifetime
+public class RemotingFixture : IDisposable
 {
     private string? _rewriteRemoteDir;
     private Socket _socket = null!;
@@ -84,7 +84,7 @@ public class RemotingFixture : IAsyncLifetime
 
 
 
-    public async Task InitializeAsync()
+    public RemotingFixture()
     {
         // register recipes (try to do this dynamically)
         IRemotingContext.RegisterRecipeFactory(Recipe.Noop().GetType().FullName!, _ => Recipe.Noop());
@@ -94,7 +94,7 @@ public class RemotingFixture : IAsyncLifetime
 
         try
         {
-            await _socket.ConnectAsync(IPAddress.Loopback, 65432);
+            _socket.Connect(IPAddress.Loopback, 65432);
             remotingContext.Connect(_socket);
             remotingContext.SetCurrent();
             ITestExecutionContext.SetCurrent(new RemotingTestExecutionContext(remotingContext));
@@ -108,14 +108,14 @@ public class RemotingFixture : IAsyncLifetime
             {
                 try
                 {
-                    await _socket.ConnectAsync(IPAddress.Loopback, 65432);
+                    _socket.Connect(IPAddress.Loopback, 65432);
                     remotingContext.Connect(_socket);
                     remotingContext.SetCurrent();
                     break;
                 }
                 catch (SocketException)
                 {
-                    await Task.Delay(1000);
+                    AsyncHelper.RunSync(() => Task.Delay(1000));
                 }
             }
         }
@@ -124,7 +124,7 @@ public class RemotingFixture : IAsyncLifetime
         IPrinterFactory.Set(new RemotePrinterFactory(remotingContext.Client!));
     }
 
-    public async Task DisposeAsync()
+    public void Dispose()
     {
         _socket.Close();
 
@@ -149,7 +149,7 @@ public class RemotingFixture : IAsyncLifetime
             }
             catch (Exception)
             {
-                await Task.Delay(1000);
+                AsyncHelper.RunSync(() => Task.Delay(1000));
             }
         }
     }

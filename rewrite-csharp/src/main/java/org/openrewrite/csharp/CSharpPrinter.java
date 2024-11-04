@@ -47,6 +47,46 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     }
 
     @Override
+    public Cs visitTupleExpression(Cs.TupleExpression tupleExpression, PrintOutputCapture<P> p)
+    {
+        beforeSyntax(tupleExpression, CsSpace.Location.TUPLE_EXPRESSION_PREFIX, p);
+        visitContainer("(", tupleExpression.getPadding().getArguments(), CsContainer.Location.TUPLE_EXPRESSION_ARGUMENTS, ",", ")", p);
+        afterSyntax(tupleExpression, p);
+        return tupleExpression;
+    }
+
+    @Override
+    public Cs visitTupleType(Cs.TupleType node, PrintOutputCapture<P> p)
+    {
+        beforeSyntax(node, CsSpace.Location.TUPLE_TYPE_PREFIX, p);
+        visitContainer("(", node.getPadding().getElements(), CsContainer.Location.TUPLE_TYPE_ELEMENTS, ",", ")", p);
+        afterSyntax(node, p);
+        return node;
+    }
+
+    @Override
+    public Cs visitTupleElement(Cs.TupleElement node, PrintOutputCapture<P> p)
+    {
+        beforeSyntax(node, CsSpace.Location.TUPLE_ELEMENT_PREFIX, p);
+        visit(node.getType(), p);
+        if (node.getName() != null)
+        {
+            visit(node.getName(), p);
+        }
+        afterSyntax(node, p);
+        return node;
+    }
+
+    @Override
+    public Cs visitParenthesizedVariableDesignation(Cs.ParenthesizedVariableDesignation node, PrintOutputCapture<P> p)
+    {
+        beforeSyntax(node, CsSpace.Location.PARENTHESIZED_VARIABLE_DESIGNATION_VARIABLES, p);
+        visitContainer("(", node.getPadding().getVariables(), CsContainer.Location.PARENTHESIZED_VARIABLE_DESIGNATION_VARIABLES, ",", ")", p);
+        afterSyntax(node, p);
+        return node;
+    }
+
+    @Override
     public J visitArgument(Cs.Argument argument, PrintOutputCapture<P> p) {
         beforeSyntax(argument, CsSpace.Location.NAMED_ARGUMENT_PREFIX, p);
         Cs.Argument.Padding padding = argument.getPadding();

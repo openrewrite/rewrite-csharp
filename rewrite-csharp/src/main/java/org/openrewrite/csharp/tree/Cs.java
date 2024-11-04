@@ -3226,4 +3226,141 @@ public interface Cs extends J {
             }
         }
     }
+
+    /**
+     * Represents a C# tuple type specification, which allows grouping multiple types into a single type.
+     * Can be used in method returns, variable declarations, etc.
+     * <p>
+     * For example:
+     * <pre>
+     *   // Simple tuple type
+     *   (int, string) coordinates;
+     *
+     *   // Tuple type with named elements
+     *   (int x, string label) namedTuple;
+     *
+     *   // Nested tuple types
+     *   (int, (string, bool)) complexTuple;
+     *
+     *   // As method return type
+     *   public (string name, int age) GetPersonDetails() { }
+     *
+     *   // As parameter type
+     *   public void ProcessData((int id, string value) data) { }
+     * </pre>
+     */
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    public class TupleType implements Cs, TypeTree, Expression {
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @With
+        @Getter
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        JContainer<TupleElement> elements;
+
+        @With
+        @Nullable
+        @Getter
+        JavaType type;
+
+        public List<TupleElement> getElements() {
+            return elements.getElements();
+        }
+
+        public TupleType withElements(List<TupleElement> elements) {
+            return getPadding().withElements(JContainer.withElements(this.elements, elements));
+        }
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitTupleType(this, p);
+        }
+
+        @Override
+        public CoordinateBuilder.Expression getCoordinates() {
+            return new CoordinateBuilder.Expression(this);
+        }
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.t != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final TupleType t;
+
+            public JContainer<TupleElement> getElements() {
+                return t.elements;
+            }
+
+            public TupleType withElements(JContainer<TupleElement> elements) {
+                return t.elements == elements ? t : new TupleType(t.id, t.prefix, t.markers, elements, t.type);
+            }
+        }
+    }
+
+    /**
+     * Represents a single element within a tuple type, which may include an optional
+     * identifier for named tuple elements.
+     */
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
+    public class TupleElement implements Cs {
+
+        @With
+        @Getter
+        @EqualsAndHashCode.Include
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        @With
+        @Getter
+        TypeTree type;
+
+        @With
+        @Getter
+        J.@Nullable Identifier name;
+
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitTupleElement(this, p);
+        }
+
+    }
+
 }

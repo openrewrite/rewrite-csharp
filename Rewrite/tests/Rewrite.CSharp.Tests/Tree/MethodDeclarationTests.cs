@@ -37,7 +37,7 @@ public class MethodDeclarationTests : RewriteTest
     public void ConstructorDelegation()
     {
         RewriteRun(
-            spec => spec.TypeValidation = new TypeValidation(Unknowns: false),
+            // spec => spec.TypeValidation = new TypeValidation(Unknowns: false),
             CSharp(
                 """
                 public class Foo

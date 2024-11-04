@@ -535,6 +535,27 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         return constructorInitializer;
     }
 
+    public J visitTupleType(Cs.TupleType tupleType, P p) {
+        tupleType = tupleType.withPrefix(visitSpace(tupleType.getPrefix(), CsSpace.Location.TUPLE_TYPE_PREFIX, p));
+        Expression tempExpression = (Expression) visitExpression(tupleType, p);
+        if (!(tempExpression instanceof Cs.TupleType))
+        {
+            return tempExpression;
+        }
+        tupleType = (Cs.TupleType) tempExpression;
+        tupleType = tupleType.withMarkers(visitMarkers(tupleType.getMarkers(), p));
+        tupleType = tupleType.getPadding().withElements(visitContainer(tupleType.getPadding().getElements(), CsContainer.Location.TUPLE_TYPE_ELEMENTS, p));
+        return tupleType;
+    }
+
+    public J visitTupleElement(Cs.TupleElement tupleElement, P p) {
+        tupleElement = tupleElement.withPrefix(visitSpace(tupleElement.getPrefix(), CsSpace.Location.TUPLE_ELEMENT_PREFIX, p));
+        tupleElement = tupleElement.withMarkers(visitMarkers(tupleElement.getMarkers(), p));
+        tupleElement = tupleElement.withType(visitAndCast(tupleElement.getType(), p));
+        tupleElement = tupleElement.withName(visitAndCast(tupleElement.getName(), p));
+        return tupleElement;
+    }
+
     public <J2 extends J> JContainer<J2> visitContainer(@Nullable JContainer<J2> container,
                                                         CsContainer.Location loc, P p) {
         if (container == null) {

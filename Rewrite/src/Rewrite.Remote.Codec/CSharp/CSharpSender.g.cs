@@ -439,6 +439,26 @@ public record CSharpSender : Sender
             return constructorInitializer;
         }
 
+        public override J VisitTupleType(Cs.TupleType tupleType, SenderContext ctx)
+        {
+            ctx.SendValue(tupleType, v => v.Id);
+            ctx.SendNode(tupleType, v => v.Prefix, SendSpace);
+            ctx.SendNode(tupleType, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(tupleType, v => v.Padding.Elements, SendContainer);
+            ctx.SendTypedValue(tupleType, v => v.Type);
+            return tupleType;
+        }
+
+        public override J VisitTupleElement(Cs.TupleElement tupleElement, SenderContext ctx)
+        {
+            ctx.SendValue(tupleElement, v => v.Id);
+            ctx.SendNode(tupleElement, v => v.Prefix, SendSpace);
+            ctx.SendNode(tupleElement, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(tupleElement, v => v.Type, ctx.SendTree);
+            ctx.SendNode(tupleElement, v => v.Name, ctx.SendTree);
+            return tupleElement;
+        }
+
         public override J VisitAnnotatedType(J.AnnotatedType annotatedType, SenderContext ctx)
         {
             ctx.SendValue(annotatedType, v => v.Id);

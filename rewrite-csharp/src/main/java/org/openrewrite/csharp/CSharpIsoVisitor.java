@@ -231,6 +231,16 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     }
 
     @Override
+    public Cs.TupleType visitTupleType(Cs.TupleType tupleType, P p) {
+        return (Cs.TupleType) super.visitTupleType(tupleType, p);
+    }
+
+    @Override
+    public Cs.TupleElement visitTupleElement(Cs.TupleElement tupleElement, P p) {
+        return (Cs.TupleElement) super.visitTupleElement(tupleElement, p);
+    }
+
+    @Override
     public J.AnnotatedType visitAnnotatedType(J.AnnotatedType annotatedType, P p) {
         return (J.AnnotatedType) super.visitAnnotatedType(annotatedType, p);
     }

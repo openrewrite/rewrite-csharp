@@ -476,6 +476,26 @@ public class CSharpReceiver implements Receiver<Cs> {
         }
 
         @Override
+        public Cs.TupleType visitTupleType(Cs.TupleType tupleType, ReceiverContext ctx) {
+            tupleType = tupleType.withId(ctx.receiveNonNullValue(tupleType.getId(), UUID.class));
+            tupleType = tupleType.withPrefix(ctx.receiveNonNullNode(tupleType.getPrefix(), CSharpReceiver::receiveSpace));
+            tupleType = tupleType.withMarkers(ctx.receiveNonNullNode(tupleType.getMarkers(), ctx::receiveMarkers));
+            tupleType = tupleType.getPadding().withElements(ctx.receiveNonNullNode(tupleType.getPadding().getElements(), CSharpReceiver::receiveContainer));
+            tupleType = tupleType.withType(ctx.receiveValue(tupleType.getType(), JavaType.class));
+            return tupleType;
+        }
+
+        @Override
+        public Cs.TupleElement visitTupleElement(Cs.TupleElement tupleElement, ReceiverContext ctx) {
+            tupleElement = tupleElement.withId(ctx.receiveNonNullValue(tupleElement.getId(), UUID.class));
+            tupleElement = tupleElement.withPrefix(ctx.receiveNonNullNode(tupleElement.getPrefix(), CSharpReceiver::receiveSpace));
+            tupleElement = tupleElement.withMarkers(ctx.receiveNonNullNode(tupleElement.getMarkers(), ctx::receiveMarkers));
+            tupleElement = tupleElement.withType(ctx.receiveNonNullNode(tupleElement.getType(), ctx::receiveTree));
+            tupleElement = tupleElement.withName(ctx.receiveNode(tupleElement.getName(), ctx::receiveTree));
+            return tupleElement;
+        }
+
+        @Override
         public J.AnnotatedType visitAnnotatedType(J.AnnotatedType annotatedType, ReceiverContext ctx) {
             annotatedType = annotatedType.withId(ctx.receiveNonNullValue(annotatedType.getId(), UUID.class));
             annotatedType = annotatedType.withPrefix(ctx.receiveNonNullNode(annotatedType.getPrefix(), CSharpReceiver::receiveSpace));
@@ -1574,6 +1594,26 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
+                );
+            }
+
+            if (type == Cs.TupleType.class) {
+                return (T) new Cs.TupleType(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer),
+                    ctx.receiveValue(null, JavaType.class)
+                );
+            }
+
+            if (type == Cs.TupleElement.class) {
+                return (T) new Cs.TupleElement(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree),
+                    ctx.receiveNode(null, ctx::receiveTree)
                 );
             }
 

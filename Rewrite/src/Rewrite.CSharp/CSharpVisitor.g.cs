@@ -558,6 +558,29 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         return constructorInitializer;
     }
 
+    public virtual J? VisitTupleType(Cs.TupleType tupleType, P p)
+    {
+        tupleType = tupleType.WithPrefix(VisitSpace(tupleType.Prefix, CsSpace.Location.TUPLE_TYPE_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(tupleType, p);
+        if (tempExpression is not Cs.TupleType)
+        {
+            return tempExpression;
+        }
+        tupleType = (Cs.TupleType) tempExpression;
+        tupleType = tupleType.WithMarkers(VisitMarkers(tupleType.Markers, p));
+        tupleType = tupleType.Padding.WithElements(VisitContainer(tupleType.Padding.Elements, CsContainer.Location.TUPLE_TYPE_ELEMENTS, p)!);
+        return tupleType;
+    }
+
+    public virtual J? VisitTupleElement(Cs.TupleElement tupleElement, P p)
+    {
+        tupleElement = tupleElement.WithPrefix(VisitSpace(tupleElement.Prefix, CsSpace.Location.TUPLE_ELEMENT_PREFIX, p)!);
+        tupleElement = tupleElement.WithMarkers(VisitMarkers(tupleElement.Markers, p));
+        tupleElement = tupleElement.WithType(VisitAndCast<TypeTree>(tupleElement.Type, p)!);
+        tupleElement = tupleElement.WithName(VisitAndCast<J.Identifier>(tupleElement.Name, p));
+        return tupleElement;
+    }
+
     protected virtual JContainer<J2>? VisitContainer<J2>(JContainer<J2>? container, CsContainer.Location loc, P p) where J2 : J
     {
         if (container == null) {
