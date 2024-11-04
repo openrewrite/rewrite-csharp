@@ -63,7 +63,7 @@ public class CSharpParser : Core.Parser
         var encoding = Encoding.GetEncoding((this as Core.Parser).GetCharset(ctx));
 
         var sourceFiles = new List<SourceFile>();
-        foreach (var source in sources)
+        Parallel.ForEach(sources,source =>
         {
             SourceFile cs;
             try
@@ -88,8 +88,7 @@ public class CSharpParser : Core.Parser
             }
 
             sourceFiles.Add(cs!);
-        }
-
+        });
         return sourceFiles;
     }
 }

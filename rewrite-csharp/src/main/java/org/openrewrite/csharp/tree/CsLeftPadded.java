@@ -24,7 +24,7 @@ public class CsLeftPadded {
         PROPERTY_DECLARATION_INITIALIZER(CsSpace.Location.PROPERTY_DECLARATION_INITIALIZER),
         USING_DIRECTIVE_STATIC(CsSpace.Location.USING_DIRECTIVE_STATIC),
         USING_DIRECTIVE_UNSAFE(CsSpace.Location.USING_DIRECTIVE_UNSAFE),
-        ;
+        UNARY_OPERATOR(CsSpace.Location.UNARY_OPERATOR);
 
         private CsSpace.Location beforeLocation;
 

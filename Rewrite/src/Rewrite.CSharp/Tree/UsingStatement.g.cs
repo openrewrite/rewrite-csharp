@@ -30,7 +30,7 @@ public partial interface Cs : J
     Guid id,
     Space prefix,
     Markers markers,
-    Space? awaitKeyword,
+    Keyword? awaitKeyword,
     JContainer<Expression> expression,
     Statement statement
     ) : Cs, Statement, MutableTree<UsingStatement>
@@ -83,11 +83,11 @@ public partial interface Cs : J
         {
             return ReferenceEquals(newMarkers, markers) ? this : new UsingStatement(id, prefix, newMarkers, awaitKeyword, _expression, statement);
         }
-        public Space? AwaitKeyword => awaitKeyword;
+        public Cs.Keyword? AwaitKeyword => awaitKeyword;
 
-        public UsingStatement WithAwaitKeyword(Space? newAwaitKeyword)
+        public UsingStatement WithAwaitKeyword(Cs.Keyword? newAwaitKeyword)
         {
-            return newAwaitKeyword == awaitKeyword ? this : new UsingStatement(id, prefix, markers, newAwaitKeyword, _expression, statement);
+            return ReferenceEquals(newAwaitKeyword, awaitKeyword) ? this : new UsingStatement(id, prefix, markers, newAwaitKeyword, _expression, statement);
         }
         private readonly JContainer<Expression> _expression = expression;
         public IList<Expression> Expression => _expression.GetElements();

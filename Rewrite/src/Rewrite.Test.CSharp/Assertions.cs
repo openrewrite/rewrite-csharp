@@ -19,9 +19,9 @@ public static class Assertions
         return (sourceFile, _) => sourceFile;
     }
 
-    public static SourceSpecs<Cs.CompilationUnit> CSharp([LanguageInjection("C#")] string before)
+    public static SourceSpec<Cs.CompilationUnit> CSharp([LanguageInjection("C#")] string before)
     {
-        return CSharp(before, s => { });
+        return CSharp(before, s => { }).Cast<SourceSpec<Cs.CompilationUnit>>().First();
     }
 
     public static SourceSpecs<Cs.CompilationUnit> CSharp([LanguageInjection("C#")] string before, Action<SourceSpec<Cs.CompilationUnit>> spec)

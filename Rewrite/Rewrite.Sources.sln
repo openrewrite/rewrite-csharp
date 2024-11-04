@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Test.Engine.Remote"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Server", "..\..\..\moderneinc\rewrite-remote\Rewrite.Remote\src\Rewrite.Server\Rewrite.Server.csproj", "{E0721BA1-2772-4486-BDF3-FC9301723BB9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Analyzers", "src\Rewrite.Analyzers\Rewrite.Analyzers.csproj", "{9818146E-C516-4D3C-80CE-A84741E7772B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,6 +117,10 @@ Global
 		{E0721BA1-2772-4486-BDF3-FC9301723BB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0721BA1-2772-4486-BDF3-FC9301723BB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0721BA1-2772-4486-BDF3-FC9301723BB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9818146E-C516-4D3C-80CE-A84741E7772B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9818146E-C516-4D3C-80CE-A84741E7772B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9818146E-C516-4D3C-80CE-A84741E7772B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9818146E-C516-4D3C-80CE-A84741E7772B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{25EEACCB-9BAE-4361-A980-9E9CDA37602E} = {7B268266-B9CD-4D85-ABC5-3B2C4611FD74}
@@ -133,5 +139,6 @@ Global
 		{5C70ACE0-BE37-4D67-A67F-EE69767994D2} = {C7A4A8F9-0343-4A3E-AB77-101C458C23B5}
 		{C04C7CA4-69C3-444F-A654-6C722A0FC3BE} = {C7A4A8F9-0343-4A3E-AB77-101C458C23B5}
 		{E0721BA1-2772-4486-BDF3-FC9301723BB9} = {45B6292D-DC7E-46A7-A86E-7455BBEAED70}
+		{9818146E-C516-4D3C-80CE-A84741E7772B} = {C7A4A8F9-0343-4A3E-AB77-101C458C23B5}
 	EndGlobalSection
 EndGlobal

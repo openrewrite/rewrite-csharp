@@ -6,7 +6,6 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection(Collections.PrinterAccess)]
 public class MethodInvocationTests : RewriteTest
 {
     [Fact]
@@ -42,16 +41,59 @@ public class MethodInvocationTests : RewriteTest
     [Fact]
     public void InvocationWithNamedParameters()
     {
-        RewriteRun(
-            CSharp(
-                @"
+        var src = CSharp(
+            @"
                 public class T
                 {
-                    string s = this.Equals(obj: null);
+                    void M()
+                    {
+                        string s = this.Equals(obj: null, 1);
+                    }
                 }
                 "
-            )
         );
+
+        var lst = src.Parse();
+        lst.ToString().ShouldBeSameAs(src.Before);
+    }
+
+    [Fact]
+    public void InvocationWithOutParameter()
+    {
+        var src = CSharp(
+            """
+                public class T
+                {
+                    void M()
+                    {
+                        int.TryParse("1", out var one);
+                    }
+                }
+                """
+        );
+
+        var lst = src.Parse();
+        lst.ToString().ShouldBeSameAs(src.Before);
+    }
+
+    [Fact]
+    public void InvocationWithRefParameter()
+    {
+        var src = CSharp(
+            """
+            public class T
+            {
+                void M()
+                {
+                    int.TryParse("1", ref one);
+                }
+            }
+            """
+        );
+
+        var lst = src.Parse();
+        var statement = lst.Descendents().OfType<J.MethodInvocation>().First();
+        lst.ToString().ShouldBeSameAs(src.Before);
     }
 
     [Fact]

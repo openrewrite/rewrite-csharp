@@ -7,7 +7,6 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection(Collections.PrinterAccess)]
 public class MethodDeclarationTests : RewriteTest
 {
     [Fact]
@@ -37,22 +36,21 @@ public class MethodDeclarationTests : RewriteTest
     [Fact]
     public void ConstructorDelegation()
     {
-        RewriteRun(
-            spec => spec.TypeValidation = new TypeValidation(Unknowns: false),
-            CSharp(
-                """
-                public class Foo
+        var src = CSharp(
+            """
+            public class Foo
+            {
+                Foo() : this(1)
                 {
-                    Foo() : this(1)
-                    {
-                    }
-                    Foo(int i)
-                    {
-                    }
                 }
-                """
-            )
+                Foo(int i)
+                {
+                }
+            }
+            """
         );
+        var lst = src.Parse();
+        lst.ToString().ShouldBeSameAs(src.Before);
     }
 
     [Fact]

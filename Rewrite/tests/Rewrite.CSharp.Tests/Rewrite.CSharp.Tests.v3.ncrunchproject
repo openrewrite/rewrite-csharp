@@ -1,0 +1,27 @@
+﻿<ProjectConfiguration>
+  <Settings>
+    <IgnoredTests>
+      <FixtureTestSelector>
+        <FixtureName>Rewrite.CSharp.Tests.Solutions.SolutionTests</FixtureName>
+      </FixtureTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>Rewrite.CSharp.Tests.PlayTests</FixtureName>
+      </FixtureTestSelector>
+      <NamedTestSelector>
+        <TestName>Rewrite.CSharp.Tests.RoslynTestCases.ParseTests.ParseAndPrint</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>Rewrite.CSharp.Tests.FindClassDeclarationTests.ClassWithoutBody2</TestName>
+      </NamedTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>Rewrite.CSharp.Tests.FindClassDeclarationTests</FixtureName>
+      </FixtureTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>Rewrite.CSharp.Tests.FindClassTests</FixtureName>
+      </FixtureTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>Rewrite.CSharp.Tests.RecipeOptionsTest</FixtureName>
+      </FixtureTestSelector>
+    </IgnoredTests>
+  </Settings>
+</ProjectConfiguration>

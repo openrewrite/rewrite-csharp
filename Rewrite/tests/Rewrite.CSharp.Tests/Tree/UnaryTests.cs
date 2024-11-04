@@ -5,7 +5,6 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection(Collections.PrinterAccess)]
 public class UnaryTests : RewriteTest
 {
     [Fact]
@@ -40,6 +39,20 @@ public class UnaryTests : RewriteTest
                 """
                 class Test {
                     bool b = !(1 == 2);
+                }
+                """
+            )
+        );
+    }
+
+    [Fact]
+    void NullWarningSuppress()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                class Test {
+                    string a = ""!;
                 }
                 """
             )

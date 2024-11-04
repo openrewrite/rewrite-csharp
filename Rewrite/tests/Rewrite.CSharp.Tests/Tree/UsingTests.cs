@@ -7,7 +7,6 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-[Collection(Collections.PrinterAccess)]
 public class UsingTests(ITestOutputHelper output) : RewriteTest
 {
     private readonly ITestOutputHelper _output = output;
