@@ -1,6 +1,5 @@
 ﻿namespace Rewrite.CSharp.Tests;
 
-[Collection(Collections.PrinterAccess)]
 [Exploratory]
 public class PlayTests(ITestOutputHelper _output) : RewriteTest
 {
@@ -31,6 +30,7 @@ public class PlayTests(ITestOutputHelper _output) : RewriteTest
     }
 
     [Fact]
+    [Exploratory]
     public void MyTest()
     {
         var root = new CSharpParser.Builder().Build().Parse(

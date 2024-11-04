@@ -5,7 +5,6 @@ namespace Rewrite.CSharp.Tests;
 
 using static Assertions;
 
-[Collection(Collections.PrinterAccess)]
 public class FindClassTests : RewriteTest
 {
     protected override void Defaults(RecipeSpec spec)
