@@ -54,6 +54,25 @@ public class MethodDeclarationTests : RewriteTest
     }
 
     [Fact]
+    [KnownBug("Cannot perform the requested operation, the next CBOR data item is of major type '3'.")]
+    public void ConstructorDelegation2()
+    {
+        RewriteRun(CSharp(
+            """
+            public class Foo
+            {
+                Foo() : this(1)
+                {
+                }
+                Foo(int i)
+                {
+                }
+            }
+            """
+        ));
+    }
+
+    [Fact]
     public void StaticConstructor()
     {
         RewriteRun(

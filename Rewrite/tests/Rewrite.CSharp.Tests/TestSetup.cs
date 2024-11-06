@@ -1,5 +1,6 @@
 ﻿
 
+using System.Reflection;
 using Rewrite.Test.Engine.Remote;
 using Xunit.Abstractions;
 using Xunit.Sdk;
@@ -10,14 +11,21 @@ namespace Rewrite.CSharp.Tests;
 
 public sealed class TestSetup : XunitTestFramework, IDisposable
 {
-#if REMOTE_PRINTER
-    private readonly IDisposable _fixture = new RemotingFixture();
-#else
-    private readonly IDisposable _fixture = new LocalPrinterFixture();
-#endif
+    private IDisposable _fixture = null!;
     public TestSetup(IMessageSink messageSink)
         :base(messageSink)
     {
+    }
+
+    protected override ITestFrameworkExecutor CreateExecutor(AssemblyName assemblyName)
+    {
+#if REMOTE_PRINTER
+        _fixture = new RemotingFixture();
+#else
+        _fixture = new LocalPrinterFixture();
+#endif
+
+        return base.CreateExecutor(assemblyName);
     }
 
     public new void Dispose()
