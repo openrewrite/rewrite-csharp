@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
@@ -23,6 +24,15 @@ namespace Rewrite.RewriteCSharp.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface Cs : J
 {
+    /// <summary>
+    /// Represents a discard designation in pattern matching expressions, indicated by an underscore (_).
+    /// For example in pattern matching:
+    /// <code>
+    /// if (obj is _) // discard pattern
+    /// // Or in deconstruction:
+    /// var (x, _, z) = tuple; // discards second element
+    /// </code>
+    /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif
@@ -31,19 +41,13 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     J.Identifier discard
-    ) : Cs.VariableDesignation, Cs, MutableTree<DiscardVariableDesignation>
+    ) : Cs.VariableDesignation, Cs, Expression<DiscardVariableDesignation>, MutableTree<DiscardVariableDesignation>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitDiscardVariableDesignation(this, p);
         }
 
-        public JavaType? Type => Extensions.GetJavaType(this);
-
-        public DiscardVariableDesignation WithType(JavaType newType)
-        {
-            return Extensions.WithJavaType(this, newType);
-        }
         public Guid Id => id;
 
         public DiscardVariableDesignation WithId(Guid newId)

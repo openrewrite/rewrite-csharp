@@ -7,7 +7,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class LiteralTests : RewriteTest
+public class LiteralTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     private void Boolean()

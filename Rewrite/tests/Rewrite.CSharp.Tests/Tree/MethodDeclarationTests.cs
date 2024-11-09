@@ -7,7 +7,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class MethodDeclarationTests : RewriteTest
+public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     public void Constructor()
@@ -88,7 +88,7 @@ public class MethodDeclarationTests : RewriteTest
                 spec => spec.AfterRecipe = cu =>
                 {
                     var ctor = cu.Descendents().OfType<J.MethodDeclaration>().First();
-                    ctor.Modifiers.Should().Contain(m => m.ModifierType == J.Modifier.Type.Static);
+                    ctor.Modifiers.Should().Contain(m => m.ModifierType == J.Modifier.Types.Static);
                 }
             )
         );

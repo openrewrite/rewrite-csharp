@@ -4,6 +4,7 @@ public partial interface J : Rewrite.Core.Tree
 {
     public partial class MethodDeclaration
     {
+
         public Identifier Name => _name.Identifier;
         public MethodDeclaration WithName(Identifier identifier)
         {
@@ -22,5 +23,8 @@ public partial interface J : Rewrite.Core.Tree
                 _defaultValue,
                 methodType);
         }
+
+        public JavaType? Type => null;
+        public MethodDeclaration WithType(JavaType? type) => this;
     }
 }

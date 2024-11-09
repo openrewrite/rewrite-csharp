@@ -9,7 +9,7 @@ using ExecutionContext = ExecutionContext;
 
 public delegate SourceFile ValidateSource(SourceFile sourceFile, TypeValidation typeValidation);
 
-public abstract class SourceSpec : SourceSpecs
+public abstract class SourceSpec
 {
     public Type SourceFileType { get; }
     public Parser.Builder Parser { get; }
@@ -46,20 +46,12 @@ public abstract class SourceSpec : SourceSpecs
         this.NoTrim = noTrim;
     }
 
-    public IEnumerator<SourceSpec> GetEnumerator()
-    {
-        yield return this;
-    }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
 
     public abstract SourceFile BeforeRecipe(SourceFile sourceFile);
 }
 
-public class SourceSpec<T> : SourceSpec, SourceSpecs<T> where T : SourceFile
+public class SourceSpec<T> : SourceSpec where T : SourceFile
 {
     private readonly Func<T, T> _beforeRecipeFunc;
     public Action<T> AfterRecipe { get; set; }

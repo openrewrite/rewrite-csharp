@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
@@ -34,7 +35,7 @@ public partial interface J : Rewrite.Core.Tree
     Identifier name,
     JContainer<Expression> arguments,
     JavaType.Method? methodType
-    ) : J, Statement, TypedTree, MethodCall, MutableTree<MethodInvocation>
+    ) : J, Statement, TypedTree, MethodCall, Expression<MethodInvocation>, TypedTree<MethodInvocation>, MutableTree<MethodInvocation>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -66,12 +67,6 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitMethodInvocation(this, p);
         }
 
-        public JavaType? Type => Extensions.GetJavaType(this);
-
-        public MethodInvocation WithType(JavaType newType)
-        {
-            return Extensions.WithJavaType(this, newType);
-        }
         public Guid Id => id;
 
         public MethodInvocation WithId(Guid newId)
@@ -108,7 +103,7 @@ public partial interface J : Rewrite.Core.Tree
 
         public MethodInvocation WithName(J.Identifier newName)
         {
-            return Extensions.WithName(this, newName);
+            return ReferenceEquals(newName, name) ? this : new MethodInvocation(id, prefix, markers, _select, _typeParameters, newName, _arguments, methodType);
         }
         private readonly JContainer<Expression> _arguments = arguments;
         public IList<Expression> Arguments => _arguments.GetElements();

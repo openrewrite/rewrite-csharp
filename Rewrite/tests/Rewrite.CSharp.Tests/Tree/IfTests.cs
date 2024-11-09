@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class IfTests : RewriteTest
+public class IfTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     void IfElse()
@@ -13,17 +13,14 @@ public class IfTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                class Test {
-                    void test() {
-                        int n = 0;
-                        if(n == 0) {
-                        }
-                        else if(n == 1) {
-                        }
-                        else {
-                        }
-                    }
+                int n = 0;
+                if(n == 0) {
                 }
+                else if(n == 1) {
+                }
+                else {
+                }
+
                 """
             )
         );
@@ -36,13 +33,10 @@ public class IfTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                class Test {
-                    void test() {
-                        int n = 0;
-                        if (n == 0) {
-                        }
-                    }
+                int n = 0;
+                if (n == 0) {
                 }
+
                 """
             )
         );
@@ -54,14 +48,10 @@ public class IfTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                class Test {
-                    void test() {
-                        int n = 0;
-                        if (n == 0) n++;
-                        else if (n == 1) n++;
-                        else n++;
-                    }
-                }
+                int n = 0;
+                if (n == 0) n++;
+                else if (n == 1) n++;
+                else n++;
                 """
             )
         );
@@ -73,14 +63,10 @@ public class IfTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                class Test {
-                    void test() {
-                        if (true) {
-                        }
-                        else{
-                            Console.WriteLine("test");
-                        }
-                    }
+                if (true) {
+                }
+                else{
+                    Console.WriteLine("test");
                 }
                 """
             )

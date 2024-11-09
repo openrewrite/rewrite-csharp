@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
@@ -30,10 +31,10 @@ public partial interface Cs : J
     Guid id,
     Space prefix,
     Markers markers,
-    JLeftPadded<Unary.Type> @operator,
+    JLeftPadded<Unary.Types> @operator,
     Expression expression,
-    JavaType? javaType
-    ) : Cs, Statement, Expression, TypedTree, MutableTree<Unary>
+    JavaType? type
+    ) : Cs, Statement, Expression, TypedTree, Expression<Unary>, TypedTree<Unary>, MutableTree<Unary>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -69,24 +70,24 @@ public partial interface Cs : J
 
         public Unary WithId(Guid newId)
         {
-            return newId == id ? this : new Unary(newId, prefix, markers, _operator, expression, javaType);
+            return newId == id ? this : new Unary(newId, prefix, markers, _operator, expression, type);
         }
         public Space Prefix => prefix;
 
         public Unary WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Unary(id, newPrefix, markers, _operator, expression, javaType);
+            return newPrefix == prefix ? this : new Unary(id, newPrefix, markers, _operator, expression, type);
         }
         public Markers Markers => markers;
 
         public Unary WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Unary(id, prefix, newMarkers, _operator, expression, javaType);
+            return ReferenceEquals(newMarkers, markers) ? this : new Unary(id, prefix, newMarkers, _operator, expression, type);
         }
-        private readonly JLeftPadded<Type> _operator = @operator;
-        public Type Operator => _operator.Element;
+        private readonly JLeftPadded<Types> _operator = @operator;
+        public Types Operator => _operator.Element;
 
-        public Unary WithOperator(Type newOperator)
+        public Unary WithOperator(Types newOperator)
         {
             return Padding.WithOperator(_operator.WithElement(newOperator));
         }
@@ -94,25 +95,25 @@ public partial interface Cs : J
 
         public Unary WithExpression(Expression newExpression)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new Unary(id, prefix, markers, _operator, newExpression, javaType);
+            return ReferenceEquals(newExpression, expression) ? this : new Unary(id, prefix, markers, _operator, newExpression, type);
         }
-        public JavaType? JavaType => javaType;
+        public JavaType? Type => type;
 
-        public Unary WithJavaType(JavaType? newJavaType)
+        public Unary WithType(JavaType? newType)
         {
-            return newJavaType == javaType ? this : new Unary(id, prefix, markers, _operator, expression, newJavaType);
+            return newType == type ? this : new Unary(id, prefix, markers, _operator, expression, newType);
         }
-        public enum Type
+        public enum Types
         {
             SuppressNullableWarning,
         }
         public sealed record PaddingHelper(Cs.Unary T)
         {
-            public JLeftPadded<Cs.Unary.Type> Operator => T._operator;
+            public JLeftPadded<Cs.Unary.Types> Operator => T._operator;
 
-            public Cs.Unary WithOperator(JLeftPadded<Cs.Unary.Type> newOperator)
+            public Cs.Unary WithOperator(JLeftPadded<Cs.Unary.Types> newOperator)
             {
-                return T._operator == newOperator ? T : new Cs.Unary(T.Id, T.Prefix, T.Markers, newOperator, T.Expression, T.JavaType);
+                return T._operator == newOperator ? T : new Cs.Unary(T.Id, T.Prefix, T.Markers, newOperator, T.Expression, T.Type);
             }
 
         }

@@ -6,7 +6,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ArrayAccessTests : RewriteTest
+public class ArrayAccessTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     public void OneDimensional()
@@ -14,13 +14,8 @@ public class ArrayAccessTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                public class Foo
-                {
-                    int M(int[] a)
-                    {
-                        return a[0];
-                    }
-                }
+                int[] a;
+                return a[0];
                 """
             )
         );

@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class NullableTypeTests : RewriteTest
+public class NullableTypeTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     void NullableFieldDeclaration()

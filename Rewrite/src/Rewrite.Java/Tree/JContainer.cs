@@ -8,7 +8,7 @@ public class JContainer<T>(
     Space before,
     IList<JRightPadded<T>> elements,
     Markers markers
-)
+) : JContainer
 {
     [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -109,8 +109,36 @@ public class JContainer<T>(
         return new JContainer<T>(Space.EMPTY, [], Markers.EMPTY);
     }
 }
+public static class JContainerExtensions
+{
+    public static JContainer<T> WithElements<T>(this JContainer<T> before, IList<T>? elements)
+        where T : J
+    {
+        if (elements == null)
+        {
+            return before.Padding.WithElements([]);
+        }
 
-public static class JContainer
+        return before.Padding.WithElements(JRightPadded<T>.WithElements(before.Elements, elements));
+    }
+
+    public static JContainer<T>? WithElementsNullable<T>(JContainer<T>? before, IList<T>? elements)
+        where T : J
+    {
+        if (elements == null || elements.Count == 0)
+        {
+            return null;
+        }
+
+        if (before == null)
+        {
+            return JContainer.Create(JRightPadded<T>.WithElements([], elements));
+        }
+
+        return before.Padding.WithElements(JRightPadded<T>.WithElements(before.Elements, elements));
+    }
+}
+public class JContainer
 {
 
     public static JContainer<T> Create<T>(IList<JRightPadded<T>> elements) => new (Space.EMPTY, elements, Markers.EMPTY);

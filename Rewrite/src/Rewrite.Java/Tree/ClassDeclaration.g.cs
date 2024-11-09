@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
@@ -40,7 +41,7 @@ public partial interface J : Rewrite.Core.Tree
     JContainer<TypeTree>? permits,
     Block body,
     JavaType.FullyQualified? type
-    ) : J, Statement, TypedTree, MutableTree<ClassDeclaration>
+    ) : J, Statement, TypedTree, TypedTree<ClassDeclaration>, MutableTree<ClassDeclaration>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -169,7 +170,7 @@ public partial interface J : Rewrite.Core.Tree
     Space prefix,
     Markers markers,
     IList<J.Annotation> annotations,
-    Kind.Type kindType
+    Kind.Types kindType
         ) : J, MutableTree<Kind>
         {
             public J? AcceptJava<P>(JavaVisitor<P> v, P p)
@@ -201,13 +202,13 @@ public partial interface J : Rewrite.Core.Tree
             {
                 return newAnnotations == annotations ? this : new Kind(id, prefix, markers, newAnnotations, kindType);
             }
-            public Type KindType => kindType;
+            public Types KindType => kindType;
 
-            public Kind WithKindType(Type newKindType)
+            public Kind WithKindType(Types newKindType)
             {
                 return newKindType == kindType ? this : new Kind(id, prefix, markers, annotations, newKindType);
             }
-            public enum Type
+            public enum Types
             {
                 Class,
                 Enum,

@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class NamespaceDeclarationTests : RewriteTest
+public class NamespaceDeclarationTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     public void EmptyBlockScopeNamespace()

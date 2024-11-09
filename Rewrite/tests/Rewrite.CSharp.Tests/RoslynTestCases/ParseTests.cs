@@ -11,16 +11,10 @@ namespace Rewrite.CSharp.Tests.RoslynTestCases;
 
 using static Assertions;
 
-public class ParseTests : RewriteTest
+public class ParseTests(ITestOutputHelper output) : RewriteTest(output)
 {
-    private readonly ITestOutputHelper _output;
-    private readonly CSharpParser _parser;
+    private readonly CSharpParser _parser = new CSharpParser.Builder().Build();
 
-    public ParseTests(ITestOutputHelper output)
-    {
-        _output = output;
-        _parser = new CSharpParser.Builder().Build();
-    }
 
     [Fact]
     [Exploratory]
@@ -31,14 +25,15 @@ public class ParseTests : RewriteTest
         List<TestResult> report = new();
         foreach (var testCase in testCases)
         {
-            var roslynDiagnostics = CSharpSyntaxTree.ParseText(testCase.SourceText).GetDiagnostics().ToList();
+            var src = this.AsValidCompilationRoot(testCase.SourceText);
+            var roslynDiagnostics = CSharpSyntaxTree.ParseText(src).GetDiagnostics().ToList();
             if (roslynDiagnostics.Any())
             {
                 badTestCases.Add((testCase,roslynDiagnostics));
                 continue;
             }
 
-            var lst = _parser.Parse(testCase.SourceText);
+            var lst = _parser.Parse(src);
 
             if (lst is ParseError)
             {
@@ -49,8 +44,8 @@ public class ParseTests : RewriteTest
             var lstPrint = lst.ToString()!;
 
             string StripWhiteSpace(string s) => Regex.Replace(s, @"[\r\n]", "");
-            var equalBeforeTrim = lstPrint == testCase.SourceText;
-            var equalAfterTrim = StripWhiteSpace(lstPrint) == StripWhiteSpace(testCase.SourceText);
+            var equalBeforeTrim = lstPrint == src;
+            var equalAfterTrim = StripWhiteSpace(lstPrint) == StripWhiteSpace(src);
             if (!equalBeforeTrim && equalAfterTrim)
             {
                 report.Add(testCase.Fail("DifferentWhitespace"));
@@ -95,7 +90,12 @@ public class ParseTests : RewriteTest
         }
     }
 
-
+    private string AsValidCompilationRoot(string src)
+    {
+        var expectsSemicolon = SyntaxFactory.ParseCompilationUnit(src).GetDiagnostics().Any(x => x.Id == "CS1002");
+        src += ";";
+        return src;
+    }
 
 
     [Theory]
@@ -103,12 +103,14 @@ public class ParseTests : RewriteTest
     [Category("Roslyn")]
     public void ParseAndPrint(SourceTestCase syntax)
     {
-        var lst = _parser.Parse(syntax.SourceText);
+        var src = AsValidCompilationRoot(syntax.SourceText);
+        _output.WriteLine(src);
+        var lst = _parser.Parse(src);
         lst.Should().NotBeOfType<ParseError>();
 
         var lstPrint = lst.ToString()!;
         // lstPrint.Should().Be(syntax.SourceText);
-        lstPrint.ShouldBeSameAs(syntax.SourceText);
+        lstPrint.ShouldBeSameAs(src);
 
     }
 }

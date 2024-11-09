@@ -10,9 +10,9 @@ public partial class CSharpTypeMapping : JavaTypeMapping<ISymbol>
     private readonly JavaTypeCache _typeCache = new();
     private readonly CSharpTypeSignatureBuilder _signatureBuilder = new();
 
-    public JavaType Type(ISymbol? t)
+    public JavaType Type(ISymbol? roslynSymbol)
     {
-        switch (t)
+        switch (roslynSymbol)
         {
             case IArrayTypeSymbol arrayType:
                 return Type(arrayType);
@@ -29,7 +29,7 @@ public partial class CSharpTypeMapping : JavaTypeMapping<ISymbol>
                 return new JavaType.Variable(
                     null,
                     0,
-                    t.Name,
+                    roslynSymbol.Name,
                     null,
                     Type(localSymbol.Type),
                     MapAttributes(localSymbol.GetAttributes())
@@ -38,7 +38,7 @@ public partial class CSharpTypeMapping : JavaTypeMapping<ISymbol>
                 return new JavaType.Variable(
                     null,
                     0,
-                    t.Name,
+                    roslynSymbol.Name,
                     null,
                     Type(fieldSymbol.Type),
                     MapAttributes(fieldSymbol.GetAttributes())

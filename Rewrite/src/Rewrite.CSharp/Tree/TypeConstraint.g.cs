@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
@@ -23,6 +24,11 @@ namespace Rewrite.RewriteCSharp.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface Cs : J
 {
+    /// <summary>
+    /// Represents a type constraint in a type parameter's constraint clause.
+    /// Example: where T : SomeClass
+    ///          where T : IInterface
+    /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif
@@ -31,7 +37,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     TypeTree typeExpression
-    ) : Cs, Cs.TypeParameterConstraint, TypedTree, MutableTree<TypeConstraint>
+    ) : Cs, Cs.TypeParameterConstraint, TypedTree, TypedTree<TypeConstraint>, MutableTree<TypeConstraint>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

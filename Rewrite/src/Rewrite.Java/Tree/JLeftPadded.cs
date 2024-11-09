@@ -11,7 +11,7 @@ public sealed class JLeftPadded<T>(
     Space before,
     T element,
     Markers markers
-)
+) : JLeftPadded
 {
     public Space Before => before;
 
@@ -35,18 +35,18 @@ public sealed class JLeftPadded<T>(
         return before == null ? new JLeftPadded<T>(Space.EMPTY, element, Markers.EMPTY) : before.WithElement(element);
     }
 
-    public Markers Markers => markers;
+    public override Markers Markers => markers;
 
     public JLeftPadded<T> WithMarkers(Markers newMarkers)
     {
         return ReferenceEquals(newMarkers, markers) ? this : new JLeftPadded<T>(before, element, newMarkers);
     }
 }
-[PublicAPI]
-public static class JLeftPadded
+
+public static class JLeftPaddedExtensions
 {
     [PublicAPI]
-    public static JLeftPadded<T> AsLeftPadded<T>(this T element) => Create(element, Space.EMPTY, Markers.EMPTY);
+    public static JLeftPadded<T> AsLeftPadded<T>(this T element) => JLeftPadded.Create(element, Space.EMPTY, Markers.EMPTY);
     public static JLeftPadded<T> AsLeftPadded<T>(this T element, Space before) => element.AsLeftPadded(before, Markers.EMPTY);
 
     [PublicAPI]
@@ -54,8 +54,12 @@ public static class JLeftPadded
     {
         return new JLeftPadded<T>(before, element, markers);
     }
-
+}
+[PublicAPI]
+public abstract class JLeftPadded : IHasMarkers
+{
     [PublicAPI]
+    public static JLeftPadded<T> Create<T>(T element, Space before) => Create(element, before, Markers.EMPTY);
     public static JLeftPadded<T> Create<T>(T element, Space before, Markers markers)
     {
         return new JLeftPadded<T>(before, element, markers);
@@ -82,4 +86,6 @@ public static class JLeftPadded
         public static readonly Location WHILE_CONDITION = new(Space.Location.WHILE_CONDITION);
         public static readonly Location WILDCARD_BOUND = new(Space.Location.WILDCARD_BOUND);
     }
+
+    public abstract Markers Markers { get; }
 }

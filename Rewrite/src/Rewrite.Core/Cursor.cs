@@ -29,13 +29,15 @@ public class Cursor
         return cursor;
     }
 
+    public bool IsRoot => Value?.ToString() == ROOT_VALUE;
+
     public Cursor? Parent => GetParent(1);
     public object? Value { get; init; }
 
     public Cursor GetRoot()
     {
         var c = this;
-        while (c.Parent != null)
+        while (c.Parent != null && c.Parent.Value?.ToString() != ROOT_VALUE)
         {
             c = c.Parent;
         }

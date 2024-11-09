@@ -15,7 +15,7 @@ using Expression = Rewrite.RewriteJava.Tree.Expression;
 
 namespace Rewrite.RewriteCSharp.Parser;
 
-[SuppressMessage("ReSharper", "RedundantOverriddenMember")]
+[SuppressMessage(category: "ReSharper", checkId: "RedundantOverriddenMember")]
 public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticModel) : CSharpSyntaxVisitor<J>
 {
     private readonly CSharpTypeMapping _typeMapping = new();
@@ -27,27 +27,27 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         var empty = node.GetFirstToken().IsKind(SyntaxKind.None);
         var prefix = Format(empty ? node.GetLeadingTrivia() : Leading(node));
         var cu = new Cs.CompilationUnit(
-            Core.Tree.RandomId(),
-            prefix,
-            Markers.EMPTY,
-            semanticModel.SyntaxTree.FilePath,
-            null,
-            null,
-            false,
-            null,
-            node.Externs.Select(u => new JRightPadded<Cs.ExternAlias>(
-                Convert<Cs.ExternAlias>(u)!,
-                Format(Leading(u.SemicolonToken)),
-                Markers.EMPTY
+            id: Core.Tree.RandomId(),
+            prefix: prefix,
+            markers: Markers.EMPTY,
+            sourcePath: semanticModel.SyntaxTree.FilePath,
+            fileAttributes: null,
+            charsetName: null,
+            charsetBomMarked: false,
+            checksum: null,
+            externs: node.Externs.Select(selector: u => new JRightPadded<Cs.ExternAlias>(
+                element: Convert<Cs.ExternAlias>(u)!,
+                after: Format(Leading(u.SemicolonToken)),
+                markers: Markers.EMPTY
             )).ToList(),
-            node.Usings.Select(u => new JRightPadded<Cs.UsingDirective>(
-                Convert<Cs.UsingDirective>(u)!,
-                Format(Leading(u.SemicolonToken)),
-                Markers.EMPTY
+            usings: node.Usings.Select(selector: u => new JRightPadded<Cs.UsingDirective>(
+                element: Convert<Cs.UsingDirective>(u)!,
+                after: Format(Leading(u.SemicolonToken)),
+                markers: Markers.EMPTY
             )).ToList(),
-            node.AttributeLists.Select(Convert<Cs.AttributeList>).ToList()!,
-            node.Members.Select(MapMemberDeclaration).ToList(),
-            Format(empty ? SyntaxTriviaList.Empty : Leading(node.EndOfFileToken))
+            attributeLists: node.AttributeLists.Select(selector: Convert<Cs.AttributeList>).ToList()!,
+            members: node.Members.Select(selector: MapMemberDeclaration).ToList(),
+            eof: Format(empty ? SyntaxTriviaList.Empty : Leading(node.EndOfFileToken))
         );
         return cu;
     }
@@ -55,20 +55,21 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J.Unknown DefaultVisit(SyntaxNode node)
     {
         return new J.Unknown(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new J.Unknown.Source(
-                Core.Tree.RandomId(),
-                Space.EMPTY,
-                new Markers(Core.Tree.RandomId(),
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            unknownSource: new J.Unknown.Source(
+                id: Core.Tree.RandomId(),
+                prefix: Space.EMPTY,
+                markers: new Markers(Id: Core.Tree.RandomId(),
+                    MarkerList:
                     [
-                        ParseExceptionResult.Build(parser, new InvalidOperationException("Unsupported AST type."))
+                        ParseExceptionResult.Build(parser: parser, t: new InvalidOperationException(message: "Unsupported AST type."))
                             // .WithTreeType(node.Kind().ToString())
-                            .WithTreeType(node.GetType().Name)
+                            .WithTreeType(newTreeType: node.GetType().Name)
                     ]
                 ),
-                node.ToString()
+                text: node.ToString()
             )
         );
     }
@@ -76,116 +77,116 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override Cs VisitFileScopedNamespaceDeclaration(FileScopedNamespaceDeclarationSyntax node)
     {
         return new Cs.FileScopeNamespaceDeclaration(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new JRightPadded<Expression>(
-                Convert<Expression>(node.Name)!,
-                Format(Trailing(node.Name)),
-                Markers.EMPTY
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            name: new JRightPadded<Expression>(
+                element: Convert<Expression>(node.Name)!,
+                after: Format(Trailing(node.Name)),
+                markers: Markers.EMPTY
             ),
-            node.Externs.Select(u => new JRightPadded<Cs.ExternAlias>(
-                Convert<Cs.ExternAlias>(u)!,
-                Format(Leading(u.SemicolonToken)),
-                Markers.EMPTY
+            externs: node.Externs.Select(selector: u => new JRightPadded<Cs.ExternAlias>(
+                element: Convert<Cs.ExternAlias>(u)!,
+                after: Format(Leading(u.SemicolonToken)),
+                markers: Markers.EMPTY
             )).ToList(),
-            node.Usings.Select(u => new JRightPadded<Cs.UsingDirective>(
-                Convert<Cs.UsingDirective>(u)!,
-                Format(Leading(u.SemicolonToken)),
-                Markers.EMPTY
+            usings: node.Usings.Select(selector: u => new JRightPadded<Cs.UsingDirective>(
+                element: Convert<Cs.UsingDirective>(u)!,
+                after: Format(Leading(u.SemicolonToken)),
+                markers: Markers.EMPTY
             )).ToList(),
-            node.Members.Select(MapMemberDeclaration).ToList()
+            members: node.Members.Select(selector: MapMemberDeclaration).ToList()
         );
     }
 
     public override J? VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
     {
         return new Cs.BlockScopeNamespaceDeclaration(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new JRightPadded<Expression>(
-                Convert<Expression>(node.Name)!,
-                Format(Trailing(node.Name)),
-                Markers.EMPTY
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            name: new JRightPadded<Expression>(
+                element: Convert<Expression>(node.Name)!,
+                after: Format(Trailing(node.Name)),
+                markers: Markers.EMPTY
             ),
-            node.Externs.Select(u => new JRightPadded<Cs.ExternAlias>(
-                Convert<Cs.ExternAlias>(u)!,
-                Format(Leading(u.SemicolonToken)),
-                Markers.EMPTY
+            externs: node.Externs.Select(selector: u => new JRightPadded<Cs.ExternAlias>(
+                element: Convert<Cs.ExternAlias>(u)!,
+                after: Format(Leading(u.SemicolonToken)),
+                markers: Markers.EMPTY
             )).ToList(),
-            node.Usings.Select(u => new JRightPadded<Cs.UsingDirective>(
-                Convert<Cs.UsingDirective>(u)!,
-                Format(Leading(u.SemicolonToken)),
-                Markers.EMPTY
+            usings: node.Usings.Select(selector: u => new JRightPadded<Cs.UsingDirective>(
+                element: Convert<Cs.UsingDirective>(u)!,
+                after: Format(Leading(u.SemicolonToken)),
+                markers: Markers.EMPTY
             )).ToList(),
-            node.Members.Select(MapMemberDeclaration).ToList(),
-            Format(Leading(node.CloseBraceToken))
+            members: node.Members.Select(selector: MapMemberDeclaration).ToList(),
+            end: Format(Leading(node.CloseBraceToken))
         );
     }
 
     public override J? VisitStructDeclaration(StructDeclarationSyntax node)
     {
-        return VisitTypeDeclaration(node, J.ClassDeclaration.Kind.Type.Value);
+        return VisitTypeDeclaration(node, type: J.ClassDeclaration.Kind.Types.Value);
     }
 
     public override J? VisitEnumDeclaration(EnumDeclarationSyntax node)
     {
-        var attributeLists = MapAttributes(node.AttributeLists);
-        var javaType = MapType(node);
+        var attributeLists = MapAttributes(m: node.AttributeLists);
+        var javaType = MapType( node);
         var hasBaseClass = node.BaseList is { Types.Count: > 0 };
 
         var isEmptyBody = node.OpenBraceToken.IsKind(SyntaxKind.None);
 
         var classDeclaration = new J.ClassDeclaration(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            [],
-            MapModifiers(node.Modifiers),
-            new J.ClassDeclaration.Kind(
-                Core.Tree.RandomId(),
-                Format(Leading(node.EnumKeyword)),
-                Markers.EMPTY,
-                [],
-                J.ClassDeclaration.Kind.Type.Enum
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            leadingAnnotations: [],
+            modifiers: MapModifiers(stl: node.Modifiers),
+            declarationKind: new J.ClassDeclaration.Kind(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.EnumKeyword)),
+                markers: Markers.EMPTY,
+                annotations: [],
+                kindType: J.ClassDeclaration.Kind.Types.Enum
             ),
-            new J.Identifier(
-                Core.Tree.RandomId(),
-                Format(Leading(node.Identifier)),
-                Markers.EMPTY,
-                [],
-                node.Identifier.Text,
-                javaType,
-                null
+            name: new J.Identifier(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.Identifier)),
+                markers: Markers.EMPTY,
+                annotations: [],
+                simpleName: node.Identifier.Text,
+                type: javaType,
+                fieldType: null
             ),
-            null,
-            null,
-            hasBaseClass
-                ? new JLeftPadded<TypeTree>(Format(Leading(node.BaseList!)),
-                    (Visit(node.BaseList!.Types[0]) as TypeTree)!, Markers.EMPTY)
+            typeParameters: null,
+            primaryConstructor: null,
+            extends: hasBaseClass
+                ? new JLeftPadded<TypeTree>(before: Format(Leading(node.BaseList!)),
+                    element: (Visit(node.BaseList!.Types[index: 0]) as TypeTree)!, markers: Markers.EMPTY)
                 : null,
-            null,
-            null,
-            new J.Block(
-                Core.Tree.RandomId(),
-                Format(Leading(isEmptyBody ? node.SemicolonToken : node.OpenBraceToken)),
-                isEmptyBody ? Markers.Create(new OmitBraces()) : Markers.EMPTY,
-                JRightPadded.Create(false),
-                [JRightPadded.Create<Statement>(MapEnumMembers(node.Members))],
-                Format(Leading(node.CloseBraceToken))
+            implements: null,
+            permits: null,
+            body: new J.Block(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(isEmptyBody ? node.SemicolonToken : node.OpenBraceToken)),
+                markers: isEmptyBody ? Markers.Create(markers: new OmitBraces()) : Markers.EMPTY,
+                @static: JRightPadded.Create(element: false),
+                statements: [JRightPadded.Create<Statement>(element: MapEnumMembers(members: node.Members))],
+                end: Format(Leading(node.CloseBraceToken))
             ),
-            javaType as JavaType.FullyQualified
+            type: javaType as JavaType.FullyQualified
         );
 
         if(attributeLists != null)
         {
             return new Cs.AnnotatedStatement(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                attributeLists,
-                classDeclaration);
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                attributeLists: attributeLists,
+                statement: classDeclaration);
         }
 
 
@@ -196,110 +197,109 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     J.EnumValueSet MapEnumMembers(SeparatedSyntaxList<EnumMemberDeclarationSyntax> members)
     {
         return new J.EnumValueSet(
-            Core.Tree.RandomId(),
-            Space.EMPTY,
-            Markers.EMPTY,
-            members.Select(x => JRightPadded.Create(new J.EnumValue(
-                Core.Tree.RandomId(),
-                Space.EMPTY,
-                Markers.EMPTY,
-                [], // todo: figure out how to make c# attributes map here
-                MapIdentifier(x.Identifier, MapType(x.Parent!)),
-                null
-            ), Format(Trailing(x)))).ToList(),
-            false
+            id: Core.Tree.RandomId(),
+            prefix: Space.EMPTY,
+            markers: Markers.EMPTY,
+            enums: members.Select(selector: x => JRightPadded.Create(element: new J.EnumValue(
+                id: Core.Tree.RandomId(),
+                prefix: Space.EMPTY,
+                markers: Markers.EMPTY,
+                annotations: [], // todo: figure out how to make c# attributes map here
+                name: MapIdentifier(identifier: x.Identifier, type: MapType( x.Parent!)),
+                initializer: null
+            ), after: Format(Trailing(x)))).ToList(),
+            terminatedWithSemicolon: false
         );
     }
 
     public override J? VisitRecordDeclaration(RecordDeclarationSyntax node)
     {
-        return VisitTypeDeclaration(node, J.ClassDeclaration.Kind.Type.Record);
+        return VisitTypeDeclaration(node, type: J.ClassDeclaration.Kind.Types.Record);
     }
 
     public override J? VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
     {
-        return VisitTypeDeclaration(node, J.ClassDeclaration.Kind.Type.Interface);
+        return VisitTypeDeclaration(node, type: J.ClassDeclaration.Kind.Types.Interface);
     }
 
     public override J? VisitClassDeclaration(ClassDeclarationSyntax node)
     {
-        return VisitTypeDeclaration(node, J.ClassDeclaration.Kind.Type.Class);
+        return VisitTypeDeclaration(node, type: J.ClassDeclaration.Kind.Types.Class);
     }
 
-    private Statement VisitTypeDeclaration(TypeDeclarationSyntax node, J.ClassDeclaration.Kind.Type type)
+    private Statement VisitTypeDeclaration(TypeDeclarationSyntax node, J.ClassDeclaration.Kind.Types type)
     {
-
-        var attributeLists = MapAttributes(node.AttributeLists);
-        var javaType = MapType(node);
+        var attributeLists = MapAttributes(m: node.AttributeLists);
+        var javaType = MapType( node);
         var hasBaseClass = node.BaseList is { Types.Count: > 0 } &&
-                           semanticModel.GetTypeInfo(node.BaseList.Types[0].Type).Type?.TypeKind == TypeKind.Class;
+                           semanticModel.GetTypeInfo(expression: node.BaseList.Types[index: 0].Type).Type?.TypeKind == TypeKind.Class;
         var hasBaseInterfaces = node.BaseList != null && node.BaseList.Types.Count > (hasBaseClass ? 1 : 0);
 
         var isEmptyBody = node.OpenBraceToken.IsKind(SyntaxKind.None);
 
         var classDeclaration = new J.ClassDeclaration(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            [],
-            MapModifiers(node.Modifiers),
-            new J.ClassDeclaration.Kind(
-                Core.Tree.RandomId(),
-                Format(Leading(node.Keyword)),
-                Markers.EMPTY,
-                [],
-                type
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            leadingAnnotations: [],
+            modifiers: MapModifiers(stl: node.Modifiers),
+            declarationKind: new J.ClassDeclaration.Kind(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.Keyword)),
+                markers: Markers.EMPTY,
+                annotations: [],
+                kindType: type
             ),
-            new J.Identifier(
-                Core.Tree.RandomId(),
-                Format(Leading(node.Identifier)),
-                Markers.EMPTY,
-                [],
-                node.Identifier.Text,
-                javaType,
-                null
+            name: new J.Identifier(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.Identifier)),
+                markers: Markers.EMPTY,
+                annotations: [],
+                simpleName: node.Identifier.Text,
+                type: javaType,
+                fieldType: null
             ),
-            MapTypeParameters(node.TypeParameterList),
-            MapParameters<Statement>(node.ParameterList),
-            hasBaseClass
-                ? new JLeftPadded<TypeTree>(Format(Leading(node.BaseList!)),
-                    (Visit(node.BaseList!.Types[0]) as TypeTree)!, Markers.EMPTY)
+            typeParameters: MapTypeParameters(tpls: node.TypeParameterList),
+            primaryConstructor: MapParameters<Statement>(pls: node.ParameterList),
+            extends: hasBaseClass
+                ? new JLeftPadded<TypeTree>(before: Format(Leading(node.BaseList!)),
+                    element: (Visit(node.BaseList!.Types[index: 0]) as TypeTree)!, markers: Markers.EMPTY)
                 : null,
-            hasBaseInterfaces
-                ? new JContainer<TypeTree>(hasBaseClass ? Space.EMPTY : Format(Leading(node.BaseList!)),
-                    node.BaseList!.Types.Skip(hasBaseClass ? 1 : 0)
-                        .Select(bts =>
-                            new JRightPadded<TypeTree>((Visit(bts) as TypeTree)!, Format(Trailing(bts)), Markers.EMPTY))
-                        .ToList(), Markers.EMPTY)
+            implements: hasBaseInterfaces
+                ? new JContainer<TypeTree>(before: hasBaseClass ? Space.EMPTY : Format(Leading(node.BaseList!)),
+                    elements: node.BaseList!.Types.Skip(count: hasBaseClass ? 1 : 0)
+                        .Select(selector: bts =>
+                            new JRightPadded<TypeTree>(element: (Visit(bts) as TypeTree)!, after: Format(Trailing(bts)), markers: Markers.EMPTY))
+                        .ToList(), markers: Markers.EMPTY)
                 : null,
-            null,
-            new J.Block(
-                Core.Tree.RandomId(),
-                Format(Leading(isEmptyBody ? node.SemicolonToken : node.OpenBraceToken)),
-                isEmptyBody ? Markers.Create(new OmitBraces()) : Markers.EMPTY,
-                JRightPadded.Create(false),
-                node.Members.Select(MapMemberDeclaration).ToList(),
-                Format(Leading(node.CloseBraceToken))
+            permits: null,
+            body: new J.Block(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(isEmptyBody ? node.SemicolonToken : node.OpenBraceToken)),
+                markers: isEmptyBody ? Markers.Create(markers: new OmitBraces()) : Markers.EMPTY,
+                @static: JRightPadded.Create(element: false),
+                statements: node.Members.Select(selector: MapMemberDeclaration).ToList(),
+                end: Format(Leading(node.CloseBraceToken))
             ),
-            javaType as JavaType.FullyQualified
+            type: javaType as JavaType.FullyQualified
         );
 
-        var constraints = MapTypeParameterConstraintClauses(node.ConstraintClauses);
+        var constraints = MapTypeParameterConstraintClauses(list: node.ConstraintClauses);
         Statement returnValue = new Cs.ClassDeclaration(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                classDeclaration,
-                constraints);
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                classDeclarationCore: classDeclaration,
+                typeParameterConstraintClauses: constraints);
 
         if(attributeLists != null)
         {
             returnValue = new Cs.AnnotatedStatement(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                attributeLists,
-                classDeclaration);
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                attributeLists: attributeLists,
+                statement: classDeclaration);
         }
 
 
@@ -313,9 +313,9 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     private JContainer<Cs.TypeParameterConstraintClause> MapTypeParameterConstraintClauses(SyntaxList<TypeParameterConstraintClauseSyntax> list)
     {
         return JContainer.Create(
-                list.Select(x => JRightPadded.Create(Convert<Cs.TypeParameterConstraintClause>(x)!, Format(Trailing(x)))).ToList(),
-                Format(Leading(list)),
-                Markers.EMPTY
+                elements: list.Select(selector: x => JRightPadded.Create(element: Convert<Cs.TypeParameterConstraintClause>(x)!, after: Format(Trailing(x)))).ToList(),
+                before: Format(Leading(list: list)),
+                markers: Markers.EMPTY
             );
     }
 
@@ -325,11 +325,11 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override Cs.TypeParameterConstraintClause? VisitTypeParameterConstraintClause(TypeParameterConstraintClauseSyntax node)
     {
         return new Cs.TypeParameterConstraintClause(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            JRightPadded.Create(Convert<J.Identifier>(node.Name)!, Format(Trailing(node.Name))),
-            MapTypeParameterConstraints(node.Constraints)
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            typeParameter: JRightPadded.Create(element: Convert<J.Identifier>(node.Name)!, after: Format(Trailing(node.Name))),
+            typeParameterConstraints: MapTypeParameterConstraints(list: node.Constraints)
         );
     }
 
@@ -339,9 +339,9 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     private JContainer<Cs.TypeParameterConstraint> MapTypeParameterConstraints(SeparatedSyntaxList<TypeParameterConstraintSyntax> list)
     {
         return JContainer.Create(
-                list.Select(MapTypeParameterConstraint).ToList(),
-                Space.EMPTY,
-                Markers.EMPTY
+                elements: list.Select(selector: MapTypeParameterConstraint).ToList(),
+                before: Space.EMPTY,
+                markers: Markers.EMPTY
             );
 
     }
@@ -349,72 +349,64 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     private JRightPadded<Cs.TypeParameterConstraint> MapTypeParameterConstraint(TypeParameterConstraintSyntax argument)
     {
         return JRightPadded.Create(
-            Convert<Cs.TypeParameterConstraint>(argument)!,
-            Format(Trailing(argument)),
-            Markers.EMPTY
+            element: Convert<Cs.TypeParameterConstraint>(argument)!,
+            after: Format(Trailing(argument)),
+            markers: Markers.EMPTY
         );
     }
 
 
     public override Statement VisitParameter(ParameterSyntax p)
     {
-        var attributeLists = MapAttributes(p.AttributeLists);
-        var javaType = MapType(p) as JavaType.Variable;
+        var attributeLists = MapAttributes(m: p.AttributeLists);
+        var javaType = MapType( p) as JavaType.Variable;
         var variableDeclarations = new J.VariableDeclarations(
-            Core.Tree.RandomId(),
-            Format(Leading(p)),
-            Markers.EMPTY,
-            [],
-            MapModifiers(p.Modifiers),
-            /*p.Type != null ? new J.Identifier(
-                Core.Tree.RandomId(),
-                Format(Leading(p.Type)),
-                Markers.EMPTY,
-                [],
-                p.Type!.ToString(),
-                MapType(p),
-                null
-            ) : null*/
-            Convert<TypeTree>(p.Type),
-            null!,
-            [],
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(p)),
+            markers: Markers.EMPTY,
+            leadingAnnotations: [],
+            modifiers: MapModifiers(stl: p.Modifiers),
+            typeExpression: Convert<TypeTree>(p.Type),
+            varargs: null!,
+            dimensionsBeforeName: [],
+            variables:
             [
                 new JRightPadded<J.VariableDeclarations.NamedVariable>(
-                    new J.VariableDeclarations.NamedVariable(
-                        Core.Tree.RandomId(),
-                        Format(Leading(p.Identifier)),
-                        Markers.EMPTY,
-                        new J.Identifier(
-                            Core.Tree.RandomId(),
-                            Space.EMPTY,
-                            Markers.EMPTY,
-                            [],
-                            p.Identifier.Text,
-                            javaType?.Type,
-                            javaType
+                    element: new J.VariableDeclarations.NamedVariable(
+                        id: Core.Tree.RandomId(),
+                        prefix: Format(Leading(p.Identifier)),
+                        markers: Markers.EMPTY,
+                        name: new J.Identifier(
+                            id: Core.Tree.RandomId(),
+                            prefix: Space.EMPTY,
+                            markers: Markers.EMPTY,
+                            annotations: [],
+                            simpleName: p.Identifier.Text,
+                            type: javaType?.Type,
+                            fieldType: javaType
                         ),
-                        [],
-                        p.Default != null
+                        dimensionsAfterName: [],
+                        initializer: p.Default != null
                             ? new JLeftPadded<Expression>(
-                                Format(Leading(p.Default)),
-                                Convert<Expression>(p.Default.Value)!,
-                                Markers.EMPTY
+                                before: Format(Leading(p.Default)),
+                                element: Convert<Expression>(p.Default.Value)!,
+                                markers: Markers.EMPTY
                             )
                             : null,
-                        javaType
+                        variableType: javaType
                     ),
-                    Format(Trailing(p.Identifier)),
-                    Markers.EMPTY
+                    after: Format(Trailing(p.Identifier)),
+                    markers: Markers.EMPTY
                 )
             ]
         );
         return attributeLists != null
             ? new Cs.AnnotatedStatement(
-                Core.Tree.RandomId(),
-                Format(Leading(p)),
-                Markers.EMPTY,
-                attributeLists,
-                variableDeclarations
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(p)),
+                markers: Markers.EMPTY,
+                attributeLists: attributeLists,
+                statement: variableDeclarations
             )
             : variableDeclarations;
     }
@@ -422,47 +414,47 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitSimpleBaseType(SimpleBaseTypeSyntax node)
     {
         return new J.Identifier(
-            Core.Tree.RandomId(),
-            Format(Leading(node.Type)),
-            Markers.EMPTY,
-            [],
-            node.ToString(),
-            MapType(node),
-            null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node.Type)),
+            markers: Markers.EMPTY,
+            annotations: [],
+            simpleName: node.ToString(),
+            type: MapType( node),
+            fieldType: null
         );
     }
 
     public override J? VisitPrimaryConstructorBaseType(PrimaryConstructorBaseTypeSyntax node)
     {
         return new J.Identifier(
-            Core.Tree.RandomId(),
-            Format(Leading(node.Type)),
-            Markers.EMPTY,
-            [],
-            node.ToString(),
-            MapType(node),
-            null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node.Type)),
+            markers: Markers.EMPTY,
+            annotations: [],
+            simpleName: node.ToString(),
+            type: MapType( node),
+            fieldType: null
         );
     }
 
     public override J.TypeParameter VisitTypeParameter(TypeParameterSyntax p)
     {
         return new J.TypeParameter(
-            Core.Tree.RandomId(),
-            Format(Leading(p)),
-            Markers.EMPTY,
-            [],
-            [],
-            new J.Identifier(
-                Core.Tree.RandomId(),
-                Format(Leading(p.Identifier)),
-                Markers.EMPTY,
-                [],
-                p.Identifier.Text,
-                MapType(p),
-                null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(p)),
+            markers: Markers.EMPTY,
+            annotations: [],
+            modifiers: [],
+            name: new J.Identifier(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(p.Identifier)),
+                markers: Markers.EMPTY,
+                annotations: [],
+                simpleName: p.Identifier.Text,
+                type: MapType( p),
+                fieldType: null
             ),
-            null
+            bounds: null
         );
     }
 
@@ -475,62 +467,62 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         }
 
         return new J.TypeParameters(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            [],
-            node.Parameters.Select(MapTypeParameter).ToList()
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            annotations: [],
+            parameters: node.Parameters.Select(selector: MapTypeParameter).ToList()
         );
     }
 
     public override J VisitIdentifierName(IdentifierNameSyntax node)
     {
         return new J.Identifier(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            [],
-            node.Identifier.Text,
-            null, // FIXME type attribution
-            null // FIXME type attribution
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            annotations: [],
+            simpleName: node.Identifier.Text,
+            type: null, // FIXME type attribution
+            fieldType: null // FIXME type attribution
         );
     }
 
     public override J? VisitInvocationExpression(InvocationExpressionSyntax node)
     {
         var prefix = Format(Leading(node));
-        var select = Convert<J>(node.Expression);
+        var select = Convert<Expression>(node.Expression);
         if (select is J.FieldAccess fa)
         {
             var operatorToken = node.Expression switch
             {
                 MemberAccessExpressionSyntax mae => mae.OperatorToken,
                 MemberBindingExpressionSyntax mbe => mbe.OperatorToken,
-                _ => throw new InvalidOperationException($"Unexpected node of type {node.Expression.GetType()} encountered.")
+                _ => throw new InvalidOperationException(message: $"Unexpected node of type {node.Expression.GetType()} encountered.")
             };
 
             return new J.MethodInvocation(
-                Core.Tree.RandomId(),
-                prefix,
-                fa.Markers,
-                new JRightPadded<Expression>(fa.Target, fa.Padding.Name.Before, Markers.EMPTY),
-                null,
-                fa.Name,
-                MapArgumentList(node.ArgumentList),
-                MapType(node) as JavaType.Method
+                id: Core.Tree.RandomId(),
+                prefix: prefix,
+                markers: fa.Markers,
+                select: new JRightPadded<Expression>(element: fa.Target, after: fa.Padding.Name.Before, markers: Markers.EMPTY),
+                typeParameters: null,
+                name: fa.Name,
+                arguments: MapArgumentList(argumentList: node.ArgumentList),
+                methodType: MapType( node) as JavaType.Method
             );
         }
         else if (select is J.Identifier id)
         {
             return new J.MethodInvocation(
-                Core.Tree.RandomId(),
-                prefix,
-                Markers.EMPTY,
-                null,
-                null,
-                id,
-                MapArgumentList(node.ArgumentList),
-                MapType(node) as JavaType.Method
+                id: Core.Tree.RandomId(),
+                prefix: prefix,
+                markers: Markers.EMPTY,
+                select: null,
+                typeParameters: null,
+                name: id,
+                arguments: MapArgumentList(argumentList: node.ArgumentList),
+                methodType: MapType( node) as JavaType.Method
             );
         }
         else if (select is J.ParameterizedType pt)
@@ -541,53 +533,53 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             //     .WithMethodType(MapType(node) as JavaType.Method);
 
             return new J.MethodInvocation(
-                Core.Tree.RandomId(),
-                prefix,
-                Markers.EMPTY,
-                pt.Clazz is J.FieldAccess lfa
-                    ? new JRightPadded<Expression>(lfa.Target, Format(Leading(node.ArgumentList)), Markers.EMPTY)
+                id: Core.Tree.RandomId(),
+                prefix: prefix,
+                markers: Markers.EMPTY,
+                select: pt.Clazz is J.FieldAccess lfa
+                    ? new JRightPadded<Expression>(element: lfa.Target, after: Format(Leading(node.ArgumentList)), markers: Markers.EMPTY)
                     : null,
-                pt.TypeParameters != null
+                typeParameters: pt.TypeParameters != null
                     ? new JContainer<Expression>(
-                        Space.EMPTY,
-                        pt.TypeParameters.Select(JRightPadded<Expression>.Build).ToList(),
-                        Markers.EMPTY
+                        before: Space.EMPTY,
+                        elements: pt.TypeParameters.Select(selector: JRightPadded.Create).ToList(),
+                        markers: Markers.EMPTY
                     )
                     : null, // TODO: type parameters
-                pt.Clazz is J.Identifier i
+                name: pt.Clazz is J.Identifier i
                     ? i
                     : (pt.Clazz as J.FieldAccess)?.Name ??
-                      MapIdentifier(node.Expression.GetFirstToken(), MapType(node.Expression)),
-                MapArgumentList(node.ArgumentList),
-                MapType(node) as JavaType.Method
+                      MapIdentifier(identifier: node.Expression.GetFirstToken(), type: MapType( node.Expression)),
+                arguments: MapArgumentList(argumentList: node.ArgumentList),
+                methodType: MapType( node) as JavaType.Method
             );
         }
-        else if (select is J.MethodInvocation mi) // chained method invocation (method returns a delegate). ex. Something()()
+        else if (select is J.MethodInvocation or J.ArrayAccess) // chained method invocation (method returns a delegate). ex. Something()()
         {
 
             return new J.MethodInvocation(
-                Core.Tree.RandomId(),
-                prefix,
-                Markers.EMPTY,
-                JRightPadded<Expression>.Build(mi),
-                null,
-                new J.Identifier(
-                    Core.Tree.RandomId(),
-                    Space.EMPTY,
-                    Markers.EMPTY,
-                    new List<J.Annotation>(),
-                    "",
-                    null,
-                    null),
-                MapArgumentList(node.ArgumentList),
-                MapType(node) as JavaType.Method
+                id: Core.Tree.RandomId(),
+                prefix: prefix,
+                markers: Markers.EMPTY,
+                select: JRightPadded.Create(element: select),
+                typeParameters: null,
+                name: new J.Identifier(
+                    id: Core.Tree.RandomId(),
+                    prefix: Space.EMPTY,
+                    markers: Markers.EMPTY,
+                    annotations: new List<J.Annotation>(),
+                    simpleName: "",
+                    type: null,
+                    fieldType: null),
+                arguments: MapArgumentList(argumentList: node.ArgumentList),
+                methodType: MapType( node) as JavaType.Method
             );
         }
 
         for (var index = 0; index < node.ArgumentList.Arguments.Count; index++)
         {
-            var arg = node.ArgumentList.Arguments[index];
-            var typeInfo = semanticModel.GetTypeInfo(arg.Expression);
+            var arg = node.ArgumentList.Arguments[index: index];
+            var typeInfo = semanticModel.GetTypeInfo(expression: arg.Expression);
         }
 
         return base.VisitInvocationExpression(node);
@@ -596,18 +588,18 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     private JContainer<Expression> MapArgumentList(ArgumentListSyntax argumentList)
     {
         return new JContainer<Expression>(
-            Format(Leading(argumentList.OpenParenToken)),
-            argumentList.Arguments.Select(MapArgument).ToList(),
-            Markers.EMPTY
+            before: Format(Leading(argumentList.OpenParenToken)),
+            elements: argumentList.Arguments.Select(selector: MapArgument).ToList(),
+            markers: Markers.EMPTY
         );
     }
 
     private JRightPadded<Expression> MapArgument(ArgumentSyntax argument)
     {
         return new JRightPadded<Expression>(
-            Convert<Expression>(argument)!,
-            Format(Trailing(argument)),
-            Markers.EMPTY
+            element: Convert<Expression>(argument)!,
+            after: Format(Trailing(argument)),
+            markers: Markers.EMPTY
         );
     }
 
@@ -615,29 +607,29 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitAttribute(AttributeSyntax node)
     {
         return new J.Annotation(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            Convert<NameTree>(node.Name)!,
-            node.ArgumentList != null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            annotationType: Convert<NameTree>(node.Name)!,
+            arguments: node.ArgumentList != null
                 ? new JContainer<Expression>(
-                    Format(Leading(node.ArgumentList.OpenParenToken)),
-                    node.ArgumentList.Arguments.Count > 0
-                        ? node.ArgumentList.Arguments.Select(a =>
+                    before: Format(Leading(node.ArgumentList.OpenParenToken)),
+                    elements: node.ArgumentList.Arguments.Count > 0
+                        ? node.ArgumentList.Arguments.Select(selector: a =>
                             new JRightPadded<Expression>(
-                                Convert<Expression>(a.Expression)!,
-                                Format(Trailing(a)),
-                                Markers.EMPTY
+                                element: Convert<Expression>(a.Expression)!,
+                                after: Format(Trailing(a)),
+                                markers: Markers.EMPTY
                             )).ToList()
                         :
                         [
                             new JRightPadded<Expression>(
-                                new J.Empty(Core.Tree.RandomId(), Space.EMPTY, Markers.EMPTY),
-                                Format(Leading(node.ArgumentList.CloseParenToken)),
-                                Markers.EMPTY
+                                element: new J.Empty(id: Core.Tree.RandomId(), prefix: Space.EMPTY, markers: Markers.EMPTY),
+                                after: Format(Leading(node.ArgumentList.CloseParenToken)),
+                                markers: Markers.EMPTY
                             )
                         ],
-                    Markers.EMPTY
+                    markers: Markers.EMPTY
                 )
                 : null
         );
@@ -646,26 +638,26 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitAttributeList(AttributeListSyntax node)
     {
         return new Cs.AttributeList(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            node.Target != null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            target: node.Target != null
                 ? new JRightPadded<J.Identifier>(
-                    Convert<J.Identifier>(node.Target)!,
-                    Format(Leading(node.Target.ColonToken)),
-                    Markers.EMPTY
+                    element: Convert<J.Identifier>(node.Target)!,
+                    after: Format(Leading(node.Target.ColonToken)),
+                    markers: Markers.EMPTY
                 )
                 : null,
-            node.Attributes.Select(a =>
+            attributes: node.Attributes.Select(selector: a =>
             {
                 var trailingComma = a == node.Attributes.Last() &&
                                     a.GetLastToken().GetNextToken().IsKind(SyntaxKind.CommaToken);
                 return new JRightPadded<J.Annotation>(
-                    Convert<J.Annotation>(a)!,
-                    Format(Trailing(a)),
-                    trailingComma
-                        ? Markers.EMPTY.Add(new TrailingComma(Core.Tree.RandomId(),
-                            Format(Trailing(a.GetLastToken().GetNextToken()))))
+                    element: Convert<J.Annotation>(a)!,
+                    after: Format(Trailing(a)),
+                    markers: trailingComma
+                        ? Markers.EMPTY.Add(marker: new TrailingComma(Id: Core.Tree.RandomId(),
+                            Suffix: Format(Trailing(a.GetLastToken().GetNextToken()))))
                         : Markers.EMPTY
                 );
             }).ToList()
@@ -691,57 +683,57 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         else
         {
             body = new J.Block(
-                Core.Tree.RandomId(),
-                Format(Leading(node.SemicolonToken)),
-                Markers.Create(new OmitBraces()),
-                JRightPadded.Create(false),
-                new List<JRightPadded<Statement>>(),
-                Format(Trailing(node.SemicolonToken)));
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.SemicolonToken)),
+                markers: Markers.Create(markers: new OmitBraces()),
+                @static: JRightPadded.Create(element: false),
+                statements: new List<JRightPadded<Statement>>(),
+                end: Format(Trailing(node.SemicolonToken)));
         }
-        var attributeLists = MapAttributes(node.AttributeLists);
+        var attributeLists = MapAttributes(m: node.AttributeLists);
         var methodDeclaration = new J.MethodDeclaration(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            [],
-            MapModifiers(node.Modifiers),
-            Visit(node.TypeParameterList) as J.TypeParameters,
-            Convert<TypeTree>(node.ReturnType),
-            new J.MethodDeclaration.IdentifierWithAnnotations(
-                new J.Identifier(
-                    Core.Tree.RandomId(),
-                    Format(Leading(node.Identifier)),
-                    Markers.EMPTY,
-                    (Enumerable.Empty<J.Annotation>() as IList<J.Annotation>)!,
-                    node.Identifier.Text,
-                    null,
-                    null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            leadingAnnotations: [],
+            modifiers: MapModifiers(stl: node.Modifiers),
+            typeParameters: Visit(node.TypeParameterList) as J.TypeParameters,
+            returnTypeExpression: Convert<TypeTree>(node.ReturnType),
+            name: new J.MethodDeclaration.IdentifierWithAnnotations(
+                identifier: new J.Identifier(
+                    id: Core.Tree.RandomId(),
+                    prefix: Format(Leading(node.Identifier)),
+                    markers: Markers.EMPTY,
+                    annotations: (Enumerable.Empty<J.Annotation>() as IList<J.Annotation>)!,
+                    simpleName: node.Identifier.Text,
+                    type: null,
+                    fieldType: null
                 ),
-                []
+                annotations: []
             ),
-            MapParameters<Statement>(node.ParameterList)!,
-            null,
-            body,
-            null,
-            MapType(node) as JavaType.Method
+            parameters: MapParameters<Statement>(pls: node.ParameterList)!,
+            throws: null,
+            body: body,
+            defaultValue: null,
+            methodType: MapType( node) as JavaType.Method
         );
 
-        var constraints = MapTypeParameterConstraintClauses(node.ConstraintClauses);
+        var constraints = MapTypeParameterConstraintClauses(list: node.ConstraintClauses);
         Statement returnValue = new Cs.MethodDeclaration(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            methodDeclaration,
-            constraints);
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            methodDeclarationCore: methodDeclaration,
+            typeParameterConstraintClauses: constraints);
 
         if(attributeLists != null)
         {
             returnValue = new Cs.AnnotatedStatement(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                attributeLists,
-                methodDeclaration);
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                attributeLists: attributeLists,
+                statement: methodDeclaration);
         }
 
 
@@ -756,34 +748,34 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         var @unsafe = node.UnsafeKeyword.IsKind(SyntaxKind.UnsafeKeyword);
 
         return new Cs.UsingDirective(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new JRightPadded<bool>(global, global ? Format(Trailing(node.GlobalKeyword)) : Space.EMPTY, Markers.EMPTY),
-            new JLeftPadded<bool>(@static ? Format(Leading(node.StaticKeyword)) : Space.EMPTY, @static, Markers.EMPTY),
-            new JLeftPadded<bool>(@unsafe ? Format(Leading(node.UnsafeKeyword)) : Space.EMPTY, @unsafe, Markers.EMPTY),
-            node.Alias != null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            global: new JRightPadded<bool>(element: global, after: global ? Format(Trailing(node.GlobalKeyword)) : Space.EMPTY, markers: Markers.EMPTY),
+            @static: new JLeftPadded<bool>(before: @static ? Format(Leading(node.StaticKeyword)) : Space.EMPTY, element: @static, markers: Markers.EMPTY),
+            @unsafe: new JLeftPadded<bool>(before: @unsafe ? Format(Leading(node.UnsafeKeyword)) : Space.EMPTY, element: @unsafe, markers: Markers.EMPTY),
+            alias: node.Alias != null
                 ? new JRightPadded<J.Identifier>(
-                    Convert<J.Identifier>(node.Alias.Name)!,
-                    Format(Leading(node.Alias.EqualsToken)),
-                    Markers.EMPTY
+                    element: Convert<J.Identifier>(node.Alias.Name)!,
+                    after: Format(Leading(node.Alias.EqualsToken)),
+                    markers: Markers.EMPTY
                 )
                 : null,
-            Convert<TypeTree>(node.NamespaceOrType)!
+            namespaceOrType: Convert<TypeTree>(node.NamespaceOrType)!
         );
     }
 
     public override J? VisitNullableType(NullableTypeSyntax node)
     {
         return new J.NullableType(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            [],
-            new JRightPadded<TypeTree>(
-                Convert<TypeTree>(node.ElementType)!,
-                Format(Leading(node.QuestionToken)),
-                Markers.EMPTY
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            annotations: [],
+            typeTree: new JRightPadded<TypeTree>(
+                element: Convert<TypeTree>(node.ElementType)!,
+                after: Format(Leading(node.QuestionToken)),
+                markers: Markers.EMPTY
             )
         );
     }
@@ -798,16 +790,16 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         // {
             var nameColumn = node.NameColon != null
                 ? new JRightPadded<J.Identifier>(
-                    MapIdentifier(node.NameColon.Name.Identifier, null),
-                    Format(Trailing(node.NameColon.Name)), Markers.EMPTY)
+                    element: MapIdentifier(identifier: node.NameColon.Name.Identifier, type: null),
+                    after: Format(Trailing(node.NameColon.Name)), markers: Markers.EMPTY)
                 : null;
             return new Cs.Argument(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                nameColumn,
-                VisitKeyword(node.RefKindKeyword),
-                Convert<Expression>(node.Expression)!
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                nameColumn: nameColumn,
+                refKindKeyword: VisitKeyword(node.RefKindKeyword),
+                expression: Convert<Expression>(node.Expression)!
                 );
         // }
     }
@@ -815,41 +807,43 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J.Block VisitBlock(BlockSyntax node)
     {
         return new J.Block(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            node.OpenBraceToken.IsKind(SyntaxKind.None)
-                ? Markers.EMPTY.Add(new OmitBraces(Core.Tree.RandomId()))
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: node.OpenBraceToken.IsKind(SyntaxKind.None)
+                ? Markers.EMPTY.Add(marker: new OmitBraces(Id: Core.Tree.RandomId()))
                 : Markers.EMPTY,
-            JRightPadded<bool>.Build(false),
-            node.Statements.Select(MapStatement).ToList(),
-            Format(Leading(node.CloseBraceToken))
+            @static: JRightPadded.Create(element: false),
+            statements: node.Statements.Select(selector: MapStatement).ToList(),
+            end: Format(Leading(node.CloseBraceToken))
         );
     }
+
+
 
     public override J? VisitInterpolation(InterpolationSyntax node)
     {
         // This was added in C# 6.0
         return new Cs.Interpolation(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new JRightPadded<Expression>(
-                Convert<Expression>(node.Expression)!,
-                Format(Trailing(node.Expression)),
-                Markers.EMPTY
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            expression: new JRightPadded<Expression>(
+                element: Convert<Expression>(node.Expression)!,
+                after: Format(Trailing(node.Expression)),
+                markers: Markers.EMPTY
             ),
-            node.AlignmentClause != null
+            alignment: node.AlignmentClause != null
                 ? new JRightPadded<Expression>(
-                    Convert<Expression>(node.AlignmentClause)!,
-                    Format(Trailing(node.AlignmentClause.Value)),
-                    Markers.EMPTY
+                    element: Convert<Expression>(node.AlignmentClause)!,
+                    after: Format(Trailing(node.AlignmentClause.Value)),
+                    markers: Markers.EMPTY
                 )
                 : null,
-            node.FormatClause != null
+            format: node.FormatClause != null
                 ? new JRightPadded<Expression>(
-                    Convert<Expression>(node.FormatClause)!,
-                    Format(Trailing(node.FormatClause.FormatStringToken)),
-                    Markers.EMPTY
+                    element: Convert<Expression>(node.FormatClause)!,
+                    after: Format(Trailing(node.FormatClause.FormatStringToken)),
+                    markers: Markers.EMPTY
                 )
                 : null
         );
@@ -863,42 +857,48 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitSubpattern(SubpatternSyntax node)
     {
         // This was added in C# 8.0
-        return base.VisitSubpattern(node);
+        return new Cs.Subpattern(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            name: node.ExpressionColon != null ? MapIdentifier(node.ExpressionColon.Expression.GetFirstToken(), MapType(node.ExpressionColon)) : null,
+            pattern: JLeftPadded.Create(Convert<Cs.Pattern>(node.Pattern)!, Format(Leading(node.Pattern)))
+        );
     }
 
     public override J? VisitAccessorDeclaration(AccessorDeclarationSyntax node)
     {
-        var javaType = MapType(node);
+        var javaType = MapType( node);
         return new J.MethodDeclaration(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY.Add(new CompactConstructor(Core.Tree.RandomId())),
-            [],
-            MapModifiers(node.Modifiers),
-            null,
-            null,
-            new J.MethodDeclaration.IdentifierWithAnnotations(MapIdentifier(node.Keyword, javaType), []),
-            new JContainer<Statement>(
-                Space.EMPTY,
-                [],
-                Markers.EMPTY
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY.Add(marker: new CompactConstructor(Id: Core.Tree.RandomId())),
+            leadingAnnotations: [],
+            modifiers: MapModifiers(stl: node.Modifiers),
+            typeParameters: null,
+            returnTypeExpression: null,
+            name: new J.MethodDeclaration.IdentifierWithAnnotations(identifier: MapIdentifier(identifier: node.Keyword, type: javaType), annotations: []),
+            parameters: new JContainer<Statement>(
+                before: Space.EMPTY,
+                elements: [],
+                markers: Markers.EMPTY
             ),
-            null,
-            node.ExpressionBody != null ? Convert<J.Block>(node.ExpressionBody) : node.Body != null ? Convert<J.Block>(node.Body) : null,
-            null,
-            javaType as JavaType.Method
+            throws: null,
+            body: node.ExpressionBody != null ? Convert<J.Block>(node.ExpressionBody) : node.Body != null ? Convert<J.Block>(node.Body) : null,
+            defaultValue: null,
+            methodType: javaType as JavaType.Method
         );
     }
 
     public override J.Block VisitAccessorList(AccessorListSyntax node)
     {
         return new J.Block(
-            Core.Tree.RandomId(),
-            Format(Leading(node.OpenBraceToken)),
-            Markers.EMPTY,
-            JRightPadded<bool>.Build(false),
-            node.Accessors.Select(MapAccessor).ToList(),
-            Format(Leading(node.CloseBraceToken))
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node.OpenBraceToken)),
+            markers: Markers.EMPTY,
+            @static: JRightPadded.Create(element: false),
+            statements: node.Accessors.Select(selector: MapAccessor).ToList(),
+            end: Format(Leading(node.CloseBraceToken))
         );
     }
 
@@ -907,9 +907,9 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         var methodDeclaration = Convert<J.MethodDeclaration>(accessorDeclarationSyntax)!;
         var trailingSemicolon = accessorDeclarationSyntax.GetLastToken().IsKind(SyntaxKind.SemicolonToken);
         return new JRightPadded<Statement>(
-            methodDeclaration,
-            trailingSemicolon ? Format(Leading(accessorDeclarationSyntax.SemicolonToken)) : Space.EMPTY,
-            Markers.EMPTY
+            element: methodDeclaration,
+            after: trailingSemicolon ? Format(Leading(accessorDeclarationSyntax.SemicolonToken)) : Space.EMPTY,
+            markers: Markers.EMPTY
         );
     }
 
@@ -920,22 +920,22 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitArrayType(ArrayTypeSyntax node)
     {
-        return MapArrayType(node, 0);
+        return MapArrayType(node, rank: 0);
     }
 
     private J.ArrayType MapArrayType(ArrayTypeSyntax node, int rank)
     {
         return new J.ArrayType(
-            Core.Tree.RandomId(),
-            rank == 0 ? Format(Leading(node)) : Space.EMPTY,
-            Markers.EMPTY,
-            rank == node.RankSpecifiers.Count - 1 ? Convert<TypeTree>(node.ElementType)! : MapArrayType(node, rank + 1),
-            [], // no attributes on type use
-            new JLeftPadded<Space>(
-                Format(Leading(node.RankSpecifiers[rank])),
-                Format(Trailing(node.RankSpecifiers[rank].OpenBracketToken)),
-                Markers.EMPTY),
-            MapType(node)
+            id: Core.Tree.RandomId(),
+            prefix: rank == 0 ? Format(Leading(node)) : Space.EMPTY,
+            markers: Markers.EMPTY,
+            elementType: rank == node.RankSpecifiers.Count - 1 ? Convert<TypeTree>(node.ElementType)! : MapArrayType(node, rank: rank + 1),
+            annotations: [], // no attributes on type use
+            dimension: new JLeftPadded<Space>(
+                before: Format(Leading(node.RankSpecifiers[index: rank])),
+                element: Format(Trailing(node.RankSpecifiers[index: rank].OpenBracketToken)),
+                markers: Markers.EMPTY),
+            type: MapType( node)
         );
     }
 
@@ -944,66 +944,66 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         if (node.IsKind(SyntaxKind.SimpleAssignmentExpression))
         {
             return new J.Assignment(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                Convert<Expression>(node.Left)!,
-                new JLeftPadded<Expression>(
-                    Format(Leading(node.OperatorToken)),
-                    Convert<Expression>(node.Right)!,
-                    Markers.EMPTY),
-                MapType(node)
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                variable: Convert<Expression>(node.Left)!,
+                expression: new JLeftPadded<Expression>(
+                    before: Format(Leading(node.OperatorToken)),
+                    element: Convert<Expression>(node.Right)!,
+                    markers: Markers.EMPTY),
+                type: MapType( node)
             );
         }
 
         if (node.OperatorToken.IsKind(SyntaxKind.QuestionQuestionEqualsToken))
         {
             return new Cs.AssignmentOperation(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                Convert<Expression>(node.Left)!,
-                new JLeftPadded<Cs.AssignmentOperation.OperatorType>(
-                    Format(Leading(node.OperatorToken)),
-                    Cs.AssignmentOperation.OperatorType.NullCoalescing,
-                    Markers.EMPTY),
-                Convert<Expression>(node.Right)!,
-                MapType(node)
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                variable: Convert<Expression>(node.Left)!,
+                @operator: new JLeftPadded<Cs.AssignmentOperation.OperatorType>(
+                    before: Format(Leading(node.OperatorToken)),
+                    element: Cs.AssignmentOperation.OperatorType.NullCoalescing,
+                    markers: Markers.EMPTY),
+                assignment: Convert<Expression>(node.Right)!,
+                type: MapType( node)
             );
         }
 
         return new J.AssignmentOperation(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            Convert<Expression>(node.Left)!,
-            new JLeftPadded<J.AssignmentOperation.Type>(
-                Format(Leading(node.OperatorToken)),
-                MapAssignmentOperator(node.OperatorToken),
-                Markers.EMPTY),
-            Convert<Expression>(node.Right)!,
-            MapType(node)
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            variable: Convert<Expression>(node.Left)!,
+            @operator: new JLeftPadded<J.AssignmentOperation.Types>(
+                before: Format(Leading(node.OperatorToken)),
+                element: MapAssignmentOperator(op: node.OperatorToken),
+                markers: Markers.EMPTY),
+            assignment: Convert<Expression>(node.Right)!,
+            type: MapType( node)
         );
     }
 
-    private J.AssignmentOperation.Type MapAssignmentOperator(SyntaxToken op)
+    private J.AssignmentOperation.Types MapAssignmentOperator(SyntaxToken op)
     {
         return op.Kind() switch
         {
-            SyntaxKind.PlusEqualsToken => J.AssignmentOperation.Type.Addition,
-            SyntaxKind.MinusEqualsToken => J.AssignmentOperation.Type.Subtraction,
-            SyntaxKind.AsteriskEqualsToken => J.AssignmentOperation.Type.Multiplication,
-            SyntaxKind.SlashEqualsToken => J.AssignmentOperation.Type.Division,
-            SyntaxKind.PercentEqualsToken => J.AssignmentOperation.Type.Modulo,
-            SyntaxKind.AmpersandEqualsToken => J.AssignmentOperation.Type.BitAnd,
-            SyntaxKind.BarEqualsToken => J.AssignmentOperation.Type.BitOr,
-            SyntaxKind.CaretEqualsToken => J.AssignmentOperation.Type.BitXor,
-            SyntaxKind.LessThanLessThanEqualsToken => J.AssignmentOperation.Type.LeftShift,
-            SyntaxKind.GreaterThanGreaterThanEqualsToken => J.AssignmentOperation.Type.RightShift,
-            SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken => J.AssignmentOperation.Type.UnsignedRightShift,
+            SyntaxKind.PlusEqualsToken => J.AssignmentOperation.Types.Addition,
+            SyntaxKind.MinusEqualsToken => J.AssignmentOperation.Types.Subtraction,
+            SyntaxKind.AsteriskEqualsToken => J.AssignmentOperation.Types.Multiplication,
+            SyntaxKind.SlashEqualsToken => J.AssignmentOperation.Types.Division,
+            SyntaxKind.PercentEqualsToken => J.AssignmentOperation.Types.Modulo,
+            SyntaxKind.AmpersandEqualsToken => J.AssignmentOperation.Types.BitAnd,
+            SyntaxKind.BarEqualsToken => J.AssignmentOperation.Types.BitOr,
+            SyntaxKind.CaretEqualsToken => J.AssignmentOperation.Types.BitXor,
+            SyntaxKind.LessThanLessThanEqualsToken => J.AssignmentOperation.Types.LeftShift,
+            SyntaxKind.GreaterThanGreaterThanEqualsToken => J.AssignmentOperation.Types.RightShift,
+            SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken => J.AssignmentOperation.Types.UnsignedRightShift,
             // TODO the `??=` operator will require a custom LST element
             // SyntaxKind.QuestionQuestionEqualsToken => ???,
-            _ => throw new NotSupportedException(op.Kind().ToString())
+            _ => throw new NotSupportedException(message: op.Kind().ToString())
         };
     }
 
@@ -1015,17 +1015,17 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitAwaitExpression(AwaitExpressionSyntax node)
     {
         return new Cs.AwaitExpression(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            Convert<Expression>(node.Expression)!,
-            MapType(node)
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            expression: Convert<Expression>(node.Expression)!,
+            type: MapType( node)
         );
     }
 
     public override J? VisitBaseExpression(BaseExpressionSyntax node)
     {
-        return MapIdentifier(node.Token, null);
+        return MapIdentifier(identifier: node.Token, type: null);
     }
 
     public override J? VisitBaseList(BaseListSyntax node)
@@ -1039,175 +1039,187 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             node.OperatorToken.IsKind(SyntaxKind.AsKeyword))
         {
             return new Cs.Binary(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                Convert<Expression>(node.Left)!,
-                new JLeftPadded<Cs.Binary.OperatorType>(
-                    Format(Leading(node.OperatorToken)),
-                    node.OperatorToken.Kind() switch
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                left: Convert<Expression>(node.Left)!,
+                @operator: new JLeftPadded<Cs.Binary.OperatorType>(
+                    before: Format(Leading(node.OperatorToken)),
+                    element: node.OperatorToken.Kind() switch
                     {
                         SyntaxKind.QuestionQuestionToken => Cs.Binary.OperatorType.NullCoalescing,
                         SyntaxKind.AsKeyword => Cs.Binary.OperatorType.As,
                         _ => throw new ArgumentOutOfRangeException()
                     },
-                    Markers.EMPTY),
-                Convert<Expression>(node.Right)!,
-                MapType(node)
+                    markers: Markers.EMPTY),
+                right: Convert<Expression>(node.Right)!,
+                type: MapType( node)
             );
         }
 
         if (node.OperatorToken.IsKind(SyntaxKind.IsKeyword))
         {
             return new J.InstanceOf(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                new JRightPadded<Expression>(
-                    Convert<Expression>(node.Left)!,
-                    Format(Trailing(node.Left)),
-                    Markers.EMPTY),
-                Convert<TypeTree>(node.Right)!,
-                null,
-                MapType(node)
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                expression: new JRightPadded<Expression>(
+                    element: Convert<Expression>(node.Left)!,
+                    after: Format(Trailing(node.Left)),
+                    markers: Markers.EMPTY),
+                clazz: Convert<TypeTree>(node.Right)!,
+                pattern: null,
+                type: MapType( node)
             );
         }
 
         return new J.Binary(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            Convert<Expression>(node.Left)!,
-            new JLeftPadded<J.Binary.Type>(
-                Format(Leading(node.OperatorToken)),
-                MapBinaryExpressionOperator(node.OperatorToken),
-                Markers.EMPTY),
-            Convert<Expression>(node.Right)!,
-            MapType(node)
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            left: Convert<Expression>(node.Left)!,
+            @operator: new JLeftPadded<J.Binary.Types>(
+                before: Format(Leading(node.OperatorToken)),
+                element: MapBinaryExpressionOperator(operatorToken: node.OperatorToken),
+                markers: Markers.EMPTY),
+            right: Convert<Expression>(node.Right)!,
+            type: MapType( node)
         );
     }
 
-    private static J.Binary.Type MapBinaryExpressionOperator(SyntaxToken operatorToken)
+    private static J.Binary.Types MapBinaryExpressionOperator(SyntaxToken operatorToken)
     {
         return operatorToken.Kind() switch
         {
-            SyntaxKind.PlusToken => J.Binary.Type.Addition,
-            SyntaxKind.MinusToken => J.Binary.Type.Subtraction,
-            SyntaxKind.AsteriskToken => J.Binary.Type.Multiplication,
-            SyntaxKind.SlashToken => J.Binary.Type.Division,
-            SyntaxKind.PercentToken => J.Binary.Type.Modulo,
-            SyntaxKind.AmpersandToken => J.Binary.Type.BitAnd,
-            SyntaxKind.BarToken => J.Binary.Type.BitOr,
-            SyntaxKind.CaretToken => J.Binary.Type.BitXor,
-            SyntaxKind.AmpersandAmpersandToken => J.Binary.Type.And,
-            SyntaxKind.BarBarToken => J.Binary.Type.Or,
-            SyntaxKind.LessThanLessThanToken => J.Binary.Type.LeftShift,
-            SyntaxKind.GreaterThanGreaterThanToken => J.Binary.Type.RightShift,
-            SyntaxKind.GreaterThanGreaterThanGreaterThanToken => J.Binary.Type.UnsignedRightShift,
-            SyntaxKind.LessThanToken => J.Binary.Type.LessThan,
-            SyntaxKind.GreaterThanToken => J.Binary.Type.GreaterThan,
-            SyntaxKind.LessThanEqualsToken => J.Binary.Type.LessThanOrEqual,
-            SyntaxKind.GreaterThanEqualsToken => J.Binary.Type.GreaterThanOrEqual,
-            SyntaxKind.EqualsEqualsToken => J.Binary.Type.Equal,
-            SyntaxKind.ExclamationEqualsToken => J.Binary.Type.NotEqual,
-            _ => throw new NotImplementedException(operatorToken.Kind().ToString())
+            SyntaxKind.PlusToken => J.Binary.Types.Addition,
+            SyntaxKind.MinusToken => J.Binary.Types.Subtraction,
+            SyntaxKind.AsteriskToken => J.Binary.Types.Multiplication,
+            SyntaxKind.SlashToken => J.Binary.Types.Division,
+            SyntaxKind.PercentToken => J.Binary.Types.Modulo,
+            SyntaxKind.AmpersandToken => J.Binary.Types.BitAnd,
+            SyntaxKind.BarToken => J.Binary.Types.BitOr,
+            SyntaxKind.CaretToken => J.Binary.Types.BitXor,
+            SyntaxKind.AmpersandAmpersandToken => J.Binary.Types.And,
+            SyntaxKind.BarBarToken => J.Binary.Types.Or,
+            SyntaxKind.LessThanLessThanToken => J.Binary.Types.LeftShift,
+            SyntaxKind.GreaterThanGreaterThanToken => J.Binary.Types.RightShift,
+            SyntaxKind.GreaterThanGreaterThanGreaterThanToken => J.Binary.Types.UnsignedRightShift,
+            SyntaxKind.LessThanToken => J.Binary.Types.LessThan,
+            SyntaxKind.GreaterThanToken => J.Binary.Types.GreaterThan,
+            SyntaxKind.LessThanEqualsToken => J.Binary.Types.LessThanOrEqual,
+            SyntaxKind.GreaterThanEqualsToken => J.Binary.Types.GreaterThanOrEqual,
+            SyntaxKind.EqualsEqualsToken => J.Binary.Types.Equal,
+            SyntaxKind.ExclamationEqualsToken => J.Binary.Types.NotEqual,
+            _ => throw new NotImplementedException(message: operatorToken.Kind().ToString())
         };
     }
 
     public override J? VisitBinaryPattern(BinaryPatternSyntax node)
     {
-        return base.VisitBinaryPattern(node);
+        var @operator = node.OperatorToken.Kind() switch
+        {
+            SyntaxKind.OrKeyword => Cs.BinaryPattern.OperatorType.Or,
+            SyntaxKind.AndKeyword => Cs.BinaryPattern.OperatorType.And,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+        return new Cs.BinaryPattern(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            left: Convert<Cs.Pattern>(node.Left)!,
+            @operator: JLeftPadded.Create(@operator, Format(Leading(node.OperatorToken))),
+            right: Convert<Cs.Pattern>(node.Right)!);
     }
 
     public override J? VisitBreakStatement(BreakStatementSyntax node)
     {
         return new J.Break(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            label: null
         );
     }
 
     public override J? VisitCastExpression(CastExpressionSyntax node)
     {
         return new J.TypeCast(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new J.ControlParentheses<TypeTree>(
-                Core.Tree.RandomId(),
-                Format(Leading(node.OpenParenToken)),
-                Markers.EMPTY,
-                new JRightPadded<TypeTree>(
-                    Convert<TypeTree>(node.Type)!,
-                    Format(Leading(node.CloseParenToken)),
-                    Markers.EMPTY
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            clazz: new J.ControlParentheses<TypeTree>(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.OpenParenToken)),
+                markers: Markers.EMPTY,
+                tree: new JRightPadded<TypeTree>(
+                    element: Convert<TypeTree>(node.Type)!,
+                    after: Format(Leading(node.CloseParenToken)),
+                    markers: Markers.EMPTY
                 )
             ),
-            Convert<Expression>(node.Expression)!
+            expression: Convert<Expression>(node.Expression)!
         );
     }
 
     public override J? VisitCatchClause(CatchClauseSyntax node)
     {
         return new J.Try.Catch(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new J.ControlParentheses<J.VariableDeclarations>(
-                Core.Tree.RandomId(),
-                node.Declaration != null ? Format(Leading(node.Declaration)) : Space.EMPTY,
-                Markers.EMPTY,
-                new JRightPadded<J.VariableDeclarations>(
-                    node.Declaration != null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            parameter: new J.ControlParentheses<J.VariableDeclarations>(
+                id: Core.Tree.RandomId(),
+                prefix: node.Declaration != null ? Format(Leading(node.Declaration)) : Space.EMPTY,
+                markers: Markers.EMPTY,
+                tree: new JRightPadded<J.VariableDeclarations>(
+                    element: node.Declaration != null
                         ? Convert<J.VariableDeclarations>(node.Declaration)!
                         : new J.VariableDeclarations(
-                            Core.Tree.RandomId(),
-                            Space.EMPTY,
-                            Markers.EMPTY,
-                            [],
-                            [],
-                            null,
-                            null!,
-                            [],
-                            []
+                            id: Core.Tree.RandomId(),
+                            prefix: Space.EMPTY,
+                            markers: Markers.EMPTY,
+                            leadingAnnotations: [],
+                            modifiers: [],
+                            typeExpression: null,
+                            varargs: null!,
+                            dimensionsBeforeName: [],
+                            variables: []
                         ),
-                    node.Declaration != null ? Format(Leading(node.Declaration.CloseParenToken)) : Space.EMPTY,
-                    Markers.EMPTY
+                    after: node.Declaration != null ? Format(Leading(node.Declaration.CloseParenToken)) : Space.EMPTY,
+                    markers: Markers.EMPTY
                 )
             ),
-            Convert<J.Block>(node.Block)!
+            body: Convert<J.Block>(node.Block)!
         );
     }
 
     public override J? VisitCatchDeclaration(CatchDeclarationSyntax node)
     {
         return new J.VariableDeclarations(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            [],
-            [],
-            Convert<TypeTree>(node.Type),
-            null!,
-            [],
-            node.Identifier.IsKind(SyntaxKind.None)
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            leadingAnnotations: [],
+            modifiers: [],
+            typeExpression: Convert<TypeTree>(node.Type),
+            varargs: null!,
+            dimensionsBeforeName: [],
+            variables: node.Identifier.IsKind(SyntaxKind.None)
                 ? []
                 :
                 [
                     new JRightPadded<J.VariableDeclarations.NamedVariable>(
-                        new J.VariableDeclarations.NamedVariable(
-                            Core.Tree.RandomId(),
-                            Format(Leading(node.Identifier)),
-                            Markers.EMPTY,
-                            MapIdentifier(node.Identifier, MapType(node.Type))!,
-                            [],
-                            null,
-                            MapType(node) as JavaType.Variable
+                        element: new J.VariableDeclarations.NamedVariable(
+                            id: Core.Tree.RandomId(),
+                            prefix: Format(Leading(node.Identifier)),
+                            markers: Markers.EMPTY,
+                            name: MapIdentifier(identifier: node.Identifier, type: MapType( node.Type))!,
+                            dimensionsAfterName: [],
+                            initializer: null,
+                            variableType: MapType( node) as JavaType.Variable
                         ),
-                        Format(Leading(node.CloseParenToken)),
-                        Markers.EMPTY
+                        after: Format(Leading(node.CloseParenToken)),
+                        markers: Markers.EMPTY
                     )
                 ]
         );
@@ -1223,39 +1235,39 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     {
         if (node.Right is GenericNameSyntax genericNameSyntax)
         {
-            var mapIdentifier = MapIdentifier(genericNameSyntax.Identifier, MapType(genericNameSyntax));
+            var mapIdentifier = MapIdentifier(identifier: genericNameSyntax.Identifier, type: MapType( genericNameSyntax));
             return new J.ParameterizedType(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                new J.FieldAccess(
-                    Core.Tree.RandomId(),
-                    Format(Leading(node)),
-                    Markers.EMPTY,
-                    (Visit(node.Left) as Expression)!,
-                    new JLeftPadded<J.Identifier>(
-                        Format(Leading(node.DotToken)),
-                        mapIdentifier,
-                        Markers.EMPTY
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                clazz: new J.FieldAccess(
+                    id: Core.Tree.RandomId(),
+                    prefix: Format(Leading(node)),
+                    markers: Markers.EMPTY,
+                    target: (Visit(node.Left) as Expression)!,
+                    name: new JLeftPadded<J.Identifier>(
+                        before: Format(Leading(node.DotToken)),
+                        element: mapIdentifier,
+                        markers: Markers.EMPTY
                     ),
-                    MapType(node.Left)
+                    type: MapType( node.Left)
                 ),
-                MapTypeArguments(genericNameSyntax.TypeArgumentList),
-                mapIdentifier.Type
+                typeParameters: MapTypeArguments(typeArgumentList: genericNameSyntax.TypeArgumentList),
+                type: mapIdentifier.Type
             );
         }
 
         return new J.FieldAccess(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            (Visit(node.Left) as Expression)!,
-            new JLeftPadded<J.Identifier>(
-                Format(Leading(node.DotToken)),
-                Convert<J.Identifier>(node.Right)!,
-                Markers.EMPTY
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            target: (Visit(node.Left) as Expression)!,
+            name: new JLeftPadded<J.Identifier>(
+                before: Format(Leading(node.DotToken)),
+                element: Convert<J.Identifier>(node.Right)!,
+                markers: Markers.EMPTY
             ),
-            MapType(node)
+            type: MapType( node)
         );
     }
 
@@ -1273,14 +1285,14 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         //     JContainer<Expression>.Empty(),
         //     type
         // );
-        var nameTree = MapIdentifier(node.Identifier, MapType(node));
+        var nameTree = MapIdentifier(identifier: node.Identifier, type: MapType( node));
         return new J.ParameterizedType(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            nameTree,
-            MapTypeArguments(node.TypeArgumentList),
-            nameTree.Type
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            clazz: nameTree,
+            typeParameters: MapTypeArguments(typeArgumentList: node.TypeArgumentList),
+            type: nameTree.Type
         );
     }
 
@@ -1289,13 +1301,13 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         if (typeArgumentList.Arguments.Count == 0) return null;
 
         return new JContainer<Expression>(
-            Format(Leading(typeArgumentList)),
-            typeArgumentList.Arguments.Select(t => new JRightPadded<Expression>(
-                Convert<Expression>(t)!,
-                Format(Trailing(t)),
-                Markers.EMPTY)
+            before: Format(Leading(typeArgumentList)),
+            elements: typeArgumentList.Arguments.Select(selector: t => new JRightPadded<Expression>(
+                element: Convert<Expression>(t)!,
+                after: Format(Trailing(t)),
+                markers: Markers.EMPTY)
             ).ToList(),
-            Markers.EMPTY
+            markers: Markers.EMPTY
         );
     }
 
@@ -1303,13 +1315,13 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     {
         var variable = type as JavaType.Variable;
         return new J.Identifier(
-            Core.Tree.RandomId(),
-            Format(Leading(identifier)),
-            Markers.EMPTY,
-            [],
-            identifier.Text,
-            variable?.Type ?? type,
-            variable
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(identifier)),
+            markers: Markers.EMPTY,
+            annotations: [],
+            simpleName: identifier.Text,
+            type: variable?.Type ?? type,
+            fieldType: variable
         );
     }
 
@@ -1330,47 +1342,47 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public TypeTree MapTypeTree(SyntaxNode node)
     {
-        var type = MapType(node);
+        var type = MapType( node);
         if (type is JavaType.Primitive)
             return new J.Primitive(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                (JavaType.Primitive)type
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                type: (JavaType.Primitive)type
             );
         // TODO also for types like `sbyte` we need to use J.Identifier or a custom `Cs.Primitive`
         return new J.Identifier(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            [],
-            node.ToString(),
-            type is JavaType.Variable variable ? variable.Type : type,
-            MapType(node) as JavaType.Variable
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            annotations: [],
+            simpleName: node.ToString(),
+            type: type is JavaType.Variable variable ? variable.Type : type,
+            fieldType: MapType( node) as JavaType.Variable
         );
     }
 
     public override J? VisitArrayRankSpecifier(ArrayRankSpecifierSyntax node)
     {
         return new J.ArrayDimension(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new JRightPadded<Expression>(
-                new Cs.ArrayRankSpecifier(
-                    Core.Tree.RandomId(),
-                    Format(Trailing(node.OpenBracketToken)),
-                    Markers.EMPTY,
-                    new JContainer<Expression>(
-                        Format(Leading(node.OpenBracketToken)),
-                        node.Sizes.Select(t => new JRightPadded<Expression>(
-                            Convert<Expression>(t)!,
-                            Format(Trailing(t.GetLastToken())), Markers.EMPTY)).ToList(),
-                        Markers.EMPTY
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            index: new JRightPadded<Expression>(
+                element: new Cs.ArrayRankSpecifier(
+                    id: Core.Tree.RandomId(),
+                    prefix: Format(Trailing(node.OpenBracketToken)),
+                    markers: Markers.EMPTY,
+                    sizes: new JContainer<Expression>(
+                        before: Format(Leading(node.OpenBracketToken)),
+                        elements: node.Sizes.Select(selector: t => new JRightPadded<Expression>(
+                            element: Convert<Expression>(t)!,
+                            after: Format(Trailing(t.GetLastToken())), markers: Markers.EMPTY)).ToList(),
+                        markers: Markers.EMPTY
                     )
                 ),
-                Space.EMPTY,
-                Markers.EMPTY
+                after: Space.EMPTY,
+                markers: Markers.EMPTY
             )
         );
     }
@@ -1416,29 +1428,29 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitTupleType(TupleTypeSyntax node)
     {
         return new Cs.TupleType(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            JContainer.Create(node.Elements.Select(x => JRightPadded.Create(Convert<Cs.TupleElement>(x)!, Format(Trailing(x)))).ToList()),
-            MapType(node)
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            elements: JContainer.Create(elements: node.Elements.Select(selector: x => JRightPadded.Create(element: Convert<Cs.TupleElement>(x)!, after: Format(Trailing(x)))).ToList()),
+            type: MapType( node)
             );
     }
 
     public override Cs VisitTupleElement(TupleElementSyntax node)
     {
-        var type = MapType(node.Type);
+        var type = MapType( node.Type);
         return new Cs.TupleElement(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            MapTypeTree(node.Type),
-            MapIdentifier(node.Identifier, type));
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            type: MapTypeTree(node.Type),
+            name: MapIdentifier(identifier: node.Identifier, type: type));
 
     }
 
     public override J? VisitOmittedTypeArgument(OmittedTypeArgumentSyntax node)
     {
-        return base.VisitOmittedTypeArgument(node);
+        return null; // not special representation for generic type definition without type parameters. Ex: List<>
     }
 
     public override J? VisitRefType(RefTypeSyntax node)
@@ -1455,20 +1467,20 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitParenthesizedExpression(ParenthesizedExpressionSyntax node)
     {
         return new J.Parentheses<Expression>(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            MapExpression(node.Expression)
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            tree: MapExpression(es: node.Expression)
         );
     }
 
     public override J? VisitTupleExpression(TupleExpressionSyntax node)
     {
         return new Cs.TupleExpression(
-            Core.Tree.RandomId(),
-            Format(Leading(node.OpenParenToken)),
-            Markers.EMPTY,
-            ToJContainer<ArgumentSyntax, Cs.Argument>(node.Arguments, node.OpenParenToken));
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node.OpenParenToken)),
+            markers: Markers.EMPTY,
+            arguments: ToJContainer<ArgumentSyntax, Cs.Argument>(syntaxList: node.Arguments, openingToken: node.OpenParenToken));
     }
 
     public override J? VisitPrefixUnaryExpression(PrefixUnaryExpressionSyntax node)
@@ -1480,12 +1492,12 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         try
         {
             return new J.Unary(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                MapPrefixUnaryOperator(node.OperatorToken),
-                Convert<Expression>(node.Operand)!,
-                MapType(node)
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                @operator: MapPrefixUnaryOperator(operatorToken: node.OperatorToken),
+                expression: Convert<Expression>(node.Operand)!,
+                type: MapType( node)
             );
         }
         catch (NotImplementedException)
@@ -1496,74 +1508,74 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     }
 
-    private JLeftPadded<J.Unary.Type> MapPrefixUnaryOperator(SyntaxToken operatorToken)
+    private JLeftPadded<J.Unary.Types> MapPrefixUnaryOperator(SyntaxToken operatorToken)
     {
         return operatorToken.Kind() switch
         {
-            SyntaxKind.ExclamationToken => new JLeftPadded<J.Unary.Type>(
-                Format(Leading(operatorToken)),
-                J.Unary.Type.Not,
-                Markers.EMPTY
+            SyntaxKind.ExclamationToken => new JLeftPadded<J.Unary.Types>(
+                before: Format(Leading(operatorToken)),
+                element: J.Unary.Types.Not,
+                markers: Markers.EMPTY
             ),
-            SyntaxKind.PlusPlusToken => new JLeftPadded<J.Unary.Type>(
-                Format(Leading(operatorToken)),
-                J.Unary.Type.PreIncrement,
-                Markers.EMPTY
+            SyntaxKind.PlusPlusToken => new JLeftPadded<J.Unary.Types>(
+                before: Format(Leading(operatorToken)),
+                element: J.Unary.Types.PreIncrement,
+                markers: Markers.EMPTY
             ),
-            SyntaxKind.MinusMinusToken => new JLeftPadded<J.Unary.Type>(
-                Format(Leading(operatorToken)),
-                J.Unary.Type.PreDecrement,
-                Markers.EMPTY
+            SyntaxKind.MinusMinusToken => new JLeftPadded<J.Unary.Types>(
+                before: Format(Leading(operatorToken)),
+                element: J.Unary.Types.PreDecrement,
+                markers: Markers.EMPTY
             ),
-            SyntaxKind.MinusToken => new JLeftPadded<J.Unary.Type>(
-                Format(Leading(operatorToken)),
-                J.Unary.Type.Negative,
-                Markers.EMPTY
+            SyntaxKind.MinusToken => new JLeftPadded<J.Unary.Types>(
+                before: Format(Leading(operatorToken)),
+                element: J.Unary.Types.Negative,
+                markers: Markers.EMPTY
             ),
-            SyntaxKind.PlusToken => new JLeftPadded<J.Unary.Type>(
-                Format(Leading(operatorToken)),
-                J.Unary.Type.Positive,
-                Markers.EMPTY
+            SyntaxKind.PlusToken => new JLeftPadded<J.Unary.Types>(
+                before: Format(Leading(operatorToken)),
+                element: J.Unary.Types.Positive,
+                markers: Markers.EMPTY
             ),
-            SyntaxKind.TildeToken => new JLeftPadded<J.Unary.Type>(
-                Format(Leading(operatorToken)),
-                J.Unary.Type.Complement,
-                Markers.EMPTY
+            SyntaxKind.TildeToken => new JLeftPadded<J.Unary.Types>(
+                before: Format(Leading(operatorToken)),
+                element: J.Unary.Types.Complement,
+                markers: Markers.EMPTY
             ),
-            _ => throw new NotImplementedException(operatorToken.ToString())
+            _ => throw new NotImplementedException(message: operatorToken.ToString())
         };
     }
 
     public override J? VisitPostfixUnaryExpression(PostfixUnaryExpressionSyntax node)
     {
-        var operatorEnum = MapPostfixUnaryOperator(node.OperatorToken);
-        if (operatorEnum is J.Unary.Type jOperator)
+        var operatorEnum = MapPostfixUnaryOperator(operatorToken: node.OperatorToken);
+        if (operatorEnum is J.Unary.Types jOperator)
         {
             return new J.Unary(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                new JLeftPadded<J.Unary.Type>(
-                    Format(Leading(node.OperatorToken)),
-                    jOperator,
-                    Markers.EMPTY
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                @operator: new JLeftPadded<J.Unary.Types>(
+                    before: Format(Leading(node.OperatorToken)),
+                    element: jOperator,
+                    markers: Markers.EMPTY
                 ),
-                Convert<Expression>(node.Operand)!,
-                MapType(node));
+                expression: Convert<Expression>(node.Operand)!,
+                type: MapType( node));
         }
         else
         {
             return new Cs.Unary(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                JLeftPadded.Create(
-                    (Cs.Unary.Type)operatorEnum,
-                    Format(Leading(node.OperatorToken)),
-                    Markers.EMPTY
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                @operator: JLeftPadded.Create(
+                    element: (Cs.Unary.Types)operatorEnum,
+                    before: Format(Leading(node.OperatorToken)),
+                    markers: Markers.EMPTY
                 ),
-                Convert<Expression>(node.Operand)!,
-                MapType(node));
+                expression: Convert<Expression>(node.Operand)!,
+                type: MapType( node));
         }
     }
 
@@ -1571,10 +1583,10 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     {
         Enum type = operatorToken.Kind() switch
         {
-            SyntaxKind.PlusPlusToken => J.Unary.Type.PostIncrement,
-            SyntaxKind.MinusMinusToken => J.Unary.Type.PostDecrement,
-            SyntaxKind.ExclamationToken => Cs.Unary.Type.SuppressNullableWarning,
-            _ => throw new InvalidOperationException($"Unsupported token type {operatorToken} in PostfixUnaryExpression")
+            SyntaxKind.PlusPlusToken => J.Unary.Types.PostIncrement,
+            SyntaxKind.MinusMinusToken => J.Unary.Types.PostDecrement,
+            SyntaxKind.ExclamationToken => Cs.Unary.Types.SuppressNullableWarning,
+            _ => throw new InvalidOperationException(message: $"Unsupported token type {operatorToken} in PostfixUnaryExpression")
         };
         return type;
     }
@@ -1583,69 +1595,34 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitMemberAccessExpression(MemberAccessExpressionSyntax node)
     {
         var name = Convert<Expression>(node.Name)!;
-        J result;
-        result = name switch
+        J result = name switch
         {
             J.Identifier id => new J.FieldAccess(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                Convert<Expression>(node.Expression)!,
-                new JLeftPadded<J.Identifier>(
-                    Format(Leading(node.OperatorToken)),
-                    id,
-                    Markers.EMPTY
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                target: Convert<Expression>(node.Expression)!,
+                name: new JLeftPadded<J.Identifier>(
+                    before: Format(Leading(node.OperatorToken)),
+                    element: id,
+                    markers: Markers.EMPTY
                 ),
-                MapType(node)),
-            J.ParameterizedType pi => pi.WithClazz(new J.FieldAccess(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                Convert<Expression>(node.Expression)!,
-                new JLeftPadded<J.Identifier>(
-                    Format(Leading(node.OperatorToken)),
-                    (J.Identifier)pi.Clazz,
-                    Markers.EMPTY
+                type: MapType( node)),
+            J.ParameterizedType pi => pi.WithClazz(newClazz: new J.FieldAccess(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                target: Convert<Expression>(node.Expression)!,
+                name: new JLeftPadded<J.Identifier>(
+                    before: Format(Leading(node.OperatorToken)),
+                    element: (J.Identifier)pi.Clazz,
+                    markers: Markers.EMPTY
                 ),
-                MapType(node)
+                type: MapType( node)
             )),
             _ => throw new NotImplementedException()
         };
 
-        // if (name is J.Identifier id)
-        // {
-        //     return new J.FieldAccess(
-        //         Core.Tree.RandomId(),
-        //         Format(Leading(node)),
-        //         Markers.EMPTY,
-        //         Convert<Expression>(node.Expression)!,
-        //         new JLeftPadded<J.Identifier>(
-        //             Format(Leading(node.OperatorToken)),
-        //             id,
-        //             Markers.EMPTY
-        //         ),
-        //         MapType(node)
-        //     );
-        // }
-        //
-        // if (name is J.ParameterizedType pi)
-        // {
-        //     var identifier = (pi.Clazz as J.Identifier)!;
-        //     // return pi.WithPrefix(Format(Leading(node))).WithSelect(Convert<Expression>(node.Expression)!);
-        //     var parameterizedType = pi.WithClazz(new J.FieldAccess(
-        //         Core.Tree.RandomId(),
-        //         Format(Leading(node)),
-        //         Markers.EMPTY,
-        //         Convert<Expression>(node.Expression)!,
-        //         new JLeftPadded<J.Identifier>(
-        //             Format(Leading(node.OperatorToken)),
-        //             identifier,
-        //             Markers.EMPTY
-        //         ),
-        //         MapType(node)
-        //     ));
-        //     return parameterizedType;
-        // }
 
         return result;
     }
@@ -1662,10 +1639,10 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         ExpressionSyntax currentNode = node;
         while(currentNode is ConditionalAccessExpressionSyntax conditionalNode)
         {
-            conditionalExpressions.Add((conditionalNode.Expression, Format(Leading(conditionalNode.OperatorToken))));
+            conditionalExpressions.Add(item: (conditionalNode.Expression, Format(Leading(conditionalNode.OperatorToken))));
             currentNode = conditionalNode.WhenNotNull;
         }
-        conditionalExpressions.Add((currentNode, Format(Leading(currentNode))));
+        conditionalExpressions.Add(item: (currentNode, Format(Leading(currentNode))));
         // at this point conditionalExpressions for something like this: a?.b?.c
         // would look like this ['a','.b','.c']
 
@@ -1682,28 +1659,28 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             // fixed up. The expression for it will become lhs from previous loop iteration (stored in currentExpression)
             // ps: god help you if you need to fix this logic :)
             var bindingNode = lstNode.Descendents()
-                .FirstOrDefault(x => x.Markers.Contains<MemberBinding>());
+                .FirstOrDefault(predicate: x => x.Markers.Contains<MemberBinding>());
             if (bindingNode != null)
             {
                 var newMarkers = bindingNode.Markers
-                    .WithMarkers(bindingNode.Markers.MarkerList.Where(x => x is not MemberBinding).ToList());
+                    .WithMarkers(markers: bindingNode.Markers.MarkerList.Where(predicate: x => x is not MemberBinding).ToList());
                 if (bindingNode is J.MethodInvocation methodNode)
                 {
                     var newMethod = methodNode
-                        .WithSelect(currentExpression)
-                        .WithMarkers(newMarkers);
-                    lstNode = methodNode.Equals(lstNode) ? newMethod : lstNode.ReplaceNode(methodNode, newMethod);
+                        .WithSelect(newSelect: currentExpression)
+                        .WithMarkers(newMarkers: newMarkers);
+                    lstNode = methodNode.Equals(other: lstNode) ? newMethod : lstNode.ReplaceNode(oldNode: methodNode, newNode: newMethod);
                 }
                 else if (bindingNode is J.FieldAccess fieldAccess)
                 {
-                    var newFieldAccess = fieldAccess.WithTarget(currentExpression).WithMarkers(newMarkers);
-                    lstNode = fieldAccess.Equals(lstNode) ? newFieldAccess : lstNode.ReplaceNode(fieldAccess, newFieldAccess);
+                    var newFieldAccess = fieldAccess.WithTarget(newTarget: currentExpression).WithMarkers(newMarkers: newMarkers);
+                    lstNode = fieldAccess.Equals(other: lstNode) ? newFieldAccess : lstNode.ReplaceNode(oldNode: fieldAccess, newNode: newFieldAccess);
                 } else if (bindingNode is J.ArrayAccess arrayAccess)
                 {
                     var newArrayAccess = arrayAccess
-                        .WithIndexed(currentExpression)
-                        .WithMarkers(newMarkers);
-                    lstNode = newArrayAccess.Equals(lstNode) ? newArrayAccess : lstNode.ReplaceNode(lstNode, newArrayAccess);
+                        .WithIndexed(newIndexed: currentExpression)
+                        .WithMarkers(newMarkers: newMarkers);
+                    lstNode = newArrayAccess.Equals(other: lstNode) ? newArrayAccess : lstNode.ReplaceNode(oldNode: lstNode, newNode: newArrayAccess);
                 }
             }
 
@@ -1711,13 +1688,13 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             if (!isLastSegment)
             {
                 lstNode = new Cs.NullSafeExpression(
-                    Core.Tree.RandomId(),
-                    Format(Leading(expressionPortion)),
-                    Markers.EMPTY,
-                    new JRightPadded<Expression>(
-                        lstNode!,
-                        afterSpace,
-                        Markers.EMPTY
+                    id: Core.Tree.RandomId(),
+                    prefix: Format(Leading(expressionPortion)),
+                    markers: Markers.EMPTY,
+                    expression: new JRightPadded<Expression>(
+                        element: lstNode!,
+                        after: afterSpace,
+                        markers: Markers.EMPTY
                     )
                 );
             }
@@ -1727,10 +1704,9 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             i++;
         }
 
-        // var result = Convert<Expression>(node.WhenNotNull)!;
+
         return currentExpression;
 
-        // return base.VisitConditionalAccessExpression(node);
     }
 
 
@@ -1742,13 +1718,13 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     {
         var name = Convert<J.Identifier>(node.Name)!;
         return new J.FieldAccess(
-            Core.Tree.RandomId(),
+            id: Core.Tree.RandomId(),
             // Format(Leading(node.OperatorToken)),
-            Space.EMPTY,
-            Markers.Create(new MemberBinding()),
-            new J.Empty(Core.Tree.RandomId(), Space.EMPTY, Markers.EMPTY),
-            name.AsLeftPadded(Format(Leading(node.OperatorToken))),
-            MapType(node)
+            prefix: Space.EMPTY,
+            markers: Markers.Create(markers: new MemberBinding()),
+            target: new J.Empty(id: Core.Tree.RandomId(), prefix: Space.EMPTY, markers: Markers.EMPTY),
+            name: name.AsLeftPadded(before: Format(Leading(node.OperatorToken))),
+            type: MapType( node)
         );
     }
 
@@ -1757,85 +1733,94 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
 
         var placeholderExpression = new J.Empty(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY);
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY);
 
 
         return new J.ArrayAccess(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.Create(new MemberBinding()),
-            placeholderExpression,
-            new J.ArrayDimension(
-                Core.Tree.RandomId(),
-                Format(Leading(node.ArgumentList.OpenBracketToken)),
-                Markers.EMPTY,
-                new JRightPadded<Expression>(
-                    Convert<Expression>(node.ArgumentList.Arguments[0])!,
-                    Format(Trailing(node.ArgumentList.Arguments[0])),
-                    Markers.EMPTY
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.Create(markers: new MemberBinding()),
+            indexed: placeholderExpression,
+            dimension: new J.ArrayDimension(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.ArgumentList.OpenBracketToken)),
+                markers: Markers.EMPTY,
+                index: new JRightPadded<Expression>(
+                    element: Convert<Expression>(node.ArgumentList.Arguments[index: 0])!,
+                    after: Format(Trailing(node.ArgumentList.Arguments[index: 0])),
+                    markers: Markers.EMPTY
                 )
             ),
-            MapType(node)
+            type: MapType( node)
         );
     }
 
     public override J? VisitRangeExpression(RangeExpressionSyntax node)
     {
-        // This was added in C# 8.0
-        return base.VisitRangeExpression(node);
+        return new Cs.RangeExpression(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            start: ToRightPadded<Expression>(node.LeftOperand),
+            end: Convert<Expression>(node.RightOperand));
     }
 
     public override J? VisitImplicitElementAccess(ImplicitElementAccessSyntax node)
     {
-        return base.VisitImplicitElementAccess(node);
+
+        return new Cs.ImplicitElementAccess(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            argumentList: ToJContainer<ArgumentSyntax, Cs.Argument>(syntaxList: node.ArgumentList.Arguments, openingToken: node.ArgumentList.OpenBracketToken));
     }
 
     public override J? VisitConditionalExpression(ConditionalExpressionSyntax node)
     {
         return new J.Ternary(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            Convert<Expression>(node.Condition)!,
-            new JLeftPadded<Expression>(
-                Format(Leading(node.QuestionToken)),
-                Convert<Expression>(node.WhenTrue)!,
-                Markers.EMPTY
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            condition: Convert<Expression>(node.Condition)!,
+            truePart: new JLeftPadded<Expression>(
+                before: Format(Leading(node.QuestionToken)),
+                element: Convert<Expression>(node.WhenTrue)!,
+                markers: Markers.EMPTY
             ),
-            new JLeftPadded<Expression>(
-                Format(Leading(node.ColonToken)),
-                Convert<Expression>(node.WhenFalse)!,
-                Markers.EMPTY
+            falsePart: new JLeftPadded<Expression>(
+                before: Format(Leading(node.ColonToken)),
+                element: Convert<Expression>(node.WhenFalse)!,
+                markers: Markers.EMPTY
             ),
-            MapType(node)
+            type: MapType( node)
         );
     }
 
     public override J? VisitThisExpression(ThisExpressionSyntax node)
     {
         return new J.Identifier(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            [],
-            node.Token.Text,
-            (MapType(node) as JavaType.Variable)?.Type,
-            MapType(node) as JavaType.Variable
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            annotations: [],
+            simpleName: node.Token.Text,
+            type: (MapType( node) as JavaType.Variable)?.Type,
+            fieldType: MapType( node) as JavaType.Variable
         );
     }
 
     public override J? VisitLiteralExpression(LiteralExpressionSyntax node)
     {
         return new J.Literal(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            node.Token.Value,
-            node.Token.Text,
-            null,
-            (MapType(node) as JavaType.Primitive)!
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            value: node.Token.Value,
+            valueSource: node.Token.Text,
+            unicodeEscapes: null,
+            type: (MapType( node) as JavaType.Primitive)!
         );
     }
 
@@ -1856,98 +1841,105 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitDefaultExpression(DefaultExpressionSyntax node)
     {
-        return base.VisitDefaultExpression(node);
+        return new Cs.DefaultExpression(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            typeOperator: node.OpenParenToken.IsPresent() ? ToJContainer<TypeSyntax, TypeTree>(syntaxList: [node.Type], openingToken: node.OpenParenToken) : null
+        );
     }
 
     public override J? VisitTypeOfExpression(TypeOfExpressionSyntax node)
     {
         return new J.MethodInvocation(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            null,
-            null,
-            new J.Identifier(
-                Core.Tree.RandomId(),
-                Format(Leading(node.Keyword)),
-                Markers.EMPTY,
-                [],
-                node.Keyword.Text,
-                null,
-                null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            select: null,
+            typeParameters: null,
+            name: new J.Identifier(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.Keyword)),
+                markers: Markers.EMPTY,
+                annotations: [],
+                simpleName: node.Keyword.Text,
+                type: null,
+                fieldType: null
             ),
-            new JContainer<Expression>(
-                Format(Leading(node.OpenParenToken)),
+            arguments: new JContainer<Expression>(
+                before: Format(Leading(node.OpenParenToken)),
+                elements:
                 [
                     new JRightPadded<Expression>(
-                        Convert<Expression>(node.Type)!,
-                        Format(Leading(node.CloseParenToken)),
-                        Markers.EMPTY
+                        element: Convert<Expression>(node.Type)!,
+                        after: Format(Leading(node.CloseParenToken)),
+                        markers: Markers.EMPTY
                     )
                 ],
-                Markers.EMPTY
+                markers: Markers.EMPTY
             ),
-            MapType(node) as JavaType.Method
+            methodType: MapType( node) as JavaType.Method
         );
     }
 
     public override J? VisitSizeOfExpression(SizeOfExpressionSyntax node)
     {
         return new J.MethodInvocation(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            null,
-            null,
-            new J.Identifier(
-                Core.Tree.RandomId(),
-                Format(Leading(node.Keyword)),
-                Markers.EMPTY,
-                [],
-                node.Keyword.Text,
-                null,
-                null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            select: null,
+            typeParameters: null,
+            name: new J.Identifier(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.Keyword)),
+                markers: Markers.EMPTY,
+                annotations: [],
+                simpleName: node.Keyword.Text,
+                type: null,
+                fieldType: null
             ),
-            new JContainer<Expression>(
-                Format(Leading(node.OpenParenToken)),
+            arguments: new JContainer<Expression>(
+                before: Format(Leading(node.OpenParenToken)),
+                elements:
                 [
                     new JRightPadded<Expression>(
-                        Convert<Expression>(node.Type)!,
-                        Format(Leading(node.CloseParenToken)),
-                        Markers.EMPTY
+                        element: Convert<Expression>(node.Type)!,
+                        after: Format(Leading(node.CloseParenToken)),
+                        markers: Markers.EMPTY
                     )
                 ],
-                Markers.EMPTY
+                markers: Markers.EMPTY
             ),
-            MapType(node) as JavaType.Method
+            methodType: MapType( node) as JavaType.Method
         );
     }
 
     public override J? VisitElementAccessExpression(ElementAccessExpressionSyntax node)
     {
-        return MapArrayAccess(node, 0);
+        return MapArrayAccess(node, index: 0);
     }
 
     private J.ArrayAccess MapArrayAccess(ElementAccessExpressionSyntax node, int index)
     {
         return new J.ArrayAccess(
-            Core.Tree.RandomId(),
-            index == 0 ? Format(Leading(node)) : Space.EMPTY,
-            Markers.EMPTY,
-            index == node.ArgumentList.Arguments.Count - 1
+            id: Core.Tree.RandomId(),
+            prefix: index == 0 ? Format(Leading(node)) : Space.EMPTY,
+            markers: Markers.EMPTY,
+            indexed: index == node.ArgumentList.Arguments.Count - 1
                 ? Convert<Expression>(node.Expression)!
-                : MapArrayAccess(node, index + 1),
-            new J.ArrayDimension(
-                Core.Tree.RandomId(),
-                Format(Leading(node.ArgumentList.OpenBracketToken)),
-                Markers.EMPTY,
-                new JRightPadded<Expression>(
-                    Convert<Expression>(node.ArgumentList.Arguments[index])!,
-                    Format(Trailing(node.ArgumentList.Arguments[index])),
-                    Markers.EMPTY
+                : MapArrayAccess(node, index: index + 1),
+            dimension: new J.ArrayDimension(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.ArgumentList.OpenBracketToken)),
+                markers: Markers.EMPTY,
+                index: new JRightPadded<Expression>(
+                    element: Convert<Expression>(node.ArgumentList.Arguments[index: index])!,
+                    after: Format(Trailing(node.ArgumentList.Arguments[index: index])),
+                    markers: Markers.EMPTY
                 )
             ),
-            MapType(node) // TODO this probably needs to be specific to the current array dimension
+            type: MapType( node) // TODO this probably needs to be specific to the current array dimension
         );
     }
 
@@ -1970,49 +1962,50 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitDeclarationExpression(DeclarationExpressionSyntax node)
     {
         var result = new Cs.DeclarationExpression(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            Convert<TypeTree>(node.Type),
-            Convert<Cs.VariableDesignation>(node.Designation)!);
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            typeExpression: Convert<TypeTree>(node.Type),
+            variables: Convert<Cs.VariableDesignation>(node.Designation)!);
         return result;
     }
 
     public override J? VisitAnonymousMethodExpression(AnonymousMethodExpressionSyntax node)
     {
         return new J.MethodDeclaration(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            [], // attributes are not supported for anonymous methods
-            MapModifiers(node.Modifiers),
-            null,
-            null,
-            new J.MethodDeclaration.IdentifierWithAnnotations(
-                new J.Identifier(
-                    Core.Tree.RandomId(),
-                    Format(Leading(node.DelegateKeyword)),
-                    Markers.EMPTY,
-                    [],
-                    node.DelegateKeyword.Text,
-                    null,
-                    null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            leadingAnnotations: [], // attributes are not supported for anonymous methods
+            modifiers: MapModifiers(stl: node.Modifiers),
+            typeParameters: null,
+            returnTypeExpression: null,
+            name: new J.MethodDeclaration.IdentifierWithAnnotations(
+                identifier: new J.Identifier(
+                    id: Core.Tree.RandomId(),
+                    prefix: Format(Leading(node.DelegateKeyword)),
+                    markers: Markers.EMPTY,
+                    annotations: [],
+                    simpleName: node.DelegateKeyword.Text,
+                    type: null,
+                    fieldType: null
                 ),
-                []
+                annotations: []
             ),
-            MapParameters<Statement>(node.ParameterList) ?? new JContainer<Statement>(
-                Space.EMPTY,
+            parameters: MapParameters<Statement>(pls: node.ParameterList) ?? new JContainer<Statement>(
+                before: Space.EMPTY,
+                elements:
                 [
-                    JRightPadded<Statement>.Build(new J.Empty(Core.Tree.RandomId(),
-                        Space.EMPTY,
-                        Markers.EMPTY))
+                    JRightPadded.Create<Statement>(element: new J.Empty(id: Core.Tree.RandomId(),
+                        prefix: Space.EMPTY,
+                        markers: Markers.EMPTY))
                 ],
-                Markers.EMPTY
+                markers: Markers.EMPTY
             ),
-            null,
-            node.ExpressionBody != null ? Convert<J.Block>(node.ExpressionBody) : Convert<J.Block>(node.Block),
-            null,
-            MapType(node) as JavaType.Method
+            throws: null,
+            body: node.ExpressionBody != null ? Convert<J.Block>(node.ExpressionBody) : Convert<J.Block>(node.Block),
+            defaultValue: null,
+            methodType: MapType( node) as JavaType.Method
         );
     }
 
@@ -2040,148 +2033,138 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         J.Lambda.Parameters parameters = node switch
         {
             ParenthesizedLambdaExpressionSyntax parenthesizedLambdaExpression => new J.Lambda.Parameters(
-                Core.Tree.RandomId(),
-                parametersSpace,
-                Markers.EMPTY,
-                true,
-                MapParameters<J>(parenthesizedLambdaExpression.ParameterList)!.Elements),
+                id: Core.Tree.RandomId(),
+                prefix: parametersSpace,
+                markers: Markers.EMPTY,
+                parenthesized: true,
+                elements: MapParameters<J>(pls: parenthesizedLambdaExpression.ParameterList)!.Elements),
             SimpleLambdaExpressionSyntax simpleLambdaExpression => new J.Lambda.Parameters(
-                Core.Tree.RandomId(),
-                parametersSpace,
-                Markers.EMPTY,
-                false,
-                [MapParameter<J>(simpleLambdaExpression.Parameter)]),
-            _ => throw new NotSupportedException($"Unsupported type {node.GetType()}")
+                id: Core.Tree.RandomId(),
+                prefix: parametersSpace,
+                markers: Markers.EMPTY,
+                parenthesized: false,
+                elements: [MapParameter<J>(tps: simpleLambdaExpression.Parameter)]),
+            _ => throw new NotSupportedException(message: $"Unsupported type {node.GetType()}")
         };
 
 
         var jLambda = new J.Lambda(
-            Core.Tree.RandomId(),
-            Space.EMPTY,
-            Markers.EMPTY,
-            parameters,
-            Format(Leading(node.ArrowToken)),
-            Convert<J>(node.Body)!,
-            MapType(node)
+            id: Core.Tree.RandomId(),
+            prefix: Space.EMPTY,
+            markers: Markers.EMPTY,
+            @params: parameters,
+            arrow: Format(Leading(node.ArrowToken)),
+            body: Convert<J>(node.Body)!,
+            type: MapType( node)
         );
         var csLambda = new Cs.Lambda(
-            Core.Tree.RandomId(),
-            leadingNodeSpace,
-            Markers.EMPTY,
-            jLambda,
-            MapModifiers(node.Modifiers)
+            id: Core.Tree.RandomId(),
+            prefix: leadingNodeSpace,
+            markers: Markers.EMPTY,
+            lambdaExpression: jLambda,
+            modifiers: MapModifiers(stl: node.Modifiers)
         );
         return csLambda;
     }
 
     public override J? VisitInitializerExpression(InitializerExpressionSyntax node)
     {
-        if (node.IsKind(SyntaxKind.ArrayInitializerExpression))
-        {
-            return new J.NewArray(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                null, // must be `null` so that no `new` keyword is printed
-                [], // must be empty so that no `[]` keyword is printed
-                new JContainer<Expression>(
-                    Format(Leading(node.OpenBraceToken)),
-                    node.Expressions.Select((e, i) =>
-                    {
-                        var trailingComma = i == node.Expressions.Count - 1 &&
-                                            e.GetLastToken().GetNextToken().IsKind(SyntaxKind.CommaToken);
-                        return new JRightPadded<Expression>(
-                            Convert<Expression>(e)!,
-                            Format(Trailing(e)),
-                            trailingComma
-                                ? Markers.EMPTY.Add(new TrailingComma(Core.Tree.RandomId(),
-                                    Format(Trailing(e.GetLastToken().GetNextToken()))))
-                                : Markers.EMPTY
-                        );
-                    }).ToList(), Markers.EMPTY),
-                MapType(node)
-            );
-        }
+        var initializer = new Cs.InitializerExpression(
+            id: Core.Tree.RandomId(),
+            prefix: Space.EMPTY,
+            markers: Markers.EMPTY,
+            expressions: ToJContainer<ExpressionSyntax, Expression>(syntaxList: node.Expressions, openingToken: node.OpenBraceToken));
 
-        return new J.Block(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            JRightPadded<bool>.Build(false),
-            node.Expressions.Count == 0
-                ? []
-                : node.Expressions.SkipLast(1).Select(MapExpressionStatement)
-                    .Append(MapExpressionStatement(node.Expressions.Last(), true)).ToList(),
-            Format(Leading(node.CloseBraceToken))
-        );
+        return initializer;
+    }
+
+    private IList<JRightPadded<Statement>> ToStatementList(SeparatedSyntaxList<ExpressionSyntax> expressions)
+    {
+        return expressions.Count == 0 ? [] : expressions.SkipLast(count: 1).Select(selector: MapExpressionStatement).Append(element: MapExpressionStatement(es: expressions.Last(), isLastElement: true)).ToList();
     }
 
     public override J? VisitImplicitObjectCreationExpression(ImplicitObjectCreationExpressionSyntax node)
     {
-        return new J.NewClass(
-            Core.Tree.RandomId(),
-            node.Initializer == null ? Format(Leading(node)) : Space.EMPTY,
-            Markers.EMPTY,
-            null,
-            Format(Leading(node.NewKeyword)),
-            new J.Empty(Core.Tree.RandomId(), Space.EMPTY, Markers.EMPTY),
-            new JContainer<Expression>(
-                Format(Leading(node.ArgumentList.OpenParenToken)),
-                node.ArgumentList.Arguments.Count == 0
+        var jNewClass =  new J.NewClass(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            enclosing: null,
+            @new: Format(Leading(node.NewKeyword)),
+            clazz: new J.Empty(id: Core.Tree.RandomId(), prefix: Space.EMPTY, markers: Markers.EMPTY),
+            arguments: new JContainer<Expression>(
+                before: Format(Leading(node.ArgumentList.OpenParenToken)),
+                elements: node.ArgumentList.Arguments.Count == 0
                     ?
                     [
                         new JRightPadded<Expression>(
-                            new J.Empty(
-                                Core.Tree.RandomId(),
-                                Space.EMPTY,
-                                Markers.EMPTY
+                            element: new J.Empty(
+                                id: Core.Tree.RandomId(),
+                                prefix: Space.EMPTY,
+                                markers: Markers.EMPTY
                             ),
-                            Format(Leading(node.ArgumentList.CloseParenToken)),
-                            Markers.EMPTY
+                            after: Format(Leading(node.ArgumentList.CloseParenToken)),
+                            markers: Markers.EMPTY
                         )
                     ]
-                    : node.ArgumentList.Arguments.Select(MapArgument).ToList(),
-                Markers.EMPTY
+                    : node.ArgumentList.Arguments.Select(selector: MapArgument).ToList(),
+                markers: Markers.EMPTY
             ),
-            node.Initializer != null ? Convert<J.Block>(node.Initializer) : null,
-            MapType(node) as JavaType.Method // this should be FindConstructorType(node) which return explicitly javaType.Method
+            body: null,
+            constructorType: MapType( node) as JavaType.Method // this should be FindConstructorType(node) which return explicitly javaType.Method
         );
+        var csNewClass = new Cs.NewClass(
+            id: Core.Tree.RandomId(),
+            prefix: Space.EMPTY,
+            markers: Markers.EMPTY,
+            newClassCore: jNewClass,
+            initializer: Convert<Cs.InitializerExpression>(node.Initializer));
+        return csNewClass;
     }
 
     public override J? VisitObjectCreationExpression(ObjectCreationExpressionSyntax node)
     {
-        return new J.NewClass(
-            Core.Tree.RandomId(),
-            node.Initializer == null ? Format(Leading(node)) : Space.EMPTY,
-            Markers.EMPTY,
-            null,
-            Format(Leading(node.NewKeyword)),
-            Convert<TypeTree>(node.Type),
-            new JContainer<Expression>(
-                node.ArgumentList == null ? Space.EMPTY : Format(Leading(node.ArgumentList.OpenParenToken)),
-                node.ArgumentList == null || node.ArgumentList.Arguments.Count == 0
+        var jNewClass = new J.NewClass(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            enclosing: null,
+            @new: Format(Leading(node.NewKeyword)),
+            clazz: Convert<TypeTree>(node.Type),
+            arguments: new JContainer<Expression>(
+                before: node.ArgumentList == null ? Space.EMPTY : Format(Leading(node.ArgumentList.OpenParenToken)),
+                elements: node.ArgumentList == null || node.ArgumentList.Arguments.Count == 0
                     ?
                     [
                         new JRightPadded<Expression>(
-                            new J.Empty(
-                                Core.Tree.RandomId(),
-                                Space.EMPTY,
-                                Markers.EMPTY
+                            element: new J.Empty(
+                                id: Core.Tree.RandomId(),
+                                prefix: Space.EMPTY,
+                                markers: Markers.EMPTY
                             ),
-                            node.ArgumentList == null
+                            after: node.ArgumentList == null
                                 ? Space.EMPTY
                                 : Format(Leading(node.ArgumentList.CloseParenToken)),
-                            Markers.EMPTY
+                            markers: Markers.EMPTY
                         )
                     ]
-                    : node.ArgumentList.Arguments.Select(MapArgument).ToList(),
-                node.ArgumentList == null
-                    ? Markers.EMPTY.Add(new OmitParentheses(Core.Tree.RandomId()))
+                    : node.ArgumentList.Arguments.Select(selector: MapArgument).ToList(),
+                markers: node.ArgumentList == null
+                    ? Markers.EMPTY.Add(marker: new OmitParentheses(Id: Core.Tree.RandomId()))
                     : Markers.EMPTY
             ),
-            node.Initializer != null ? Convert<J.Block>(node.Initializer) : null,
-            MapType(node) as JavaType.Method // this should be FindConstructorType(node) which return explicitly javaType.Method
+            body: null,
+            constructorType: MapType( node) as JavaType.Method // this should be FindConstructorType(node) which return explicitly javaType.Method
         );
+
+        var csNewClass = new Cs.NewClass(
+            id: Core.Tree.RandomId(),
+            prefix: Space.EMPTY,
+            markers: Markers.EMPTY,
+            newClassCore: jNewClass,
+            initializer: Convert<Cs.InitializerExpression>(node.Initializer));
+
+        return csNewClass;
     }
 
     public override J? VisitWithExpression(WithExpressionSyntax node)
@@ -2192,20 +2175,15 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitAnonymousObjectMemberDeclarator(AnonymousObjectMemberDeclaratorSyntax node)
     {
-        return new J.VariableDeclarations(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            [],
-            [],
-            null,
-            null!,
-            [],
-            [
-                node.NameEquals != null
-                    ? MapNamedVariableFromNameEquals(node.NameEquals, node.Expression)
-                    : MapNamedVariableFromExpression(node.Expression)
-            ]
+        if (node.NameEquals == null)
+            return Convert<Expression>(node.Expression);
+        return new J.Assignment(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            variable: MapIdentifier(identifier: node.NameEquals.Name.Identifier, type: MapType( node.Expression)),
+            expression: JLeftPadded.Create(element: Convert<Expression>(node.Expression)!, before: Format(Leading(node.NameEquals.EqualsToken)), markers: Markers.EMPTY),
+            type: MapType( node.Expression)
         );
     }
 
@@ -2213,21 +2191,21 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         NameEqualsSyntax nameEqualsSyntax, ExpressionSyntax expression)
     {
         return new JRightPadded<J.VariableDeclarations.NamedVariable>(
-            new J.VariableDeclarations.NamedVariable(
-                Core.Tree.RandomId(),
-                Format(Leading(nameEqualsSyntax.Name)),
-                Markers.EMPTY,
-                Convert<J.Identifier>(nameEqualsSyntax.Name)!,
-                [],
-                new JLeftPadded<Expression>(
-                    Format(Leading(nameEqualsSyntax.EqualsToken)),
-                    Convert<Expression>(expression)!,
-                    Markers.EMPTY
+            element: new J.VariableDeclarations.NamedVariable(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(nameEqualsSyntax.Name)),
+                markers: Markers.EMPTY,
+                name: Convert<J.Identifier>(nameEqualsSyntax.Name)!,
+                dimensionsAfterName: [],
+                initializer: new JLeftPadded<Expression>(
+                    before: Format(Leading(nameEqualsSyntax.EqualsToken)),
+                    element: Convert<Expression>(expression)!,
+                    markers: Markers.EMPTY
                 ),
-                MapType(expression) as JavaType.Variable
+                variableType: MapType( expression) as JavaType.Variable
             ),
-            Format(Trailing(expression)),
-            Markers.EMPTY
+            after: Format(Trailing(expression)),
+            markers: Markers.EMPTY
         );
     }
 
@@ -2237,66 +2215,68 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         var identifierOrFieldAccess = Convert<Expression>(expression)!;
         var identifier = identifierOrFieldAccess is J.Identifier i
             ? i
-            : (identifierOrFieldAccess as J.FieldAccess)?.Name ?? throw new InvalidOperationException("Can't determine identifier");
+            : (identifierOrFieldAccess as J.FieldAccess)?.Name ?? throw new InvalidOperationException(message: "Can't determine identifier");
         return new JRightPadded<J.VariableDeclarations.NamedVariable>(
-            new J.VariableDeclarations.NamedVariable(
-                Core.Tree.RandomId(),
-                Format(Leading(expression)),
-                Markers.EMPTY,
-                new J.Identifier(Core.Tree.RandomId(), identifierOrFieldAccess.Prefix, identifierOrFieldAccess.Markers,
-                    identifier.Annotations, expression.ToString(), identifier.Type, identifier.FieldType),
-                [],
-                null,
-                identifier.Type as JavaType.Variable
+            element: new J.VariableDeclarations.NamedVariable(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(expression)),
+                markers: Markers.EMPTY,
+                name: new J.Identifier(id: Core.Tree.RandomId(), prefix: identifierOrFieldAccess.Prefix, markers: identifierOrFieldAccess.Markers,
+                    annotations: identifier.Annotations, simpleName: expression.ToString(), type: identifier.Type, fieldType: identifier.FieldType),
+                dimensionsAfterName: [],
+                initializer: null,
+                variableType: identifier.Type as JavaType.Variable
             ),
-            Format(Trailing(expression)),
-            Markers.EMPTY
+            after: Format(Trailing(expression)),
+            markers: Markers.EMPTY
         );
     }
 
     public override J? VisitAnonymousObjectCreationExpression(AnonymousObjectCreationExpressionSyntax node)
     {
-        return new J.NewClass(
-            Core.Tree.RandomId(),
-            Space.EMPTY,
-            Markers.EMPTY,
-            null,
-            Format(Leading(node.NewKeyword)),
-            new J.Empty(Core.Tree.RandomId(), Space.EMPTY, Markers.EMPTY),
-            new JContainer<Expression>(
-                Space.EMPTY,
+        var jNewClass = new J.NewClass(
+            id: Core.Tree.RandomId(),
+            prefix: Space.EMPTY,
+            markers: Markers.EMPTY,
+            enclosing: null,
+            @new: Format(Leading(node.NewKeyword)),
+            clazz: new J.Empty(id: Core.Tree.RandomId(), prefix: Space.EMPTY, markers: Markers.EMPTY),
+            arguments: new JContainer<Expression>(
+                before: Space.EMPTY,
+                elements:
                 [
                     new JRightPadded<Expression>(
-                        new J.Empty(
-                            Core.Tree.RandomId(),
-                            Space.EMPTY,
-                            Markers.EMPTY
+                        element: new J.Empty(
+                            id: Core.Tree.RandomId(),
+                            prefix: Space.EMPTY,
+                            markers: Markers.EMPTY
                         ),
-                        Space.EMPTY,
-                        Markers.EMPTY
+                        after: Space.EMPTY,
+                        markers: Markers.EMPTY
                     )
                 ],
-                Markers.EMPTY.Add(new OmitParentheses(Core.Tree.RandomId()))
+                markers: Markers.EMPTY.Add(marker: new OmitParentheses(Id: Core.Tree.RandomId()))
             ),
-            new J.Block(
-                Core.Tree.RandomId(),
-                Format(Leading(node.OpenBraceToken)),
-                Markers.EMPTY,
-                JRightPadded<bool>.Build(false),
-                node.Initializers.Count == 0
-                    ? []
-                    : node.Initializers.SkipLast(1).Select(MapAnonymousObjectMember)
-                        .Append(MapAnonymousObjectMember(node.Initializers.Last(), true)).ToList(),
-                Format(Leading(node.CloseBraceToken))
-            ),
-            MapType(node) as JavaType.Method // this should be FindConstructorType(node) which return explicitly javaType.Method
+            body: null,
+            constructorType: MapType( node) as JavaType.Method // this should be FindConstructorType(node) which return explicitly javaType.Method
         );
+        var csNewClass = new Cs.NewClass(
+            id: Core.Tree.RandomId(),
+            prefix: Space.EMPTY,
+            markers: Markers.EMPTY,
+            newClassCore: jNewClass,
+            initializer: new Cs.InitializerExpression(
+                id: Core.Tree.RandomId(),
+                prefix: Space.EMPTY,
+                markers: Markers.EMPTY,
+                expressions: ToJContainer<AnonymousObjectMemberDeclaratorSyntax, Expression>(syntaxList: node.Initializers, openingToken: node.OpenBraceToken)));
+        return csNewClass;
     }
 
     private JRightPadded<Statement> MapAnonymousObjectMember(AnonymousObjectMemberDeclaratorSyntax aomds)
     {
         // This was added in C# 3.0
-        return MapAnonymousObjectMember(aomds, false);
+        return MapAnonymousObjectMember(aomds: aomds, isLastElement: false);
     }
 
     private JRightPadded<Statement> MapAnonymousObjectMember(AnonymousObjectMemberDeclaratorSyntax aomds,
@@ -2305,64 +2285,55 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         var statement = Convert<Statement>(aomds)!;
         var trailingComma = isLastElement && aomds.GetLastToken().GetNextToken().IsKind(SyntaxKind.CommaToken);
         return new JRightPadded<Statement>(
-            statement,
-            Space.EMPTY,
-            trailingComma
-                ? Markers.EMPTY.Add(new TrailingComma(Core.Tree.RandomId(),
-                    Format(Trailing(aomds.GetLastToken().GetNextToken()))))
+            element: statement,
+            after: Space.EMPTY,
+            markers: trailingComma
+                ? Markers.EMPTY.Add(marker: new TrailingComma(Id: Core.Tree.RandomId(),
+                    Suffix: Format(Trailing(aomds.GetLastToken().GetNextToken()))))
                 : Markers.EMPTY
         );
     }
 
     public override J? VisitArrayCreationExpression(ArrayCreationExpressionSyntax node)
     {
+
+        var initializer = Convert<Cs.InitializerExpression>(node.Initializer);
         return new J.NewArray(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            Convert<TypeTree>(node.Type.ElementType),
-            node.Type.RankSpecifiers.Select(r => Convert<J.ArrayDimension>(r)!).ToList(),
-            node.Initializer != null
-                ? new JContainer<Expression>(
-                    Format(Leading(node.Initializer.OpenBraceToken)),
-                    node.Initializer.Expressions.Select(e =>
-                            new JRightPadded<Expression>(Convert<Expression>(e)!, Format(Trailing(e)), Markers.EMPTY))
-                        .ToList(),
-                    Markers.EMPTY
-                )
-                : null,
-            MapType(node)
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            typeExpression: Convert<TypeTree>(node.Type.ElementType),
+            dimensions: node.Type.RankSpecifiers.Select(selector: r => Convert<J.ArrayDimension>(r)!).ToList(),
+            initializer: initializer?.Padding.Expressions,
+            type: MapType( node)
         );
     }
 
     public override J? VisitImplicitArrayCreationExpression(ImplicitArrayCreationExpressionSyntax node)
     {
+        var initializer = Convert<Cs.InitializerExpression>(node.Initializer);
         return new J.NewArray(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            null,
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            typeExpression: null,
+            dimensions:
             [ new J.ArrayDimension(
-                Core.Tree.RandomId(),
-                Format(Leading(node.OpenBracketToken)),
-                Markers.EMPTY,
-                JRightPadded.Create<Expression>(new Cs.ArrayRankSpecifier(
-                    Core.Tree.RandomId(),
-                    Space.EMPTY,
-                    Markers.EMPTY,
-                    JContainer.Create(node.Commas.Select(c => JRightPadded.Create<Expression>(new J.Empty(Core.Tree.RandomId(), Format(Leading(c)), Markers.EMPTY), Format(Trailing(c)))).ToList())))) ],
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.OpenBracketToken)),
+                markers: Markers.EMPTY,
+                index: JRightPadded.Create<Expression>(element: new Cs.ArrayRankSpecifier(
+                    id: Core.Tree.RandomId(),
+                    prefix: Space.EMPTY,
+                    markers: Markers.EMPTY,
+                    sizes: JContainer.Create(elements: node.Commas.Select(selector: c => JRightPadded.Create<Expression>(element: new J.Empty(id: Core.Tree.RandomId(), prefix: Format(Leading(c)), markers: Markers.EMPTY), after: Format(Trailing(c)))).ToList())))) ],
                 // node.Commas.Select(c => new J.ArrayDimension(
                 // Core.Tree.RandomId(),
                 // Format(Leading(c)),
                 // Markers.EMPTY,
                 // JRightPadded.Create<Expression>(new J.Empty(Core.Tree.RandomId(), Space.EMPTY, Markers.EMPTY)))).ToList(),
-            new JContainer<Expression>(
-                Format(Leading(node.Initializer.OpenBraceToken)),
-                node.Initializer.Expressions.Select(e =>
-                        new JRightPadded<Expression>(Convert<Expression>(e)!, Format(Trailing(e)), Markers.EMPTY))
-                    .ToList(),
-                Markers.EMPTY),
-            MapType(node)
+            initializer: initializer?.Padding.Expressions,
+            type: MapType( node)
         );
     }
 
@@ -2380,34 +2351,34 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitCollectionExpression(CollectionExpressionSyntax node)
     {
         return new Cs.CollectionExpression(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            node.Elements.Count == 0
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            elements: node.Elements.Count == 0
                 ?
                 [
                     new JRightPadded<Expression>(
-                        new J.Empty(
-                            Core.Tree.RandomId(),
-                            Format(Trailing(node.OpenBracketToken)),
-                            Markers.EMPTY
+                        element: new J.Empty(
+                            id: Core.Tree.RandomId(),
+                            prefix: Format(Trailing(node.OpenBracketToken)),
+                            markers: Markers.EMPTY
                         ),
-                        Space.EMPTY,
-                        node.CloseBracketToken.GetPreviousToken().IsKind(SyntaxKind.CommaToken)
-                            ? Markers.EMPTY.Add(new TrailingComma(Core.Tree.RandomId(),
-                                Format(Leading(node.CloseBracketToken))))
+                        after: Space.EMPTY,
+                        markers: node.CloseBracketToken.GetPreviousToken().IsKind(SyntaxKind.CommaToken)
+                            ? Markers.EMPTY.Add(marker: new TrailingComma(Id: Core.Tree.RandomId(),
+                                Suffix: Format(Leading(node.CloseBracketToken))))
                             : Markers.EMPTY
                     )
                 ]
-                : node.Elements.Select(e => new JRightPadded<Expression>(
-                    Convert<Expression>(e)!,
-                    Format(Trailing(e)),
-                    e == node.Elements.Last() && e.GetLastToken().GetNextToken().IsKind(SyntaxKind.CommaToken)
-                        ? Markers.EMPTY.Add(new TrailingComma(Core.Tree.RandomId(),
-                            Format(Trailing(e.GetLastToken().GetNextToken()))))
+                : node.Elements.Select(selector: e => new JRightPadded<Expression>(
+                    element: Convert<Expression>(e)!,
+                    after: Format(Trailing(e)),
+                    markers: e == node.Elements.Last() && e.GetLastToken().GetNextToken().IsKind(SyntaxKind.CommaToken)
+                        ? Markers.EMPTY.Add(marker: new TrailingComma(Id: Core.Tree.RandomId(),
+                            Suffix: Format(Trailing(e.GetLastToken().GetNextToken()))))
                         : Markers.EMPTY
                 )).ToList(),
-            MapType(node)
+            type: MapType( node)
         );
     }
 
@@ -2491,9 +2462,9 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitOmittedArraySizeExpression(OmittedArraySizeExpressionSyntax node)
     {
         return new J.Empty(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY
         );
     }
 
@@ -2501,165 +2472,280 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     {
         // This was added in C# 6.0
         return new Cs.InterpolatedString(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            node.StringStartToken.ToString(),
-            node.Contents.Count == 0
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            start: node.StringStartToken.ToString(),
+            parts: node.Contents.Count == 0
                 ?
                 [
                     new JRightPadded<Expression>(
-                        new J.Empty(
-                            Core.Tree.RandomId(),
-                            Format(Trailing(node.StringStartToken)),
-                            Markers.EMPTY
+                        element: new J.Empty(
+                            id: Core.Tree.RandomId(),
+                            prefix: Format(Trailing(node.StringStartToken)),
+                            markers: Markers.EMPTY
                         ),
-                        Space.EMPTY,
-                        Markers.EMPTY
+                        after: Space.EMPTY,
+                        markers: Markers.EMPTY
                     )
                 ]
-                : node.Contents.Select(c => new JRightPadded<Expression>(
-                    Convert<Expression>(c)!,
-                    Format(Trailing(c)),
-                    Markers.EMPTY
+                : node.Contents.Select(selector: c => new JRightPadded<Expression>(
+                    element: Convert<Expression>(c)!,
+                    after: Format(Trailing(c)),
+                    markers: Markers.EMPTY
                 )).ToList(),
-            node.StringEndToken.ToString()
+            end: node.StringEndToken.ToString()
         );
     }
 
     public override J? VisitIsPatternExpression(IsPatternExpressionSyntax node)
     {
-        // todo: handle  ConstantPatternSyntax (such as "something is true")
-        if (node.Pattern is DeclarationPatternSyntax dp)
-        {
-            return new J.InstanceOf(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                new JRightPadded<Expression>(
-                    Convert<Expression>(node.Expression)!,
-                    Format(Trailing(node.Expression)),
-                    Markers.EMPTY),
-                Convert<TypeTree>(dp.Type)!,
-                Convert<J>(dp.Designation),
-                MapType(node)
-            );
-        }
+        return new Cs.IsPattern(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            expression: Convert<Expression>(node.Expression)!,
+            JLeftPadded.Create(Convert<Cs.Pattern>(node.Pattern)!, Format(Leading(node.IsKeyword))));
+        // return node.Pattern switch
+        // {
+        //     DeclarationPatternSyntax dp => new J.InstanceOf(
+        //         id: Core.Tree.RandomId(),
+        //         prefix: Format(Leading(node)),
+        //         markers: Markers.EMPTY,
+        //         expression: new JRightPadded<Expression>(
+        //             element: Convert<Expression>(node.Expression)!,
+        //             after: Format(Trailing(node.Expression)),
+        //             markers: Markers.EMPTY),
+        //         clazz: Convert<TypeTree>(dp.Type)!,
+        //         pattern: Convert<J>(dp.Designation),
+        //         type: MapType(node)
+        //     ),
+        //     VarPatternSyntax varPattern => new J.InstanceOf(
+        //         id: Core.Tree.RandomId(),
+        //         prefix: Format(Leading(node)),
+        //         markers: Markers.EMPTY,
+        //         expression: new JRightPadded<Expression>(
+        //             element: Convert<Expression>(node.Expression)!,
+        //             after: Format(Trailing(node.Expression)),
+        //             markers: Markers.EMPTY),
+        //         clazz: MapIdentifier(varPattern.VarKeyword, MapType(varPattern)),
+        //         pattern: Convert<J>(varPattern.Designation),
+        //         type: MapType(node)
+        //     ),
+        //     ConstantPatternSyntax constantPattern => new J.InstanceOf(
+        //         id: Core.Tree.RandomId(),
+        //         prefix: Format(Leading(node)),
+        //         markers: Markers.EMPTY,
+        //         expression: new JRightPadded<Expression>(
+        //             element: Convert<Expression>(node.Expression)!,
+        //             after: Format(Trailing(node.Expression)),
+        //             markers: Markers.EMPTY),
+        //         clazz: new J.Empty(
+        //             id: Core.Tree.RandomId(),
+        //             prefix: Space.EMPTY,
+        //             markers: Markers.EMPTY),
+        //         pattern: Convert<J>(constantPattern.Expression),
+        //         type: MapType(node)
+        //     ),
+        //     UnaryPatternSyntax unaryPattern => new J.InstanceOf(
+        //         id: Core.Tree.RandomId(),
+        //         prefix: Format(Leading(node)),
+        //         markers: Markers.EMPTY,
+        //         expression: new JRightPadded<Expression>(
+        //             element: Convert<Expression>(node.Expression)!,
+        //             after: Format(Trailing(node.Expression)),
+        //             markers: Markers.EMPTY),
+        //         clazz: Convert<TypeTree>(dp.Type),
+        //         pattern: Convert<J>(unaryPattern),
+        //         type: MapType(node)
+        //     ),
+        //     _ => base.VisitIsPatternExpression(node)
+        // };
 
-        return base.VisitIsPatternExpression(node);
     }
 
     public override J? VisitThrowExpression(ThrowExpressionSyntax node)
     {
         return new Cs.StatementExpression(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new J.Throw(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                Convert<Expression>(node.Expression)!
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            statement: new J.Throw(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                exception: Convert<Expression>(node.Expression)!
             )
         );
     }
 
     public override J? VisitWhenClause(WhenClauseSyntax node)
     {
-        // This was added in C# 7.0
-        return base.VisitWhenClause(node);
+        return Convert<Expression>(node.Condition);
     }
 
     public override J? VisitDiscardPattern(DiscardPatternSyntax node)
     {
-        return base.VisitDiscardPattern(node);
+        return new Cs.DiscardPattern(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            type: MapType(node));
     }
 
     public override J? VisitDeclarationPattern(DeclarationPatternSyntax node)
     {
-        return base.VisitDeclarationPattern(node);
+        return new Cs.TypePattern(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            typeIdentifier: MapTypeTree(node.Type),
+            designation: Convert<Cs.VariableDesignation>(node.Designation)
+        );
     }
 
     public override J? VisitVarPattern(VarPatternSyntax node)
     {
-        return base.VisitVarPattern(node);
+        return new Cs.VarPattern(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            designation: Convert<Cs.VariableDesignation>(node.Designation)!
+        );
     }
 
     public override J? VisitRecursivePattern(RecursivePatternSyntax node)
     {
-        return base.VisitRecursivePattern(node);
+        return new Cs.RecursivePattern(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            typeQualifier: node.Type != null ? MapTypeTree(node.Type) : null,
+            positionalPattern: Convert<Cs.PositionalPatternClause>(node.PositionalPatternClause),
+            propertyPattern: Convert<Cs.PropertyPatternClause>(node.PropertyPatternClause),
+            designation: Convert<Cs.VariableDesignation>(node.Designation)
+        );
     }
 
     public override J? VisitPositionalPatternClause(PositionalPatternClauseSyntax node)
     {
-        return base.VisitPositionalPatternClause(node);
+        return new Cs.PositionalPatternClause(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            subpatterns: ToJContainer<SubpatternSyntax, Cs.Subpattern>(node.Subpatterns, node.OpenParenToken));
     }
 
     public override J? VisitPropertyPatternClause(PropertyPatternClauseSyntax node)
     {
-        return base.VisitPropertyPatternClause(node);
+        return new Cs.PropertyPatternClause(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            subpatterns: ToJContainer<SubpatternSyntax, Cs.Subpattern>(node.Subpatterns, node.OpenBraceToken));
     }
 
     public override J? VisitConstantPattern(ConstantPatternSyntax node)
     {
-        return base.VisitConstantPattern(node);
+        return new Cs.ConstantPattern(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            value: Convert<Expression>(node.Expression)!
+        );
     }
 
     public override J? VisitParenthesizedPattern(ParenthesizedPatternSyntax node)
     {
-        return base.VisitParenthesizedPattern(node);
+        return new Cs.ParenthesizedPattern(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            pattern: ToJContainer<PatternSyntax, Cs.Pattern>([node.Pattern], node.OpenParenToken));
     }
 
     public override J? VisitRelationalPattern(RelationalPatternSyntax node)
     {
-        return new J.Binary(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new J.Empty(
-                Core.Tree.RandomId(),
-                Space.EMPTY,
-                Markers.EMPTY
-            ),
-            new JLeftPadded<J.Binary.Type>(
-                Format(Leading(node.OperatorToken)),
-                MapBinaryExpressionOperator(node.OperatorToken),
-                Markers.EMPTY),
-            Convert<Expression>(node.Expression)!,
-            MapType(node)
+        var operatorType = node.OperatorToken.Kind() switch
+        {
+            SyntaxKind.LessThanToken => Cs.RelationalPattern.OperatorType.LessThan,
+            SyntaxKind.LessThanEqualsToken => Cs.RelationalPattern.OperatorType.LessThanOrEqual,
+            SyntaxKind.GreaterThanToken => Cs.RelationalPattern.OperatorType.GreaterThan,
+            SyntaxKind.GreaterThanEqualsToken => Cs.RelationalPattern.OperatorType.GreaterThanOrEqual,
+            _ => throw new InvalidOperationException($"Unsupported operator '{node.OperatorToken}' in {nameof(RelationalPatternSyntax)}")
+        };
+        return new Cs.RelationalPattern(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            @operator: JLeftPadded.Create(operatorType, Format(Leading(node.OperatorToken))),
+            value: Convert<Expression>(node.Expression)!
         );
     }
 
     public override J? VisitTypePattern(TypePatternSyntax node)
     {
-        return base.VisitTypePattern(node);
+        return new Cs.TypePattern(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            typeIdentifier: MapTypeTree(node.Type),
+            designation: null
+        );
     }
 
     public override J? VisitUnaryPattern(UnaryPatternSyntax node)
     {
-        return base.VisitUnaryPattern(node);
+        return new Cs.UnaryPattern(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            @operator: MapKeyword(node.OperatorToken),
+            pattern: Convert<Cs.Pattern>(node.Pattern)!
+        );
     }
 
+    private Cs.Keyword MapKeyword(SyntaxToken keyword)
+    {
+        if (!Enum.TryParse(keyword.ValueText, true, out Cs.Keyword.KeywordKind keywordKind))
+            throw new InvalidOperationException($"Unable to parse '{keyword}' token as {nameof(Cs.Keyword)}.{nameof(Cs.Keyword.KeywordKind)} enum");
+        return new Cs.Keyword(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(keyword)),
+            markers: Markers.EMPTY,
+            kind: keywordKind
+        );
+    }
     public override J? VisitListPattern(ListPatternSyntax node)
     {
-        return base.VisitListPattern(node);
+        return new Cs.ListPattern(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            patterns: ToJContainer<PatternSyntax, Cs.Pattern>(node.Patterns, node.OpenBracketToken),
+            designation: Convert<Cs.VariableDesignation>(node.Designation)
+        );
     }
 
     public override J? VisitSlicePattern(SlicePatternSyntax node)
     {
-        return base.VisitSlicePattern(node);
+        return new Cs.SlicePattern(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY
+        );
     }
 
     public override J? VisitInterpolatedStringText(InterpolatedStringTextSyntax node)
     {
         return new J.Literal(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            node.TextToken.Text,
-            node.TextToken.Text,
-            null,
-            (JavaType.Primitive)MapType(node)
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            value: node.TextToken.Text,
+            valueSource: node.TextToken.Text,
+            unicodeEscapes: null,
+            type: (JavaType.Primitive)MapType( node)
         );
     }
 
@@ -2671,49 +2757,49 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitInterpolationFormatClause(InterpolationFormatClauseSyntax node)
     {
         return new J.Literal(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            node.FormatStringToken.Text,
-            node.FormatStringToken.Text,
-            null,
-            (JavaType.Primitive)MapType(node)
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            value: node.FormatStringToken.Text,
+            valueSource: node.FormatStringToken.Text,
+            unicodeEscapes: null,
+            type: (JavaType.Primitive)MapType( node)
         );
     }
 
     public override J? VisitGlobalStatement(GlobalStatementSyntax node)
     {
-        return node.Statement.Accept(this);
+        return node.Statement.Accept(visitor: this);
     }
 
     public override J? VisitLocalFunctionStatement(LocalFunctionStatementSyntax node)
     {
         return new J.MethodDeclaration(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            [],
-            MapModifiers(node.Modifiers),
-            Visit(node.TypeParameterList) as J.TypeParameters,
-            Convert<TypeTree>(node.ReturnType),
-            new J.MethodDeclaration.IdentifierWithAnnotations(
-                new J.Identifier(
-                    Core.Tree.RandomId(),
-                    Format(Leading(node.Identifier)),
-                    Markers.EMPTY,
-                    (Enumerable.Empty<J.Annotation>() as IList<J.Annotation>)!,
-                    node.Identifier.Text,
-                    null,
-                    null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            leadingAnnotations: [],
+            modifiers: MapModifiers(stl: node.Modifiers),
+            typeParameters: Visit(node.TypeParameterList) as J.TypeParameters,
+            returnTypeExpression: Convert<TypeTree>(node.ReturnType),
+            name: new J.MethodDeclaration.IdentifierWithAnnotations(
+                identifier: new J.Identifier(
+                    id: Core.Tree.RandomId(),
+                    prefix: Format(Leading(node.Identifier)),
+                    markers: Markers.EMPTY,
+                    annotations: (Enumerable.Empty<J.Annotation>() as IList<J.Annotation>)!,
+                    simpleName: node.Identifier.Text,
+                    type: null,
+                    fieldType: null
                 ),
-                []
+                annotations: []
             ),
-            MapParameters<Statement>(node.ParameterList)!,
-            null,
-            node.Body != null ? Convert<J.Block>(node.Body) :
+            parameters: MapParameters<Statement>(pls: node.ParameterList)!,
+            throws: null,
+            body: node.Body != null ? Convert<J.Block>(node.Body) :
             node.ExpressionBody != null ? Convert<J.Block>(node.ExpressionBody) : null,
-            null,
-            MapType(node) as JavaType.Method
+            defaultValue: null,
+            methodType: MapType( node) as JavaType.Method
         );
     }
 
@@ -2721,25 +2807,25 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     {
         var usingModifier = node.UsingKeyword.IsKind(SyntaxKind.UsingKeyword)
             ? new J.Modifier(
-                Core.Tree.RandomId(),
-                Format(Leading(node.UsingKeyword)),
-                Markers.EMPTY,
-                "using",
-                J.Modifier.Type.LanguageExtension,
-                []
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.UsingKeyword)),
+                markers: Markers.EMPTY,
+                keyword: "using",
+                modifierType: J.Modifier.Types.LanguageExtension,
+                annotations: []
             )
             : null;
 
         return new J.VariableDeclarations(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            [],
-            usingModifier != null ? [usingModifier, .. MapModifiers(node.Modifiers)] : MapModifiers(node.Modifiers),
-            Visit(node.Declaration.Type) as TypeTree,
-            null!,
-            [],
-            node.Declaration.Variables.Select(MapVariable).ToList()
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            leadingAnnotations: [],
+            modifiers: usingModifier != null ? [usingModifier, .. MapModifiers(stl: node.Modifiers)] : MapModifiers(stl: node.Modifiers),
+            typeExpression: Visit(node.Declaration.Type) as TypeTree,
+            varargs: null!,
+            dimensionsBeforeName: [],
+            variables: node.Declaration.Variables.Select(selector: MapVariable).ToList()
         );
     }
 
@@ -2747,52 +2833,52 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     {
         var namedVariable = (Visit(variableDeclarator) as J.VariableDeclarations.NamedVariable)!;
         return new JRightPadded<J.VariableDeclarations.NamedVariable>(
-            namedVariable,
-            Format(Trailing(variableDeclarator)),
-            Markers.EMPTY
+            element: namedVariable,
+            after: Format(Trailing(variableDeclarator)),
+            markers: Markers.EMPTY
         );
     }
 
     public override J? VisitVariableDeclaration(VariableDeclarationSyntax node)
     {
         return new J.VariableDeclarations(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            [],
-            [],
-            Visit(node.Type) as TypeTree,
-            null!,
-            [],
-            node.Variables.Select(MapVariable).ToList()
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            leadingAnnotations: [],
+            modifiers: [],
+            typeExpression: Visit(node.Type) as TypeTree,
+            varargs: null!,
+            dimensionsBeforeName: [],
+            variables: node.Variables.Select(selector: MapVariable).ToList()
         );
     }
 
     public override J? VisitVariableDeclarator(VariableDeclaratorSyntax node)
     {
-        var javaType = (MapType(node) as JavaType.Variable)!;
+        var javaType = (MapType( node) as JavaType.Variable)!;
         return new J.VariableDeclarations.NamedVariable(
-            Core.Tree.RandomId(),
-            Format(Leading(node.Identifier)),
-            Markers.EMPTY,
-            new J.Identifier(
-                Core.Tree.RandomId(),
-                Space.EMPTY,
-                Markers.EMPTY,
-                [],
-                node.Identifier.Text,
-                javaType.Type,
-                javaType
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node.Identifier)),
+            markers: Markers.EMPTY,
+            name: new J.Identifier(
+                id: Core.Tree.RandomId(),
+                prefix: Space.EMPTY,
+                markers: Markers.EMPTY,
+                annotations: [],
+                simpleName: node.Identifier.Text,
+                type: javaType.Type,
+                fieldType: javaType
             ),
-            MapArrayDimensions(node.ArgumentList),
-            node.Initializer != null
+            dimensionsAfterName: MapArrayDimensions(nodeArgumentList: node.ArgumentList),
+            initializer: node.Initializer != null
                 ? new JLeftPadded<Expression>(
-                    Format(Leading(node.Initializer)),
-                    Convert<Expression>(node.Initializer.Value)!,
-                    Markers.EMPTY
+                    before: Format(Leading(node.Initializer)),
+                    element: Convert<Expression>(node.Initializer.Value)!,
+                    markers: Markers.EMPTY
                 )
                 : null,
-            javaType
+            variableType: javaType
         );
     }
 
@@ -2809,66 +2895,66 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitSingleVariableDesignation(SingleVariableDesignationSyntax node)
     {
         return new Cs.SingleVariableDesignation(
-            Core.Tree.RandomId(),
-            Space.EMPTY,
-            Markers.EMPTY,
-            MapIdentifier(node.Identifier, MapType(node)));
+            id: Core.Tree.RandomId(),
+            prefix: Space.EMPTY,
+            markers: Markers.EMPTY,
+            name: MapIdentifier(identifier: node.Identifier, type: MapType( node)));
     }
 
     public override J? VisitDiscardDesignation(DiscardDesignationSyntax node)
     {
         return new Cs.DiscardVariableDesignation(
-            Core.Tree.RandomId(),
-            Space.EMPTY,
-            Markers.EMPTY,
-            MapIdentifier(node.UnderscoreToken, MapType(node)));
+            id: Core.Tree.RandomId(),
+            prefix: Space.EMPTY,
+            markers: Markers.EMPTY,
+            discard: MapIdentifier(identifier: node.UnderscoreToken, type: MapType( node)));
     }
 
     public override J? VisitParenthesizedVariableDesignation(ParenthesizedVariableDesignationSyntax node)
     {
         return new Cs.ParenthesizedVariableDesignation(
-            Core.Tree.RandomId(),
-            Space.EMPTY,
-            Markers.EMPTY,
-            ToJContainer<VariableDesignationSyntax, Cs.VariableDesignation>(node.Variables, node.OpenParenToken),
-            MapType(node));
+            id: Core.Tree.RandomId(),
+            prefix: Space.EMPTY,
+            markers: Markers.EMPTY,
+            variables: ToJContainer<VariableDesignationSyntax, Cs.VariableDesignation>(syntaxList: node.Variables, openingToken: node.OpenParenToken),
+            type: MapType( node));
     }
 
     public override J? VisitExpressionStatement(ExpressionStatementSyntax node)
     {
         var j = Convert<J>(node.Expression);
-        if (j is Statement)
-            return j;
+        // if (j is Statement)
+        //     return j;
 
         return new Cs.ExpressionStatement(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            (j as Expression)!
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            expression: (j as Expression)!
         );
     }
 
     public override J? VisitEmptyStatement(EmptyStatementSyntax node)
     {
         return new J.Empty(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY
         );
     }
 
     public override J? VisitLabeledStatement(LabeledStatementSyntax node)
     {
         return new J.Label(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new JRightPadded<J.Identifier>(
-                MapIdentifier(node.Identifier, null),
-                Format(Trailing(node.Identifier)),
-                Markers.EMPTY
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            name: new JRightPadded<J.Identifier>(
+                element: MapIdentifier(identifier: node.Identifier, type: null),
+                after: Format(Trailing(node.Identifier)),
+                markers: Markers.EMPTY
             ),
-            Convert<Statement>(node.Statement)!
+            statement: Convert<Statement>(node.Statement)!
         );
     }
 
@@ -2880,20 +2966,20 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitContinueStatement(ContinueStatementSyntax node)
     {
         return new J.Continue(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            label: null
         );
     }
 
     public override J? VisitReturnStatement(ReturnStatementSyntax node)
     {
         return new J.Return(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            node.Expression != null ? Convert<Expression>(node.Expression!) : null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            expression: node.Expression != null ? Convert<Expression>(node.Expression!) : null
         );
     }
 
@@ -2901,40 +2987,49 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     {
         // FIXME: NODE has AttributesList
         return new J.Throw(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            node.Expression != null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            exception: node.Expression != null
                 ? Convert<Expression>(node.Expression)!
                 : new J.Empty(
-                    Core.Tree.RandomId(),
-                    Format(Leading(node.SemicolonToken)),
-                    Markers.EMPTY
+                    id: Core.Tree.RandomId(),
+                    prefix: Format(Leading(node.SemicolonToken)),
+                    markers: Markers.EMPTY
                 )
         );
     }
 
     public override J? VisitYieldStatement(YieldStatementSyntax node)
     {
-        return base.VisitYieldStatement(node);
+        return new Cs.Yield(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            returnOrBreakKeyword: new Cs.Keyword(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.ReturnOrBreakKeyword)),
+                markers: Markers.EMPTY,
+                kind: node.ReturnOrBreakKeyword.IsKind(SyntaxKind.ReturnKeyword) ? Cs.Keyword.KeywordKind.Return : Cs.Keyword.KeywordKind.Break),
+            expression: Convert<Expression>(node.Expression)!);
     }
 
     public override J? VisitWhileStatement(WhileStatementSyntax node)
     {
         return new J.WhileLoop(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new J.ControlParentheses<Expression>(
-                Core.Tree.RandomId(),
-                Format(Leading(node.OpenParenToken)),
-                Markers.EMPTY,
-                new JRightPadded<Expression>(
-                    Convert<Expression>(node.Condition)!,
-                    Format(Leading(node.CloseParenToken)),
-                    Markers.EMPTY)
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            condition: new J.ControlParentheses<Expression>(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.OpenParenToken)),
+                markers: Markers.EMPTY,
+                tree: new JRightPadded<Expression>(
+                    element: Convert<Expression>(node.Condition)!,
+                    after: Format(Leading(node.CloseParenToken)),
+                    markers: Markers.EMPTY)
             ),
-            MapStatement(node.Statement)
+            body: MapStatement(statementSyntax: node.Statement)
         );
     }
 
@@ -2946,117 +3041,131 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitForStatement(ForStatementSyntax node)
     {
         return new J.ForLoop(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new J.ForLoop.Control(
-                Core.Tree.RandomId(),
-                Format(Leading(node.OpenParenToken)),
-                Markers.EMPTY,
-                node.Declaration == null && node.Initializers.Count == 0
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            loopControl: new J.ForLoop.Control(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.OpenParenToken)),
+                markers: Markers.EMPTY,
+                init: node.Declaration == null && node.Initializers.Count == 0
                     ?
                     [
-                        JRightPadded<Statement>.Build(new J.Empty(Core.Tree.RandomId(),
-                            Format(Leading(node.FirstSemicolonToken)), Markers.EMPTY))
+                        JRightPadded.Create<Statement>(element: new J.Empty(id: Core.Tree.RandomId(),
+                            prefix: Format(Leading(node.FirstSemicolonToken)), markers: Markers.EMPTY))
                     ]
                     : node.Declaration != null
                         ?
                         [
-                            new JRightPadded<Statement>(Convert<Statement>(node.Declaration!)!,
-                                Format(Leading(node.FirstSemicolonToken)), Markers.EMPTY)
+                            new JRightPadded<Statement>(element: Convert<Statement>(node.Declaration!)!,
+                                after: Format(Leading(node.FirstSemicolonToken)), markers: Markers.EMPTY)
                         ]
-                        : node.Initializers.Select(MapExpressionStatement).ToList(),
-                node.Condition != null
-                    ? MapExpression(node.Condition)
-                    : JRightPadded<Expression>.Build(
-                        new J.Empty(Core.Tree.RandomId(), Format(Leading(node.SecondSemicolonToken)), Markers.EMPTY)
+                        : node.Initializers.Select(selector: MapExpressionStatement).ToList(),
+                condition: node.Condition != null
+                    ? MapExpression(es: node.Condition)
+                    : JRightPadded.Create<Expression>(
+                        element: new J.Empty(id: Core.Tree.RandomId(), prefix: Format(Leading(node.SecondSemicolonToken)), markers: Markers.EMPTY)
                     ),
-                node.Incrementors.Count == 0
+                update: node.Incrementors.Count == 0
                     ?
                     [
-                        JRightPadded<Statement>.Build(new J.Empty(Core.Tree.RandomId(),
-                            Format(Leading(node.CloseParenToken)), Markers.EMPTY))
+                        JRightPadded.Create<Statement>(element: new J.Empty(id: Core.Tree.RandomId(),
+                            prefix: Format(Leading(node.CloseParenToken)), markers: Markers.EMPTY))
                     ]
-                    : node.Incrementors.Select(MapExpressionStatement).ToList()
+                    : node.Incrementors.Select(selector: MapExpressionStatement).ToList()
             ),
-            MapStatement(node.Statement)
+            body: MapStatement(statementSyntax: node.Statement)
         );
     }
 
     public override J? VisitForEachStatement(ForEachStatementSyntax node)
     {
-        var javaType = (MapType(node) as JavaType.Variable)!;
+        var javaType = (MapType( node) as JavaType.Variable)!;
         return new J.ForEachLoop(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new J.ForEachLoop.Control(
-                Core.Tree.RandomId(),
-                Format(Leading(node.OpenParenToken)),
-                Markers.EMPTY,
-                new JRightPadded<J.VariableDeclarations>(
-                    new J.VariableDeclarations(
-                        Core.Tree.RandomId(),
-                        Format(Leading(node.Type)),
-                        Markers.EMPTY,
-                        [],
-                        [],
-                        Convert<TypeTree>(node.Type),
-                        null!,
-                        [],
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            loopControl: new J.ForEachLoop.Control(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.OpenParenToken)),
+                markers: Markers.EMPTY,
+                variable: new JRightPadded<J.VariableDeclarations>(
+                    element: new J.VariableDeclarations(
+                        id: Core.Tree.RandomId(),
+                        prefix: Format(Leading(node.Type)),
+                        markers: Markers.EMPTY,
+                        leadingAnnotations: [],
+                        modifiers: [],
+                        typeExpression: Convert<TypeTree>(node.Type),
+                        varargs: null!,
+                        dimensionsBeforeName: [],
+                        variables:
                         [
                             new JRightPadded<J.VariableDeclarations.NamedVariable>(
-                                new J.VariableDeclarations.NamedVariable(
-                                    Core.Tree.RandomId(),
-                                    Format(Leading(node.Identifier)),
-                                    Markers.EMPTY,
-                                    new J.Identifier(
-                                        Core.Tree.RandomId(),
-                                        Space.EMPTY,
-                                        Markers.EMPTY,
-                                        [],
-                                        node.Identifier.Text,
-                                        javaType.Type,
-                                        javaType
+                                element: new J.VariableDeclarations.NamedVariable(
+                                    id: Core.Tree.RandomId(),
+                                    prefix: Format(Leading(node.Identifier)),
+                                    markers: Markers.EMPTY,
+                                    name: new J.Identifier(
+                                        id: Core.Tree.RandomId(),
+                                        prefix: Space.EMPTY,
+                                        markers: Markers.EMPTY,
+                                        annotations: [],
+                                        simpleName: node.Identifier.Text,
+                                        type: javaType.Type,
+                                        fieldType: javaType
                                     ),
-                                    [],
-                                    null,
-                                    javaType
+                                    dimensionsAfterName: [],
+                                    initializer: null,
+                                    variableType: javaType
                                 ),
-                                Space.EMPTY,
-                                Markers.EMPTY
+                                after: Space.EMPTY,
+                                markers: Markers.EMPTY
                             )
                         ]
                     ),
-                    Format(Trailing(node.Identifier)),
-                    Markers.EMPTY
+                    after: Format(Trailing(node.Identifier)),
+                    markers: Markers.EMPTY
                 ),
-                MapExpression(node.Expression)
+                iterable: MapExpression(es: node.Expression)
             ),
-            MapStatement(node.Statement)
+            body: MapStatement(statementSyntax: node.Statement)
         );
     }
 
     public override J? VisitForEachVariableStatement(ForEachVariableStatementSyntax node)
     {
-        return base.VisitForEachVariableStatement(node);
+        return new Cs.ForEachVariableLoop(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            controlElement: new Cs.ForEachVariableLoop.Control(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.OpenParenToken)),
+                markers: Markers.EMPTY,
+                variable: ToRightPadded<Expression>(node.Variable)!,
+                iterable: MapExpression(es: node.Expression)
+            ),
+            body: MapStatement(statementSyntax: node.Statement)
+        );
+
     }
 
     public override J? VisitUsingStatement(UsingStatementSyntax node)
     {
-        var statement = Convert<Statement>(node.Statement) ?? throw new InvalidOperationException("Statement is empty after conversion");
-        JRightPadded<Expression> expression = JRightPadded.Create(Convert<Expression>((SyntaxNode?)node.Expression ?? node.Declaration)!, Format(Leading(node.CloseParenToken)));
+        var statement = Convert<Statement>(node.Statement) ?? throw new InvalidOperationException(message: "Statement is empty after conversion");
+        JRightPadded<Expression> expression = JRightPadded.Create(element: Convert<Expression>((SyntaxNode?)node.Expression ?? node.Declaration)!, after: Format(Leading(node.CloseParenToken)));
         var usingStatement =
             new Cs.UsingStatement(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                VisitKeyword(node.AwaitKeyword),
-                JContainer.Create(new List<JRightPadded<Expression>>
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                awaitKeyword: VisitKeyword(node.AwaitKeyword),
+                expression: JContainer.Create(elements: new List<JRightPadded<Expression>>
                 {
                     expression
-                }, Format(Leading(node.OpenParenToken))),
-                statement);
+                }, space: Format(Leading(node.OpenParenToken))),
+                statement: statement);
         return usingStatement;
     }
 
@@ -3066,53 +3175,76 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             return null;
         var kind = token.Kind() switch
         {
-            SyntaxKind.AwaitKeyword => Cs.KeywordKind.Await,
-            SyntaxKind.RefKeyword => Cs.KeywordKind.Ref,
-            SyntaxKind.OutKeyword => Cs.KeywordKind.Out,
-            _ => throw new NotSupportedException($"Keyword is {token} supported.")
+            SyntaxKind.AwaitKeyword => Cs.Keyword.KeywordKind.Await,
+            SyntaxKind.RefKeyword => Cs.Keyword.KeywordKind.Ref,
+            SyntaxKind.OutKeyword => Cs.Keyword.KeywordKind.Out,
+            _ => throw new NotSupportedException(message: $"Keyword is {token} supported.")
         };
         return new Cs.Keyword(
-            Core.Tree.RandomId(),
-            Format(Leading(token)),
-            Markers.EMPTY,
-            kind);
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(token)),
+            markers: Markers.EMPTY,
+            kind: kind);
 
     }
 
     public override J? VisitFixedStatement(FixedStatementSyntax node)
     {
-        return base.VisitFixedStatement(node);
+
+        return new Cs.FixedStatement(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            declarations: ToControlParentheses<J.VariableDeclarations>(node.Declaration, node.OpenParenToken)!,
+            block: Convert<J.Block>(node.Statement)!
+        );
     }
 
     public override J? VisitCheckedStatement(CheckedStatementSyntax node)
     {
-        return base.VisitCheckedStatement(node);
+        return new Cs.CheckedStatement(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            block: Convert<J.Block>(node.Block)!
+        );
     }
 
     public override J? VisitUnsafeStatement(UnsafeStatementSyntax node)
     {
-        return base.VisitUnsafeStatement(node);
+        return new Cs.UnsafeStatement(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            block: Convert<J.Block>(node.Block)!
+        );
     }
 
     public override J? VisitLockStatement(LockStatementSyntax node)
     {
-        return base.VisitLockStatement(node);
+        return new Cs.LockStatement(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            expression: ToControlParentheses<Expression>(node.Expression, node.OpenParenToken)!,
+            statement: ToRightPadded<Statement>(node.Statement)!
+        );
     }
 
     public override J? VisitIfStatement(IfStatementSyntax node)
     {
         return new J.If(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new J.ControlParentheses<Expression>(
-                Core.Tree.RandomId(),
-                Format(Leading(node.OpenParenToken)),
-                Markers.EMPTY,
-                MapExpression(node.Condition)
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            ifCondition: new J.ControlParentheses<Expression>(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.OpenParenToken)),
+                markers: Markers.EMPTY,
+                tree: MapExpression(es: node.Condition)
             ),
-            MapStatement(node.Statement),
-            node.Else != null ? Convert<J.If.Else>(node.Else) : null
+            thenPart: MapStatement(statementSyntax: node.Statement),
+            elsePart: node.Else != null ? Convert<J.If.Else>(node.Else) : null
         );
     }
 
@@ -3121,15 +3253,15 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         var expression = Convert<Expression>(es)!;
 
         return new JRightPadded<Expression>(
-            expression,
-            Format(Trailing(es)),
-            Markers.EMPTY
+            element: expression,
+            after: Format(Trailing(es)),
+            markers: Markers.EMPTY
         );
     }
 
     private JRightPadded<Statement> MapExpressionStatement(ExpressionSyntax es)
     {
-        return MapExpressionStatement(es, false);
+        return MapExpressionStatement(es: es, isLastElement: false);
     }
 
     private JRightPadded<Statement> MapExpressionStatement(ExpressionSyntax es, bool isLastElement)
@@ -3138,25 +3270,25 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         var trailingComma = isLastElement && es.GetLastToken().GetNextToken().IsKind(SyntaxKind.CommaToken);
         if (j is Statement s)
             return new JRightPadded<Statement>(
-                s,
-                Format(Trailing(es)),
-                trailingComma
-                    ? Markers.EMPTY.Add(new TrailingComma(Core.Tree.RandomId(),
-                        Format(Trailing(es.GetLastToken().GetNextToken()))))
+                element: s,
+                after: Format(Trailing(es)),
+                markers: trailingComma
+                    ? Markers.EMPTY.Add(marker: new TrailingComma(Id: Core.Tree.RandomId(),
+                        Suffix: Format(Trailing(es.GetLastToken().GetNextToken()))))
                     : Markers.EMPTY
             );
 
         return new JRightPadded<Statement>(
-            new Cs.ExpressionStatement(
-                Core.Tree.RandomId(),
-                Format(Leading(es)),
-                Markers.EMPTY,
-                (j as Expression)!
+            element: new Cs.ExpressionStatement(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(es)),
+                markers: Markers.EMPTY,
+                expression: (j as Expression)!
             ),
-            Format(Trailing(es)),
-            trailingComma
-                ? Markers.EMPTY.Add(new TrailingComma(Core.Tree.RandomId(),
-                    Format(Trailing(es.GetLastToken().GetNextToken()))))
+            after: Format(Trailing(es)),
+            markers: trailingComma
+                ? Markers.EMPTY.Add(marker: new TrailingComma(Id: Core.Tree.RandomId(),
+                    Suffix: Format(Trailing(es.GetLastToken().GetNextToken()))))
                 : Markers.EMPTY
         );
     }
@@ -3164,151 +3296,141 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitElseClause(ElseClauseSyntax node)
     {
         return new J.If.Else(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            MapStatement(node.Statement)
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            body: MapStatement(statementSyntax: node.Statement)
         );
     }
 
     public override J? VisitSwitchStatement(SwitchStatementSyntax node)
     {
-        return new J.Switch(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new J.ControlParentheses<Expression>(
-                Core.Tree.RandomId(),
-                Format(Leading(node.OpenParenToken)),
-                node.OpenParenToken.IsKind(SyntaxKind.None)
-                    ? Markers.EMPTY.Add(new OmitParentheses(Core.Tree.RandomId()))
-                    : Markers.EMPTY,
-                MapExpression(node.Expression)
-            ),
-            new J.Block(
-                Core.Tree.RandomId(),
-                Format(Leading(node.OpenBraceToken)),
-                Markers.EMPTY,
-                new JRightPadded<bool>(false, Space.EMPTY, Markers.EMPTY),
-                node.Sections.SelectMany(MapSwitchCase).ToList(),
-                Format(Leading(node.CloseBraceToken))
-            )
+        Statement result = new Cs.SwitchStatement(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            expression: ToJContainer<ExpressionSyntax, Expression>([node.Expression], node.OpenParenToken),
+            sections: ToJContainer<SwitchSectionSyntax, Cs.SwitchSection>(node.Sections, node.OpenBraceToken)
         );
-    }
 
-    private IList<JRightPadded<Statement>> MapSwitchCase(SwitchSectionSyntax sss)
-    {
-        return sss.Labels.SkipLast(1)
-            .Select(sls =>
-            {
-                var statement = new J.Case(
-                    Core.Tree.RandomId(),
-                    Format(Leading(sls)),
-                    Markers.EMPTY,
-                    J.Case.Type.Statement,
-                    new JContainer<Expression>(
-                        Format(Leading(sls)),
-                        [
-                            MapSwitchCaseLabel(sls)
-                        ],
-                        Markers.EMPTY
-                    ),
-                    JContainer<Statement>.Build<Statement>(
-                        Format(Leading(sls.ColonToken)),
-                        [
-                        ],
-                        Markers.EMPTY
-                    ),
-                    null
-                );
-                return new JRightPadded<Statement>(
-                    statement,
-                    Space.EMPTY,
-                    Markers.EMPTY
-                );
-            })
-            .Append(
-                new JRightPadded<Statement>(
-                    new J.Case(
-                        Core.Tree.RandomId(),
-                        Format(Leading(sss.Labels.Last())),
-                        Markers.EMPTY,
-                        J.Case.Type.Statement,
-                        new JContainer<Expression>(
-                            Format(Leading(sss.Labels.Last())),
-                            [
-                                MapSwitchCaseLabel(sss.Labels.Last())
-                            ],
-                            Markers.EMPTY
-                        ),
-                        JContainer<Statement>.Build(
-                            Format(Leading(sss.Labels.Last().ColonToken)),
-                            sss.Statements.Select(MapStatement).ToList(),
-                            Markers.EMPTY
-                        ),
-                        null
-                    ),
-                    Space.EMPTY,
-                    Markers.EMPTY
-                ))
-            .ToList();
+        if (node.AttributeLists.Count > 0)
+        {
+            result = new Cs.AnnotatedStatement(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                attributeLists: MapAttributes(node.AttributeLists)!,
+                statement: result);
+
+        }
+
+        return result;
     }
 
 
     public override J? VisitSwitchSection(SwitchSectionSyntax node)
     {
-        return base.VisitSwitchSection(node);
+        return new Cs.SwitchSection(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            labels: node.Labels.Select(x => Convert<Cs.SwitchLabel>(x)!).ToList(),
+            statements: node.Statements.Select(selector: MapStatement).ToList()
+        );
+
+
     }
 
-    private JRightPadded<Expression> MapSwitchCaseLabel(SwitchLabelSyntax sls)
-    {
-        var expression = Convert<Expression>(sls)!;
-        return new JRightPadded<Expression>(
-            expression,
-            Space.EMPTY,
-            Markers.EMPTY
-        );
-    }
+    // private JRightPadded<Expression> MapSwitchCaseLabel(SwitchLabelSyntax sls)
+    // {
+    //     var expression = Convert<Expression>(sls)!;
+    //     return new JRightPadded<Expression>(
+    //         element: expression,
+    //         after: Space.EMPTY,
+    //         markers: Markers.EMPTY
+    //     );
+    // }
 
     public override J? VisitCasePatternSwitchLabel(CasePatternSwitchLabelSyntax node)
     {
-        return Convert<J>(node.Pattern);
+        return new Cs.CasePatternSwitchLabel(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            pattern: Convert<Cs.Pattern>(node.Pattern)!,
+            whenClause: ToLeftPadded<Expression>(node.WhenClause?.Condition),
+            colonToken: Format(Leading(node.ColonToken)));
     }
 
     public override J? VisitCaseSwitchLabel(CaseSwitchLabelSyntax node)
     {
-        return Convert<J>(node.Value);
+        Cs.Pattern pattern = node.Value switch
+        {
+            IdentifierNameSyntax identifier => new Cs.TypePattern(
+                id: Core.Tree.RandomId(),
+                prefix: Space.EMPTY,  //Format(Leading(node)),
+                markers: Markers.EMPTY,
+                typeIdentifier: Convert<TypeTree>(identifier)!,
+                designation: null),
+            _ => new Cs.ConstantPattern(
+            id: Core.Tree.RandomId(),
+            prefix: Space.EMPTY, //Format(Leading(node.Value)),
+            markers: Markers.EMPTY,
+            value: Convert<Expression>(node.Value)!),
+        };
+        return new Cs.CasePatternSwitchLabel(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            pattern: pattern,
+            whenClause: null,
+            colonToken: Format(Leading(node.ColonToken)));
     }
 
     public override J? VisitDefaultSwitchLabel(DefaultSwitchLabelSyntax node)
     {
-        return new J.Identifier(Core.Tree.RandomId(), Space.EMPTY, Markers.EMPTY, [], node.Keyword.Text, null, null);
+        return new Cs.DefaultSwitchLabel(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            colonToken: Format(Leading(node.ColonToken)));
     }
 
     public override J? VisitSwitchExpression(SwitchExpressionSyntax node)
     {
-        return base.VisitSwitchExpression(node);
+        return new Cs.SwitchExpression(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            expression: ToRightPadded<Expression>(node.GoverningExpression)!,
+            arms: ToJContainer<SwitchExpressionArmSyntax, Cs.SwitchExpressionArm>(node.Arms, node.OpenBraceToken));
     }
 
     public override J? VisitSwitchExpressionArm(SwitchExpressionArmSyntax node)
     {
-        return base.VisitSwitchExpressionArm(node);
+        return new Cs.SwitchExpressionArm(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            pattern: Convert<Cs.Pattern>(node.Pattern)!,
+            whenExpression: ToLeftPadded<Expression>(node.WhenClause?.Condition),
+            expression: ToLeftPadded<Expression>(node.Expression)!);
     }
 
     public override J? VisitTryStatement(TryStatementSyntax node)
     {
         return new J.Try(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            null,
-            Convert<J.Block>(node.Block)!,
-            node.Catches.Select(Convert<J.Try.Catch>).ToList()!,
-            node.Finally != null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            resources: null,
+            body: Convert<J.Block>(node.Block)!,
+            catches: node.Catches.Select(selector: Convert<J.Try.Catch>).ToList()!,
+            @finally: node.Finally != null
                 ? new JLeftPadded<J.Block>(
-                    Format(Leading(node.Finally)),
-                    Convert<J.Block>(node.Finally)!,
-                    Markers.EMPTY)
+                    before: Format(Leading(node.Finally)),
+                    element: Convert<J.Block>(node.Finally)!,
+                    markers: Markers.EMPTY)
                 : null
         );
     }
@@ -3326,20 +3448,20 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitExternAliasDirective(ExternAliasDirectiveSyntax node)
     {
         return new Cs.ExternAlias(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new JLeftPadded<J.Identifier>(
-                Format(Leading(node.AliasKeyword)),
-                MapIdentifier(node.Identifier, null),
-                Markers.EMPTY
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            identifier: new JLeftPadded<J.Identifier>(
+                before: Format(Leading(node.AliasKeyword)),
+                element: MapIdentifier(identifier: node.Identifier, type: null),
+                markers: Markers.EMPTY
             )
         );
     }
 
     public override J? VisitAttributeTargetSpecifier(AttributeTargetSpecifierSyntax node)
     {
-        return MapIdentifier(node.Identifier, null);
+        return MapIdentifier(identifier: node.Identifier, type: null);
     }
 
     public override J? VisitAttributeArgumentList(AttributeArgumentListSyntax node)
@@ -3366,44 +3488,44 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitConstructorConstraint(ConstructorConstraintSyntax node)
     {
         return new Cs.ConstructorConstraint(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY);
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY);
     }
 
     public override J? VisitClassOrStructConstraint(ClassOrStructConstraintSyntax node)
     {
         return new Cs.ClassOrStructConstraint(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            node.ClassOrStructKeyword.IsKind(SyntaxKind.ClassKeyword) ? Cs.ClassOrStructConstraint.TypeKind.Class : Cs.ClassOrStructConstraint.TypeKind.Struct);
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            kind: node.ClassOrStructKeyword.IsKind(SyntaxKind.ClassKeyword) ? Cs.ClassOrStructConstraint.TypeKind.Class : Cs.ClassOrStructConstraint.TypeKind.Struct);
     }
 
     public override J? VisitTypeConstraint(TypeConstraintSyntax node)
     {
         return new Cs.TypeConstraint(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            Convert<TypeTree>(node.Type)!);
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            typeExpression: Convert<TypeTree>(node.Type)!);
     }
 
     public override J? VisitDefaultConstraint(DefaultConstraintSyntax node)
     {
         return new Cs.DefaultConstraint(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY);
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY);
     }
 
     public override J? VisitAllowsConstraintClause(AllowsConstraintClauseSyntax node)
     {
         return new Cs.AllowsConstraintClause(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            JContainer.Create(ToRightPadded<AllowsConstraintSyntax, Cs.AllowsConstraint>(node.Constraints)));
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            expressions: JContainer.Create(elements: ToRightPadded<AllowsConstraintSyntax, Cs.AllowsConstraint>(syntaxList: node.Constraints)));
     }
 
     public override J? VisitRefStructConstraint(RefStructConstraintSyntax node)
@@ -3413,25 +3535,25 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitFieldDeclaration(FieldDeclarationSyntax node)
     {
-        var attributeLists = MapAttributes(node.AttributeLists);
+        var attributeLists = MapAttributes(m: node.AttributeLists);
         var variableDeclarations = new J.VariableDeclarations(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            [],
-            MapModifiers(node.Modifiers),
-            Convert<TypeTree>(node.Declaration.Type),
-            null,
-            [],
-            node.Declaration.Variables.Select(MapVariable).ToList()
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            leadingAnnotations: [],
+            modifiers: MapModifiers(stl: node.Modifiers),
+            typeExpression: Convert<TypeTree>(node.Declaration.Type),
+            varargs: null,
+            dimensionsBeforeName: [],
+            variables: node.Declaration.Variables.Select(selector: MapVariable).ToList()
         );
         return attributeLists != null
             ? new Cs.AnnotatedStatement(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                attributeLists,
-                variableDeclarations
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                attributeLists: attributeLists,
+                statement: variableDeclarations
             )
             : variableDeclarations;
     }
@@ -3460,42 +3582,42 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     {
 
 
-        var attributeLists = MapAttributes(node.AttributeLists);
+        var attributeLists = MapAttributes(m: node.AttributeLists);
 
         var methodDeclaration = new J.MethodDeclaration(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            [],
-            MapModifiers(node.Modifiers),
-            null, // constructors have no type parameters
-            null, // constructors have no return type
-            new J.MethodDeclaration.IdentifierWithAnnotations(
-                MapIdentifier(node.Identifier, null),
-                [] // attributes always appear as leading
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            leadingAnnotations: [],
+            modifiers: MapModifiers(stl: node.Modifiers),
+            typeParameters: null, // constructors have no type parameters
+            returnTypeExpression: null, // constructors have no return type
+            name: new J.MethodDeclaration.IdentifierWithAnnotations(
+                identifier: MapIdentifier(identifier: node.Identifier, type: null),
+                annotations: [] // attributes always appear as leading
             ),
-            MapParameters<Statement>(node.ParameterList)!,
-            null, // C# has no checked exceptions
-            Convert<J.Block>(node.Body),
-            null, // not applicable to constructors
-            MapType(node) as JavaType.Method
+            parameters: MapParameters<Statement>(pls: node.ParameterList)!,
+            throws: null, // C# has no checked exceptions
+            body: Convert<J.Block>(node.Body),
+            defaultValue: null, // not applicable to constructors
+            methodType: MapType( node) as JavaType.Method
         );
 
 
         var constructor = new Cs.Constructor(
-            Core.Tree.RandomId(),
-            Space.EMPTY,
-            Markers.EMPTY,
-            Convert<Cs.ConstructorInitializer>(node.Initializer),
-            methodDeclaration);
+            id: Core.Tree.RandomId(),
+            prefix: Space.EMPTY,
+            markers: Markers.EMPTY,
+            initializer: Convert<Cs.ConstructorInitializer>(node.Initializer),
+            constructorCore: methodDeclaration);
 
         return attributeLists != null
             ? new Cs.AnnotatedStatement(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                attributeLists,
-                constructor
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                attributeLists: attributeLists,
+                statement: constructor
             )
             : constructor;
     }
@@ -3503,22 +3625,24 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitConstructorInitializer(ConstructorInitializerSyntax node)
     {
         return new Cs.ConstructorInitializer(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            new Cs.Keyword(
-                Core.Tree.RandomId(),
-                Format(Leading(node.ThisOrBaseKeyword)),
-                Markers.EMPTY,
-                node.ThisOrBaseKeyword.IsKind(SyntaxKind.BaseKeyword) ? Cs.KeywordKind.Base : Cs.KeywordKind.This
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            keyword: new Cs.Keyword(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.ThisOrBaseKeyword)),
+                markers: Markers.EMPTY,
+                kind: node.ThisOrBaseKeyword.IsKind(SyntaxKind.BaseKeyword) ? Cs.Keyword.KeywordKind.Base : Cs.Keyword.KeywordKind.This
             ),
-            ToJContainer<ArgumentSyntax, Cs.Argument>(node.ArgumentList.Arguments, node.ArgumentList.OpenParenToken)
+            arguments: ToJContainer<ArgumentSyntax, Cs.Argument>(syntaxList: node.ArgumentList.Arguments, openingToken: node.ArgumentList.OpenParenToken)
         );
     }
 
+    ~CSharpParserVisitor() => Console.WriteLine("");
+
     public override J? VisitDestructorDeclaration(DestructorDeclarationSyntax node)
     {
-        // This was added in C# 1.0
+
         return base.VisitDestructorDeclaration(node);
     }
 
@@ -3526,28 +3650,28 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     {
         var typeTree = Convert<TypeTree>(node.Type)!;
         return new Cs.PropertyDeclaration(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY,
-            MapAttributes(node.AttributeLists) ?? [],
-            MapModifiers(node.Modifiers),
-            typeTree,
-            node.ExplicitInterfaceSpecifier != null
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            attributeLists: MapAttributes(m: node.AttributeLists) ?? [],
+            modifiers: MapModifiers(stl: node.Modifiers),
+            typeExpression: typeTree,
+            interfaceSpecifier: node.ExplicitInterfaceSpecifier != null
                 ? new JRightPadded<NameTree>(
-                    Convert<NameTree>(node.ExplicitInterfaceSpecifier.Name)!,
-                    Format(Leading(node.ExplicitInterfaceSpecifier.DotToken)),
-                    Markers.EMPTY
+                    element: Convert<NameTree>(node.ExplicitInterfaceSpecifier.Name)!,
+                    after: Format(Leading(node.ExplicitInterfaceSpecifier.DotToken)),
+                    markers: Markers.EMPTY
                 )
                 : null,
-            MapIdentifier(node.Identifier, typeTree.Type),
-            node.ExpressionBody != null
+            name: MapIdentifier(identifier: node.Identifier, type: typeTree.Type),
+            accessors: node.ExpressionBody != null
                 ? Convert<J.Block>(node.ExpressionBody)!
                 : Convert<J.Block>(node.AccessorList)!,
-            node.Initializer != null
+            initializer: node.Initializer != null
                 ? new JLeftPadded<Expression>(
-                    Format(Leading(node.Initializer)),
-                    Convert<Expression>(node.Initializer.Value)!,
-                    Markers.EMPTY
+                    before: Format(Leading(node.Initializer)),
+                    element: Convert<Expression>(node.Initializer.Value)!,
+                    markers: Markers.EMPTY
                 )
                 : null
         );
@@ -3556,15 +3680,16 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitArrowExpressionClause(ArrowExpressionClauseSyntax node)
     {
         return new J.Block(
-            Core.Tree.RandomId(),
-            Format(Leading(node)),
-            Markers.EMPTY.Add(new SingleExpressionBlock(Core.Tree.RandomId()))
-                .Add(new OmitBraces(Core.Tree.RandomId())),
-            JRightPadded<bool>.Build(false),
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY.Add(marker: new SingleExpressionBlock(Id: Core.Tree.RandomId()))
+                .Add(marker: new OmitBraces(Id: Core.Tree.RandomId())),
+            @static: JRightPadded.Create(element: false),
+            statements:
             [
-                MapExpressionStatement(node.Expression)
+                MapExpressionStatement(es: node.Expression)
             ],
-            Space.EMPTY
+            end: Space.EMPTY
         );
     }
 
@@ -3831,12 +3956,13 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         if (typeof(T) == typeof(Expression) && visit is not Expression && visit is Statement statement)
         {
             return new Cs.StatementExpression(
-                Core.Tree.RandomId(),
-                Format(Leading(node)),
-                Markers.EMPTY,
-                statement
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                statement: statement
             ) as T;
         }
+
 
         return (T?)visit;
     }
@@ -3849,15 +3975,15 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                 NamespaceDeclarationSyntax { CloseBraceToken.Text: "}" })
         {
             return new JRightPadded<Statement>(
-                memberDeclaration,
-                Format(Leading(m.GetLastToken())),
-                Markers.EMPTY.Add(new Semicolon(Core.Tree.RandomId()))
+                element: memberDeclaration,
+                after: Format(Leading(m.GetLastToken())),
+                markers: Markers.EMPTY.Add(marker: new Semicolon(Id: Core.Tree.RandomId()))
             );
         }
 
-        return new JRightPadded<Statement>(memberDeclaration,
-            trailingSemicolon ? Format(Leading(m.GetLastToken())) : Space.EMPTY,
-            Markers.EMPTY
+        return new JRightPadded<Statement>(element: memberDeclaration,
+            after: trailingSemicolon ? Format(Leading(m.GetLastToken())) : Space.EMPTY,
+            markers: Markers.EMPTY
         );
     }
 
@@ -3866,16 +3992,16 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         return pls == null
             ? null
             : new JContainer<T>(
-                Format(Leading(pls)),
-                pls.Parameters.Count == 0
+                before: Format(Leading(pls)),
+                elements: pls.Parameters.Count == 0
                     ?
                     [
-                        JRightPadded<T>.Build(new J.Empty(Core.Tree.RandomId(),
-                            Format(Leading(pls.CloseParenToken)),
-                            Markers.EMPTY) as dynamic)
+                        JRightPadded<T>.Build(t: new J.Empty(id: Core.Tree.RandomId(),
+                            prefix: Format(Leading(pls.CloseParenToken)),
+                            markers: Markers.EMPTY) as dynamic)
                     ]
-                    : pls.Parameters.Select(MapParameter<T>).ToList(),
-                Markers.EMPTY
+                    : pls.Parameters.Select(selector: MapParameter<T>).ToList(),
+                markers: Markers.EMPTY
             );
     }
 
@@ -3883,9 +4009,9 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     {
         var parameter = ((T?)Visit(tps))!;
         return new JRightPadded<T>(
-            parameter,
-            Format(Trailing(tps.Identifier)),
-            Markers.EMPTY
+            element: parameter,
+            after: Format(Trailing(tps.Identifier)),
+            markers: Markers.EMPTY
         );
     }
 
@@ -3893,9 +4019,9 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     {
         return tpls == null || tpls.Parameters.Count == 0
             ? null
-            : JContainer<J.TypeParameter>.Build(Format(Leading(tpls)),
-                tpls.Parameters.Select(MapTypeParameter).ToList(),
-                Markers.EMPTY
+            : JContainer<J.TypeParameter>.Build(before: Format(Leading(tpls)),
+                elements: tpls.Parameters.Select(selector: MapTypeParameter).ToList(),
+                markers: Markers.EMPTY
             );
     }
 
@@ -3903,34 +4029,34 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     {
         var typeParameter = (Visit(tps) as J.TypeParameter)!;
         return new JRightPadded<J.TypeParameter>(
-            typeParameter,
-            Format(Trailing(tps.Identifier)),
-            Markers.EMPTY
+            element: typeParameter,
+            after: Format(Trailing(tps.Identifier)),
+            markers: Markers.EMPTY
         );
     }
 
-    private static readonly IDictionary<SyntaxKind, J.Modifier.Type> AccessModifierMap =
-        new Dictionary<SyntaxKind, J.Modifier.Type>
+    private static readonly IDictionary<SyntaxKind, J.Modifier.Types> AccessModifierMap =
+        new Dictionary<SyntaxKind, J.Modifier.Types>
         {
-            { SyntaxKind.PublicKeyword, J.Modifier.Type.Public },
-            { SyntaxKind.PrivateKeyword, J.Modifier.Type.Private },
-            { SyntaxKind.AbstractKeyword, J.Modifier.Type.Abstract },
-            { SyntaxKind.ProtectedKeyword, J.Modifier.Type.Protected },
-            { SyntaxKind.StaticKeyword, J.Modifier.Type.Static },
-            { SyntaxKind.VolatileKeyword, J.Modifier.Type.Volatile },
-            { SyntaxKind.SealedKeyword, J.Modifier.Type.Sealed },
-            { SyntaxKind.AsyncKeyword, J.Modifier.Type.Async },
+            { SyntaxKind.PublicKeyword, J.Modifier.Types.Public },
+            { SyntaxKind.PrivateKeyword, J.Modifier.Types.Private },
+            { SyntaxKind.AbstractKeyword, J.Modifier.Types.Abstract },
+            { SyntaxKind.ProtectedKeyword, J.Modifier.Types.Protected },
+            { SyntaxKind.StaticKeyword, J.Modifier.Types.Static },
+            { SyntaxKind.VolatileKeyword, J.Modifier.Types.Volatile },
+            { SyntaxKind.SealedKeyword, J.Modifier.Types.Sealed },
+            { SyntaxKind.AsyncKeyword, J.Modifier.Types.Async },
         };
 
     private IList<J.Modifier> MapModifiers(SyntaxTokenList stl)
     {
-        return stl.Select(m => new J.Modifier(
-            Core.Tree.RandomId(),
-            Format(Leading(m)),
-            Markers.EMPTY,
-            AccessModifierMap.ContainsKey(m.Kind()) ? null : m.ToString(),
-            AccessModifierMap.ContainsKey(m.Kind()) ? AccessModifierMap[m.Kind()] : J.Modifier.Type.LanguageExtension,
-            []
+        return stl.Select(selector: m => new J.Modifier(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(m)),
+            markers: Markers.EMPTY,
+            keyword: AccessModifierMap.ContainsKey(key: m.Kind()) ? null : m.ToString(),
+            modifierType: AccessModifierMap.ContainsKey(key: m.Kind()) ? AccessModifierMap[key: m.Kind()] : J.Modifier.Types.LanguageExtension,
+            annotations: []
         )).ToList();
     }
 
@@ -3940,7 +4066,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 #endif
     private List<Cs.AttributeList>? MapAttributes(SyntaxList<AttributeListSyntax> m)
     {
-        return m.Count == 0 ? null : m.Select(x => Convert<Cs.AttributeList>(x)!).ToList();
+        return m.Count == 0 ? null : m.Select(selector: x => Convert<Cs.AttributeList>(x)!).ToList();
     }
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
@@ -3951,14 +4077,14 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         {
             return new JavaType.Primitive(JavaType.Primitive.PrimitiveType.Null);
         }
-        return _typeMapping.Type(semanticModel.GetTypeInfo(ins).Type);
+        return _typeMapping.Type(roslynSymbol: semanticModel.GetTypeInfo(expression: ins).Type);
     }
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
 #endif
     private JavaType MapType(SyntaxNode ins)
     {
-        return _typeMapping.Type(semanticModel.GetDeclaredSymbol(ins) ?? semanticModel.GetTypeInfo(ins).Type);
+        return _typeMapping.Type(roslynSymbol: semanticModel.GetDeclaredSymbol(declaration: ins) ?? semanticModel.GetTypeInfo(ins).Type);
     }
 // #if DEBUG_VISITOR
 //     [DebuggerStepThrough]
@@ -3970,8 +4096,8 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         var trailingSemicolon = statement is not J.Unknown &&
                                 statementSyntax.GetLastToken().IsKind(SyntaxKind.SemicolonToken);
         return new JRightPadded<Statement>(
-            statement,
-            trailingSemicolon ? Format(Leading(statementSyntax.GetLastToken())) : Space.EMPTY, Markers.EMPTY
+            element: statement,
+            after: trailingSemicolon ? Format(Leading(statementSyntax.GetLastToken())) : Space.EMPTY, markers: Markers.EMPTY
         );
     }
 #if DEBUG_VISITOR
@@ -3999,11 +4125,11 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         var previousToken = token.GetPreviousToken();
         var leading = token.LeadingTrivia;
         if (leading.Count == 0)
-            return OnlyUnseenTrivia(previousToken.TrailingTrivia);
+            return OnlyUnseenTrivia(trivia: previousToken.TrailingTrivia);
         var trailing = previousToken.TrailingTrivia;
         if (trailing.Count == 0)
-            return OnlyUnseenTrivia(leading);
-        return OnlyUnseenTrivia(trailing, leading);
+            return OnlyUnseenTrivia(trivia: leading);
+        return OnlyUnseenTrivia(trivia1: trailing, trivia2: leading);
     }
 
 #if DEBUG_VISITOR
@@ -4012,13 +4138,13 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     private SyntaxTriviaList OnlyUnseenTrivia(SyntaxTriviaList trivia)
     {
         var span = trivia.Span;
-        var idx = _seenTriviaSpans.BinarySearch(span);
+        var idx = _seenTriviaSpans.BinarySearch(item: span);
         if (idx >= 0)
             return SyntaxTriviaList.Empty;
         idx = ~idx;
-        if (idx > 0 && _seenTriviaSpans[idx - 1].End > span.Start)
+        if (idx > 0 && _seenTriviaSpans[index: idx - 1].End > span.Start)
             return SyntaxTriviaList.Empty;
-        _seenTriviaSpans.Insert(idx, span);
+        _seenTriviaSpans.Insert(index: idx, item: span);
         _seenTriviaSpans.Sort();
         return trivia;
     }
@@ -4027,14 +4153,14 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 #endif
     private SyntaxTriviaList OnlyUnseenTrivia(SyntaxTriviaList trivia1, SyntaxTriviaList trivia2)
     {
-        var span = new TextSpan(trivia1.Span.Start, trivia2.Span.End - trivia1.Span.Start);
-        var idx = _seenTriviaSpans.BinarySearch(span);
+        var span = new TextSpan(start: trivia1.Span.Start, length: trivia2.Span.End - trivia1.Span.Start);
+        var idx = _seenTriviaSpans.BinarySearch(item: span);
         if (idx >= 0)
             return SyntaxTriviaList.Empty;
         idx = ~idx;
-        if (idx > 0 && _seenTriviaSpans[idx - 1].End > span.Start)
+        if (idx > 0 && _seenTriviaSpans[index: idx - 1].End > span.Start)
             return SyntaxTriviaList.Empty;
-        _seenTriviaSpans.Insert(idx, span);
+        _seenTriviaSpans.Insert(index: idx, item: span);
         _seenTriviaSpans.Sort();
         return trivia1.AddRange(trivia2);
     }
@@ -4061,17 +4187,66 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         return Space.Format(trivia.ToString());
     }
 
-    private List<JRightPadded<TTo>> ToRightPadded<TFrom, TTo>(SeparatedSyntaxList<TFrom> syntaxList)
-        where TFrom : SyntaxNode
+    private JLeftPadded<TTo>? ToLeftPadded<TTo>(SyntaxNode? node)
         where TTo : class, J
     {
-        return syntaxList.Select(x => JRightPadded.Create(Convert<TTo>(x)!, Format(Trailing(x)))).ToList();
+        if (node == null)
+            return null;
+        // find first token to left side of the node that doesn't belong to the node
+        // ex: "a is b", "is" is the token to the left side of "b" node
+        var leftSideToken = node.GetFirstToken().GetPreviousToken();
+        return JLeftPadded.Create(Convert<TTo>(node)!, Format(Leading(leftSideToken)));
     }
 
-    private JContainer<TTo> ToJContainer<TFrom, TTo>(SeparatedSyntaxList<TFrom> syntaxList, SyntaxToken openingToken)
+    private JRightPadded<TTo>? ToRightPadded<TTo>(SyntaxNode? node)
+        where TTo : class, J
+    {
+        if (node == null)
+            return null;
+
+        return JRightPadded.Create(Convert<TTo>(node)!, Format(Trailing(node)));
+    }
+
+    private List<JRightPadded<TTo>> ToRightPadded<TFrom, TTo>(IReadOnlyList<TFrom> syntaxList)
         where TFrom : SyntaxNode
         where TTo : class, J
     {
-        return JContainer.Create(ToRightPadded<TFrom, TTo>(syntaxList), Format(Leading(openingToken)));
+        // return syntaxList.Count == 0 ? [] : syntaxList.SkipLast(1).Select(x => JRightPadded.Create(Convert<TTo>(x)!)).Append(x => JRightPadded.Create(syntaxList.Last(), true)).ToList();
+        int totalElements = syntaxList.Count;
+        return syntaxList.Select(selector: (element,i) =>
+        {
+            var isLastElement = totalElements - i - 1 == 0;
+            var isTrailingComma = isLastElement && element.GetLastToken().GetNextToken().IsKind(SyntaxKind.CommaToken);
+            var markers = isTrailingComma ? Markers.Create(markers: new TrailingComma(Id: Core.Tree.RandomId(), Suffix: Format(Trailing(element.GetLastToken().GetNextToken())))) : Markers.EMPTY;
+            return JRightPadded.Create(element: Convert<TTo>(element)!, after: Format(Trailing(element)), markers: markers);
+        }).ToList();
+    }
+
+    private J.ControlParentheses<TTo> ToControlParentheses<TTo>(SyntaxNode node, SyntaxToken openingToken) where TTo : class, J
+    {
+        return new J.ControlParentheses<TTo>(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(openingToken)),
+            markers: Markers.EMPTY,
+            JRightPadded.Create(Convert<TTo>(node)!, Format(Trailing(node))));
+    }
+    private JContainer<TTo> ToJContainer<TFrom, TTo>(IReadOnlyList<TFrom> syntaxList, SyntaxToken openingToken)
+        where TFrom : SyntaxNode
+        where TTo : class, J
+    {
+        if (syntaxList.Count > 0)
+        {
+            return JContainer.Create(elements: ToRightPadded<TFrom, TTo>(syntaxList: syntaxList), space: Format(Leading(openingToken)));
+        }
+        else
+        {
+            J empty = new J.Empty(id: Core.Tree.RandomId(),
+                prefix: Space.EMPTY,
+                markers: Markers.EMPTY);
+            // hack - we use J.Empty to represent the space inside the brackets since we got no real elements in there
+            return JContainer.Create(
+                elements: [JRightPadded.Create(element: (TTo)empty, after: Format(Trailing(openingToken))) ],
+                space: Format(Leading(openingToken)));
+        }
     }
 }

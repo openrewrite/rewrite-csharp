@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class NewClassTests : RewriteTest
+public class NewClassTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     void SimpleNewClassCase()
@@ -111,7 +111,7 @@ public class NewClassTests : RewriteTest
     }
 
     [Fact]
-    void ImplicitNewClassWithInitializerSpaces()
+    public void ImplicitNewClassWithInitializerSpaces()
     {
         RewriteRun(
             CSharp(
@@ -147,6 +147,22 @@ public class NewClassTests : RewriteTest
                 """
             )
         );
+    }
+
+    [Fact]
+    void NewClassWithMultiValueInitializer()
+    {
+        var src = CSharp(
+                """
+                new List<int>
+                {
+                    1,
+                    2
+                };
+                """);
+        var lst = src.Parse();
+        lst.ToString().ShouldBeSameAs(src.Before);
+
     }
 
     [Fact]
@@ -194,6 +210,22 @@ public class NewClassTests : RewriteTest
                     public string? Type;
                     private Container c = new /*asdas*/   () /*asdas*/  ; //asdas
                 }
+                """
+            )
+        );
+    }
+
+    [Fact]
+    void ImplicitElementAccess()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                new Dictionary<int, string>
+                {
+                    [1] = "one",
+                    [2] = "two",
+                };
                 """
             )
         );
@@ -268,15 +300,12 @@ public class NewClassTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                public class Test
-                {
-                    public void Test() {
-                        var pet = new Dictionary<string, int> {
-                            { "test1", 1 },
-                            { "test2", 2, },
-                        };
-                    }
-                }
+
+                var pet = new Dictionary<string, int> {
+                    { "test1", 1 },
+                    { "test2", 2 },
+                };
+
                 """
             )
         );
@@ -288,20 +317,16 @@ public class NewClassTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                class T
+                var pet = new Dictionary<Dictionary<int, int>, int>
                 {
-                    void M()
-                    {
-                        var pet = new Dictionary<Dictionary<int, int>, int> {
-                           { new Dictionary<int, int>
-                               {
-                                   {1, 1}
-                               },
-                               1
-                           },
-                        };
-                    }
-                }
+                   {
+                       new Dictionary<int, int>
+                       {
+                           {1, 1}
+                       },
+                       1
+                   },
+                };
                 """
             )
         );

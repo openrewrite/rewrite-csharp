@@ -97,23 +97,23 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         Visit(mod.Annotations, p);
         var keyword = mod.ModifierType switch
         {
-            J.Modifier.Type.Default => "default",
-            J.Modifier.Type.Public => "public",
-            J.Modifier.Type.Protected => "protected",
-            J.Modifier.Type.Private => "private",
-            J.Modifier.Type.Abstract => "abstract",
-            J.Modifier.Type.Static => "static",
-            J.Modifier.Type.Final => "final",
-            J.Modifier.Type.Native => "native",
-            J.Modifier.Type.NonSealed => "non-sealed",
-            J.Modifier.Type.Sealed => "sealed",
-            J.Modifier.Type.Strictfp => "strictfp",
-            J.Modifier.Type.Synchronized => "synchronized",
-            J.Modifier.Type.Transient => "transient",
-            J.Modifier.Type.Volatile => "volatile",
-            J.Modifier.Type.Async => "async",
-            J.Modifier.Type.Reified => "reified",
-            J.Modifier.Type.Inline => "inline",
+            J.Modifier.Types.Default => "default",
+            J.Modifier.Types.Public => "public",
+            J.Modifier.Types.Protected => "protected",
+            J.Modifier.Types.Private => "private",
+            J.Modifier.Types.Abstract => "abstract",
+            J.Modifier.Types.Static => "static",
+            J.Modifier.Types.Final => "final",
+            J.Modifier.Types.Native => "native",
+            J.Modifier.Types.NonSealed => "non-sealed",
+            J.Modifier.Types.Sealed => "sealed",
+            J.Modifier.Types.Strictfp => "strictfp",
+            J.Modifier.Types.Synchronized => "synchronized",
+            J.Modifier.Types.Transient => "transient",
+            J.Modifier.Types.Volatile => "volatile",
+            J.Modifier.Types.Async => "async",
+            J.Modifier.Types.Reified => "reified",
+            J.Modifier.Types.Inline => "inline",
             _ => mod.Keyword
         };
 
@@ -218,17 +218,17 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     {
         string keyword = assignOp.Operator switch
         {
-            J.AssignmentOperation.Type.Addition => "+=",
-            J.AssignmentOperation.Type.Subtraction => "-=",
-            J.AssignmentOperation.Type.Multiplication => "*=",
-            J.AssignmentOperation.Type.Division => "/=",
-            J.AssignmentOperation.Type.Modulo => "%=",
-            J.AssignmentOperation.Type.BitAnd => "&=",
-            J.AssignmentOperation.Type.BitOr => "|=",
-            J.AssignmentOperation.Type.BitXor => "^=",
-            J.AssignmentOperation.Type.LeftShift => "<<=",
-            J.AssignmentOperation.Type.RightShift => ">>=",
-            J.AssignmentOperation.Type.UnsignedRightShift => ">>>=",
+            J.AssignmentOperation.Types.Addition => "+=",
+            J.AssignmentOperation.Types.Subtraction => "-=",
+            J.AssignmentOperation.Types.Multiplication => "*=",
+            J.AssignmentOperation.Types.Division => "/=",
+            J.AssignmentOperation.Types.Modulo => "%=",
+            J.AssignmentOperation.Types.BitAnd => "&=",
+            J.AssignmentOperation.Types.BitOr => "|=",
+            J.AssignmentOperation.Types.BitXor => "^=",
+            J.AssignmentOperation.Types.LeftShift => "<<=",
+            J.AssignmentOperation.Types.RightShift => ">>=",
+            J.AssignmentOperation.Types.UnsignedRightShift => ">>>=",
             _ => ""
         };
 
@@ -245,25 +245,25 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     {
         string keyword = binary.Operator switch
         {
-            J.Binary.Type.Addition => "+",
-            J.Binary.Type.Subtraction => "-",
-            J.Binary.Type.Multiplication => "*",
-            J.Binary.Type.Division => "/",
-            J.Binary.Type.Modulo => "%",
-            J.Binary.Type.LessThan => "<",
-            J.Binary.Type.GreaterThan => ">",
-            J.Binary.Type.LessThanOrEqual => "<=",
-            J.Binary.Type.GreaterThanOrEqual => ">=",
-            J.Binary.Type.Equal => "==",
-            J.Binary.Type.NotEqual => "!=",
-            J.Binary.Type.BitAnd => "&",
-            J.Binary.Type.BitOr => "|",
-            J.Binary.Type.BitXor => "^",
-            J.Binary.Type.LeftShift => "<<",
-            J.Binary.Type.RightShift => ">>",
-            J.Binary.Type.UnsignedRightShift => ">>>",
-            J.Binary.Type.Or => "||",
-            J.Binary.Type.And => "&&",
+            J.Binary.Types.Addition => "+",
+            J.Binary.Types.Subtraction => "-",
+            J.Binary.Types.Multiplication => "*",
+            J.Binary.Types.Division => "/",
+            J.Binary.Types.Modulo => "%",
+            J.Binary.Types.LessThan => "<",
+            J.Binary.Types.GreaterThan => ">",
+            J.Binary.Types.LessThanOrEqual => "<=",
+            J.Binary.Types.GreaterThanOrEqual => ">=",
+            J.Binary.Types.Equal => "==",
+            J.Binary.Types.NotEqual => "!=",
+            J.Binary.Types.BitAnd => "&",
+            J.Binary.Types.BitOr => "|",
+            J.Binary.Types.BitXor => "^",
+            J.Binary.Types.LeftShift => "<<",
+            J.Binary.Types.RightShift => ">>",
+            J.Binary.Types.UnsignedRightShift => ">>>",
+            J.Binary.Types.Or => "||",
+            J.Binary.Types.And => "&&",
             _ => ""
         };
 
@@ -303,8 +303,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
     }
 
-    protected void VisitStatement(JRightPadded<Statement>? paddedStat, JRightPadded.Location location,
-        PrintOutputCapture<P> p)
+    protected void VisitStatement(JRightPadded<Statement>? paddedStat, JRightPadded.Location location, PrintOutputCapture<P> p)
     {
         if (paddedStat != null)
         {
@@ -378,7 +377,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
 
         VisitContainer("", @case.Padding.Expressions, JContainer.Location.CASE_EXPRESSION, ",", "", p);
         VisitSpace(@case.Padding.Statements.Before, Space.Location.CASE, p);
-        p.Append(@case.CaseType == J.Case.Type.Statement ? ":" : "->");
+        p.Append(@case.CaseType == J.Case.Types.Statement ? ":" : "->");
         VisitStatements(@case.Padding.Statements.Padding.Elements, JRightPadded.Location.CASE, p);
         if (@case.Body is Statement)
         {
@@ -405,13 +404,13 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
 
     public override J VisitClassDeclaration(J.ClassDeclaration classDecl, PrintOutputCapture<P> p)
     {
-        var kind = classDecl.GetKind() switch
+        var kind = classDecl.DeclarationKind switch
         {
-            J.ClassDeclaration.Kind.Type.Class => "class",
-            J.ClassDeclaration.Kind.Type.Enum => "enum",
-            J.ClassDeclaration.Kind.Type.Interface => "interface",
-            J.ClassDeclaration.Kind.Type.Annotation => "@interface",
-            J.ClassDeclaration.Kind.Type.Record => "record",
+            J.ClassDeclaration.Kind.Types.Class => "class",
+            J.ClassDeclaration.Kind.Types.Enum => "enum",
+            J.ClassDeclaration.Kind.Types.Interface => "interface",
+            J.ClassDeclaration.Kind.Types.Annotation => "@interface",
+            J.ClassDeclaration.Kind.Types.Record => "record",
             _ => ""
         };
 
@@ -430,7 +429,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         VisitContainer("<", classDecl.Padding.TypeParameters, JContainer.Location.TYPE_PARAMETERS, ",", ">", p);
         VisitContainer("(", classDecl.Padding.PrimaryConstructor, JContainer.Location.RECORD_STATE_VECTOR, ",", ")", p);
         VisitLeftPadded("extends", classDecl.Padding.Extends, JLeftPadded.Location.EXTENDS, p);
-        VisitContainer(classDecl.GetKind().Equals(J.ClassDeclaration.Kind.Type.Interface) ? "extends" : "implements",
+        VisitContainer(classDecl.DeclarationKind.Equals(J.ClassDeclaration.Kind.Types.Interface) ? "extends" : "implements",
             classDecl.Padding.Implements, JContainer.Location.IMPLEMENTS, ",", null, p);
         VisitContainer("permits", classDecl.Padding.Permits, JContainer.Location.PERMITS, ",", null, p);
         Visit(classDecl.Body, p);
@@ -1024,33 +1023,33 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         BeforeSyntax(unary, Space.Location.UNARY_PREFIX, p);
         switch (unary.Operator)
         {
-            case J.Unary.Type.PreIncrement:
+            case J.Unary.Types.PreIncrement:
                 p.Append("++");
                 Visit(unary.Expression, p);
                 break;
-            case J.Unary.Type.PreDecrement:
+            case J.Unary.Types.PreDecrement:
                 p.Append("--");
                 Visit(unary.Expression, p);
                 break;
-            case J.Unary.Type.PostIncrement:
+            case J.Unary.Types.PostIncrement:
                 Visit(unary.Expression, p);
                 VisitSpace(unary.Padding.Operator.Before, Space.Location.UNARY_OPERATOR, p);
                 p.Append("++");
                 break;
-            case J.Unary.Type.PostDecrement:
+            case J.Unary.Types.PostDecrement:
                 Visit(unary.Expression, p);
                 VisitSpace(unary.Padding.Operator.Before, Space.Location.UNARY_OPERATOR, p);
                 p.Append("--");
                 break;
-            case J.Unary.Type.Positive:
+            case J.Unary.Types.Positive:
                 p.Append('+');
                 Visit(unary.Expression, p);
                 break;
-            case J.Unary.Type.Negative:
+            case J.Unary.Types.Negative:
                 p.Append('-');
                 Visit(unary.Expression, p);
                 break;
-            case J.Unary.Type.Complement:
+            case J.Unary.Types.Complement:
                 p.Append('~');
                 Visit(unary.Expression, p);
                 break;

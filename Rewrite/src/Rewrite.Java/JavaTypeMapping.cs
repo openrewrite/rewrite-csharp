@@ -4,5 +4,5 @@ namespace Rewrite.RewriteJava;
 
 public interface JavaTypeMapping<in T>
 {
-    JavaType Type(T? t);
+    JavaType Type(T? roslynSymbol);
 }

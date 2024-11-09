@@ -75,6 +75,26 @@ public class CSharpSender implements Sender<Cs> {
         }
 
         @Override
+        public Cs.ForEachVariableLoop visitForEachVariableLoop(Cs.ForEachVariableLoop forEachVariableLoop, SenderContext ctx) {
+            ctx.sendValue(forEachVariableLoop, Cs.ForEachVariableLoop::getId);
+            ctx.sendNode(forEachVariableLoop, Cs.ForEachVariableLoop::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(forEachVariableLoop, Cs.ForEachVariableLoop::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(forEachVariableLoop, Cs.ForEachVariableLoop::getControlElement, ctx::sendTree);
+            ctx.sendNode(forEachVariableLoop, e -> e.getPadding().getBody(), CSharpSender::sendRightPadded);
+            return forEachVariableLoop;
+        }
+
+        @Override
+        public Cs.ForEachVariableLoop.Control visitForEachVariableLoopControl(Cs.ForEachVariableLoop.Control control, SenderContext ctx) {
+            ctx.sendValue(control, Cs.ForEachVariableLoop.Control::getId);
+            ctx.sendNode(control, Cs.ForEachVariableLoop.Control::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(control, Cs.ForEachVariableLoop.Control::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(control, e -> e.getPadding().getVariable(), CSharpSender::sendRightPadded);
+            ctx.sendNode(control, e -> e.getPadding().getIterable(), CSharpSender::sendRightPadded);
+            return control;
+        }
+
+        @Override
         public Cs.Argument visitArgument(Cs.Argument argument, SenderContext ctx) {
             ctx.sendValue(argument, Cs.Argument::getId);
             ctx.sendNode(argument, Cs.Argument::getPrefix, CSharpSender::sendSpace);
@@ -438,6 +458,16 @@ public class CSharpSender implements Sender<Cs> {
         }
 
         @Override
+        public Cs.DestructorDeclaration visitDestructorDeclaration(Cs.DestructorDeclaration destructorDeclaration, SenderContext ctx) {
+            ctx.sendValue(destructorDeclaration, Cs.DestructorDeclaration::getId);
+            ctx.sendNode(destructorDeclaration, Cs.DestructorDeclaration::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(destructorDeclaration, Cs.DestructorDeclaration::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(destructorDeclaration, Cs.DestructorDeclaration::getInitializer, ctx::sendTree);
+            ctx.sendNode(destructorDeclaration, Cs.DestructorDeclaration::getConstructorCore, ctx::sendTree);
+            return destructorDeclaration;
+        }
+
+        @Override
         public Cs.Unary visitUnary(Cs.Unary unary, SenderContext ctx) {
             ctx.sendValue(unary, Cs.Unary::getId);
             ctx.sendNode(unary, Cs.Unary::getPrefix, CSharpSender::sendSpace);
@@ -476,6 +506,307 @@ public class CSharpSender implements Sender<Cs> {
             ctx.sendNode(tupleElement, Cs.TupleElement::getType, ctx::sendTree);
             ctx.sendNode(tupleElement, Cs.TupleElement::getName, ctx::sendTree);
             return tupleElement;
+        }
+
+        @Override
+        public Cs.NewClass visitNewClass(Cs.NewClass newClass, SenderContext ctx) {
+            ctx.sendValue(newClass, Cs.NewClass::getId);
+            ctx.sendNode(newClass, Cs.NewClass::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(newClass, Cs.NewClass::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(newClass, Cs.NewClass::getNewClassCore, ctx::sendTree);
+            ctx.sendNode(newClass, Cs.NewClass::getInitializer, ctx::sendTree);
+            return newClass;
+        }
+
+        @Override
+        public Cs.InitializerExpression visitInitializerExpression(Cs.InitializerExpression initializerExpression, SenderContext ctx) {
+            ctx.sendValue(initializerExpression, Cs.InitializerExpression::getId);
+            ctx.sendNode(initializerExpression, Cs.InitializerExpression::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(initializerExpression, Cs.InitializerExpression::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(initializerExpression, e -> e.getPadding().getExpressions(), CSharpSender::sendContainer);
+            return initializerExpression;
+        }
+
+        @Override
+        public Cs.ImplicitElementAccess visitImplicitElementAccess(Cs.ImplicitElementAccess implicitElementAccess, SenderContext ctx) {
+            ctx.sendValue(implicitElementAccess, Cs.ImplicitElementAccess::getId);
+            ctx.sendNode(implicitElementAccess, Cs.ImplicitElementAccess::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(implicitElementAccess, Cs.ImplicitElementAccess::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(implicitElementAccess, e -> e.getPadding().getArgumentList(), CSharpSender::sendContainer);
+            return implicitElementAccess;
+        }
+
+        @Override
+        public Cs.Yield visitYield(Cs.Yield yield, SenderContext ctx) {
+            ctx.sendValue(yield, Cs.Yield::getId);
+            ctx.sendNode(yield, Cs.Yield::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(yield, Cs.Yield::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(yield, Cs.Yield::getReturnOrBreakKeyword, ctx::sendTree);
+            ctx.sendNode(yield, Cs.Yield::getExpression, ctx::sendTree);
+            return yield;
+        }
+
+        @Override
+        public Cs.DefaultExpression visitDefaultExpression(Cs.DefaultExpression defaultExpression, SenderContext ctx) {
+            ctx.sendValue(defaultExpression, Cs.DefaultExpression::getId);
+            ctx.sendNode(defaultExpression, Cs.DefaultExpression::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(defaultExpression, Cs.DefaultExpression::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(defaultExpression, e -> e.getPadding().getTypeOperator(), CSharpSender::sendContainer);
+            return defaultExpression;
+        }
+
+        @Override
+        public Cs.IsPattern visitIsPattern(Cs.IsPattern isPattern, SenderContext ctx) {
+            ctx.sendValue(isPattern, Cs.IsPattern::getId);
+            ctx.sendNode(isPattern, Cs.IsPattern::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(isPattern, Cs.IsPattern::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(isPattern, Cs.IsPattern::getExpression, ctx::sendTree);
+            ctx.sendNode(isPattern, e -> e.getPadding().getPattern(), CSharpSender::sendLeftPadded);
+            return isPattern;
+        }
+
+        @Override
+        public Cs.UnaryPattern visitUnaryPattern(Cs.UnaryPattern unaryPattern, SenderContext ctx) {
+            ctx.sendValue(unaryPattern, Cs.UnaryPattern::getId);
+            ctx.sendNode(unaryPattern, Cs.UnaryPattern::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(unaryPattern, Cs.UnaryPattern::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(unaryPattern, Cs.UnaryPattern::getOperator, ctx::sendTree);
+            ctx.sendNode(unaryPattern, Cs.UnaryPattern::getPattern, ctx::sendTree);
+            return unaryPattern;
+        }
+
+        @Override
+        public Cs.TypePattern visitTypePattern(Cs.TypePattern typePattern, SenderContext ctx) {
+            ctx.sendValue(typePattern, Cs.TypePattern::getId);
+            ctx.sendNode(typePattern, Cs.TypePattern::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(typePattern, Cs.TypePattern::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(typePattern, Cs.TypePattern::getTypeIdentifier, ctx::sendTree);
+            ctx.sendNode(typePattern, Cs.TypePattern::getDesignation, ctx::sendTree);
+            return typePattern;
+        }
+
+        @Override
+        public Cs.BinaryPattern visitBinaryPattern(Cs.BinaryPattern binaryPattern, SenderContext ctx) {
+            ctx.sendValue(binaryPattern, Cs.BinaryPattern::getId);
+            ctx.sendNode(binaryPattern, Cs.BinaryPattern::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(binaryPattern, Cs.BinaryPattern::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(binaryPattern, Cs.BinaryPattern::getLeft, ctx::sendTree);
+            ctx.sendNode(binaryPattern, e -> e.getPadding().getOperator(), CSharpSender::sendLeftPadded);
+            ctx.sendNode(binaryPattern, Cs.BinaryPattern::getRight, ctx::sendTree);
+            return binaryPattern;
+        }
+
+        @Override
+        public Cs.ConstantPattern visitConstantPattern(Cs.ConstantPattern constantPattern, SenderContext ctx) {
+            ctx.sendValue(constantPattern, Cs.ConstantPattern::getId);
+            ctx.sendNode(constantPattern, Cs.ConstantPattern::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(constantPattern, Cs.ConstantPattern::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(constantPattern, Cs.ConstantPattern::getValue, ctx::sendTree);
+            return constantPattern;
+        }
+
+        @Override
+        public Cs.DiscardPattern visitDiscardPattern(Cs.DiscardPattern discardPattern, SenderContext ctx) {
+            ctx.sendValue(discardPattern, Cs.DiscardPattern::getId);
+            ctx.sendNode(discardPattern, Cs.DiscardPattern::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(discardPattern, Cs.DiscardPattern::getMarkers, ctx::sendMarkers);
+            ctx.sendTypedValue(discardPattern, Cs.DiscardPattern::getType);
+            return discardPattern;
+        }
+
+        @Override
+        public Cs.ListPattern visitListPattern(Cs.ListPattern listPattern, SenderContext ctx) {
+            ctx.sendValue(listPattern, Cs.ListPattern::getId);
+            ctx.sendNode(listPattern, Cs.ListPattern::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(listPattern, Cs.ListPattern::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(listPattern, e -> e.getPadding().getPatterns(), CSharpSender::sendContainer);
+            ctx.sendNode(listPattern, Cs.ListPattern::getDesignation, ctx::sendTree);
+            return listPattern;
+        }
+
+        @Override
+        public Cs.ParenthesizedPattern visitParenthesizedPattern(Cs.ParenthesizedPattern parenthesizedPattern, SenderContext ctx) {
+            ctx.sendValue(parenthesizedPattern, Cs.ParenthesizedPattern::getId);
+            ctx.sendNode(parenthesizedPattern, Cs.ParenthesizedPattern::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(parenthesizedPattern, Cs.ParenthesizedPattern::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(parenthesizedPattern, e -> e.getPadding().getPattern(), CSharpSender::sendContainer);
+            return parenthesizedPattern;
+        }
+
+        @Override
+        public Cs.RecursivePattern visitRecursivePattern(Cs.RecursivePattern recursivePattern, SenderContext ctx) {
+            ctx.sendValue(recursivePattern, Cs.RecursivePattern::getId);
+            ctx.sendNode(recursivePattern, Cs.RecursivePattern::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(recursivePattern, Cs.RecursivePattern::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(recursivePattern, Cs.RecursivePattern::getTypeQualifier, ctx::sendTree);
+            ctx.sendNode(recursivePattern, Cs.RecursivePattern::getPositionalPattern, ctx::sendTree);
+            ctx.sendNode(recursivePattern, Cs.RecursivePattern::getPropertyPattern, ctx::sendTree);
+            ctx.sendNode(recursivePattern, Cs.RecursivePattern::getDesignation, ctx::sendTree);
+            return recursivePattern;
+        }
+
+        @Override
+        public Cs.VarPattern visitVarPattern(Cs.VarPattern varPattern, SenderContext ctx) {
+            ctx.sendValue(varPattern, Cs.VarPattern::getId);
+            ctx.sendNode(varPattern, Cs.VarPattern::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(varPattern, Cs.VarPattern::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(varPattern, Cs.VarPattern::getDesignation, ctx::sendTree);
+            return varPattern;
+        }
+
+        @Override
+        public Cs.PositionalPatternClause visitPositionalPatternClause(Cs.PositionalPatternClause positionalPatternClause, SenderContext ctx) {
+            ctx.sendValue(positionalPatternClause, Cs.PositionalPatternClause::getId);
+            ctx.sendNode(positionalPatternClause, Cs.PositionalPatternClause::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(positionalPatternClause, Cs.PositionalPatternClause::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(positionalPatternClause, e -> e.getPadding().getSubpatterns(), CSharpSender::sendContainer);
+            return positionalPatternClause;
+        }
+
+        @Override
+        public Cs.RelationalPattern visitRelationalPattern(Cs.RelationalPattern relationalPattern, SenderContext ctx) {
+            ctx.sendValue(relationalPattern, Cs.RelationalPattern::getId);
+            ctx.sendNode(relationalPattern, Cs.RelationalPattern::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(relationalPattern, Cs.RelationalPattern::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(relationalPattern, e -> e.getPadding().getOperator(), CSharpSender::sendLeftPadded);
+            ctx.sendNode(relationalPattern, Cs.RelationalPattern::getValue, ctx::sendTree);
+            return relationalPattern;
+        }
+
+        @Override
+        public Cs.SlicePattern visitSlicePattern(Cs.SlicePattern slicePattern, SenderContext ctx) {
+            ctx.sendValue(slicePattern, Cs.SlicePattern::getId);
+            ctx.sendNode(slicePattern, Cs.SlicePattern::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(slicePattern, Cs.SlicePattern::getMarkers, ctx::sendMarkers);
+            return slicePattern;
+        }
+
+        @Override
+        public Cs.PropertyPatternClause visitPropertyPatternClause(Cs.PropertyPatternClause propertyPatternClause, SenderContext ctx) {
+            ctx.sendValue(propertyPatternClause, Cs.PropertyPatternClause::getId);
+            ctx.sendNode(propertyPatternClause, Cs.PropertyPatternClause::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(propertyPatternClause, Cs.PropertyPatternClause::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(propertyPatternClause, e -> e.getPadding().getSubpatterns(), CSharpSender::sendContainer);
+            return propertyPatternClause;
+        }
+
+        @Override
+        public Cs.Subpattern visitSubpattern(Cs.Subpattern subpattern, SenderContext ctx) {
+            ctx.sendValue(subpattern, Cs.Subpattern::getId);
+            ctx.sendNode(subpattern, Cs.Subpattern::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(subpattern, Cs.Subpattern::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(subpattern, Cs.Subpattern::getName, ctx::sendTree);
+            ctx.sendNode(subpattern, e -> e.getPadding().getPattern(), CSharpSender::sendLeftPadded);
+            return subpattern;
+        }
+
+        @Override
+        public Cs.SwitchExpression visitSwitchExpression(Cs.SwitchExpression switchExpression, SenderContext ctx) {
+            ctx.sendValue(switchExpression, Cs.SwitchExpression::getId);
+            ctx.sendNode(switchExpression, Cs.SwitchExpression::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(switchExpression, Cs.SwitchExpression::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(switchExpression, e -> e.getPadding().getExpression(), CSharpSender::sendRightPadded);
+            ctx.sendNode(switchExpression, e -> e.getPadding().getArms(), CSharpSender::sendContainer);
+            return switchExpression;
+        }
+
+        @Override
+        public Cs.SwitchExpressionArm visitSwitchExpressionArm(Cs.SwitchExpressionArm switchExpressionArm, SenderContext ctx) {
+            ctx.sendValue(switchExpressionArm, Cs.SwitchExpressionArm::getId);
+            ctx.sendNode(switchExpressionArm, Cs.SwitchExpressionArm::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(switchExpressionArm, Cs.SwitchExpressionArm::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(switchExpressionArm, Cs.SwitchExpressionArm::getPattern, ctx::sendTree);
+            ctx.sendNode(switchExpressionArm, e -> e.getPadding().getWhenExpression(), CSharpSender::sendLeftPadded);
+            ctx.sendNode(switchExpressionArm, e -> e.getPadding().getExpression(), CSharpSender::sendLeftPadded);
+            return switchExpressionArm;
+        }
+
+        @Override
+        public Cs.SwitchSection visitSwitchSection(Cs.SwitchSection switchSection, SenderContext ctx) {
+            ctx.sendValue(switchSection, Cs.SwitchSection::getId);
+            ctx.sendNode(switchSection, Cs.SwitchSection::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(switchSection, Cs.SwitchSection::getMarkers, ctx::sendMarkers);
+            ctx.sendNodes(switchSection, Cs.SwitchSection::getLabels, ctx::sendTree, Tree::getId);
+            ctx.sendNodes(switchSection, e -> e.getPadding().getStatements(), CSharpSender::sendRightPadded, e -> e.getElement().getId());
+            return switchSection;
+        }
+
+        @Override
+        public Cs.DefaultSwitchLabel visitDefaultSwitchLabel(Cs.DefaultSwitchLabel defaultSwitchLabel, SenderContext ctx) {
+            ctx.sendValue(defaultSwitchLabel, Cs.DefaultSwitchLabel::getId);
+            ctx.sendNode(defaultSwitchLabel, Cs.DefaultSwitchLabel::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(defaultSwitchLabel, Cs.DefaultSwitchLabel::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(defaultSwitchLabel, Cs.DefaultSwitchLabel::getColonToken, CSharpSender::sendSpace);
+            return defaultSwitchLabel;
+        }
+
+        @Override
+        public Cs.CasePatternSwitchLabel visitCasePatternSwitchLabel(Cs.CasePatternSwitchLabel casePatternSwitchLabel, SenderContext ctx) {
+            ctx.sendValue(casePatternSwitchLabel, Cs.CasePatternSwitchLabel::getId);
+            ctx.sendNode(casePatternSwitchLabel, Cs.CasePatternSwitchLabel::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(casePatternSwitchLabel, Cs.CasePatternSwitchLabel::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(casePatternSwitchLabel, Cs.CasePatternSwitchLabel::getPattern, ctx::sendTree);
+            ctx.sendNode(casePatternSwitchLabel, e -> e.getPadding().getWhenClause(), CSharpSender::sendLeftPadded);
+            ctx.sendNode(casePatternSwitchLabel, Cs.CasePatternSwitchLabel::getColonToken, CSharpSender::sendSpace);
+            return casePatternSwitchLabel;
+        }
+
+        @Override
+        public Cs.SwitchStatement visitSwitchStatement(Cs.SwitchStatement switchStatement, SenderContext ctx) {
+            ctx.sendValue(switchStatement, Cs.SwitchStatement::getId);
+            ctx.sendNode(switchStatement, Cs.SwitchStatement::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(switchStatement, Cs.SwitchStatement::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(switchStatement, e -> e.getPadding().getExpression(), CSharpSender::sendContainer);
+            ctx.sendNode(switchStatement, e -> e.getPadding().getSections(), CSharpSender::sendContainer);
+            return switchStatement;
+        }
+
+        @Override
+        public Cs.LockStatement visitLockStatement(Cs.LockStatement lockStatement, SenderContext ctx) {
+            ctx.sendValue(lockStatement, Cs.LockStatement::getId);
+            ctx.sendNode(lockStatement, Cs.LockStatement::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(lockStatement, Cs.LockStatement::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(lockStatement, Cs.LockStatement::getExpression, ctx::sendTree);
+            ctx.sendNode(lockStatement, e -> e.getPadding().getStatement(), CSharpSender::sendRightPadded);
+            return lockStatement;
+        }
+
+        @Override
+        public Cs.FixedStatement visitFixedStatement(Cs.FixedStatement fixedStatement, SenderContext ctx) {
+            ctx.sendValue(fixedStatement, Cs.FixedStatement::getId);
+            ctx.sendNode(fixedStatement, Cs.FixedStatement::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(fixedStatement, Cs.FixedStatement::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(fixedStatement, Cs.FixedStatement::getDeclarations, ctx::sendTree);
+            ctx.sendNode(fixedStatement, Cs.FixedStatement::getBlock, ctx::sendTree);
+            return fixedStatement;
+        }
+
+        @Override
+        public Cs.CheckedStatement visitCheckedStatement(Cs.CheckedStatement checkedStatement, SenderContext ctx) {
+            ctx.sendValue(checkedStatement, Cs.CheckedStatement::getId);
+            ctx.sendNode(checkedStatement, Cs.CheckedStatement::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(checkedStatement, Cs.CheckedStatement::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(checkedStatement, Cs.CheckedStatement::getBlock, ctx::sendTree);
+            return checkedStatement;
+        }
+
+        @Override
+        public Cs.UnsafeStatement visitUnsafeStatement(Cs.UnsafeStatement unsafeStatement, SenderContext ctx) {
+            ctx.sendValue(unsafeStatement, Cs.UnsafeStatement::getId);
+            ctx.sendNode(unsafeStatement, Cs.UnsafeStatement::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(unsafeStatement, Cs.UnsafeStatement::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(unsafeStatement, Cs.UnsafeStatement::getBlock, ctx::sendTree);
+            return unsafeStatement;
+        }
+
+        @Override
+        public Cs.RangeExpression visitRangeExpression(Cs.RangeExpression rangeExpression, SenderContext ctx) {
+            ctx.sendValue(rangeExpression, Cs.RangeExpression::getId);
+            ctx.sendNode(rangeExpression, Cs.RangeExpression::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(rangeExpression, Cs.RangeExpression::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(rangeExpression, e -> e.getPadding().getStart(), CSharpSender::sendRightPadded);
+            ctx.sendNode(rangeExpression, Cs.RangeExpression::getEnd, ctx::sendTree);
+            return rangeExpression;
         }
 
         @Override

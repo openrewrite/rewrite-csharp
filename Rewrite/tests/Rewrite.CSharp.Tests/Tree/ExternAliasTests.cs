@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ExternAliasTests : RewriteTest
+public class ExternAliasTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     public void CompilationUnit()

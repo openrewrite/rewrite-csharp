@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ArrayTypeTests : RewriteTest
+public class ArrayTypeTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     public void OneDimensional()
@@ -13,26 +13,20 @@ public class ArrayTypeTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                public class Foo
-                {
-                    int [] _arr = null;
-                }
+                int [] _arr;
                 """
             )
         );
     }
 
     [Fact]
-    [KnownBug]
+    [KnownBug("Requires new LST type for Cs.ArrayType to support matrix type arrays")]
     public void TwoDimensional()
     {
         RewriteRun(
             CSharp(
                 """
-                public class Foo
-                {
-                    int [,] _arr = null;
-                }
+                int [,] _arr;
                 """
             )
         );
@@ -44,10 +38,7 @@ public class ArrayTypeTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                public class Foo
-                {
-                    int[][] _arr = null;
-                }
+                int[][] _arr;
                 """
             )
         );
@@ -59,10 +50,7 @@ public class ArrayTypeTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                public class Foo
-                {
-                    /*0*/ int /*1*/ [ /*2*/ ] /*3*/ [ /*4*/ ] /*5*/ _arr = null;
-                }
+                /*0*/ int /*1*/ [ /*2*/ ] /*3*/ [ /*4*/ ] /*5*/ _arr = null;
                 """
             )
         );

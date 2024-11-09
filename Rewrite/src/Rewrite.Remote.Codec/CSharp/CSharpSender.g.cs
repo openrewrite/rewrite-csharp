@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
@@ -53,6 +54,26 @@ public record CSharpSender : Sender
             ctx.SendNodes(compilationUnit, v => v.Padding.Members, SendRightPadded, t => t.Element.Id);
             ctx.SendNode(compilationUnit, v => v.Eof, SendSpace);
             return compilationUnit;
+        }
+
+        public override J VisitForEachVariableLoop(Cs.ForEachVariableLoop forEachVariableLoop, SenderContext ctx)
+        {
+            ctx.SendValue(forEachVariableLoop, v => v.Id);
+            ctx.SendNode(forEachVariableLoop, v => v.Prefix, SendSpace);
+            ctx.SendNode(forEachVariableLoop, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(forEachVariableLoop, v => v.ControlElement, ctx.SendTree);
+            ctx.SendNode(forEachVariableLoop, v => v.Padding.Body, SendRightPadded);
+            return forEachVariableLoop;
+        }
+
+        public override J VisitForEachVariableLoopControl(Cs.ForEachVariableLoop.Control control, SenderContext ctx)
+        {
+            ctx.SendValue(control, v => v.Id);
+            ctx.SendNode(control, v => v.Prefix, SendSpace);
+            ctx.SendNode(control, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(control, v => v.Padding.Variable, SendRightPadded);
+            ctx.SendNode(control, v => v.Padding.Iterable, SendRightPadded);
+            return control;
         }
 
         public override J VisitArgument(Cs.Argument argument, SenderContext ctx)
@@ -418,6 +439,16 @@ public record CSharpSender : Sender
             return constructor;
         }
 
+        public override J VisitDestructorDeclaration(Cs.DestructorDeclaration destructorDeclaration, SenderContext ctx)
+        {
+            ctx.SendValue(destructorDeclaration, v => v.Id);
+            ctx.SendNode(destructorDeclaration, v => v.Prefix, SendSpace);
+            ctx.SendNode(destructorDeclaration, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(destructorDeclaration, v => v.Initializer, ctx.SendTree);
+            ctx.SendNode(destructorDeclaration, v => v.ConstructorCore, ctx.SendTree);
+            return destructorDeclaration;
+        }
+
         public override J VisitUnary(Cs.Unary unary, SenderContext ctx)
         {
             ctx.SendValue(unary, v => v.Id);
@@ -425,7 +456,7 @@ public record CSharpSender : Sender
             ctx.SendNode(unary, v => v.Markers, ctx.SendMarkers);
             ctx.SendNode(unary, v => v.Padding.Operator, SendLeftPadded);
             ctx.SendNode(unary, v => v.Expression, ctx.SendTree);
-            ctx.SendTypedValue(unary, v => v.JavaType);
+            ctx.SendTypedValue(unary, v => v.Type);
             return unary;
         }
 
@@ -457,6 +488,307 @@ public record CSharpSender : Sender
             ctx.SendNode(tupleElement, v => v.Type, ctx.SendTree);
             ctx.SendNode(tupleElement, v => v.Name, ctx.SendTree);
             return tupleElement;
+        }
+
+        public override J VisitNewClass(Cs.NewClass newClass, SenderContext ctx)
+        {
+            ctx.SendValue(newClass, v => v.Id);
+            ctx.SendNode(newClass, v => v.Prefix, SendSpace);
+            ctx.SendNode(newClass, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(newClass, v => v.NewClassCore, ctx.SendTree);
+            ctx.SendNode(newClass, v => v.Initializer, ctx.SendTree);
+            return newClass;
+        }
+
+        public override J VisitInitializerExpression(Cs.InitializerExpression initializerExpression, SenderContext ctx)
+        {
+            ctx.SendValue(initializerExpression, v => v.Id);
+            ctx.SendNode(initializerExpression, v => v.Prefix, SendSpace);
+            ctx.SendNode(initializerExpression, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(initializerExpression, v => v.Padding.Expressions, SendContainer);
+            return initializerExpression;
+        }
+
+        public override J VisitImplicitElementAccess(Cs.ImplicitElementAccess implicitElementAccess, SenderContext ctx)
+        {
+            ctx.SendValue(implicitElementAccess, v => v.Id);
+            ctx.SendNode(implicitElementAccess, v => v.Prefix, SendSpace);
+            ctx.SendNode(implicitElementAccess, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(implicitElementAccess, v => v.Padding.ArgumentList, SendContainer);
+            return implicitElementAccess;
+        }
+
+        public override J VisitYield(Cs.Yield yield, SenderContext ctx)
+        {
+            ctx.SendValue(yield, v => v.Id);
+            ctx.SendNode(yield, v => v.Prefix, SendSpace);
+            ctx.SendNode(yield, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(yield, v => v.ReturnOrBreakKeyword, ctx.SendTree);
+            ctx.SendNode(yield, v => v.Expression, ctx.SendTree);
+            return yield;
+        }
+
+        public override J VisitDefaultExpression(Cs.DefaultExpression defaultExpression, SenderContext ctx)
+        {
+            ctx.SendValue(defaultExpression, v => v.Id);
+            ctx.SendNode(defaultExpression, v => v.Prefix, SendSpace);
+            ctx.SendNode(defaultExpression, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(defaultExpression, v => v.Padding.TypeOperator, SendContainer);
+            return defaultExpression;
+        }
+
+        public override J VisitIsPattern(Cs.IsPattern isPattern, SenderContext ctx)
+        {
+            ctx.SendValue(isPattern, v => v.Id);
+            ctx.SendNode(isPattern, v => v.Prefix, SendSpace);
+            ctx.SendNode(isPattern, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(isPattern, v => v.Expression, ctx.SendTree);
+            ctx.SendNode(isPattern, v => v.Padding.Pattern, SendLeftPadded);
+            return isPattern;
+        }
+
+        public override J VisitUnaryPattern(Cs.UnaryPattern unaryPattern, SenderContext ctx)
+        {
+            ctx.SendValue(unaryPattern, v => v.Id);
+            ctx.SendNode(unaryPattern, v => v.Prefix, SendSpace);
+            ctx.SendNode(unaryPattern, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(unaryPattern, v => v.Operator, ctx.SendTree);
+            ctx.SendNode(unaryPattern, v => v.Pattern, ctx.SendTree);
+            return unaryPattern;
+        }
+
+        public override J VisitTypePattern(Cs.TypePattern typePattern, SenderContext ctx)
+        {
+            ctx.SendValue(typePattern, v => v.Id);
+            ctx.SendNode(typePattern, v => v.Prefix, SendSpace);
+            ctx.SendNode(typePattern, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(typePattern, v => v.TypeIdentifier, ctx.SendTree);
+            ctx.SendNode(typePattern, v => v.Designation, ctx.SendTree);
+            return typePattern;
+        }
+
+        public override J VisitBinaryPattern(Cs.BinaryPattern binaryPattern, SenderContext ctx)
+        {
+            ctx.SendValue(binaryPattern, v => v.Id);
+            ctx.SendNode(binaryPattern, v => v.Prefix, SendSpace);
+            ctx.SendNode(binaryPattern, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(binaryPattern, v => v.Left, ctx.SendTree);
+            ctx.SendNode(binaryPattern, v => v.Padding.Operator, SendLeftPadded);
+            ctx.SendNode(binaryPattern, v => v.Right, ctx.SendTree);
+            return binaryPattern;
+        }
+
+        public override J VisitConstantPattern(Cs.ConstantPattern constantPattern, SenderContext ctx)
+        {
+            ctx.SendValue(constantPattern, v => v.Id);
+            ctx.SendNode(constantPattern, v => v.Prefix, SendSpace);
+            ctx.SendNode(constantPattern, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(constantPattern, v => v.Value, ctx.SendTree);
+            return constantPattern;
+        }
+
+        public override J VisitDiscardPattern(Cs.DiscardPattern discardPattern, SenderContext ctx)
+        {
+            ctx.SendValue(discardPattern, v => v.Id);
+            ctx.SendNode(discardPattern, v => v.Prefix, SendSpace);
+            ctx.SendNode(discardPattern, v => v.Markers, ctx.SendMarkers);
+            ctx.SendTypedValue(discardPattern, v => v.Type);
+            return discardPattern;
+        }
+
+        public override J VisitListPattern(Cs.ListPattern listPattern, SenderContext ctx)
+        {
+            ctx.SendValue(listPattern, v => v.Id);
+            ctx.SendNode(listPattern, v => v.Prefix, SendSpace);
+            ctx.SendNode(listPattern, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(listPattern, v => v.Padding.Patterns, SendContainer);
+            ctx.SendNode(listPattern, v => v.Designation, ctx.SendTree);
+            return listPattern;
+        }
+
+        public override J VisitParenthesizedPattern(Cs.ParenthesizedPattern parenthesizedPattern, SenderContext ctx)
+        {
+            ctx.SendValue(parenthesizedPattern, v => v.Id);
+            ctx.SendNode(parenthesizedPattern, v => v.Prefix, SendSpace);
+            ctx.SendNode(parenthesizedPattern, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(parenthesizedPattern, v => v.Padding.Pattern, SendContainer);
+            return parenthesizedPattern;
+        }
+
+        public override J VisitRecursivePattern(Cs.RecursivePattern recursivePattern, SenderContext ctx)
+        {
+            ctx.SendValue(recursivePattern, v => v.Id);
+            ctx.SendNode(recursivePattern, v => v.Prefix, SendSpace);
+            ctx.SendNode(recursivePattern, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(recursivePattern, v => v.TypeQualifier, ctx.SendTree);
+            ctx.SendNode(recursivePattern, v => v.PositionalPattern, ctx.SendTree);
+            ctx.SendNode(recursivePattern, v => v.PropertyPattern, ctx.SendTree);
+            ctx.SendNode(recursivePattern, v => v.Designation, ctx.SendTree);
+            return recursivePattern;
+        }
+
+        public override J VisitVarPattern(Cs.VarPattern varPattern, SenderContext ctx)
+        {
+            ctx.SendValue(varPattern, v => v.Id);
+            ctx.SendNode(varPattern, v => v.Prefix, SendSpace);
+            ctx.SendNode(varPattern, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(varPattern, v => v.Designation, ctx.SendTree);
+            return varPattern;
+        }
+
+        public override J VisitPositionalPatternClause(Cs.PositionalPatternClause positionalPatternClause, SenderContext ctx)
+        {
+            ctx.SendValue(positionalPatternClause, v => v.Id);
+            ctx.SendNode(positionalPatternClause, v => v.Prefix, SendSpace);
+            ctx.SendNode(positionalPatternClause, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(positionalPatternClause, v => v.Padding.Subpatterns, SendContainer);
+            return positionalPatternClause;
+        }
+
+        public override J VisitRelationalPattern(Cs.RelationalPattern relationalPattern, SenderContext ctx)
+        {
+            ctx.SendValue(relationalPattern, v => v.Id);
+            ctx.SendNode(relationalPattern, v => v.Prefix, SendSpace);
+            ctx.SendNode(relationalPattern, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(relationalPattern, v => v.Padding.Operator, SendLeftPadded);
+            ctx.SendNode(relationalPattern, v => v.Value, ctx.SendTree);
+            return relationalPattern;
+        }
+
+        public override J VisitSlicePattern(Cs.SlicePattern slicePattern, SenderContext ctx)
+        {
+            ctx.SendValue(slicePattern, v => v.Id);
+            ctx.SendNode(slicePattern, v => v.Prefix, SendSpace);
+            ctx.SendNode(slicePattern, v => v.Markers, ctx.SendMarkers);
+            return slicePattern;
+        }
+
+        public override J VisitPropertyPatternClause(Cs.PropertyPatternClause propertyPatternClause, SenderContext ctx)
+        {
+            ctx.SendValue(propertyPatternClause, v => v.Id);
+            ctx.SendNode(propertyPatternClause, v => v.Prefix, SendSpace);
+            ctx.SendNode(propertyPatternClause, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(propertyPatternClause, v => v.Padding.Subpatterns, SendContainer);
+            return propertyPatternClause;
+        }
+
+        public override J VisitSubpattern(Cs.Subpattern subpattern, SenderContext ctx)
+        {
+            ctx.SendValue(subpattern, v => v.Id);
+            ctx.SendNode(subpattern, v => v.Prefix, SendSpace);
+            ctx.SendNode(subpattern, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(subpattern, v => v.Name, ctx.SendTree);
+            ctx.SendNode(subpattern, v => v.Padding.Pattern, SendLeftPadded);
+            return subpattern;
+        }
+
+        public override J VisitSwitchExpression(Cs.SwitchExpression switchExpression, SenderContext ctx)
+        {
+            ctx.SendValue(switchExpression, v => v.Id);
+            ctx.SendNode(switchExpression, v => v.Prefix, SendSpace);
+            ctx.SendNode(switchExpression, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(switchExpression, v => v.Padding.Expression, SendRightPadded);
+            ctx.SendNode(switchExpression, v => v.Padding.Arms, SendContainer);
+            return switchExpression;
+        }
+
+        public override J VisitSwitchExpressionArm(Cs.SwitchExpressionArm switchExpressionArm, SenderContext ctx)
+        {
+            ctx.SendValue(switchExpressionArm, v => v.Id);
+            ctx.SendNode(switchExpressionArm, v => v.Prefix, SendSpace);
+            ctx.SendNode(switchExpressionArm, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(switchExpressionArm, v => v.Pattern, ctx.SendTree);
+            ctx.SendNode(switchExpressionArm, v => v.Padding.WhenExpression, SendLeftPadded);
+            ctx.SendNode(switchExpressionArm, v => v.Padding.Expression, SendLeftPadded);
+            return switchExpressionArm;
+        }
+
+        public override J VisitSwitchSection(Cs.SwitchSection switchSection, SenderContext ctx)
+        {
+            ctx.SendValue(switchSection, v => v.Id);
+            ctx.SendNode(switchSection, v => v.Prefix, SendSpace);
+            ctx.SendNode(switchSection, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNodes(switchSection, v => v.Labels, ctx.SendTree, t => t.Id);
+            ctx.SendNodes(switchSection, v => v.Padding.Statements, SendRightPadded, t => t.Element.Id);
+            return switchSection;
+        }
+
+        public override J VisitDefaultSwitchLabel(Cs.DefaultSwitchLabel defaultSwitchLabel, SenderContext ctx)
+        {
+            ctx.SendValue(defaultSwitchLabel, v => v.Id);
+            ctx.SendNode(defaultSwitchLabel, v => v.Prefix, SendSpace);
+            ctx.SendNode(defaultSwitchLabel, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(defaultSwitchLabel, v => v.ColonToken, SendSpace);
+            return defaultSwitchLabel;
+        }
+
+        public override J VisitCasePatternSwitchLabel(Cs.CasePatternSwitchLabel casePatternSwitchLabel, SenderContext ctx)
+        {
+            ctx.SendValue(casePatternSwitchLabel, v => v.Id);
+            ctx.SendNode(casePatternSwitchLabel, v => v.Prefix, SendSpace);
+            ctx.SendNode(casePatternSwitchLabel, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(casePatternSwitchLabel, v => v.Pattern, ctx.SendTree);
+            ctx.SendNode(casePatternSwitchLabel, v => v.Padding.WhenClause, SendLeftPadded);
+            ctx.SendNode(casePatternSwitchLabel, v => v.ColonToken, SendSpace);
+            return casePatternSwitchLabel;
+        }
+
+        public override J VisitSwitchStatement(Cs.SwitchStatement switchStatement, SenderContext ctx)
+        {
+            ctx.SendValue(switchStatement, v => v.Id);
+            ctx.SendNode(switchStatement, v => v.Prefix, SendSpace);
+            ctx.SendNode(switchStatement, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(switchStatement, v => v.Padding.Expression, SendContainer);
+            ctx.SendNode(switchStatement, v => v.Padding.Sections, SendContainer);
+            return switchStatement;
+        }
+
+        public override J VisitLockStatement(Cs.LockStatement lockStatement, SenderContext ctx)
+        {
+            ctx.SendValue(lockStatement, v => v.Id);
+            ctx.SendNode(lockStatement, v => v.Prefix, SendSpace);
+            ctx.SendNode(lockStatement, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(lockStatement, v => v.Expression, ctx.SendTree);
+            ctx.SendNode(lockStatement, v => v.Padding.Statement, SendRightPadded);
+            return lockStatement;
+        }
+
+        public override J VisitFixedStatement(Cs.FixedStatement fixedStatement, SenderContext ctx)
+        {
+            ctx.SendValue(fixedStatement, v => v.Id);
+            ctx.SendNode(fixedStatement, v => v.Prefix, SendSpace);
+            ctx.SendNode(fixedStatement, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(fixedStatement, v => v.Declarations, ctx.SendTree);
+            ctx.SendNode(fixedStatement, v => v.Block, ctx.SendTree);
+            return fixedStatement;
+        }
+
+        public override J VisitCheckedStatement(Cs.CheckedStatement checkedStatement, SenderContext ctx)
+        {
+            ctx.SendValue(checkedStatement, v => v.Id);
+            ctx.SendNode(checkedStatement, v => v.Prefix, SendSpace);
+            ctx.SendNode(checkedStatement, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(checkedStatement, v => v.Block, ctx.SendTree);
+            return checkedStatement;
+        }
+
+        public override J VisitUnsafeStatement(Cs.UnsafeStatement unsafeStatement, SenderContext ctx)
+        {
+            ctx.SendValue(unsafeStatement, v => v.Id);
+            ctx.SendNode(unsafeStatement, v => v.Prefix, SendSpace);
+            ctx.SendNode(unsafeStatement, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(unsafeStatement, v => v.Block, ctx.SendTree);
+            return unsafeStatement;
+        }
+
+        public override J VisitRangeExpression(Cs.RangeExpression rangeExpression, SenderContext ctx)
+        {
+            ctx.SendValue(rangeExpression, v => v.Id);
+            ctx.SendNode(rangeExpression, v => v.Prefix, SendSpace);
+            ctx.SendNode(rangeExpression, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(rangeExpression, v => v.Padding.Start, SendRightPadded);
+            ctx.SendNode(rangeExpression, v => v.End, ctx.SendTree);
+            return rangeExpression;
         }
 
         public override J VisitAnnotatedType(J.AnnotatedType annotatedType, SenderContext ctx)
@@ -531,7 +863,7 @@ public record CSharpSender : Sender
             ctx.SendNode(assignmentOperation, v => v.Variable, ctx.SendTree);
             ctx.SendNode(assignmentOperation, v => v.Padding.Operator, SendLeftPadded);
             ctx.SendNode(assignmentOperation, v => v.Assignment, ctx.SendTree);
-            ctx.SendTypedValue(assignmentOperation, v => v.JavaType);
+            ctx.SendTypedValue(assignmentOperation, v => v.Type);
             return assignmentOperation;
         }
 
@@ -543,7 +875,7 @@ public record CSharpSender : Sender
             ctx.SendNode(binary, v => v.Left, ctx.SendTree);
             ctx.SendNode(binary, v => v.Padding.Operator, SendLeftPadded);
             ctx.SendNode(binary, v => v.Right, ctx.SendTree);
-            ctx.SendTypedValue(binary, v => v.JavaType);
+            ctx.SendTypedValue(binary, v => v.Type);
             return binary;
         }
 
@@ -1120,7 +1452,7 @@ public record CSharpSender : Sender
             ctx.SendNode(unary, v => v.Markers, ctx.SendMarkers);
             ctx.SendNode(unary, v => v.Padding.Operator, SendLeftPadded);
             ctx.SendNode(unary, v => v.Expression, ctx.SendTree);
-            ctx.SendTypedValue(unary, v => v.JavaType);
+            ctx.SendTypedValue(unary, v => v.Type);
             return unary;
         }
 

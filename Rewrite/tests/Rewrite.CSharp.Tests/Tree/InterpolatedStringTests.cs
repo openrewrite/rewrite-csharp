@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class InterpolatedStringTests : RewriteTest
+public class InterpolatedStringTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     public void SingleLine()

@@ -1,20 +1,22 @@
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
-using FileAttributes = Rewrite.Core.FileAttributes;
+using MyAttributes = Rewrite.Core.FileAttributes;
 
 namespace Rewrite.RewriteJava.Tree;
 
+public interface Expression<T> : Expression, TypedTree<T> where T : Expression
+{
+    TypedTree TypedTree.WithType(JavaType? type) => ((TypedTree<T>)this).WithType(type);
+    Expression Expression.WithType(JavaType? type) => ((TypedTree<T>)this).WithType(type);
+}
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "PossibleUnintendedReferenceComparison")]
-public interface Expression : J
+public interface Expression :  TypedTree
 {
-    public JavaType? Type => Extensions.GetJavaType(this);
+    public new Expression WithType(JavaType? type);
+    TypedTree TypedTree.WithType(JavaType? type) => WithType(type);
 
-    public T WithType<T>(JavaType? type) where T : J
-    {
-        return Extensions.WithType(this as dynamic, type);
-    }
 
     IList<J> SideEffects => (Enumerable.Empty<J>() as IList<J>)!;
 

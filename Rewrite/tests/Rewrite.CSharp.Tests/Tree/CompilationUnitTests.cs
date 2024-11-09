@@ -6,7 +6,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class CompilationUnitTests : RewriteTest
+public class CompilationUnitTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     public void Empty()

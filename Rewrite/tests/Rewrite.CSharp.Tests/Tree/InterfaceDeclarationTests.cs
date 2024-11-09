@@ -7,7 +7,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class InterfaceDeclarationTests : RewriteTest
+public class InterfaceDeclarationTests(ITestOutputHelper output) : RewriteTest(output)
 {
 
     [Fact]
@@ -35,7 +35,7 @@ public class InterfaceDeclarationTests : RewriteTest
                 spec => spec.AfterRecipe = cu =>
                 {
                     var bar = cu.Descendents().OfType<J.ClassDeclaration>().First(x => x.Name == "Baz");
-                    bar.GetKind().Should().Be(J.ClassDeclaration.Kind.Type.Interface);
+                    bar.DeclarationKind.Should().Be(J.ClassDeclaration.Kind.Types.Interface);
                     bar.Extends.Should().BeNull();
                     bar.Implements.Should().NotBeNull();
                 }
@@ -56,7 +56,7 @@ public class InterfaceDeclarationTests : RewriteTest
                 spec => spec.AfterRecipe = cu =>
                 {
                     var bar = cu.Descendents().OfType<J.ClassDeclaration>().First(x => x.Name == "Baz");
-                    bar.GetKind().Should().Be(J.ClassDeclaration.Kind.Type.Interface);
+                    bar.DeclarationKind.Should().Be(J.ClassDeclaration.Kind.Types.Interface);
                     bar.Extends.Should().BeNull();
                     bar.Implements.Should().NotBeNull();
                 }

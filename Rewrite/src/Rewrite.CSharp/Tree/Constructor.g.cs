@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
@@ -23,6 +24,22 @@ namespace Rewrite.RewriteCSharp.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface Cs : J
 {
+    /// <summary>
+    /// Represents a C# constructor declaration which may include an optional constructor initializer.
+    /// <br/>
+    /// For example:
+    /// <code>
+    ///   // Constructor with no initializer
+    ///   public MyClass() {
+    ///   }
+    ///   // Constructor with base class initializer
+    ///   public MyClass(int x) : base(x) {
+    ///   }
+    ///   // Constructor with this initializer
+    ///   public MyClass(string s) : this(int.Parse(s)) {
+    ///   }
+    /// </code>
+    /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif

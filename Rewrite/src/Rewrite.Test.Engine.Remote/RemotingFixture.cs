@@ -128,7 +128,7 @@ public class RemotingFixture : IDisposable
     {
         _socket.Close();
 
-        var cancellationToken = new CancellationTokenSource(5000).Token;
+        var cancellationToken = new CancellationTokenSource(1000).Token;
 
         while (!cancellationToken.IsCancellationRequested)
         {

@@ -25,7 +25,7 @@ public class EnumGenerator : ISourceGenerator
         var csContainerSrc = $$"""
               namespace Rewrite.RewriteCSharp.Tree;
 
-              public interface CsContainer
+              public partial interface CsContainer
               {
                   public record Location(CsSpace.Location BeforeLocation, CsRightPadded.Location ElementLocation)
                   {
@@ -38,7 +38,7 @@ public class EnumGenerator : ISourceGenerator
         var csSpaceSrc = $$"""
                namespace Rewrite.RewriteCSharp.Tree;
 
-               public interface CsSpace
+               public partial interface CsSpace
                {
                    public record Location
                    {
@@ -52,7 +52,7 @@ public class EnumGenerator : ISourceGenerator
         var csRightPaddedSrc = $$"""
                namespace Rewrite.RewriteCSharp.Tree;
 
-               public interface CsRightPadded
+               public partial interface CsRightPadded
                {
                    public record Location(CsSpace.Location AfterLocation)
                    {
@@ -66,7 +66,7 @@ public class EnumGenerator : ISourceGenerator
         var csLeftPaddedSrc = $$"""
                namespace Rewrite.RewriteCSharp.Tree;
 
-               public interface CsLeftPadded
+               public partial interface CsLeftPadded
                {
                    public record Location(CsSpace.Location BeforeLocation)
                    {

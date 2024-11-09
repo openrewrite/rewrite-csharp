@@ -41,6 +41,11 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     }
 
     @Override
+    public Cs.ForEachVariableLoop visitForEachVariableLoop(Cs.ForEachVariableLoop forEachVariableLoop, P p) {
+        return (Cs.ForEachVariableLoop) super.visitForEachVariableLoop(forEachVariableLoop, p);
+    }
+
+    @Override
     public Cs.Argument visitArgument(Cs.Argument argument, P p) {
         return (Cs.Argument) super.visitArgument(argument, p);
     }
@@ -221,6 +226,11 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     }
 
     @Override
+    public Cs.DestructorDeclaration visitDestructorDeclaration(Cs.DestructorDeclaration destructorDeclaration, P p) {
+        return (Cs.DestructorDeclaration) super.visitDestructorDeclaration(destructorDeclaration, p);
+    }
+
+    @Override
     public Cs.Unary visitUnary(Cs.Unary unary, P p) {
         return (Cs.Unary) super.visitUnary(unary, p);
     }
@@ -238,6 +248,161 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     @Override
     public Cs.TupleElement visitTupleElement(Cs.TupleElement tupleElement, P p) {
         return (Cs.TupleElement) super.visitTupleElement(tupleElement, p);
+    }
+
+    @Override
+    public Cs.NewClass visitNewClass(Cs.NewClass newClass, P p) {
+        return (Cs.NewClass) super.visitNewClass(newClass, p);
+    }
+
+    @Override
+    public Cs.InitializerExpression visitInitializerExpression(Cs.InitializerExpression initializerExpression, P p) {
+        return (Cs.InitializerExpression) super.visitInitializerExpression(initializerExpression, p);
+    }
+
+    @Override
+    public Cs.ImplicitElementAccess visitImplicitElementAccess(Cs.ImplicitElementAccess implicitElementAccess, P p) {
+        return (Cs.ImplicitElementAccess) super.visitImplicitElementAccess(implicitElementAccess, p);
+    }
+
+    @Override
+    public Cs.Yield visitYield(Cs.Yield yield, P p) {
+        return (Cs.Yield) super.visitYield(yield, p);
+    }
+
+    @Override
+    public Cs.DefaultExpression visitDefaultExpression(Cs.DefaultExpression defaultExpression, P p) {
+        return (Cs.DefaultExpression) super.visitDefaultExpression(defaultExpression, p);
+    }
+
+    @Override
+    public Cs.IsPattern visitIsPattern(Cs.IsPattern isPattern, P p) {
+        return (Cs.IsPattern) super.visitIsPattern(isPattern, p);
+    }
+
+    @Override
+    public Cs.UnaryPattern visitUnaryPattern(Cs.UnaryPattern unaryPattern, P p) {
+        return (Cs.UnaryPattern) super.visitUnaryPattern(unaryPattern, p);
+    }
+
+    @Override
+    public Cs.TypePattern visitTypePattern(Cs.TypePattern typePattern, P p) {
+        return (Cs.TypePattern) super.visitTypePattern(typePattern, p);
+    }
+
+    @Override
+    public Cs.BinaryPattern visitBinaryPattern(Cs.BinaryPattern binaryPattern, P p) {
+        return (Cs.BinaryPattern) super.visitBinaryPattern(binaryPattern, p);
+    }
+
+    @Override
+    public Cs.ConstantPattern visitConstantPattern(Cs.ConstantPattern constantPattern, P p) {
+        return (Cs.ConstantPattern) super.visitConstantPattern(constantPattern, p);
+    }
+
+    @Override
+    public Cs.DiscardPattern visitDiscardPattern(Cs.DiscardPattern discardPattern, P p) {
+        return (Cs.DiscardPattern) super.visitDiscardPattern(discardPattern, p);
+    }
+
+    @Override
+    public Cs.ListPattern visitListPattern(Cs.ListPattern listPattern, P p) {
+        return (Cs.ListPattern) super.visitListPattern(listPattern, p);
+    }
+
+    @Override
+    public Cs.ParenthesizedPattern visitParenthesizedPattern(Cs.ParenthesizedPattern parenthesizedPattern, P p) {
+        return (Cs.ParenthesizedPattern) super.visitParenthesizedPattern(parenthesizedPattern, p);
+    }
+
+    @Override
+    public Cs.RecursivePattern visitRecursivePattern(Cs.RecursivePattern recursivePattern, P p) {
+        return (Cs.RecursivePattern) super.visitRecursivePattern(recursivePattern, p);
+    }
+
+    @Override
+    public Cs.VarPattern visitVarPattern(Cs.VarPattern varPattern, P p) {
+        return (Cs.VarPattern) super.visitVarPattern(varPattern, p);
+    }
+
+    @Override
+    public Cs.PositionalPatternClause visitPositionalPatternClause(Cs.PositionalPatternClause positionalPatternClause, P p) {
+        return (Cs.PositionalPatternClause) super.visitPositionalPatternClause(positionalPatternClause, p);
+    }
+
+    @Override
+    public Cs.RelationalPattern visitRelationalPattern(Cs.RelationalPattern relationalPattern, P p) {
+        return (Cs.RelationalPattern) super.visitRelationalPattern(relationalPattern, p);
+    }
+
+    @Override
+    public Cs.SlicePattern visitSlicePattern(Cs.SlicePattern slicePattern, P p) {
+        return (Cs.SlicePattern) super.visitSlicePattern(slicePattern, p);
+    }
+
+    @Override
+    public Cs.PropertyPatternClause visitPropertyPatternClause(Cs.PropertyPatternClause propertyPatternClause, P p) {
+        return (Cs.PropertyPatternClause) super.visitPropertyPatternClause(propertyPatternClause, p);
+    }
+
+    @Override
+    public Cs.Subpattern visitSubpattern(Cs.Subpattern subpattern, P p) {
+        return (Cs.Subpattern) super.visitSubpattern(subpattern, p);
+    }
+
+    @Override
+    public Cs.SwitchExpression visitSwitchExpression(Cs.SwitchExpression switchExpression, P p) {
+        return (Cs.SwitchExpression) super.visitSwitchExpression(switchExpression, p);
+    }
+
+    @Override
+    public Cs.SwitchExpressionArm visitSwitchExpressionArm(Cs.SwitchExpressionArm switchExpressionArm, P p) {
+        return (Cs.SwitchExpressionArm) super.visitSwitchExpressionArm(switchExpressionArm, p);
+    }
+
+    @Override
+    public Cs.SwitchSection visitSwitchSection(Cs.SwitchSection switchSection, P p) {
+        return (Cs.SwitchSection) super.visitSwitchSection(switchSection, p);
+    }
+
+    @Override
+    public Cs.DefaultSwitchLabel visitDefaultSwitchLabel(Cs.DefaultSwitchLabel defaultSwitchLabel, P p) {
+        return (Cs.DefaultSwitchLabel) super.visitDefaultSwitchLabel(defaultSwitchLabel, p);
+    }
+
+    @Override
+    public Cs.CasePatternSwitchLabel visitCasePatternSwitchLabel(Cs.CasePatternSwitchLabel casePatternSwitchLabel, P p) {
+        return (Cs.CasePatternSwitchLabel) super.visitCasePatternSwitchLabel(casePatternSwitchLabel, p);
+    }
+
+    @Override
+    public Cs.SwitchStatement visitSwitchStatement(Cs.SwitchStatement switchStatement, P p) {
+        return (Cs.SwitchStatement) super.visitSwitchStatement(switchStatement, p);
+    }
+
+    @Override
+    public Cs.LockStatement visitLockStatement(Cs.LockStatement lockStatement, P p) {
+        return (Cs.LockStatement) super.visitLockStatement(lockStatement, p);
+    }
+
+    @Override
+    public Cs.FixedStatement visitFixedStatement(Cs.FixedStatement fixedStatement, P p) {
+        return (Cs.FixedStatement) super.visitFixedStatement(fixedStatement, p);
+    }
+
+    @Override
+    public Cs.CheckedStatement visitCheckedStatement(Cs.CheckedStatement checkedStatement, P p) {
+        return (Cs.CheckedStatement) super.visitCheckedStatement(checkedStatement, p);
+    }
+
+    @Override
+    public Cs.UnsafeStatement visitUnsafeStatement(Cs.UnsafeStatement unsafeStatement, P p) {
+        return (Cs.UnsafeStatement) super.visitUnsafeStatement(unsafeStatement, p);
+    }
+
+    @Override
+    public Cs.RangeExpression visitRangeExpression(Cs.RangeExpression rangeExpression, P p) {
+        return (Cs.RangeExpression) super.visitRangeExpression(rangeExpression, p);
     }
 
     @Override

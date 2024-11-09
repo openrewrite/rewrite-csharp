@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
@@ -30,10 +31,10 @@ public partial interface J : Rewrite.Core.Tree
     Space prefix,
     Markers markers,
     Expression left,
-    JLeftPadded<Binary.Type> @operator,
+    JLeftPadded<Binary.Types> @operator,
     Expression right,
-    JavaType? javaType
-    ) : J, Expression, TypedTree, MutableTree<Binary>
+    JavaType? type
+    ) : J, Expression, TypedTree, Expression<Binary>, TypedTree<Binary>, MutableTree<Binary>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -69,30 +70,30 @@ public partial interface J : Rewrite.Core.Tree
 
         public Binary WithId(Guid newId)
         {
-            return newId == id ? this : new Binary(newId, prefix, markers, left, _operator, right, javaType);
+            return newId == id ? this : new Binary(newId, prefix, markers, left, _operator, right, type);
         }
         public Space Prefix => prefix;
 
         public Binary WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Binary(id, newPrefix, markers, left, _operator, right, javaType);
+            return newPrefix == prefix ? this : new Binary(id, newPrefix, markers, left, _operator, right, type);
         }
         public Markers Markers => markers;
 
         public Binary WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Binary(id, prefix, newMarkers, left, _operator, right, javaType);
+            return ReferenceEquals(newMarkers, markers) ? this : new Binary(id, prefix, newMarkers, left, _operator, right, type);
         }
         public Expression Left => left;
 
         public Binary WithLeft(Expression newLeft)
         {
-            return ReferenceEquals(newLeft, left) ? this : new Binary(id, prefix, markers, newLeft, _operator, right, javaType);
+            return ReferenceEquals(newLeft, left) ? this : new Binary(id, prefix, markers, newLeft, _operator, right, type);
         }
-        private readonly JLeftPadded<Type> _operator = @operator;
-        public Type Operator => _operator.Element;
+        private readonly JLeftPadded<Types> _operator = @operator;
+        public Types Operator => _operator.Element;
 
-        public Binary WithOperator(Type newOperator)
+        public Binary WithOperator(Types newOperator)
         {
             return Padding.WithOperator(_operator.WithElement(newOperator));
         }
@@ -100,15 +101,15 @@ public partial interface J : Rewrite.Core.Tree
 
         public Binary WithRight(Expression newRight)
         {
-            return ReferenceEquals(newRight, right) ? this : new Binary(id, prefix, markers, left, _operator, newRight, javaType);
+            return ReferenceEquals(newRight, right) ? this : new Binary(id, prefix, markers, left, _operator, newRight, type);
         }
-        public JavaType? JavaType => javaType;
+        public JavaType? Type => type;
 
-        public Binary WithJavaType(JavaType? newJavaType)
+        public Binary WithType(JavaType? newType)
         {
-            return newJavaType == javaType ? this : new Binary(id, prefix, markers, left, _operator, right, newJavaType);
+            return newType == type ? this : new Binary(id, prefix, markers, left, _operator, right, newType);
         }
-        public enum Type
+        public enum Types
         {
             Addition,
             Subtraction,
@@ -132,11 +133,11 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.Binary T)
         {
-            public JLeftPadded<J.Binary.Type> Operator => T._operator;
+            public JLeftPadded<J.Binary.Types> Operator => T._operator;
 
-            public J.Binary WithOperator(JLeftPadded<J.Binary.Type> newOperator)
+            public J.Binary WithOperator(JLeftPadded<J.Binary.Types> newOperator)
             {
-                return T._operator == newOperator ? T : new J.Binary(T.Id, T.Prefix, T.Markers, T.Left, newOperator, T.Right, T.JavaType);
+                return T._operator == newOperator ? T : new J.Binary(T.Id, T.Prefix, T.Markers, T.Left, newOperator, T.Right, T.Type);
             }
 
         }

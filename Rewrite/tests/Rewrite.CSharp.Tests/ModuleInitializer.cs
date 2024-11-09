@@ -25,7 +25,9 @@ public class ModuleInitializer
         if (ITestExecutionContext.Current() == null)
         {
             ITestExecutionContext.SetCurrent(new LocalTestExecutionContext());
-            IPrinterFactory.Set(new LocalPrinterFactory());
+            var localPrinter = new LocalPrinterFactory();
+            IPrinterFactory.Set(localPrinter);
+            IPrinterFactory.Default = localPrinter;
             Initialization.Initialize();
             SenderContext.Register(typeof(Cs), () => new CSharpSender());
             ReceiverContext.Register(typeof(Cs), () => new CSharpReceiver());

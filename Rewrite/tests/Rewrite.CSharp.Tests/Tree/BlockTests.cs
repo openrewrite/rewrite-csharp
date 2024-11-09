@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class BlockTests : RewriteTest
+public class BlockTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     public void MultipleStatementBlock()
