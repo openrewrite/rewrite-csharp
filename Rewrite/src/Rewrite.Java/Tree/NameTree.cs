@@ -9,4 +9,5 @@ namespace Rewrite.RewriteJava.Tree;
 [SuppressMessage("ReSharper", "PossibleUnintendedReferenceComparison")]
 public interface NameTree : TypedTree
 {
+    public new NameTree WithType(JavaType? type) => (NameTree)((TypedTree)this).WithType(type);
 }

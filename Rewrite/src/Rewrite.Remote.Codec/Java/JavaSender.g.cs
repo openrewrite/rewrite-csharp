@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
@@ -107,7 +108,7 @@ public record JavaSender : Sender
             ctx.SendNode(assignmentOperation, v => v.Variable, ctx.SendTree);
             ctx.SendNode(assignmentOperation, v => v.Padding.Operator, SendLeftPadded);
             ctx.SendNode(assignmentOperation, v => v.Assignment, ctx.SendTree);
-            ctx.SendTypedValue(assignmentOperation, v => v.JavaType);
+            ctx.SendTypedValue(assignmentOperation, v => v.Type);
             return assignmentOperation;
         }
 
@@ -119,7 +120,7 @@ public record JavaSender : Sender
             ctx.SendNode(binary, v => v.Left, ctx.SendTree);
             ctx.SendNode(binary, v => v.Padding.Operator, SendLeftPadded);
             ctx.SendNode(binary, v => v.Right, ctx.SendTree);
-            ctx.SendTypedValue(binary, v => v.JavaType);
+            ctx.SendTypedValue(binary, v => v.Type);
             return binary;
         }
 
@@ -713,7 +714,7 @@ public record JavaSender : Sender
             ctx.SendNode(unary, v => v.Markers, ctx.SendMarkers);
             ctx.SendNode(unary, v => v.Padding.Operator, SendLeftPadded);
             ctx.SendNode(unary, v => v.Expression, ctx.SendTree);
-            ctx.SendTypedValue(unary, v => v.JavaType);
+            ctx.SendTypedValue(unary, v => v.Type);
             return unary;
         }
 

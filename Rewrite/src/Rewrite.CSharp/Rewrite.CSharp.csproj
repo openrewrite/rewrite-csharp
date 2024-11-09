@@ -24,8 +24,7 @@
     </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rewrite.Analyzers\Rewrite.Analyzers.csproj"
-                      OutputItemType="Analyzer"
-                      ReferenceOutputAssembly="false" />
+                      OutputItemType="Analyzer" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
@@ -62,6 +63,26 @@ public record CSharpReceiver : Receiver
             compilationUnit = compilationUnit.Padding.WithMembers(ctx.ReceiveNodes(compilationUnit.Padding.Members, ReceiveRightPadded)!);
             compilationUnit = compilationUnit.WithEof(ctx.ReceiveNode(compilationUnit.Eof, ReceiveSpace)!);
             return compilationUnit;
+        }
+
+        public override J VisitForEachVariableLoop(Cs.ForEachVariableLoop forEachVariableLoop, ReceiverContext ctx)
+        {
+            forEachVariableLoop = forEachVariableLoop.WithId(ctx.ReceiveValue(forEachVariableLoop.Id)!);
+            forEachVariableLoop = forEachVariableLoop.WithPrefix(ctx.ReceiveNode(forEachVariableLoop.Prefix, ReceiveSpace)!);
+            forEachVariableLoop = forEachVariableLoop.WithMarkers(ctx.ReceiveNode(forEachVariableLoop.Markers, ctx.ReceiveMarkers)!);
+            forEachVariableLoop = forEachVariableLoop.WithControlElement(ctx.ReceiveNode(forEachVariableLoop.ControlElement, ctx.ReceiveTree)!);
+            forEachVariableLoop = forEachVariableLoop.Padding.WithBody(ctx.ReceiveNode(forEachVariableLoop.Padding.Body, ReceiveRightPadded)!);
+            return forEachVariableLoop;
+        }
+
+        public override J VisitForEachVariableLoopControl(Cs.ForEachVariableLoop.Control control, ReceiverContext ctx)
+        {
+            control = control.WithId(ctx.ReceiveValue(control.Id)!);
+            control = control.WithPrefix(ctx.ReceiveNode(control.Prefix, ReceiveSpace)!);
+            control = control.WithMarkers(ctx.ReceiveNode(control.Markers, ctx.ReceiveMarkers)!);
+            control = control.Padding.WithVariable(ctx.ReceiveNode(control.Padding.Variable, ReceiveRightPadded)!);
+            control = control.Padding.WithIterable(ctx.ReceiveNode(control.Padding.Iterable, ReceiveRightPadded)!);
+            return control;
         }
 
         public override J VisitArgument(Cs.Argument argument, ReceiverContext ctx)
@@ -427,6 +448,16 @@ public record CSharpReceiver : Receiver
             return constructor;
         }
 
+        public override J VisitDestructorDeclaration(Cs.DestructorDeclaration destructorDeclaration, ReceiverContext ctx)
+        {
+            destructorDeclaration = destructorDeclaration.WithId(ctx.ReceiveValue(destructorDeclaration.Id)!);
+            destructorDeclaration = destructorDeclaration.WithPrefix(ctx.ReceiveNode(destructorDeclaration.Prefix, ReceiveSpace)!);
+            destructorDeclaration = destructorDeclaration.WithMarkers(ctx.ReceiveNode(destructorDeclaration.Markers, ctx.ReceiveMarkers)!);
+            destructorDeclaration = destructorDeclaration.WithInitializer(ctx.ReceiveNode(destructorDeclaration.Initializer, ctx.ReceiveTree));
+            destructorDeclaration = destructorDeclaration.WithConstructorCore(ctx.ReceiveNode(destructorDeclaration.ConstructorCore, ctx.ReceiveTree)!);
+            return destructorDeclaration;
+        }
+
         public override J VisitUnary(Cs.Unary unary, ReceiverContext ctx)
         {
             unary = unary.WithId(ctx.ReceiveValue(unary.Id)!);
@@ -434,7 +465,7 @@ public record CSharpReceiver : Receiver
             unary = unary.WithMarkers(ctx.ReceiveNode(unary.Markers, ctx.ReceiveMarkers)!);
             unary = unary.Padding.WithOperator(ctx.ReceiveNode(unary.Padding.Operator, ReceiveLeftPadded)!);
             unary = unary.WithExpression(ctx.ReceiveNode(unary.Expression, ctx.ReceiveTree)!);
-            unary = unary.WithJavaType(ctx.ReceiveValue(unary.JavaType));
+            unary = unary.WithType(ctx.ReceiveValue(unary.Type));
             return unary;
         }
 
@@ -466,6 +497,307 @@ public record CSharpReceiver : Receiver
             tupleElement = tupleElement.WithType(ctx.ReceiveNode(tupleElement.Type, ctx.ReceiveTree)!);
             tupleElement = tupleElement.WithName(ctx.ReceiveNode(tupleElement.Name, ctx.ReceiveTree));
             return tupleElement;
+        }
+
+        public override J VisitNewClass(Cs.NewClass newClass, ReceiverContext ctx)
+        {
+            newClass = newClass.WithId(ctx.ReceiveValue(newClass.Id)!);
+            newClass = newClass.WithPrefix(ctx.ReceiveNode(newClass.Prefix, ReceiveSpace)!);
+            newClass = newClass.WithMarkers(ctx.ReceiveNode(newClass.Markers, ctx.ReceiveMarkers)!);
+            newClass = newClass.WithNewClassCore(ctx.ReceiveNode(newClass.NewClassCore, ctx.ReceiveTree)!);
+            newClass = newClass.WithInitializer(ctx.ReceiveNode(newClass.Initializer, ctx.ReceiveTree));
+            return newClass;
+        }
+
+        public override J VisitInitializerExpression(Cs.InitializerExpression initializerExpression, ReceiverContext ctx)
+        {
+            initializerExpression = initializerExpression.WithId(ctx.ReceiveValue(initializerExpression.Id)!);
+            initializerExpression = initializerExpression.WithPrefix(ctx.ReceiveNode(initializerExpression.Prefix, ReceiveSpace)!);
+            initializerExpression = initializerExpression.WithMarkers(ctx.ReceiveNode(initializerExpression.Markers, ctx.ReceiveMarkers)!);
+            initializerExpression = initializerExpression.Padding.WithExpressions(ctx.ReceiveNode(initializerExpression.Padding.Expressions, ReceiveContainer)!);
+            return initializerExpression;
+        }
+
+        public override J VisitImplicitElementAccess(Cs.ImplicitElementAccess implicitElementAccess, ReceiverContext ctx)
+        {
+            implicitElementAccess = implicitElementAccess.WithId(ctx.ReceiveValue(implicitElementAccess.Id)!);
+            implicitElementAccess = implicitElementAccess.WithPrefix(ctx.ReceiveNode(implicitElementAccess.Prefix, ReceiveSpace)!);
+            implicitElementAccess = implicitElementAccess.WithMarkers(ctx.ReceiveNode(implicitElementAccess.Markers, ctx.ReceiveMarkers)!);
+            implicitElementAccess = implicitElementAccess.Padding.WithArgumentList(ctx.ReceiveNode(implicitElementAccess.Padding.ArgumentList, ReceiveContainer)!);
+            return implicitElementAccess;
+        }
+
+        public override J VisitYield(Cs.Yield yield, ReceiverContext ctx)
+        {
+            yield = yield.WithId(ctx.ReceiveValue(yield.Id)!);
+            yield = yield.WithPrefix(ctx.ReceiveNode(yield.Prefix, ReceiveSpace)!);
+            yield = yield.WithMarkers(ctx.ReceiveNode(yield.Markers, ctx.ReceiveMarkers)!);
+            yield = yield.WithReturnOrBreakKeyword(ctx.ReceiveNode(yield.ReturnOrBreakKeyword, ctx.ReceiveTree)!);
+            yield = yield.WithExpression(ctx.ReceiveNode(yield.Expression, ctx.ReceiveTree));
+            return yield;
+        }
+
+        public override J VisitDefaultExpression(Cs.DefaultExpression defaultExpression, ReceiverContext ctx)
+        {
+            defaultExpression = defaultExpression.WithId(ctx.ReceiveValue(defaultExpression.Id)!);
+            defaultExpression = defaultExpression.WithPrefix(ctx.ReceiveNode(defaultExpression.Prefix, ReceiveSpace)!);
+            defaultExpression = defaultExpression.WithMarkers(ctx.ReceiveNode(defaultExpression.Markers, ctx.ReceiveMarkers)!);
+            defaultExpression = defaultExpression.Padding.WithTypeOperator(ctx.ReceiveNode(defaultExpression.Padding.TypeOperator, ReceiveContainer));
+            return defaultExpression;
+        }
+
+        public override J VisitIsPattern(Cs.IsPattern isPattern, ReceiverContext ctx)
+        {
+            isPattern = isPattern.WithId(ctx.ReceiveValue(isPattern.Id)!);
+            isPattern = isPattern.WithPrefix(ctx.ReceiveNode(isPattern.Prefix, ReceiveSpace)!);
+            isPattern = isPattern.WithMarkers(ctx.ReceiveNode(isPattern.Markers, ctx.ReceiveMarkers)!);
+            isPattern = isPattern.WithExpression(ctx.ReceiveNode(isPattern.Expression, ctx.ReceiveTree)!);
+            isPattern = isPattern.Padding.WithPattern(ctx.ReceiveNode(isPattern.Padding.Pattern, ReceiveLeftPadded)!);
+            return isPattern;
+        }
+
+        public override J VisitUnaryPattern(Cs.UnaryPattern unaryPattern, ReceiverContext ctx)
+        {
+            unaryPattern = unaryPattern.WithId(ctx.ReceiveValue(unaryPattern.Id)!);
+            unaryPattern = unaryPattern.WithPrefix(ctx.ReceiveNode(unaryPattern.Prefix, ReceiveSpace)!);
+            unaryPattern = unaryPattern.WithMarkers(ctx.ReceiveNode(unaryPattern.Markers, ctx.ReceiveMarkers)!);
+            unaryPattern = unaryPattern.WithOperator(ctx.ReceiveNode(unaryPattern.Operator, ctx.ReceiveTree)!);
+            unaryPattern = unaryPattern.WithPattern(ctx.ReceiveNode(unaryPattern.Pattern, ctx.ReceiveTree)!);
+            return unaryPattern;
+        }
+
+        public override J VisitTypePattern(Cs.TypePattern typePattern, ReceiverContext ctx)
+        {
+            typePattern = typePattern.WithId(ctx.ReceiveValue(typePattern.Id)!);
+            typePattern = typePattern.WithPrefix(ctx.ReceiveNode(typePattern.Prefix, ReceiveSpace)!);
+            typePattern = typePattern.WithMarkers(ctx.ReceiveNode(typePattern.Markers, ctx.ReceiveMarkers)!);
+            typePattern = typePattern.WithTypeIdentifier(ctx.ReceiveNode(typePattern.TypeIdentifier, ctx.ReceiveTree)!);
+            typePattern = typePattern.WithDesignation(ctx.ReceiveNode(typePattern.Designation, ctx.ReceiveTree));
+            return typePattern;
+        }
+
+        public override J VisitBinaryPattern(Cs.BinaryPattern binaryPattern, ReceiverContext ctx)
+        {
+            binaryPattern = binaryPattern.WithId(ctx.ReceiveValue(binaryPattern.Id)!);
+            binaryPattern = binaryPattern.WithPrefix(ctx.ReceiveNode(binaryPattern.Prefix, ReceiveSpace)!);
+            binaryPattern = binaryPattern.WithMarkers(ctx.ReceiveNode(binaryPattern.Markers, ctx.ReceiveMarkers)!);
+            binaryPattern = binaryPattern.WithLeft(ctx.ReceiveNode(binaryPattern.Left, ctx.ReceiveTree)!);
+            binaryPattern = binaryPattern.Padding.WithOperator(ctx.ReceiveNode(binaryPattern.Padding.Operator, ReceiveLeftPadded)!);
+            binaryPattern = binaryPattern.WithRight(ctx.ReceiveNode(binaryPattern.Right, ctx.ReceiveTree)!);
+            return binaryPattern;
+        }
+
+        public override J VisitConstantPattern(Cs.ConstantPattern constantPattern, ReceiverContext ctx)
+        {
+            constantPattern = constantPattern.WithId(ctx.ReceiveValue(constantPattern.Id)!);
+            constantPattern = constantPattern.WithPrefix(ctx.ReceiveNode(constantPattern.Prefix, ReceiveSpace)!);
+            constantPattern = constantPattern.WithMarkers(ctx.ReceiveNode(constantPattern.Markers, ctx.ReceiveMarkers)!);
+            constantPattern = constantPattern.WithValue(ctx.ReceiveNode(constantPattern.Value, ctx.ReceiveTree)!);
+            return constantPattern;
+        }
+
+        public override J VisitDiscardPattern(Cs.DiscardPattern discardPattern, ReceiverContext ctx)
+        {
+            discardPattern = discardPattern.WithId(ctx.ReceiveValue(discardPattern.Id)!);
+            discardPattern = discardPattern.WithPrefix(ctx.ReceiveNode(discardPattern.Prefix, ReceiveSpace)!);
+            discardPattern = discardPattern.WithMarkers(ctx.ReceiveNode(discardPattern.Markers, ctx.ReceiveMarkers)!);
+            discardPattern = discardPattern.WithType(ctx.ReceiveValue(discardPattern.Type)!);
+            return discardPattern;
+        }
+
+        public override J VisitListPattern(Cs.ListPattern listPattern, ReceiverContext ctx)
+        {
+            listPattern = listPattern.WithId(ctx.ReceiveValue(listPattern.Id)!);
+            listPattern = listPattern.WithPrefix(ctx.ReceiveNode(listPattern.Prefix, ReceiveSpace)!);
+            listPattern = listPattern.WithMarkers(ctx.ReceiveNode(listPattern.Markers, ctx.ReceiveMarkers)!);
+            listPattern = listPattern.Padding.WithPatterns(ctx.ReceiveNode(listPattern.Padding.Patterns, ReceiveContainer)!);
+            listPattern = listPattern.WithDesignation(ctx.ReceiveNode(listPattern.Designation, ctx.ReceiveTree));
+            return listPattern;
+        }
+
+        public override J VisitParenthesizedPattern(Cs.ParenthesizedPattern parenthesizedPattern, ReceiverContext ctx)
+        {
+            parenthesizedPattern = parenthesizedPattern.WithId(ctx.ReceiveValue(parenthesizedPattern.Id)!);
+            parenthesizedPattern = parenthesizedPattern.WithPrefix(ctx.ReceiveNode(parenthesizedPattern.Prefix, ReceiveSpace)!);
+            parenthesizedPattern = parenthesizedPattern.WithMarkers(ctx.ReceiveNode(parenthesizedPattern.Markers, ctx.ReceiveMarkers)!);
+            parenthesizedPattern = parenthesizedPattern.Padding.WithPattern(ctx.ReceiveNode(parenthesizedPattern.Padding.Pattern, ReceiveContainer)!);
+            return parenthesizedPattern;
+        }
+
+        public override J VisitRecursivePattern(Cs.RecursivePattern recursivePattern, ReceiverContext ctx)
+        {
+            recursivePattern = recursivePattern.WithId(ctx.ReceiveValue(recursivePattern.Id)!);
+            recursivePattern = recursivePattern.WithPrefix(ctx.ReceiveNode(recursivePattern.Prefix, ReceiveSpace)!);
+            recursivePattern = recursivePattern.WithMarkers(ctx.ReceiveNode(recursivePattern.Markers, ctx.ReceiveMarkers)!);
+            recursivePattern = recursivePattern.WithTypeQualifier(ctx.ReceiveNode(recursivePattern.TypeQualifier, ctx.ReceiveTree));
+            recursivePattern = recursivePattern.WithPositionalPattern(ctx.ReceiveNode(recursivePattern.PositionalPattern, ctx.ReceiveTree));
+            recursivePattern = recursivePattern.WithPropertyPattern(ctx.ReceiveNode(recursivePattern.PropertyPattern, ctx.ReceiveTree));
+            recursivePattern = recursivePattern.WithDesignation(ctx.ReceiveNode(recursivePattern.Designation, ctx.ReceiveTree));
+            return recursivePattern;
+        }
+
+        public override J VisitVarPattern(Cs.VarPattern varPattern, ReceiverContext ctx)
+        {
+            varPattern = varPattern.WithId(ctx.ReceiveValue(varPattern.Id)!);
+            varPattern = varPattern.WithPrefix(ctx.ReceiveNode(varPattern.Prefix, ReceiveSpace)!);
+            varPattern = varPattern.WithMarkers(ctx.ReceiveNode(varPattern.Markers, ctx.ReceiveMarkers)!);
+            varPattern = varPattern.WithDesignation(ctx.ReceiveNode(varPattern.Designation, ctx.ReceiveTree)!);
+            return varPattern;
+        }
+
+        public override J VisitPositionalPatternClause(Cs.PositionalPatternClause positionalPatternClause, ReceiverContext ctx)
+        {
+            positionalPatternClause = positionalPatternClause.WithId(ctx.ReceiveValue(positionalPatternClause.Id)!);
+            positionalPatternClause = positionalPatternClause.WithPrefix(ctx.ReceiveNode(positionalPatternClause.Prefix, ReceiveSpace)!);
+            positionalPatternClause = positionalPatternClause.WithMarkers(ctx.ReceiveNode(positionalPatternClause.Markers, ctx.ReceiveMarkers)!);
+            positionalPatternClause = positionalPatternClause.Padding.WithSubpatterns(ctx.ReceiveNode(positionalPatternClause.Padding.Subpatterns, ReceiveContainer)!);
+            return positionalPatternClause;
+        }
+
+        public override J VisitRelationalPattern(Cs.RelationalPattern relationalPattern, ReceiverContext ctx)
+        {
+            relationalPattern = relationalPattern.WithId(ctx.ReceiveValue(relationalPattern.Id)!);
+            relationalPattern = relationalPattern.WithPrefix(ctx.ReceiveNode(relationalPattern.Prefix, ReceiveSpace)!);
+            relationalPattern = relationalPattern.WithMarkers(ctx.ReceiveNode(relationalPattern.Markers, ctx.ReceiveMarkers)!);
+            relationalPattern = relationalPattern.Padding.WithOperator(ctx.ReceiveNode(relationalPattern.Padding.Operator, ReceiveLeftPadded)!);
+            relationalPattern = relationalPattern.WithValue(ctx.ReceiveNode(relationalPattern.Value, ctx.ReceiveTree)!);
+            return relationalPattern;
+        }
+
+        public override J VisitSlicePattern(Cs.SlicePattern slicePattern, ReceiverContext ctx)
+        {
+            slicePattern = slicePattern.WithId(ctx.ReceiveValue(slicePattern.Id)!);
+            slicePattern = slicePattern.WithPrefix(ctx.ReceiveNode(slicePattern.Prefix, ReceiveSpace)!);
+            slicePattern = slicePattern.WithMarkers(ctx.ReceiveNode(slicePattern.Markers, ctx.ReceiveMarkers)!);
+            return slicePattern;
+        }
+
+        public override J VisitPropertyPatternClause(Cs.PropertyPatternClause propertyPatternClause, ReceiverContext ctx)
+        {
+            propertyPatternClause = propertyPatternClause.WithId(ctx.ReceiveValue(propertyPatternClause.Id)!);
+            propertyPatternClause = propertyPatternClause.WithPrefix(ctx.ReceiveNode(propertyPatternClause.Prefix, ReceiveSpace)!);
+            propertyPatternClause = propertyPatternClause.WithMarkers(ctx.ReceiveNode(propertyPatternClause.Markers, ctx.ReceiveMarkers)!);
+            propertyPatternClause = propertyPatternClause.Padding.WithSubpatterns(ctx.ReceiveNode(propertyPatternClause.Padding.Subpatterns, ReceiveContainer)!);
+            return propertyPatternClause;
+        }
+
+        public override J VisitSubpattern(Cs.Subpattern subpattern, ReceiverContext ctx)
+        {
+            subpattern = subpattern.WithId(ctx.ReceiveValue(subpattern.Id)!);
+            subpattern = subpattern.WithPrefix(ctx.ReceiveNode(subpattern.Prefix, ReceiveSpace)!);
+            subpattern = subpattern.WithMarkers(ctx.ReceiveNode(subpattern.Markers, ctx.ReceiveMarkers)!);
+            subpattern = subpattern.WithName(ctx.ReceiveNode(subpattern.Name, ctx.ReceiveTree));
+            subpattern = subpattern.Padding.WithPattern(ctx.ReceiveNode(subpattern.Padding.Pattern, ReceiveLeftPadded)!);
+            return subpattern;
+        }
+
+        public override J VisitSwitchExpression(Cs.SwitchExpression switchExpression, ReceiverContext ctx)
+        {
+            switchExpression = switchExpression.WithId(ctx.ReceiveValue(switchExpression.Id)!);
+            switchExpression = switchExpression.WithPrefix(ctx.ReceiveNode(switchExpression.Prefix, ReceiveSpace)!);
+            switchExpression = switchExpression.WithMarkers(ctx.ReceiveNode(switchExpression.Markers, ctx.ReceiveMarkers)!);
+            switchExpression = switchExpression.Padding.WithExpression(ctx.ReceiveNode(switchExpression.Padding.Expression, ReceiveRightPadded)!);
+            switchExpression = switchExpression.Padding.WithArms(ctx.ReceiveNode(switchExpression.Padding.Arms, ReceiveContainer)!);
+            return switchExpression;
+        }
+
+        public override J VisitSwitchExpressionArm(Cs.SwitchExpressionArm switchExpressionArm, ReceiverContext ctx)
+        {
+            switchExpressionArm = switchExpressionArm.WithId(ctx.ReceiveValue(switchExpressionArm.Id)!);
+            switchExpressionArm = switchExpressionArm.WithPrefix(ctx.ReceiveNode(switchExpressionArm.Prefix, ReceiveSpace)!);
+            switchExpressionArm = switchExpressionArm.WithMarkers(ctx.ReceiveNode(switchExpressionArm.Markers, ctx.ReceiveMarkers)!);
+            switchExpressionArm = switchExpressionArm.WithPattern(ctx.ReceiveNode(switchExpressionArm.Pattern, ctx.ReceiveTree)!);
+            switchExpressionArm = switchExpressionArm.Padding.WithWhenExpression(ctx.ReceiveNode(switchExpressionArm.Padding.WhenExpression, ReceiveLeftPadded));
+            switchExpressionArm = switchExpressionArm.Padding.WithExpression(ctx.ReceiveNode(switchExpressionArm.Padding.Expression, ReceiveLeftPadded)!);
+            return switchExpressionArm;
+        }
+
+        public override J VisitSwitchSection(Cs.SwitchSection switchSection, ReceiverContext ctx)
+        {
+            switchSection = switchSection.WithId(ctx.ReceiveValue(switchSection.Id)!);
+            switchSection = switchSection.WithPrefix(ctx.ReceiveNode(switchSection.Prefix, ReceiveSpace)!);
+            switchSection = switchSection.WithMarkers(ctx.ReceiveNode(switchSection.Markers, ctx.ReceiveMarkers)!);
+            switchSection = switchSection.WithLabels(ctx.ReceiveNodes(switchSection.Labels, ctx.ReceiveTree)!);
+            switchSection = switchSection.Padding.WithStatements(ctx.ReceiveNodes(switchSection.Padding.Statements, ReceiveRightPadded)!);
+            return switchSection;
+        }
+
+        public override J VisitDefaultSwitchLabel(Cs.DefaultSwitchLabel defaultSwitchLabel, ReceiverContext ctx)
+        {
+            defaultSwitchLabel = defaultSwitchLabel.WithId(ctx.ReceiveValue(defaultSwitchLabel.Id)!);
+            defaultSwitchLabel = defaultSwitchLabel.WithPrefix(ctx.ReceiveNode(defaultSwitchLabel.Prefix, ReceiveSpace)!);
+            defaultSwitchLabel = defaultSwitchLabel.WithMarkers(ctx.ReceiveNode(defaultSwitchLabel.Markers, ctx.ReceiveMarkers)!);
+            defaultSwitchLabel = defaultSwitchLabel.WithColonToken(ctx.ReceiveNode(defaultSwitchLabel.ColonToken, ReceiveSpace)!);
+            return defaultSwitchLabel;
+        }
+
+        public override J VisitCasePatternSwitchLabel(Cs.CasePatternSwitchLabel casePatternSwitchLabel, ReceiverContext ctx)
+        {
+            casePatternSwitchLabel = casePatternSwitchLabel.WithId(ctx.ReceiveValue(casePatternSwitchLabel.Id)!);
+            casePatternSwitchLabel = casePatternSwitchLabel.WithPrefix(ctx.ReceiveNode(casePatternSwitchLabel.Prefix, ReceiveSpace)!);
+            casePatternSwitchLabel = casePatternSwitchLabel.WithMarkers(ctx.ReceiveNode(casePatternSwitchLabel.Markers, ctx.ReceiveMarkers)!);
+            casePatternSwitchLabel = casePatternSwitchLabel.WithPattern(ctx.ReceiveNode(casePatternSwitchLabel.Pattern, ctx.ReceiveTree)!);
+            casePatternSwitchLabel = casePatternSwitchLabel.Padding.WithWhenClause(ctx.ReceiveNode(casePatternSwitchLabel.Padding.WhenClause, ReceiveLeftPadded));
+            casePatternSwitchLabel = casePatternSwitchLabel.WithColonToken(ctx.ReceiveNode(casePatternSwitchLabel.ColonToken, ReceiveSpace)!);
+            return casePatternSwitchLabel;
+        }
+
+        public override J VisitSwitchStatement(Cs.SwitchStatement switchStatement, ReceiverContext ctx)
+        {
+            switchStatement = switchStatement.WithId(ctx.ReceiveValue(switchStatement.Id)!);
+            switchStatement = switchStatement.WithPrefix(ctx.ReceiveNode(switchStatement.Prefix, ReceiveSpace)!);
+            switchStatement = switchStatement.WithMarkers(ctx.ReceiveNode(switchStatement.Markers, ctx.ReceiveMarkers)!);
+            switchStatement = switchStatement.Padding.WithExpression(ctx.ReceiveNode(switchStatement.Padding.Expression, ReceiveContainer)!);
+            switchStatement = switchStatement.Padding.WithSections(ctx.ReceiveNode(switchStatement.Padding.Sections, ReceiveContainer)!);
+            return switchStatement;
+        }
+
+        public override J VisitLockStatement(Cs.LockStatement lockStatement, ReceiverContext ctx)
+        {
+            lockStatement = lockStatement.WithId(ctx.ReceiveValue(lockStatement.Id)!);
+            lockStatement = lockStatement.WithPrefix(ctx.ReceiveNode(lockStatement.Prefix, ReceiveSpace)!);
+            lockStatement = lockStatement.WithMarkers(ctx.ReceiveNode(lockStatement.Markers, ctx.ReceiveMarkers)!);
+            lockStatement = lockStatement.WithExpression(ctx.ReceiveNode(lockStatement.Expression, ReceiveControlParentheses)!);
+            lockStatement = lockStatement.Padding.WithStatement(ctx.ReceiveNode(lockStatement.Padding.Statement, ReceiveRightPadded)!);
+            return lockStatement;
+        }
+
+        public override J VisitFixedStatement(Cs.FixedStatement fixedStatement, ReceiverContext ctx)
+        {
+            fixedStatement = fixedStatement.WithId(ctx.ReceiveValue(fixedStatement.Id)!);
+            fixedStatement = fixedStatement.WithPrefix(ctx.ReceiveNode(fixedStatement.Prefix, ReceiveSpace)!);
+            fixedStatement = fixedStatement.WithMarkers(ctx.ReceiveNode(fixedStatement.Markers, ctx.ReceiveMarkers)!);
+            fixedStatement = fixedStatement.WithDeclarations(ctx.ReceiveNode(fixedStatement.Declarations, ReceiveControlParentheses)!);
+            fixedStatement = fixedStatement.WithBlock(ctx.ReceiveNode(fixedStatement.Block, ctx.ReceiveTree)!);
+            return fixedStatement;
+        }
+
+        public override J VisitCheckedStatement(Cs.CheckedStatement checkedStatement, ReceiverContext ctx)
+        {
+            checkedStatement = checkedStatement.WithId(ctx.ReceiveValue(checkedStatement.Id)!);
+            checkedStatement = checkedStatement.WithPrefix(ctx.ReceiveNode(checkedStatement.Prefix, ReceiveSpace)!);
+            checkedStatement = checkedStatement.WithMarkers(ctx.ReceiveNode(checkedStatement.Markers, ctx.ReceiveMarkers)!);
+            checkedStatement = checkedStatement.WithBlock(ctx.ReceiveNode(checkedStatement.Block, ctx.ReceiveTree)!);
+            return checkedStatement;
+        }
+
+        public override J VisitUnsafeStatement(Cs.UnsafeStatement unsafeStatement, ReceiverContext ctx)
+        {
+            unsafeStatement = unsafeStatement.WithId(ctx.ReceiveValue(unsafeStatement.Id)!);
+            unsafeStatement = unsafeStatement.WithPrefix(ctx.ReceiveNode(unsafeStatement.Prefix, ReceiveSpace)!);
+            unsafeStatement = unsafeStatement.WithMarkers(ctx.ReceiveNode(unsafeStatement.Markers, ctx.ReceiveMarkers)!);
+            unsafeStatement = unsafeStatement.WithBlock(ctx.ReceiveNode(unsafeStatement.Block, ctx.ReceiveTree)!);
+            return unsafeStatement;
+        }
+
+        public override J VisitRangeExpression(Cs.RangeExpression rangeExpression, ReceiverContext ctx)
+        {
+            rangeExpression = rangeExpression.WithId(ctx.ReceiveValue(rangeExpression.Id)!);
+            rangeExpression = rangeExpression.WithPrefix(ctx.ReceiveNode(rangeExpression.Prefix, ReceiveSpace)!);
+            rangeExpression = rangeExpression.WithMarkers(ctx.ReceiveNode(rangeExpression.Markers, ctx.ReceiveMarkers)!);
+            rangeExpression = rangeExpression.Padding.WithStart(ctx.ReceiveNode(rangeExpression.Padding.Start, ReceiveRightPadded));
+            rangeExpression = rangeExpression.WithEnd(ctx.ReceiveNode(rangeExpression.End, ctx.ReceiveTree));
+            return rangeExpression;
         }
 
         public override J VisitAnnotatedType(J.AnnotatedType annotatedType, ReceiverContext ctx)
@@ -540,7 +872,7 @@ public record CSharpReceiver : Receiver
             assignmentOperation = assignmentOperation.WithVariable(ctx.ReceiveNode(assignmentOperation.Variable, ctx.ReceiveTree)!);
             assignmentOperation = assignmentOperation.Padding.WithOperator(ctx.ReceiveNode(assignmentOperation.Padding.Operator, ReceiveLeftPadded)!);
             assignmentOperation = assignmentOperation.WithAssignment(ctx.ReceiveNode(assignmentOperation.Assignment, ctx.ReceiveTree)!);
-            assignmentOperation = assignmentOperation.WithJavaType(ctx.ReceiveValue(assignmentOperation.JavaType));
+            assignmentOperation = assignmentOperation.WithType(ctx.ReceiveValue(assignmentOperation.Type));
             return assignmentOperation;
         }
 
@@ -552,7 +884,7 @@ public record CSharpReceiver : Receiver
             binary = binary.WithLeft(ctx.ReceiveNode(binary.Left, ctx.ReceiveTree)!);
             binary = binary.Padding.WithOperator(ctx.ReceiveNode(binary.Padding.Operator, ReceiveLeftPadded)!);
             binary = binary.WithRight(ctx.ReceiveNode(binary.Right, ctx.ReceiveTree)!);
-            binary = binary.WithJavaType(ctx.ReceiveValue(binary.JavaType));
+            binary = binary.WithType(ctx.ReceiveValue(binary.Type));
             return binary;
         }
 
@@ -1115,7 +1447,7 @@ public record CSharpReceiver : Receiver
             unary = unary.WithMarkers(ctx.ReceiveNode(unary.Markers, ctx.ReceiveMarkers)!);
             unary = unary.Padding.WithOperator(ctx.ReceiveNode(unary.Padding.Operator, ReceiveLeftPadded)!);
             unary = unary.WithExpression(ctx.ReceiveNode(unary.Expression, ctx.ReceiveTree)!);
-            unary = unary.WithJavaType(ctx.ReceiveValue(unary.JavaType));
+            unary = unary.WithType(ctx.ReceiveValue(unary.Type));
             return unary;
         }
 
@@ -1215,6 +1547,28 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveNodes(default(IList<Cs.AttributeList>), ctx.ReceiveTree)!,
                     ctx.ReceiveNodes(default(IList<JRightPadded<Statement>>), ReceiveRightPadded)!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.ForEachVariableLoop" or "org.openrewrite.csharp.tree.Cs$ForEachVariableLoop")
+            {
+                return new Cs.ForEachVariableLoop(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(Cs.ForEachVariableLoop.Control), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(JRightPadded<Statement>), ReceiveRightPadded)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.ForEachVariableLoop.Control" or "org.openrewrite.csharp.tree.Cs$ForEachVariableLoop$Control")
+            {
+                return new Cs.ForEachVariableLoop.Control(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(JRightPadded<Expression>), ReceiveRightPadded)!,
+                    ctx.ReceiveNode(default(JRightPadded<Expression>), ReceiveRightPadded)!
                 );
             }
 
@@ -1437,7 +1791,7 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveValue(default(Cs.KeywordKind))!
+                    ctx.ReceiveValue(default(Cs.Keyword.KeywordKind))!
                 );
             }
 
@@ -1617,13 +1971,24 @@ public record CSharpReceiver : Receiver
                 );
             }
 
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.DestructorDeclaration" or "org.openrewrite.csharp.tree.Cs$DestructorDeclaration")
+            {
+                return new Cs.DestructorDeclaration(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(Cs.ConstructorInitializer), ctx.ReceiveTree),
+                    ctx.ReceiveNode(default(J.MethodDeclaration), ctx.ReceiveTree)!
+                );
+            }
+
             if (type is "Rewrite.RewriteCSharp.Tree.Cs.Unary" or "org.openrewrite.csharp.tree.Cs$Unary")
             {
                 return new Cs.Unary(
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveNode(default(JLeftPadded<Cs.Unary.Type>), ReceiveLeftPadded)!,
+                    ctx.ReceiveNode(default(JLeftPadded<Cs.Unary.Types>), ReceiveLeftPadded)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
                     ctx.ReceiveValue(default(JavaType))
                 );
@@ -1659,6 +2024,338 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(TypeTree), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(J.Identifier), ctx.ReceiveTree)
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.NewClass" or "org.openrewrite.csharp.tree.Cs$NewClass")
+            {
+                return new Cs.NewClass(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(J.NewClass), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(Cs.InitializerExpression), ctx.ReceiveTree)
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.InitializerExpression" or "org.openrewrite.csharp.tree.Cs$InitializerExpression")
+            {
+                return new Cs.InitializerExpression(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(JContainer<Expression>), ReceiveContainer)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.ImplicitElementAccess" or "org.openrewrite.csharp.tree.Cs$ImplicitElementAccess")
+            {
+                return new Cs.ImplicitElementAccess(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(JContainer<Cs.Argument>), ReceiveContainer)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.Yield" or "org.openrewrite.csharp.tree.Cs$Yield")
+            {
+                return new Cs.Yield(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(Cs.Keyword), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.DefaultExpression" or "org.openrewrite.csharp.tree.Cs$DefaultExpression")
+            {
+                return new Cs.DefaultExpression(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(JContainer<TypeTree>), ReceiveContainer)
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.IsPattern" or "org.openrewrite.csharp.tree.Cs$IsPattern")
+            {
+                return new Cs.IsPattern(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(JLeftPadded<Cs.Pattern>), ReceiveLeftPadded)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.UnaryPattern" or "org.openrewrite.csharp.tree.Cs$UnaryPattern")
+            {
+                return new Cs.UnaryPattern(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(Cs.Keyword), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(Cs.Pattern), ctx.ReceiveTree)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.TypePattern" or "org.openrewrite.csharp.tree.Cs$TypePattern")
+            {
+                return new Cs.TypePattern(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(TypeTree), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(Cs.VariableDesignation), ctx.ReceiveTree)
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.BinaryPattern" or "org.openrewrite.csharp.tree.Cs$BinaryPattern")
+            {
+                return new Cs.BinaryPattern(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(Cs.Pattern), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(JLeftPadded<Cs.BinaryPattern.OperatorType>), ReceiveLeftPadded)!,
+                    ctx.ReceiveNode(default(Cs.Pattern), ctx.ReceiveTree)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.ConstantPattern" or "org.openrewrite.csharp.tree.Cs$ConstantPattern")
+            {
+                return new Cs.ConstantPattern(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.DiscardPattern" or "org.openrewrite.csharp.tree.Cs$DiscardPattern")
+            {
+                return new Cs.DiscardPattern(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveValue(default(JavaType))!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.ListPattern" or "org.openrewrite.csharp.tree.Cs$ListPattern")
+            {
+                return new Cs.ListPattern(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(JContainer<Cs.Pattern>), ReceiveContainer)!,
+                    ctx.ReceiveNode(default(Cs.VariableDesignation), ctx.ReceiveTree)
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.ParenthesizedPattern" or "org.openrewrite.csharp.tree.Cs$ParenthesizedPattern")
+            {
+                return new Cs.ParenthesizedPattern(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(JContainer<Cs.Pattern>), ReceiveContainer)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.RecursivePattern" or "org.openrewrite.csharp.tree.Cs$RecursivePattern")
+            {
+                return new Cs.RecursivePattern(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(TypeTree), ctx.ReceiveTree),
+                    ctx.ReceiveNode(default(Cs.PositionalPatternClause), ctx.ReceiveTree),
+                    ctx.ReceiveNode(default(Cs.PropertyPatternClause), ctx.ReceiveTree),
+                    ctx.ReceiveNode(default(Cs.VariableDesignation), ctx.ReceiveTree)
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.VarPattern" or "org.openrewrite.csharp.tree.Cs$VarPattern")
+            {
+                return new Cs.VarPattern(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(Cs.VariableDesignation), ctx.ReceiveTree)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.PositionalPatternClause" or "org.openrewrite.csharp.tree.Cs$PositionalPatternClause")
+            {
+                return new Cs.PositionalPatternClause(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(JContainer<Cs.Subpattern>), ReceiveContainer)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.RelationalPattern" or "org.openrewrite.csharp.tree.Cs$RelationalPattern")
+            {
+                return new Cs.RelationalPattern(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(JLeftPadded<Cs.RelationalPattern.OperatorType>), ReceiveLeftPadded)!,
+                    ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.SlicePattern" or "org.openrewrite.csharp.tree.Cs$SlicePattern")
+            {
+                return new Cs.SlicePattern(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.PropertyPatternClause" or "org.openrewrite.csharp.tree.Cs$PropertyPatternClause")
+            {
+                return new Cs.PropertyPatternClause(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(JContainer<Cs.Subpattern>), ReceiveContainer)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.Subpattern" or "org.openrewrite.csharp.tree.Cs$Subpattern")
+            {
+                return new Cs.Subpattern(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(J.Identifier), ctx.ReceiveTree),
+                    ctx.ReceiveNode(default(JLeftPadded<Cs.Pattern>), ReceiveLeftPadded)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.SwitchExpression" or "org.openrewrite.csharp.tree.Cs$SwitchExpression")
+            {
+                return new Cs.SwitchExpression(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(JRightPadded<Expression>), ReceiveRightPadded)!,
+                    ctx.ReceiveNode(default(JContainer<Cs.SwitchExpressionArm>), ReceiveContainer)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.SwitchExpressionArm" or "org.openrewrite.csharp.tree.Cs$SwitchExpressionArm")
+            {
+                return new Cs.SwitchExpressionArm(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(Cs.Pattern), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(JLeftPadded<Expression>), ReceiveLeftPadded),
+                    ctx.ReceiveNode(default(JLeftPadded<Expression>), ReceiveLeftPadded)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.SwitchSection" or "org.openrewrite.csharp.tree.Cs$SwitchSection")
+            {
+                return new Cs.SwitchSection(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNodes(default(IList<Cs.SwitchLabel>), ctx.ReceiveTree)!,
+                    ctx.ReceiveNodes(default(IList<JRightPadded<Statement>>), ReceiveRightPadded)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.DefaultSwitchLabel" or "org.openrewrite.csharp.tree.Cs$DefaultSwitchLabel")
+            {
+                return new Cs.DefaultSwitchLabel(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.CasePatternSwitchLabel" or "org.openrewrite.csharp.tree.Cs$CasePatternSwitchLabel")
+            {
+                return new Cs.CasePatternSwitchLabel(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(Cs.Pattern), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(JLeftPadded<Expression>), ReceiveLeftPadded),
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.SwitchStatement" or "org.openrewrite.csharp.tree.Cs$SwitchStatement")
+            {
+                return new Cs.SwitchStatement(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(JContainer<Expression>), ReceiveContainer)!,
+                    ctx.ReceiveNode(default(JContainer<Cs.SwitchSection>), ReceiveContainer)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.LockStatement" or "org.openrewrite.csharp.tree.Cs$LockStatement")
+            {
+                return new Cs.LockStatement(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(J.ControlParentheses<Expression>), ReceiveControlParentheses)!,
+                    ctx.ReceiveNode(default(JRightPadded<Statement>), ReceiveRightPadded)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.FixedStatement" or "org.openrewrite.csharp.tree.Cs$FixedStatement")
+            {
+                return new Cs.FixedStatement(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(J.ControlParentheses<J.VariableDeclarations>), ReceiveControlParentheses)!,
+                    ctx.ReceiveNode(default(J.Block), ctx.ReceiveTree)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.CheckedStatement" or "org.openrewrite.csharp.tree.Cs$CheckedStatement")
+            {
+                return new Cs.CheckedStatement(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(J.Block), ctx.ReceiveTree)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.UnsafeStatement" or "org.openrewrite.csharp.tree.Cs$UnsafeStatement")
+            {
+                return new Cs.UnsafeStatement(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(J.Block), ctx.ReceiveTree)!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.Cs.RangeExpression" or "org.openrewrite.csharp.tree.Cs$RangeExpression")
+            {
+                return new Cs.RangeExpression(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(JRightPadded<Expression>), ReceiveRightPadded),
+                    ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)
                 );
             }
 
@@ -1739,7 +2436,7 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
-                    ctx.ReceiveNode(default(JLeftPadded<J.AssignmentOperation.Type>), ReceiveLeftPadded)!,
+                    ctx.ReceiveNode(default(JLeftPadded<J.AssignmentOperation.Types>), ReceiveLeftPadded)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
                     ctx.ReceiveValue(default(JavaType))
                 );
@@ -1752,7 +2449,7 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
-                    ctx.ReceiveNode(default(JLeftPadded<J.Binary.Type>), ReceiveLeftPadded)!,
+                    ctx.ReceiveNode(default(JLeftPadded<J.Binary.Types>), ReceiveLeftPadded)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
                     ctx.ReceiveValue(default(JavaType))
                 );
@@ -1786,7 +2483,7 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveValue(default(J.Case.Type))!,
+                    ctx.ReceiveValue(default(J.Case.Types))!,
                     ctx.ReceiveNode(default(JContainer<Expression>), ReceiveContainer)!,
                     ctx.ReceiveNode(default(JContainer<Statement>), ReceiveContainer)!,
                     ctx.ReceiveNode(default(JRightPadded<J>), ReceiveRightPadded)
@@ -1820,7 +2517,7 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNodes(default(IList<J.Annotation>), ctx.ReceiveTree)!,
-                    ctx.ReceiveValue(default(J.ClassDeclaration.Kind.Type))!
+                    ctx.ReceiveValue(default(J.ClassDeclaration.Kind.Types))!
                 );
             }
 
@@ -2118,7 +2815,7 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveValue(default(string)),
-                    ctx.ReceiveValue(default(J.Modifier.Type))!,
+                    ctx.ReceiveValue(default(J.Modifier.Types))!,
                     ctx.ReceiveNodes(default(IList<J.Annotation>), ctx.ReceiveTree)!
                 );
             }
@@ -2377,7 +3074,7 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveNode(default(JLeftPadded<J.Unary.Type>), ReceiveLeftPadded)!,
+                    ctx.ReceiveNode(default(JLeftPadded<J.Unary.Types>), ReceiveLeftPadded)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
                     ctx.ReceiveValue(default(JavaType))
                 );

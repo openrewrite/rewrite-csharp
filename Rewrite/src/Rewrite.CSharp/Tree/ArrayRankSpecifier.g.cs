@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
@@ -31,7 +32,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     JContainer<Expression> sizes
-    ) : Cs, Expression, MutableTree<ArrayRankSpecifier>
+    ) : Cs, Expression, Expression<ArrayRankSpecifier>, MutableTree<ArrayRankSpecifier>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -63,12 +64,6 @@ public partial interface Cs : J
             return v.VisitArrayRankSpecifier(this, p);
         }
 
-        public JavaType? Type => Extensions.GetJavaType(this);
-
-        public ArrayRankSpecifier WithType(JavaType newType)
-        {
-            return Extensions.WithJavaType(this, newType);
-        }
         public Guid Id => id;
 
         public ArrayRankSpecifier WithId(Guid newId)

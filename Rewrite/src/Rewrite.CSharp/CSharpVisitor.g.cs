@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
 using Rewrite.RewriteCSharp.Tree;
@@ -34,6 +35,30 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         compilationUnit = compilationUnit.Padding.WithMembers(compilationUnit.Padding.Members.Map(el => VisitRightPadded(el, CsRightPadded.Location.COMPILATION_UNIT_MEMBERS, p)));
         compilationUnit = compilationUnit.WithEof(VisitSpace(compilationUnit.Eof, Space.Location.COMPILATION_UNIT_EOF, p)!);
         return compilationUnit;
+    }
+
+    public virtual J? VisitForEachVariableLoop(Cs.ForEachVariableLoop forEachVariableLoop, P p)
+    {
+        forEachVariableLoop = forEachVariableLoop.WithPrefix(VisitSpace(forEachVariableLoop.Prefix, CsSpace.Location.FOR_EACH_VARIABLE_LOOP_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(forEachVariableLoop, p);
+        if (tempStatement is not Cs.ForEachVariableLoop)
+        {
+            return tempStatement;
+        }
+        forEachVariableLoop = (Cs.ForEachVariableLoop) tempStatement;
+        forEachVariableLoop = forEachVariableLoop.WithMarkers(VisitMarkers(forEachVariableLoop.Markers, p));
+        forEachVariableLoop = forEachVariableLoop.WithControlElement(VisitAndCast<Cs.ForEachVariableLoop.Control>(forEachVariableLoop.ControlElement, p)!);
+        forEachVariableLoop = forEachVariableLoop.Padding.WithBody(VisitRightPadded(forEachVariableLoop.Padding.Body, CsRightPadded.Location.FOR_EACH_VARIABLE_LOOP_BODY, p)!);
+        return forEachVariableLoop;
+    }
+
+    public virtual J? VisitForEachVariableLoopControl(Cs.ForEachVariableLoop.Control control, P p)
+    {
+        control = control.WithPrefix(VisitSpace(control.Prefix, CsSpace.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_PREFIX, p)!);
+        control = control.WithMarkers(VisitMarkers(control.Markers, p));
+        control = control.Padding.WithVariable(VisitRightPadded(control.Padding.Variable, CsRightPadded.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_VARIABLE, p)!);
+        control = control.Padding.WithIterable(VisitRightPadded(control.Padding.Iterable, CsRightPadded.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_ITERABLE, p)!);
+        return control;
     }
 
     public virtual J? VisitArgument(Cs.Argument argument, P p)
@@ -528,6 +553,21 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         return constructor;
     }
 
+    public virtual J? VisitDestructorDeclaration(Cs.DestructorDeclaration destructorDeclaration, P p)
+    {
+        destructorDeclaration = destructorDeclaration.WithPrefix(VisitSpace(destructorDeclaration.Prefix, CsSpace.Location.DESTRUCTOR_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(destructorDeclaration, p);
+        if (tempStatement is not Cs.DestructorDeclaration)
+        {
+            return tempStatement;
+        }
+        destructorDeclaration = (Cs.DestructorDeclaration) tempStatement;
+        destructorDeclaration = destructorDeclaration.WithMarkers(VisitMarkers(destructorDeclaration.Markers, p));
+        destructorDeclaration = destructorDeclaration.WithInitializer(VisitAndCast<Cs.ConstructorInitializer>(destructorDeclaration.Initializer, p));
+        destructorDeclaration = destructorDeclaration.WithConstructorCore(VisitAndCast<J.MethodDeclaration>(destructorDeclaration.ConstructorCore, p)!);
+        return destructorDeclaration;
+    }
+
     public virtual J? VisitUnary(Cs.Unary unary, P p)
     {
         unary = unary.WithPrefix(VisitSpace(unary.Prefix, CsSpace.Location.UNARY_PREFIX, p)!);
@@ -579,6 +619,443 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         tupleElement = tupleElement.WithType(VisitAndCast<TypeTree>(tupleElement.Type, p)!);
         tupleElement = tupleElement.WithName(VisitAndCast<J.Identifier>(tupleElement.Name, p));
         return tupleElement;
+    }
+
+    public virtual J? VisitNewClass(Cs.NewClass newClass, P p)
+    {
+        newClass = newClass.WithPrefix(VisitSpace(newClass.Prefix, CsSpace.Location.NEW_CLASS_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(newClass, p);
+        if (tempStatement is not Cs.NewClass)
+        {
+            return tempStatement;
+        }
+        newClass = (Cs.NewClass) tempStatement;
+        var tempExpression = (Expression) VisitExpression(newClass, p);
+        if (tempExpression is not Cs.NewClass)
+        {
+            return tempExpression;
+        }
+        newClass = (Cs.NewClass) tempExpression;
+        newClass = newClass.WithMarkers(VisitMarkers(newClass.Markers, p));
+        newClass = newClass.WithNewClassCore(VisitAndCast<J.NewClass>(newClass.NewClassCore, p)!);
+        newClass = newClass.WithInitializer(VisitAndCast<Cs.InitializerExpression>(newClass.Initializer, p));
+        return newClass;
+    }
+
+    public virtual J? VisitInitializerExpression(Cs.InitializerExpression initializerExpression, P p)
+    {
+        initializerExpression = initializerExpression.WithPrefix(VisitSpace(initializerExpression.Prefix, CsSpace.Location.INITIALIZER_EXPRESSION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(initializerExpression, p);
+        if (tempExpression is not Cs.InitializerExpression)
+        {
+            return tempExpression;
+        }
+        initializerExpression = (Cs.InitializerExpression) tempExpression;
+        initializerExpression = initializerExpression.WithMarkers(VisitMarkers(initializerExpression.Markers, p));
+        initializerExpression = initializerExpression.Padding.WithExpressions(VisitContainer(initializerExpression.Padding.Expressions, CsContainer.Location.INITIALIZER_EXPRESSION_EXPRESSIONS, p)!);
+        return initializerExpression;
+    }
+
+    public virtual J? VisitImplicitElementAccess(Cs.ImplicitElementAccess implicitElementAccess, P p)
+    {
+        implicitElementAccess = implicitElementAccess.WithPrefix(VisitSpace(implicitElementAccess.Prefix, CsSpace.Location.IMPLICIT_ELEMENT_ACCESS_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(implicitElementAccess, p);
+        if (tempExpression is not Cs.ImplicitElementAccess)
+        {
+            return tempExpression;
+        }
+        implicitElementAccess = (Cs.ImplicitElementAccess) tempExpression;
+        implicitElementAccess = implicitElementAccess.WithMarkers(VisitMarkers(implicitElementAccess.Markers, p));
+        implicitElementAccess = implicitElementAccess.Padding.WithArgumentList(VisitContainer(implicitElementAccess.Padding.ArgumentList, CsContainer.Location.IMPLICIT_ELEMENT_ACCESS_ARGUMENT_LIST, p)!);
+        return implicitElementAccess;
+    }
+
+    public virtual J? VisitYield(Cs.Yield yield, P p)
+    {
+        yield = yield.WithPrefix(VisitSpace(yield.Prefix, CsSpace.Location.YIELD_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(yield, p);
+        if (tempStatement is not Cs.Yield)
+        {
+            return tempStatement;
+        }
+        yield = (Cs.Yield) tempStatement;
+        yield = yield.WithMarkers(VisitMarkers(yield.Markers, p));
+        yield = yield.WithReturnOrBreakKeyword(VisitAndCast<Cs.Keyword>(yield.ReturnOrBreakKeyword, p)!);
+        yield = yield.WithExpression(VisitAndCast<Expression>(yield.Expression, p));
+        return yield;
+    }
+
+    public virtual J? VisitDefaultExpression(Cs.DefaultExpression defaultExpression, P p)
+    {
+        defaultExpression = defaultExpression.WithPrefix(VisitSpace(defaultExpression.Prefix, CsSpace.Location.DEFAULT_EXPRESSION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(defaultExpression, p);
+        if (tempExpression is not Cs.DefaultExpression)
+        {
+            return tempExpression;
+        }
+        defaultExpression = (Cs.DefaultExpression) tempExpression;
+        defaultExpression = defaultExpression.WithMarkers(VisitMarkers(defaultExpression.Markers, p));
+        defaultExpression = defaultExpression.Padding.WithTypeOperator(defaultExpression.Padding.TypeOperator == null ? null : VisitContainer(defaultExpression.Padding.TypeOperator, CsContainer.Location.DEFAULT_EXPRESSION_TYPE_OPERATOR, p));
+        return defaultExpression;
+    }
+
+    public virtual J? VisitIsPattern(Cs.IsPattern isPattern, P p)
+    {
+        isPattern = isPattern.WithPrefix(VisitSpace(isPattern.Prefix, CsSpace.Location.IS_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(isPattern, p);
+        if (tempExpression is not Cs.IsPattern)
+        {
+            return tempExpression;
+        }
+        isPattern = (Cs.IsPattern) tempExpression;
+        isPattern = isPattern.WithMarkers(VisitMarkers(isPattern.Markers, p));
+        isPattern = isPattern.WithExpression(VisitAndCast<Expression>(isPattern.Expression, p)!);
+        isPattern = isPattern.Padding.WithPattern(VisitLeftPadded(isPattern.Padding.Pattern, CsLeftPadded.Location.IS_PATTERN_PATTERN, p)!);
+        return isPattern;
+    }
+
+    public virtual J? VisitUnaryPattern(Cs.UnaryPattern unaryPattern, P p)
+    {
+        unaryPattern = unaryPattern.WithPrefix(VisitSpace(unaryPattern.Prefix, CsSpace.Location.UNARY_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(unaryPattern, p);
+        if (tempExpression is not Cs.UnaryPattern)
+        {
+            return tempExpression;
+        }
+        unaryPattern = (Cs.UnaryPattern) tempExpression;
+        unaryPattern = unaryPattern.WithMarkers(VisitMarkers(unaryPattern.Markers, p));
+        unaryPattern = unaryPattern.WithOperator(VisitAndCast<Cs.Keyword>(unaryPattern.Operator, p)!);
+        unaryPattern = unaryPattern.WithPattern(VisitAndCast<Cs.Pattern>(unaryPattern.Pattern, p)!);
+        return unaryPattern;
+    }
+
+    public virtual J? VisitTypePattern(Cs.TypePattern typePattern, P p)
+    {
+        typePattern = typePattern.WithPrefix(VisitSpace(typePattern.Prefix, CsSpace.Location.TYPE_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(typePattern, p);
+        if (tempExpression is not Cs.TypePattern)
+        {
+            return tempExpression;
+        }
+        typePattern = (Cs.TypePattern) tempExpression;
+        typePattern = typePattern.WithMarkers(VisitMarkers(typePattern.Markers, p));
+        typePattern = typePattern.WithTypeIdentifier(VisitAndCast<TypeTree>(typePattern.TypeIdentifier, p)!);
+        typePattern = typePattern.WithDesignation(VisitAndCast<Cs.VariableDesignation>(typePattern.Designation, p));
+        return typePattern;
+    }
+
+    public virtual J? VisitBinaryPattern(Cs.BinaryPattern binaryPattern, P p)
+    {
+        binaryPattern = binaryPattern.WithPrefix(VisitSpace(binaryPattern.Prefix, CsSpace.Location.BINARY_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(binaryPattern, p);
+        if (tempExpression is not Cs.BinaryPattern)
+        {
+            return tempExpression;
+        }
+        binaryPattern = (Cs.BinaryPattern) tempExpression;
+        binaryPattern = binaryPattern.WithMarkers(VisitMarkers(binaryPattern.Markers, p));
+        binaryPattern = binaryPattern.WithLeft(VisitAndCast<Cs.Pattern>(binaryPattern.Left, p)!);
+        binaryPattern = binaryPattern.Padding.WithOperator(VisitLeftPadded(binaryPattern.Padding.Operator, CsLeftPadded.Location.BINARY_PATTERN_OPERATOR, p)!);
+        binaryPattern = binaryPattern.WithRight(VisitAndCast<Cs.Pattern>(binaryPattern.Right, p)!);
+        return binaryPattern;
+    }
+
+    public virtual J? VisitConstantPattern(Cs.ConstantPattern constantPattern, P p)
+    {
+        constantPattern = constantPattern.WithPrefix(VisitSpace(constantPattern.Prefix, CsSpace.Location.CONSTANT_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(constantPattern, p);
+        if (tempExpression is not Cs.ConstantPattern)
+        {
+            return tempExpression;
+        }
+        constantPattern = (Cs.ConstantPattern) tempExpression;
+        constantPattern = constantPattern.WithMarkers(VisitMarkers(constantPattern.Markers, p));
+        constantPattern = constantPattern.WithValue(VisitAndCast<Expression>(constantPattern.Value, p)!);
+        return constantPattern;
+    }
+
+    public virtual J? VisitDiscardPattern(Cs.DiscardPattern discardPattern, P p)
+    {
+        discardPattern = discardPattern.WithPrefix(VisitSpace(discardPattern.Prefix, CsSpace.Location.DISCARD_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(discardPattern, p);
+        if (tempExpression is not Cs.DiscardPattern)
+        {
+            return tempExpression;
+        }
+        discardPattern = (Cs.DiscardPattern) tempExpression;
+        discardPattern = discardPattern.WithMarkers(VisitMarkers(discardPattern.Markers, p));
+        return discardPattern;
+    }
+
+    public virtual J? VisitListPattern(Cs.ListPattern listPattern, P p)
+    {
+        listPattern = listPattern.WithPrefix(VisitSpace(listPattern.Prefix, CsSpace.Location.LIST_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(listPattern, p);
+        if (tempExpression is not Cs.ListPattern)
+        {
+            return tempExpression;
+        }
+        listPattern = (Cs.ListPattern) tempExpression;
+        listPattern = listPattern.WithMarkers(VisitMarkers(listPattern.Markers, p));
+        listPattern = listPattern.Padding.WithPatterns(VisitContainer(listPattern.Padding.Patterns, CsContainer.Location.LIST_PATTERN_PATTERNS, p)!);
+        listPattern = listPattern.WithDesignation(VisitAndCast<Cs.VariableDesignation>(listPattern.Designation, p));
+        return listPattern;
+    }
+
+    public virtual J? VisitParenthesizedPattern(Cs.ParenthesizedPattern parenthesizedPattern, P p)
+    {
+        parenthesizedPattern = parenthesizedPattern.WithPrefix(VisitSpace(parenthesizedPattern.Prefix, CsSpace.Location.PARENTHESIZED_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(parenthesizedPattern, p);
+        if (tempExpression is not Cs.ParenthesizedPattern)
+        {
+            return tempExpression;
+        }
+        parenthesizedPattern = (Cs.ParenthesizedPattern) tempExpression;
+        parenthesizedPattern = parenthesizedPattern.WithMarkers(VisitMarkers(parenthesizedPattern.Markers, p));
+        parenthesizedPattern = parenthesizedPattern.Padding.WithPattern(VisitContainer(parenthesizedPattern.Padding.Pattern, CsContainer.Location.PARENTHESIZED_PATTERN_PATTERN, p)!);
+        return parenthesizedPattern;
+    }
+
+    public virtual J? VisitRecursivePattern(Cs.RecursivePattern recursivePattern, P p)
+    {
+        recursivePattern = recursivePattern.WithPrefix(VisitSpace(recursivePattern.Prefix, CsSpace.Location.RECURSIVE_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(recursivePattern, p);
+        if (tempExpression is not Cs.RecursivePattern)
+        {
+            return tempExpression;
+        }
+        recursivePattern = (Cs.RecursivePattern) tempExpression;
+        recursivePattern = recursivePattern.WithMarkers(VisitMarkers(recursivePattern.Markers, p));
+        recursivePattern = recursivePattern.WithTypeQualifier(VisitAndCast<TypeTree>(recursivePattern.TypeQualifier, p));
+        recursivePattern = recursivePattern.WithPositionalPattern(VisitAndCast<Cs.PositionalPatternClause>(recursivePattern.PositionalPattern, p));
+        recursivePattern = recursivePattern.WithPropertyPattern(VisitAndCast<Cs.PropertyPatternClause>(recursivePattern.PropertyPattern, p));
+        recursivePattern = recursivePattern.WithDesignation(VisitAndCast<Cs.VariableDesignation>(recursivePattern.Designation, p));
+        return recursivePattern;
+    }
+
+    public virtual J? VisitVarPattern(Cs.VarPattern varPattern, P p)
+    {
+        varPattern = varPattern.WithPrefix(VisitSpace(varPattern.Prefix, CsSpace.Location.VAR_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(varPattern, p);
+        if (tempExpression is not Cs.VarPattern)
+        {
+            return tempExpression;
+        }
+        varPattern = (Cs.VarPattern) tempExpression;
+        varPattern = varPattern.WithMarkers(VisitMarkers(varPattern.Markers, p));
+        varPattern = varPattern.WithDesignation(VisitAndCast<Cs.VariableDesignation>(varPattern.Designation, p)!);
+        return varPattern;
+    }
+
+    public virtual J? VisitPositionalPatternClause(Cs.PositionalPatternClause positionalPatternClause, P p)
+    {
+        positionalPatternClause = positionalPatternClause.WithPrefix(VisitSpace(positionalPatternClause.Prefix, CsSpace.Location.POSITIONAL_PATTERN_CLAUSE_PREFIX, p)!);
+        positionalPatternClause = positionalPatternClause.WithMarkers(VisitMarkers(positionalPatternClause.Markers, p));
+        positionalPatternClause = positionalPatternClause.Padding.WithSubpatterns(VisitContainer(positionalPatternClause.Padding.Subpatterns, CsContainer.Location.POSITIONAL_PATTERN_CLAUSE_SUBPATTERNS, p)!);
+        return positionalPatternClause;
+    }
+
+    public virtual J? VisitRelationalPattern(Cs.RelationalPattern relationalPattern, P p)
+    {
+        relationalPattern = relationalPattern.WithPrefix(VisitSpace(relationalPattern.Prefix, CsSpace.Location.RELATIONAL_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(relationalPattern, p);
+        if (tempExpression is not Cs.RelationalPattern)
+        {
+            return tempExpression;
+        }
+        relationalPattern = (Cs.RelationalPattern) tempExpression;
+        relationalPattern = relationalPattern.WithMarkers(VisitMarkers(relationalPattern.Markers, p));
+        relationalPattern = relationalPattern.Padding.WithOperator(VisitLeftPadded(relationalPattern.Padding.Operator, CsLeftPadded.Location.RELATIONAL_PATTERN_OPERATOR, p)!);
+        relationalPattern = relationalPattern.WithValue(VisitAndCast<Expression>(relationalPattern.Value, p)!);
+        return relationalPattern;
+    }
+
+    public virtual J? VisitSlicePattern(Cs.SlicePattern slicePattern, P p)
+    {
+        slicePattern = slicePattern.WithPrefix(VisitSpace(slicePattern.Prefix, CsSpace.Location.SLICE_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(slicePattern, p);
+        if (tempExpression is not Cs.SlicePattern)
+        {
+            return tempExpression;
+        }
+        slicePattern = (Cs.SlicePattern) tempExpression;
+        slicePattern = slicePattern.WithMarkers(VisitMarkers(slicePattern.Markers, p));
+        return slicePattern;
+    }
+
+    public virtual J? VisitPropertyPatternClause(Cs.PropertyPatternClause propertyPatternClause, P p)
+    {
+        propertyPatternClause = propertyPatternClause.WithPrefix(VisitSpace(propertyPatternClause.Prefix, CsSpace.Location.PROPERTY_PATTERN_CLAUSE_PREFIX, p)!);
+        propertyPatternClause = propertyPatternClause.WithMarkers(VisitMarkers(propertyPatternClause.Markers, p));
+        propertyPatternClause = propertyPatternClause.Padding.WithSubpatterns(VisitContainer(propertyPatternClause.Padding.Subpatterns, CsContainer.Location.PROPERTY_PATTERN_CLAUSE_SUBPATTERNS, p)!);
+        return propertyPatternClause;
+    }
+
+    public virtual J? VisitSubpattern(Cs.Subpattern subpattern, P p)
+    {
+        subpattern = subpattern.WithPrefix(VisitSpace(subpattern.Prefix, CsSpace.Location.SUBPATTERN_PREFIX, p)!);
+        subpattern = subpattern.WithMarkers(VisitMarkers(subpattern.Markers, p));
+        subpattern = subpattern.WithName(VisitAndCast<J.Identifier>(subpattern.Name, p));
+        subpattern = subpattern.Padding.WithPattern(VisitLeftPadded(subpattern.Padding.Pattern, CsLeftPadded.Location.SUBPATTERN_PATTERN, p)!);
+        return subpattern;
+    }
+
+    public virtual J? VisitSwitchExpression(Cs.SwitchExpression switchExpression, P p)
+    {
+        switchExpression = switchExpression.WithPrefix(VisitSpace(switchExpression.Prefix, CsSpace.Location.SWITCH_EXPRESSION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(switchExpression, p);
+        if (tempExpression is not Cs.SwitchExpression)
+        {
+            return tempExpression;
+        }
+        switchExpression = (Cs.SwitchExpression) tempExpression;
+        switchExpression = switchExpression.WithMarkers(VisitMarkers(switchExpression.Markers, p));
+        switchExpression = switchExpression.Padding.WithExpression(VisitRightPadded(switchExpression.Padding.Expression, CsRightPadded.Location.SWITCH_EXPRESSION_EXPRESSION, p)!);
+        switchExpression = switchExpression.Padding.WithArms(VisitContainer(switchExpression.Padding.Arms, CsContainer.Location.SWITCH_EXPRESSION_ARMS, p)!);
+        return switchExpression;
+    }
+
+    public virtual J? VisitSwitchExpressionArm(Cs.SwitchExpressionArm switchExpressionArm, P p)
+    {
+        switchExpressionArm = switchExpressionArm.WithPrefix(VisitSpace(switchExpressionArm.Prefix, CsSpace.Location.SWITCH_EXPRESSION_ARM_PREFIX, p)!);
+        switchExpressionArm = switchExpressionArm.WithMarkers(VisitMarkers(switchExpressionArm.Markers, p));
+        switchExpressionArm = switchExpressionArm.WithPattern(VisitAndCast<Cs.Pattern>(switchExpressionArm.Pattern, p)!);
+        switchExpressionArm = switchExpressionArm.Padding.WithWhenExpression(switchExpressionArm.Padding.WhenExpression == null ? null : VisitLeftPadded(switchExpressionArm.Padding.WhenExpression, CsLeftPadded.Location.SWITCH_EXPRESSION_ARM_WHEN_EXPRESSION, p));
+        switchExpressionArm = switchExpressionArm.Padding.WithExpression(VisitLeftPadded(switchExpressionArm.Padding.Expression, CsLeftPadded.Location.SWITCH_EXPRESSION_ARM_EXPRESSION, p)!);
+        return switchExpressionArm;
+    }
+
+    public virtual J? VisitSwitchSection(Cs.SwitchSection switchSection, P p)
+    {
+        switchSection = switchSection.WithPrefix(VisitSpace(switchSection.Prefix, CsSpace.Location.SWITCH_SECTION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(switchSection, p);
+        if (tempStatement is not Cs.SwitchSection)
+        {
+            return tempStatement;
+        }
+        switchSection = (Cs.SwitchSection) tempStatement;
+        switchSection = switchSection.WithMarkers(VisitMarkers(switchSection.Markers, p));
+        switchSection = switchSection.WithLabels(switchSection.Labels.Map(el => (Cs.SwitchLabel?)Visit(el, p)));
+        switchSection = switchSection.Padding.WithStatements(switchSection.Padding.Statements.Map(el => VisitRightPadded(el, CsRightPadded.Location.SWITCH_SECTION_STATEMENTS, p)));
+        return switchSection;
+    }
+
+    public virtual J? VisitDefaultSwitchLabel(Cs.DefaultSwitchLabel defaultSwitchLabel, P p)
+    {
+        defaultSwitchLabel = defaultSwitchLabel.WithPrefix(VisitSpace(defaultSwitchLabel.Prefix, CsSpace.Location.DEFAULT_SWITCH_LABEL_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(defaultSwitchLabel, p);
+        if (tempExpression is not Cs.DefaultSwitchLabel)
+        {
+            return tempExpression;
+        }
+        defaultSwitchLabel = (Cs.DefaultSwitchLabel) tempExpression;
+        defaultSwitchLabel = defaultSwitchLabel.WithMarkers(VisitMarkers(defaultSwitchLabel.Markers, p));
+        defaultSwitchLabel = defaultSwitchLabel.WithColonToken(VisitSpace(defaultSwitchLabel.ColonToken, CsSpace.Location.DEFAULT_SWITCH_LABEL_COLON_TOKEN, p)!);
+        return defaultSwitchLabel;
+    }
+
+    public virtual J? VisitCasePatternSwitchLabel(Cs.CasePatternSwitchLabel casePatternSwitchLabel, P p)
+    {
+        casePatternSwitchLabel = casePatternSwitchLabel.WithPrefix(VisitSpace(casePatternSwitchLabel.Prefix, CsSpace.Location.CASE_PATTERN_SWITCH_LABEL_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(casePatternSwitchLabel, p);
+        if (tempExpression is not Cs.CasePatternSwitchLabel)
+        {
+            return tempExpression;
+        }
+        casePatternSwitchLabel = (Cs.CasePatternSwitchLabel) tempExpression;
+        casePatternSwitchLabel = casePatternSwitchLabel.WithMarkers(VisitMarkers(casePatternSwitchLabel.Markers, p));
+        casePatternSwitchLabel = casePatternSwitchLabel.WithPattern(VisitAndCast<Cs.Pattern>(casePatternSwitchLabel.Pattern, p)!);
+        casePatternSwitchLabel = casePatternSwitchLabel.Padding.WithWhenClause(casePatternSwitchLabel.Padding.WhenClause == null ? null : VisitLeftPadded(casePatternSwitchLabel.Padding.WhenClause, CsLeftPadded.Location.CASE_PATTERN_SWITCH_LABEL_WHEN_CLAUSE, p));
+        casePatternSwitchLabel = casePatternSwitchLabel.WithColonToken(VisitSpace(casePatternSwitchLabel.ColonToken, CsSpace.Location.CASE_PATTERN_SWITCH_LABEL_COLON_TOKEN, p)!);
+        return casePatternSwitchLabel;
+    }
+
+    public virtual J? VisitSwitchStatement(Cs.SwitchStatement switchStatement, P p)
+    {
+        switchStatement = switchStatement.WithPrefix(VisitSpace(switchStatement.Prefix, CsSpace.Location.SWITCH_STATEMENT_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(switchStatement, p);
+        if (tempStatement is not Cs.SwitchStatement)
+        {
+            return tempStatement;
+        }
+        switchStatement = (Cs.SwitchStatement) tempStatement;
+        switchStatement = switchStatement.WithMarkers(VisitMarkers(switchStatement.Markers, p));
+        switchStatement = switchStatement.Padding.WithExpression(VisitContainer(switchStatement.Padding.Expression, CsContainer.Location.SWITCH_STATEMENT_EXPRESSION, p)!);
+        switchStatement = switchStatement.Padding.WithSections(VisitContainer(switchStatement.Padding.Sections, CsContainer.Location.SWITCH_STATEMENT_SECTIONS, p)!);
+        return switchStatement;
+    }
+
+    public virtual J? VisitLockStatement(Cs.LockStatement lockStatement, P p)
+    {
+        lockStatement = lockStatement.WithPrefix(VisitSpace(lockStatement.Prefix, CsSpace.Location.LOCK_STATEMENT_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(lockStatement, p);
+        if (tempStatement is not Cs.LockStatement)
+        {
+            return tempStatement;
+        }
+        lockStatement = (Cs.LockStatement) tempStatement;
+        lockStatement = lockStatement.WithMarkers(VisitMarkers(lockStatement.Markers, p));
+        lockStatement = lockStatement.WithExpression(VisitAndCast<J.ControlParentheses<Expression>>(lockStatement.Expression, p)!);
+        lockStatement = lockStatement.Padding.WithStatement(VisitRightPadded(lockStatement.Padding.Statement, CsRightPadded.Location.LOCK_STATEMENT_STATEMENT, p)!);
+        return lockStatement;
+    }
+
+    public virtual J? VisitFixedStatement(Cs.FixedStatement fixedStatement, P p)
+    {
+        fixedStatement = fixedStatement.WithPrefix(VisitSpace(fixedStatement.Prefix, CsSpace.Location.FIXED_STATEMENT_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(fixedStatement, p);
+        if (tempStatement is not Cs.FixedStatement)
+        {
+            return tempStatement;
+        }
+        fixedStatement = (Cs.FixedStatement) tempStatement;
+        fixedStatement = fixedStatement.WithMarkers(VisitMarkers(fixedStatement.Markers, p));
+        fixedStatement = fixedStatement.WithDeclarations(VisitAndCast<J.ControlParentheses<J.VariableDeclarations>>(fixedStatement.Declarations, p)!);
+        fixedStatement = fixedStatement.WithBlock(VisitAndCast<J.Block>(fixedStatement.Block, p)!);
+        return fixedStatement;
+    }
+
+    public virtual J? VisitCheckedStatement(Cs.CheckedStatement checkedStatement, P p)
+    {
+        checkedStatement = checkedStatement.WithPrefix(VisitSpace(checkedStatement.Prefix, CsSpace.Location.CHECKED_STATEMENT_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(checkedStatement, p);
+        if (tempStatement is not Cs.CheckedStatement)
+        {
+            return tempStatement;
+        }
+        checkedStatement = (Cs.CheckedStatement) tempStatement;
+        checkedStatement = checkedStatement.WithMarkers(VisitMarkers(checkedStatement.Markers, p));
+        checkedStatement = checkedStatement.WithBlock(VisitAndCast<J.Block>(checkedStatement.Block, p)!);
+        return checkedStatement;
+    }
+
+    public virtual J? VisitUnsafeStatement(Cs.UnsafeStatement unsafeStatement, P p)
+    {
+        unsafeStatement = unsafeStatement.WithPrefix(VisitSpace(unsafeStatement.Prefix, CsSpace.Location.UNSAFE_STATEMENT_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(unsafeStatement, p);
+        if (tempStatement is not Cs.UnsafeStatement)
+        {
+            return tempStatement;
+        }
+        unsafeStatement = (Cs.UnsafeStatement) tempStatement;
+        unsafeStatement = unsafeStatement.WithMarkers(VisitMarkers(unsafeStatement.Markers, p));
+        unsafeStatement = unsafeStatement.WithBlock(VisitAndCast<J.Block>(unsafeStatement.Block, p)!);
+        return unsafeStatement;
+    }
+
+    public virtual J? VisitRangeExpression(Cs.RangeExpression rangeExpression, P p)
+    {
+        rangeExpression = rangeExpression.WithPrefix(VisitSpace(rangeExpression.Prefix, CsSpace.Location.RANGE_EXPRESSION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(rangeExpression, p);
+        if (tempExpression is not Cs.RangeExpression)
+        {
+            return tempExpression;
+        }
+        rangeExpression = (Cs.RangeExpression) tempExpression;
+        rangeExpression = rangeExpression.WithMarkers(VisitMarkers(rangeExpression.Markers, p));
+        rangeExpression = rangeExpression.Padding.WithStart(rangeExpression.Padding.Start == null ? null : VisitRightPadded(rangeExpression.Padding.Start, CsRightPadded.Location.RANGE_EXPRESSION_START, p));
+        rangeExpression = rangeExpression.WithEnd(VisitAndCast<Expression>(rangeExpression.End, p));
+        return rangeExpression;
     }
 
     protected virtual JContainer<J2>? VisitContainer<J2>(JContainer<J2>? container, CsContainer.Location loc, P p) where J2 : J

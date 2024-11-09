@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class SwitchStatementTests : RewriteTest
+public class SwitchStatementTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     public void Simple()
@@ -13,56 +13,54 @@ public class SwitchStatementTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                class Foo
+                switch (o)
                 {
-                    public void PrintDayOfWeek(int day)
-                    {
-                        switch (day)
-                        {
-                            case 0:
-                                System.Console.WriteLine("Sunday");
-                                break;
-                            default:
-                                System.Console.WriteLine("Not Sunday");
-                                break;
-                        }
-                    }
+                    case 0:
+                        a = "one";
+                        break;
+                    default:
+                        a = "two";
+                        return;
                 }
+
                 """
             )
         );
     }
 
     [Fact]
-    void SimpleSwitch()
+    public void SwitchWithClause()
     {
         RewriteRun(
             CSharp(
                 """
-                class Test {
-                    void DisplayMeasurement(double measurement)
-                    {
-                        switch (measurement)
-                        {
-                            case < 0.0:
-                                Console.WriteLine("Measured value is too low.");
-                                break;
-
-                            case > 15.0:
-                                Console.WriteLine("Measured value is too high.");
-                                break;
-                             /*asda*/
-                            /*asda*/ case /*asda*/ double.NaN /*asda*/:
-                            case double.NaN:
-                                Console.WriteLine("Failed measurement.");
-                                break;
-
-                            default:
-                                Console.WriteLine("Measured value is " + measurement);
-                                break;
-                        }
-                    }
+                switch (o)
+                {
+                    case 0 when 1 > 0:
+                        return;
                 }
+
+                """
+            )
+        );
+    }
+
+    [Fact]
+    void MultipleLabelsOnSingleArm()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                switch (a)
+                {
+                    case double.NaN:
+                    case double.NaN:
+                        Console.WriteLine("Failed measurement.");
+                        break;
+                    default:
+                        return;
+                }
+
                 """
             )
         );

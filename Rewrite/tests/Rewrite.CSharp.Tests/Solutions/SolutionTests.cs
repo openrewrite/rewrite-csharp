@@ -11,7 +11,7 @@ namespace Rewrite.CSharp.Tests.Solutions;
 using static Assertions;
 
 [Collection("C# remoting")]
-public class SolutionTests// : RewriteTest
+public class SolutionTests//(ITestOutputHelper output) : RewriteTest(output)
 {
     private readonly ITestOutputHelper _output;
 
@@ -21,9 +21,7 @@ public class SolutionTests// : RewriteTest
     }
 
     [Fact]
-    // [MemberData(nameof(Fixtures))]
     [Exploratory]
-    // public async Task UnknownSyntaxReport(AbsolutePath solutionOrProjectPath, AbsolutePath root)
     public async Task UnknownSyntaxReport()
     {
         var fixtures = Fixtures.Select(x => (solutionOrProjectPath: (AbsolutePath)x[0], root: (AbsolutePath)x[1]));
@@ -57,7 +55,10 @@ public class SolutionTests// : RewriteTest
 
 
         var report = sourceFiles
-            .SelectMany(x => x.Descendents().OfType<J.Unknown>())
+            .SelectMany(x =>
+            {
+                return x.Descendents().OfType<J.Unknown>();
+            })
             .Select(x => x.UnknownSource.Markers.OfType<ParseExceptionResult>().Select(y => y.TreeType).First())
             .GroupBy(x => x)
             .Select(x => new
@@ -77,14 +78,14 @@ public class SolutionTests// : RewriteTest
     [Theory]
     [MemberData(nameof(Fixtures))]
     [Exploratory]
-    public async Task ParseSolution(AbsolutePath solutionPath)
+    public async Task ParseSolution(AbsolutePath solutionPath, AbsolutePath root)
     {
         var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(1000)).Token;
         var solutionParser = new SolutionParser();
 
         var solution = await solutionParser.LoadSolutionAsync(solutionPath, cancellationToken);
         var executionContext = new InMemoryExecutionContext(exception => _output.WriteLine(exception.ToString()));
-        var root = solutionPath.Parent;
+        // var root = solutionPath.Parent;
         var projectPaths = solution.Projects.Select(x => x.FilePath).ToList();
         List<J.Unknown> jUnknowns = new();
         foreach (var projectPath in projectPaths.Where(x => x != null).Cast<string>())

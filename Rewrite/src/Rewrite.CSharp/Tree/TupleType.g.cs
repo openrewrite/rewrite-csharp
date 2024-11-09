@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
@@ -23,6 +24,24 @@ namespace Rewrite.RewriteCSharp.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface Cs : J
 {
+    /// <summary>
+    /// Represents a C# tuple type specification, which allows grouping multiple types into a single type.
+    /// Can be used in method returns, variable declarations, etc.
+    /// <br/>
+    /// For example:
+    /// <code>
+    ///   // Simple tuple type
+    ///   (int, string) coordinates;
+    ///   // Tuple type with named elements
+    ///   (int x, string label) namedTuple;
+    ///   // Nested tuple types
+    ///   (int, (string, bool)) complexTuple;
+    ///   // As method return type
+    ///   public (string name, int age) GetPersonDetails() { }
+    ///   // As parameter type
+    ///   public void ProcessData((int id, string value) data) { }
+    /// </code>
+    /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif
@@ -32,7 +51,7 @@ public partial interface Cs : J
     Markers markers,
     JContainer<TupleElement> elements,
     JavaType? type
-    ) : Cs, TypeTree, Expression, MutableTree<TupleType>
+    ) : Cs, TypeTree, Expression, Expression<TupleType>, TypedTree<TupleType>, TypeTree<TupleType>, MutableTree<TupleType>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

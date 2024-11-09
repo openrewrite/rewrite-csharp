@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
@@ -30,7 +31,7 @@ public partial interface Cs : J
     Guid id,
     Space prefix,
     Markers markers,
-    KeywordKind kind
+    Keyword.KeywordKind kind
     ) : Cs, MutableTree<Keyword>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
@@ -56,11 +57,22 @@ public partial interface Cs : J
         {
             return ReferenceEquals(newMarkers, markers) ? this : new Keyword(id, prefix, newMarkers, kind);
         }
-        public Cs.KeywordKind Kind => kind;
+        public KeywordKind Kind => kind;
 
-        public Keyword WithKind(Cs.KeywordKind newKind)
+        public Keyword WithKind(KeywordKind newKind)
         {
             return newKind == kind ? this : new Keyword(id, prefix, markers, newKind);
+        }
+        public enum KeywordKind
+        {
+            Ref,
+            Out,
+            Await,
+            Base,
+            This,
+            Break,
+            Return,
+            Not,
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

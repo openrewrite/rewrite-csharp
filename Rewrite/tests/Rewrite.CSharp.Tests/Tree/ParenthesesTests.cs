@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ParenthesesTests : RewriteTest
+public class ParenthesesTests(ITestOutputHelper output) : RewriteTest(output)
 {
 
     [Fact]

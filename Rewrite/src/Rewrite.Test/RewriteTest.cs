@@ -2,13 +2,16 @@ using System.Reflection;
 using System.Text;
 using Rewrite.Core;
 using Rewrite.Core.Quark;
+using Xunit.Abstractions;
 using ExecutionContext = Rewrite.Core.ExecutionContext;
 
 namespace Rewrite.Test;
 
-public class RewriteTest
+public class RewriteTest(ITestOutputHelper output)
 {
-    public void RewriteRun(params SourceSpecs[] sourceSpecs)
+    protected readonly ITestOutputHelper _output = output;
+
+    public void RewriteRun(params SourceSpec[] sourceSpecs)
     {
         RewriteRun(spec => { }, sourceSpecs);
     }
@@ -19,7 +22,7 @@ public class RewriteTest
         RewriteRun(spec, flatSourceSpecs);
     }
 
-    public void RewriteRun(Action<RecipeSpec> spec, SourceSpec[] sourceSpecs)
+    public void RewriteRun(Action<RecipeSpec> spec, params SourceSpec[] sourceSpecs)
     {
         var testClassSpec = RecipeSpec.Defaults();
         Defaults(testClassSpec);
@@ -160,6 +163,13 @@ public class RewriteTest
             for (var i = 0; i < sourceFiles.Count; i++)
             {
                 var sourceFile = sourceFiles[i];
+                if (sourceFile is ParseError parseError)
+                {
+                    var error = parseError.Markers.FindFirst<ParseExceptionResult>()!;
+                    throw new Exception(error.Message);
+                }
+
+                _output.WriteLine(sourceFile.RenderLstTree());
                 var markers = sourceFile.Markers;
 
                 sourceSpecIter.MoveNext().Should().BeTrue();

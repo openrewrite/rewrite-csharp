@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ClassDeclarationTests : RewriteTest
+public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     public void ModifierAndClassWithoutBody()
@@ -118,7 +118,7 @@ public class ClassDeclarationTests : RewriteTest
             class Foo<T> where T : class;
             """
         );
-        var lst = src.First().Parse<Cs.CompilationUnit>();
+        var lst = src.Parse();
         RewriteRun(
             src
         );

@@ -6,7 +6,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 using static Assertions;
 
 
-public class BaseExpressionTests : RewriteTest
+public class BaseExpressionTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     private void BaseExpresion()

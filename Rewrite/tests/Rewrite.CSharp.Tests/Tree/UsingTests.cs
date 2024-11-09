@@ -7,10 +7,8 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class UsingTests(ITestOutputHelper output) : RewriteTest
+public class UsingTests(ITestOutputHelper output) : RewriteTest(output)
 {
-    private readonly ITestOutputHelper _output = output;
-
     [Fact]
     public void Simple()
     {
@@ -73,12 +71,11 @@ public class UsingTests(ITestOutputHelper output) : RewriteTest
                     }
                 }
             }
-            """).First();
+            """);
 
-        var lst = src.Parse<Cs.CompilationUnit>();
-        var body = lst.Descendents().OfType<J.MethodDeclaration>().First().Body!;
-        _output.WriteLine(lst.ToString());
+        var lst = src.Parse();
         lst.ToString().ShouldBeSameAs(src.Before);
+        // _output.WriteLine(lst.RenderLstTree());
     }
 
     [Fact]

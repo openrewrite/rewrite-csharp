@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
@@ -29,7 +30,7 @@ public partial interface J : Rewrite.Core.Tree
     Guid id,
     Space prefix,
     Markers markers,
-    Case.Type caseType,
+    Case.Types caseType,
     JContainer<Expression> expressions,
     JContainer<Statement> statements,
     JRightPadded<J>? body
@@ -83,9 +84,9 @@ public partial interface J : Rewrite.Core.Tree
         {
             return ReferenceEquals(newMarkers, markers) ? this : new Case(id, prefix, newMarkers, caseType, _expressions, _statements, _body);
         }
-        public Type CaseType => caseType;
+        public Types CaseType => caseType;
 
-        public Case WithCaseType(Type newCaseType)
+        public Case WithCaseType(Types newCaseType)
         {
             return newCaseType == caseType ? this : new Case(id, prefix, markers, newCaseType, _expressions, _statements, _body);
         }
@@ -110,7 +111,7 @@ public partial interface J : Rewrite.Core.Tree
         {
             return Padding.WithBody(JRightPadded<J>.WithElement(_body, newBody));
         }
-        public enum Type
+        public enum Types
         {
             Statement,
             Rule,

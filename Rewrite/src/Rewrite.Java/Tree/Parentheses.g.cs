@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
@@ -30,7 +31,7 @@ public partial interface J : Rewrite.Core.Tree
     Space prefix,
     Markers markers,
     JRightPadded<J2> tree
-    ) : J, Expression, MutableTree<J.Parentheses<J2>> where J2 : J
+    ) : J, Expression, Expression<J.Parentheses<J2>>, MutableTree<J.Parentheses<J2>> where J2 : J
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -62,12 +63,6 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitParentheses(this, p);
         }
 
-        public JavaType? Type => Extensions.GetJavaType(this);
-
-        public J.Parentheses<J2> WithType(JavaType newType)
-        {
-            return Extensions.WithJavaType(this, newType);
-        }
         public Guid Id => id;
 
         public J.Parentheses<J2> WithId(Guid newId)

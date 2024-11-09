@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
@@ -30,10 +31,10 @@ public partial interface J : Rewrite.Core.Tree
     Space prefix,
     Markers markers,
     Expression variable,
-    JLeftPadded<AssignmentOperation.Type> @operator,
+    JLeftPadded<AssignmentOperation.Types> @operator,
     Expression assignment,
-    JavaType? javaType
-    ) : J, Statement, Expression, TypedTree, MutableTree<AssignmentOperation>
+    JavaType? type
+    ) : J, Statement, Expression, TypedTree, Expression<AssignmentOperation>, TypedTree<AssignmentOperation>, MutableTree<AssignmentOperation>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -69,30 +70,30 @@ public partial interface J : Rewrite.Core.Tree
 
         public AssignmentOperation WithId(Guid newId)
         {
-            return newId == id ? this : new AssignmentOperation(newId, prefix, markers, variable, _operator, assignment, javaType);
+            return newId == id ? this : new AssignmentOperation(newId, prefix, markers, variable, _operator, assignment, type);
         }
         public Space Prefix => prefix;
 
         public AssignmentOperation WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new AssignmentOperation(id, newPrefix, markers, variable, _operator, assignment, javaType);
+            return newPrefix == prefix ? this : new AssignmentOperation(id, newPrefix, markers, variable, _operator, assignment, type);
         }
         public Markers Markers => markers;
 
         public AssignmentOperation WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new AssignmentOperation(id, prefix, newMarkers, variable, _operator, assignment, javaType);
+            return ReferenceEquals(newMarkers, markers) ? this : new AssignmentOperation(id, prefix, newMarkers, variable, _operator, assignment, type);
         }
         public Expression Variable => variable;
 
         public AssignmentOperation WithVariable(Expression newVariable)
         {
-            return ReferenceEquals(newVariable, variable) ? this : new AssignmentOperation(id, prefix, markers, newVariable, _operator, assignment, javaType);
+            return ReferenceEquals(newVariable, variable) ? this : new AssignmentOperation(id, prefix, markers, newVariable, _operator, assignment, type);
         }
-        private readonly JLeftPadded<Type> _operator = @operator;
-        public Type Operator => _operator.Element;
+        private readonly JLeftPadded<Types> _operator = @operator;
+        public Types Operator => _operator.Element;
 
-        public AssignmentOperation WithOperator(Type newOperator)
+        public AssignmentOperation WithOperator(Types newOperator)
         {
             return Padding.WithOperator(_operator.WithElement(newOperator));
         }
@@ -100,15 +101,15 @@ public partial interface J : Rewrite.Core.Tree
 
         public AssignmentOperation WithAssignment(Expression newAssignment)
         {
-            return ReferenceEquals(newAssignment, assignment) ? this : new AssignmentOperation(id, prefix, markers, variable, _operator, newAssignment, javaType);
+            return ReferenceEquals(newAssignment, assignment) ? this : new AssignmentOperation(id, prefix, markers, variable, _operator, newAssignment, type);
         }
-        public JavaType? JavaType => javaType;
+        public JavaType? Type => type;
 
-        public AssignmentOperation WithJavaType(JavaType? newJavaType)
+        public AssignmentOperation WithType(JavaType? newType)
         {
-            return newJavaType == javaType ? this : new AssignmentOperation(id, prefix, markers, variable, _operator, assignment, newJavaType);
+            return newType == type ? this : new AssignmentOperation(id, prefix, markers, variable, _operator, assignment, newType);
         }
-        public enum Type
+        public enum Types
         {
             Addition,
             BitAnd,
@@ -127,11 +128,11 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.AssignmentOperation T)
         {
-            public JLeftPadded<J.AssignmentOperation.Type> Operator => T._operator;
+            public JLeftPadded<J.AssignmentOperation.Types> Operator => T._operator;
 
-            public J.AssignmentOperation WithOperator(JLeftPadded<J.AssignmentOperation.Type> newOperator)
+            public J.AssignmentOperation WithOperator(JLeftPadded<J.AssignmentOperation.Types> newOperator)
             {
-                return T._operator == newOperator ? T : new J.AssignmentOperation(T.Id, T.Prefix, T.Markers, T.Variable, newOperator, T.Assignment, T.JavaType);
+                return T._operator == newOperator ? T : new J.AssignmentOperation(T.Id, T.Prefix, T.Markers, T.Variable, newOperator, T.Assignment, T.Type);
             }
 
         }

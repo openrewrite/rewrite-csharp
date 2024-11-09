@@ -1,6 +1,6 @@
 ﻿namespace Rewrite.CSharp.Tests.Tree;
 using static Assertions;
-public class GlobalTests : RewriteTest
+public class GlobalTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     void TopLevelProgram()

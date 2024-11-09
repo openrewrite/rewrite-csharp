@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ForLoopTests : RewriteTest
+public class ForLoopTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     void ForLoopMultipleInit()

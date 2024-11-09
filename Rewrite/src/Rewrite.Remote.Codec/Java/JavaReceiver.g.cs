@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
@@ -116,7 +117,7 @@ public record JavaReceiver : Receiver
             assignmentOperation = assignmentOperation.WithVariable(ctx.ReceiveNode(assignmentOperation.Variable, ctx.ReceiveTree)!);
             assignmentOperation = assignmentOperation.Padding.WithOperator(ctx.ReceiveNode(assignmentOperation.Padding.Operator, ReceiveLeftPadded)!);
             assignmentOperation = assignmentOperation.WithAssignment(ctx.ReceiveNode(assignmentOperation.Assignment, ctx.ReceiveTree)!);
-            assignmentOperation = assignmentOperation.WithJavaType(ctx.ReceiveValue(assignmentOperation.JavaType));
+            assignmentOperation = assignmentOperation.WithType(ctx.ReceiveValue(assignmentOperation.Type));
             return assignmentOperation;
         }
 
@@ -128,7 +129,7 @@ public record JavaReceiver : Receiver
             binary = binary.WithLeft(ctx.ReceiveNode(binary.Left, ctx.ReceiveTree)!);
             binary = binary.Padding.WithOperator(ctx.ReceiveNode(binary.Padding.Operator, ReceiveLeftPadded)!);
             binary = binary.WithRight(ctx.ReceiveNode(binary.Right, ctx.ReceiveTree)!);
-            binary = binary.WithJavaType(ctx.ReceiveValue(binary.JavaType));
+            binary = binary.WithType(ctx.ReceiveValue(binary.Type));
             return binary;
         }
 
@@ -708,7 +709,7 @@ public record JavaReceiver : Receiver
             unary = unary.WithMarkers(ctx.ReceiveNode(unary.Markers, ctx.ReceiveMarkers)!);
             unary = unary.Padding.WithOperator(ctx.ReceiveNode(unary.Padding.Operator, ReceiveLeftPadded)!);
             unary = unary.WithExpression(ctx.ReceiveNode(unary.Expression, ctx.ReceiveTree)!);
-            unary = unary.WithJavaType(ctx.ReceiveValue(unary.JavaType));
+            unary = unary.WithType(ctx.ReceiveValue(unary.Type));
             return unary;
         }
 
@@ -869,7 +870,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
-                    ctx.ReceiveNode(default(JLeftPadded<J.AssignmentOperation.Type>), ReceiveLeftPadded)!,
+                    ctx.ReceiveNode(default(JLeftPadded<J.AssignmentOperation.Types>), ReceiveLeftPadded)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
                     ctx.ReceiveValue(default(JavaType))
                 );
@@ -882,7 +883,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
-                    ctx.ReceiveNode(default(JLeftPadded<J.Binary.Type>), ReceiveLeftPadded)!,
+                    ctx.ReceiveNode(default(JLeftPadded<J.Binary.Types>), ReceiveLeftPadded)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
                     ctx.ReceiveValue(default(JavaType))
                 );
@@ -916,7 +917,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveValue(default(J.Case.Type))!,
+                    ctx.ReceiveValue(default(J.Case.Types))!,
                     ctx.ReceiveNode(default(JContainer<Expression>), ReceiveContainer)!,
                     ctx.ReceiveNode(default(JContainer<Statement>), ReceiveContainer)!,
                     ctx.ReceiveNode(default(JRightPadded<J>), ReceiveRightPadded)
@@ -950,7 +951,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNodes(default(IList<J.Annotation>), ctx.ReceiveTree)!,
-                    ctx.ReceiveValue(default(J.ClassDeclaration.Kind.Type))!
+                    ctx.ReceiveValue(default(J.ClassDeclaration.Kind.Types))!
                 );
             }
 
@@ -1266,7 +1267,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveValue(default(string)),
-                    ctx.ReceiveValue(default(J.Modifier.Type))!,
+                    ctx.ReceiveValue(default(J.Modifier.Types))!,
                     ctx.ReceiveNodes(default(IList<J.Annotation>), ctx.ReceiveTree)!
                 );
             }
@@ -1525,7 +1526,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveNode(default(JLeftPadded<J.Unary.Type>), ReceiveLeftPadded)!,
+                    ctx.ReceiveNode(default(JLeftPadded<J.Unary.Types>), ReceiveLeftPadded)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
                     ctx.ReceiveValue(default(JavaType))
                 );

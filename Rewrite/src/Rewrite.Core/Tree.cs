@@ -3,7 +3,7 @@ using Rewrite.Core.Marker;
 
 namespace Rewrite.Core;
 
-public interface Tree : IEquatable<Tree>
+public interface Tree : IHasMarkers, IEquatable<Tree>
 {
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
@@ -11,7 +11,7 @@ public interface Tree : IEquatable<Tree>
     internal static string? ToString(Tree node)
     {
         var output = new PrintOutputCapture<object?>(null);
-        IPrinterFactory.Current()?.CreatePrinter<object?>().Visit(node, output);
+        IPrinterFactory.Default?.CreatePrinter<object?>().Visit(node, output);
 
         return output.ToString();
     }
@@ -24,7 +24,6 @@ public interface Tree : IEquatable<Tree>
     }
 
     Guid Id { get; }
-    Markers Markers { get; }
 
     bool IsAcceptable<R, P>(ITreeVisitor<R, P> v, P p) where R : class, Tree;
 

@@ -6,7 +6,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 using static Assertions;
 
 
-public class ArrayTests : RewriteTest
+public class ArrayTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     public void OneDimensional()
@@ -14,10 +14,20 @@ public class ArrayTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                public class Foo
-                {
-                    object arr = new int[3];
+                new int[3];
                 }
+                """
+            )
+        );
+    }
+
+    [Fact]
+    public void RangeExpression()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                a[1..3];
                 """
             )
         );
@@ -44,13 +54,36 @@ public class ArrayTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                public class Foo
-                {
-                    object arr = new int[3] { 1, 2, 3 };
+                new int[3] { 1, 2, 3 };
                 }
                 """
             )
         );
+    }
+
+    [Fact]
+    public void InitializerWithTrailingComma()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                new [] { 1, };
+                """
+            )
+        );
+    }
+
+    [Fact]
+    public void ArrayWithEmptyInitializer()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                var a = new int[] { /*1*/ };
+                """
+            )
+        );
+
     }
 
     [Fact]
@@ -59,10 +92,7 @@ public class ArrayTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                public class Foo
-                {
-                    object arr = new int[3][];
-                }
+                new int[3][];
                 """
             )
         );

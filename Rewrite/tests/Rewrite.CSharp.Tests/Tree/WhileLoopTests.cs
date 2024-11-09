@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class WhileLoopTests : RewriteTest
+public class WhileLoopTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     public void EmptyBody()

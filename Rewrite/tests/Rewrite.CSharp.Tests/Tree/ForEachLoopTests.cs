@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ForEachLoopTests : RewriteTest
+public class ForEachLoopTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     void SimpleForEachLoop()
@@ -13,30 +13,21 @@ public class ForEachLoopTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                class Test {
-                    void test() {
-                        foreach (int element in new int[]{ 0, 1, 1, 2, 3, 5, 8, 13 })
-                        {
-                            Console.Write(element.ToString());
-                        }
-                        // Output:
-                        // 0 1 1 2 3 5 8 13
-                    }
+                foreach (int element in new int[]{ 0, 1, 1, 2, 3, 5, 8, 13 })
+                {
+
                 }
+
                 """
             ),
             CSharp(
                 """
-                class Test {
-                    void test(int[] n) {
-                        foreach (int element in n)
-                        {
-                            Console.Write((element.ToString()));
-                        }
-                        // Output:
-                        // 0 1 1 2 3 5 8 13
-                    }
+                var n = new int[] { 1, 2, 3};
+                foreach (int element in n)
+                {
+
                 }
+
                 """
             )
         );
@@ -48,15 +39,25 @@ public class ForEachLoopTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                class Test {
-                    void test(int[] n) {
-                        /*dsas?*/ foreach /*dsas?*/ (/*dsas?*/ int /*dsas?*/ element /*dsas?*/ in   n /*dsas?*/) /*dsas?*/
-                        {
-                            Console.Write(element.ToString());
-                        }
-                        // Output:
-                        // 0 1 1 2 3 5 8 13
-                    }
+                /*dsas?*/ foreach /*dsas?*/ (/*dsas?*/ int /*dsas?*/ element /*dsas?*/ in   n /*dsas?*/) /*dsas?*/
+                {
+
+                }
+                """
+            )
+        );
+    }
+
+    [Fact]
+    void MultiVariableForEachLoop()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                var points = new[]{(1,2)};
+                foreach ((var x, var y) in points)
+                {
+
                 }
                 """
             )

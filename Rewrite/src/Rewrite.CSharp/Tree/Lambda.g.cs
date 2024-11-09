@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
@@ -32,19 +33,13 @@ public partial interface Cs : J
     Markers markers,
     J.Lambda lambdaExpression,
     IList<J.Modifier> modifiers
-    ) : Cs, Statement, Expression, MutableTree<Lambda>
+    ) : Cs, Statement, Expression, Expression<Lambda>, MutableTree<Lambda>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitLambda(this, p);
         }
 
-        public JavaType? Type => Extensions.GetJavaType(this);
-
-        public Lambda WithType(JavaType newType)
-        {
-            return Extensions.WithJavaType(this, newType);
-        }
         public Guid Id => id;
 
         public Lambda WithId(Guid newId)

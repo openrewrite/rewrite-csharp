@@ -15,7 +15,7 @@ public sealed class JRightPadded<T>(
     T element,
     Space after,
     Markers markers
-)
+) : JRightPadded
 {
     public T Element => element;
 
@@ -111,7 +111,7 @@ public sealed class JRightPadded<T>(
         return newAfter == after ? this : new JRightPadded<T>(element, newAfter, markers);
     }
 
-    public Markers Markers => markers;
+    public override Markers Markers => markers;
 
     public JRightPadded<T> WithMarkers(Markers newMarkers)
     {
@@ -130,7 +130,7 @@ public sealed class JRightPadded<T>(
     }
 }
 
-public static class JRightPadded
+public abstract class JRightPadded : IHasMarkers
 {
     public static JRightPadded<T> Create<T>(T element) => new (element, Space.EMPTY, Markers.EMPTY);
     public static JRightPadded<T> Create<T>(T element, Space after) => new (element, after, Markers.EMPTY);
@@ -187,4 +187,6 @@ public static class JRightPadded
     {
         return right.WithElement(element);
     }
+
+    public abstract Markers Markers { get; }
 }

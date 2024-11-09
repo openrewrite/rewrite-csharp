@@ -6,7 +6,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class MethodInvocationTests : RewriteTest
+public class MethodInvocationTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     public void NoReceiver()
@@ -134,6 +134,19 @@ public class MethodInvocationTests : RewriteTest
                 "
             )
         );
+    }
+
+    [Fact]
+    public void InvocationOfDelegateReturnedByArrayAccess()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                a[0]();
+                """
+            )
+        );
+
     }
 
     [Fact]

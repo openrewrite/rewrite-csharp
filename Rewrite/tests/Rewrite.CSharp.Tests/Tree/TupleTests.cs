@@ -7,7 +7,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class TupleTests : RewriteTest
+public class TupleTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     public void TupleDeconstruction()

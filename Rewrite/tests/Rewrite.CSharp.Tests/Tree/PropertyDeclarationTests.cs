@@ -8,7 +8,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class PropertyDeclarationTests : RewriteTest
+public class PropertyDeclarationTests(ITestOutputHelper output) : RewriteTest(output)
 {
 
     [Fact]
@@ -136,7 +136,7 @@ public class PropertyDeclarationTests : RewriteTest
             {
                 static bool Is64Bit => true || true;
             }
-            """).First();
+            """);
         RewriteRun(sourceSpec);
     }
 
@@ -149,7 +149,7 @@ public class PropertyDeclarationTests : RewriteTest
             {
                 static bool Is64Bit => true /*1*/ ;
             }
-            """).First();
+            """);
         RewriteRun(sourceSpec);
     }
 

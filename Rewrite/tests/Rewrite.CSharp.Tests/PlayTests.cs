@@ -1,7 +1,7 @@
 ﻿namespace Rewrite.CSharp.Tests;
 
 [Exploratory]
-public class PlayTests(ITestOutputHelper _output) : RewriteTest
+public class PlayTests(ITestOutputHelper output) : RewriteTest(output)
 {
     /// <summary>
     /// Some pretty print tests for string delta report

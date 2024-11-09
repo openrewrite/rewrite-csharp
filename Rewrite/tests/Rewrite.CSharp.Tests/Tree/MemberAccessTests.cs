@@ -6,7 +6,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class MemberAccessTests : RewriteTest
+public class MemberAccessTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     public void MultilineLinq()

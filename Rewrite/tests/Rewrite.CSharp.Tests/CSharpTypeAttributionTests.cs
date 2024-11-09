@@ -11,7 +11,7 @@ namespace Rewrite.CSharp.Tests;
 
 using static Assertions;
 
-public class CSharpTypeAttributionTests : RewriteTest
+public class CSharpTypeAttributionTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     [KnownBug]

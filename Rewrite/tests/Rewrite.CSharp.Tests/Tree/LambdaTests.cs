@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class LambdaTests : RewriteTest
+public class LambdaTests(ITestOutputHelper output) : RewriteTest(output)
 {
 
     [Fact]

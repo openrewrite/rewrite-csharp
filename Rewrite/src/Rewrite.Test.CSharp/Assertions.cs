@@ -6,6 +6,7 @@ using Rewrite.RewriteCSharp.Tree;
 using Rewrite.RewriteJava;
 using Rewrite.RewriteJava.Tree;
 using Rewrite.Test;
+using Xunit;
 using ExecutionContext = Rewrite.Core.ExecutionContext;
 
 namespace Rewrite.Test.CSharp;
@@ -21,10 +22,10 @@ public static class Assertions
 
     public static SourceSpec<Cs.CompilationUnit> CSharp([LanguageInjection("C#")] string before)
     {
-        return CSharp(before, s => { }).Cast<SourceSpec<Cs.CompilationUnit>>().First();
+        return CSharp(before, s => { });
     }
 
-    public static SourceSpecs<Cs.CompilationUnit> CSharp([LanguageInjection("C#")] string before, Action<SourceSpec<Cs.CompilationUnit>> spec)
+    public static SourceSpec<Cs.CompilationUnit> CSharp([LanguageInjection("C#")] string before, Action<SourceSpec<Cs.CompilationUnit>> spec)
     {
         var cs = new SourceSpec<Cs.CompilationUnit>(
             Core.Tree.RandomId(), Parser, before, t => t,
@@ -36,12 +37,12 @@ public static class Assertions
         return cs;
     }
 
-    public static SourceSpecs<Cs.CompilationUnit> CSharp([LanguageInjection("C#")] string before, [LanguageInjection("C#")] string after)
+    public static SourceSpec<Cs.CompilationUnit> CSharp([LanguageInjection("C#")] string before, [LanguageInjection("C#")] string after)
     {
         return CSharp(before, after, s => { });
     }
 
-    public static SourceSpecs<Cs.CompilationUnit> CSharp([LanguageInjection("C#")] string before, [LanguageInjection("C#")] string after, Action<SourceSpec<Cs.CompilationUnit>> spec)
+    public static SourceSpec<Cs.CompilationUnit> CSharp([LanguageInjection("C#")] string before, [LanguageInjection("C#")] string after, Action<SourceSpec<Cs.CompilationUnit>> spec)
     {
         var cs = new SourceSpec<Cs.CompilationUnit>(
             Core.Tree.RandomId(), Parser, before, t => t,
@@ -118,7 +119,11 @@ internal class UnknownDetector : JavaVisitor<int>
         if (parent is J.Annotation)
             return unknown;
 
-        unknown.Should().BeNull(because: "parser must not produce `J.Unknown` nodes");
+        Assert.Fail($$"""
+           Parser produced `J.Unknown` trying to process '{{unknown.UnknownSource.Markers.FindFirst<ParseExceptionResult>()?.TreeType}}'
+           Original source code:
+           {{unknown.UnknownSource.Text}}
+           """);
         return unknown;
     }
 }

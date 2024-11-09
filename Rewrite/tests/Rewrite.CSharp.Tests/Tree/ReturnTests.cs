@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ReturnTests : RewriteTest
+public class ReturnTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     public void Simple()

@@ -7,7 +7,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class TryTests : RewriteTest
+public class TryTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     public void TryFinallyOnly()

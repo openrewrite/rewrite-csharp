@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
@@ -29,19 +30,13 @@ public partial interface J : Rewrite.Core.Tree
     Guid id,
     Space prefix,
     Markers markers
-    ) : J, Statement, Expression, TypeTree, MutableTree<Empty>
+    ) : J, Statement, Expression, TypeTree, Expression<Empty>, TypedTree<Empty>, TypeTree<Empty>, MutableTree<Empty>
     {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {
             return v.VisitEmpty(this, p);
         }
 
-        public JavaType? Type => Extensions.GetJavaType(this);
-
-        public Empty WithType(JavaType newType)
-        {
-            return Extensions.WithJavaType(this, newType);
-        }
         public Guid Id => id;
 
         public Empty WithId(Guid newId)

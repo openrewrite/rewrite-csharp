@@ -310,10 +310,21 @@ public interface JavaType
                 Supertype, OwningClass, Annotations, Interfaces, m, Methods);
         }
 
+        /// <summary>
+        /// Hello <see cref="string.PadLeft(int)"/>
+        /// </summary>
+        /// <param name="typeParameters"></param>
+        /// <param name="supertype"></param>
+        /// <param name="owningClass"></param>
+        /// <param name="annotations"></param>
+        /// <param name="interfaces"></param>
+        /// <param name="members"></param>
+        /// <param name="methods"></param>
         internal void UnsafeSet(IList<JavaType>? typeParameters, FullyQualified? supertype, FullyQualified? owningClass,
             IList<FullyQualified>? annotations, IList<FullyQualified>? interfaces,
             IList<Variable>? members, IList<Method>? methods)
         {
+            
             TypeParameters = typeParameters ?? EMPTY_JAVA_TYPE_ARRAY;
             Supertype = supertype;
             OwningClass = owningClass;

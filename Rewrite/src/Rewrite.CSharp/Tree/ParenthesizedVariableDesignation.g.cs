@@ -5,7 +5,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 #nullable enable
-#pragma warning disable CS0108
+#pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
+#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Rewrite.Core;
@@ -23,6 +24,19 @@ namespace Rewrite.RewriteCSharp.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface Cs : J
 {
+    /// <summary>
+    /// Represents a parenthesized list of variable declarations used in deconstruction patterns.
+    /// Example of simple deconstruction:
+    /// <code>
+    /// int (x, y) = point;
+    /// </code>
+    /// Example of nested deconstruction:
+    /// <code>
+    /// (int count, var (string name, int age)) = GetPersonDetails();
+    ///             ^^^^^^^^^^^^^^^^^^^^^^^^^^ nested ParenthesizedVariable
+    ///  ^^^^^^^^^ SingleVariableDesignation
+    /// </code>
+    /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif
@@ -32,7 +46,7 @@ public partial interface Cs : J
     Markers markers,
     JContainer<VariableDesignation> variables,
     JavaType? type
-    ) : Cs.VariableDesignation, Cs, MutableTree<ParenthesizedVariableDesignation>
+    ) : Cs.VariableDesignation, Cs, Expression<ParenthesizedVariableDesignation>, MutableTree<ParenthesizedVariableDesignation>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

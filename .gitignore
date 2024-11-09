@@ -286,3 +286,4 @@ src/main/generated/
 
 ## vscode
 .vscode/
+**/*.v3.ncrunchproject

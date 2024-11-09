@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class CollectionExpressionTests : RewriteTest
+public class CollectionExpressionTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
     void Space()

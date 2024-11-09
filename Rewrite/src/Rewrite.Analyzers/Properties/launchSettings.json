@@ -3,7 +3,7 @@
   "profiles": {
     "Generators": {
       "commandName": "DebugRoslynComponent",
-      "targetProject": "../Rewrite.CSharp/Rewrite.CSharp.csproj"
+      "targetProject": "../Rewrite.Java/Rewrite.Java.csproj"
     }
   }
 }
