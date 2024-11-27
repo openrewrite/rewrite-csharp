@@ -22,6 +22,8 @@ import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.csharp.CSharpPrinter;
 import org.openrewrite.csharp.CSharpVisitor;
+import org.openrewrite.csharp.service.CSharpNamingService;
+import org.openrewrite.internal.NamingService;
 import org.openrewrite.internal.ListUtils;
 import org.openrewrite.java.JavaPrinter;
 import org.openrewrite.java.JavaTypeVisitor;
@@ -72,7 +74,7 @@ public interface Cs extends J {
 
         @Nullable
         @NonFinal
-        transient WeakReference<Padding>    padding;
+        transient WeakReference<Padding> padding;
 
         @Getter
         @With
@@ -264,8 +266,17 @@ public interface Cs extends J {
             return p;
         }
 
+        @Override
+        @Incubating(since = "8.2.0")
+        public <S, T extends S> T service(Class<S> service) {
+            if (NamingService.class.getName().equals(service.getName())) {
+                return (T) new CSharpNamingService();
+            }
+            return JavaSourceFile.super.service(service);
+        }
+
         @RequiredArgsConstructor
-        public static class Padding implements JavaSourceFile.Padding  {
+        public static class Padding implements JavaSourceFile.Padding {
             private final Cs.CompilationUnit t;
 
             @Override
@@ -505,7 +516,9 @@ public interface Cs extends J {
         @With
         Keyword refKindKeyword;
 
-        public @Nullable Identifier getNameColumn() { return nameColumn == null ? null : nameColumn.getElement(); }
+        public @Nullable Identifier getNameColumn() {
+            return nameColumn == null ? null : nameColumn.getElement();
+        }
 
         public Argument withNameColumn(@Nullable Identifier nameColumn) {
             return getPadding().withNameColumn(JRightPadded.withElement(this.nameColumn, nameColumn));
@@ -1602,7 +1615,7 @@ public interface Cs extends J {
             return v.visitInterpolation(this, p);
         }
 
-                public Padding getPadding() {
+        public Padding getPadding() {
             Padding p;
             if (this.padding == null) {
                 p = new Padding(this);
@@ -1966,7 +1979,7 @@ public interface Cs extends J {
         }
 
         public @Nullable NameTree getInterfaceSpecifier() {
-            return interfaceSpecifier!= null ? interfaceSpecifier.getElement() : null;
+            return interfaceSpecifier != null ? interfaceSpecifier.getElement() : null;
         }
 
         public PropertyDeclaration withInterfaceSpecifier(@Nullable NameTree interfaceSpecifier) {
@@ -2059,13 +2072,11 @@ public interface Cs extends J {
     }
 
 
-
     @Getter
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
     @RequiredArgsConstructor
-    final class Keyword implements Cs
-    {
+    final class Keyword implements Cs {
         @With
         @Getter
         @EqualsAndHashCode.Include
@@ -2145,7 +2156,7 @@ public interface Cs extends J {
 
         @Override
         public Cs.Lambda withType(@Nullable JavaType type) {
-            return this.getType() == type ? this :  new Cs.Lambda(
+            return this.getType() == type ? this : new Cs.Lambda(
                     id,
                     prefix,
                     markers,
@@ -2491,12 +2502,13 @@ public interface Cs extends J {
         }
     }
 
-    interface TypeParameterConstraint extends J {}
+    interface TypeParameterConstraint extends J {
+    }
 
     /**
      * Represents a type constraint in a type parameter's constraint clause.
      * Example: where T : SomeClass
-     *          where T : IInterface
+     * where T : IInterface
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -2574,9 +2586,8 @@ public interface Cs extends J {
     /* ------------------ */
 
 
-
-
-    interface AllowsConstraint extends J {}
+    interface AllowsConstraint extends J {
+    }
 
     /**
      * Represents an `allows` constraint in a where clause.
@@ -2701,8 +2712,7 @@ public interface Cs extends J {
         @Getter
         TypeKind kind;
 
-        public enum TypeKind
-        {
+        public enum TypeKind {
             Class,
             Struct
         }
@@ -2788,7 +2798,7 @@ public interface Cs extends J {
      *     // use result
      * }
      * </pre>
-     *
+     * <p>
      * Example 2: Deconstruction declaration:
      * <pre>
      * int (x, y) = point;
@@ -2855,6 +2865,7 @@ public interface Cs extends J {
     /**
      * Interface for variable designators in declaration expressions.
      * This can be either a single variable name or a parenthesized list of designators for deconstruction.
+     *
      * @see SingleVariableDesignation
      * @see ParenthesizedVariableDesignation
      */
@@ -2864,12 +2875,12 @@ public interface Cs extends J {
     /**
      * Represents a single variable declaration within a declaration expression.
      * Used both for simple out variable declarations and as elements within deconstruction declarations.
-     *
+     * <p>
      * Example in out variable:
      * <pre>
      * int.TryParse(s, out int x)  // 'int x' is the SingleVariable
      * </pre>
-     *
+     * <p>
      * Example in deconstruction:
      * <pre>
      * (int x, string y) = point;  // both 'int x' and 'string y' are SingleVariables
@@ -2908,7 +2919,7 @@ public interface Cs extends J {
 
         @Override
         public SingleVariableDesignation withType(@Nullable JavaType type) {
-            return this.getType() == type ? this :  new SingleVariableDesignation(
+            return this.getType() == type ? this : new SingleVariableDesignation(
                     id,
                     prefix,
                     markers,
@@ -2929,7 +2940,7 @@ public interface Cs extends J {
      * <pre>
      * int (x, y) = point;
      * </pre>
-     *
+     * <p>
      * Example of nested deconstruction:
      * <pre>
      * (int count, var (string name, int age)) = GetPersonDetails();
@@ -3413,15 +3424,15 @@ public interface Cs extends J {
     /**
      * Represents a constructor initializer which is a call to another constructor, either in the same class (this)
      * or in the base class (base).
-     *
+     * <p>
      * Examples:
      *  <pre>
      * class Person {
-     *     // Constructor with 'this' initializer
-     *     public Person(string name) : this(name, 0) { }
-     *
-     *     // Constructor with 'base' initializer
-     *     public Person(string name, int age) : base(name) { }
+     * // Constructor with 'this' initializer
+     * public Person(string name) : this(name, 0) { }
+     * <p>
+     * // Constructor with 'base' initializer
+     * public Person(string name, int age) : base(name) { }
      * }
      * </pre>
      */
