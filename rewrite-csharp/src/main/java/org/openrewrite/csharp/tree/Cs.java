@@ -2071,7 +2071,6 @@ public interface Cs extends J {
         }
     }
 
-
     @Getter
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -2797,7 +2796,6 @@ public interface Cs extends J {
      *     // use result
      * }
      * </pre>
-     * <p>
      * Example 2: Deconstruction declaration:
      * <pre>
      * int (x, y) = point;
@@ -2875,12 +2873,10 @@ public interface Cs extends J {
     /**
      * Represents a single variable declaration within a declaration expression.
      * Used both for simple out variable declarations and as elements within deconstruction declarations.
-     * <p>
      * Example in out variable:
      * <pre>
      * int.TryParse(s, out int x)  // 'int x' is the SingleVariable
      * </pre>
-     * <p>
      * Example in deconstruction:
      * <pre>
      * (int x, string y) = point;  // both 'int x' and 'string y' are SingleVariables
@@ -2935,12 +2931,10 @@ public interface Cs extends J {
 
     /**
      * Represents a parenthesized list of variable declarations used in deconstruction patterns.
-     * <p>
      * Example of simple deconstruction:
      * <pre>
      * int (x, y) = point;
      * </pre>
-     * <p>
      * Example of nested deconstruction:
      * <pre>
      * (int count, var (string name, int age)) = GetPersonDetails();
@@ -3424,13 +3418,11 @@ public interface Cs extends J {
     /**
      * Represents a constructor initializer which is a call to another constructor, either in the same class (this)
      * or in the base class (base).
-     * <p>
      * Examples:
      * <pre>
      * class Person {
      * // Constructor with 'this' initializer
      * public Person(string name) : this(name, 0) { }
-     * <p>
      * // Constructor with 'base' initializer
      * public Person(string name, int age) : base(name) { }
      * }
@@ -5288,7 +5280,6 @@ public interface Cs extends J {
 
     }
 
-
     /**
      * Represents a property pattern clause in C# pattern matching, which matches against object properties.
      * <p>
@@ -6395,7 +6386,6 @@ public interface Cs extends J {
             return new CoordinateBuilder.Statement(this);
         }
     }
-
 
     /**
      * Represents a C# checked statement which enforces overflow checking for arithmetic operations
