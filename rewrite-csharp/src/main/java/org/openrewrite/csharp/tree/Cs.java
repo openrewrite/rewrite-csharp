@@ -23,8 +23,8 @@ import org.openrewrite.*;
 import org.openrewrite.csharp.CSharpPrinter;
 import org.openrewrite.csharp.CSharpVisitor;
 import org.openrewrite.csharp.service.CSharpNamingService;
-import org.openrewrite.internal.NamingService;
 import org.openrewrite.internal.ListUtils;
+import org.openrewrite.internal.NamingService;
 import org.openrewrite.java.JavaPrinter;
 import org.openrewrite.java.JavaTypeVisitor;
 import org.openrewrite.java.internal.TypesInUse;
@@ -2099,8 +2099,7 @@ public interface Cs extends J {
             return v.visitKeyword(this, p);
         }
 
-        public enum KeywordKind
-        {
+        public enum KeywordKind {
             Ref,
             Out,
             Await,
@@ -2862,6 +2861,7 @@ public interface Cs extends J {
     }
 
     //region VariableDesignation
+
     /**
      * Interface for variable designators in declaration expressions.
      * This can be either a single variable name or a parenthesized list of designators for deconstruction.
@@ -2935,7 +2935,7 @@ public interface Cs extends J {
 
     /**
      * Represents a parenthesized list of variable declarations used in deconstruction patterns.
-     *
+     * <p>
      * Example of simple deconstruction:
      * <pre>
      * int (x, y) = point;
@@ -3426,7 +3426,7 @@ public interface Cs extends J {
      * or in the base class (base).
      * <p>
      * Examples:
-     *  <pre>
+     * <pre>
      * class Person {
      * // Constructor with 'this' initializer
      * public Person(string name) : this(name, 0) { }
@@ -3712,6 +3712,7 @@ public interface Cs extends J {
         }
 
     }
+
     /**
      * Represents an initializer expression that consists of a list of expressions, typically used in array
      * or collection initialization contexts. The expressions are contained within delimiters like curly braces.
@@ -4168,6 +4169,7 @@ public interface Cs extends J {
     }
 
     //region Patterns
+
     /**
      * Base interface for all C# pattern types that can appear on the right-hand side of an 'is' expression.
      * This includes type patterns, constant patterns, declaration patterns, property patterns, etc.
@@ -4720,6 +4722,7 @@ public interface Cs extends J {
 
         }
     }
+
     /**
      * Represents a C# parenthesized pattern expression that groups a nested pattern.
      * <p>
@@ -5284,7 +5287,6 @@ public interface Cs extends J {
         }
 
     }
-
 
 
     /**
@@ -5874,8 +5876,7 @@ public interface Cs extends J {
         }
     }
 
-    public interface SwitchLabel extends Expression
-    {
+    public interface SwitchLabel extends Expression {
 
     }
 
@@ -6381,7 +6382,6 @@ public interface Cs extends J {
         @With
         @Getter
         J.Block block;
-
 
 
         @Override
