@@ -35,7 +35,6 @@ public class CSharpNamingService implements NamingService {
                 int nameLength = oldMethodName.length();
                 for (int i = 0; i < nameLength; i++) {
                     char c = oldMethodName.charAt(i);
-
                     if (i == 0) {
                         // the java specification requires identifiers to start with [a-zA-Z$_]
                         if (c != '$' && c != '_') {
@@ -43,8 +42,13 @@ public class CSharpNamingService implements NamingService {
                         }
                     } else {
                         if (!Character.isLetterOrDigit(c)) {
-                            while (i < nameLength && (!Character.isLetterOrDigit(c) || c > 'z')) {
-                                c = oldMethodName.charAt(i++);
+                            while ((!Character.isLetterOrDigit(c) || c > 'z')) {
+                                i++;
+                                if (i < nameLength) {
+                                    c = oldMethodName.charAt(i);
+                                } else {
+                                    break;
+                                }
                             }
                             if (i < nameLength) {
                                 result.append(Character.toUpperCase(c));
