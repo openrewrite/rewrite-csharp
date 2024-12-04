@@ -22,7 +22,9 @@ import org.jspecify.annotations.Nullable;
 import org.openrewrite.*;
 import org.openrewrite.csharp.CSharpPrinter;
 import org.openrewrite.csharp.CSharpVisitor;
+import org.openrewrite.csharp.service.CSharpNamingService;
 import org.openrewrite.internal.ListUtils;
+import org.openrewrite.internal.NamingService;
 import org.openrewrite.java.JavaPrinter;
 import org.openrewrite.java.JavaTypeVisitor;
 import org.openrewrite.java.internal.TypesInUse;
@@ -72,7 +74,7 @@ public interface Cs extends J {
 
         @Nullable
         @NonFinal
-        transient WeakReference<Padding>    padding;
+        transient WeakReference<Padding> padding;
 
         @Getter
         @With
@@ -264,8 +266,17 @@ public interface Cs extends J {
             return p;
         }
 
+        @Override
+        @Incubating(since = "8.2.0")
+        public <S, T extends S> T service(Class<S> service) {
+            if (NamingService.class.getName().equals(service.getName())) {
+                return (T) new CSharpNamingService();
+            }
+            return JavaSourceFile.super.service(service);
+        }
+
         @RequiredArgsConstructor
-        public static class Padding implements JavaSourceFile.Padding  {
+        public static class Padding implements JavaSourceFile.Padding {
             private final Cs.CompilationUnit t;
 
             @Override
@@ -505,7 +516,9 @@ public interface Cs extends J {
         @With
         Keyword refKindKeyword;
 
-        public @Nullable Identifier getNameColumn() { return nameColumn == null ? null : nameColumn.getElement(); }
+        public @Nullable Identifier getNameColumn() {
+            return nameColumn == null ? null : nameColumn.getElement();
+        }
 
         public Argument withNameColumn(@Nullable Identifier nameColumn) {
             return getPadding().withNameColumn(JRightPadded.withElement(this.nameColumn, nameColumn));
@@ -1602,7 +1615,7 @@ public interface Cs extends J {
             return v.visitInterpolation(this, p);
         }
 
-                public Padding getPadding() {
+        public Padding getPadding() {
             Padding p;
             if (this.padding == null) {
                 p = new Padding(this);
@@ -1966,7 +1979,7 @@ public interface Cs extends J {
         }
 
         public @Nullable NameTree getInterfaceSpecifier() {
-            return interfaceSpecifier!= null ? interfaceSpecifier.getElement() : null;
+            return interfaceSpecifier != null ? interfaceSpecifier.getElement() : null;
         }
 
         public PropertyDeclaration withInterfaceSpecifier(@Nullable NameTree interfaceSpecifier) {
@@ -2058,14 +2071,11 @@ public interface Cs extends J {
         }
     }
 
-
-
     @Getter
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
     @RequiredArgsConstructor
-    final class Keyword implements Cs
-    {
+    final class Keyword implements Cs {
         @With
         @Getter
         @EqualsAndHashCode.Include
@@ -2088,8 +2098,7 @@ public interface Cs extends J {
             return v.visitKeyword(this, p);
         }
 
-        public enum KeywordKind
-        {
+        public enum KeywordKind {
             Ref,
             Out,
             Await,
@@ -2145,7 +2154,7 @@ public interface Cs extends J {
 
         @Override
         public Cs.Lambda withType(@Nullable JavaType type) {
-            return this.getType() == type ? this :  new Cs.Lambda(
+            return this.getType() == type ? this : new Cs.Lambda(
                     id,
                     prefix,
                     markers,
@@ -2491,12 +2500,13 @@ public interface Cs extends J {
         }
     }
 
-    interface TypeParameterConstraint extends J {}
+    interface TypeParameterConstraint extends J {
+    }
 
     /**
      * Represents a type constraint in a type parameter's constraint clause.
      * Example: where T : SomeClass
-     *          where T : IInterface
+     * where T : IInterface
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -2573,10 +2583,8 @@ public interface Cs extends J {
 
     /* ------------------ */
 
-
-
-
-    interface AllowsConstraint extends J {}
+    interface AllowsConstraint extends J {
+    }
 
     /**
      * Represents an `allows` constraint in a where clause.
@@ -2701,8 +2709,7 @@ public interface Cs extends J {
         @Getter
         TypeKind kind;
 
-        public enum TypeKind
-        {
+        public enum TypeKind {
             Class,
             Struct
         }
@@ -2788,7 +2795,6 @@ public interface Cs extends J {
      *     // use result
      * }
      * </pre>
-     *
      * Example 2: Deconstruction declaration:
      * <pre>
      * int (x, y) = point;
@@ -2852,9 +2858,11 @@ public interface Cs extends J {
     }
 
     //region VariableDesignation
+
     /**
      * Interface for variable designators in declaration expressions.
      * This can be either a single variable name or a parenthesized list of designators for deconstruction.
+     *
      * @see SingleVariableDesignation
      * @see ParenthesizedVariableDesignation
      */
@@ -2864,12 +2872,10 @@ public interface Cs extends J {
     /**
      * Represents a single variable declaration within a declaration expression.
      * Used both for simple out variable declarations and as elements within deconstruction declarations.
-     *
      * Example in out variable:
      * <pre>
      * int.TryParse(s, out int x)  // 'int x' is the SingleVariable
      * </pre>
-     *
      * Example in deconstruction:
      * <pre>
      * (int x, string y) = point;  // both 'int x' and 'string y' are SingleVariables
@@ -2908,7 +2914,7 @@ public interface Cs extends J {
 
         @Override
         public SingleVariableDesignation withType(@Nullable JavaType type) {
-            return this.getType() == type ? this :  new SingleVariableDesignation(
+            return this.getType() == type ? this : new SingleVariableDesignation(
                     id,
                     prefix,
                     markers,
@@ -2924,12 +2930,10 @@ public interface Cs extends J {
 
     /**
      * Represents a parenthesized list of variable declarations used in deconstruction patterns.
-     *
      * Example of simple deconstruction:
      * <pre>
      * int (x, y) = point;
      * </pre>
-     *
      * Example of nested deconstruction:
      * <pre>
      * (int count, var (string name, int age)) = GetPersonDetails();
@@ -3413,15 +3417,13 @@ public interface Cs extends J {
     /**
      * Represents a constructor initializer which is a call to another constructor, either in the same class (this)
      * or in the base class (base).
-     *
      * Examples:
-     *  <pre>
+     * <pre>
      * class Person {
-     *     // Constructor with 'this' initializer
-     *     public Person(string name) : this(name, 0) { }
-     *
-     *     // Constructor with 'base' initializer
-     *     public Person(string name, int age) : base(name) { }
+     * // Constructor with 'this' initializer
+     * public Person(string name) : this(name, 0) { }
+     * // Constructor with 'base' initializer
+     * public Person(string name, int age) : base(name) { }
      * }
      * </pre>
      */
@@ -3701,6 +3703,7 @@ public interface Cs extends J {
         }
 
     }
+
     /**
      * Represents an initializer expression that consists of a list of expressions, typically used in array
      * or collection initialization contexts. The expressions are contained within delimiters like curly braces.
@@ -4157,6 +4160,7 @@ public interface Cs extends J {
     }
 
     //region Patterns
+
     /**
      * Base interface for all C# pattern types that can appear on the right-hand side of an 'is' expression.
      * This includes type patterns, constant patterns, declaration patterns, property patterns, etc.
@@ -4709,6 +4713,7 @@ public interface Cs extends J {
 
         }
     }
+
     /**
      * Represents a C# parenthesized pattern expression that groups a nested pattern.
      * <p>
@@ -5273,8 +5278,6 @@ public interface Cs extends J {
         }
 
     }
-
-
 
     /**
      * Represents a property pattern clause in C# pattern matching, which matches against object properties.
@@ -5863,8 +5866,7 @@ public interface Cs extends J {
         }
     }
 
-    public interface SwitchLabel extends Expression
-    {
+    public interface SwitchLabel extends Expression {
 
     }
 
@@ -6371,8 +6373,6 @@ public interface Cs extends J {
         @Getter
         J.Block block;
 
-
-
         @Override
         public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
             return v.visitFixedStatement(this, p);
@@ -6384,7 +6384,6 @@ public interface Cs extends J {
             return new CoordinateBuilder.Statement(this);
         }
     }
-
 
     /**
      * Represents a C# checked statement which enforces overflow checking for arithmetic operations
