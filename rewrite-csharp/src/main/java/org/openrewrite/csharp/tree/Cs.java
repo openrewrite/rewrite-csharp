@@ -2583,7 +2583,6 @@ public interface Cs extends J {
 
     /* ------------------ */
 
-
     interface AllowsConstraint extends J {
     }
 
@@ -6373,7 +6372,6 @@ public interface Cs extends J {
         @With
         @Getter
         J.Block block;
-
 
         @Override
         public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
