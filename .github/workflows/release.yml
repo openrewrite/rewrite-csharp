@@ -42,17 +42,6 @@ jobs:
         working-directory: Rewrite
         run: |
           sed -i -E "s/<VersionPrefix>.*<\/VersionPrefix>/<VersionPrefix>${GITHUB_REF#refs/tags/v}<\/VersionPrefix>/g" Directory.Build.props
-  
-      - name: Commit version updates
-        working-directory: Rewrite
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add Directory.Build.props
-          git commit -m "bump version ${GITHUB_REF#refs/tags/}"
-          git push https://${GH_TOKEN}@github.com/openrewrite/rewrite-csharp.git HEAD:main
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: build
         run: |
@@ -91,3 +80,14 @@ jobs:
           dotnet nuget push ~/localNuGetFeed/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{env.NUGET_API_KEY}}
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+  
+      - name: Commit version updates
+        working-directory: Rewrite
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add Directory.Build.props
+          git commit -m "bump version ${GITHUB_REF#refs/tags/}"
+          git push https://${GH_TOKEN}@github.com/openrewrite/rewrite-csharp.git HEAD:main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
