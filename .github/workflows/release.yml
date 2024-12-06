@@ -41,7 +41,7 @@ jobs:
       - name: Update Directory.Build.props version from tag
         working-directory: Rewrite
         run: |
-          sed -i -E "s/<VersionPrefix>.*<\/VersionPrefix>/<VersionPrefix>${GITHUB_REF#refs/tags/}<\/VersionPrefix>/g" Directory.Build.props
+          sed -i -E "s/<VersionPrefix>.*<\/VersionPrefix>/<VersionPrefix>${GITHUB_REF#refs/tags/v}<\/VersionPrefix>/g" Directory.Build.props
   
       - name: Commit version updates
         working-directory: Rewrite
