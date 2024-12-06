@@ -37,12 +37,6 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      
-      - name: Update Directory.Build.props version from tag
-        working-directory: Rewrite
-        run: |
-          sed -i -E "s/<VersionPrefix>.*<\/VersionPrefix>/<VersionPrefix>${GITHUB_REF#refs/tags/v}<\/VersionPrefix>/g" Directory.Build.props
-
       - name: build
         run: |
           (cd Rewrite && dotnet publish Rewrite.sln)
@@ -70,6 +64,11 @@ jobs:
           final \
           publish \
           closeAndReleaseSonatypeStagingRepository --info
+
+      - name: Update Directory.Build.props version from tag
+        working-directory: Rewrite
+        run: |
+          sed -i -E "s/<VersionPrefix>.*<\/VersionPrefix>/<VersionPrefix>${GITHUB_REF#refs/tags/v}<\/VersionPrefix>/g" Directory.Build.props
 
       - name: publish-dotnet-release
         if: (!contains(github.ref, '-rc.'))
