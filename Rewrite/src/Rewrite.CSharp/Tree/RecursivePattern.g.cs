@@ -58,7 +58,7 @@ public partial interface Cs : J
     PositionalPatternClause? positionalPattern,
     PropertyPatternClause? propertyPattern,
     VariableDesignation? designation
-    ) : Cs.Pattern, Expression<RecursivePattern>, MutableTree<RecursivePattern>
+    ) : Cs.Pattern, Expression<RecursivePattern>, J<RecursivePattern>, MutableTree<RecursivePattern>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {

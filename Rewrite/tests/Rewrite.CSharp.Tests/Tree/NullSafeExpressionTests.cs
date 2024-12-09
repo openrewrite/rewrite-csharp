@@ -125,4 +125,17 @@ public class NullSafeExpressionTests(ITestOutputHelper output) : RewriteTest(out
             )
         );
     }
+
+    [Fact]
+    public void MultiLevelWithSpaces()
+    {
+        var src = CSharp(
+            """
+            /*1*/a ? .
+            b() ? .
+            c() .
+            d;
+
+            """);
+    }
 }

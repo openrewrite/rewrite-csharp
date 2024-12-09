@@ -32,7 +32,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     IList<Annotation> annotations,
     TypeTree typeExpression
-    ) : J, Expression, TypeTree, Expression<AnnotatedType>, TypedTree<AnnotatedType>, TypeTree<AnnotatedType>, MutableTree<AnnotatedType>
+    ) : J, Expression, TypeTree, Expression<AnnotatedType>, TypedTree<AnnotatedType>, J<AnnotatedType>, TypeTree<AnnotatedType>, MutableTree<AnnotatedType>
     {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {

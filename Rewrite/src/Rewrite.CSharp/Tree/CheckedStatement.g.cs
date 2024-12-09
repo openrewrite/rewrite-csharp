@@ -55,7 +55,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     J.Block block
-    ) : Cs, Statement, MutableTree<CheckedStatement>
+    ) : Cs, Statement, J<CheckedStatement>, MutableTree<CheckedStatement>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {

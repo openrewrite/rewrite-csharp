@@ -65,6 +65,19 @@ public class AttributeTests(ITestOutputHelper output) : RewriteTest(output)
     }
 
     [Fact]
+    public void NamedProperty()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                [Fact(Skip = "yes")]
+                class Foo;
+                """
+            )
+        );
+    }
+
+    [Fact]
     public void CompilationUnit()
     {
         RewriteRun(

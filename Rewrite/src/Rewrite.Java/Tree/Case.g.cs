@@ -34,7 +34,7 @@ public partial interface J : Rewrite.Core.Tree
     JContainer<Expression> expressions,
     JContainer<Statement> statements,
     JRightPadded<J>? body
-    ) : J, Statement, MutableTree<Case>
+    ) : J, Statement, J<Case>, MutableTree<Case>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

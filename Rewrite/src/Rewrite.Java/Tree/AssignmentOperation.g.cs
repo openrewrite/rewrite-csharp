@@ -34,7 +34,7 @@ public partial interface J : Rewrite.Core.Tree
     JLeftPadded<AssignmentOperation.Types> @operator,
     Expression assignment,
     JavaType? type
-    ) : J, Statement, Expression, TypedTree, Expression<AssignmentOperation>, TypedTree<AssignmentOperation>, MutableTree<AssignmentOperation>
+    ) : J, Statement, Expression, TypedTree, Expression<AssignmentOperation>, TypedTree<AssignmentOperation>, J<AssignmentOperation>, MutableTree<AssignmentOperation>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

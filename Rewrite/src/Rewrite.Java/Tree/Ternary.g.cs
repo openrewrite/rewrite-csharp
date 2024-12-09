@@ -34,7 +34,7 @@ public partial interface J : Rewrite.Core.Tree
     JLeftPadded<Expression> truePart,
     JLeftPadded<Expression> falsePart,
     JavaType? type
-    ) : J, Expression, Statement, TypedTree, Expression<Ternary>, TypedTree<Ternary>, MutableTree<Ternary>
+    ) : J, Expression, Statement, TypedTree, Expression<Ternary>, TypedTree<Ternary>, J<Ternary>, MutableTree<Ternary>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

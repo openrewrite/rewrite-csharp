@@ -5,6 +5,37 @@ namespace Rewrite.RewriteCSharp.Tree;
 
 public partial interface Cs
 {
+    public partial class AliasQualifiedName : Expression<AliasQualifiedName>
+    {
+        JavaType? TypedTree.Type => this.Name.Type;
+        public AliasQualifiedName WithType(JavaType? type) => WithName(Name.WithType(type));
+    }
+    public partial class ClassDeclaration : Expression<ClassDeclaration>
+    {
+        public J.ClassDeclaration.Kind Kind => _kind;
+        JavaType? TypedTree.Type => type;
+        public ClassDeclaration WithType(JavaType? type) => WithType((JavaType.FullyQualified?)type);
+    }
+    public partial class MethodDeclaration : Expression<MethodDeclaration>
+    {
+        public JavaType? Type => this.MethodType;
+        public MethodDeclaration WithType(JavaType? type) => WithMethodType(type as JavaType.Method);
+    }
+    public partial class IndexerDeclaration : Expression<IndexerDeclaration>
+    {
+        public JavaType? Type => this.TypeExpression.Type;
+        public IndexerDeclaration WithType(JavaType? type) => WithTypeExpression(TypeExpression.WithType(type));
+    }
+    public partial class QueryExpression : Expression<QueryExpression>
+    {
+        public JavaType? Type => this.FromClause.Type;
+        public QueryExpression WithType(JavaType? type) => WithFromClause(FromClause.WithType(type));
+    }
+    public partial class FromClause : Expression<FromClause>
+    {
+        public JavaType? Type => this.Expression.Type;
+        public FromClause WithType(JavaType? type) => WithExpression(Expression.WithType(type));
+    }
     public partial class RangeExpression : Expression<RangeExpression>
     {
         public JavaType? Type => Start?.Type ?? End?.Type;

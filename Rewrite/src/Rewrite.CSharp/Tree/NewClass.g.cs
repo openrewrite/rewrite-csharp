@@ -51,7 +51,7 @@ public partial interface Cs : J
     Markers markers,
     J.NewClass newClassCore,
     InitializerExpression? initializer
-    ) : Cs, Statement, Expression, Expression<NewClass>, MutableTree<NewClass>
+    ) : Cs, Statement, Expression, Expression<NewClass>, J<NewClass>, MutableTree<NewClass>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {

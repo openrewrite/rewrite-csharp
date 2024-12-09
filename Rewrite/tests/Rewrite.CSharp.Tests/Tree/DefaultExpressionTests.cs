@@ -24,7 +24,7 @@ public class DefaultExpressionTests(ITestOutputHelper output) : RewriteTest(outp
         RewriteRun(
             CSharp(
                 @"
-                int i = default (  int   );
+                int i = default (  int?   );
                 "
             )
         );

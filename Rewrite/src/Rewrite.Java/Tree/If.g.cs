@@ -33,7 +33,7 @@ public partial interface J : Rewrite.Core.Tree
     J.ControlParentheses<Expression> ifCondition,
     JRightPadded<Statement> thenPart,
     If.Else? elsePart
-    ) : J, Statement, MutableTree<If>
+    ) : J, Statement, J<If>, MutableTree<If>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -110,7 +110,7 @@ public partial interface J : Rewrite.Core.Tree
     Space prefix,
     Markers markers,
     JRightPadded<Statement> body
-        ) : J, MutableTree<Else>
+        ) : J, J<Else>, MutableTree<Else>
         {
             [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

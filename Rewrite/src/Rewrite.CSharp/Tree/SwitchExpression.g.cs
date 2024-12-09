@@ -50,7 +50,7 @@ public partial interface Cs : J
     Markers markers,
     JRightPadded<Expression> expression,
     JContainer<SwitchExpressionArm> arms
-    ) : Cs, Expression, Expression<SwitchExpression>, MutableTree<SwitchExpression>
+    ) : Cs, Expression, Expression<SwitchExpression>, J<SwitchExpression>, MutableTree<SwitchExpression>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

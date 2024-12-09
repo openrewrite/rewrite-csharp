@@ -86,4 +86,6 @@ public class ParseExceptionResult(
     {
         return Id.GetHashCode();
     }
+
+    public override string ToString() => Message;
 }

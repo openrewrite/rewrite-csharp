@@ -28,12 +28,12 @@ public partial interface Cs : J
     /// Represents a constructor initializer which is a call to another constructor, either in the same class (this)
     /// or in the base class (base).
     /// Examples:
-    ///  <code>
+    /// <code>
     /// class Person {
-    ///     // Constructor with 'this' initializer
-    ///     public Person(string name) : this(name, 0) { }
-    ///     // Constructor with 'base' initializer
-    ///     public Person(string name, int age) : base(name) { }
+    /// // Constructor with 'this' initializer
+    /// public Person(string name) : this(name, 0) { }
+    /// // Constructor with 'base' initializer
+    /// public Person(string name, int age) : base(name) { }
     /// }
     /// </code>
     /// </summary>
@@ -45,8 +45,8 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     Keyword keyword,
-    JContainer<Argument> arguments
-    ) : Cs, MutableTree<ConstructorInitializer>
+    JContainer<Expression> arguments
+    ) : Cs, J<ConstructorInitializer>, MutableTree<ConstructorInitializer>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -102,18 +102,18 @@ public partial interface Cs : J
         {
             return ReferenceEquals(newKeyword, keyword) ? this : new ConstructorInitializer(id, prefix, markers, newKeyword, _arguments);
         }
-        private readonly JContainer<Cs.Argument> _arguments = arguments;
-        public IList<Cs.Argument> Arguments => _arguments.GetElements();
+        private readonly JContainer<Expression> _arguments = arguments;
+        public IList<Expression> Arguments => _arguments.GetElements();
 
-        public ConstructorInitializer WithArguments(IList<Cs.Argument> newArguments)
+        public ConstructorInitializer WithArguments(IList<Expression> newArguments)
         {
-            return Padding.WithArguments(JContainer<Cs.Argument>.WithElements(_arguments, newArguments));
+            return Padding.WithArguments(JContainer<Expression>.WithElements(_arguments, newArguments));
         }
         public sealed record PaddingHelper(Cs.ConstructorInitializer T)
         {
-            public JContainer<Cs.Argument> Arguments => T._arguments;
+            public JContainer<Expression> Arguments => T._arguments;
 
-            public Cs.ConstructorInitializer WithArguments(JContainer<Cs.Argument> newArguments)
+            public Cs.ConstructorInitializer WithArguments(JContainer<Expression> newArguments)
             {
                 return T._arguments == newArguments ? T : new Cs.ConstructorInitializer(T.Id, T.Prefix, T.Markers, T.Keyword, newArguments);
             }

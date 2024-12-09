@@ -10,6 +10,8 @@ internal class CSharpTypeSignatureBuilder : JavaTypeSignatureBuilder<ISymbol>
     {
         if (type is ITypeSymbol)
             return type.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat);
+        if(type is IPropertySymbol propertySymbol)
+            return propertySymbol.Type.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat);
         throw new NotImplementedException();
     }
 
@@ -56,7 +58,7 @@ internal class CSharpTypeSignatureBuilder : JavaTypeSignatureBuilder<ISymbol>
         {
             containingSymbol = containingSymbol.ContainingSymbol;
         }
-        
+
         string owner;
         if (containingSymbol is IMethodSymbol ms)
         {

@@ -36,7 +36,7 @@ public partial interface Cs : J
     IList<JRightPadded<UsingDirective>> usings,
     IList<JRightPadded<Statement>> members,
     Space end
-    ) : Cs, Statement, MutableTree<BlockScopeNamespaceDeclaration>
+    ) : Cs, Statement, J<BlockScopeNamespaceDeclaration>, MutableTree<BlockScopeNamespaceDeclaration>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

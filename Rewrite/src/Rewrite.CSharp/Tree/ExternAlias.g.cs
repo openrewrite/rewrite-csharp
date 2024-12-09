@@ -32,7 +32,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     JLeftPadded<J.Identifier> identifier
-    ) : Cs, Statement, MutableTree<ExternAlias>
+    ) : Cs, Statement, J<ExternAlias>, MutableTree<ExternAlias>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

@@ -18,7 +18,7 @@ public static class StringAssertionExtensions
             Assert.Fail($"Expected string to be the same but are different\n{result}");
         }
     }
-    public static string? GetDifferences(string oldText, string newText)
+    public static string? GetDifferences(this string oldText, string newText)
     {
         string AddVisibleCrLf(string str) =>
             Regex.Replace(str.Replace("\r", "\u240D").Replace("\n", "\u2424"), "([\u240D\u2424]+)", "$1\n");// + (AnsiColor.ColorizeText("<-EOF", AnsiColor.Foreground(Terminal256ColorCodes.Yellow1C226)));
@@ -33,7 +33,7 @@ public static class StringAssertionExtensions
 
         var result = new StringBuilder();
         var oldLastLineIndex = diff.OldText.Lines.Last(x => x.Type != ChangeType.Imaginary).Position;
-        var newLastLineIndex = diff.NewText.Lines.Last(x => x.Type != ChangeType.Imaginary).Position;
+        // var newLastLineIndex = diff.NewText.Lines.Last(x => x.Type != ChangeType.Imaginary).Position;
         for (int i = 0; i < diff.OldText.Lines.Count ; i++)
         {
             var oldLine = diff.OldText.Lines[i];

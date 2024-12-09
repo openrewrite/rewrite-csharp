@@ -51,7 +51,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     JavaType type
-    ) : Cs.Pattern, Expression<DiscardPattern>, MutableTree<DiscardPattern>
+    ) : Cs.Pattern, Expression<DiscardPattern>, J<DiscardPattern>, MutableTree<DiscardPattern>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {

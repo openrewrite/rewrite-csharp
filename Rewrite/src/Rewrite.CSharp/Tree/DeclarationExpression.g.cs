@@ -57,7 +57,7 @@ public partial interface Cs : J
     Markers markers,
     TypeTree? typeExpression,
     VariableDesignation variables
-    ) : Cs, Expression, TypedTree, Expression<DeclarationExpression>, TypedTree<DeclarationExpression>, MutableTree<DeclarationExpression>
+    ) : Cs, Expression, TypedTree, Expression<DeclarationExpression>, TypedTree<DeclarationExpression>, J<DeclarationExpression>, MutableTree<DeclarationExpression>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {

@@ -36,7 +36,7 @@ public partial interface J : Rewrite.Core.Tree
     JavaType? type,
     JavaType.Method? methodType,
     JavaType.Variable? variableType
-    ) : J, TypedTree, MethodCall, Expression<MemberReference>, TypedTree<MemberReference>, MutableTree<MemberReference>
+    ) : J, TypedTree, MethodCall, Expression<MemberReference>, TypedTree<MemberReference>, J<MemberReference>, MutableTree<MemberReference>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

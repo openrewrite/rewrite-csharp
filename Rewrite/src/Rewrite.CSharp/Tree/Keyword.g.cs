@@ -32,7 +32,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     Keyword.KeywordKind kind
-    ) : Cs, MutableTree<Keyword>
+    ) : Cs, J<Keyword>, MutableTree<Keyword>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {

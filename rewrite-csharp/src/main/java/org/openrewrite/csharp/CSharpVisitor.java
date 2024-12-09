@@ -145,6 +145,12 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
 
     public J visitAwaitExpression(Cs.AwaitExpression awaitExpression, P p) {
         awaitExpression = awaitExpression.withPrefix(visitSpace(awaitExpression.getPrefix(), CsSpace.Location.AWAIT_EXPRESSION_PREFIX, p));
+        Statement tempStatement = (Statement) visitStatement(awaitExpression, p);
+        if (!(tempStatement instanceof Cs.AwaitExpression))
+        {
+            return tempStatement;
+        }
+        awaitExpression = (Cs.AwaitExpression) tempStatement;
         Expression tempExpression = (Expression) visitExpression(awaitExpression, p);
         if (!(tempExpression instanceof Cs.AwaitExpression))
         {
@@ -210,7 +216,7 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         }
         expressionStatement = (Cs.ExpressionStatement) tempStatement;
         expressionStatement = expressionStatement.withMarkers(visitMarkers(expressionStatement.getMarkers(), p));
-        expressionStatement = expressionStatement.withExpression(visitAndCast(expressionStatement.getExpression(), p));
+        expressionStatement = expressionStatement.getPadding().withExpression(visitRightPadded(expressionStatement.getPadding().getExpression(), CsRightPadded.Location.EXPRESSION_STATEMENT_EXPRESSION, p));
         return expressionStatement;
     }
 
@@ -368,7 +374,15 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         }
         classDeclaration = (Cs.ClassDeclaration) tempStatement;
         classDeclaration = classDeclaration.withMarkers(visitMarkers(classDeclaration.getMarkers(), p));
-        classDeclaration = classDeclaration.withClassDeclarationCore(visitAndCast(classDeclaration.getClassDeclarationCore(), p));
+        classDeclaration = classDeclaration.withAttributeList(ListUtils.map(classDeclaration.getAttributeList(), el -> (Cs.AttributeList)visit(el, p)));
+        classDeclaration = classDeclaration.withModifiers(ListUtils.map(classDeclaration.getModifiers(), el -> (J.Modifier)visit(el, p)));
+        classDeclaration = classDeclaration.getPadding().withKind(visitAndCast(classDeclaration.getPadding().getKind(), p));
+        classDeclaration = classDeclaration.withName(visitAndCast(classDeclaration.getName(), p));
+        classDeclaration = classDeclaration.getPadding().withTypeParameters(visitContainer(classDeclaration.getPadding().getTypeParameters(), CsContainer.Location.CLASS_DECLARATION_TYPE_PARAMETERS, p));
+        classDeclaration = classDeclaration.getPadding().withPrimaryConstructor(visitContainer(classDeclaration.getPadding().getPrimaryConstructor(), CsContainer.Location.CLASS_DECLARATION_PRIMARY_CONSTRUCTOR, p));
+        classDeclaration = classDeclaration.getPadding().withExtendings(visitLeftPadded(classDeclaration.getPadding().getExtendings(), CsLeftPadded.Location.CLASS_DECLARATION_EXTENDINGS, p));
+        classDeclaration = classDeclaration.getPadding().withImplementings(visitContainer(classDeclaration.getPadding().getImplementings(), CsContainer.Location.CLASS_DECLARATION_IMPLEMENTINGS, p));
+        classDeclaration = classDeclaration.withBody(visitAndCast(classDeclaration.getBody(), p));
         classDeclaration = classDeclaration.getPadding().withTypeParameterConstraintClauses(visitContainer(classDeclaration.getPadding().getTypeParameterConstraintClauses(), CsContainer.Location.CLASS_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, p));
         return classDeclaration;
     }
@@ -382,7 +396,14 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         }
         methodDeclaration = (Cs.MethodDeclaration) tempStatement;
         methodDeclaration = methodDeclaration.withMarkers(visitMarkers(methodDeclaration.getMarkers(), p));
-        methodDeclaration = methodDeclaration.withMethodDeclarationCore(visitAndCast(methodDeclaration.getMethodDeclarationCore(), p));
+        methodDeclaration = methodDeclaration.withAttributes(ListUtils.map(methodDeclaration.getAttributes(), el -> (Cs.AttributeList)visit(el, p)));
+        methodDeclaration = methodDeclaration.withModifiers(ListUtils.map(methodDeclaration.getModifiers(), el -> (J.Modifier)visit(el, p)));
+        methodDeclaration = methodDeclaration.getPadding().withTypeParameters(visitContainer(methodDeclaration.getPadding().getTypeParameters(), CsContainer.Location.METHOD_DECLARATION_TYPE_PARAMETERS, p));
+        methodDeclaration = methodDeclaration.withReturnTypeExpression(visitAndCast(methodDeclaration.getReturnTypeExpression(), p));
+        methodDeclaration = methodDeclaration.getPadding().withExplicitInterfaceSpecifier(visitRightPadded(methodDeclaration.getPadding().getExplicitInterfaceSpecifier(), CsRightPadded.Location.METHOD_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, p));
+        methodDeclaration = methodDeclaration.withName(visitAndCast(methodDeclaration.getName(), p));
+        methodDeclaration = methodDeclaration.getPadding().withParameters(visitContainer(methodDeclaration.getPadding().getParameters(), CsContainer.Location.METHOD_DECLARATION_PARAMETERS, p));
+        methodDeclaration = methodDeclaration.withBody(visitAndCast(methodDeclaration.getBody(), p));
         methodDeclaration = methodDeclaration.getPadding().withTypeParameterConstraintClauses(visitContainer(methodDeclaration.getPadding().getTypeParameterConstraintClauses(), CsContainer.Location.METHOD_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, p));
         return methodDeclaration;
     }
@@ -397,7 +418,7 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         usingStatement = (Cs.UsingStatement) tempStatement;
         usingStatement = usingStatement.withMarkers(visitMarkers(usingStatement.getMarkers(), p));
         usingStatement = usingStatement.withAwaitKeyword(visitAndCast(usingStatement.getAwaitKeyword(), p));
-        usingStatement = usingStatement.getPadding().withExpression(visitContainer(usingStatement.getPadding().getExpression(), CsContainer.Location.USING_STATEMENT_EXPRESSION, p));
+        usingStatement = usingStatement.getPadding().withExpression(visitLeftPadded(usingStatement.getPadding().getExpression(), CsLeftPadded.Location.USING_STATEMENT_EXPRESSION, p));
         usingStatement = usingStatement.withStatement(visitAndCast(usingStatement.getStatement(), p));
         return usingStatement;
     }
@@ -537,8 +558,7 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         }
         destructorDeclaration = (Cs.DestructorDeclaration) tempStatement;
         destructorDeclaration = destructorDeclaration.withMarkers(visitMarkers(destructorDeclaration.getMarkers(), p));
-        destructorDeclaration = destructorDeclaration.withInitializer(visitAndCast(destructorDeclaration.getInitializer(), p));
-        destructorDeclaration = destructorDeclaration.withConstructorCore(visitAndCast(destructorDeclaration.getConstructorCore(), p));
+        destructorDeclaration = destructorDeclaration.withMethodCore(visitAndCast(destructorDeclaration.getMethodCore(), p));
         return destructorDeclaration;
     }
 
@@ -995,6 +1015,231 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         rangeExpression = rangeExpression.getPadding().withStart(visitRightPadded(rangeExpression.getPadding().getStart(), CsRightPadded.Location.RANGE_EXPRESSION_START, p));
         rangeExpression = rangeExpression.withEnd(visitAndCast(rangeExpression.getEnd(), p));
         return rangeExpression;
+    }
+
+    public J visitQueryExpression(Cs.QueryExpression queryExpression, P p) {
+        queryExpression = queryExpression.withPrefix(visitSpace(queryExpression.getPrefix(), CsSpace.Location.QUERY_EXPRESSION_PREFIX, p));
+        Expression tempExpression = (Expression) visitExpression(queryExpression, p);
+        if (!(tempExpression instanceof Cs.QueryExpression))
+        {
+            return tempExpression;
+        }
+        queryExpression = (Cs.QueryExpression) tempExpression;
+        queryExpression = queryExpression.withMarkers(visitMarkers(queryExpression.getMarkers(), p));
+        queryExpression = queryExpression.withFromClause(visitAndCast(queryExpression.getFromClause(), p));
+        queryExpression = queryExpression.withBody(visitAndCast(queryExpression.getBody(), p));
+        return queryExpression;
+    }
+
+    public J visitQueryBody(Cs.QueryBody queryBody, P p) {
+        queryBody = queryBody.withPrefix(visitSpace(queryBody.getPrefix(), CsSpace.Location.QUERY_BODY_PREFIX, p));
+        queryBody = queryBody.withMarkers(visitMarkers(queryBody.getMarkers(), p));
+        queryBody = queryBody.withClauses(ListUtils.map(queryBody.getClauses(), el -> (Cs.QueryClause)visit(el, p)));
+        queryBody = queryBody.withSelectOrGroup(visitAndCast(queryBody.getSelectOrGroup(), p));
+        queryBody = queryBody.withContinuation(visitAndCast(queryBody.getContinuation(), p));
+        return queryBody;
+    }
+
+    public J visitFromClause(Cs.FromClause fromClause, P p) {
+        fromClause = fromClause.withPrefix(visitSpace(fromClause.getPrefix(), CsSpace.Location.FROM_CLAUSE_PREFIX, p));
+        Expression tempExpression = (Expression) visitExpression(fromClause, p);
+        if (!(tempExpression instanceof Cs.FromClause))
+        {
+            return tempExpression;
+        }
+        fromClause = (Cs.FromClause) tempExpression;
+        fromClause = fromClause.withMarkers(visitMarkers(fromClause.getMarkers(), p));
+        fromClause = fromClause.withTypeIdentifier(visitAndCast(fromClause.getTypeIdentifier(), p));
+        fromClause = fromClause.getPadding().withIdentifier(visitRightPadded(fromClause.getPadding().getIdentifier(), CsRightPadded.Location.FROM_CLAUSE_IDENTIFIER, p));
+        fromClause = fromClause.withExpression(visitAndCast(fromClause.getExpression(), p));
+        return fromClause;
+    }
+
+    public J visitLetClause(Cs.LetClause letClause, P p) {
+        letClause = letClause.withPrefix(visitSpace(letClause.getPrefix(), CsSpace.Location.LET_CLAUSE_PREFIX, p));
+        letClause = letClause.withMarkers(visitMarkers(letClause.getMarkers(), p));
+        letClause = letClause.getPadding().withIdentifier(visitRightPadded(letClause.getPadding().getIdentifier(), CsRightPadded.Location.LET_CLAUSE_IDENTIFIER, p));
+        letClause = letClause.withExpression(visitAndCast(letClause.getExpression(), p));
+        return letClause;
+    }
+
+    public J visitJoinClause(Cs.JoinClause joinClause, P p) {
+        joinClause = joinClause.withPrefix(visitSpace(joinClause.getPrefix(), CsSpace.Location.JOIN_CLAUSE_PREFIX, p));
+        joinClause = joinClause.withMarkers(visitMarkers(joinClause.getMarkers(), p));
+        joinClause = joinClause.getPadding().withIdentifier(visitRightPadded(joinClause.getPadding().getIdentifier(), CsRightPadded.Location.JOIN_CLAUSE_IDENTIFIER, p));
+        joinClause = joinClause.getPadding().withInExpression(visitRightPadded(joinClause.getPadding().getInExpression(), CsRightPadded.Location.JOIN_CLAUSE_IN_EXPRESSION, p));
+        joinClause = joinClause.getPadding().withLeftExpression(visitRightPadded(joinClause.getPadding().getLeftExpression(), CsRightPadded.Location.JOIN_CLAUSE_LEFT_EXPRESSION, p));
+        joinClause = joinClause.withRightExpression(visitAndCast(joinClause.getRightExpression(), p));
+        joinClause = joinClause.getPadding().withInto(visitLeftPadded(joinClause.getPadding().getInto(), CsLeftPadded.Location.JOIN_CLAUSE_INTO, p));
+        return joinClause;
+    }
+
+    public J visitJoinIntoClause(Cs.JoinIntoClause joinIntoClause, P p) {
+        joinIntoClause = joinIntoClause.withPrefix(visitSpace(joinIntoClause.getPrefix(), CsSpace.Location.JOIN_INTO_CLAUSE_PREFIX, p));
+        joinIntoClause = joinIntoClause.withMarkers(visitMarkers(joinIntoClause.getMarkers(), p));
+        joinIntoClause = joinIntoClause.withIdentifier(visitAndCast(joinIntoClause.getIdentifier(), p));
+        return joinIntoClause;
+    }
+
+    public J visitWhereClause(Cs.WhereClause whereClause, P p) {
+        whereClause = whereClause.withPrefix(visitSpace(whereClause.getPrefix(), CsSpace.Location.WHERE_CLAUSE_PREFIX, p));
+        whereClause = whereClause.withMarkers(visitMarkers(whereClause.getMarkers(), p));
+        whereClause = whereClause.withCondition(visitAndCast(whereClause.getCondition(), p));
+        return whereClause;
+    }
+
+    public J visitOrderByClause(Cs.OrderByClause orderByClause, P p) {
+        orderByClause = orderByClause.withPrefix(visitSpace(orderByClause.getPrefix(), CsSpace.Location.ORDER_BY_CLAUSE_PREFIX, p));
+        orderByClause = orderByClause.withMarkers(visitMarkers(orderByClause.getMarkers(), p));
+        orderByClause = orderByClause.getPadding().withOrderings(ListUtils.map(orderByClause.getPadding().getOrderings(), el -> visitRightPadded(el, CsRightPadded.Location.ORDER_BY_CLAUSE_ORDERINGS, p)));
+        return orderByClause;
+    }
+
+    public J visitQueryContinuation(Cs.QueryContinuation queryContinuation, P p) {
+        queryContinuation = queryContinuation.withPrefix(visitSpace(queryContinuation.getPrefix(), CsSpace.Location.QUERY_CONTINUATION_PREFIX, p));
+        queryContinuation = queryContinuation.withMarkers(visitMarkers(queryContinuation.getMarkers(), p));
+        queryContinuation = queryContinuation.withIdentifier(visitAndCast(queryContinuation.getIdentifier(), p));
+        queryContinuation = queryContinuation.withBody(visitAndCast(queryContinuation.getBody(), p));
+        return queryContinuation;
+    }
+
+    public J visitOrdering(Cs.Ordering ordering, P p) {
+        ordering = ordering.withPrefix(visitSpace(ordering.getPrefix(), CsSpace.Location.ORDERING_PREFIX, p));
+        ordering = ordering.withMarkers(visitMarkers(ordering.getMarkers(), p));
+        ordering = ordering.getPadding().withExpression(visitRightPadded(ordering.getPadding().getExpression(), CsRightPadded.Location.ORDERING_EXPRESSION, p));
+        return ordering;
+    }
+
+    public J visitSelectClause(Cs.SelectClause selectClause, P p) {
+        selectClause = selectClause.withPrefix(visitSpace(selectClause.getPrefix(), CsSpace.Location.SELECT_CLAUSE_PREFIX, p));
+        selectClause = selectClause.withMarkers(visitMarkers(selectClause.getMarkers(), p));
+        selectClause = selectClause.withExpression(visitAndCast(selectClause.getExpression(), p));
+        return selectClause;
+    }
+
+    public J visitGroupClause(Cs.GroupClause groupClause, P p) {
+        groupClause = groupClause.withPrefix(visitSpace(groupClause.getPrefix(), CsSpace.Location.GROUP_CLAUSE_PREFIX, p));
+        groupClause = groupClause.withMarkers(visitMarkers(groupClause.getMarkers(), p));
+        groupClause = groupClause.getPadding().withGroupExpression(visitRightPadded(groupClause.getPadding().getGroupExpression(), CsRightPadded.Location.GROUP_CLAUSE_GROUP_EXPRESSION, p));
+        groupClause = groupClause.withKey(visitAndCast(groupClause.getKey(), p));
+        return groupClause;
+    }
+
+    public J visitIndexerDeclaration(Cs.IndexerDeclaration indexerDeclaration, P p) {
+        indexerDeclaration = indexerDeclaration.withPrefix(visitSpace(indexerDeclaration.getPrefix(), CsSpace.Location.INDEXER_DECLARATION_PREFIX, p));
+        Statement tempStatement = (Statement) visitStatement(indexerDeclaration, p);
+        if (!(tempStatement instanceof Cs.IndexerDeclaration))
+        {
+            return tempStatement;
+        }
+        indexerDeclaration = (Cs.IndexerDeclaration) tempStatement;
+        indexerDeclaration = indexerDeclaration.withMarkers(visitMarkers(indexerDeclaration.getMarkers(), p));
+        indexerDeclaration = indexerDeclaration.withModifiers(ListUtils.map(indexerDeclaration.getModifiers(), el -> (J.Modifier)visit(el, p)));
+        indexerDeclaration = indexerDeclaration.withTypeExpression(visitAndCast(indexerDeclaration.getTypeExpression(), p));
+        indexerDeclaration = indexerDeclaration.withIndexer(visitAndCast(indexerDeclaration.getIndexer(), p));
+        indexerDeclaration = indexerDeclaration.getPadding().withParameters(visitContainer(indexerDeclaration.getPadding().getParameters(), CsContainer.Location.INDEXER_DECLARATION_PARAMETERS, p));
+        indexerDeclaration = indexerDeclaration.getPadding().withExpressionBody(visitLeftPadded(indexerDeclaration.getPadding().getExpressionBody(), CsLeftPadded.Location.INDEXER_DECLARATION_EXPRESSION_BODY, p));
+        indexerDeclaration = indexerDeclaration.withAccessors(visitAndCast(indexerDeclaration.getAccessors(), p));
+        return indexerDeclaration;
+    }
+
+    public J visitDelegateDeclaration(Cs.DelegateDeclaration delegateDeclaration, P p) {
+        delegateDeclaration = delegateDeclaration.withPrefix(visitSpace(delegateDeclaration.getPrefix(), CsSpace.Location.DELEGATE_DECLARATION_PREFIX, p));
+        Statement tempStatement = (Statement) visitStatement(delegateDeclaration, p);
+        if (!(tempStatement instanceof Cs.DelegateDeclaration))
+        {
+            return tempStatement;
+        }
+        delegateDeclaration = (Cs.DelegateDeclaration) tempStatement;
+        delegateDeclaration = delegateDeclaration.withMarkers(visitMarkers(delegateDeclaration.getMarkers(), p));
+        delegateDeclaration = delegateDeclaration.withModifiers(ListUtils.map(delegateDeclaration.getModifiers(), el -> (J.Modifier)visit(el, p)));
+        delegateDeclaration = delegateDeclaration.getPadding().withReturnType(visitLeftPadded(delegateDeclaration.getPadding().getReturnType(), CsLeftPadded.Location.DELEGATE_DECLARATION_RETURN_TYPE, p));
+        delegateDeclaration = delegateDeclaration.withIdentifier(visitAndCast(delegateDeclaration.getIdentifier(), p));
+        delegateDeclaration = delegateDeclaration.getPadding().withTypeParameters(visitContainer(delegateDeclaration.getPadding().getTypeParameters(), CsContainer.Location.DELEGATE_DECLARATION_TYPE_PARAMETERS, p));
+        delegateDeclaration = delegateDeclaration.getPadding().withParameters(visitContainer(delegateDeclaration.getPadding().getParameters(), CsContainer.Location.DELEGATE_DECLARATION_PARAMETERS, p));
+        delegateDeclaration = delegateDeclaration.getPadding().withTypeParameterConstraintClauses(visitContainer(delegateDeclaration.getPadding().getTypeParameterConstraintClauses(), CsContainer.Location.DELEGATE_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, p));
+        return delegateDeclaration;
+    }
+
+    public J visitConversionOperatorDeclaration(Cs.ConversionOperatorDeclaration conversionOperatorDeclaration, P p) {
+        conversionOperatorDeclaration = conversionOperatorDeclaration.withPrefix(visitSpace(conversionOperatorDeclaration.getPrefix(), CsSpace.Location.CONVERSION_OPERATOR_DECLARATION_PREFIX, p));
+        Statement tempStatement = (Statement) visitStatement(conversionOperatorDeclaration, p);
+        if (!(tempStatement instanceof Cs.ConversionOperatorDeclaration))
+        {
+            return tempStatement;
+        }
+        conversionOperatorDeclaration = (Cs.ConversionOperatorDeclaration) tempStatement;
+        conversionOperatorDeclaration = conversionOperatorDeclaration.withMarkers(visitMarkers(conversionOperatorDeclaration.getMarkers(), p));
+        conversionOperatorDeclaration = conversionOperatorDeclaration.withModifiers(ListUtils.map(conversionOperatorDeclaration.getModifiers(), el -> (J.Modifier)visit(el, p)));
+        conversionOperatorDeclaration = conversionOperatorDeclaration.getPadding().withKind(visitLeftPadded(conversionOperatorDeclaration.getPadding().getKind(), CsLeftPadded.Location.CONVERSION_OPERATOR_DECLARATION_KIND, p));
+        conversionOperatorDeclaration = conversionOperatorDeclaration.getPadding().withReturnType(visitLeftPadded(conversionOperatorDeclaration.getPadding().getReturnType(), CsLeftPadded.Location.CONVERSION_OPERATOR_DECLARATION_RETURN_TYPE, p));
+        conversionOperatorDeclaration = conversionOperatorDeclaration.getPadding().withParameters(visitContainer(conversionOperatorDeclaration.getPadding().getParameters(), CsContainer.Location.CONVERSION_OPERATOR_DECLARATION_PARAMETERS, p));
+        conversionOperatorDeclaration = conversionOperatorDeclaration.getPadding().withExpressionBody(visitLeftPadded(conversionOperatorDeclaration.getPadding().getExpressionBody(), CsLeftPadded.Location.CONVERSION_OPERATOR_DECLARATION_EXPRESSION_BODY, p));
+        conversionOperatorDeclaration = conversionOperatorDeclaration.withBody(visitAndCast(conversionOperatorDeclaration.getBody(), p));
+        return conversionOperatorDeclaration;
+    }
+
+    public J visitTypeParameter(Cs.TypeParameter typeParameter, P p) {
+        typeParameter = typeParameter.withPrefix(visitSpace(typeParameter.getPrefix(), CsSpace.Location.TYPE_PARAMETER_PREFIX, p));
+        typeParameter = typeParameter.withMarkers(visitMarkers(typeParameter.getMarkers(), p));
+        typeParameter = typeParameter.withAttributeLists(ListUtils.map(typeParameter.getAttributeLists(), el -> (Cs.AttributeList)visit(el, p)));
+        typeParameter = typeParameter.getPadding().withVariance(visitLeftPadded(typeParameter.getPadding().getVariance(), CsLeftPadded.Location.TYPE_PARAMETER_VARIANCE, p));
+        typeParameter = typeParameter.withName(visitAndCast(typeParameter.getName(), p));
+        return typeParameter;
+    }
+
+    public J visitEnumDeclaration(Cs.EnumDeclaration enumDeclaration, P p) {
+        enumDeclaration = enumDeclaration.withPrefix(visitSpace(enumDeclaration.getPrefix(), CsSpace.Location.ENUM_DECLARATION_PREFIX, p));
+        Statement tempStatement = (Statement) visitStatement(enumDeclaration, p);
+        if (!(tempStatement instanceof Cs.EnumDeclaration))
+        {
+            return tempStatement;
+        }
+        enumDeclaration = (Cs.EnumDeclaration) tempStatement;
+        enumDeclaration = enumDeclaration.withMarkers(visitMarkers(enumDeclaration.getMarkers(), p));
+        enumDeclaration = enumDeclaration.withAttributeLists(ListUtils.map(enumDeclaration.getAttributeLists(), el -> (Cs.AttributeList)visit(el, p)));
+        enumDeclaration = enumDeclaration.withModifiers(ListUtils.map(enumDeclaration.getModifiers(), el -> (J.Modifier)visit(el, p)));
+        enumDeclaration = enumDeclaration.getPadding().withName(visitLeftPadded(enumDeclaration.getPadding().getName(), CsLeftPadded.Location.ENUM_DECLARATION_NAME, p));
+        enumDeclaration = enumDeclaration.getPadding().withBaseType(visitLeftPadded(enumDeclaration.getPadding().getBaseType(), CsLeftPadded.Location.ENUM_DECLARATION_BASE_TYPE, p));
+        enumDeclaration = enumDeclaration.getPadding().withMembers(visitContainer(enumDeclaration.getPadding().getMembers(), CsContainer.Location.ENUM_DECLARATION_MEMBERS, p));
+        return enumDeclaration;
+    }
+
+    public J visitEnumMemberDeclaration(Cs.EnumMemberDeclaration enumMemberDeclaration, P p) {
+        enumMemberDeclaration = enumMemberDeclaration.withPrefix(visitSpace(enumMemberDeclaration.getPrefix(), CsSpace.Location.ENUM_MEMBER_DECLARATION_PREFIX, p));
+        enumMemberDeclaration = enumMemberDeclaration.withMarkers(visitMarkers(enumMemberDeclaration.getMarkers(), p));
+        enumMemberDeclaration = enumMemberDeclaration.withAttributeLists(ListUtils.map(enumMemberDeclaration.getAttributeLists(), el -> (Cs.AttributeList)visit(el, p)));
+        enumMemberDeclaration = enumMemberDeclaration.withName(visitAndCast(enumMemberDeclaration.getName(), p));
+        enumMemberDeclaration = enumMemberDeclaration.getPadding().withInitializer(visitLeftPadded(enumMemberDeclaration.getPadding().getInitializer(), CsLeftPadded.Location.ENUM_MEMBER_DECLARATION_INITIALIZER, p));
+        return enumMemberDeclaration;
+    }
+
+    public J visitAliasQualifiedName(Cs.AliasQualifiedName aliasQualifiedName, P p) {
+        aliasQualifiedName = aliasQualifiedName.withPrefix(visitSpace(aliasQualifiedName.getPrefix(), CsSpace.Location.ALIAS_QUALIFIED_NAME_PREFIX, p));
+        Expression tempExpression = (Expression) visitExpression(aliasQualifiedName, p);
+        if (!(tempExpression instanceof Cs.AliasQualifiedName))
+        {
+            return tempExpression;
+        }
+        aliasQualifiedName = (Cs.AliasQualifiedName) tempExpression;
+        aliasQualifiedName = aliasQualifiedName.withMarkers(visitMarkers(aliasQualifiedName.getMarkers(), p));
+        aliasQualifiedName = aliasQualifiedName.getPadding().withAlias(visitRightPadded(aliasQualifiedName.getPadding().getAlias(), CsRightPadded.Location.ALIAS_QUALIFIED_NAME_ALIAS, p));
+        aliasQualifiedName = aliasQualifiedName.withName(visitAndCast(aliasQualifiedName.getName(), p));
+        return aliasQualifiedName;
+    }
+
+    public J visitArrayType(Cs.ArrayType arrayType, P p) {
+        arrayType = arrayType.withPrefix(visitSpace(arrayType.getPrefix(), CsSpace.Location.ARRAY_TYPE_PREFIX, p));
+        Expression tempExpression = (Expression) visitExpression(arrayType, p);
+        if (!(tempExpression instanceof Cs.ArrayType))
+        {
+            return tempExpression;
+        }
+        arrayType = (Cs.ArrayType) tempExpression;
+        arrayType = arrayType.withMarkers(visitMarkers(arrayType.getMarkers(), p));
+        arrayType = arrayType.withTypeExpression(visitAndCast(arrayType.getTypeExpression(), p));
+        arrayType = arrayType.withDimensions(ListUtils.map(arrayType.getDimensions(), el -> (J.ArrayDimension)visit(el, p)));
+        return arrayType;
     }
 
     public <J2 extends J> JContainer<J2> visitContainer(@Nullable JContainer<J2> container,

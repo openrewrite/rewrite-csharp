@@ -46,7 +46,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     JContainer<Expression> expressions
-    ) : Cs, Expression, Expression<InitializerExpression>, MutableTree<InitializerExpression>
+    ) : Cs, Expression, Expression<InitializerExpression>, J<InitializerExpression>, MutableTree<InitializerExpression>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

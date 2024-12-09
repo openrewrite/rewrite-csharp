@@ -51,7 +51,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     Space colonToken
-    ) : Cs, Cs.SwitchLabel, Expression, Expression<DefaultSwitchLabel>, MutableTree<DefaultSwitchLabel>
+    ) : Cs, Cs.SwitchLabel, Expression, Expression<DefaultSwitchLabel>, J<DefaultSwitchLabel>, MutableTree<DefaultSwitchLabel>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {

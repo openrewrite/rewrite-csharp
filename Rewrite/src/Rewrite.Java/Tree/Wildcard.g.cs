@@ -32,7 +32,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     JLeftPadded<Wildcard.Bound>? wildcardBound,
     NameTree? boundedType
-    ) : J, Expression, TypeTree, Expression<Wildcard>, TypedTree<Wildcard>, TypeTree<Wildcard>, MutableTree<Wildcard>
+    ) : J, Expression, TypeTree, Expression<Wildcard>, TypedTree<Wildcard>, J<Wildcard>, TypeTree<Wildcard>, MutableTree<Wildcard>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

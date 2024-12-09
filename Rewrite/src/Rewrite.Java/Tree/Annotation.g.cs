@@ -32,7 +32,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     NameTree annotationType,
     JContainer<Expression>? arguments
-    ) : J, Expression, Expression<Annotation>, MutableTree<Annotation>
+    ) : J, Expression, Expression<Annotation>, J<Annotation>, MutableTree<Annotation>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

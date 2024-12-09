@@ -58,7 +58,7 @@ public partial interface Cs : J
     Pattern left,
     JLeftPadded<BinaryPattern.OperatorType> @operator,
     Pattern right
-    ) : Cs.Pattern, Expression<BinaryPattern>, MutableTree<BinaryPattern>
+    ) : Cs.Pattern, Expression<BinaryPattern>, J<BinaryPattern>, MutableTree<BinaryPattern>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

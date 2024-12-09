@@ -51,7 +51,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     JContainer<Subpattern> subpatterns
-    ) : Cs, MutableTree<PositionalPatternClause>
+    ) : Cs, J<PositionalPatternClause>, MutableTree<PositionalPatternClause>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

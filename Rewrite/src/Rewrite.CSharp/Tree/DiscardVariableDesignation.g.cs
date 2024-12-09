@@ -41,7 +41,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     J.Identifier discard
-    ) : Cs.VariableDesignation, Cs, Expression<DiscardVariableDesignation>, MutableTree<DiscardVariableDesignation>
+    ) : Cs.VariableDesignation, Cs, Expression<DiscardVariableDesignation>, J<DiscardVariableDesignation>, MutableTree<DiscardVariableDesignation>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {

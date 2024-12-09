@@ -34,7 +34,7 @@ public partial interface J : Rewrite.Core.Tree
     J clazz,
     J? pattern,
     JavaType? type
-    ) : J, Expression, TypedTree, Expression<InstanceOf>, TypedTree<InstanceOf>, MutableTree<InstanceOf>
+    ) : J, Expression, TypedTree, Expression<InstanceOf>, TypedTree<InstanceOf>, J<InstanceOf>, MutableTree<InstanceOf>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

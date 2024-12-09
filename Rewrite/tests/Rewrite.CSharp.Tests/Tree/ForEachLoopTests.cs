@@ -63,4 +63,18 @@ public class ForEachLoopTests(ITestOutputHelper output) : RewriteTest(output)
             )
         );
     }
+
+    [Fact]
+    void ForEachAwait()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                await foreach (var a in b)
+                {
+
+                }
+                """
+            ));
+    }
 }

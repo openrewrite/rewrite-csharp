@@ -139,4 +139,16 @@ public class IsPatternTests(ITestOutputHelper output) : RewriteTest(output)
             )
         );
     }
+
+    [Fact]
+    private void PropertyNameNested()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                return organization is { Permissions.ManageUsers: true };
+                """
+            )
+        );
+    }
 }

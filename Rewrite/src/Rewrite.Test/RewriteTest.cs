@@ -1,5 +1,7 @@
 using System.Reflection;
 using System.Text;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Rewrite.Core;
 using Rewrite.Core.Quark;
 using Xunit.Abstractions;
@@ -111,8 +113,7 @@ public class RewriteTest(ITestOutputHelper output)
 
         foreach (var sourceSpecsForParser in sourceSpecsByParser)
         {
-            var inputs =
-                new Dictionary<SourceSpec, Parser.Input>(sourceSpecsForParser.Value.Count);
+            var inputs = new Dictionary<SourceSpec, Parser.Input>(sourceSpecsForParser.Value.Count);
             var parser = sourceSpecsForParser.Key.Build();
 
             foreach (var sourceSpec in sourceSpecsForParser.Value)
@@ -175,8 +176,7 @@ public class RewriteTest(ITestOutputHelper output)
                 sourceSpecIter.MoveNext().Should().BeTrue();
                 var nextSpec = sourceSpecIter.Current;
 
-                markers = nextSpec.Markers.MarkerList.Aggregate(markers,
-                    (current, marker) => current.SetByType(marker));
+                markers = nextSpec.Markers.MarkerList.Aggregate(markers, (current, marker) => current.SetByType(marker));
                 sourceFile = (sourceFile as MutableTree<SourceFile>)?.WithMarkers(markers);
 
                 if (sourceFile != null)
@@ -293,5 +293,16 @@ internal static class StringUtils
     {
         using var reader = new StreamReader(stream, encoding);
         return reader.ReadToEnd();
+    }
+}
+public class WhitespaceRewriter : CSharpSyntaxRewriter
+{
+    int _i = 0;
+    public override SyntaxToken VisitToken(SyntaxToken token)
+    {
+        var trailingTrivia = token.TrailingTrivia.Where(x => x.IsKind(SyntaxKind.EndOfLineTrivia));
+        return base.VisitToken(token
+            .WithLeadingTrivia(SyntaxFactory.Comment($"/*{_i++}*/"))
+            .WithTrailingTrivia(trailingTrivia));
     }
 }

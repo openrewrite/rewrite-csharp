@@ -7,6 +7,7 @@ using static Assertions;
 
 public class ForLoopTests(ITestOutputHelper output) : RewriteTest(output)
 {
+
     [Fact]
     void ForLoopMultipleInit()
     {

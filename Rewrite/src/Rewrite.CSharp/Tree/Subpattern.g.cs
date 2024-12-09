@@ -59,9 +59,9 @@ public partial interface Cs : J
     Guid id,
     Space prefix,
     Markers markers,
-    J.Identifier? name,
+    Expression? name,
     JLeftPadded<Pattern> pattern
-    ) : Cs, MutableTree<Subpattern>
+    ) : Cs, J<Subpattern>, MutableTree<Subpattern>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -111,9 +111,9 @@ public partial interface Cs : J
         {
             return ReferenceEquals(newMarkers, markers) ? this : new Subpattern(id, prefix, newMarkers, name, _pattern);
         }
-        public J.Identifier? Name => name;
+        public Expression? Name => name;
 
-        public Subpattern WithName(J.Identifier? newName)
+        public Subpattern WithName(Expression? newName)
         {
             return ReferenceEquals(newName, name) ? this : new Subpattern(id, prefix, markers, newName, _pattern);
         }

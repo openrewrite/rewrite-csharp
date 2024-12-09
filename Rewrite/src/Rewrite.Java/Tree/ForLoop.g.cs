@@ -32,7 +32,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     ForLoop.Control loopControl,
     JRightPadded<Statement> body
-    ) : J, Loop, MutableTree<ForLoop>
+    ) : J, Loop, J<ForLoop>, MutableTree<ForLoop>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -105,7 +105,7 @@ public partial interface J : Rewrite.Core.Tree
     IList<JRightPadded<Statement>> init,
     JRightPadded<Expression> condition,
     IList<JRightPadded<Statement>> update
-        ) : J, MutableTree<Control>
+        ) : J, J<Control>, MutableTree<Control>
         {
             [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

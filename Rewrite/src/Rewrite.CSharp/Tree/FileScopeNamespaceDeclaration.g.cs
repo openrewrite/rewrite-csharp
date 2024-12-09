@@ -35,7 +35,7 @@ public partial interface Cs : J
     IList<JRightPadded<ExternAlias>> externs,
     IList<JRightPadded<UsingDirective>> usings,
     IList<JRightPadded<Statement>> members
-    ) : Cs, Statement, MutableTree<FileScopeNamespaceDeclaration>
+    ) : Cs, Statement, J<FileScopeNamespaceDeclaration>, MutableTree<FileScopeNamespaceDeclaration>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

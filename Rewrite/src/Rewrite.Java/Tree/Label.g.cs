@@ -32,7 +32,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     JRightPadded<Identifier> name,
     Statement statement
-    ) : J, Statement, MutableTree<Label>
+    ) : J, Statement, J<Label>, MutableTree<Label>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

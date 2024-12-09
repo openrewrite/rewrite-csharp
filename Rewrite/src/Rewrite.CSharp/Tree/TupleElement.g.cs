@@ -37,7 +37,7 @@ public partial interface Cs : J
     Markers markers,
     TypeTree type,
     J.Identifier? name
-    ) : Cs, MutableTree<TupleElement>
+    ) : Cs, J<TupleElement>, MutableTree<TupleElement>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
