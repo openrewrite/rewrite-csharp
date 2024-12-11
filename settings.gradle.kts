@@ -9,6 +9,7 @@ rootProject.name = "rewrite-csharp"
 val allProjects = listOf(
     "rewrite-csharp",
     "rewrite-csharp-remote",
+    "rewrite-csharp-remote-server",
     "rewrite-test-engine-remote",
 )
 
