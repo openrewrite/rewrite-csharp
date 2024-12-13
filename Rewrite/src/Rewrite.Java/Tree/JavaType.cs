@@ -530,6 +530,73 @@ public interface JavaType
             JavaType Element { get; }
             object GetValue();
         }
+
+        public sealed class SingleElementValue : ElementValue
+        {
+            internal SingleElementValue()
+            {
+            }
+
+            public SingleElementValue(JavaType element, object value)
+            {
+                Element = element;
+                if (value is JavaType javaType)
+                {
+                    ReferenceValue = javaType;
+                }
+                else
+                {
+                    ConstantValue = value;
+                }
+            }
+
+            public JavaType Element { get; internal set; } = null!;
+
+            internal object? ConstantValue { get; set; } = null!;
+            internal JavaType? ReferenceValue { get; set; } = null!;
+
+            public object GetValue()
+            {
+                return ConstantValue ?? ReferenceValue!;
+            }
+        }
+
+        public sealed class ArrayElementValue : ElementValue
+        {
+            internal ArrayElementValue()
+            {
+            }
+
+            public ArrayElementValue(JavaType element, IList<object> values)
+            {
+                Element = element;
+                if (values.Count == 0)
+                {
+                    ConstantValues = null;
+                    ReferenceValues = null;
+                }
+                else if (values is IList<JavaType> javaTypes)
+                {
+                    ReferenceValues = javaTypes;
+                }
+                else
+                {
+                    ConstantValues = values;
+                }
+            }
+
+            public JavaType Element { get; internal set; } = null!;
+
+            internal IList<object>? ConstantValues { get; set; }
+            internal IList<JavaType>? ReferenceValues { get; set; }
+
+            public object GetValue()
+            {
+                return ConstantValues != null ? ConstantValues :
+                    ReferenceValues != null ? ReferenceValues :
+                    EMPTY_ANNOTATION_VALUE_ARRAY;
+            }
+        }
     }
 
     public sealed class GenericTypeVariable : JavaType

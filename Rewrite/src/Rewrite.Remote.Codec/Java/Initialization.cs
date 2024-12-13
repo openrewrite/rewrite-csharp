@@ -218,6 +218,123 @@ public static class Initialization
             reader.ReadEndMap();
             return array;
         });
+        RemotingContext.RegisterValueDeserializer<JavaType.Annotation>((type, reader, context) =>
+        {
+            var annotation = new JavaType.Annotation();
+
+            while (reader.PeekState() != CborReaderState.EndMap)
+            {
+                var prop = reader.ReadTextString();
+                switch (prop)
+                {
+                    case "@ref":
+                        context.RemotingContext.Add(reader.ReadInt64(), annotation);
+                        break;
+                    case "@c":
+                        reader.ReadTextString();
+                        break;
+                    case "type":
+                        annotation.Type = context.Deserialize<JavaType.FullyQualified>(reader)!;
+                        break;
+                    case "values":
+                        reader.ReadStartArray();
+                        List<JavaType.Annotation.ElementValue> values = [];
+                        while (reader.PeekState() != CborReaderState.EndArray)
+                        {
+                            values.Add(context.Deserialize<JavaType.Annotation.ElementValue>(reader)!);
+                        }
+
+                        reader.ReadEndArray();
+                        annotation.Values = values;
+                        break;
+                    default:
+                        throw new NotImplementedException(prop);
+                }
+            }
+
+            reader.ReadEndMap();
+            return annotation;
+        });
+        RemotingContext.RegisterValueDeserializer<JavaType.Annotation.SingleElementValue>((type, reader, context) =>
+        {
+            var elementValue = new JavaType.Annotation.SingleElementValue();
+
+            while (reader.PeekState() != CborReaderState.EndMap)
+            {
+                var prop = reader.ReadTextString();
+                switch (prop)
+                {
+                    case "@ref":
+                        context.RemotingContext.Add(reader.ReadInt64(), elementValue);
+                        break;
+                    case "@c":
+                        reader.ReadTextString();
+                        break;
+                    case "element":
+                        elementValue.Element = context.Deserialize<JavaType>(reader)!;
+                        break;
+                    case "constantValue":
+                        elementValue.ConstantValue = context.Deserialize<object>(reader)!;
+                        break;
+                    case "referenceValue":
+                        elementValue.ReferenceValue = context.Deserialize<JavaType>(reader)!;
+                        break;
+                    default:
+                        throw new NotImplementedException(prop);
+                }
+            }
+
+            reader.ReadEndMap();
+            return elementValue;
+        });
+        RemotingContext.RegisterValueDeserializer<JavaType.Annotation.ArrayElementValue>((type, reader, context) =>
+        {
+            var elementValue = new JavaType.Annotation.ArrayElementValue();
+
+            while (reader.PeekState() != CborReaderState.EndMap)
+            {
+                var prop = reader.ReadTextString();
+                switch (prop)
+                {
+                    case "@ref":
+                        context.RemotingContext.Add(reader.ReadInt64(), elementValue);
+                        break;
+                    case "@c":
+                        reader.ReadTextString();
+                        break;
+                    case "element":
+                        elementValue.Element = context.Deserialize<JavaType>(reader)!;
+                        break;
+                    case "constantValues":
+                        reader.ReadStartArray();
+                        List<object> constantValues = [];
+                        while (reader.PeekState() != CborReaderState.EndArray)
+                        {
+                            constantValues.Add(context.Deserialize<object>(reader)!);
+                        }
+
+                        reader.ReadEndArray();
+                        elementValue.ConstantValues = constantValues;
+                        break;
+                    case "referenceValues":
+                        reader.ReadStartArray();
+                        List<JavaType> referenceValues = [];
+                        while (reader.PeekState() != CborReaderState.EndArray)
+                        {
+                            referenceValues.Add(context.Deserialize<JavaType>(reader)!);
+                        }
+
+                        reader.ReadEndArray();
+                        elementValue.ReferenceValues = referenceValues;
+                        break;
+                    default:
+                        throw new NotImplementedException(prop);
+                }
+            }
+
+            reader.ReadEndMap();
+            return elementValue;
+        });
         RemotingContext.RegisterValueDeserializer<JavaType.Parameterized>((type, reader, context) =>
         {
             var parameterized = new JavaType.Parameterized();
@@ -548,6 +665,75 @@ public static class Initialization
                 writer.WriteStartArray(value.Annotations.Count);
                 foreach (var annotation in value.Annotations)
                     context.Serialize(annotation, null, writer);
+                writer.WriteEndArray();
+            }
+
+            writer.WriteEndMap();
+        });
+        RemotingContext.RegisterValueSerializer<JavaType.Annotation>((value, type, writer, context) =>
+        {
+            writer.WriteStartMap(null);
+            writer.WriteTextString("@c");
+            writer.WriteTextString("org.openrewrite.java.tree.JavaType$Annotation");
+            writer.WriteTextString("type");
+            context.Serialize(value.Type, null, writer);
+
+            if (value.Values.Count > 0)
+            {
+                writer.WriteTextString("values");
+                writer.WriteStartArray(value.Values.Count);
+                foreach (var elementValue in value.Values)
+                    context.Serialize(elementValue, null, writer);
+                writer.WriteEndArray();
+            }
+
+            writer.WriteEndMap();
+        });
+        RemotingContext.RegisterValueSerializer<JavaType.Annotation.SingleElementValue>((value, type, writer, context) =>
+        {
+            writer.WriteStartMap(null);
+            writer.WriteTextString("@c");
+            writer.WriteTextString("org.openrewrite.java.tree.JavaType$Annotation$SingleElementValue");
+            writer.WriteTextString("element");
+            context.Serialize(value.Element, null, writer);
+
+            if (value.ConstantValue != null)
+            {
+                writer.WriteTextString("constantValue");
+                context.Serialize(value.ConstantValue, null, writer);
+            }
+
+            if (value.ReferenceValue != null)
+            {
+                writer.WriteTextString("referenceValue");
+                context.Serialize(value.ReferenceValue, null, writer);
+            }
+
+            writer.WriteEndMap();
+        });
+        RemotingContext.RegisterValueSerializer<JavaType.Annotation.ArrayElementValue>((value, type, writer, context) =>
+        {
+            writer.WriteStartMap(null);
+            writer.WriteTextString("@c");
+            writer.WriteTextString("org.openrewrite.java.tree.JavaType$Annotation$ArrayElementValue");
+            writer.WriteTextString("element");
+            context.Serialize(value.Element, null, writer);
+
+            if (value.ConstantValues is { Count: > 0 })
+            {
+                writer.WriteTextString("constantValues");
+                writer.WriteStartArray(value.ConstantValues.Count);
+                foreach (var constantValue in value.ConstantValues)
+                    context.Serialize(constantValue, null, writer);
+                writer.WriteEndArray();
+            }
+
+            if (value.ReferenceValues is { Count: > 0 })
+            {
+                writer.WriteTextString("referenceValues");
+                writer.WriteStartArray(value.ReferenceValues.Count);
+                foreach (var referenceValue in value.ReferenceValues)
+                    context.Serialize(referenceValue, null, writer);
                 writer.WriteEndArray();
             }
 
