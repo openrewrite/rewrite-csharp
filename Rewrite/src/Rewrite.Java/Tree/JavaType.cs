@@ -13,6 +13,7 @@ public interface JavaType
     internal static FullyQualified[] EMPTY_FULLY_QUALIFIED_ARRAY = [];
     internal static Method[] EMPTY_METHOD_ARRAY = [];
     internal static Variable[] EMPTY_VARIABLE_ARRAY = [];
+    internal static Annotation.ElementValue[] EMPTY_ANNOTATION_VALUE_ARRAY = [];
 
     internal int? ManagedReference => null;
 
@@ -151,9 +152,8 @@ public interface JavaType
         }
 
         private class FullyQualifiedEnumerator<E>(
-#pragma warning disable  // TODO: needs to be fully implemented
+#pragma warning disable // TODO: needs to be fully implemented
             FullyQualified fq,
-
             string packageName,
             Func<E, long> flagsFn,
             Func<FullyQualified, IList<E>> baseFn,
@@ -324,7 +324,6 @@ public interface JavaType
             IList<FullyQualified>? annotations, IList<FullyQualified>? interfaces,
             IList<Variable>? members, IList<Method>? methods)
         {
-            
             TypeParameters = typeParameters ?? EMPTY_JAVA_TYPE_ARRAY;
             Supertype = supertype;
             OwningClass = owningClass;
@@ -417,6 +416,120 @@ public interface JavaType
         public override IList<JavaType> TypeParameters { get; internal set; } = EMPTY_JAVA_TYPE_ARRAY;
         public override FullyQualified? Supertype { get; internal set; }
         public override FullyQualified? OwningClass { get; internal set; }
+    }
+
+    public sealed class Annotation : FullyQualified
+    {
+        internal Annotation()
+        {
+        }
+
+        public Annotation(FullyQualified type,
+            IList<ElementValue>? values)
+        {
+            Type = type;
+            Values = values ?? EMPTY_ANNOTATION_VALUE_ARRAY;
+        }
+
+        public IList<ElementValue> Values { get; internal set; } = EMPTY_ANNOTATION_VALUE_ARRAY;
+
+        public Annotation WithValues(IList<ElementValue>? values)
+        {
+            var newValues = values ?? EMPTY_ANNOTATION_VALUE_ARRAY;
+            if (newValues == Values)
+            {
+                return this;
+            }
+
+            return new Annotation(Type, newValues);
+        }
+
+        public FullyQualified Type { get; internal set; } = null!;
+
+        public Annotation WithType(FullyQualified type)
+        {
+            if (type == Type)
+            {
+                return this;
+            }
+
+            return new Annotation(type, Values);
+        }
+
+        public override string FullyQualifiedName
+        {
+            get => Type.FullyQualifiedName;
+            internal set => Type.FullyQualifiedName = value;
+        }
+
+        public override FullyQualified WithFullyQualifiedName(string fullyQualifiedName)
+        {
+            return WithType(Type.WithFullyQualifiedName(fullyQualifiedName));
+        }
+
+        public override IList<FullyQualified> Annotations
+        {
+            get => Type.Annotations;
+            internal set => Type.Annotations = value;
+        }
+
+        public override bool HasFlags(Flag[] test)
+        {
+            return Type.HasFlags(test);
+        }
+
+        public override ISet<Flag> GetFlags()
+        {
+            return Type.GetFlags();
+        }
+
+        public override IList<FullyQualified> Interfaces
+        {
+            get => Type.Interfaces;
+            internal set => Type.Interfaces = value;
+        }
+
+        public override TypeKind Kind
+        {
+            get => Type.Kind;
+            internal set => Type.Kind = value;
+        }
+
+        public override IList<Variable> Members
+        {
+            get => Type.Members;
+            internal set => Type.Members = value;
+        }
+
+        public override IList<Method> Methods
+        {
+            get => Type.Methods;
+            internal set => Type.Methods = value;
+        }
+
+        public override IList<JavaType> TypeParameters
+        {
+            get => Type.TypeParameters;
+            internal set => Type.TypeParameters = value;
+        }
+
+        public override FullyQualified? Supertype
+        {
+            get => Type.Supertype;
+            internal set => Type.Supertype = value;
+        }
+
+        public override FullyQualified? OwningClass
+        {
+            get => Type.OwningClass;
+            internal set => Type.OwningClass = value;
+        }
+
+        public interface ElementValue
+        {
+            JavaType Element { get; }
+            object GetValue();
+        }
     }
 
     public sealed class GenericTypeVariable : JavaType
