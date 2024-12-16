@@ -280,7 +280,7 @@ public class CSharpSender implements Sender<Cs> {
             ctx.sendNode(propertyDeclaration, Cs.PropertyDeclaration::getPrefix, CSharpSender::sendSpace);
             ctx.sendNode(propertyDeclaration, Cs.PropertyDeclaration::getMarkers, ctx::sendMarkers);
             ctx.sendNodes(propertyDeclaration, Cs.PropertyDeclaration::getAttributeLists, ctx::sendTree, Tree::getId);
-            ctx.sendNodes(propertyDeclaration, Cs.PropertyDeclaration::getModifiers, this::sendModifier, Tree::getId);
+            ctx.sendNodes(propertyDeclaration, Cs.PropertyDeclaration::getModifiers, ctx::sendTree, Tree::getId);
             ctx.sendNode(propertyDeclaration, Cs.PropertyDeclaration::getTypeExpression, ctx::sendTree);
             ctx.sendNode(propertyDeclaration, e -> e.getPadding().getInterfaceSpecifier(), CSharpSender::sendRightPadded);
             ctx.sendNode(propertyDeclaration, Cs.PropertyDeclaration::getName, ctx::sendTree);
@@ -304,7 +304,7 @@ public class CSharpSender implements Sender<Cs> {
             ctx.sendNode(lambda, Cs.Lambda::getPrefix, CSharpSender::sendSpace);
             ctx.sendNode(lambda, Cs.Lambda::getMarkers, ctx::sendMarkers);
             ctx.sendNode(lambda, Cs.Lambda::getLambdaExpression, ctx::sendTree);
-            ctx.sendNodes(lambda, Cs.Lambda::getModifiers, this::sendModifier, Tree::getId);
+            ctx.sendNodes(lambda, Cs.Lambda::getModifiers, ctx::sendTree, Tree::getId);
             return lambda;
         }
 
@@ -935,7 +935,7 @@ public class CSharpSender implements Sender<Cs> {
             ctx.sendNode(classDeclaration, J.ClassDeclaration::getPrefix, CSharpSender::sendSpace);
             ctx.sendNode(classDeclaration, J.ClassDeclaration::getMarkers, ctx::sendMarkers);
             ctx.sendNodes(classDeclaration, J.ClassDeclaration::getLeadingAnnotations, ctx::sendTree, Tree::getId);
-            ctx.sendNodes(classDeclaration, J.ClassDeclaration::getModifiers, this::sendModifier, Tree::getId);
+            ctx.sendNodes(classDeclaration, J.ClassDeclaration::getModifiers, ctx::sendTree, Tree::getId);
             ctx.sendNode(classDeclaration, e -> e.getPadding().getKind(), this::sendClassDeclarationKind);
             ctx.sendNode(classDeclaration, J.ClassDeclaration::getName, ctx::sendTree);
             ctx.sendNode(classDeclaration, e -> e.getPadding().getTypeParameters(), CSharpSender::sendContainer);
@@ -1192,7 +1192,7 @@ public class CSharpSender implements Sender<Cs> {
             ctx.sendNode(methodDeclaration, J.MethodDeclaration::getPrefix, CSharpSender::sendSpace);
             ctx.sendNode(methodDeclaration, J.MethodDeclaration::getMarkers, ctx::sendMarkers);
             ctx.sendNodes(methodDeclaration, J.MethodDeclaration::getLeadingAnnotations, ctx::sendTree, Tree::getId);
-            ctx.sendNodes(methodDeclaration, J.MethodDeclaration::getModifiers, this::sendModifier, Tree::getId);
+            ctx.sendNodes(methodDeclaration, J.MethodDeclaration::getModifiers, ctx::sendTree, Tree::getId);
             ctx.sendNode(methodDeclaration, e -> e.getAnnotations().getTypeParameters(), this::sendMethodTypeParameters);
             ctx.sendNode(methodDeclaration, J.MethodDeclaration::getReturnTypeExpression, ctx::sendTree);
             ctx.sendNode(methodDeclaration, e -> e.getAnnotations().getName(), this::sendMethodIdentifierWithAnnotations);
@@ -1222,13 +1222,15 @@ public class CSharpSender implements Sender<Cs> {
             return methodInvocation;
         }
 
-        private void sendModifier(J.Modifier modifier, SenderContext ctx) {
+        @Override
+        public J.Modifier visitModifier(J.Modifier modifier, SenderContext ctx) {
             ctx.sendValue(modifier, J.Modifier::getId);
             ctx.sendNode(modifier, J.Modifier::getPrefix, CSharpSender::sendSpace);
             ctx.sendNode(modifier, J.Modifier::getMarkers, ctx::sendMarkers);
             ctx.sendValue(modifier, J.Modifier::getKeyword);
             ctx.sendValue(modifier, J.Modifier::getType);
             ctx.sendNodes(modifier, J.Modifier::getAnnotations, ctx::sendTree, Tree::getId);
+            return modifier;
         }
 
         @Override
@@ -1441,7 +1443,7 @@ public class CSharpSender implements Sender<Cs> {
             ctx.sendNode(typeParameter, J.TypeParameter::getPrefix, CSharpSender::sendSpace);
             ctx.sendNode(typeParameter, J.TypeParameter::getMarkers, ctx::sendMarkers);
             ctx.sendNodes(typeParameter, J.TypeParameter::getAnnotations, ctx::sendTree, Tree::getId);
-            ctx.sendNodes(typeParameter, J.TypeParameter::getModifiers, this::sendModifier, Tree::getId);
+            ctx.sendNodes(typeParameter, J.TypeParameter::getModifiers, ctx::sendTree, Tree::getId);
             ctx.sendNode(typeParameter, J.TypeParameter::getName, ctx::sendTree);
             ctx.sendNode(typeParameter, e -> e.getPadding().getBounds(), CSharpSender::sendContainer);
             return typeParameter;
@@ -1472,7 +1474,7 @@ public class CSharpSender implements Sender<Cs> {
             ctx.sendNode(variableDeclarations, J.VariableDeclarations::getPrefix, CSharpSender::sendSpace);
             ctx.sendNode(variableDeclarations, J.VariableDeclarations::getMarkers, ctx::sendMarkers);
             ctx.sendNodes(variableDeclarations, J.VariableDeclarations::getLeadingAnnotations, ctx::sendTree, Tree::getId);
-            ctx.sendNodes(variableDeclarations, J.VariableDeclarations::getModifiers, this::sendModifier, Tree::getId);
+            ctx.sendNodes(variableDeclarations, J.VariableDeclarations::getModifiers, ctx::sendTree, Tree::getId);
             ctx.sendNode(variableDeclarations, J.VariableDeclarations::getTypeExpression, ctx::sendTree);
             ctx.sendNode(variableDeclarations, J.VariableDeclarations::getVarargs, CSharpSender::sendSpace);
             ctx.sendNodes(variableDeclarations, J.VariableDeclarations::getDimensionsBeforeName, CSharpSender::sendLeftPadded, Function.identity());

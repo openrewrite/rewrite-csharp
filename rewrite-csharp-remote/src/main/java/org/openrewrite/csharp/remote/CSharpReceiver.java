@@ -41,6 +41,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
 @Value
 public class CSharpReceiver implements Receiver<Cs> {
@@ -297,7 +298,7 @@ public class CSharpReceiver implements Receiver<Cs> {
             propertyDeclaration = propertyDeclaration.withPrefix(ctx.receiveNonNullNode(propertyDeclaration.getPrefix(), CSharpReceiver::receiveSpace));
             propertyDeclaration = propertyDeclaration.withMarkers(ctx.receiveNonNullNode(propertyDeclaration.getMarkers(), ctx::receiveMarkers));
             propertyDeclaration = propertyDeclaration.withAttributeLists(ctx.receiveNonNullNodes(propertyDeclaration.getAttributeLists(), ctx::receiveTree));
-            propertyDeclaration = propertyDeclaration.withModifiers(ctx.receiveNonNullNodes(propertyDeclaration.getModifiers(), CSharpReceiver::receiveModifier));
+            propertyDeclaration = propertyDeclaration.withModifiers(ctx.receiveNonNullNodes(propertyDeclaration.getModifiers(), ctx::receiveTree));
             propertyDeclaration = propertyDeclaration.withTypeExpression(ctx.receiveNonNullNode(propertyDeclaration.getTypeExpression(), ctx::receiveTree));
             propertyDeclaration = propertyDeclaration.getPadding().withInterfaceSpecifier(ctx.receiveNode(propertyDeclaration.getPadding().getInterfaceSpecifier(), CSharpReceiver::receiveRightPaddedTree));
             propertyDeclaration = propertyDeclaration.withName(ctx.receiveNonNullNode(propertyDeclaration.getName(), ctx::receiveTree));
@@ -321,7 +322,7 @@ public class CSharpReceiver implements Receiver<Cs> {
             lambda = lambda.withPrefix(ctx.receiveNonNullNode(lambda.getPrefix(), CSharpReceiver::receiveSpace));
             lambda = lambda.withMarkers(ctx.receiveNonNullNode(lambda.getMarkers(), ctx::receiveMarkers));
             lambda = lambda.withLambdaExpression(ctx.receiveNonNullNode(lambda.getLambdaExpression(), ctx::receiveTree));
-            lambda = lambda.withModifiers(ctx.receiveNonNullNodes(lambda.getModifiers(), CSharpReceiver::receiveModifier));
+            lambda = lambda.withModifiers(ctx.receiveNonNullNodes(lambda.getModifiers(), ctx::receiveTree));
             return lambda;
         }
 
@@ -952,7 +953,7 @@ public class CSharpReceiver implements Receiver<Cs> {
             classDeclaration = classDeclaration.withPrefix(ctx.receiveNonNullNode(classDeclaration.getPrefix(), CSharpReceiver::receiveSpace));
             classDeclaration = classDeclaration.withMarkers(ctx.receiveNonNullNode(classDeclaration.getMarkers(), ctx::receiveMarkers));
             classDeclaration = classDeclaration.withLeadingAnnotations(ctx.receiveNonNullNodes(classDeclaration.getLeadingAnnotations(), ctx::receiveTree));
-            classDeclaration = classDeclaration.withModifiers(ctx.receiveNonNullNodes(classDeclaration.getModifiers(), CSharpReceiver::receiveModifier));
+            classDeclaration = classDeclaration.withModifiers(ctx.receiveNonNullNodes(classDeclaration.getModifiers(), ctx::receiveTree));
             classDeclaration = classDeclaration.getPadding().withKind(ctx.receiveNonNullNode(classDeclaration.getPadding().getKind(), CSharpReceiver::receiveClassDeclarationKind));
             classDeclaration = classDeclaration.withName(ctx.receiveNonNullNode(classDeclaration.getName(), ctx::receiveTree));
             classDeclaration = classDeclaration.getPadding().withTypeParameters(ctx.receiveNode(classDeclaration.getPadding().getTypeParameters(), CSharpReceiver::receiveContainer));
@@ -1193,7 +1194,7 @@ public class CSharpReceiver implements Receiver<Cs> {
             methodDeclaration = methodDeclaration.withPrefix(ctx.receiveNonNullNode(methodDeclaration.getPrefix(), CSharpReceiver::receiveSpace));
             methodDeclaration = methodDeclaration.withMarkers(ctx.receiveNonNullNode(methodDeclaration.getMarkers(), ctx::receiveMarkers));
             methodDeclaration = methodDeclaration.withLeadingAnnotations(ctx.receiveNonNullNodes(methodDeclaration.getLeadingAnnotations(), ctx::receiveTree));
-            methodDeclaration = methodDeclaration.withModifiers(ctx.receiveNonNullNodes(methodDeclaration.getModifiers(), CSharpReceiver::receiveModifier));
+            methodDeclaration = methodDeclaration.withModifiers(ctx.receiveNonNullNodes(methodDeclaration.getModifiers(), ctx::receiveTree));
             methodDeclaration = methodDeclaration.getAnnotations().withTypeParameters(ctx.receiveNode(methodDeclaration.getAnnotations().getTypeParameters(), CSharpReceiver::receiveMethodTypeParameters));
             methodDeclaration = methodDeclaration.withReturnTypeExpression(ctx.receiveNode(methodDeclaration.getReturnTypeExpression(), ctx::receiveTree));
             methodDeclaration = methodDeclaration.getAnnotations().withName(ctx.receiveNonNullNode(methodDeclaration.getAnnotations().getName(), CSharpReceiver::receiveMethodIdentifierWithAnnotations));
@@ -1216,6 +1217,17 @@ public class CSharpReceiver implements Receiver<Cs> {
             methodInvocation = methodInvocation.getPadding().withArguments(ctx.receiveNonNullNode(methodInvocation.getPadding().getArguments(), CSharpReceiver::receiveContainer));
             methodInvocation = methodInvocation.withMethodType(ctx.receiveValue(methodInvocation.getMethodType(), JavaType.Method.class));
             return methodInvocation;
+        }
+
+        @Override
+        public J.Modifier visitModifier(J.Modifier modifier, ReceiverContext ctx) {
+            modifier = modifier.withId(ctx.receiveNonNullValue(modifier.getId(), UUID.class));
+            modifier = modifier.withPrefix(ctx.receiveNonNullNode(modifier.getPrefix(), CSharpReceiver::receiveSpace));
+            modifier = modifier.withMarkers(ctx.receiveNonNullNode(modifier.getMarkers(), ctx::receiveMarkers));
+            modifier = modifier.withKeyword(ctx.receiveValue(modifier.getKeyword(), String.class));
+            modifier = modifier.withType(ctx.receiveNonNullValue(modifier.getType(), J.Modifier.Type.class));
+            modifier = modifier.withAnnotations(ctx.receiveNonNullNodes(modifier.getAnnotations(), ctx::receiveTree));
+            return modifier;
         }
 
         @Override
@@ -1428,7 +1440,7 @@ public class CSharpReceiver implements Receiver<Cs> {
             typeParameter = typeParameter.withPrefix(ctx.receiveNonNullNode(typeParameter.getPrefix(), CSharpReceiver::receiveSpace));
             typeParameter = typeParameter.withMarkers(ctx.receiveNonNullNode(typeParameter.getMarkers(), ctx::receiveMarkers));
             typeParameter = typeParameter.withAnnotations(ctx.receiveNonNullNodes(typeParameter.getAnnotations(), ctx::receiveTree));
-            typeParameter = typeParameter.withModifiers(ctx.receiveNonNullNodes(typeParameter.getModifiers(), CSharpReceiver::receiveModifier));
+            typeParameter = typeParameter.withModifiers(ctx.receiveNonNullNodes(typeParameter.getModifiers(), ctx::receiveTree));
             typeParameter = typeParameter.withName(ctx.receiveNonNullNode(typeParameter.getName(), ctx::receiveTree));
             typeParameter = typeParameter.getPadding().withBounds(ctx.receiveNode(typeParameter.getPadding().getBounds(), CSharpReceiver::receiveContainer));
             return typeParameter;
@@ -1451,7 +1463,7 @@ public class CSharpReceiver implements Receiver<Cs> {
             variableDeclarations = variableDeclarations.withPrefix(ctx.receiveNonNullNode(variableDeclarations.getPrefix(), CSharpReceiver::receiveSpace));
             variableDeclarations = variableDeclarations.withMarkers(ctx.receiveNonNullNode(variableDeclarations.getMarkers(), ctx::receiveMarkers));
             variableDeclarations = variableDeclarations.withLeadingAnnotations(ctx.receiveNonNullNodes(variableDeclarations.getLeadingAnnotations(), ctx::receiveTree));
-            variableDeclarations = variableDeclarations.withModifiers(ctx.receiveNonNullNodes(variableDeclarations.getModifiers(), CSharpReceiver::receiveModifier));
+            variableDeclarations = variableDeclarations.withModifiers(ctx.receiveNonNullNodes(variableDeclarations.getModifiers(), ctx::receiveTree));
             variableDeclarations = variableDeclarations.withTypeExpression(ctx.receiveNode(variableDeclarations.getTypeExpression(), ctx::receiveTree));
             variableDeclarations = variableDeclarations.withVarargs(ctx.receiveNode(variableDeclarations.getVarargs(), CSharpReceiver::receiveSpace));
             variableDeclarations = variableDeclarations.withDimensionsBeforeName(ctx.receiveNonNullNodes(variableDeclarations.getDimensionsBeforeName(), leftPaddedNodeReceiver(org.openrewrite.java.tree.Space.class)));
@@ -1523,11 +1535,164 @@ public class CSharpReceiver implements Receiver<Cs> {
 
     private static class Factory implements ReceiverFactory {
 
+        private final ClassValue<Function<ReceiverContext, Object>> factories = new ClassValue<Function<ReceiverContext, Object>>() {
+            @Override
+            protected Function<ReceiverContext, Object> computeValue(Class type) {
+                if (type == Cs.CompilationUnit.class) return Factory::createCsCompilationUnit;
+                if (type == Cs.ForEachVariableLoop.class) return Factory::createCsForEachVariableLoop;
+                if (type == Cs.ForEachVariableLoop.Control.class) return Factory::createCsForEachVariableLoopControl;
+                if (type == Cs.Argument.class) return Factory::createCsArgument;
+                if (type == Cs.AnnotatedStatement.class) return Factory::createCsAnnotatedStatement;
+                if (type == Cs.ArrayRankSpecifier.class) return Factory::createCsArrayRankSpecifier;
+                if (type == Cs.AssignmentOperation.class) return Factory::createCsAssignmentOperation;
+                if (type == Cs.AttributeList.class) return Factory::createCsAttributeList;
+                if (type == Cs.AwaitExpression.class) return Factory::createCsAwaitExpression;
+                if (type == Cs.Binary.class) return Factory::createCsBinary;
+                if (type == Cs.BlockScopeNamespaceDeclaration.class) return Factory::createCsBlockScopeNamespaceDeclaration;
+                if (type == Cs.CollectionExpression.class) return Factory::createCsCollectionExpression;
+                if (type == Cs.ExpressionStatement.class) return Factory::createCsExpressionStatement;
+                if (type == Cs.ExternAlias.class) return Factory::createCsExternAlias;
+                if (type == Cs.FileScopeNamespaceDeclaration.class) return Factory::createCsFileScopeNamespaceDeclaration;
+                if (type == Cs.InterpolatedString.class) return Factory::createCsInterpolatedString;
+                if (type == Cs.Interpolation.class) return Factory::createCsInterpolation;
+                if (type == Cs.NullSafeExpression.class) return Factory::createCsNullSafeExpression;
+                if (type == Cs.StatementExpression.class) return Factory::createCsStatementExpression;
+                if (type == Cs.UsingDirective.class) return Factory::createCsUsingDirective;
+                if (type == Cs.PropertyDeclaration.class) return Factory::createCsPropertyDeclaration;
+                if (type == Cs.Keyword.class) return Factory::createCsKeyword;
+                if (type == Cs.Lambda.class) return Factory::createCsLambda;
+                if (type == Cs.ClassDeclaration.class) return Factory::createCsClassDeclaration;
+                if (type == Cs.MethodDeclaration.class) return Factory::createCsMethodDeclaration;
+                if (type == Cs.UsingStatement.class) return Factory::createCsUsingStatement;
+                if (type == Cs.TypeParameterConstraintClause.class) return Factory::createCsTypeParameterConstraintClause;
+                if (type == Cs.TypeConstraint.class) return Factory::createCsTypeConstraint;
+                if (type == Cs.AllowsConstraintClause.class) return Factory::createCsAllowsConstraintClause;
+                if (type == Cs.RefStructConstraint.class) return Factory::createCsRefStructConstraint;
+                if (type == Cs.ClassOrStructConstraint.class) return Factory::createCsClassOrStructConstraint;
+                if (type == Cs.ConstructorConstraint.class) return Factory::createCsConstructorConstraint;
+                if (type == Cs.DefaultConstraint.class) return Factory::createCsDefaultConstraint;
+                if (type == Cs.DeclarationExpression.class) return Factory::createCsDeclarationExpression;
+                if (type == Cs.SingleVariableDesignation.class) return Factory::createCsSingleVariableDesignation;
+                if (type == Cs.ParenthesizedVariableDesignation.class) return Factory::createCsParenthesizedVariableDesignation;
+                if (type == Cs.DiscardVariableDesignation.class) return Factory::createCsDiscardVariableDesignation;
+                if (type == Cs.TupleExpression.class) return Factory::createCsTupleExpression;
+                if (type == Cs.Constructor.class) return Factory::createCsConstructor;
+                if (type == Cs.DestructorDeclaration.class) return Factory::createCsDestructorDeclaration;
+                if (type == Cs.Unary.class) return Factory::createCsUnary;
+                if (type == Cs.ConstructorInitializer.class) return Factory::createCsConstructorInitializer;
+                if (type == Cs.TupleType.class) return Factory::createCsTupleType;
+                if (type == Cs.TupleElement.class) return Factory::createCsTupleElement;
+                if (type == Cs.NewClass.class) return Factory::createCsNewClass;
+                if (type == Cs.InitializerExpression.class) return Factory::createCsInitializerExpression;
+                if (type == Cs.ImplicitElementAccess.class) return Factory::createCsImplicitElementAccess;
+                if (type == Cs.Yield.class) return Factory::createCsYield;
+                if (type == Cs.DefaultExpression.class) return Factory::createCsDefaultExpression;
+                if (type == Cs.IsPattern.class) return Factory::createCsIsPattern;
+                if (type == Cs.UnaryPattern.class) return Factory::createCsUnaryPattern;
+                if (type == Cs.TypePattern.class) return Factory::createCsTypePattern;
+                if (type == Cs.BinaryPattern.class) return Factory::createCsBinaryPattern;
+                if (type == Cs.ConstantPattern.class) return Factory::createCsConstantPattern;
+                if (type == Cs.DiscardPattern.class) return Factory::createCsDiscardPattern;
+                if (type == Cs.ListPattern.class) return Factory::createCsListPattern;
+                if (type == Cs.ParenthesizedPattern.class) return Factory::createCsParenthesizedPattern;
+                if (type == Cs.RecursivePattern.class) return Factory::createCsRecursivePattern;
+                if (type == Cs.VarPattern.class) return Factory::createCsVarPattern;
+                if (type == Cs.PositionalPatternClause.class) return Factory::createCsPositionalPatternClause;
+                if (type == Cs.RelationalPattern.class) return Factory::createCsRelationalPattern;
+                if (type == Cs.SlicePattern.class) return Factory::createCsSlicePattern;
+                if (type == Cs.PropertyPatternClause.class) return Factory::createCsPropertyPatternClause;
+                if (type == Cs.Subpattern.class) return Factory::createCsSubpattern;
+                if (type == Cs.SwitchExpression.class) return Factory::createCsSwitchExpression;
+                if (type == Cs.SwitchExpressionArm.class) return Factory::createCsSwitchExpressionArm;
+                if (type == Cs.SwitchSection.class) return Factory::createCsSwitchSection;
+                if (type == Cs.DefaultSwitchLabel.class) return Factory::createCsDefaultSwitchLabel;
+                if (type == Cs.CasePatternSwitchLabel.class) return Factory::createCsCasePatternSwitchLabel;
+                if (type == Cs.SwitchStatement.class) return Factory::createCsSwitchStatement;
+                if (type == Cs.LockStatement.class) return Factory::createCsLockStatement;
+                if (type == Cs.FixedStatement.class) return Factory::createCsFixedStatement;
+                if (type == Cs.CheckedStatement.class) return Factory::createCsCheckedStatement;
+                if (type == Cs.UnsafeStatement.class) return Factory::createCsUnsafeStatement;
+                if (type == Cs.RangeExpression.class) return Factory::createCsRangeExpression;
+                if (type == J.AnnotatedType.class) return Factory::createJAnnotatedType;
+                if (type == J.Annotation.class) return Factory::createJAnnotation;
+                if (type == J.ArrayAccess.class) return Factory::createJArrayAccess;
+                if (type == J.ArrayType.class) return Factory::createJArrayType;
+                if (type == J.Assert.class) return Factory::createJAssert;
+                if (type == J.Assignment.class) return Factory::createJAssignment;
+                if (type == J.AssignmentOperation.class) return Factory::createJAssignmentOperation;
+                if (type == J.Binary.class) return Factory::createJBinary;
+                if (type == J.Block.class) return Factory::createJBlock;
+                if (type == J.Break.class) return Factory::createJBreak;
+                if (type == J.Case.class) return Factory::createJCase;
+                if (type == J.ClassDeclaration.class) return Factory::createJClassDeclaration;
+                if (type == J.ClassDeclaration.Kind.class) return Factory::createJClassDeclarationKind;
+                if (type == J.Continue.class) return Factory::createJContinue;
+                if (type == J.DoWhileLoop.class) return Factory::createJDoWhileLoop;
+                if (type == J.Empty.class) return Factory::createJEmpty;
+                if (type == J.EnumValue.class) return Factory::createJEnumValue;
+                if (type == J.EnumValueSet.class) return Factory::createJEnumValueSet;
+                if (type == J.FieldAccess.class) return Factory::createJFieldAccess;
+                if (type == J.ForEachLoop.class) return Factory::createJForEachLoop;
+                if (type == J.ForEachLoop.Control.class) return Factory::createJForEachLoopControl;
+                if (type == J.ForLoop.class) return Factory::createJForLoop;
+                if (type == J.ForLoop.Control.class) return Factory::createJForLoopControl;
+                if (type == J.ParenthesizedTypeTree.class) return Factory::createJParenthesizedTypeTree;
+                if (type == J.Identifier.class) return Factory::createJIdentifier;
+                if (type == J.If.class) return Factory::createJIf;
+                if (type == J.If.Else.class) return Factory::createJIfElse;
+                if (type == J.Import.class) return Factory::createJImport;
+                if (type == J.InstanceOf.class) return Factory::createJInstanceOf;
+                if (type == J.IntersectionType.class) return Factory::createJIntersectionType;
+                if (type == J.Label.class) return Factory::createJLabel;
+                if (type == J.Lambda.class) return Factory::createJLambda;
+                if (type == J.Lambda.Parameters.class) return Factory::createJLambdaParameters;
+                if (type == J.Literal.class) return Factory::createJLiteral;
+                if (type == J.MemberReference.class) return Factory::createJMemberReference;
+                if (type == J.MethodDeclaration.class) return Factory::createJMethodDeclaration;
+                if (type == J.MethodInvocation.class) return Factory::createJMethodInvocation;
+                if (type == J.Modifier.class) return Factory::createJModifier;
+                if (type == J.MultiCatch.class) return Factory::createJMultiCatch;
+                if (type == J.NewArray.class) return Factory::createJNewArray;
+                if (type == J.ArrayDimension.class) return Factory::createJArrayDimension;
+                if (type == J.NewClass.class) return Factory::createJNewClass;
+                if (type == J.NullableType.class) return Factory::createJNullableType;
+                if (type == J.Package.class) return Factory::createJPackage;
+                if (type == J.ParameterizedType.class) return Factory::createJParameterizedType;
+                if (type == J.Parentheses.class) return Factory::createJParentheses;
+                if (type == J.ControlParentheses.class) return Factory::createJControlParentheses;
+                if (type == J.Primitive.class) return Factory::createJPrimitive;
+                if (type == J.Return.class) return Factory::createJReturn;
+                if (type == J.Switch.class) return Factory::createJSwitch;
+                if (type == J.SwitchExpression.class) return Factory::createJSwitchExpression;
+                if (type == J.Synchronized.class) return Factory::createJSynchronized;
+                if (type == J.Ternary.class) return Factory::createJTernary;
+                if (type == J.Throw.class) return Factory::createJThrow;
+                if (type == J.Try.class) return Factory::createJTry;
+                if (type == J.Try.Resource.class) return Factory::createJTryResource;
+                if (type == J.Try.Catch.class) return Factory::createJTryCatch;
+                if (type == J.TypeCast.class) return Factory::createJTypeCast;
+                if (type == J.TypeParameter.class) return Factory::createJTypeParameter;
+                if (type == J.TypeParameters.class) return Factory::createJTypeParameters;
+                if (type == J.Unary.class) return Factory::createJUnary;
+                if (type == J.VariableDeclarations.class) return Factory::createJVariableDeclarations;
+                if (type == J.VariableDeclarations.NamedVariable.class) return Factory::createJVariableDeclarationsNamedVariable;
+                if (type == J.WhileLoop.class) return Factory::createJWhileLoop;
+                if (type == J.Wildcard.class) return Factory::createJWildcard;
+                if (type == J.Yield.class) return Factory::createJYield;
+                if (type == J.Unknown.class) return Factory::createJUnknown;
+                if (type == J.Unknown.Source.class) return Factory::createJUnknownSource;
+                throw new IllegalArgumentException("Unknown type: " + type);
+            }
+        };
+
         @Override
         @SuppressWarnings("unchecked")
         public <T> T create(Class<T> type, ReceiverContext ctx) {
-            if (type == Cs.CompilationUnit.class) {
-                return (T) new Cs.CompilationUnit(
+            return (T) factories.get(type).apply(ctx);
+        }
+
+        private static Cs.CompilationUnit createCsCompilationUnit(ReceiverContext ctx) {
+            return new Cs.CompilationUnit(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -1541,61 +1706,61 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.ForEachVariableLoop.class) {
-                return (T) new Cs.ForEachVariableLoop(
+        private static Cs.ForEachVariableLoop createCsForEachVariableLoop(ReceiverContext ctx) {
+            return new Cs.ForEachVariableLoop(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.ForEachVariableLoop.Control.class) {
-                return (T) new Cs.ForEachVariableLoop.Control(
+        private static Cs.ForEachVariableLoop.Control createCsForEachVariableLoopControl(ReceiverContext ctx) {
+            return new Cs.ForEachVariableLoop.Control(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.Argument.class) {
-                return (T) new Cs.Argument(
+        private static Cs.Argument createCsArgument(ReceiverContext ctx) {
+            return new Cs.Argument(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.AnnotatedStatement.class) {
-                return (T) new Cs.AnnotatedStatement(
+        private static Cs.AnnotatedStatement createCsAnnotatedStatement(ReceiverContext ctx) {
+            return new Cs.AnnotatedStatement(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.ArrayRankSpecifier.class) {
-                return (T) new Cs.ArrayRankSpecifier(
+        private static Cs.ArrayRankSpecifier createCsArrayRankSpecifier(ReceiverContext ctx) {
+            return new Cs.ArrayRankSpecifier(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.AssignmentOperation.class) {
-                return (T) new Cs.AssignmentOperation(
+        private static Cs.AssignmentOperation createCsAssignmentOperation(ReceiverContext ctx) {
+            return new Cs.AssignmentOperation(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -1603,31 +1768,31 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, leftPaddedValueReceiver(org.openrewrite.csharp.tree.Cs.AssignmentOperation.OperatorType.class)),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.AttributeList.class) {
-                return (T) new Cs.AttributeList(
+        private static Cs.AttributeList createCsAttributeList(ReceiverContext ctx) {
+            return new Cs.AttributeList(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.AwaitExpression.class) {
-                return (T) new Cs.AwaitExpression(
+        private static Cs.AwaitExpression createCsAwaitExpression(ReceiverContext ctx) {
+            return new Cs.AwaitExpression(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.Binary.class) {
-                return (T) new Cs.Binary(
+        private static Cs.Binary createCsBinary(ReceiverContext ctx) {
+            return new Cs.Binary(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -1635,11 +1800,11 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, leftPaddedValueReceiver(org.openrewrite.csharp.tree.Cs.Binary.OperatorType.class)),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.BlockScopeNamespaceDeclaration.class) {
-                return (T) new Cs.BlockScopeNamespaceDeclaration(
+        private static Cs.BlockScopeNamespaceDeclaration createCsBlockScopeNamespaceDeclaration(ReceiverContext ctx) {
+            return new Cs.BlockScopeNamespaceDeclaration(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -1648,39 +1813,39 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.CollectionExpression.class) {
-                return (T) new Cs.CollectionExpression(
+        private static Cs.CollectionExpression createCsCollectionExpression(ReceiverContext ctx) {
+            return new Cs.CollectionExpression(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.ExpressionStatement.class) {
-                return (T) new Cs.ExpressionStatement(
+        private static Cs.ExpressionStatement createCsExpressionStatement(ReceiverContext ctx) {
+            return new Cs.ExpressionStatement(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.ExternAlias.class) {
-                return (T) new Cs.ExternAlias(
+        private static Cs.ExternAlias createCsExternAlias(ReceiverContext ctx) {
+            return new Cs.ExternAlias(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveLeftPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.FileScopeNamespaceDeclaration.class) {
-                return (T) new Cs.FileScopeNamespaceDeclaration(
+        private static Cs.FileScopeNamespaceDeclaration createCsFileScopeNamespaceDeclaration(ReceiverContext ctx) {
+            return new Cs.FileScopeNamespaceDeclaration(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -1688,51 +1853,51 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.InterpolatedString.class) {
-                return (T) new Cs.InterpolatedString(
+        private static Cs.InterpolatedString createCsInterpolatedString(ReceiverContext ctx) {
+            return new Cs.InterpolatedString(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullValue(null, String.class),
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullValue(null, String.class)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.Interpolation.class) {
-                return (T) new Cs.Interpolation(
+        private static Cs.Interpolation createCsInterpolation(ReceiverContext ctx) {
+            return new Cs.Interpolation(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.NullSafeExpression.class) {
-                return (T) new Cs.NullSafeExpression(
+        private static Cs.NullSafeExpression createCsNullSafeExpression(ReceiverContext ctx) {
+            return new Cs.NullSafeExpression(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.StatementExpression.class) {
-                return (T) new Cs.StatementExpression(
+        private static Cs.StatementExpression createCsStatementExpression(ReceiverContext ctx) {
+            return new Cs.StatementExpression(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.UsingDirective.class) {
-                return (T) new Cs.UsingDirective(
+        private static Cs.UsingDirective createCsUsingDirective(ReceiverContext ctx) {
+            return new Cs.UsingDirective(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -1741,370 +1906,370 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, leftPaddedValueReceiver(java.lang.Boolean.class)),
                     ctx.receiveNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.PropertyDeclaration.class) {
-                return (T) new Cs.PropertyDeclaration(
+        private static Cs.PropertyDeclaration createCsPropertyDeclaration(ReceiverContext ctx) {
+            return new Cs.PropertyDeclaration(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
-                    ctx.receiveNonNullNodes(null, CSharpReceiver::receiveModifier),
+                    ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveLeftPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.Keyword.class) {
-                return (T) new Cs.Keyword(
+        private static Cs.Keyword createCsKeyword(ReceiverContext ctx) {
+            return new Cs.Keyword(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullValue(null, Cs.Keyword.KeywordKind.class)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.Lambda.class) {
-                return (T) new Cs.Lambda(
+        private static Cs.Lambda createCsLambda(ReceiverContext ctx) {
+            return new Cs.Lambda(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
-                    ctx.receiveNonNullNodes(null, CSharpReceiver::receiveModifier)
-                );
-            }
+                    ctx.receiveNonNullNodes(null, ctx::receiveTree)
+            );
+        }
 
-            if (type == Cs.ClassDeclaration.class) {
-                return (T) new Cs.ClassDeclaration(
-                    ctx.receiveNonNullValue(null, UUID.class),
-                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
-                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
-                    ctx.receiveNonNullNode(null, ctx::receiveTree),
-                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
-
-            if (type == Cs.MethodDeclaration.class) {
-                return (T) new Cs.MethodDeclaration(
+        private static Cs.ClassDeclaration createCsClassDeclaration(ReceiverContext ctx) {
+            return new Cs.ClassDeclaration(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.UsingStatement.class) {
-                return (T) new Cs.UsingStatement(
+        private static Cs.MethodDeclaration createCsMethodDeclaration(ReceiverContext ctx) {
+            return new Cs.MethodDeclaration(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
+            );
+        }
+
+        private static Cs.UsingStatement createCsUsingStatement(ReceiverContext ctx) {
+            return new Cs.UsingStatement(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.TypeParameterConstraintClause.class) {
-                return (T) new Cs.TypeParameterConstraintClause(
+        private static Cs.TypeParameterConstraintClause createCsTypeParameterConstraintClause(ReceiverContext ctx) {
+            return new Cs.TypeParameterConstraintClause(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.TypeConstraint.class) {
-                return (T) new Cs.TypeConstraint(
+        private static Cs.TypeConstraint createCsTypeConstraint(ReceiverContext ctx) {
+            return new Cs.TypeConstraint(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.AllowsConstraintClause.class) {
-                return (T) new Cs.AllowsConstraintClause(
+        private static Cs.AllowsConstraintClause createCsAllowsConstraintClause(ReceiverContext ctx) {
+            return new Cs.AllowsConstraintClause(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.RefStructConstraint.class) {
-                return (T) new Cs.RefStructConstraint(
+        private static Cs.RefStructConstraint createCsRefStructConstraint(ReceiverContext ctx) {
+            return new Cs.RefStructConstraint(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.ClassOrStructConstraint.class) {
-                return (T) new Cs.ClassOrStructConstraint(
+        private static Cs.ClassOrStructConstraint createCsClassOrStructConstraint(ReceiverContext ctx) {
+            return new Cs.ClassOrStructConstraint(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullValue(null, Cs.ClassOrStructConstraint.TypeKind.class)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.ConstructorConstraint.class) {
-                return (T) new Cs.ConstructorConstraint(
+        private static Cs.ConstructorConstraint createCsConstructorConstraint(ReceiverContext ctx) {
+            return new Cs.ConstructorConstraint(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.DefaultConstraint.class) {
-                return (T) new Cs.DefaultConstraint(
+        private static Cs.DefaultConstraint createCsDefaultConstraint(ReceiverContext ctx) {
+            return new Cs.DefaultConstraint(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.DeclarationExpression.class) {
-                return (T) new Cs.DeclarationExpression(
+        private static Cs.DeclarationExpression createCsDeclarationExpression(ReceiverContext ctx) {
+            return new Cs.DeclarationExpression(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.SingleVariableDesignation.class) {
-                return (T) new Cs.SingleVariableDesignation(
+        private static Cs.SingleVariableDesignation createCsSingleVariableDesignation(ReceiverContext ctx) {
+            return new Cs.SingleVariableDesignation(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.ParenthesizedVariableDesignation.class) {
-                return (T) new Cs.ParenthesizedVariableDesignation(
+        private static Cs.ParenthesizedVariableDesignation createCsParenthesizedVariableDesignation(ReceiverContext ctx) {
+            return new Cs.ParenthesizedVariableDesignation(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.DiscardVariableDesignation.class) {
-                return (T) new Cs.DiscardVariableDesignation(
+        private static Cs.DiscardVariableDesignation createCsDiscardVariableDesignation(ReceiverContext ctx) {
+            return new Cs.DiscardVariableDesignation(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.TupleExpression.class) {
-                return (T) new Cs.TupleExpression(
+        private static Cs.TupleExpression createCsTupleExpression(ReceiverContext ctx) {
+            return new Cs.TupleExpression(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.Constructor.class) {
-                return (T) new Cs.Constructor(
+        private static Cs.Constructor createCsConstructor(ReceiverContext ctx) {
+            return new Cs.Constructor(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.DestructorDeclaration.class) {
-                return (T) new Cs.DestructorDeclaration(
+        private static Cs.DestructorDeclaration createCsDestructorDeclaration(ReceiverContext ctx) {
+            return new Cs.DestructorDeclaration(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.Unary.class) {
-                return (T) new Cs.Unary(
+        private static Cs.Unary createCsUnary(ReceiverContext ctx) {
+            return new Cs.Unary(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, leftPaddedValueReceiver(org.openrewrite.csharp.tree.Cs.Unary.Type.class)),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.ConstructorInitializer.class) {
-                return (T) new Cs.ConstructorInitializer(
+        private static Cs.ConstructorInitializer createCsConstructorInitializer(ReceiverContext ctx) {
+            return new Cs.ConstructorInitializer(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.TupleType.class) {
-                return (T) new Cs.TupleType(
+        private static Cs.TupleType createCsTupleType(ReceiverContext ctx) {
+            return new Cs.TupleType(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.TupleElement.class) {
-                return (T) new Cs.TupleElement(
+        private static Cs.TupleElement createCsTupleElement(ReceiverContext ctx) {
+            return new Cs.TupleElement(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.NewClass.class) {
-                return (T) new Cs.NewClass(
+        private static Cs.NewClass createCsNewClass(ReceiverContext ctx) {
+            return new Cs.NewClass(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.InitializerExpression.class) {
-                return (T) new Cs.InitializerExpression(
+        private static Cs.InitializerExpression createCsInitializerExpression(ReceiverContext ctx) {
+            return new Cs.InitializerExpression(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.ImplicitElementAccess.class) {
-                return (T) new Cs.ImplicitElementAccess(
+        private static Cs.ImplicitElementAccess createCsImplicitElementAccess(ReceiverContext ctx) {
+            return new Cs.ImplicitElementAccess(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.Yield.class) {
-                return (T) new Cs.Yield(
+        private static Cs.Yield createCsYield(ReceiverContext ctx) {
+            return new Cs.Yield(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.DefaultExpression.class) {
-                return (T) new Cs.DefaultExpression(
+        private static Cs.DefaultExpression createCsDefaultExpression(ReceiverContext ctx) {
+            return new Cs.DefaultExpression(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.IsPattern.class) {
-                return (T) new Cs.IsPattern(
+        private static Cs.IsPattern createCsIsPattern(ReceiverContext ctx) {
+            return new Cs.IsPattern(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveLeftPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.UnaryPattern.class) {
-                return (T) new Cs.UnaryPattern(
+        private static Cs.UnaryPattern createCsUnaryPattern(ReceiverContext ctx) {
+            return new Cs.UnaryPattern(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.TypePattern.class) {
-                return (T) new Cs.TypePattern(
+        private static Cs.TypePattern createCsTypePattern(ReceiverContext ctx) {
+            return new Cs.TypePattern(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.BinaryPattern.class) {
-                return (T) new Cs.BinaryPattern(
+        private static Cs.BinaryPattern createCsBinaryPattern(ReceiverContext ctx) {
+            return new Cs.BinaryPattern(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, leftPaddedValueReceiver(org.openrewrite.csharp.tree.Cs.BinaryPattern.OperatorType.class)),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.ConstantPattern.class) {
-                return (T) new Cs.ConstantPattern(
+        private static Cs.ConstantPattern createCsConstantPattern(ReceiverContext ctx) {
+            return new Cs.ConstantPattern(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.DiscardPattern.class) {
-                return (T) new Cs.DiscardPattern(
+        private static Cs.DiscardPattern createCsDiscardPattern(ReceiverContext ctx) {
+            return new Cs.DiscardPattern(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.ListPattern.class) {
-                return (T) new Cs.ListPattern(
+        private static Cs.ListPattern createCsListPattern(ReceiverContext ctx) {
+            return new Cs.ListPattern(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer),
                     ctx.receiveNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.ParenthesizedPattern.class) {
-                return (T) new Cs.ParenthesizedPattern(
+        private static Cs.ParenthesizedPattern createCsParenthesizedPattern(ReceiverContext ctx) {
+            return new Cs.ParenthesizedPattern(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.RecursivePattern.class) {
-                return (T) new Cs.RecursivePattern(
+        private static Cs.RecursivePattern createCsRecursivePattern(ReceiverContext ctx) {
+            return new Cs.RecursivePattern(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -2112,206 +2277,206 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.VarPattern.class) {
-                return (T) new Cs.VarPattern(
+        private static Cs.VarPattern createCsVarPattern(ReceiverContext ctx) {
+            return new Cs.VarPattern(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.PositionalPatternClause.class) {
-                return (T) new Cs.PositionalPatternClause(
+        private static Cs.PositionalPatternClause createCsPositionalPatternClause(ReceiverContext ctx) {
+            return new Cs.PositionalPatternClause(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.RelationalPattern.class) {
-                return (T) new Cs.RelationalPattern(
+        private static Cs.RelationalPattern createCsRelationalPattern(ReceiverContext ctx) {
+            return new Cs.RelationalPattern(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, leftPaddedValueReceiver(org.openrewrite.csharp.tree.Cs.RelationalPattern.OperatorType.class)),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.SlicePattern.class) {
-                return (T) new Cs.SlicePattern(
+        private static Cs.SlicePattern createCsSlicePattern(ReceiverContext ctx) {
+            return new Cs.SlicePattern(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.PropertyPatternClause.class) {
-                return (T) new Cs.PropertyPatternClause(
+        private static Cs.PropertyPatternClause createCsPropertyPatternClause(ReceiverContext ctx) {
+            return new Cs.PropertyPatternClause(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.Subpattern.class) {
-                return (T) new Cs.Subpattern(
+        private static Cs.Subpattern createCsSubpattern(ReceiverContext ctx) {
+            return new Cs.Subpattern(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveLeftPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.SwitchExpression.class) {
-                return (T) new Cs.SwitchExpression(
+        private static Cs.SwitchExpression createCsSwitchExpression(ReceiverContext ctx) {
+            return new Cs.SwitchExpression(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.SwitchExpressionArm.class) {
-                return (T) new Cs.SwitchExpressionArm(
+        private static Cs.SwitchExpressionArm createCsSwitchExpressionArm(ReceiverContext ctx) {
+            return new Cs.SwitchExpressionArm(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveLeftPaddedTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveLeftPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.SwitchSection.class) {
-                return (T) new Cs.SwitchSection(
+        private static Cs.SwitchSection createCsSwitchSection(ReceiverContext ctx) {
+            return new Cs.SwitchSection(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.DefaultSwitchLabel.class) {
-                return (T) new Cs.DefaultSwitchLabel(
+        private static Cs.DefaultSwitchLabel createCsDefaultSwitchLabel(ReceiverContext ctx) {
+            return new Cs.DefaultSwitchLabel(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.CasePatternSwitchLabel.class) {
-                return (T) new Cs.CasePatternSwitchLabel(
+        private static Cs.CasePatternSwitchLabel createCsCasePatternSwitchLabel(ReceiverContext ctx) {
+            return new Cs.CasePatternSwitchLabel(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveLeftPaddedTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.SwitchStatement.class) {
-                return (T) new Cs.SwitchStatement(
+        private static Cs.SwitchStatement createCsSwitchStatement(ReceiverContext ctx) {
+            return new Cs.SwitchStatement(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.LockStatement.class) {
-                return (T) new Cs.LockStatement(
+        private static Cs.LockStatement createCsLockStatement(ReceiverContext ctx) {
+            return new Cs.LockStatement(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.FixedStatement.class) {
-                return (T) new Cs.FixedStatement(
+        private static Cs.FixedStatement createCsFixedStatement(ReceiverContext ctx) {
+            return new Cs.FixedStatement(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.CheckedStatement.class) {
-                return (T) new Cs.CheckedStatement(
+        private static Cs.CheckedStatement createCsCheckedStatement(ReceiverContext ctx) {
+            return new Cs.CheckedStatement(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.UnsafeStatement.class) {
-                return (T) new Cs.UnsafeStatement(
+        private static Cs.UnsafeStatement createCsUnsafeStatement(ReceiverContext ctx) {
+            return new Cs.UnsafeStatement(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == Cs.RangeExpression.class) {
-                return (T) new Cs.RangeExpression(
+        private static Cs.RangeExpression createCsRangeExpression(ReceiverContext ctx) {
+            return new Cs.RangeExpression(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.AnnotatedType.class) {
-                return (T) new J.AnnotatedType(
+        private static J.AnnotatedType createJAnnotatedType(ReceiverContext ctx) {
+            return new J.AnnotatedType(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Annotation.class) {
-                return (T) new J.Annotation(
+        private static J.Annotation createJAnnotation(ReceiverContext ctx) {
+            return new J.Annotation(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
+            );
+        }
 
-            if (type == J.ArrayAccess.class) {
-                return (T) new J.ArrayAccess(
+        private static J.ArrayAccess createJArrayAccess(ReceiverContext ctx) {
+            return new J.ArrayAccess(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.ArrayType.class) {
-                return (T) new J.ArrayType(
+        private static J.ArrayType createJArrayType(ReceiverContext ctx) {
+            return new J.ArrayType(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -2319,32 +2484,32 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNodes(null, ctx::receiveTree),
                     ctx.receiveNode(null, leftPaddedNodeReceiver(org.openrewrite.java.tree.Space.class)),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.Assert.class) {
-                return (T) new J.Assert(
+        private static J.Assert createJAssert(ReceiverContext ctx) {
+            return new J.Assert(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveLeftPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Assignment.class) {
-                return (T) new J.Assignment(
+        private static J.Assignment createJAssignment(ReceiverContext ctx) {
+            return new J.Assignment(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveLeftPaddedTree),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.AssignmentOperation.class) {
-                return (T) new J.AssignmentOperation(
+        private static J.AssignmentOperation createJAssignmentOperation(ReceiverContext ctx) {
+            return new J.AssignmentOperation(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -2352,11 +2517,11 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, leftPaddedValueReceiver(org.openrewrite.java.tree.J.AssignmentOperation.Type.class)),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.Binary.class) {
-                return (T) new J.Binary(
+        private static J.Binary createJBinary(ReceiverContext ctx) {
+            return new J.Binary(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -2364,31 +2529,31 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, leftPaddedValueReceiver(org.openrewrite.java.tree.J.Binary.Type.class)),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.Block.class) {
-                return (T) new J.Block(
+        private static J.Block createJBlock(ReceiverContext ctx) {
+            return new J.Block(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, rightPaddedValueReceiver(java.lang.Boolean.class)),
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace)
-                );
-            }
+            );
+        }
 
-            if (type == J.Break.class) {
-                return (T) new J.Break(
+        private static J.Break createJBreak(ReceiverContext ctx) {
+            return new J.Break(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Case.class) {
-                return (T) new J.Case(
+        private static J.Case createJCase(ReceiverContext ctx) {
+            return new J.Case(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -2396,16 +2561,16 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer),
                     ctx.receiveNode(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.ClassDeclaration.class) {
-                return (T) new J.ClassDeclaration(
+        private static J.ClassDeclaration createJClassDeclaration(ReceiverContext ctx) {
+            return new J.ClassDeclaration(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
-                    ctx.receiveNonNullNodes(null, CSharpReceiver::receiveModifier),
+                    ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveClassDeclarationKind),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveContainer),
@@ -2415,131 +2580,131 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNode(null, CSharpReceiver::receiveContainer),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveValue(null, JavaType.FullyQualified.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.ClassDeclaration.Kind.class) {
-                return (T) new J.ClassDeclaration.Kind(
+        private static J.ClassDeclaration.Kind createJClassDeclarationKind(ReceiverContext ctx) {
+            return new J.ClassDeclaration.Kind(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNonNullValue(null, J.ClassDeclaration.Kind.Type.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.Continue.class) {
-                return (T) new J.Continue(
+        private static J.Continue createJContinue(ReceiverContext ctx) {
+            return new J.Continue(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.DoWhileLoop.class) {
-                return (T) new J.DoWhileLoop(
+        private static J.DoWhileLoop createJDoWhileLoop(ReceiverContext ctx) {
+            return new J.DoWhileLoop(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveLeftPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Empty.class) {
-                return (T) new J.Empty(
+        private static J.Empty createJEmpty(ReceiverContext ctx) {
+            return new J.Empty(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers)
-                );
-            }
+            );
+        }
 
-            if (type == J.EnumValue.class) {
-                return (T) new J.EnumValue(
+        private static J.EnumValue createJEnumValue(ReceiverContext ctx) {
+            return new J.EnumValue(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.EnumValueSet.class) {
-                return (T) new J.EnumValueSet(
+        private static J.EnumValueSet createJEnumValueSet(ReceiverContext ctx) {
+            return new J.EnumValueSet(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullValue(null, boolean.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.FieldAccess.class) {
-                return (T) new J.FieldAccess(
+        private static J.FieldAccess createJFieldAccess(ReceiverContext ctx) {
+            return new J.FieldAccess(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveLeftPaddedTree),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.ForEachLoop.class) {
-                return (T) new J.ForEachLoop(
+        private static J.ForEachLoop createJForEachLoop(ReceiverContext ctx) {
+            return new J.ForEachLoop(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.ForEachLoop.Control.class) {
-                return (T) new J.ForEachLoop.Control(
+        private static J.ForEachLoop.Control createJForEachLoopControl(ReceiverContext ctx) {
+            return new J.ForEachLoop.Control(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.ForLoop.class) {
-                return (T) new J.ForLoop(
+        private static J.ForLoop createJForLoop(ReceiverContext ctx) {
+            return new J.ForLoop(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.ForLoop.Control.class) {
-                return (T) new J.ForLoop.Control(
+        private static J.ForLoop.Control createJForLoopControl(ReceiverContext ctx) {
+            return new J.ForLoop.Control(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.ParenthesizedTypeTree.class) {
-                return (T) new J.ParenthesizedTypeTree(
+        private static J.ParenthesizedTypeTree createJParenthesizedTypeTree(ReceiverContext ctx) {
+            return new J.ParenthesizedTypeTree(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Identifier.class) {
-                return (T) new J.Identifier(
+        private static J.Identifier createJIdentifier(ReceiverContext ctx) {
+            return new J.Identifier(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -2547,42 +2712,42 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullValue(null, String.class),
                     ctx.receiveValue(null, JavaType.class),
                     ctx.receiveValue(null, JavaType.Variable.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.If.class) {
-                return (T) new J.If(
+        private static J.If createJIf(ReceiverContext ctx) {
+            return new J.If(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.If.Else.class) {
-                return (T) new J.If.Else(
+        private static J.If.Else createJIfElse(ReceiverContext ctx) {
+            return new J.If.Else(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Import.class) {
-                return (T) new J.Import(
+        private static J.Import createJImport(ReceiverContext ctx) {
+            return new J.Import(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, leftPaddedValueReceiver(java.lang.Boolean.class)),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveLeftPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.InstanceOf.class) {
-                return (T) new J.InstanceOf(
+        private static J.InstanceOf createJInstanceOf(ReceiverContext ctx) {
+            return new J.InstanceOf(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -2590,30 +2755,30 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, ctx::receiveTree),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.IntersectionType.class) {
-                return (T) new J.IntersectionType(
+        private static J.IntersectionType createJIntersectionType(ReceiverContext ctx) {
+            return new J.IntersectionType(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
+            );
+        }
 
-            if (type == J.Label.class) {
-                return (T) new J.Label(
+        private static J.Label createJLabel(ReceiverContext ctx) {
+            return new J.Label(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Lambda.class) {
-                return (T) new J.Lambda(
+        private static J.Lambda createJLambda(ReceiverContext ctx) {
+            return new J.Lambda(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -2621,21 +2786,21 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.Lambda.Parameters.class) {
-                return (T) new J.Lambda.Parameters(
+        private static J.Lambda.Parameters createJLambdaParameters(ReceiverContext ctx) {
+            return new J.Lambda.Parameters(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullValue(null, boolean.class),
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Literal.class) {
-                return (T) new J.Literal(
+        private static J.Literal createJLiteral(ReceiverContext ctx) {
+            return new J.Literal(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -2643,11 +2808,11 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveValue(null, String.class),
                     ctx.receiveValues(null, J.Literal.UnicodeEscape.class),
                     ctx.receiveValue(null, JavaType.Primitive.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.MemberReference.class) {
-                return (T) new J.MemberReference(
+        private static J.MemberReference createJMemberReference(ReceiverContext ctx) {
+            return new J.MemberReference(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -2657,16 +2822,16 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveValue(null, JavaType.class),
                     ctx.receiveValue(null, JavaType.Method.class),
                     ctx.receiveValue(null, JavaType.Variable.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.MethodDeclaration.class) {
-                return (T) new J.MethodDeclaration(
+        private static J.MethodDeclaration createJMethodDeclaration(ReceiverContext ctx) {
+            return new J.MethodDeclaration(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
-                    ctx.receiveNonNullNodes(null, CSharpReceiver::receiveModifier),
+                    ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveMethodTypeParameters),
                     ctx.receiveNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveMethodIdentifierWithAnnotations),
@@ -2675,11 +2840,11 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveLeftPaddedTree),
                     ctx.receiveValue(null, JavaType.Method.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.MethodInvocation.class) {
-                return (T) new J.MethodInvocation(
+        private static J.MethodInvocation createJMethodInvocation(ReceiverContext ctx) {
+            return new J.MethodInvocation(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -2688,31 +2853,31 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer),
                     ctx.receiveValue(null, JavaType.Method.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.Modifier.class) {
-                return (T) new J.Modifier(
+        private static J.Modifier createJModifier(ReceiverContext ctx) {
+            return new J.Modifier(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveValue(null, String.class),
                     ctx.receiveNonNullValue(null, J.Modifier.Type.class),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.MultiCatch.class) {
-                return (T) new J.MultiCatch(
+        private static J.MultiCatch createJMultiCatch(ReceiverContext ctx) {
+            return new J.MultiCatch(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.NewArray.class) {
-                return (T) new J.NewArray(
+        private static J.NewArray createJNewArray(ReceiverContext ctx) {
+            return new J.NewArray(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -2720,20 +2885,20 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveContainer),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.ArrayDimension.class) {
-                return (T) new J.ArrayDimension(
+        private static J.ArrayDimension createJArrayDimension(ReceiverContext ctx) {
+            return new J.ArrayDimension(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.NewClass.class) {
-                return (T) new J.NewClass(
+        private static J.NewClass createJNewClass(ReceiverContext ctx) {
+            return new J.NewClass(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -2743,108 +2908,108 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer),
                     ctx.receiveNode(null, ctx::receiveTree),
                     ctx.receiveValue(null, JavaType.Method.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.NullableType.class) {
-                return (T) new J.NullableType(
+        private static J.NullableType createJNullableType(ReceiverContext ctx) {
+            return new J.NullableType(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Package.class) {
-                return (T) new J.Package(
+        private static J.Package createJPackage(ReceiverContext ctx) {
+            return new J.Package(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.ParameterizedType.class) {
-                return (T) new J.ParameterizedType(
+        private static J.ParameterizedType createJParameterizedType(ReceiverContext ctx) {
+            return new J.ParameterizedType(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveContainer),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.Parentheses.class) {
-                return (T) new J.Parentheses(
+        private static J.Parentheses createJParentheses(ReceiverContext ctx) {
+            return new J.Parentheses(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.ControlParentheses.class) {
-                return (T) new J.ControlParentheses(
+        private static J.ControlParentheses createJControlParentheses(ReceiverContext ctx) {
+            return new J.ControlParentheses(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Primitive.class) {
-                return (T) new J.Primitive(
+        private static J.Primitive createJPrimitive(ReceiverContext ctx) {
+            return new J.Primitive(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveValue(null, JavaType.Primitive.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.Return.class) {
-                return (T) new J.Return(
+        private static J.Return createJReturn(ReceiverContext ctx) {
+            return new J.Return(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Switch.class) {
-                return (T) new J.Switch(
+        private static J.Switch createJSwitch(ReceiverContext ctx) {
+            return new J.Switch(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.SwitchExpression.class) {
-                return (T) new J.SwitchExpression(
+        private static J.SwitchExpression createJSwitchExpression(ReceiverContext ctx) {
+            return new J.SwitchExpression(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Synchronized.class) {
-                return (T) new J.Synchronized(
+        private static J.Synchronized createJSynchronized(ReceiverContext ctx) {
+            return new J.Synchronized(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Ternary.class) {
-                return (T) new J.Ternary(
+        private static J.Ternary createJTernary(ReceiverContext ctx) {
+            return new J.Ternary(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -2852,20 +3017,20 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveLeftPaddedTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveLeftPaddedTree),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.Throw.class) {
-                return (T) new J.Throw(
+        private static J.Throw createJThrow(ReceiverContext ctx) {
+            return new J.Throw(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Try.class) {
-                return (T) new J.Try(
+        private static J.Try createJTry(ReceiverContext ctx) {
+            return new J.Try(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -2873,88 +3038,88 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveLeftPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Try.Resource.class) {
-                return (T) new J.Try.Resource(
+        private static J.Try.Resource createJTryResource(ReceiverContext ctx) {
+            return new J.Try.Resource(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullValue(null, boolean.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.Try.Catch.class) {
-                return (T) new J.Try.Catch(
+        private static J.Try.Catch createJTryCatch(ReceiverContext ctx) {
+            return new J.Try.Catch(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.TypeCast.class) {
-                return (T) new J.TypeCast(
+        private static J.TypeCast createJTypeCast(ReceiverContext ctx) {
+            return new J.TypeCast(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.TypeParameter.class) {
-                return (T) new J.TypeParameter(
+        private static J.TypeParameter createJTypeParameter(ReceiverContext ctx) {
+            return new J.TypeParameter(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
-                    ctx.receiveNonNullNodes(null, CSharpReceiver::receiveModifier),
+                    ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveContainer)
-                );
-            }
+            );
+        }
 
-            if (type == J.TypeParameters.class) {
-                return (T) new J.TypeParameters(
+        private static J.TypeParameters createJTypeParameters(ReceiverContext ctx) {
+            return new J.TypeParameters(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Unary.class) {
-                return (T) new J.Unary(
+        private static J.Unary createJUnary(ReceiverContext ctx) {
+            return new J.Unary(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, leftPaddedValueReceiver(org.openrewrite.java.tree.J.Unary.Type.class)),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveValue(null, JavaType.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.VariableDeclarations.class) {
-                return (T) new J.VariableDeclarations(
+        private static J.VariableDeclarations createJVariableDeclarations(ReceiverContext ctx) {
+            return new J.VariableDeclarations(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
-                    ctx.receiveNonNullNodes(null, CSharpReceiver::receiveModifier),
+                    ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNodes(null, leftPaddedNodeReceiver(org.openrewrite.java.tree.Space.class)),
                     ctx.receiveNonNullNodes(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.VariableDeclarations.NamedVariable.class) {
-                return (T) new J.VariableDeclarations.NamedVariable(
+        private static J.VariableDeclarations.NamedVariable createJVariableDeclarationsNamedVariable(ReceiverContext ctx) {
+            return new J.VariableDeclarations.NamedVariable(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
@@ -2962,59 +3127,57 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNodes(null, leftPaddedNodeReceiver(org.openrewrite.java.tree.Space.class)),
                     ctx.receiveNode(null, CSharpReceiver::receiveLeftPaddedTree),
                     ctx.receiveValue(null, JavaType.Variable.class)
-                );
-            }
+            );
+        }
 
-            if (type == J.WhileLoop.class) {
-                return (T) new J.WhileLoop(
+        private static J.WhileLoop createJWhileLoop(ReceiverContext ctx) {
+            return new J.WhileLoop(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Wildcard.class) {
-                return (T) new J.Wildcard(
+        private static J.Wildcard createJWildcard(ReceiverContext ctx) {
+            return new J.Wildcard(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNode(null, leftPaddedValueReceiver(org.openrewrite.java.tree.J.Wildcard.Bound.class)),
                     ctx.receiveNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Yield.class) {
-                return (T) new J.Yield(
+        private static J.Yield createJYield(ReceiverContext ctx) {
+            return new J.Yield(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullValue(null, boolean.class),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Unknown.class) {
-                return (T) new J.Unknown(
+        private static J.Unknown createJUnknown(ReceiverContext ctx) {
+            return new J.Unknown(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
-                );
-            }
+            );
+        }
 
-            if (type == J.Unknown.Source.class) {
-                return (T) new J.Unknown.Source(
+        private static J.Unknown.Source createJUnknownSource(ReceiverContext ctx) {
+            return new J.Unknown.Source(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullValue(null, String.class)
-                );
-            }
-
-            throw new IllegalArgumentException("Unknown type: " + type);
+            );
         }
+
     }
 
     private static J.ClassDeclaration.Kind receiveClassDeclarationKind(J.ClassDeclaration.@Nullable Kind kind, @Nullable Class<?> type, ReceiverContext ctx) {
@@ -3066,27 +3229,6 @@ public class CSharpReceiver implements Receiver<Cs> {
             );
         }
         return identifierWithAnnotations;
-    }
-
-    private static J.Modifier receiveModifier(J.@Nullable Modifier modifier, @Nullable Class<?> type, ReceiverContext ctx) {
-        if (modifier != null) {
-            modifier = modifier.withId(ctx.receiveNonNullValue(modifier.getId(), UUID.class));
-            modifier = modifier.withPrefix(ctx.receiveNonNullNode(modifier.getPrefix(), CSharpReceiver::receiveSpace));
-            modifier = modifier.withMarkers(ctx.receiveNonNullNode(modifier.getMarkers(), ctx::receiveMarkers));
-            modifier = modifier.withKeyword(ctx.receiveValue(modifier.getKeyword(), String.class));
-            modifier = modifier.withType(ctx.receiveNonNullValue(modifier.getType(), J.Modifier.Type.class));
-            modifier = modifier.withAnnotations(ctx.receiveNonNullNodes(modifier.getAnnotations(), ctx::receiveTree));
-        } else {
-            modifier = new J.Modifier(
-                ctx.receiveNonNullValue(null, UUID.class),
-                ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
-                ctx.receiveNonNullNode(null, ctx::receiveMarkers),
-                ctx.receiveValue(null, String.class),
-                ctx.receiveNonNullValue(null, J.Modifier.Type.class),
-                ctx.receiveNonNullNodes(null, ctx::receiveTree)
-            );
-        }
-        return modifier;
     }
 
     private static J.TypeParameters receiveMethodTypeParameters(J.@Nullable TypeParameters typeParameters, @Nullable Class<?> type, ReceiverContext ctx) {

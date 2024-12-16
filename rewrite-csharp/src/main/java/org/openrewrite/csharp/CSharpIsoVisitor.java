@@ -566,6 +566,11 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     }
 
     @Override
+    public J.Modifier visitModifier(J.Modifier modifier, P p) {
+        return (J.Modifier) super.visitModifier(modifier, p);
+    }
+
+    @Override
     public J.MultiCatch visitMultiCatch(J.MultiCatch multiCatch, P p) {
         return (J.MultiCatch) super.visitMultiCatch(multiCatch, p);
     }
