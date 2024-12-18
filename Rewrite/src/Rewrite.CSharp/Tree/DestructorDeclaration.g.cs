@@ -68,9 +68,8 @@ public partial interface Cs : J
     Guid id,
     Space prefix,
     Markers markers,
-    ConstructorInitializer? initializer,
-    J.MethodDeclaration constructorCore
-    ) : Cs, Statement, MutableTree<DestructorDeclaration>
+    J.MethodDeclaration methodCore
+    ) : Cs, Statement, J<DestructorDeclaration>, MutableTree<DestructorDeclaration>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
@@ -81,31 +80,25 @@ public partial interface Cs : J
 
         public DestructorDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new DestructorDeclaration(newId, prefix, markers, initializer, constructorCore);
+            return newId == id ? this : new DestructorDeclaration(newId, prefix, markers, methodCore);
         }
         public Space Prefix => prefix;
 
         public DestructorDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new DestructorDeclaration(id, newPrefix, markers, initializer, constructorCore);
+            return newPrefix == prefix ? this : new DestructorDeclaration(id, newPrefix, markers, methodCore);
         }
         public Markers Markers => markers;
 
         public DestructorDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new DestructorDeclaration(id, prefix, newMarkers, initializer, constructorCore);
+            return ReferenceEquals(newMarkers, markers) ? this : new DestructorDeclaration(id, prefix, newMarkers, methodCore);
         }
-        public Cs.ConstructorInitializer? Initializer => initializer;
+        public J.MethodDeclaration MethodCore => methodCore;
 
-        public DestructorDeclaration WithInitializer(Cs.ConstructorInitializer? newInitializer)
+        public DestructorDeclaration WithMethodCore(J.MethodDeclaration newMethodCore)
         {
-            return ReferenceEquals(newInitializer, initializer) ? this : new DestructorDeclaration(id, prefix, markers, newInitializer, constructorCore);
-        }
-        public J.MethodDeclaration ConstructorCore => constructorCore;
-
-        public DestructorDeclaration WithConstructorCore(J.MethodDeclaration newConstructorCore)
-        {
-            return ReferenceEquals(newConstructorCore, constructorCore) ? this : new DestructorDeclaration(id, prefix, markers, initializer, newConstructorCore);
+            return ReferenceEquals(newMethodCore, methodCore) ? this : new DestructorDeclaration(id, prefix, markers, newMethodCore);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

@@ -47,7 +47,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Test.CSharp", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Test.Engine.Remote", "src\Rewrite.Test.Engine.Remote\Rewrite.Test.Engine.Remote.csproj", "{C04C7CA4-69C3-444F-A654-6C722A0FC3BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Server", "..\..\..\moderneinc\rewrite-remote\Rewrite.Remote\src\Rewrite.Server\Rewrite.Server.csproj", "{E0721BA1-2772-4486-BDF3-FC9301723BB9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Remote.Server", "..\..\..\moderneinc\rewrite-remote\Rewrite.Remote\src\Rewrite.Remote.Server\Rewrite.Remote.Server.csproj", "{E0721BA1-2772-4486-BDF3-FC9301723BB9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Analyzers", "src\Rewrite.Analyzers\Rewrite.Analyzers.csproj", "{9818146E-C516-4D3C-80CE-A84741E7772B}"
 EndProject

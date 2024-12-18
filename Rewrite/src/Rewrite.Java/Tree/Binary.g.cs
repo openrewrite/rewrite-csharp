@@ -34,7 +34,7 @@ public partial interface J : Rewrite.Core.Tree
     JLeftPadded<Binary.Types> @operator,
     Expression right,
     JavaType? type
-    ) : J, Expression, TypedTree, Expression<Binary>, TypedTree<Binary>, MutableTree<Binary>
+    ) : J, Expression, TypedTree, Expression<Binary>, TypedTree<Binary>, J<Binary>, MutableTree<Binary>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

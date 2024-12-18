@@ -103,7 +103,10 @@ public class RemotingFixture : IDisposable
         catch (SocketException)
         {
             // start new server process
+#if EMBEDDED_SERVER
             StartJavaRemotingServer();
+#endif
+
             for (var i = 0; i < 5; i++)
             {
                 try

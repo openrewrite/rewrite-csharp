@@ -18,11 +18,11 @@ public class FindClass([Option(displayName: "Description", description: "A speci
         return new FindClassVisitor(description);
     }
 
-    private class FindClassVisitor(string? description = null) : JavaVisitor<ExecutionContext>
+    private class FindClassVisitor(string? description = null) : CSharpVisitor<ExecutionContext>
     {
-        public override J VisitClassDeclaration(J.ClassDeclaration classDeclaration, ExecutionContext ctx)
+        public override Cs VisitClassDeclaration(Cs.ClassDeclaration classDeclaration, ExecutionContext ctx)
         {
-            var tree = (MutableTree<J.ClassDeclaration>)base.VisitClassDeclaration(classDeclaration, ctx)!;
+            var tree = (MutableTree<Cs.ClassDeclaration>)base.VisitClassDeclaration(classDeclaration, ctx)!;
             return tree.WithMarkers(tree.Markers.AddIfAbsent<SearchResult>(new SearchResult(RandomId(), description)));
         }
     }

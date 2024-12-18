@@ -36,7 +36,7 @@ public partial interface J : Rewrite.Core.Tree
     Space? varargs,
     IList<JLeftPadded<Space>> dimensionsBeforeName,
     IList<JRightPadded<VariableDeclarations.NamedVariable>> variables
-    ) : J, Statement, TypedTree, TypedTree<VariableDeclarations>, MutableTree<VariableDeclarations>
+    ) : J, Statement, TypedTree, TypedTree<VariableDeclarations>, J<VariableDeclarations>, MutableTree<VariableDeclarations>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -134,7 +134,7 @@ public partial interface J : Rewrite.Core.Tree
     IList<JLeftPadded<Space>> dimensionsAfterName,
     JLeftPadded<Expression>? initializer,
     JavaType.Variable? variableType
-        ) : J, NameTree, TypedTree<NamedVariable>, TypeTree<NamedVariable>, MutableTree<NamedVariable>
+        ) : J, NameTree, TypedTree<NamedVariable>, J<NamedVariable>, TypeTree<NamedVariable>, MutableTree<NamedVariable>
         {
             [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

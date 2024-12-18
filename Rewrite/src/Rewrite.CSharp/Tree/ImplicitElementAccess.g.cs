@@ -52,7 +52,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     JContainer<Argument> argumentList
-    ) : Cs, Expression, Expression<ImplicitElementAccess>, MutableTree<ImplicitElementAccess>
+    ) : Cs, Expression, Expression<ImplicitElementAccess>, J<ImplicitElementAccess>, MutableTree<ImplicitElementAccess>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

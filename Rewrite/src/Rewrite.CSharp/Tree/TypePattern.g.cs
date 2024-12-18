@@ -56,7 +56,7 @@ public partial interface Cs : J
     Markers markers,
     TypeTree typeIdentifier,
     VariableDesignation? designation
-    ) : Cs.Pattern, Expression<TypePattern>, MutableTree<TypePattern>
+    ) : Cs.Pattern, Expression<TypePattern>, J<TypePattern>, MutableTree<TypePattern>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {

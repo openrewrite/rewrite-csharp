@@ -44,7 +44,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     JContainer<TypeTree>? typeOperator
-    ) : Cs, Expression, TypedTree, Expression<DefaultExpression>, TypedTree<DefaultExpression>, MutableTree<DefaultExpression>
+    ) : Cs, Expression, TypedTree, Expression<DefaultExpression>, TypedTree<DefaultExpression>, J<DefaultExpression>, MutableTree<DefaultExpression>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

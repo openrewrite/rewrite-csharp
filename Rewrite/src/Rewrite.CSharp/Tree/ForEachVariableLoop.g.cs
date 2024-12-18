@@ -33,7 +33,7 @@ public partial interface Cs : J
     Markers markers,
     ForEachVariableLoop.Control controlElement,
     JRightPadded<Statement> body
-    ) : Cs, Loop, MutableTree<ForEachVariableLoop>
+    ) : Cs, Loop, J<ForEachVariableLoop>, MutableTree<ForEachVariableLoop>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -105,7 +105,7 @@ public partial interface Cs : J
     Markers markers,
     JRightPadded<Expression> variable,
     JRightPadded<Expression> iterable
-        ) : Cs, MutableTree<Control>
+        ) : Cs, J<Control>, MutableTree<Control>
         {
             [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

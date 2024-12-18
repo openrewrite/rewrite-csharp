@@ -58,4 +58,40 @@ public class UnaryTests(ITestOutputHelper output) : RewriteTest(output)
             )
         );
     }
+
+    [Fact]
+    void IndexExpression()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                a[^1];
+                """
+            )
+        );
+    }
+
+    [Fact]
+    void AddressOfExpression()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                var a = &a;
+                """
+            )
+        );
+    }
+
+    [Fact]
+    void PointerType()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                int* a;
+                """
+            )
+        );
+    }
 }

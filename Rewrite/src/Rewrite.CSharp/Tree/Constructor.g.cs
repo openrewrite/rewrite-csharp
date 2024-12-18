@@ -49,7 +49,7 @@ public partial interface Cs : J
     Markers markers,
     ConstructorInitializer? initializer,
     J.MethodDeclaration constructorCore
-    ) : Cs, Statement, MutableTree<Constructor>
+    ) : Cs, Statement, J<Constructor>, MutableTree<Constructor>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {

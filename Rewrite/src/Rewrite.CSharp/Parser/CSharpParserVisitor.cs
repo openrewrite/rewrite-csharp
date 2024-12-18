@@ -1,6 +1,10 @@
 using System.Collections;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography;
+using System.Text;
+using System.Xml.Serialization;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -130,67 +134,19 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         return VisitTypeDeclaration(node, type: J.ClassDeclaration.Kind.Types.Value);
     }
 
+
     public override J? VisitEnumDeclaration(EnumDeclarationSyntax node)
     {
-        var attributeLists = MapAttributes(m: node.AttributeLists);
-        var javaType = MapType( node);
-        var hasBaseClass = node.BaseList is { Types.Count: > 0 };
-
-        var isEmptyBody = node.OpenBraceToken.IsKind(SyntaxKind.None);
-
-        var classDeclaration = new J.ClassDeclaration(
+        var classDeclaration = new Cs.EnumDeclaration(
             id: Core.Tree.RandomId(),
             prefix: Format(Leading(node)),
             markers: Markers.EMPTY,
-            leadingAnnotations: [],
+            attributeLists: MapAttributes(node.AttributeLists),
             modifiers: MapModifiers(stl: node.Modifiers),
-            declarationKind: new J.ClassDeclaration.Kind(
-                id: Core.Tree.RandomId(),
-                prefix: Format(Leading(node.EnumKeyword)),
-                markers: Markers.EMPTY,
-                annotations: [],
-                kindType: J.ClassDeclaration.Kind.Types.Enum
-            ),
-            name: new J.Identifier(
-                id: Core.Tree.RandomId(),
-                prefix: Format(Leading(node.Identifier)),
-                markers: Markers.EMPTY,
-                annotations: [],
-                simpleName: node.Identifier.Text,
-                type: javaType,
-                fieldType: null
-            ),
-            typeParameters: null,
-            primaryConstructor: null,
-            extends: hasBaseClass
-                ? new JLeftPadded<TypeTree>(before: Format(Leading(node.BaseList!)),
-                    element: (Visit(node.BaseList!.Types[index: 0]) as TypeTree)!, markers: Markers.EMPTY)
-                : null,
-            implements: null,
-            permits: null,
-            body: new J.Block(
-                id: Core.Tree.RandomId(),
-                prefix: Format(Leading(isEmptyBody ? node.SemicolonToken : node.OpenBraceToken)),
-                markers: isEmptyBody ? Markers.Create(markers: new OmitBraces()) : Markers.EMPTY,
-                @static: JRightPadded.Create(element: false),
-                statements: [JRightPadded.Create<Statement>(element: MapEnumMembers(members: node.Members))],
-                end: Format(Leading(node.CloseBraceToken))
-            ),
-            type: javaType as JavaType.FullyQualified
+            name: JLeftPadded.Create(MapIdentifier(node.Identifier), Format(Leading(node.EnumKeyword))),
+            baseType: ToLeftPadded<TypeTree>(node.BaseList?.Types[0]),
+            members: ToJContainer<EnumMemberDeclarationSyntax, Cs.EnumMemberDeclaration>(node.Members, node.OpenBraceToken)
         );
-
-        if(attributeLists != null)
-        {
-            return new Cs.AnnotatedStatement(
-                id: Core.Tree.RandomId(),
-                prefix: Format(Leading(node)),
-                markers: Markers.EMPTY,
-                attributeLists: attributeLists,
-                statement: classDeclaration);
-        }
-
-
-
         return classDeclaration;
     }
 
@@ -237,42 +193,31 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
         var isEmptyBody = node.OpenBraceToken.IsKind(SyntaxKind.None);
 
-        var classDeclaration = new J.ClassDeclaration(
+        var classDeclaration = new Cs.ClassDeclaration(
             id: Core.Tree.RandomId(),
             prefix: Format(Leading(node)),
             markers: Markers.EMPTY,
-            leadingAnnotations: [],
+            attributeList: attributeLists,
             modifiers: MapModifiers(stl: node.Modifiers),
-            declarationKind: new J.ClassDeclaration.Kind(
+            kind: new J.ClassDeclaration.Kind(
                 id: Core.Tree.RandomId(),
                 prefix: Format(Leading(node.Keyword)),
                 markers: Markers.EMPTY,
                 annotations: [],
                 kindType: type
             ),
-            name: new J.Identifier(
-                id: Core.Tree.RandomId(),
-                prefix: Format(Leading(node.Identifier)),
-                markers: Markers.EMPTY,
-                annotations: [],
-                simpleName: node.Identifier.Text,
-                type: javaType,
-                fieldType: null
-            ),
-            typeParameters: MapTypeParameters(tpls: node.TypeParameterList),
+            name: MapIdentifier(node.Identifier),
+            typeParameters: node.TypeParameterList != null ? ToJContainer<TypeParameterSyntax, Cs.TypeParameter>(node.TypeParameterList.Parameters, node.TypeParameterList.LessThanToken) : null,
             primaryConstructor: MapParameters<Statement>(pls: node.ParameterList),
-            extends: hasBaseClass
-                ? new JLeftPadded<TypeTree>(before: Format(Leading(node.BaseList!)),
-                    element: (Visit(node.BaseList!.Types[index: 0]) as TypeTree)!, markers: Markers.EMPTY)
+            extendings: hasBaseClass
+                ? new JLeftPadded<TypeTree>(before: Format(Leading(node.BaseList!)), element: (Visit(node.BaseList!.Types[index: 0]) as TypeTree)!, markers: Markers.EMPTY)
                 : null,
-            implements: hasBaseInterfaces
+            implementings: hasBaseInterfaces
                 ? new JContainer<TypeTree>(before: hasBaseClass ? Space.EMPTY : Format(Leading(node.BaseList!)),
                     elements: node.BaseList!.Types.Skip(count: hasBaseClass ? 1 : 0)
-                        .Select(selector: bts =>
-                            new JRightPadded<TypeTree>(element: (Visit(bts) as TypeTree)!, after: Format(Trailing(bts)), markers: Markers.EMPTY))
+                        .Select(selector: bts => new JRightPadded<TypeTree>(element: (Visit(bts) as TypeTree)!, after: Format(Trailing(bts)), markers: Markers.EMPTY))
                         .ToList(), markers: Markers.EMPTY)
                 : null,
-            permits: null,
             body: new J.Block(
                 id: Core.Tree.RandomId(),
                 prefix: Format(Leading(isEmptyBody ? node.SemicolonToken : node.OpenBraceToken)),
@@ -281,30 +226,13 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                 statements: node.Members.Select(selector: MapMemberDeclaration).ToList(),
                 end: Format(Leading(node.CloseBraceToken))
             ),
-            type: javaType as JavaType.FullyQualified
+            type: javaType as JavaType.FullyQualified,
+            typeParameterConstraintClauses: MapTypeParameterConstraintClauses(node.ConstraintClauses)
         );
 
-        var constraints = MapTypeParameterConstraintClauses(list: node.ConstraintClauses);
-        Statement returnValue = new Cs.ClassDeclaration(
-                id: Core.Tree.RandomId(),
-                prefix: Format(Leading(node)),
-                markers: Markers.EMPTY,
-                classDeclarationCore: classDeclaration,
-                typeParameterConstraintClauses: constraints);
-
-        if(attributeLists != null)
-        {
-            returnValue = new Cs.AnnotatedStatement(
-                id: Core.Tree.RandomId(),
-                prefix: Format(Leading(node)),
-                markers: Markers.EMPTY,
-                attributeLists: attributeLists,
-                statement: classDeclaration);
-        }
 
 
-
-        return returnValue;
+        return classDeclaration;
     }
 
     /// <summary>
@@ -400,7 +328,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                 )
             ]
         );
-        return attributeLists != null
+        return attributeLists.Count > 0
             ? new Cs.AnnotatedStatement(
                 id: Core.Tree.RandomId(),
                 prefix: Format(Leading(p)),
@@ -437,24 +365,15 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J.TypeParameter VisitTypeParameter(TypeParameterSyntax p)
+    public override Cs.TypeParameter VisitTypeParameter(TypeParameterSyntax node)
     {
-        return new J.TypeParameter(
+        return new Cs.TypeParameter(
             id: Core.Tree.RandomId(),
-            prefix: Format(Leading(p)),
+            prefix: Format(Leading(node)),
             markers: Markers.EMPTY,
-            annotations: [],
-            modifiers: [],
-            name: new J.Identifier(
-                id: Core.Tree.RandomId(),
-                prefix: Format(Leading(p.Identifier)),
-                markers: Markers.EMPTY,
-                annotations: [],
-                simpleName: p.Identifier.Text,
-                type: MapType( p),
-                fieldType: null
-            ),
-            bounds: null
+            attributeLists: MapAttributes(node.AttributeLists)!,
+            variance: ToLeftPadded<Cs.TypeParameter.VarianceKind>(node.VarianceKeyword),
+            name: MapIdentifier(node.Identifier)
         );
     }
 
@@ -492,88 +411,94 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     {
         var prefix = Format(Leading(node));
         var select = Convert<Expression>(node.Expression);
-        if (select is J.FieldAccess fa)
+        switch (select)
         {
-            var operatorToken = node.Expression switch
+            case J.FieldAccess fa:
             {
-                MemberAccessExpressionSyntax mae => mae.OperatorToken,
-                MemberBindingExpressionSyntax mbe => mbe.OperatorToken,
-                _ => throw new InvalidOperationException(message: $"Unexpected node of type {node.Expression.GetType()} encountered.")
-            };
-
-            return new J.MethodInvocation(
-                id: Core.Tree.RandomId(),
-                prefix: prefix,
-                markers: fa.Markers,
-                select: new JRightPadded<Expression>(element: fa.Target, after: fa.Padding.Name.Before, markers: Markers.EMPTY),
-                typeParameters: null,
-                name: fa.Name,
-                arguments: MapArgumentList(argumentList: node.ArgumentList),
-                methodType: MapType( node) as JavaType.Method
-            );
-        }
-        else if (select is J.Identifier id)
-        {
-            return new J.MethodInvocation(
-                id: Core.Tree.RandomId(),
-                prefix: prefix,
-                markers: Markers.EMPTY,
-                select: null,
-                typeParameters: null,
-                name: id,
-                arguments: MapArgumentList(argumentList: node.ArgumentList),
-                methodType: MapType( node) as JavaType.Method
-            );
-        }
-        else if (select is J.ParameterizedType pt)
-        {
-            // return mi
-            //     .WithPrefix(prefix)
-            //     .Padding.WithArguments(MapArgumentList(node.ArgumentList))
-            //     .WithMethodType(MapType(node) as JavaType.Method);
-
-            return new J.MethodInvocation(
-                id: Core.Tree.RandomId(),
-                prefix: prefix,
-                markers: Markers.EMPTY,
-                select: pt.Clazz is J.FieldAccess lfa
-                    ? new JRightPadded<Expression>(element: lfa.Target, after: Format(Leading(node.ArgumentList)), markers: Markers.EMPTY)
-                    : null,
-                typeParameters: pt.TypeParameters != null
-                    ? new JContainer<Expression>(
-                        before: Space.EMPTY,
-                        elements: pt.TypeParameters.Select(selector: JRightPadded.Create).ToList(),
-                        markers: Markers.EMPTY
-                    )
-                    : null, // TODO: type parameters
-                name: pt.Clazz is J.Identifier i
-                    ? i
-                    : (pt.Clazz as J.FieldAccess)?.Name ??
-                      MapIdentifier(identifier: node.Expression.GetFirstToken(), type: MapType( node.Expression)),
-                arguments: MapArgumentList(argumentList: node.ArgumentList),
-                methodType: MapType( node) as JavaType.Method
-            );
-        }
-        else if (select is J.MethodInvocation or J.ArrayAccess) // chained method invocation (method returns a delegate). ex. Something()()
-        {
-
-            return new J.MethodInvocation(
-                id: Core.Tree.RandomId(),
-                prefix: prefix,
-                markers: Markers.EMPTY,
-                select: JRightPadded.Create(element: select),
-                typeParameters: null,
-                name: new J.Identifier(
+                return new J.MethodInvocation(
                     id: Core.Tree.RandomId(),
-                    prefix: Space.EMPTY,
+                    prefix: prefix,
+                    markers: fa.Markers,
+                    select: new JRightPadded<Expression>(element: fa.Target, after: fa.Padding.Name.Before, markers: Markers.EMPTY),
+                    typeParameters: null,
+                    name: fa.Name,
+                    arguments: MapArgumentList(argumentList: node.ArgumentList),
+                    methodType: MapType( node) as JavaType.Method
+                );
+            }
+            case J.Identifier id:
+                return new J.MethodInvocation(
+                    id: Core.Tree.RandomId(),
+                    prefix: prefix,
                     markers: Markers.EMPTY,
-                    annotations: new List<J.Annotation>(),
-                    simpleName: "",
-                    type: null,
-                    fieldType: null),
-                arguments: MapArgumentList(argumentList: node.ArgumentList),
-                methodType: MapType( node) as JavaType.Method
-            );
+                    select: null,
+                    typeParameters: null,
+                    name: id,
+                    arguments: MapArgumentList(argumentList: node.ArgumentList),
+                    methodType: MapType( node) as JavaType.Method
+                );
+            case J.ParameterizedType pt:
+                // return mi
+                //     .WithPrefix(prefix)
+                //     .Padding.WithArguments(MapArgumentList(node.ArgumentList))
+                //     .WithMethodType(MapType(node) as JavaType.Method);
+
+                return new J.MethodInvocation(
+                    id: Core.Tree.RandomId(),
+                    prefix: prefix,
+                    markers: pt.Markers,
+                    select: pt.Clazz is J.FieldAccess lfa
+                        ? new JRightPadded<Expression>(element: lfa.Target, after: lfa.Padding.Name.Before, markers: Markers.EMPTY)
+                        : null,
+                    typeParameters: pt.TypeParameters != null
+                        ? new JContainer<Expression>(
+                            before: Space.EMPTY,
+                            elements: pt.TypeParameters.Select(selector: JRightPadded.Create).ToList(),
+                            markers: Markers.EMPTY
+                        )
+                        : null, // TODO: type parameters
+                    name: pt.Clazz is J.Identifier i
+                        ? i
+                        : (pt.Clazz as J.FieldAccess)?.Name ??
+                          MapIdentifier(identifier: node.Expression.GetFirstToken(), type: MapType( node.Expression)),
+                    arguments: MapArgumentList(argumentList: node.ArgumentList),
+                    methodType: MapType( node) as JavaType.Method
+                );
+            // chained method invocation (method returns a delegate). ex. Something()()
+            case J.MethodInvocation or J.ArrayAccess:
+                return new J.MethodInvocation(
+                    id: Core.Tree.RandomId(),
+                    prefix: prefix,
+                    markers: Markers.EMPTY,
+                    select: JRightPadded.Create(element: select),
+                    typeParameters: null,
+                    name: new J.Identifier(
+                        id: Core.Tree.RandomId(),
+                        prefix: Space.EMPTY,
+                        markers: Markers.EMPTY,
+                        annotations: new List<J.Annotation>(),
+                        simpleName: "",
+                        type: null,
+                        fieldType: null),
+                    arguments: MapArgumentList(argumentList: node.ArgumentList),
+                    methodType: MapType( node) as JavaType.Method
+                );
+            case Cs.AliasQualifiedName alias:
+                return new Cs.AliasQualifiedName(
+                    id: Core.Tree.RandomId(),
+                    prefix: prefix,
+                    markers: Markers.EMPTY,
+                    alias: alias.Padding.Alias,
+                    name: new J.MethodInvocation(
+                        id: Core.Tree.RandomId(),
+                        prefix: Space.EMPTY,
+                        markers: Markers.EMPTY,
+                        select: null,
+                        typeParameters: null,
+                        name: (J.Identifier)alias.Name,
+                        arguments: MapArgumentList(argumentList: node.ArgumentList),
+                        methodType: MapType(node) as JavaType.Method
+                    ));
         }
 
         for (var index = 0; index < node.ArgumentList.Arguments.Count; index++)
@@ -616,11 +541,22 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                     before: Format(Leading(node.ArgumentList.OpenParenToken)),
                     elements: node.ArgumentList.Arguments.Count > 0
                         ? node.ArgumentList.Arguments.Select(selector: a =>
-                            new JRightPadded<Expression>(
-                                element: Convert<Expression>(a.Expression)!,
+                        {
+                            var expression = a.NameEquals == null ? Convert<Expression>(a.Expression)! : new J.Assignment(
+                                id: Core.Tree.RandomId(),
+                                prefix: Format(Leading(node)),
+                                markers: Markers.EMPTY,
+                                variable: Convert<Expression>(a.NameEquals.Name)!,
+                                expression: ToLeftPadded<Expression>(a.Expression)!,
+                                type: MapType(a.Expression)
+                            );
+
+                            return new JRightPadded<Expression>(
+                                element: expression,
                                 after: Format(Trailing(a)),
                                 markers: Markers.EMPTY
-                            )).ToList()
+                            );
+                        }).ToList()
                         :
                         [
                             new JRightPadded<Expression>(
@@ -666,11 +602,6 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitMethodDeclaration(MethodDeclarationSyntax node)
     {
-        // DeclarationExpressionSyntax f;
-        // SingleVariableDesignationSyntax s;
-        // ArgumentSyntax s;
-        // J.VariableDeclarations;
-
         J.Block body;
         if (node.Body != null)
         {
@@ -691,54 +622,40 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                 end: Format(Trailing(node.SemicolonToken)));
         }
         var attributeLists = MapAttributes(m: node.AttributeLists);
-        var methodDeclaration = new J.MethodDeclaration(
-            id: Core.Tree.RandomId(),
-            prefix: Format(Leading(node)),
-            markers: Markers.EMPTY,
-            leadingAnnotations: [],
-            modifiers: MapModifiers(stl: node.Modifiers),
-            typeParameters: Visit(node.TypeParameterList) as J.TypeParameters,
-            returnTypeExpression: Convert<TypeTree>(node.ReturnType),
-            name: new J.MethodDeclaration.IdentifierWithAnnotations(
-                identifier: new J.Identifier(
-                    id: Core.Tree.RandomId(),
-                    prefix: Format(Leading(node.Identifier)),
-                    markers: Markers.EMPTY,
-                    annotations: (Enumerable.Empty<J.Annotation>() as IList<J.Annotation>)!,
-                    simpleName: node.Identifier.Text,
-                    type: null,
-                    fieldType: null
-                ),
-                annotations: []
-            ),
-            parameters: MapParameters<Statement>(pls: node.ParameterList)!,
-            throws: null,
-            body: body,
-            defaultValue: null,
-            methodType: MapType( node) as JavaType.Method
-        );
-
-        var constraints = MapTypeParameterConstraintClauses(list: node.ConstraintClauses);
         Statement returnValue = new Cs.MethodDeclaration(
             id: Core.Tree.RandomId(),
             prefix: Format(Leading(node)),
             markers: Markers.EMPTY,
-            methodDeclarationCore: methodDeclaration,
-            typeParameterConstraintClauses: constraints);
+            modifiers: MapModifiers(stl: node.Modifiers),
+            typeParameters: MapTypeParameters(node.TypeParameterList),
+            returnTypeExpression: Convert<TypeTree>(node.ReturnType)!,
+            explicitInterfaceSpecifier: ToRightPadded<TypeTree>(node.ExplicitInterfaceSpecifier),
+            name: MapIdentifier(node.Identifier, null),
+            parameters: MapParameters<Statement>(pls: node.ParameterList)!,
+            body: body,
+            methodType: MapType( node) as JavaType.Method,
+            attributes: MapAttributes(node.AttributeLists),
+            typeParameterConstraintClauses: MapTypeParameterConstraintClauses(node.ConstraintClauses)
+        );
 
-        if(attributeLists != null)
+        if(attributeLists.Count > 0)
         {
             returnValue = new Cs.AnnotatedStatement(
                 id: Core.Tree.RandomId(),
                 prefix: Format(Leading(node)),
                 markers: Markers.EMPTY,
                 attributeLists: attributeLists,
-                statement: methodDeclaration);
+                statement: returnValue);
         }
 
 
 
         return returnValue;
+    }
+
+    private JContainer<Cs.TypeParameter>? MapTypeParameters(TypeParameterListSyntax? parameters)
+    {
+        return parameters != null ? ToJContainer<TypeParameterSyntax, Cs.TypeParameter>(parameters.Parameters, parameters.GreaterThanToken) : null;
     }
 
     public override J? VisitUsingDirective(UsingDirectiveSyntax node)
@@ -851,7 +768,17 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitOrdering(OrderingSyntax node)
     {
-        return base.VisitOrdering(node);
+        Cs.Ordering.DirectionKind? direction = null;
+        if (Enum.TryParse(node.AscendingOrDescendingKeyword.ToString(), true, out Cs.Ordering.DirectionKind outVal))
+        {
+            direction = outVal;
+        }
+        return new Cs.Ordering(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            expression: ToRightPadded<Expression>(node.Expression)!,
+            direction: direction);
     }
 
     public override J? VisitSubpattern(SubpatternSyntax node)
@@ -861,7 +788,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             id: Core.Tree.RandomId(),
             prefix: Format(Leading(node)),
             markers: Markers.EMPTY,
-            name: node.ExpressionColon != null ? MapIdentifier(node.ExpressionColon.Expression.GetFirstToken(), MapType(node.ExpressionColon)) : null,
+            name: Convert<Expression>(node.ExpressionColon?.Expression),
             pattern: JLeftPadded.Create(Convert<Cs.Pattern>(node.Pattern)!, Format(Leading(node.Pattern)))
         );
     }
@@ -920,7 +847,15 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitArrayType(ArrayTypeSyntax node)
     {
-        return MapArrayType(node, rank: 0);
+        return new Cs.ArrayType(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            typeExpression: Convert<TypeTree>(node.ElementType),
+            dimensions: node.RankSpecifiers.Select(selector: r => Convert<J.ArrayDimension>(r)!).ToList(),
+            type: MapType( node)
+        );
+        // return MapArrayType(node, rank: 0);
     }
 
     private J.ArrayType MapArrayType(ArrayTypeSyntax node, int rank)
@@ -1311,6 +1246,11 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
+    private J.Identifier MapIdentifier(SyntaxToken identifier)
+    {
+        var type = identifier.Parent != null ? MapType(identifier.Parent) : null;
+        return MapIdentifier(identifier, type);
+    }
     private J.Identifier MapIdentifier(SyntaxToken identifier, JavaType? type)
     {
         var variable = type as JavaType.Variable;
@@ -1332,7 +1272,13 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitAliasQualifiedName(AliasQualifiedNameSyntax node)
     {
-        return base.VisitAliasQualifiedName(node);
+        return new Cs.AliasQualifiedName(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            alias: ToRightPadded<J.Identifier>(node.Alias)!,
+            name: Convert<Expression>(node.Name)!
+        );
     }
 
     public override J? VisitPredefinedType(PredefinedTypeSyntax node)
@@ -1443,7 +1389,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             id: Core.Tree.RandomId(),
             prefix: Format(Leading(node)),
             markers: Markers.EMPTY,
-            type: MapTypeTree(node.Type),
+            type: Convert<TypeTree>(node.Type)!,
             name: MapIdentifier(identifier: node.Identifier, type: type));
 
     }
@@ -1485,12 +1431,30 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitPrefixUnaryExpression(PrefixUnaryExpressionSyntax node)
     {
-        if (node.OperatorToken.IsKind(SyntaxKind.CaretToken) || node.OperatorToken.IsKind(SyntaxKind.AsteriskToken) )
-            // TODO implement C# 8.0 "index from the end" operator `^`
-            return base.VisitPrefixUnaryExpression(node);
 
         try
         {
+            Cs.Unary.Types? operatorType = node.OperatorToken.Kind() switch
+            {
+                SyntaxKind.CaretToken => Cs.Unary.Types.FromEnd,
+                SyntaxKind.AsteriskToken => Cs.Unary.Types.PointerIndirection,
+                SyntaxKind.AmpersandToken => Cs.Unary.Types.AddressOf,
+                _ => null,
+            };
+            if (operatorType != null)
+            {
+                return new Cs.Unary(
+                    id: Core.Tree.RandomId(),
+                    prefix: Format(Leading(node)),
+                    markers: Markers.EMPTY,
+                    @operator: new JLeftPadded<Cs.Unary.Types>(
+                        before: Format(Leading(node.OperatorToken)),
+                        element: operatorType.Value,
+                        markers: Markers.EMPTY),
+                    expression: Convert<Expression>(node.Operand)!,
+                    type: MapType( node)
+                );
+            }
             return new J.Unary(
                 id: Core.Tree.RandomId(),
                 prefix: Format(Leading(node)),
@@ -1666,8 +1630,11 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                     .WithMarkers(markers: bindingNode.Markers.MarkerList.Where(predicate: x => x is not MemberBinding).ToList());
                 if (bindingNode is J.MethodInvocation methodNode)
                 {
+                    var innerPrefix = methodNode.Prefix;
+                    var outerExpression = currentExpression;
                     var newMethod = methodNode
-                        .WithSelect(newSelect: currentExpression)
+                        .WithPrefix(Space.EMPTY)
+                        .Padding.WithSelect(JRightPadded.Create(outerExpression,innerPrefix))
                         .WithMarkers(newMarkers: newMarkers);
                     lstNode = methodNode.Equals(other: lstNode) ? newMethod : lstNode.ReplaceNode(oldNode: methodNode, newNode: newMethod);
                 }
@@ -1716,16 +1683,24 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     /// </summary>
     public override J? VisitMemberBindingExpression(MemberBindingExpressionSyntax node)
     {
-        var name = Convert<J.Identifier>(node.Name)!;
-        return new J.FieldAccess(
-            id: Core.Tree.RandomId(),
-            // Format(Leading(node.OperatorToken)),
-            prefix: Space.EMPTY,
-            markers: Markers.Create(markers: new MemberBinding()),
-            target: new J.Empty(id: Core.Tree.RandomId(), prefix: Space.EMPTY, markers: Markers.EMPTY),
-            name: name.AsLeftPadded(before: Format(Leading(node.OperatorToken))),
-            type: MapType( node)
-        );
+        var name = Convert<Expression>(node.Name)!;
+
+        if (name is J.ParameterizedType generic)
+        {
+            return generic.WithMarkers(Markers.Create(markers: new MemberBinding()));
+        }
+        else
+        {
+            return new J.FieldAccess(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.Create(markers: new MemberBinding()),
+                target: new J.Empty(id: Core.Tree.RandomId(), prefix: Space.EMPTY, markers: Markers.EMPTY),
+                name: ((J.Identifier)name).AsLeftPadded(before: Format(Leading(node.OperatorToken))),
+                type: MapType( node)
+            );
+        }
+
     }
 
     public override J? VisitElementBindingExpression(ElementBindingExpressionSyntax node)
@@ -2078,11 +2053,6 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         return initializer;
     }
 
-    private IList<JRightPadded<Statement>> ToStatementList(SeparatedSyntaxList<ExpressionSyntax> expressions)
-    {
-        return expressions.Count == 0 ? [] : expressions.SkipLast(count: 1).Select(selector: MapExpressionStatement).Append(element: MapExpressionStatement(es: expressions.Last(), isLastElement: true)).ToList();
-    }
-
     public override J? VisitImplicitObjectCreationExpression(ImplicitObjectCreationExpressionSyntax node)
     {
         var jNewClass =  new J.NewClass(
@@ -2395,68 +2365,113 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitQueryExpression(QueryExpressionSyntax node)
     {
-        // This was added in C# 3.0
-        return base.VisitQueryExpression(node);
+        return new Cs.QueryExpression(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            fromClause: Convert<Cs.FromClause>(node.FromClause)!,
+            body: Convert<Cs.QueryBody>(node.Body)!);
     }
 
     public override J? VisitQueryBody(QueryBodySyntax node)
     {
-        // This was added in C# 3.0
-        return base.VisitQueryBody(node);
+        return new Cs.QueryBody(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            clauses: node.Clauses.Select(x => Convert<Cs.QueryClause>(x)!).ToList(),
+            selectOrGroup: Convert<Cs.SelectOrGroupClause>(node.SelectOrGroup)!,
+            continuation: Convert<Cs.QueryContinuation>(node.Continuation)!);
     }
 
     public override J? VisitFromClause(FromClauseSyntax node)
     {
-        // This was added in C# 3.0
-        return base.VisitFromClause(node);
+        return new Cs.FromClause(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            typeIdentifier: node.Type != null ? MapTypeTree(node.Type) : null,
+            identifier: JRightPadded.Create(MapIdentifier(node.Identifier, MapType(node.Expression)), Format(Trailing(node.Identifier))),
+            expression: Convert<Expression>(node.Expression)!);
     }
 
     public override J? VisitLetClause(LetClauseSyntax node)
     {
-        // This was added in C# 3.0
-        return base.VisitLetClause(node);
+        return new Cs.LetClause(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            identifier: JRightPadded.Create(MapIdentifier(node.Identifier, MapType(node.Expression)), Format(Trailing(node.Identifier))),
+            expression: Convert<Expression>(node.Expression)!);
     }
 
     public override J? VisitJoinClause(JoinClauseSyntax node)
     {
-        // This was added in C# 3.0
-        return base.VisitJoinClause(node);
+        return new Cs.JoinClause(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            identifier: JRightPadded.Create(MapIdentifier(node.Identifier, MapType(node.InExpression)), Format(Trailing(node.Identifier))),
+            inExpression: ToRightPadded<Expression>(node.InExpression)!,
+            leftExpression: ToRightPadded<Expression>(node.LeftExpression)!,
+            rightExpression: Convert<Expression>(node.RightExpression)!,
+            into: ToLeftPadded<Cs.JoinIntoClause>(node.Into));
     }
 
     public override J? VisitJoinIntoClause(JoinIntoClauseSyntax node)
     {
-        // This was added in C# 3.0
-        return base.VisitJoinIntoClause(node);
+        return new Cs.JoinIntoClause(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            identifier: MapIdentifier(node.Identifier, MapType(node)));
     }
 
     public override J? VisitWhereClause(WhereClauseSyntax node)
     {
-        // This was added in C# 3.0
-        return base.VisitWhereClause(node);
+        return new Cs.WhereClause(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            condition: Convert<Expression>(node.Condition)!);
     }
 
     public override J? VisitOrderByClause(OrderByClauseSyntax node)
     {
-        // This was added in C# 3.0
-        return base.VisitOrderByClause(node);
+        return new Cs.OrderByClause(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            orderings: ToRightPadded<OrderingSyntax, Cs.Ordering>(node.Orderings)!);
     }
 
     public override J? VisitSelectClause(SelectClauseSyntax node)
     {
-        // This was added in C# 3.0
-        return base.VisitSelectClause(node);
+        return new Cs.SelectClause(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            expression: Convert<Expression>(node.Expression)!);
     }
 
     public override J? VisitGroupClause(GroupClauseSyntax node)
     {
-        // This was added in C# 3.0
-        return base.VisitGroupClause(node);
+        return new Cs.GroupClause(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            groupExpression: ToRightPadded<Expression>(node.GroupExpression)!,
+            key: Convert<Expression>(node.ByExpression)!);
     }
 
     public override J? VisitQueryContinuation(QueryContinuationSyntax node)
     {
-        // This was added in C# 3.0
-        return base.VisitQueryContinuation(node);
+        return new Cs.QueryContinuation(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            identifier: MapIdentifier(node.Identifier, MapType(node.Body)),
+            body: Convert<Cs.QueryBody>(node.Body)!);
     }
 
     public override J? VisitOmittedArraySizeExpression(OmittedArraySizeExpressionSyntax node)
@@ -2805,28 +2820,64 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitLocalDeclarationStatement(LocalDeclarationStatementSyntax node)
     {
-        var usingModifier = node.UsingKeyword.IsKind(SyntaxKind.UsingKeyword)
-            ? new J.Modifier(
-                id: Core.Tree.RandomId(),
-                prefix: Format(Leading(node.UsingKeyword)),
-                markers: Markers.EMPTY,
-                keyword: "using",
-                modifierType: J.Modifier.Types.LanguageExtension,
-                annotations: []
-            )
-            : null;
+        Statement result;
+        var type = MapType(node);
+        if (node.UsingKeyword.IsPresent())
+        {
+            result =
+                new Cs.UsingStatement(
+                    id: Core.Tree.RandomId(),
+                    prefix: Format(Leading(node)),
+                    markers: Markers.EMPTY,
+                    awaitKeyword: VisitKeyword(node.AwaitKeyword),
+                    expression: ToLeftPadded<Expression>(node.Declaration)!,
+                    statement: new J.Empty(
+                        id: Core.Tree.RandomId(),
+                        prefix: Space.EMPTY,
+                        markers: Markers.EMPTY));
+        }
+        else
+        {
 
-        return new J.VariableDeclarations(
-            id: Core.Tree.RandomId(),
-            prefix: Format(Leading(node)),
-            markers: Markers.EMPTY,
-            leadingAnnotations: [],
-            modifiers: usingModifier != null ? [usingModifier, .. MapModifiers(stl: node.Modifiers)] : MapModifiers(stl: node.Modifiers),
-            typeExpression: Visit(node.Declaration.Type) as TypeTree,
-            varargs: null!,
-            dimensionsBeforeName: [],
-            variables: node.Declaration.Variables.Select(selector: MapVariable).ToList()
-        );
+
+
+            // var usingModifier = node.UsingKeyword.IsKind(SyntaxKind.UsingKeyword)
+            //     ? new J.Modifier(
+            //         id: Core.Tree.RandomId(),
+            //         prefix: Format(Leading(node.UsingKeyword)),
+            //         markers: Markers.EMPTY,
+            //         keyword: "using",
+            //         modifierType: J.Modifier.Types.LanguageExtension,
+            //         annotations: []
+            //     )
+            //     : null;
+
+            var typeExpression = Convert<TypeTree>(node.Declaration.Type)!;
+
+            result = new J.VariableDeclarations(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                leadingAnnotations: [],
+                modifiers: MapModifiers(stl: node.Modifiers), //usingModifier != null ? [usingModifier, .. MapModifiers(stl: node.Modifiers)] : MapModifiers(stl: node.Modifiers),
+                typeExpression: typeExpression,
+                varargs: null!,
+                dimensionsBeforeName: [],
+                variables: node.Declaration.Variables.Select(selector: MapVariable).ToList()
+            );
+            if (node.AwaitKeyword.IsPresent())
+            {
+                result = new Cs.AwaitExpression(
+                    id: Core.Tree.RandomId(),
+                    prefix: Format(Leading(node)),
+                    markers: Markers.EMPTY,
+                    expression: result,
+                    type: type);
+
+            }
+        }
+
+        return result;
     }
 
     private JRightPadded<J.VariableDeclarations.NamedVariable> MapVariable(VariableDeclaratorSyntax variableDeclarator)
@@ -2922,15 +2973,11 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitExpressionStatement(ExpressionStatementSyntax node)
     {
-        var j = Convert<J>(node.Expression);
-        // if (j is Statement)
-        //     return j;
-
         return new Cs.ExpressionStatement(
             id: Core.Tree.RandomId(),
             prefix: Format(Leading(node)),
             markers: Markers.EMPTY,
-            expression: (j as Expression)!
+            expression: ToRightPadded<Expression>(node.Expression)!
         );
     }
 
@@ -3035,7 +3082,21 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitDoStatement(DoStatementSyntax node)
     {
-        return base.VisitDoStatement(node);
+        var condition = JLeftPadded.Create(
+            new J.ControlParentheses<Expression>(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.OpenParenToken)),
+                markers: Markers.EMPTY,
+                tree: ToRightPadded<Expression>(node.Condition)!),
+            Format(Leading(node.WhileKeyword)));
+        var body = ToRightPadded<Statement>(node.Statement)!;
+        return new J.DoWhileLoop(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            body: body,
+            whileCondition: condition);
+
     }
 
     public override J? VisitForStatement(ForStatementSyntax node)
@@ -3072,7 +3133,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                         JRightPadded.Create<Statement>(element: new J.Empty(id: Core.Tree.RandomId(),
                             prefix: Format(Leading(node.CloseParenToken)), markers: Markers.EMPTY))
                     ]
-                    : node.Incrementors.Select(selector: MapExpressionStatement).ToList()
+                    : node.Incrementors.Select(MapExpressionStatement).ToList()
             ),
             body: MapStatement(statementSyntax: node.Statement)
         );
@@ -3081,9 +3142,9 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitForEachStatement(ForEachStatementSyntax node)
     {
         var javaType = (MapType( node) as JavaType.Variable)!;
-        return new J.ForEachLoop(
+        var loop = new J.ForEachLoop(
             id: Core.Tree.RandomId(),
-            prefix: Format(Leading(node)),
+            prefix: Format(Leading(node.ForEachKeyword)),
             markers: Markers.EMPTY,
             loopControl: new J.ForEachLoop.Control(
                 id: Core.Tree.RandomId(),
@@ -3131,6 +3192,17 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             ),
             body: MapStatement(statementSyntax: node.Statement)
         );
+
+        if (node.AwaitKeyword.IsKeyword())
+        {
+            return new Cs.AwaitExpression(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                loop,
+                loop.LoopControl.Iterable.Type);
+        }
+        return loop;
     }
 
     public override J? VisitForEachVariableStatement(ForEachVariableStatementSyntax node)
@@ -3154,17 +3226,16 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitUsingStatement(UsingStatementSyntax node)
     {
         var statement = Convert<Statement>(node.Statement) ?? throw new InvalidOperationException(message: "Statement is empty after conversion");
-        JRightPadded<Expression> expression = JRightPadded.Create(element: Convert<Expression>((SyntaxNode?)node.Expression ?? node.Declaration)!, after: Format(Leading(node.CloseParenToken)));
+        var expressionNode = (SyntaxNode?)node.Expression ?? node.Declaration!;
+        var expression = node.OpenParenToken.IsPresent() ? ToControlParentheses<Expression>(expressionNode, node.OpenParenToken) : Convert<Expression>(expressionNode)!;
+
         var usingStatement =
             new Cs.UsingStatement(
                 id: Core.Tree.RandomId(),
                 prefix: Format(Leading(node)),
                 markers: Markers.EMPTY,
                 awaitKeyword: VisitKeyword(node.AwaitKeyword),
-                expression: JContainer.Create(elements: new List<JRightPadded<Expression>>
-                {
-                    expression
-                }, space: Format(Leading(node.OpenParenToken))),
+                expression: JLeftPadded.Create(expression, Format(Leading(node.UsingKeyword))),
                 statement: statement);
         return usingStatement;
     }
@@ -3259,38 +3330,21 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    private JRightPadded<Statement> MapExpressionStatement(ExpressionSyntax es)
+    private JRightPadded<Statement> MapExpressionStatement(ExpressionSyntax es) => MapExpressionStatement(es, false);
+    private JRightPadded<Statement> MapExpressionStatement(ExpressionSyntax es, bool forceWrap)
     {
-        return MapExpressionStatement(es: es, isLastElement: false);
-    }
+        var lst = Convert<J>(es)!;
+        if (lst is Cs.ExpressionStatement || (lst is Statement && !forceWrap))
+        {
+            return JRightPadded.Create((Statement)lst, Format(Trailing(es)));
+        }
 
-    private JRightPadded<Statement> MapExpressionStatement(ExpressionSyntax es, bool isLastElement)
-    {
-        var j = Convert<J>(es);
-        var trailingComma = isLastElement && es.GetLastToken().GetNextToken().IsKind(SyntaxKind.CommaToken);
-        if (j is Statement s)
-            return new JRightPadded<Statement>(
-                element: s,
-                after: Format(Trailing(es)),
-                markers: trailingComma
-                    ? Markers.EMPTY.Add(marker: new TrailingComma(Id: Core.Tree.RandomId(),
-                        Suffix: Format(Trailing(es.GetLastToken().GetNextToken()))))
-                    : Markers.EMPTY
-            );
-
-        return new JRightPadded<Statement>(
-            element: new Cs.ExpressionStatement(
+        return JRightPadded.Create<Statement>(new Cs.ExpressionStatement(
                 id: Core.Tree.RandomId(),
                 prefix: Format(Leading(es)),
                 markers: Markers.EMPTY,
-                expression: (j as Expression)!
-            ),
-            after: Format(Trailing(es)),
-            markers: trailingComma
-                ? Markers.EMPTY.Add(marker: new TrailingComma(Id: Core.Tree.RandomId(),
-                    Suffix: Format(Trailing(es.GetLastToken().GetNextToken()))))
-                : Markers.EMPTY
-        );
+                expression: JRightPadded.Create((Expression)lst, Format(Trailing(es)))
+            ));
     }
 
     public override J? VisitElseClause(ElseClauseSyntax node)
@@ -3476,13 +3530,27 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitDelegateDeclaration(DelegateDeclarationSyntax node)
     {
-        // This was added in C# 1.0
-        return base.VisitDelegateDeclaration(node);
+        return new Cs.DelegateDeclaration(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            modifiers: MapModifiers(node.Modifiers),
+            returnType: ToLeftPadded<TypeTree>(node.ReturnType)!,
+            identifier: MapIdentifier(node.Identifier),
+            typeParameters: MapTypeParameters(node.TypeParameterList),
+            parameters: MapParameters<Statement>(node.ParameterList)!,
+            typeParameterConstraintClauses: MapTypeParameterConstraintClauses(node.ConstraintClauses));
     }
 
     public override J? VisitEnumMemberDeclaration(EnumMemberDeclarationSyntax node)
     {
-        return base.VisitEnumMemberDeclaration(node);
+        return new Cs.EnumMemberDeclaration(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            attributeLists: MapAttributes(node.AttributeLists),
+            name: MapIdentifier(node.Identifier),
+            initializer: ToLeftPadded<Expression>(node.EqualsValue?.Value));
     }
 
     public override J? VisitConstructorConstraint(ConstructorConstraintSyntax node)
@@ -3547,7 +3615,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             dimensionsBeforeName: [],
             variables: node.Declaration.Variables.Select(selector: MapVariable).ToList()
         );
-        return attributeLists != null
+        return attributeLists.Count > 0
             ? new Cs.AnnotatedStatement(
                 id: Core.Tree.RandomId(),
                 prefix: Format(Leading(node)),
@@ -3565,7 +3633,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax node)
     {
-        return base.VisitExplicitInterfaceSpecifier(node);
+        return Convert<NameTree>(node.Name);
     }
 
     public override J? VisitOperatorDeclaration(OperatorDeclarationSyntax node)
@@ -3575,7 +3643,29 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitConversionOperatorDeclaration(ConversionOperatorDeclarationSyntax node)
     {
-        return base.VisitConversionOperatorDeclaration(node);
+        var attributeLists = MapAttributes(m: node.AttributeLists);
+        Statement returnValue = new Cs.ConversionOperatorDeclaration(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            modifiers: MapModifiers(node.Modifiers),
+            kind: ToLeftPadded<Cs.ConversionOperatorDeclaration.ExplicitImplicit>(node.ImplicitOrExplicitKeyword)!,
+            returnType: ToLeftPadded<TypeTree>(node.Type)!,
+            parameters: MapParameters<Statement>(node.ParameterList)!,
+            expressionBody: ToLeftPadded<Expression>(node.ExpressionBody),
+            body: Convert<J.Block>(node.Body));
+
+        if(attributeLists.Count > 0)
+        {
+            returnValue = new Cs.AnnotatedStatement(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                attributeLists: attributeLists,
+                statement: returnValue);
+        }
+
+        return returnValue;
     }
 
     public override J? VisitConstructorDeclaration(ConstructorDeclarationSyntax node)
@@ -3611,7 +3701,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             initializer: Convert<Cs.ConstructorInitializer>(node.Initializer),
             constructorCore: methodDeclaration);
 
-        return attributeLists != null
+        return attributeLists.Count > 0
             ? new Cs.AnnotatedStatement(
                 id: Core.Tree.RandomId(),
                 prefix: Format(Leading(node)),
@@ -3634,16 +3724,50 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                 markers: Markers.EMPTY,
                 kind: node.ThisOrBaseKeyword.IsKind(SyntaxKind.BaseKeyword) ? Cs.Keyword.KeywordKind.Base : Cs.Keyword.KeywordKind.This
             ),
-            arguments: ToJContainer<ArgumentSyntax, Cs.Argument>(syntaxList: node.ArgumentList.Arguments, openingToken: node.ArgumentList.OpenParenToken)
+            arguments: ToJContainer<ArgumentSyntax, Expression>(syntaxList: node.ArgumentList.Arguments, openingToken: node.ArgumentList.OpenParenToken)
         );
     }
-
-    ~CSharpParserVisitor() => Console.WriteLine("");
 
     public override J? VisitDestructorDeclaration(DestructorDeclarationSyntax node)
     {
 
-        return base.VisitDestructorDeclaration(node);
+
+
+        var attributeLists = MapAttributes(m: node.AttributeLists);
+        var methodDeclaration = new J.MethodDeclaration(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node.TildeToken)),
+            markers: Markers.EMPTY,
+            leadingAnnotations: [],
+            modifiers: MapModifiers(stl: node.Modifiers),
+            typeParameters: null, // constructors have no type parameters
+            returnTypeExpression: null, // constructors have no return type
+            name: new J.MethodDeclaration.IdentifierWithAnnotations(
+                identifier: MapIdentifier(identifier: node.Identifier, type: null),
+                annotations: [] // attributes always appear as leading
+            ),
+            parameters: MapParameters<Statement>(pls: node.ParameterList)!,
+            throws: null, // C# has no checked exceptions
+            body: Convert<J.Block>(node.Body as SyntaxNode ?? node.ExpressionBody),
+            defaultValue: null, // not applicable to constructors
+            methodType: MapType( node) as JavaType.Method
+        );
+
+        var destructor = new Cs.DestructorDeclaration(
+            id: Core.Tree.RandomId(),
+            prefix: Space.EMPTY,
+            markers: Markers.EMPTY,
+            methodCore: methodDeclaration);
+
+        return attributeLists.Count > 0
+            ? new Cs.AnnotatedStatement(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                attributeLists: attributeLists,
+                statement: destructor
+            )
+            : destructor;
     }
 
     public override J? VisitPropertyDeclaration(PropertyDeclarationSyntax node)
@@ -3687,7 +3811,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             @static: JRightPadded.Create(element: false),
             statements:
             [
-                MapExpressionStatement(es: node.Expression)
+                MapExpressionStatement(node.Expression, forceWrap: true)
             ],
             end: Space.EMPTY
         );
@@ -3701,8 +3825,40 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitIndexerDeclaration(IndexerDeclarationSyntax node)
     {
-        // This was added in C# 1.0
-        return base.VisitIndexerDeclaration(node);
+        // return base.VisitIndexerDeclaration(node);
+        var attributeLists = MapAttributes(m: node.AttributeLists);
+        // Expression indexer = node.ExplicitInterfaceSpecifier
+        Statement returnValue = new Cs.IndexerDeclaration(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            modifiers: MapModifiers(stl: node.Modifiers),
+            typeExpression: MapTypeTree(node.Type),
+            indexer: new J.Identifier(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node.ThisKeyword)),
+                markers: Markers.EMPTY,
+                annotations: [],
+                simpleName: "this",
+                type: null,
+                fieldType: null),
+            parameters: ToJContainer<ParameterSyntax, Expression>(node.ParameterList.Parameters, node.ParameterList.OpenBracketToken),
+            expressionBody: ToLeftPadded<Expression>(node.ExpressionBody),
+            accessors: Convert<J.Block>(node.AccessorList)
+        );
+
+        if(attributeLists != null)
+        {
+            returnValue = new Cs.AnnotatedStatement(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                attributeLists: attributeLists,
+                statement: returnValue);
+        }
+
+        return returnValue;
+
     }
 
     public override J? VisitParameterList(ParameterListSyntax node)
@@ -3969,7 +4125,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     private JRightPadded<Statement> MapMemberDeclaration(MemberDeclarationSyntax m)
     {
-        var memberDeclaration = (Visit(m) as Statement)!;
+        var memberDeclaration = (Statement)Visit(m)!;
         var trailingSemicolon = m.GetLastToken().IsKind(SyntaxKind.SemicolonToken);
         if (trailingSemicolon && m is BaseTypeDeclarationSyntax { CloseBraceToken.Text: "}" } or
                 NamespaceDeclarationSyntax { CloseBraceToken.Text: "}" })
@@ -4010,20 +4166,20 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         var parameter = ((T?)Visit(tps))!;
         return new JRightPadded<T>(
             element: parameter,
-            after: Format(Trailing(tps.Identifier)),
+            after: Format(Trailing(tps)),
             markers: Markers.EMPTY
         );
     }
 
-    private JContainer<J.TypeParameter>? MapTypeParameters(TypeParameterListSyntax? tpls)
-    {
-        return tpls == null || tpls.Parameters.Count == 0
-            ? null
-            : JContainer<J.TypeParameter>.Build(before: Format(Leading(tpls)),
-                elements: tpls.Parameters.Select(selector: MapTypeParameter).ToList(),
-                markers: Markers.EMPTY
-            );
-    }
+    // private JContainer<J.TypeParameter>? MapTypeParameters(TypeParameterListSyntax? tpls)
+    // {
+    //     return tpls == null || tpls.Parameters.Count == 0
+    //         ? null
+    //         : JContainer<J.TypeParameter>.Build(before: Format(Leading(tpls)),
+    //             elements: tpls.Parameters.Select(selector: MapTypeParameter).ToList(),
+    //             markers: Markers.EMPTY
+    //         );
+    // }
 
     private JRightPadded<J.TypeParameter> MapTypeParameter(TypeParameterSyntax tps)
     {
@@ -4064,9 +4220,9 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
 #endif
-    private List<Cs.AttributeList>? MapAttributes(SyntaxList<AttributeListSyntax> m)
+    private List<Cs.AttributeList> MapAttributes(SyntaxList<AttributeListSyntax> m)
     {
-        return m.Count == 0 ? null : m.Select(selector: x => Convert<Cs.AttributeList>(x)!).ToList();
+        return m.Select(selector: x => Convert<Cs.AttributeList>(x)!).ToList();
     }
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
@@ -4181,12 +4337,18 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
 #endif
-    internal static Space Format(SyntaxTriviaList trivia)
+    internal static Space Format(SyntaxTriviaList triviaList)
     {
-        // FIXME optimize
-        return Space.Format(trivia.ToString());
+        return Space.Format(triviaList.ToFullString());
     }
 
+    private JLeftPadded<TTo>? ToLeftPadded<TTo>(SyntaxToken node) where TTo : struct, Enum
+    {
+        if (node.IsKind(SyntaxKind.None))
+            return null;
+        var value = Enum.Parse<TTo>(node.ToString(), ignoreCase: true);
+        return JLeftPadded.Create(value, Format(Leading(node)));
+    }
     private JLeftPadded<TTo>? ToLeftPadded<TTo>(SyntaxNode? node)
         where TTo : class, J
     {

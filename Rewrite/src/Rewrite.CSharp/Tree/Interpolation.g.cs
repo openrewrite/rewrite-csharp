@@ -34,7 +34,7 @@ public partial interface Cs : J
     JRightPadded<Expression> expression,
     JRightPadded<Expression>? alignment,
     JRightPadded<Expression>? format
-    ) : Cs, Expression, Expression<Interpolation>, MutableTree<Interpolation>
+    ) : Cs, Expression, Expression<Interpolation>, J<Interpolation>, MutableTree<Interpolation>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

@@ -35,15 +35,17 @@ public class PlayTests(ITestOutputHelper output) : RewriteTest(output)
     {
         var root = new CSharpParser.Builder().Build().Parse(
                 """
-                public class Foo
-                {
-                    void Bar()
-                }
+                /*1*/
+                a/*2*/
+                .FirstOrDefault()/*3*/?/*4*/
+                ./*5*/GetCustomAttribute<D>(1)/*6*/?/*7*/./*8*/Name;
                 """
         );
-        var methodDeclaration = root.Descendents().OfType<J.MethodDeclaration>().First();
-        var newRoot = root.ReplaceNode(methodDeclaration, methodDeclaration.WithName(methodDeclaration.Name.WithSimpleName("Hello")));
-        _output.WriteLine(newRoot.ToString());
+        if (root is ParseError)
+        {
+
+        }
+        _output.WriteLine(root.ToString());
     }
 
     [Fact]

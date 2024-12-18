@@ -47,7 +47,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     JContainer<Argument> arguments
-    ) : Cs, Expression, Expression<TupleExpression>, MutableTree<TupleExpression>
+    ) : Cs, Expression, Expression<TupleExpression>, J<TupleExpression>, MutableTree<TupleExpression>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

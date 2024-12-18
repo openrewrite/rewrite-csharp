@@ -34,7 +34,7 @@ public partial interface J : Rewrite.Core.Tree
     Block body,
     IList<Try.Catch> catches,
     JLeftPadded<Block>? @finally
-    ) : J, Statement, MutableTree<Try>
+    ) : J, Statement, J<Try>, MutableTree<Try>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -119,7 +119,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     TypedTree variableDeclarations,
     bool terminatedWithSemicolon
-        ) : J, MutableTree<Resource>
+        ) : J, J<Resource>, MutableTree<Resource>
         {
             public J? AcceptJava<P>(JavaVisitor<P> v, P p)
             {
@@ -180,7 +180,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     J.ControlParentheses<J.VariableDeclarations> parameter,
     J.Block body
-        ) : J, MutableTree<Catch>
+        ) : J, J<Catch>, MutableTree<Catch>
         {
             public J? AcceptJava<P>(JavaVisitor<P> v, P p)
             {

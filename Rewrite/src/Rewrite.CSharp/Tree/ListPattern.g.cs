@@ -61,7 +61,7 @@ public partial interface Cs : J
     Markers markers,
     JContainer<Pattern> patterns,
     VariableDesignation? designation
-    ) : Cs.Pattern, Expression<ListPattern>, MutableTree<ListPattern>
+    ) : Cs.Pattern, Expression<ListPattern>, J<ListPattern>, MutableTree<ListPattern>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

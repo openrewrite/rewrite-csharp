@@ -32,7 +32,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     J.ControlParentheses<Expression> selector,
     Block cases
-    ) : J, Statement, MutableTree<Switch>
+    ) : J, Statement, J<Switch>, MutableTree<Switch>
     {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {

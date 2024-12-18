@@ -39,7 +39,7 @@ public partial interface Cs : J
     Guid id,
     Space prefix,
     Markers markers
-    ) : Cs, Cs.TypeParameterConstraint, MutableTree<DefaultConstraint>
+    ) : Cs, Cs.TypeParameterConstraint, J<DefaultConstraint>, MutableTree<DefaultConstraint>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {

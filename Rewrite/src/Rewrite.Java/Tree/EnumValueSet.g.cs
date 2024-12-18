@@ -32,7 +32,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     IList<JRightPadded<EnumValue>> enums,
     bool terminatedWithSemicolon
-    ) : J, Statement, MutableTree<EnumValueSet>
+    ) : J, Statement, J<EnumValueSet>, MutableTree<EnumValueSet>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

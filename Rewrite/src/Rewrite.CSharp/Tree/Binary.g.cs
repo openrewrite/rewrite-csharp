@@ -35,7 +35,7 @@ public partial interface Cs : J
     JLeftPadded<Binary.OperatorType> @operator,
     Expression right,
     JavaType? type
-    ) : Cs, Expression, TypedTree, Expression<Binary>, TypedTree<Binary>, MutableTree<Binary>
+    ) : Cs, Expression, TypedTree, Expression<Binary>, TypedTree<Binary>, J<Binary>, MutableTree<Binary>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

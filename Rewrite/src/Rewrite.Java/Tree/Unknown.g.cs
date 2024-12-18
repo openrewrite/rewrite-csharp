@@ -34,7 +34,7 @@ public partial interface J : Rewrite.Core.Tree
     Space prefix,
     Markers markers,
     Unknown.Source unknownSource
-    ) : J, Statement, Expression, TypeTree, Expression<Unknown>, TypedTree<Unknown>, TypeTree<Unknown>, MutableTree<Unknown>
+    ) : J, Statement, Expression, TypeTree, Expression<Unknown>, TypedTree<Unknown>, J<Unknown>, TypeTree<Unknown>, MutableTree<Unknown>
     {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {
@@ -77,7 +77,7 @@ public partial interface J : Rewrite.Core.Tree
     Space prefix,
     Markers markers,
     string text
-        ) : J, MutableTree<Source>
+        ) : J, J<Source>, MutableTree<Source>
         {
             public J? AcceptJava<P>(JavaVisitor<P> v, P p)
             {

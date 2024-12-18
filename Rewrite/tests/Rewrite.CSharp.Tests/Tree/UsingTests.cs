@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Rewrite.Test.CSharp;
 using Rewrite.Test;
 
@@ -7,22 +5,76 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class UsingTests(ITestOutputHelper output) : RewriteTest(output)
+public class UsingStatementTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
-    public void Simple()
+    public void BasicUsing()
     {
         RewriteRun(
             CSharp(
                 """
-                class Foo
+                using (var file = File.OpenRead("test.txt"))
                 {
-                    void M()
+                    // do something
+                }
+                """
+            )
+        );
+    }
+
+    [Fact]
+    public void UsingDeclaration()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                using var file = File.OpenRead("test.txt");
+                // rest of the code
+                """
+            )
+        );
+    }
+
+    [Fact]
+    public void MultipleResources()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                using (var reader = new StreamReader("test.txt"))
+                using (var writer = new StreamWriter("output.txt"))
+                {
+                    // do something
+                }
+                """
+            )
+        );
+    }
+
+    [Fact]
+    public void UsingWithoutBraces()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                using (var stream = new MemoryStream())
+                    stream.WriteByte(0);
+                """
+            )
+        );
+    }
+
+    [Fact]
+    public void NestedUsing()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                using (var outer = new MemoryStream())
+                {
+                    using (var inner = new MemoryStream())
                     {
-                        using (System.IO.StreamWriter file = new System.IO.StreamWriter("/path/to/your/file.txt", true))
-                        {
-                            file.WriteLine("Hello World");
-                        }
+
                     }
                 }
                 """
@@ -31,22 +83,14 @@ public class UsingTests(ITestOutputHelper output) : RewriteTest(output)
     }
 
     [Fact]
-    public void Multiple()
+    public void UsingWithMultipleDeclarations()
     {
         RewriteRun(
             CSharp(
                 """
-                using System.IO;
-
-                class Foo
+                using (Stream stream = File.OpenRead("input.txt"), output = File.Create("output.txt"))
                 {
-                    void M()
-                    {
-                        using (StreamReader reader1 = new StreamReader("file1.txt"), reader2 = new StreamReader("file2.txt"))
-                        {
-                            // code
-                        }
-                    }
+                    // do something with both streams
                 }
                 """
             )
@@ -54,45 +98,59 @@ public class UsingTests(ITestOutputHelper output) : RewriteTest(output)
     }
 
     [Fact]
-    public void Multiple2()
-    {
-        var src = CSharp(
-            """
-            using System.IO;
-
-            class Foo
-            {
-                void M()
-                {
-                    using /*1%*/ (/*2%*/ StreamReader reader1 = new StreamReader("file1.txt") /*3%*/ )
-                    using (StreamReader reader2 = new StreamReader("file2.txt")) /*4%*/
-                    {
-                        // code
-                    }
-                }
-            }
-            """);
-
-        var lst = src.Parse();
-        lst.ToString().ShouldBeSameAs(src.Before);
-        // _output.WriteLine(lst.RenderLstTree());
-    }
-
-    [Fact]
-    public void NoBraces()
+    public void UsingWithExplicitType()
     {
         RewriteRun(
             CSharp(
                 """
-                using System.IO;
-
-                class Foo
+                using (Stream stream = new MemoryStream())
                 {
-                    void M()
-                    {
-                        using /*1%*/ StreamReader reader = new StreamReader("file1.txt")/*2%*/ ;
-                    }
+                    // explicit type declaration
                 }
+                """
+            )
+        );
+    }
+
+    [Fact]
+    public void UsingWithNull()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                using (Stream stream = null)
+                {
+                    // using with null resource
+                }
+                """
+            )
+        );
+    }
+
+    [Fact]
+    public void UsingWithAwait()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                  await using (var resource = await GetResourceAsync())
+                {
+                    // async operations
+                }
+                """
+            )
+        );
+    }
+
+    [Fact]
+    public void UsingDeclarationWithAwait()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                int a;
+                  await using var resource = await GetResourceAsync();
+                // rest of async code
                 """
             )
         );

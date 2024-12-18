@@ -52,7 +52,7 @@ public partial interface Cs : J
     Guid id,
     Space prefix,
     Markers markers
-    ) : Cs.Pattern, Expression<SlicePattern>, MutableTree<SlicePattern>
+    ) : Cs.Pattern, Expression<SlicePattern>, J<SlicePattern>, MutableTree<SlicePattern>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {

@@ -31,7 +31,7 @@ public partial interface J : Rewrite.Core.Tree
     Space prefix,
     Markers markers,
     JavaType.Primitive type
-    ) : J, TypeTree, Expression, Expression<Primitive>, TypedTree<Primitive>, TypeTree<Primitive>, MutableTree<Primitive>
+    ) : J, TypeTree, Expression, Expression<Primitive>, TypedTree<Primitive>, J<Primitive>, TypeTree<Primitive>, MutableTree<Primitive>
     {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {

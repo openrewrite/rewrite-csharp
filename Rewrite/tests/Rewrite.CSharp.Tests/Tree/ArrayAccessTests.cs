@@ -20,7 +20,18 @@ public class ArrayAccessTests(ITestOutputHelper output) : RewriteTest(output)
             )
         );
     }
-
+    [Fact]
+    [KnownBug("Need custom LST")]
+    public void MultiDimensional()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                return a[0, 1];
+                """
+            )
+        );
+    }
     [Fact]
     public void Space()
     {

@@ -33,7 +33,7 @@ public partial interface J : Rewrite.Core.Tree
     string? keyword,
     Modifier.Types modifierType,
     IList<Annotation> annotations
-    ) : J, MutableTree<Modifier>
+    ) : J, J<Modifier>, MutableTree<Modifier>
     {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {

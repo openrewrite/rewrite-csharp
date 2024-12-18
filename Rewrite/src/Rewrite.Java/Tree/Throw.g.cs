@@ -31,7 +31,7 @@ public partial interface J : Rewrite.Core.Tree
     Space prefix,
     Markers markers,
     Expression exception
-    ) : J, Statement, MutableTree<Throw>
+    ) : J, Statement, J<Throw>, MutableTree<Throw>
     {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {

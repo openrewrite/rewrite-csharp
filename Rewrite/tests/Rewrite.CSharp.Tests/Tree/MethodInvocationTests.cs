@@ -39,6 +39,18 @@ public class MethodInvocationTests(ITestOutputHelper output) : RewriteTest(outpu
     }
 
     [Fact]
+    public void InvocationSpacing()
+    {
+        RewriteRun(
+            CSharp(
+                @"
+                a.GetField . GetCustomAttribute<EnumMemberAttribute>();
+                "
+            )
+        );
+    }
+
+    [Fact]
     public void InvocationWithNamedParameters()
     {
         var src = CSharp(

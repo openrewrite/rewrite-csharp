@@ -159,4 +159,33 @@ public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(outpu
             )
         );
     }
+
+    [Fact]
+    public void MultipleTypeConstraints()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                public interface IRepository<T, TId>
+                    where TId : IEquatable<TId>
+                    where T : class, ITableObject<TId>
+                {
+                }
+                """
+            )
+        );
+    }
+
+    [Fact]
+    public void ClassDeclarationWithAttribute()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                [Obsolete]
+                public    class Foo;
+                """
+            )
+        );
+    }
 }

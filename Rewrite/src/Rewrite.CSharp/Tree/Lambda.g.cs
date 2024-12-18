@@ -33,7 +33,7 @@ public partial interface Cs : J
     Markers markers,
     J.Lambda lambdaExpression,
     IList<J.Modifier> modifiers
-    ) : Cs, Statement, Expression, Expression<Lambda>, MutableTree<Lambda>
+    ) : Cs, Statement, Expression, Expression<Lambda>, J<Lambda>, MutableTree<Lambda>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {

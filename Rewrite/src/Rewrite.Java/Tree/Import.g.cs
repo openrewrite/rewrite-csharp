@@ -33,7 +33,7 @@ public partial interface J : Rewrite.Core.Tree
     JLeftPadded<bool> @static,
     FieldAccess qualid,
     JLeftPadded<Identifier>? alias
-    ) : Statement, MutableTree<Import>
+    ) : Statement, J<Import>, MutableTree<Import>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

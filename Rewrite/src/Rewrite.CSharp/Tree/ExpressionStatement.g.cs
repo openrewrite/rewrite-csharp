@@ -31,9 +31,34 @@ public partial interface Cs : J
     Guid id,
     Space prefix,
     Markers markers,
-    Expression expression
-    ) : Cs, Statement, MutableTree<ExpressionStatement>
+    JRightPadded<Expression> expression
+    ) : Cs, Statement, J<ExpressionStatement>, MutableTree<ExpressionStatement>
     {
+        [NonSerialized] private WeakReference<PaddingHelper>? _padding;
+
+        public PaddingHelper Padding
+        {
+            get
+            {
+                PaddingHelper? p;
+                if (_padding == null)
+                {
+                    p = new PaddingHelper(this);
+                    _padding = new WeakReference<PaddingHelper>(p);
+                }
+                else
+                {
+                    _padding.TryGetTarget(out p);
+                    if (p == null || p.T != this)
+                    {
+                        p = new PaddingHelper(this);
+                        _padding.SetTarget(p);
+                    }
+                }
+                return p;
+            }
+        }
+
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitExpressionStatement(this, p);
@@ -43,26 +68,38 @@ public partial interface Cs : J
 
         public ExpressionStatement WithId(Guid newId)
         {
-            return newId == id ? this : new ExpressionStatement(newId, prefix, markers, expression);
+            return newId == id ? this : new ExpressionStatement(newId, prefix, markers, _expression);
         }
         public Space Prefix => prefix;
 
         public ExpressionStatement WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ExpressionStatement(id, newPrefix, markers, expression);
+            return newPrefix == prefix ? this : new ExpressionStatement(id, newPrefix, markers, _expression);
         }
         public Markers Markers => markers;
 
         public ExpressionStatement WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ExpressionStatement(id, prefix, newMarkers, expression);
+            return ReferenceEquals(newMarkers, markers) ? this : new ExpressionStatement(id, prefix, newMarkers, _expression);
         }
-        public Expression Expression => expression;
+        private readonly JRightPadded<Expression> _expression = expression;
+        public Expression Expression => _expression.Element;
 
         public ExpressionStatement WithExpression(Expression newExpression)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new ExpressionStatement(id, prefix, markers, newExpression);
+            return Padding.WithExpression(_expression.WithElement(newExpression));
         }
+        public sealed record PaddingHelper(Cs.ExpressionStatement T)
+        {
+            public JRightPadded<Expression> Expression => T._expression;
+
+            public Cs.ExpressionStatement WithExpression(JRightPadded<Expression> newExpression)
+            {
+                return T._expression == newExpression ? T : new Cs.ExpressionStatement(T.Id, T.Prefix, T.Markers, newExpression);
+            }
+
+        }
+
         #if DEBUG_VISITOR
         [DebuggerStepThrough]
         #endif

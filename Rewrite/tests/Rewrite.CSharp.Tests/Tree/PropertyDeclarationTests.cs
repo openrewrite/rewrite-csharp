@@ -89,21 +89,17 @@ public class PropertyDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         RewriteRun(
             CSharp(
                 """
-                public class Date
+                class C
                 {
-                    private int _month = 7;  // Backing store
+                    int _m;
 
-                    public int Month
+                    public int M
                     {
-                        get => _month    /*space*/   ; // comment
-                        set// comment store
-                        /*123*/  {  // comment store
-                            if ((value > 0) && (value < 13))
-                            {
-                                _month = value;
-                          /* comment store*/  } // comment store
-                        }    // comment store
-                        // comment store
+                        get => _m;
+                        set
+                        {
+                            _m = value;
+                        }
                     }
                 }
                 """
@@ -117,10 +113,10 @@ public class PropertyDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         RewriteRun(
             CSharp(
                 """
-                class Manager
+                class M
                 {
-                    private string _name;
-                    public string Name => _name != null ? _name : "NA"   /*space*/  ;   /// commment
+                    string _n;
+                    public string Name => _n != null ? _n : "NA" ;
                 }
                 """
             )

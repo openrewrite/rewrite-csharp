@@ -405,6 +405,106 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     }
 
     @Override
+    public Cs.QueryExpression visitQueryExpression(Cs.QueryExpression queryExpression, P p) {
+        return (Cs.QueryExpression) super.visitQueryExpression(queryExpression, p);
+    }
+
+    @Override
+    public Cs.QueryBody visitQueryBody(Cs.QueryBody queryBody, P p) {
+        return (Cs.QueryBody) super.visitQueryBody(queryBody, p);
+    }
+
+    @Override
+    public Cs.FromClause visitFromClause(Cs.FromClause fromClause, P p) {
+        return (Cs.FromClause) super.visitFromClause(fromClause, p);
+    }
+
+    @Override
+    public Cs.LetClause visitLetClause(Cs.LetClause letClause, P p) {
+        return (Cs.LetClause) super.visitLetClause(letClause, p);
+    }
+
+    @Override
+    public Cs.JoinClause visitJoinClause(Cs.JoinClause joinClause, P p) {
+        return (Cs.JoinClause) super.visitJoinClause(joinClause, p);
+    }
+
+    @Override
+    public Cs.JoinIntoClause visitJoinIntoClause(Cs.JoinIntoClause joinIntoClause, P p) {
+        return (Cs.JoinIntoClause) super.visitJoinIntoClause(joinIntoClause, p);
+    }
+
+    @Override
+    public Cs.WhereClause visitWhereClause(Cs.WhereClause whereClause, P p) {
+        return (Cs.WhereClause) super.visitWhereClause(whereClause, p);
+    }
+
+    @Override
+    public Cs.OrderByClause visitOrderByClause(Cs.OrderByClause orderByClause, P p) {
+        return (Cs.OrderByClause) super.visitOrderByClause(orderByClause, p);
+    }
+
+    @Override
+    public Cs.QueryContinuation visitQueryContinuation(Cs.QueryContinuation queryContinuation, P p) {
+        return (Cs.QueryContinuation) super.visitQueryContinuation(queryContinuation, p);
+    }
+
+    @Override
+    public Cs.Ordering visitOrdering(Cs.Ordering ordering, P p) {
+        return (Cs.Ordering) super.visitOrdering(ordering, p);
+    }
+
+    @Override
+    public Cs.SelectClause visitSelectClause(Cs.SelectClause selectClause, P p) {
+        return (Cs.SelectClause) super.visitSelectClause(selectClause, p);
+    }
+
+    @Override
+    public Cs.GroupClause visitGroupClause(Cs.GroupClause groupClause, P p) {
+        return (Cs.GroupClause) super.visitGroupClause(groupClause, p);
+    }
+
+    @Override
+    public Cs.IndexerDeclaration visitIndexerDeclaration(Cs.IndexerDeclaration indexerDeclaration, P p) {
+        return (Cs.IndexerDeclaration) super.visitIndexerDeclaration(indexerDeclaration, p);
+    }
+
+    @Override
+    public Cs.DelegateDeclaration visitDelegateDeclaration(Cs.DelegateDeclaration delegateDeclaration, P p) {
+        return (Cs.DelegateDeclaration) super.visitDelegateDeclaration(delegateDeclaration, p);
+    }
+
+    @Override
+    public Cs.ConversionOperatorDeclaration visitConversionOperatorDeclaration(Cs.ConversionOperatorDeclaration conversionOperatorDeclaration, P p) {
+        return (Cs.ConversionOperatorDeclaration) super.visitConversionOperatorDeclaration(conversionOperatorDeclaration, p);
+    }
+
+    @Override
+    public Cs.TypeParameter visitTypeParameter(Cs.TypeParameter typeParameter, P p) {
+        return (Cs.TypeParameter) super.visitTypeParameter(typeParameter, p);
+    }
+
+    @Override
+    public Cs.EnumDeclaration visitEnumDeclaration(Cs.EnumDeclaration enumDeclaration, P p) {
+        return (Cs.EnumDeclaration) super.visitEnumDeclaration(enumDeclaration, p);
+    }
+
+    @Override
+    public Cs.EnumMemberDeclaration visitEnumMemberDeclaration(Cs.EnumMemberDeclaration enumMemberDeclaration, P p) {
+        return (Cs.EnumMemberDeclaration) super.visitEnumMemberDeclaration(enumMemberDeclaration, p);
+    }
+
+    @Override
+    public Cs.AliasQualifiedName visitAliasQualifiedName(Cs.AliasQualifiedName aliasQualifiedName, P p) {
+        return (Cs.AliasQualifiedName) super.visitAliasQualifiedName(aliasQualifiedName, p);
+    }
+
+    @Override
+    public Cs.ArrayType visitArrayType(Cs.ArrayType arrayType, P p) {
+        return (Cs.ArrayType) super.visitArrayType(arrayType, p);
+    }
+
+    @Override
     public J.AnnotatedType visitAnnotatedType(J.AnnotatedType annotatedType, P p) {
         return (J.AnnotatedType) super.visitAnnotatedType(annotatedType, p);
     }

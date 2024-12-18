@@ -31,9 +31,9 @@ public partial interface Cs : J
     Guid id,
     Space prefix,
     Markers markers,
-    Expression expression,
+    J expression,
     JavaType? type
-    ) : Cs, Expression, Expression<AwaitExpression>, MutableTree<AwaitExpression>
+    ) : Cs, Expression, Statement, Expression<AwaitExpression>, J<AwaitExpression>, MutableTree<AwaitExpression>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
@@ -58,9 +58,9 @@ public partial interface Cs : J
         {
             return ReferenceEquals(newMarkers, markers) ? this : new AwaitExpression(id, prefix, newMarkers, expression, type);
         }
-        public Expression Expression => expression;
+        public J Expression => expression;
 
-        public AwaitExpression WithExpression(Expression newExpression)
+        public AwaitExpression WithExpression(J newExpression)
         {
             return ReferenceEquals(newExpression, expression) ? this : new AwaitExpression(id, prefix, markers, newExpression, type);
         }
