@@ -49,11 +49,13 @@ jobs:
 
       - name: build
         run: |
-          ./gradlew ${{ env.GRADLE_SWITCHES }} build
+          ./gradlew ${{ env.GRADLE_SWITCHES }} assemble
           (cd Rewrite && dotnet restore Rewrite.sln --no-cache --force --force-evaluate)
           (cd Rewrite && dotnet publish Rewrite.sln --no-restore)
-      - name: test-cs
-        run: (cd Rewrite && dotnet test Rewrite.sln --filter "Category!=KnownBug & Category!=Exploratory & Category!=Roslyn")
+      - name: test
+        run: |
+          (cd Rewrite && dotnet test Rewrite.sln --filter "Category!=KnownBug & Category!=Exploratory & Category!=Roslyn")
+          ./gradlew ${{ env.GRADLE_SWITCHES }} test
 
       - name: publish-java-snapshots
         if: github.event_name != 'pull_request'
