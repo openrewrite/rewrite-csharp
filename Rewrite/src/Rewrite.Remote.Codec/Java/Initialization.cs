@@ -99,7 +99,7 @@ public static class Initialization
                         IList<JavaType> exceptions = [];
                         while (reader.PeekState() != CborReaderState.EndArray)
                         {
-                            exceptions.Add(context.Deserialize<JavaType.FullyQualified>(reader)!);
+                            exceptions.Add(context.Deserialize<JavaType>(reader)!);
                         }
 
                         reader.ReadEndArray();
