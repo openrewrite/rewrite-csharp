@@ -10,8 +10,7 @@
         <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
     </PropertyGroup>
 
-
-    <ItemGroup Condition="'$(RELEASE_BUILD)'==''">
+    <ItemGroup>
         <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
         <ProjectReference Include="..\Rewrite.CSharp\Rewrite.CSharp.csproj" />
         <ProjectReference Include="..\Rewrite.Java\Rewrite.Java.csproj" />
