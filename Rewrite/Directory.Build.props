@@ -19,10 +19,10 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(RELEASE_PUBLICATION)'!=''">
-        <RewriteRemoteVersion>0.14.0</RewriteRemoteVersion>
+        <RewriteRemoteVersion>0.15.0</RewriteRemoteVersion>
     </PropertyGroup>
     <PropertyGroup Condition="'$(RELEASE_PUBLICATION)'==''">
-        <RewriteRemoteVersion>0.14.0</RewriteRemoteVersion>
+        <RewriteRemoteVersion>0.15.0</RewriteRemoteVersion>
     </PropertyGroup>
 
     <Import Project="Directory.Build.props.user" Condition="Exists('Directory.Build.props.user')"/>
