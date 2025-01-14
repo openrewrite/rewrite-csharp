@@ -3,8 +3,45 @@ using Rewrite.RewriteJava.Tree;
 
 namespace Rewrite.RewriteCSharp.Tree;
 
+partial interface CsContainer
+{
+    partial record Location
+    {
+    }
+}
 public partial interface Cs
 {
+
+    public partial class EnumMemberDeclaration
+    {
+        JavaType? TypedTree.Type => this.Name.Type;
+        public EnumMemberDeclaration WithType(JavaType? type) => WithName(Name.WithType(type));
+    }
+    public partial class CheckedExpression
+    {
+        JavaType? TypedTree.Type => this.Expression.Type;
+        public CheckedExpression WithType(JavaType? type) => WithExpression(Expression.WithType(type));
+    }
+    public partial class PointerType
+    {
+        JavaType? TypedTree.Type => this.ElementType.Type;
+        public PointerType WithType(JavaType? type) => WithElementType(ElementType.WithType(type));
+    }
+    public partial class RefExpression
+    {
+        JavaType? TypedTree.Type => this.Expression.Type;
+        public RefExpression WithType(JavaType? type) => WithExpression(Expression.WithType(type));
+    }
+    public partial class StackAllocExpression
+    {
+        JavaType? TypedTree.Type => this.Expression.Type;
+        public StackAllocExpression WithType(JavaType? type) => WithExpression(Expression.WithType(type));
+    }
+    public partial class Subpattern : Expression<Subpattern>
+    {
+        JavaType? TypedTree.Type => this.Pattern.Type;
+        public Subpattern WithType(JavaType? type) => WithPattern(Pattern.WithType(type));
+    }
     public partial class AliasQualifiedName : Expression<AliasQualifiedName>
     {
         JavaType? TypedTree.Type => this.Name.Type;

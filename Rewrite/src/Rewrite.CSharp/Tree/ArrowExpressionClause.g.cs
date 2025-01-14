@@ -25,43 +25,31 @@ namespace Rewrite.RewriteCSharp.Tree;
 public partial interface Cs : J
 {
     /// <summary>
-    /// Represents a subpattern in C# pattern matching, which can appear in property patterns or positional patterns.
-    /// Each subpattern consists of an optional name with a corresponding pattern.
+    /// Represents a C# arrow expression clause (=&gt;).
     /// <br/>
     /// For example:
     /// <code>
-    ///     // In property patterns
-    ///     if (obj is { Name: "test", Age: &gt; 18 })
-    ///                  ^^^^^^^^^^^^  ^^^^^^^^^
-    ///     // In positional patterns
-    ///     if (point is (x: &gt; 0, y: &gt; 0))
-    ///                   ^^^^^^  ^^^^^^
-    ///     // With variable declarations
-    ///     if (person is { Id: var id, Name: string name })
-    ///                     ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
-    ///     // Nested patterns
-    ///     if (obj is { Address: { City: "NY" } })
-    ///                  ^^^^^^^^^^^^^^^^^^^^^^^
-    ///     // In switch expressions
-    ///     return shape switch {
-    ///         { Radius: var r } =&gt; Math.PI * r * r,
-    ///           ^^^^^^^^^^^
-    ///         { Width: var w, Height: var h } =&gt; w * h,
-    ///           ^^^^^^^^^^^^  ^^^^^^^^^^^^^
-    ///         _ =&gt; 0
-    ///     };
+    ///     // In property accessors
+    ///     public string Name {
+    ///         get =&gt; _name;
+    ///     }
+    ///     // In methods
+    ///     public string GetName() =&gt; _name;
+    ///     // In properties
+    ///     public string FullName =&gt; $"{FirstName} {LastName}";
+    ///     // In operators
+    ///     public static implicit operator string(Person p) =&gt; p.Name;
     /// </code>
     /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif
-    public partial class Subpattern(
+    public partial class ArrowExpressionClause(
     Guid id,
     Space prefix,
     Markers markers,
-    Expression? name,
-    JLeftPadded<Pattern> pattern
-    ) : Cs, Expression, Expression<Subpattern>, J<Subpattern>, MutableTree<Subpattern>
+    JRightPadded<Expression> expression
+    ) : Cs, Statement, J<ArrowExpressionClause>, MutableTree<ArrowExpressionClause>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -90,47 +78,41 @@ public partial interface Cs : J
 
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
-            return v.VisitSubpattern(this, p);
+            return v.VisitArrowExpressionClause(this, p);
         }
 
         public Guid Id => id;
 
-        public Subpattern WithId(Guid newId)
+        public ArrowExpressionClause WithId(Guid newId)
         {
-            return newId == id ? this : new Subpattern(newId, prefix, markers, name, _pattern);
+            return newId == id ? this : new ArrowExpressionClause(newId, prefix, markers, _expression);
         }
         public Space Prefix => prefix;
 
-        public Subpattern WithPrefix(Space newPrefix)
+        public ArrowExpressionClause WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Subpattern(id, newPrefix, markers, name, _pattern);
+            return newPrefix == prefix ? this : new ArrowExpressionClause(id, newPrefix, markers, _expression);
         }
         public Markers Markers => markers;
 
-        public Subpattern WithMarkers(Markers newMarkers)
+        public ArrowExpressionClause WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Subpattern(id, prefix, newMarkers, name, _pattern);
+            return ReferenceEquals(newMarkers, markers) ? this : new ArrowExpressionClause(id, prefix, newMarkers, _expression);
         }
-        public Expression? Name => name;
+        private readonly JRightPadded<Expression> _expression = expression;
+        public Expression Expression => _expression.Element;
 
-        public Subpattern WithName(Expression? newName)
+        public ArrowExpressionClause WithExpression(Expression newExpression)
         {
-            return ReferenceEquals(newName, name) ? this : new Subpattern(id, prefix, markers, newName, _pattern);
+            return Padding.WithExpression(_expression.WithElement(newExpression));
         }
-        private readonly JLeftPadded<Cs.Pattern> _pattern = pattern;
-        public Cs.Pattern Pattern => _pattern.Element;
-
-        public Subpattern WithPattern(Cs.Pattern newPattern)
+        public sealed record PaddingHelper(Cs.ArrowExpressionClause T)
         {
-            return Padding.WithPattern(_pattern.WithElement(newPattern));
-        }
-        public sealed record PaddingHelper(Cs.Subpattern T)
-        {
-            public JLeftPadded<Cs.Pattern> Pattern => T._pattern;
+            public JRightPadded<Expression> Expression => T._expression;
 
-            public Cs.Subpattern WithPattern(JLeftPadded<Cs.Pattern> newPattern)
+            public Cs.ArrowExpressionClause WithExpression(JRightPadded<Expression> newExpression)
             {
-                return T._pattern == newPattern ? T : new Cs.Subpattern(T.Id, T.Prefix, T.Markers, T.Name, newPattern);
+                return T._expression == newExpression ? T : new Cs.ArrowExpressionClause(T.Id, T.Prefix, T.Markers, newExpression);
             }
 
         }
@@ -140,7 +122,7 @@ public partial interface Cs : J
         #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
-            return other is Subpattern && other.Id == Id;
+            return other is ArrowExpressionClause && other.Id == Id;
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

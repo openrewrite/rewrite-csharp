@@ -24,6 +24,21 @@ public class EnumDeclarationTests(ITestOutputHelper output) : RewriteTest(output
     }
 
     [Fact]
+    public void EmptyEnum()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                public enum A
+                {
+
+                }
+                """
+            )
+        );
+    }
+
+    [Fact]
     public void EnumWithBaseType()
     {
         RewriteRun(

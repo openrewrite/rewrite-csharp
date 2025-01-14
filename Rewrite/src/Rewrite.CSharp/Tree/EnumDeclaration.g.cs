@@ -54,7 +54,7 @@ public partial interface Cs : J
     IList<J.Modifier> modifiers,
     JLeftPadded<J.Identifier> name,
     JLeftPadded<TypeTree>? baseType,
-    JContainer<EnumMemberDeclaration>? members
+    JContainer<Expression>? members
     ) : Cs, Statement, J<EnumDeclaration>, MutableTree<EnumDeclaration>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
@@ -131,12 +131,12 @@ public partial interface Cs : J
         {
             return Padding.WithBaseType(JLeftPadded<TypeTree>.WithElement(_baseType, newBaseType));
         }
-        private readonly JContainer<Cs.EnumMemberDeclaration>? _members = members;
-        public IList<Cs.EnumMemberDeclaration>? Members => _members?.GetElements();
+        private readonly JContainer<Expression>? _members = members;
+        public IList<Expression>? Members => _members?.GetElements();
 
-        public EnumDeclaration WithMembers(IList<Cs.EnumMemberDeclaration>? newMembers)
+        public EnumDeclaration WithMembers(IList<Expression>? newMembers)
         {
-            return Padding.WithMembers(JContainer<Cs.EnumMemberDeclaration>.WithElementsNullable(_members, newMembers));
+            return Padding.WithMembers(JContainer<Expression>.WithElementsNullable(_members, newMembers));
         }
         public sealed record PaddingHelper(Cs.EnumDeclaration T)
         {
@@ -154,9 +154,9 @@ public partial interface Cs : J
                 return T._baseType == newBaseType ? T : new Cs.EnumDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T._name, newBaseType, T._members);
             }
 
-            public JContainer<Cs.EnumMemberDeclaration>? Members => T._members;
+            public JContainer<Expression>? Members => T._members;
 
-            public Cs.EnumDeclaration WithMembers(JContainer<Cs.EnumMemberDeclaration>? newMembers)
+            public Cs.EnumDeclaration WithMembers(JContainer<Expression>? newMembers)
             {
                 return T._members == newMembers ? T : new Cs.EnumDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T._name, T._baseType, newMembers);
             }

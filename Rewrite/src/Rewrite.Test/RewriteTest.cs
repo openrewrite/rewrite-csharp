@@ -4,6 +4,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Rewrite.Core;
 using Rewrite.Core.Quark;
+using Rewrite.RewriteCSharp;
+using Rewrite.RewriteJava.Tree;
 using Xunit.Abstractions;
 using ExecutionContext = Rewrite.Core.ExecutionContext;
 
@@ -168,6 +170,12 @@ public class RewriteTest(ITestOutputHelper output)
                 {
                     var error = parseError.Markers.FindFirst<ParseExceptionResult>()!;
                     throw new Exception(error.Message);
+                }
+
+                var unknown = sourceFile.Descendents().OfType<J.Unknown>().SelectMany(x => x.Markers.OfType<ParseExceptionResult>().Select(x => x.TreeType)).ToList();
+                if(unknown.Any())
+                {
+                    throw new Exception($"LST should not contain unknown nodes: {unknown.First()}");
                 }
 
                 _output.WriteLine(sourceFile.RenderLstTree());

@@ -30,7 +30,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
     }
 
-    protected void VisitContainer<T>(string before, JContainer<T>? container, JContainer.Location location,
+    public void VisitContainer<T>(string before, JContainer<T>? container, JContainer.Location location,
         string suffixBetween, string? after, PrintOutputCapture<P> p) where T : J
     {
         if (container != null)
@@ -746,8 +746,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
 
         if (!method.Markers.Any(marker => marker is CompactConstructor))
         {
-            VisitContainer("(", method.Padding.Parameters, JContainer.Location.METHOD_DECLARATION_PARAMETERS, ",", ")",
-                p);
+            VisitContainer("(", method.Padding.Parameters, JContainer.Location.METHOD_DECLARATION_PARAMETERS, ",", ")", p);
         }
 
         VisitContainer("throws", method.Padding.Throws, JContainer.Location.THROWS, ",", null, p);

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /*
  * -------------------THIS FILE IS AUTO GENERATED--------------------------
  * Changes to this file may cause incorrect behavior and will be lost if
@@ -37,6 +38,21 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     @Override
     public Cs.CompilationUnit visitCompilationUnit(Cs.CompilationUnit compilationUnit, P p) {
         return (Cs.CompilationUnit) super.visitCompilationUnit(compilationUnit, p);
+    }
+
+    @Override
+    public Cs.RefExpression visitRefExpression(Cs.RefExpression refExpression, P p) {
+        return (Cs.RefExpression) super.visitRefExpression(refExpression, p);
+    }
+
+    @Override
+    public Cs.PointerType visitPointerType(Cs.PointerType pointerType, P p) {
+        return (Cs.PointerType) super.visitPointerType(pointerType, p);
+    }
+
+    @Override
+    public Cs.RefType visitRefType(Cs.RefType refType, P p) {
+        return (Cs.RefType) super.visitRefType(refType, p);
     }
 
     @Override
@@ -72,6 +88,21 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     @Override
     public Cs.AwaitExpression visitAwaitExpression(Cs.AwaitExpression awaitExpression, P p) {
         return (Cs.AwaitExpression) super.visitAwaitExpression(awaitExpression, p);
+    }
+
+    @Override
+    public Cs.StackAllocExpression visitStackAllocExpression(Cs.StackAllocExpression stackAllocExpression, P p) {
+        return (Cs.StackAllocExpression) super.visitStackAllocExpression(stackAllocExpression, p);
+    }
+
+    @Override
+    public Cs.GotoStatement visitGotoStatement(Cs.GotoStatement gotoStatement, P p) {
+        return (Cs.GotoStatement) super.visitGotoStatement(gotoStatement, p);
+    }
+
+    @Override
+    public Cs.EventDeclaration visitEventDeclaration(Cs.EventDeclaration eventDeclaration, P p) {
+        return (Cs.EventDeclaration) super.visitEventDeclaration(eventDeclaration, p);
     }
 
     @Override
@@ -390,6 +421,11 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     }
 
     @Override
+    public Cs.CheckedExpression visitCheckedExpression(Cs.CheckedExpression checkedExpression, P p) {
+        return (Cs.CheckedExpression) super.visitCheckedExpression(checkedExpression, p);
+    }
+
+    @Override
     public Cs.CheckedStatement visitCheckedStatement(Cs.CheckedStatement checkedStatement, P p) {
         return (Cs.CheckedStatement) super.visitCheckedStatement(checkedStatement, p);
     }
@@ -502,6 +538,26 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     @Override
     public Cs.ArrayType visitArrayType(Cs.ArrayType arrayType, P p) {
         return (Cs.ArrayType) super.visitArrayType(arrayType, p);
+    }
+
+    @Override
+    public Cs.Try visitTry(Cs.Try try_, P p) {
+        return (Cs.Try) super.visitTry(try_, p);
+    }
+
+    @Override
+    public Cs.ArrowExpressionClause visitArrowExpressionClause(Cs.ArrowExpressionClause arrowExpressionClause, P p) {
+        return (Cs.ArrowExpressionClause) super.visitArrowExpressionClause(arrowExpressionClause, p);
+    }
+
+    @Override
+    public Cs.AccessorDeclaration visitAccessorDeclaration(Cs.AccessorDeclaration accessorDeclaration, P p) {
+        return (Cs.AccessorDeclaration) super.visitAccessorDeclaration(accessorDeclaration, p);
+    }
+
+    @Override
+    public Cs.PointerFieldAccess visitPointerFieldAccess(Cs.PointerFieldAccess pointerFieldAccess, P p) {
+        return (Cs.PointerFieldAccess) super.visitPointerFieldAccess(pointerFieldAccess, p);
     }
 
     @Override

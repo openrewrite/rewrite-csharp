@@ -55,6 +55,43 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         }
     }
 
+    public override J? VisitPointerType(Cs.PointerType node, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(node, CsSpace.Location.POINTER_TYPE_PREFIX, p);
+        VisitRightPadded(node.Padding.ElementType, CsRightPadded.Location.POINTER_TYPE_ELEMENT_TYPE, "*", p);
+        AfterSyntax(node, p);
+        return node;
+    }
+
+    public override Cs VisitTry(Cs.Try tryable, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(tryable, Space.Location.TRY_PREFIX, p);
+        p.Append("try");
+        Visit(tryable.Body, p);
+        Visit(tryable.Catches, p);
+        VisitLeftPadded("finally", tryable.Padding.Finally, CsLeftPadded.Location.TRY_FINALLIE, p);
+        AfterSyntax(tryable, p);
+        return tryable;
+    }
+
+
+
+    public override Cs VisitTryCatch(Cs.Try.Catch @catch, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(@catch, Space.Location.CATCH_PREFIX, p);
+        p.Append("catch");
+        if (@catch.Parameter.Tree.TypeExpression != null)
+        {
+            Visit(@catch.Parameter, p);
+        }
+
+        VisitLeftPadded("when", @catch.Padding.FilterExpression, CsLeftPadded.Location.TRY_CATCH_FILTER_EXPRESSION, p);
+
+        Visit(@catch.Body, p);
+        AfterSyntax(@catch, p);
+        return @catch;
+    }
+
     public override Cs VisitArrayType(Cs.ArrayType newArray, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(newArray, CsSpace.Location.ARRAY_TYPE_PREFIX, p);
@@ -150,7 +187,6 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         VisitRightPadded(node.Padding.LeftExpression, CsRightPadded.Location.JOIN_CLAUSE_LEFT_EXPRESSION, p);
         p.Append("equals");
         Visit(node.RightExpression, p);
-        VisitLeftPadded("into", node.Padding.Into, CsLeftPadded.Location.JOIN_CLAUSE_INTO, p);
         Visit(node.Into, p);
         AfterSyntax(node, p);
         return node;
@@ -282,11 +318,38 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         return node;
     }
 
+    public override J? VisitCheckedExpression(Cs.CheckedExpression node, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(node, CsSpace.Location.CHECKED_EXPRESSION_PREFIX, p);
+        Visit(node.CheckedOrUncheckedKeyword, p);
+        Visit(node.Expression, p);
+        AfterSyntax(node, p);
+        return node;
+    }
     public override J? VisitCheckedStatement(Cs.CheckedStatement node, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(node, CsSpace.Location.CHECKED_STATEMENT_PREFIX, p);
-        p.Append("checked");
+        Visit(node.Keyword, p);
         Visit(node.Block, p);
+        AfterSyntax(node, p);
+        return node;
+    }
+
+    public override J? VisitRefExpression(Cs.RefExpression node, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(node, CsSpace.Location.REF_EXPRESSION_PREFIX, p);
+        p.Append("ref");
+        Visit(node.Expression, p);
+        AfterSyntax(node, p);
+        return node;
+    }
+
+    public override J? VisitRefType(Cs.RefType node, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(node, CsSpace.Location.REF_TYPE_PREFIX, p);
+        p.Append("ref");
+        Visit(node.ReadonlyKeyword, p);
+        Visit(node.TypeIdentifier, p);
         AfterSyntax(node, p);
         return node;
     }
@@ -649,6 +712,10 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
                 Visit(unary.Expression, p);
                 break;
             case Cs.Unary.Types.PointerIndirection:
+                p.Append("*");
+                Visit(unary.Expression, p);
+                break;
+            case Cs.Unary.Types.PointerType:
                 Visit(unary.Expression, p);
                 p.Append("*");
                 break;
@@ -664,6 +731,71 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
 
         AfterSyntax(unary, p);
         return unary;
+    }
+
+    public override J? VisitAccessorDeclaration(Cs.AccessorDeclaration node, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(node, CsSpace.Location.ACCESSOR_DECLARATION_PREFIX, p);
+        Visit(node.Attributes, p);
+        Visit(node.Modifiers, p);
+        VisitLeftPaddedEnum(node.Padding.Kind, CsLeftPadded.Location.ACCESSOR_DECLARATION_KIND, p);
+        Visit(node.ExpressionBody, p);
+        Visit(node.Body, p);
+        AfterSyntax(node, p);
+        return node;
+    }
+
+    public override J? VisitArrowExpressionClause(Cs.ArrowExpressionClause node, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(node, CsSpace.Location.ARROW_EXPRESSION_CLAUSE_PREFIX, p);
+        p.Append("=>");
+        VisitRightPadded(node.Padding.Expression, CsRightPadded.Location.ARROW_EXPRESSION_CLAUSE_EXPRESSION, ";", p);
+        AfterSyntax(node, p);
+        return node;
+    }
+
+    public override J? VisitStackAllocExpression(Cs.StackAllocExpression node, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(node, Space.Location.COMPILATION_UNIT_PREFIX, p);
+        p.Append("stackalloc");
+        var newArray = node.Expression;
+        VisitSpace(newArray.Prefix, Space.Location.NEW_ARRAY_INITIALIZER, p);
+        Visit(newArray.TypeExpression, p);
+        Visit(newArray.Dimensions, p);
+        VisitContainer("{", newArray.Padding.Initializer, CsContainer.Location.ANY, ",", "}", p);
+        AfterSyntax(node, p);
+        return node;
+    }
+
+
+    public override Cs VisitPointerFieldAccess(Cs.PointerFieldAccess node, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(node, CsSpace.Location.POINTER_FIELD_ACCESS_PREFIX, p);
+        Visit(node.Target, p);
+        VisitLeftPadded("->", node.Padding.Name, CsLeftPadded.Location.POINTER_FIELD_ACCESS_NAME, p);
+        AfterSyntax(node, p);
+        return node;
+    }
+
+    public override J? VisitGotoStatement(Cs.GotoStatement node, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(node, CsSpace.Location.GOTO_STATEMENT_PREFIX, p);
+        p.Append("goto");
+        Visit(node.CaseOrDefaultKeyword, p);
+        Visit(node.Target, p);
+        return node;
+    }
+
+    public override J? VisitEventDeclaration(Cs.EventDeclaration node, PrintOutputCapture<TState> p)
+    {
+        BeforeSyntax(node, CsSpace.Location.EVENT_DECLARATION_PREFIX, p);
+        Visit(node.AttributeLists, p);
+        Visit(node.Modifiers, p);
+        VisitLeftPadded("event", node.Padding.TypeExpression, CsLeftPadded.Location.EVENT_DECLARATION_TYPE_EXPRESSION, p);
+        VisitRightPadded(node.Padding.InterfaceSpecifier, CsRightPadded.Location.EVENT_DECLARATION_INTERFACE_SPECIFIER, ".", p);
+        Visit(node.Name, p);
+        VisitContainer("{", node.Padding.Accessors, CsContainer.Location.EVENT_DECLARATION_ACCESSORS, "", "}", p);
+        return node;
     }
 
     public override Cs VisitCompilationUnit(Cs.CompilationUnit compilationUnit, PrintOutputCapture<TState> p)
@@ -716,7 +848,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
     public override J? VisitMethodDeclaration(Cs.MethodDeclaration node, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(node, Space.Location.METHOD_DECLARATION_PREFIX, p);
-        VisitSpace(Space.EMPTY, Space.Location.ANNOTATIONS, p);
+        Visit(node.Attributes, p);
 
         Visit(node.Modifiers, p);
 
@@ -739,19 +871,15 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
     }
 
 
-    public override J? VisitAnnotatedStatement(Cs.AnnotatedStatement annotatedStatement, PrintOutputCapture<TState> p)
+    public override J? VisitAnnotatedStatement(Cs.AnnotatedStatement node, PrintOutputCapture<TState> p)
     {
-        BeforeSyntax(annotatedStatement, CsSpace.Location.ANNOTATED_STATEMENT_PREFIX, p);
+        BeforeSyntax(node, CsSpace.Location.ANNOTATED_STATEMENT_PREFIX, p);
 
-        foreach (var attributeList in annotatedStatement.AttributeLists)
-        {
-            Visit(attributeList, p);
-        }
+        Visit(node.AttributeLists, p);
+        Visit(node.Statement, p);
+        AfterSyntax(node, p);
 
-        Visit(annotatedStatement.Statement, p);
-        AfterSyntax(annotatedStatement, p);
-
-        return annotatedStatement;
+        return node;
     }
 
     public override J? VisitAttributeList(Cs.AttributeList attributeList, PrintOutputCapture<TState> p)
@@ -970,30 +1098,13 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
     {
         BeforeSyntax(propertyDeclaration, CsSpace.Location.PROPERTY_DECLARATION_PREFIX, p);
         Visit(propertyDeclaration.AttributeLists, p);
-
-        foreach (var m in propertyDeclaration.Modifiers)
-        {
-            _delegate.VisitModifier(m, p);
-        }
-
+        Visit(propertyDeclaration.Modifiers, p);
         Visit(propertyDeclaration.TypeExpression, p);
-
-        if (propertyDeclaration.Padding.InterfaceSpecifier != null)
-        {
-            VisitRightPadded(propertyDeclaration.Padding.InterfaceSpecifier,
-                CsRightPadded.Location.PROPERTY_DECLARATION_INTERFACE_SPECIFIER, p);
-            p.Append('.');
-        }
-
+        VisitRightPadded(propertyDeclaration.Padding.InterfaceSpecifier, CsRightPadded.Location.PROPERTY_DECLARATION_INTERFACE_SPECIFIER, ".", p);
         Visit(propertyDeclaration.Name, p);
         Visit(propertyDeclaration.Accessors, p);
-
-        if (propertyDeclaration.Initializer != null)
-        {
-            VisitLeftPadded("=", propertyDeclaration.Padding.Initializer,
-                CsLeftPadded.Location.PROPERTY_DECLARATION_INITIALIZER, p);
-        }
-
+        Visit(propertyDeclaration.ExpressionBody, p);
+        VisitLeftPadded("=", propertyDeclaration.Padding.Initializer, CsLeftPadded.Location.PROPERTY_DECLARATION_INITIALIZER, p);
         AfterSyntax(propertyDeclaration, p);
         return propertyDeclaration;
     }
@@ -1082,11 +1193,8 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
     public override J? VisitDelegateDeclaration(Cs.DelegateDeclaration node, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(node, CsSpace.Location.DELEGATE_DECLARATION_PREFIX, p);
-        foreach (var modifier in node.Modifiers)
-        {
-            Visit(modifier, p);
-        }
-
+        Visit(node.Attributes, p);
+        Visit(node.Modifiers, p);
         VisitLeftPadded("delegate", node.Padding.ReturnType, CsLeftPadded.Location.DELEGATE_DECLARATION_RETURN_TYPE, p);
         Visit(node.Identifier, p);
         VisitContainer("<", node.Padding.TypeParameters, CsContainer.Location.CONVERSION_OPERATOR_DECLARATION_PARAMETERS, ",", ">", p);
@@ -1159,14 +1267,10 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
 
     public override Cs VisitLambda(Cs.Lambda lambda, PrintOutputCapture<TState> p)
     {
-        if (lambda.Modifiers.Any()) // only put space in front if current node actually has anything to contribute
-        {
-            BeforeSyntax(lambda, Space.Location.LAMBDA_PREFIX, p);
-        }
+        BeforeSyntax(lambda, Space.Location.LAMBDA_PREFIX, p);
 
         var javaLambda = lambda.LambdaExpression;
 
-        VisitSpace(lambda.Prefix, Space.Location.LAMBDA_PARAMETERS_PREFIX, p);
         VisitMarkers(lambda.Markers, p);
         foreach (var modifier in lambda.Modifiers)
         {
@@ -1375,6 +1479,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
 
 
 
+
         public override J? VisitClassDeclarationKind(J.ClassDeclaration.Kind kind, PrintOutputCapture<TState> p)
         {
             BeforeSyntax(kind, Space.Location.CLASS_KIND, p);
@@ -1443,11 +1548,21 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
             if (block.Markers.FirstOrDefault(m => m is SingleExpressionBlock) != null)
             {
                 p.Append("=>");
-                VisitStatements(block.Padding.Statements, JRightPadded.Location.BLOCK_STATEMENT, p);
+                var statement = block.Padding.Statements.First();
+                if (statement.Element is Cs.ExpressionStatement expressionStatement)
+                {
+                    // expression statements model their own semicolon
+                    Visit(expressionStatement, p);
+                }
+                else
+                {
+                    VisitRightPadded(statement, JRightPadded.Location.BLOCK_STATEMENT, ";", p);
+                }
+                // VisitStatements(block.Padding.Statements, JRightPadded.Location.BLOCK_STATEMENT, p);
 
-                VisitSpace(block.End, Space.Location.BLOCK_END, p);
+                // VisitSpace(block.End, Space.Location.BLOCK_END, p);
             }
-            else if (!block.Markers.OfType<OmitBraces>().Any() || block.Statements.Any())
+            else if (!block.Markers.OfType<OmitBraces>().Any())
             {
                 p.Append('{');
                 VisitStatements(block.Padding.Statements, JRightPadded.Location.BLOCK_STATEMENT, p);
@@ -1471,7 +1586,6 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
             AfterSyntax(block, p);
             return block;
         }
-
 
         protected override void VisitStatements(IList<JRightPadded<Statement>> statements, JRightPadded.Location location, PrintOutputCapture<TState> p)
         {
@@ -1654,6 +1768,11 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         // override print
         public override void PrintStatementTerminator(Statement s, PrintOutputCapture<TState> p)
         {
+            while (s is Cs.AnnotatedStatement annotatedStatement)
+                s = annotatedStatement.Statement;
+            // while (s is Cs.FixedStatement f && f.Block.Markers.OfType<OmitBraces>().Any() && f.Block.Statements.Count > 0)
+            //     s = f.Block.Statements.First();
+
             if (s is
                 Cs.ExpressionStatement or
                 Cs.AwaitExpression { Expression: J.ForEachLoop { Body: J.Block } })
@@ -1667,7 +1786,10 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
                 Cs.DelegateDeclaration or
                 Cs.UsingStatement { Statement: not J.Block and not Cs.UsingStatement and not Cs.ExpressionStatement } or
                 Cs.AwaitExpression { Expression: not J.ForEachLoop { Body: not J.Block}} or
-                Cs.PropertyDeclaration { Initializer: not null }
+                Cs.PropertyDeclaration { Initializer: not null } or
+                Cs.EventDeclaration { Accessors: null } or
+                Cs.GotoStatement or
+                Cs.AccessorDeclaration { Body: null, ExpressionBody: null }
                 )
             {
                 p.Append(';');

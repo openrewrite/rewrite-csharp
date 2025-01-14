@@ -149,4 +149,18 @@ public class PropertyDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         RewriteRun(sourceSpec);
     }
 
+
+    [Fact]
+    void AccessorWithAnnotation()
+    {
+        var sourceSpec = CSharp(
+            """
+            public override int Capacity
+            {
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                get => this.Length;
+            }
+            """);
+        RewriteRun(sourceSpec);
+    }
 }

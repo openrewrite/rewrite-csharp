@@ -1,61 +1,55 @@
-using FluentAssertions;
+using System.Diagnostics;
 using Rewrite.Test.CSharp;
-using Rewrite.RewriteJava.Tree;
 using Rewrite.Test;
 
 namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class CheckedTests(ITestOutputHelper output) : RewriteTest(output)
+public class StackAllocTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
-    private void CheckedStatement()
+    public void BasicStackAlloc()
     {
         RewriteRun(
             CSharp(
                 """
-                checked
-                {
-
-                }
+                stackalloc int[3];
                 """
             )
         );
     }
     [Fact]
-    private void UnCheckedStatement()
+    public void StackAllocWithInitializer()
     {
         RewriteRun(
             CSharp(
                 """
-                unchecked
-                {
-
-                }
+                stackalloc int[] { 1,2,3 };
                 """
             )
         );
     }
 
     [Fact]
-    private void CheckedExpression()
+    public void ImplicitStackAlloc()
     {
         RewriteRun(
             CSharp(
                 """
-                var a = checked(1);
+                stackalloc[ ] { 1,2,3 };
                 """
             )
         );
     }
+
     [Fact]
-    private void UnCheckedExpression()
+    public void VariableAssignedStackAlloc()
     {
         RewriteRun(
             CSharp(
                 """
-                var a = unchecked(1);
+                char* chars = stackalloc char[charCount];
                 """
             )
         );

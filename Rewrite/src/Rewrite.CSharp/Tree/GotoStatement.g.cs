@@ -24,66 +24,75 @@ namespace Rewrite.RewriteCSharp.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface Cs : J
 {
+    /// <summary>
+    /// Represents a C# goto statement, which performs an unconditional jump to a labeled statement,
+    /// case label, or default label within a switch statement.
+    /// <br/>
+    /// For example:
+    /// <code>
+    ///     // Simple goto statement
+    ///     goto Label;
+    ///     // Goto case in switch statement
+    ///     goto case 1;
+    ///     // Goto default in switch statement
+    ///     goto default;
+    ///     // With label declaration
+    ///     Label:
+    ///     Console.WriteLine("At label");
+    /// </code>
+    /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif
-    public partial class Keyword(
+    public partial class GotoStatement(
     Guid id,
     Space prefix,
     Markers markers,
-    Keyword.KeywordKind kind
-    ) : Cs, J<Keyword>, MutableTree<Keyword>
+    Keyword? caseOrDefaultKeyword,
+    Expression? target
+    ) : Cs, Statement, J<GotoStatement>, MutableTree<GotoStatement>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
-            return v.VisitKeyword(this, p);
+            return v.VisitGotoStatement(this, p);
         }
 
         public Guid Id => id;
 
-        public Keyword WithId(Guid newId)
+        public GotoStatement WithId(Guid newId)
         {
-            return newId == id ? this : new Keyword(newId, prefix, markers, kind);
+            return newId == id ? this : new GotoStatement(newId, prefix, markers, caseOrDefaultKeyword, target);
         }
         public Space Prefix => prefix;
 
-        public Keyword WithPrefix(Space newPrefix)
+        public GotoStatement WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Keyword(id, newPrefix, markers, kind);
+            return newPrefix == prefix ? this : new GotoStatement(id, newPrefix, markers, caseOrDefaultKeyword, target);
         }
         public Markers Markers => markers;
 
-        public Keyword WithMarkers(Markers newMarkers)
+        public GotoStatement WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Keyword(id, prefix, newMarkers, kind);
+            return ReferenceEquals(newMarkers, markers) ? this : new GotoStatement(id, prefix, newMarkers, caseOrDefaultKeyword, target);
         }
-        public KeywordKind Kind => kind;
+        public Cs.Keyword? CaseOrDefaultKeyword => caseOrDefaultKeyword;
 
-        public Keyword WithKind(KeywordKind newKind)
+        public GotoStatement WithCaseOrDefaultKeyword(Cs.Keyword? newCaseOrDefaultKeyword)
         {
-            return newKind == kind ? this : new Keyword(id, prefix, markers, newKind);
+            return ReferenceEquals(newCaseOrDefaultKeyword, caseOrDefaultKeyword) ? this : new GotoStatement(id, prefix, markers, newCaseOrDefaultKeyword, target);
         }
-        public enum KeywordKind
+        public Expression? Target => target;
+
+        public GotoStatement WithTarget(Expression? newTarget)
         {
-            Ref,
-            Out,
-            Await,
-            Base,
-            This,
-            Break,
-            Return,
-            Not,
-            Default,
-            Case,
-            Checked,
-            Unchecked,
+            return ReferenceEquals(newTarget, target) ? this : new GotoStatement(id, prefix, markers, caseOrDefaultKeyword, newTarget);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]
         #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
-            return other is Keyword && other.Id == Id;
+            return other is GotoStatement && other.Id == Id;
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]
