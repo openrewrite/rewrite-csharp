@@ -77,7 +77,19 @@ public class UnaryTests(ITestOutputHelper output) : RewriteTest(output)
         RewriteRun(
             CSharp(
                 """
-                var a = &a;
+                &myvar;
+                """
+            )
+        );
+    }
+
+    [Fact]
+    void PointerIndirection()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                *ptr;
                 """
             )
         );

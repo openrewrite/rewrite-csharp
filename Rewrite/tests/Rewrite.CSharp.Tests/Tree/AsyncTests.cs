@@ -25,20 +25,32 @@ public class AsyncTests(ITestOutputHelper output) : RewriteTest(output)
           )
         );
     }
-
     [Fact]
     private void AwaitStatement()
     {
         RewriteRun(
+            CSharp(
+                """
+                class T
+                {
+                    async System.Threading.Tasks.Task M()
+                    {
+                        await M();
+                    }
+                }
+                var requestAction =  async () => await sutProvider.Sut.RemoveDomain(orgId, id);
+                """
+            )
+        );
+    }
+
+    [Fact]
+    private void AsyncLambda()
+    {
+        RewriteRun(
           CSharp(
               """
-              class T
-              {
-                  async System.Threading.Tasks.Task M()
-                  {
-                      await M();
-                  }
-              }
+              var requestAction = async () => await sutProvider.Sut.RemoveDomain(orgId, id);
               """
           )
         );

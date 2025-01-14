@@ -47,6 +47,35 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
             return super.visit(tree, p);
         }
     }
+    public J visitPointerType(Cs.PointerType node, PrintOutputCapture<P> p) {
+        beforeSyntax(node, CsSpace.Location.POINTER_TYPE_PREFIX, p);
+        visitRightPadded(node.getPadding().getElementType(), CsRightPadded.Location.POINTER_TYPE_ELEMENT_TYPE, "*", p);
+        afterSyntax(node, p);
+        return node;
+    }
+
+    public Cs visitTry(Cs.Try tryable, PrintOutputCapture<P> p) {
+        beforeSyntax(tryable, Space.Location.TRY_PREFIX, p);
+        p.append("try");
+        visit(tryable.getBody(), p);
+        visit(tryable.getCatches(), p);
+        visitLeftPadded("finally", tryable.getPadding().getFinally(), CsLeftPadded.Location.TRY_FINALLIE, p);
+        afterSyntax(tryable, p);
+        return tryable;
+    }
+
+
+    public Cs visitTryCatch(Cs.Try.Catch catch_, PrintOutputCapture<P> p) {
+        beforeSyntax(catch_, Space.Location.CATCH_PREFIX, p);
+        p.append("catch");
+        if (catch_.getParameter().getTree().getTypeExpression() != null) {
+            visit(catch_.getParameter(), p);
+        }
+        visitLeftPadded("when", catch_.getPadding().getFilterExpression(), CsLeftPadded.Location.TRY_CATCH_FILTER_EXPRESSION, p);
+        visit(catch_.getBody(), p);
+        afterSyntax(catch_, p);
+        return catch_;
+    }
 
     @Override
     public Cs visitArrayType(Cs.ArrayType newArray, PrintOutputCapture<P> p) {
@@ -142,7 +171,6 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         visitRightPadded(node.getPadding().getLeftExpression(), CsRightPadded.Location.JOIN_CLAUSE_LEFT_EXPRESSION, p);
         p.append("equals");
         visit(node.getRightExpression(), p);
-        visitLeftPadded("into", node.getPadding().getInto(), CsLeftPadded.Location.JOIN_CLAUSE_INTO, p);
         visit(node.getInto(), p);
         afterSyntax(node, p);
         return node;
@@ -221,7 +249,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return node;
     }
 
-    protected <T extends J> void visitRightPadded(JRightPadded<T> rightPadded, CsRightPadded.Location location, String suffix, PrintOutputCapture<P> p) {
+    protected <T extends J> void visitRightPadded(@Nullable JRightPadded<T> rightPadded, CsRightPadded.Location location, @Nullable String suffix, PrintOutputCapture<P> p) {
         if (rightPadded != null) {
             beforeSyntax(Space.EMPTY, rightPadded.getMarkers(), (CsSpace.Location) null, p);
             visit(rightPadded.getElement(), p);
@@ -267,10 +295,38 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return node;
     }
 
+    @Override
+    public J visitCheckedExpression(Cs.CheckedExpression node, PrintOutputCapture<P> p) {
+        beforeSyntax(node, CsSpace.Location.CHECKED_EXPRESSION_PREFIX, p);
+        visit(node.getCheckedOrUncheckedKeyword(), p);
+        visit(node.getExpression(), p);
+        afterSyntax(node, p);
+        return node;
+    }
+
     public J visitCheckedStatement(Cs.CheckedStatement node, PrintOutputCapture<P> p) {
         beforeSyntax(node, CsSpace.Location.CHECKED_STATEMENT_PREFIX, p);
-        p.append("checked");
+        visit(node.getKeyword(), p);
         visit(node.getBlock(), p);
+        afterSyntax(node, p);
+        return node;
+    }
+
+    @Override
+    public J visitRefExpression(Cs.RefExpression node, PrintOutputCapture<P> p) {
+        beforeSyntax(node, CsSpace.Location.REF_EXPRESSION_PREFIX, p);
+        p.append("ref");
+        visit(node.getExpression(), p);
+        afterSyntax(node, p);
+        return node;
+    }
+
+    @Override
+    public J visitRefType(Cs.RefType node, PrintOutputCapture<P> p) {
+        beforeSyntax(node, CsSpace.Location.REF_TYPE_PREFIX, p);
+        p.append("ref");
+        visit(node.getReadonlyKeyword(), p);
+        visit(node.getTypeIdentifier(), p);
         afterSyntax(node, p);
         return node;
     }
@@ -541,15 +597,6 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     }
 
     @Override
-    public J visitUnaryPattern(Cs.UnaryPattern node, PrintOutputCapture<P> p) {
-        beforeSyntax(node, CsSpace.Location.UNARY_PATTERN_PREFIX, p);
-        visit(node.getOperator(), p);
-        visit(node.getPattern(), p);
-        afterSyntax(node, p);
-        return node;
-    }
-
-    @Override
     public J visitVarPattern(Cs.VarPattern node, PrintOutputCapture<P> p) {
         beforeSyntax(node, CsSpace.Location.VAR_PATTERN_PREFIX, p);
         p.append("var");
@@ -629,9 +676,12 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return usingStatement;
     }
 
+
+
+
+
     @Override
-    public Cs visitUnary(Cs.Unary unary, PrintOutputCapture<P> p)
-    {
+    public J visitUnary(Cs.Unary unary, PrintOutputCapture<P> p) {
         beforeSyntax(unary, Space.Location.UNARY_PREFIX, p);
         switch (unary.getOperator()) {
             case FromEnd:
@@ -639,6 +689,10 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
                 visit(unary.getExpression(), p);
                 break;
             case PointerIndirection:
+                p.append("*");
+                visit(unary.getExpression(), p);
+                break;
+            case PointerType:
                 visit(unary.getExpression(), p);
                 p.append("*");
                 break;
@@ -651,10 +705,74 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
                 p.append("!");
                 break;
         }
-
         afterSyntax(unary, p);
         return unary;
     }
+
+    @Override
+    public J visitAccessorDeclaration(Cs.AccessorDeclaration node, PrintOutputCapture<P> p) {
+        beforeSyntax(node, CsSpace.Location.ACCESSOR_DECLARATION_PREFIX, p);
+        visit(node.getAttributes(), p);
+        visit(node.getModifiers(), p);
+        visitLeftPaddedEnum(node.getPadding().getKind(), CsLeftPadded.Location.ACCESSOR_DECLARATION_KIND, p);
+        visit(node.getExpressionBody(), p);
+        visit(node.getBody(), p);
+        afterSyntax(node, p);
+        return node;
+    }
+
+    @Override
+    public J visitArrowExpressionClause(Cs.ArrowExpressionClause node, PrintOutputCapture<P> p) {
+        beforeSyntax(node, CsSpace.Location.ARROW_EXPRESSION_CLAUSE_PREFIX, p);
+        p.append("=>");
+        visitRightPadded(node.getPadding().getExpression(), CsRightPadded.Location.ARROW_EXPRESSION_CLAUSE_EXPRESSION, ";", p);
+        afterSyntax(node, p);
+        return node;
+    }
+
+    @Override
+    public J visitStackAllocExpression(Cs.StackAllocExpression node, PrintOutputCapture<P> p) {
+        beforeSyntax(node, CsSpace.Location.STACK_ALLOC_EXPRESSION_PREFIX, p);
+        p.append("stackalloc");
+        J.NewArray newArray = node.getExpression();
+        visitSpace(newArray.getPrefix(), Space.Location.NEW_ARRAY_INITIALIZER, p);
+        visit(newArray.getTypeExpression(), p);
+        visit(newArray.getDimensions(), p);
+        visitContainer("{", newArray.getPadding().getInitializer(), CsContainer.Location.ANY, ",", "}", p);
+        afterSyntax(node, p);
+        return node;
+    }
+
+    @Override
+    public Cs visitPointerFieldAccess(Cs.PointerFieldAccess node, PrintOutputCapture<P> p) {
+        beforeSyntax(node, CsSpace.Location.POINTER_FIELD_ACCESS_PREFIX, p);
+        visit(node.getTarget(), p);
+        visitLeftPadded("->", node.getPadding().getName(), CsLeftPadded.Location.POINTER_FIELD_ACCESS_NAME, p);
+        afterSyntax(node, p);
+        return node;
+    }
+
+    @Override
+    public J visitGotoStatement(Cs.GotoStatement node, PrintOutputCapture<P> p) {
+        beforeSyntax(node, CsSpace.Location.GOTO_STATEMENT_PREFIX, p);
+        p.append("goto");
+        visit(node.getCaseOrDefaultKeyword(), p);
+        visit(node.getTarget(), p);
+        return node;
+    }
+
+    @Override
+    public J visitEventDeclaration(Cs.EventDeclaration node, PrintOutputCapture<P> p) {
+        beforeSyntax(node, CsSpace.Location.EVENT_DECLARATION_PREFIX, p);
+        visit(node.getAttributeLists(), p);
+        visit(node.getModifiers(), p);
+        visitLeftPadded("event", node.getPadding().getTypeExpression(), CsLeftPadded.Location.EVENT_DECLARATION_TYPE_EXPRESSION, p);
+        visitRightPadded(node.getPadding().getInterfaceSpecifier(), CsRightPadded.Location.EVENT_DECLARATION_INTERFACE_SPECIFIER, ".", p);
+        visit(node.getName(), p);
+        visitContainer("{", node.getPadding().getAccessors(), CsContainer.Location.EVENT_DECLARATION_ACCESSORS, "", "}", p);
+        return node;
+    }
+
 
     @Override
     public Cs visitCompilationUnit(Cs.CompilationUnit compilationUnit, PrintOutputCapture<P> p) {
@@ -721,7 +839,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     @Override
     public J visitMethodDeclaration(Cs.MethodDeclaration node, PrintOutputCapture<P> p) {
         beforeSyntax(node, Space.Location.METHOD_DECLARATION_PREFIX, p);
-        visitSpace(Space.EMPTY, Space.Location.ANNOTATIONS, p);
+        visit(node.getAttributes(), p);
 
         visit(node.getModifiers(), p);
         visit(node.getReturnTypeExpression(), p);
@@ -740,16 +858,18 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return node;
     }
 
+
     @Override
-    public J visitAnnotatedStatement(Cs.AnnotatedStatement annotatedStatement, PrintOutputCapture<P> p) {
-        beforeSyntax(annotatedStatement, CsSpace.Location.ANNOTATED_STATEMENT_PREFIX, p);
-        for (Cs.AttributeList attributeList : annotatedStatement.getAttributeLists()) {
+    public J visitAnnotatedStatement(Cs.AnnotatedStatement node, PrintOutputCapture<P> p) {
+        beforeSyntax(node, CsSpace.Location.ANNOTATED_STATEMENT_PREFIX, p);
+        for (Cs.AttributeList attributeList : node.getAttributeLists()) {
             visit(attributeList, p);
         }
-        visit(annotatedStatement.getStatement(), p);
-        afterSyntax(annotatedStatement, p);
-        return annotatedStatement;
+        visit(node.getStatement(), p);
+        afterSyntax(node, p);
+        return node;
     }
+
 
     @Override
     public J visitAttributeList(Cs.AttributeList attributeList, PrintOutputCapture<P> p) {
@@ -930,27 +1050,23 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return nullSafeExpression;
     }
 
+
     @Override
-    public J visitPropertyDeclaration(Cs.PropertyDeclaration propertyDeclaration,
-            PrintOutputCapture<P> p) {
+    public J visitPropertyDeclaration(Cs.PropertyDeclaration propertyDeclaration, PrintOutputCapture<P> p) {
         beforeSyntax(propertyDeclaration, CsSpace.Location.PROPERTY_DECLARATION_PREFIX, p);
         visit(propertyDeclaration.getAttributeLists(), p);
-        for (J.Modifier m : propertyDeclaration.getModifiers()) {
-            delegate.visitModifier(m, p);
-        }
+        visit(propertyDeclaration.getModifiers(), p);
         visit(propertyDeclaration.getTypeExpression(), p);
-        if (propertyDeclaration.getPadding().getInterfaceSpecifier() != null) {
-            visitRightPadded(propertyDeclaration.getPadding().getInterfaceSpecifier(), CsRightPadded.Location.PROPERTY_DECLARATION_INTERFACE_SPECIFIER, p);
-            p.append('.');
-        }
+        visitRightPadded(propertyDeclaration.getPadding().getInterfaceSpecifier(), CsRightPadded.Location.PROPERTY_DECLARATION_INTERFACE_SPECIFIER, ".", p);
         visit(propertyDeclaration.getName(), p);
         visit(propertyDeclaration.getAccessors(), p);
-        if(propertyDeclaration.getInitializer() != null) {
-            visitLeftPadded("=", propertyDeclaration.getPadding().getInitializer(), CsLeftPadded.Location.PROPERTY_DECLARATION_INITIALIZER, p);
-        }
+        visit(propertyDeclaration.getExpressionBody(), p);
+        visitLeftPadded("=", propertyDeclaration.getPadding().getInitializer(), CsLeftPadded.Location.PROPERTY_DECLARATION_INITIALIZER, p);
+        
         afterSyntax(propertyDeclaration, p);
         return propertyDeclaration;
     }
+
 
     @Override
     public J visitUsingDirective(Cs.UsingDirective usingDirective, PrintOutputCapture<P> p) {
@@ -1020,9 +1136,8 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     @Override
     public J visitDelegateDeclaration(Cs.DelegateDeclaration node, PrintOutputCapture<P> p) {
         beforeSyntax(node, CsSpace.Location.DELEGATE_DECLARATION_PREFIX, p);
-        for (J modifier : node.getModifiers()) {
-            visit(modifier, p);
-        }
+        visit(node.getAttributes(), p);
+        visit(node.getModifiers(), p);
         visitLeftPadded("delegate", node.getPadding().getReturnType(), CsLeftPadded.Location.DELEGATE_DECLARATION_RETURN_TYPE, p);
         visit(node.getIdentifier(), p);
         visitContainer("<", node.getPadding().getTypeParameters(), CsContainer.Location.CONVERSION_OPERATOR_DECLARATION_PARAMETERS, ",", ">", p);
@@ -1088,25 +1203,21 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return node;
     }
 
+
     @Override
-    public Cs visitLambda(Cs.Lambda lambda, PrintOutputCapture<P> p)
-    {
-        if (!lambda.getModifiers().isEmpty()) // only put space in front if current node actually has anything to contribute
-        {
-            beforeSyntax(lambda, Space.Location.LAMBDA_PREFIX, p);
-        }
+    public Cs visitLambda(Cs.Lambda lambda, PrintOutputCapture<P> p) {
+        beforeSyntax(lambda, Space.Location.LAMBDA_PREFIX, p);
+
         J.Lambda javaLambda = lambda.getLambdaExpression();
-        visitSpace(lambda.getPrefix(), Space.Location.LAMBDA_PARAMETERS_PREFIX, p);
         visitMarkers(lambda.getMarkers(), p);
-        for(J.Modifier modifier : lambda.getModifiers())
-        {
-            delegate.visitModifier(modifier, p);
-        }
+
+        visit(lambda.getModifiers(), p);
 
         visit(javaLambda, p);
         afterSyntax(lambda, p);
         return lambda;
     }
+
 
     @Override
     public Space visitSpace(Space space, CsSpace.Location loc, PrintOutputCapture<P> p) {
@@ -1134,6 +1245,17 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
             afterSyntax(leftPadded.getMarkers(), p);
         }
     }
+//    protected void visitContainer(String before, @Nullable JContainer<? extends J> container, JContainer.Location location,
+//                                  String suffixBetween, @Nullable String after, PrintOutputCapture<P> p) {
+//        if (container == null) {
+//            return;
+//        }
+//        beforeSyntax(container.getBefore(), container.getMarkers(), location.getBeforeLocation(), p);
+//        p.append(before);
+//        visitRightPadded(container.getPadding().getElements(), location.getElementLocation(), suffixBetween, p);
+//        afterSyntax(container.getMarkers(), p);
+//        p.append(after == null ? "" : after);
+//    }
 
     protected void visitContainer(@Nullable String before, @Nullable JContainer<? extends J> container, CsContainer.Location location,
                                   String suffixBetween, @Nullable String after, PrintOutputCapture<P> p) {
@@ -1341,9 +1463,14 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
 
             if (block.getMarkers().findFirst(SingleExpressionBlock.class).isPresent()) {
                 p.append("=>");
-                visitStatements(block.getPadding().getStatements(), JRightPadded.Location.BLOCK_STATEMENT, p);
-                visitSpace(block.getEnd(), Space.Location.BLOCK_END, p);
-            } else if (!block.getMarkers().findFirst(OmitBraces.class).isPresent() || !block.getStatements().isEmpty()) {
+                JRightPadded<Statement> statement = block.getPadding().getStatements().get(0);
+                if (statement.getElement() instanceof Cs.ExpressionStatement) {
+                    // expression statements model their own semicolon
+                    visit(statement.getElement(), p);
+                } else {
+                    visitRightPadded(statement, JRightPadded.Location.BLOCK_STATEMENT, ";", p);
+                }
+            } else if (!block.getMarkers().findFirst(OmitBraces.class).isPresent()) {
                 p.append('{');
                 visitStatements(block.getPadding().getStatements(), JRightPadded.Location.BLOCK_STATEMENT, p);
                 visitSpace(block.getEnd(), Space.Location.BLOCK_END, p);
@@ -1552,6 +1679,10 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
 
         @Override
         protected void printStatementTerminator(Statement s, PrintOutputCapture<P> p) {
+            while (s instanceof Cs.AnnotatedStatement) {
+                s = ((Cs.AnnotatedStatement)s).getStatement();
+            }
+
             if (s instanceof Cs.ExpressionStatement ||
                     (s instanceof Cs.AwaitExpression &&
                             ((Cs.AwaitExpression) s).getExpression() instanceof J.ForEachLoop &&
@@ -1588,11 +1719,11 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
                     s instanceof Cs.Yield ||
                     s instanceof Cs.DelegateDeclaration ||
                     usingStatementRequiresSemicolon ||
-                    (s instanceof Cs.PropertyDeclaration && ((Cs.PropertyDeclaration) s).getInitializer() != null)) {
+                    (s instanceof Cs.PropertyDeclaration && ((Cs.PropertyDeclaration) s).getInitializer() != null) ||
+                    (s instanceof Cs.EventDeclaration && ((Cs.EventDeclaration)s).getPadding().getAccessors() == null) ||
+                    s instanceof Cs.GotoStatement ||
+                    (s instanceof Cs.AccessorDeclaration && ((Cs.AccessorDeclaration)s).getBody() == null && ((Cs.AccessorDeclaration)s).getExpressionBody() == null)) {
                 p.append(';');
-            } else if (s instanceof Cs.PropertyDeclaration && (((Cs.PropertyDeclaration) s).getInitializer() != null)) {
-                p.append(';');
-
             } else {
                 super.printStatementTerminator(s, p);
             }

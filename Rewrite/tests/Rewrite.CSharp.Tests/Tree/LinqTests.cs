@@ -104,6 +104,20 @@ public class LinqTests(ITestOutputHelper output) : RewriteTest(output)
     }
 
     [Fact]
+    public void JoinInto()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                from ou in orgUsers
+                join o in orgs on ou.orgId equals o.Id into outerOrg
+                select o;
+                """
+            )
+        );
+    }
+
+    [Fact]
     public void ComplexLinqQuery()
     {
         RewriteRun(

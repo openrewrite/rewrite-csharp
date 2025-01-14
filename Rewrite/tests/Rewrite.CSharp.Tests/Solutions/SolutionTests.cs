@@ -11,13 +11,28 @@ namespace Rewrite.CSharp.Tests.Solutions;
 using static Assertions;
 
 [Collection("C# remoting")]
-public class SolutionTests//(ITestOutputHelper output) : RewriteTest(output)
+public class SolutionTests(ITestOutputHelper output) : RewriteTest(output)
 {
-    private readonly ITestOutputHelper _output;
 
-    public SolutionTests(ITestOutputHelper output)
+
+    [Fact]
+    [Exploratory]
+    public void PlayTest()
     {
-        _output = output;
+        var actual = """
+                     hello
+                     there
+                     """;
+        var expected = "hello there";
+        actual.ShouldBeSameAs(expected);
+    }
+
+    [Fact]
+    [Exploratory]
+    public async Task ParseSingleFile()
+    {
+        var src = await File.ReadAllTextAsync(@"C:\projects\openrewrite\rewrite-csharp\Rewrite\tests\fixtures\DotNetty\src\DotNetty.Common\Internal\PlatformDependent0.cs");
+        RewriteRun(CSharp(src));
     }
 
     [Fact]
@@ -54,10 +69,15 @@ public class SolutionTests//(ITestOutputHelper output) : RewriteTest(output)
             .SelectMany(x => x)
             .ToList();
 
+        // var items = sourceFiles.Where(x => x.SourceTree is null);
+
         var brokenIdp = sourceFiles
             .Select(x =>
             {
+
                 var file = x.ProjectPath / x.SourceTree.SourcePath;
+
+
                 var before = File.ReadAllText(file);
                 var after = x.SourceTree.ToString();
                 return (file, before, after, x.SourceTree);

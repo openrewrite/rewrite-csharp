@@ -25,43 +25,27 @@ namespace Rewrite.RewriteCSharp.Tree;
 public partial interface Cs : J
 {
     /// <summary>
-    /// Represents a subpattern in C# pattern matching, which can appear in property patterns or positional patterns.
-    /// Each subpattern consists of an optional name with a corresponding pattern.
+    /// Represents a C# pointer type declaration.
     /// <br/>
     /// For example:
     /// <code>
-    ///     // In property patterns
-    ///     if (obj is { Name: "test", Age: &gt; 18 })
-    ///                  ^^^^^^^^^^^^  ^^^^^^^^^
-    ///     // In positional patterns
-    ///     if (point is (x: &gt; 0, y: &gt; 0))
-    ///                   ^^^^^^  ^^^^^^
-    ///     // With variable declarations
-    ///     if (person is { Id: var id, Name: string name })
-    ///                     ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
-    ///     // Nested patterns
-    ///     if (obj is { Address: { City: "NY" } })
-    ///                  ^^^^^^^^^^^^^^^^^^^^^^^
-    ///     // In switch expressions
-    ///     return shape switch {
-    ///         { Radius: var r } =&gt; Math.PI * r * r,
-    ///           ^^^^^^^^^^^
-    ///         { Width: var w, Height: var h } =&gt; w * h,
-    ///           ^^^^^^^^^^^^  ^^^^^^^^^^^^^
-    ///         _ =&gt; 0
-    ///     };
+    ///     // Basic pointer declaration
+    ///     int* ptr;
+    ///        ^
+    ///     // Pointer to pointer
+    ///     int** ptr;
+    ///         ^
     /// </code>
     /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif
-    public partial class Subpattern(
+    public partial class PointerType(
     Guid id,
     Space prefix,
     Markers markers,
-    Expression? name,
-    JLeftPadded<Pattern> pattern
-    ) : Cs, Expression, Expression<Subpattern>, J<Subpattern>, MutableTree<Subpattern>
+    JRightPadded<TypeTree> elementType
+    ) : Cs, TypeTree, Expression, Expression<PointerType>, TypedTree<PointerType>, J<PointerType>, TypeTree<PointerType>, MutableTree<PointerType>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -90,47 +74,41 @@ public partial interface Cs : J
 
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
-            return v.VisitSubpattern(this, p);
+            return v.VisitPointerType(this, p);
         }
 
         public Guid Id => id;
 
-        public Subpattern WithId(Guid newId)
+        public PointerType WithId(Guid newId)
         {
-            return newId == id ? this : new Subpattern(newId, prefix, markers, name, _pattern);
+            return newId == id ? this : new PointerType(newId, prefix, markers, _elementType);
         }
         public Space Prefix => prefix;
 
-        public Subpattern WithPrefix(Space newPrefix)
+        public PointerType WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Subpattern(id, newPrefix, markers, name, _pattern);
+            return newPrefix == prefix ? this : new PointerType(id, newPrefix, markers, _elementType);
         }
         public Markers Markers => markers;
 
-        public Subpattern WithMarkers(Markers newMarkers)
+        public PointerType WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Subpattern(id, prefix, newMarkers, name, _pattern);
+            return ReferenceEquals(newMarkers, markers) ? this : new PointerType(id, prefix, newMarkers, _elementType);
         }
-        public Expression? Name => name;
+        private readonly JRightPadded<TypeTree> _elementType = elementType;
+        public TypeTree ElementType => _elementType.Element;
 
-        public Subpattern WithName(Expression? newName)
+        public PointerType WithElementType(TypeTree newElementType)
         {
-            return ReferenceEquals(newName, name) ? this : new Subpattern(id, prefix, markers, newName, _pattern);
+            return Padding.WithElementType(_elementType.WithElement(newElementType));
         }
-        private readonly JLeftPadded<Cs.Pattern> _pattern = pattern;
-        public Cs.Pattern Pattern => _pattern.Element;
-
-        public Subpattern WithPattern(Cs.Pattern newPattern)
+        public sealed record PaddingHelper(Cs.PointerType T)
         {
-            return Padding.WithPattern(_pattern.WithElement(newPattern));
-        }
-        public sealed record PaddingHelper(Cs.Subpattern T)
-        {
-            public JLeftPadded<Cs.Pattern> Pattern => T._pattern;
+            public JRightPadded<TypeTree> ElementType => T._elementType;
 
-            public Cs.Subpattern WithPattern(JLeftPadded<Cs.Pattern> newPattern)
+            public Cs.PointerType WithElementType(JRightPadded<TypeTree> newElementType)
             {
-                return T._pattern == newPattern ? T : new Cs.Subpattern(T.Id, T.Prefix, T.Markers, T.Name, newPattern);
+                return T._elementType == newElementType ? T : new Cs.PointerType(T.Id, T.Prefix, T.Markers, newElementType);
             }
 
         }
@@ -140,7 +118,7 @@ public partial interface Cs : J
         #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
-            return other is Subpattern && other.Id == Id;
+            return other is PointerType && other.Id == Id;
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

@@ -24,66 +24,66 @@ namespace Rewrite.RewriteCSharp.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface Cs : J
 {
+    /// <summary>
+    /// Represents a C# ref expression used to pass variables by reference.
+    /// <br/>
+    /// For example:
+    /// <code>
+    ///     // Method call with ref argument
+    ///     Process(ref value);
+    ///     // Return ref value
+    ///     return ref field;
+    ///     // Local ref assignment
+    ///     ref int x = ref field;
+    ///     // Ref property return
+    ///     public ref int Property =&gt; ref field;
+    /// </code>
+    /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif
-    public partial class Keyword(
+    public partial class RefExpression(
     Guid id,
     Space prefix,
     Markers markers,
-    Keyword.KeywordKind kind
-    ) : Cs, J<Keyword>, MutableTree<Keyword>
+    Expression expression
+    ) : Cs, Expression, Expression<RefExpression>, J<RefExpression>, MutableTree<RefExpression>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
-            return v.VisitKeyword(this, p);
+            return v.VisitRefExpression(this, p);
         }
 
         public Guid Id => id;
 
-        public Keyword WithId(Guid newId)
+        public RefExpression WithId(Guid newId)
         {
-            return newId == id ? this : new Keyword(newId, prefix, markers, kind);
+            return newId == id ? this : new RefExpression(newId, prefix, markers, expression);
         }
         public Space Prefix => prefix;
 
-        public Keyword WithPrefix(Space newPrefix)
+        public RefExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Keyword(id, newPrefix, markers, kind);
+            return newPrefix == prefix ? this : new RefExpression(id, newPrefix, markers, expression);
         }
         public Markers Markers => markers;
 
-        public Keyword WithMarkers(Markers newMarkers)
+        public RefExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Keyword(id, prefix, newMarkers, kind);
+            return ReferenceEquals(newMarkers, markers) ? this : new RefExpression(id, prefix, newMarkers, expression);
         }
-        public KeywordKind Kind => kind;
+        public Expression Expression => expression;
 
-        public Keyword WithKind(KeywordKind newKind)
+        public RefExpression WithExpression(Expression newExpression)
         {
-            return newKind == kind ? this : new Keyword(id, prefix, markers, newKind);
-        }
-        public enum KeywordKind
-        {
-            Ref,
-            Out,
-            Await,
-            Base,
-            This,
-            Break,
-            Return,
-            Not,
-            Default,
-            Case,
-            Checked,
-            Unchecked,
+            return ReferenceEquals(newExpression, expression) ? this : new RefExpression(id, prefix, markers, newExpression);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]
         #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
-            return other is Keyword && other.Id == Id;
+            return other is RefExpression && other.Id == Id;
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

@@ -25,80 +25,68 @@ namespace Rewrite.RewriteCSharp.Tree;
 public partial interface Cs : J
 {
     /// <summary>
-    /// Represents a C# checked statement which enforces overflow checking for arithmetic operations
-    /// and conversions. Operations within a checked block will throw OverflowException if arithmetic
-    /// overflow occurs.
+    /// Represents a C# checked or unchecked expression which controls overflow checking behavior.
     /// <br/>
     /// For example:
     /// <code>
-    ///     // Basic checked block
-    ///     checked {
-    ///         int result = int.MaxValue + 1; // throws OverflowException
-    ///     }
-    ///     // Checked with multiple operations
-    ///     checked {
-    ///         int a = int.MaxValue;
-    ///         int b = a + 1;     // throws OverflowException
-    ///         short s = (short)a; // throws OverflowException if out of range
-    ///     }
-    ///     // Nested arithmetic operations
-    ///     checked {
-    ///         int result = Math.Abs(int.MinValue); // throws OverflowException
-    ///     }
+    ///     // Checked expression
+    ///     int result = checked(x + y);
+    ///     // Unchecked expression
+    ///     int value = unchecked(a * b);
     /// </code>
     /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif
-    public partial class CheckedStatement(
+    public partial class CheckedExpression(
     Guid id,
     Space prefix,
     Markers markers,
-    Keyword keyword,
-    J.Block block
-    ) : Cs, Statement, J<CheckedStatement>, MutableTree<CheckedStatement>
+    Keyword checkedOrUncheckedKeyword,
+    J.ControlParentheses<Expression> expression
+    ) : Cs, Expression, Expression<CheckedExpression>, J<CheckedExpression>, MutableTree<CheckedExpression>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
-            return v.VisitCheckedStatement(this, p);
+            return v.VisitCheckedExpression(this, p);
         }
 
         public Guid Id => id;
 
-        public CheckedStatement WithId(Guid newId)
+        public CheckedExpression WithId(Guid newId)
         {
-            return newId == id ? this : new CheckedStatement(newId, prefix, markers, keyword, block);
+            return newId == id ? this : new CheckedExpression(newId, prefix, markers, checkedOrUncheckedKeyword, expression);
         }
         public Space Prefix => prefix;
 
-        public CheckedStatement WithPrefix(Space newPrefix)
+        public CheckedExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new CheckedStatement(id, newPrefix, markers, keyword, block);
+            return newPrefix == prefix ? this : new CheckedExpression(id, newPrefix, markers, checkedOrUncheckedKeyword, expression);
         }
         public Markers Markers => markers;
 
-        public CheckedStatement WithMarkers(Markers newMarkers)
+        public CheckedExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new CheckedStatement(id, prefix, newMarkers, keyword, block);
+            return ReferenceEquals(newMarkers, markers) ? this : new CheckedExpression(id, prefix, newMarkers, checkedOrUncheckedKeyword, expression);
         }
-        public Cs.Keyword Keyword => keyword;
+        public Cs.Keyword CheckedOrUncheckedKeyword => checkedOrUncheckedKeyword;
 
-        public CheckedStatement WithKeyword(Cs.Keyword newKeyword)
+        public CheckedExpression WithCheckedOrUncheckedKeyword(Cs.Keyword newCheckedOrUncheckedKeyword)
         {
-            return ReferenceEquals(newKeyword, keyword) ? this : new CheckedStatement(id, prefix, markers, newKeyword, block);
+            return ReferenceEquals(newCheckedOrUncheckedKeyword, checkedOrUncheckedKeyword) ? this : new CheckedExpression(id, prefix, markers, newCheckedOrUncheckedKeyword, expression);
         }
-        public J.Block Block => block;
+        public J.ControlParentheses<Expression> Expression => expression;
 
-        public CheckedStatement WithBlock(J.Block newBlock)
+        public CheckedExpression WithExpression(J.ControlParentheses<Expression> newExpression)
         {
-            return ReferenceEquals(newBlock, block) ? this : new CheckedStatement(id, prefix, markers, keyword, newBlock);
+            return ReferenceEquals(newExpression, expression) ? this : new CheckedExpression(id, prefix, markers, checkedOrUncheckedKeyword, newExpression);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]
         #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
-            return other is CheckedStatement && other.Id == Id;
+            return other is CheckedExpression && other.Id == Id;
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

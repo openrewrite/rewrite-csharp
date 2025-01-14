@@ -27,63 +27,48 @@ public partial interface Cs : J
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif
-    public partial class Keyword(
+    public partial class StackAllocExpression(
     Guid id,
     Space prefix,
     Markers markers,
-    Keyword.KeywordKind kind
-    ) : Cs, J<Keyword>, MutableTree<Keyword>
+    J.NewArray expression
+    ) : Cs, Expression, Expression<StackAllocExpression>, J<StackAllocExpression>, MutableTree<StackAllocExpression>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
-            return v.VisitKeyword(this, p);
+            return v.VisitStackAllocExpression(this, p);
         }
 
         public Guid Id => id;
 
-        public Keyword WithId(Guid newId)
+        public StackAllocExpression WithId(Guid newId)
         {
-            return newId == id ? this : new Keyword(newId, prefix, markers, kind);
+            return newId == id ? this : new StackAllocExpression(newId, prefix, markers, expression);
         }
         public Space Prefix => prefix;
 
-        public Keyword WithPrefix(Space newPrefix)
+        public StackAllocExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Keyword(id, newPrefix, markers, kind);
+            return newPrefix == prefix ? this : new StackAllocExpression(id, newPrefix, markers, expression);
         }
         public Markers Markers => markers;
 
-        public Keyword WithMarkers(Markers newMarkers)
+        public StackAllocExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Keyword(id, prefix, newMarkers, kind);
+            return ReferenceEquals(newMarkers, markers) ? this : new StackAllocExpression(id, prefix, newMarkers, expression);
         }
-        public KeywordKind Kind => kind;
+        public J.NewArray Expression => expression;
 
-        public Keyword WithKind(KeywordKind newKind)
+        public StackAllocExpression WithExpression(J.NewArray newExpression)
         {
-            return newKind == kind ? this : new Keyword(id, prefix, markers, newKind);
-        }
-        public enum KeywordKind
-        {
-            Ref,
-            Out,
-            Await,
-            Base,
-            This,
-            Break,
-            Return,
-            Not,
-            Default,
-            Case,
-            Checked,
-            Unchecked,
+            return ReferenceEquals(newExpression, expression) ? this : new StackAllocExpression(id, prefix, markers, newExpression);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]
         #endif
         public bool Equals(Rewrite.Core.Tree? other)
         {
-            return other is Keyword && other.Id == Id;
+            return other is StackAllocExpression && other.Id == Id;
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

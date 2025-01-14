@@ -374,4 +374,31 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
             )
         );
     }
+
+    [Fact]
+    public void WithPointerParameter()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                class Test {
+                    abstract unsafe bool ByteArrayEquals(byte* bytes1);
+                }
+                """
+            )
+        );
+    }
+
+    [Fact]
+    public void AnonymousFunctionDelegate()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                obj.SomeEvent += delegate   { };
+                """
+            )
+        );
+    }
+
 }

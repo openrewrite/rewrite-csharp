@@ -16,9 +16,6 @@ public class AttributeTests(ITestOutputHelper output) : RewriteTest(output)
                 [Serializable]
                 public class Foo
                 {
-                    void M([Obsolete] int x)
-                    {
-                    }
                 }
                 """
             )
@@ -52,12 +49,12 @@ public class AttributeTests(ITestOutputHelper output) : RewriteTest(output)
     }
 
     [Fact]
-    public void Target()
+    public void NamedParameter()
     {
         RewriteRun(
             CSharp(
                 """
-                [type : Serializable]
+                [Skip(value: true)]
                 public class Foo;
                 """
             )

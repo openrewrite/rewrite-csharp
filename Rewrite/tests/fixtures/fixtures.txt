@@ -1,1 +1,2 @@
-https://github.com/macsux/pcf-ers-dotnetcore-demo/
+https://github.com/Azure/DotNetty
+https://github.com/0x7c13/Notepads

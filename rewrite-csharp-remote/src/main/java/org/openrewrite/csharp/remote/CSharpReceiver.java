@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /*
  * -------------------THIS FILE IS AUTO GENERATED--------------------------
  * Changes to this file may cause incorrect behavior and will be lost if
@@ -89,6 +90,35 @@ public class CSharpReceiver implements Receiver<Cs> {
             compilationUnit = compilationUnit.getPadding().withMembers(ctx.receiveNonNullNodes(compilationUnit.getPadding().getMembers(), CSharpReceiver::receiveRightPaddedTree));
             compilationUnit = compilationUnit.withEof(ctx.receiveNonNullNode(compilationUnit.getEof(), CSharpReceiver::receiveSpace));
             return compilationUnit;
+        }
+
+        @Override
+        public Cs.RefExpression visitRefExpression(Cs.RefExpression refExpression, ReceiverContext ctx) {
+            refExpression = refExpression.withId(ctx.receiveNonNullValue(refExpression.getId(), UUID.class));
+            refExpression = refExpression.withPrefix(ctx.receiveNonNullNode(refExpression.getPrefix(), CSharpReceiver::receiveSpace));
+            refExpression = refExpression.withMarkers(ctx.receiveNonNullNode(refExpression.getMarkers(), ctx::receiveMarkers));
+            refExpression = refExpression.withExpression(ctx.receiveNonNullNode(refExpression.getExpression(), ctx::receiveTree));
+            return refExpression;
+        }
+
+        @Override
+        public Cs.PointerType visitPointerType(Cs.PointerType pointerType, ReceiverContext ctx) {
+            pointerType = pointerType.withId(ctx.receiveNonNullValue(pointerType.getId(), UUID.class));
+            pointerType = pointerType.withPrefix(ctx.receiveNonNullNode(pointerType.getPrefix(), CSharpReceiver::receiveSpace));
+            pointerType = pointerType.withMarkers(ctx.receiveNonNullNode(pointerType.getMarkers(), ctx::receiveMarkers));
+            pointerType = pointerType.getPadding().withElementType(ctx.receiveNonNullNode(pointerType.getPadding().getElementType(), CSharpReceiver::receiveRightPaddedTree));
+            return pointerType;
+        }
+
+        @Override
+        public Cs.RefType visitRefType(Cs.RefType refType, ReceiverContext ctx) {
+            refType = refType.withId(ctx.receiveNonNullValue(refType.getId(), UUID.class));
+            refType = refType.withPrefix(ctx.receiveNonNullNode(refType.getPrefix(), CSharpReceiver::receiveSpace));
+            refType = refType.withMarkers(ctx.receiveNonNullNode(refType.getMarkers(), ctx::receiveMarkers));
+            refType = refType.withReadonlyKeyword(ctx.receiveNode(refType.getReadonlyKeyword(), ctx::receiveTree));
+            refType = refType.withTypeIdentifier(ctx.receiveNonNullNode(refType.getTypeIdentifier(), ctx::receiveTree));
+            refType = refType.withType(ctx.receiveValue(refType.getType(), JavaType.class));
+            return refType;
         }
 
         @Override
@@ -171,6 +201,39 @@ public class CSharpReceiver implements Receiver<Cs> {
             awaitExpression = awaitExpression.withExpression(ctx.receiveNonNullNode(awaitExpression.getExpression(), ctx::receiveTree));
             awaitExpression = awaitExpression.withType(ctx.receiveValue(awaitExpression.getType(), JavaType.class));
             return awaitExpression;
+        }
+
+        @Override
+        public Cs.StackAllocExpression visitStackAllocExpression(Cs.StackAllocExpression stackAllocExpression, ReceiverContext ctx) {
+            stackAllocExpression = stackAllocExpression.withId(ctx.receiveNonNullValue(stackAllocExpression.getId(), UUID.class));
+            stackAllocExpression = stackAllocExpression.withPrefix(ctx.receiveNonNullNode(stackAllocExpression.getPrefix(), CSharpReceiver::receiveSpace));
+            stackAllocExpression = stackAllocExpression.withMarkers(ctx.receiveNonNullNode(stackAllocExpression.getMarkers(), ctx::receiveMarkers));
+            stackAllocExpression = stackAllocExpression.withExpression(ctx.receiveNonNullNode(stackAllocExpression.getExpression(), ctx::receiveTree));
+            return stackAllocExpression;
+        }
+
+        @Override
+        public Cs.GotoStatement visitGotoStatement(Cs.GotoStatement gotoStatement, ReceiverContext ctx) {
+            gotoStatement = gotoStatement.withId(ctx.receiveNonNullValue(gotoStatement.getId(), UUID.class));
+            gotoStatement = gotoStatement.withPrefix(ctx.receiveNonNullNode(gotoStatement.getPrefix(), CSharpReceiver::receiveSpace));
+            gotoStatement = gotoStatement.withMarkers(ctx.receiveNonNullNode(gotoStatement.getMarkers(), ctx::receiveMarkers));
+            gotoStatement = gotoStatement.withCaseOrDefaultKeyword(ctx.receiveNode(gotoStatement.getCaseOrDefaultKeyword(), ctx::receiveTree));
+            gotoStatement = gotoStatement.withTarget(ctx.receiveNode(gotoStatement.getTarget(), ctx::receiveTree));
+            return gotoStatement;
+        }
+
+        @Override
+        public Cs.EventDeclaration visitEventDeclaration(Cs.EventDeclaration eventDeclaration, ReceiverContext ctx) {
+            eventDeclaration = eventDeclaration.withId(ctx.receiveNonNullValue(eventDeclaration.getId(), UUID.class));
+            eventDeclaration = eventDeclaration.withPrefix(ctx.receiveNonNullNode(eventDeclaration.getPrefix(), CSharpReceiver::receiveSpace));
+            eventDeclaration = eventDeclaration.withMarkers(ctx.receiveNonNullNode(eventDeclaration.getMarkers(), ctx::receiveMarkers));
+            eventDeclaration = eventDeclaration.withAttributeLists(ctx.receiveNonNullNodes(eventDeclaration.getAttributeLists(), ctx::receiveTree));
+            eventDeclaration = eventDeclaration.withModifiers(ctx.receiveNonNullNodes(eventDeclaration.getModifiers(), ctx::receiveTree));
+            eventDeclaration = eventDeclaration.getPadding().withTypeExpression(ctx.receiveNonNullNode(eventDeclaration.getPadding().getTypeExpression(), CSharpReceiver::receiveLeftPaddedTree));
+            eventDeclaration = eventDeclaration.getPadding().withInterfaceSpecifier(ctx.receiveNode(eventDeclaration.getPadding().getInterfaceSpecifier(), CSharpReceiver::receiveRightPaddedTree));
+            eventDeclaration = eventDeclaration.withName(ctx.receiveNonNullNode(eventDeclaration.getName(), ctx::receiveTree));
+            eventDeclaration = eventDeclaration.getPadding().withAccessors(ctx.receiveNode(eventDeclaration.getPadding().getAccessors(), CSharpReceiver::receiveContainer));
+            return eventDeclaration;
         }
 
         @Override
@@ -301,7 +364,8 @@ public class CSharpReceiver implements Receiver<Cs> {
             propertyDeclaration = propertyDeclaration.withTypeExpression(ctx.receiveNonNullNode(propertyDeclaration.getTypeExpression(), ctx::receiveTree));
             propertyDeclaration = propertyDeclaration.getPadding().withInterfaceSpecifier(ctx.receiveNode(propertyDeclaration.getPadding().getInterfaceSpecifier(), CSharpReceiver::receiveRightPaddedTree));
             propertyDeclaration = propertyDeclaration.withName(ctx.receiveNonNullNode(propertyDeclaration.getName(), ctx::receiveTree));
-            propertyDeclaration = propertyDeclaration.withAccessors(ctx.receiveNonNullNode(propertyDeclaration.getAccessors(), ctx::receiveTree));
+            propertyDeclaration = propertyDeclaration.withAccessors(ctx.receiveNode(propertyDeclaration.getAccessors(), ctx::receiveTree));
+            propertyDeclaration = propertyDeclaration.withExpressionBody(ctx.receiveNode(propertyDeclaration.getExpressionBody(), ctx::receiveTree));
             propertyDeclaration = propertyDeclaration.getPadding().withInitializer(ctx.receiveNode(propertyDeclaration.getPadding().getInitializer(), CSharpReceiver::receiveLeftPaddedTree));
             return propertyDeclaration;
         }
@@ -815,10 +879,21 @@ public class CSharpReceiver implements Receiver<Cs> {
         }
 
         @Override
+        public Cs.CheckedExpression visitCheckedExpression(Cs.CheckedExpression checkedExpression, ReceiverContext ctx) {
+            checkedExpression = checkedExpression.withId(ctx.receiveNonNullValue(checkedExpression.getId(), UUID.class));
+            checkedExpression = checkedExpression.withPrefix(ctx.receiveNonNullNode(checkedExpression.getPrefix(), CSharpReceiver::receiveSpace));
+            checkedExpression = checkedExpression.withMarkers(ctx.receiveNonNullNode(checkedExpression.getMarkers(), ctx::receiveMarkers));
+            checkedExpression = checkedExpression.withCheckedOrUncheckedKeyword(ctx.receiveNonNullNode(checkedExpression.getCheckedOrUncheckedKeyword(), ctx::receiveTree));
+            checkedExpression = checkedExpression.withExpression(ctx.receiveNonNullNode(checkedExpression.getExpression(), ctx::receiveTree));
+            return checkedExpression;
+        }
+
+        @Override
         public Cs.CheckedStatement visitCheckedStatement(Cs.CheckedStatement checkedStatement, ReceiverContext ctx) {
             checkedStatement = checkedStatement.withId(ctx.receiveNonNullValue(checkedStatement.getId(), UUID.class));
             checkedStatement = checkedStatement.withPrefix(ctx.receiveNonNullNode(checkedStatement.getPrefix(), CSharpReceiver::receiveSpace));
             checkedStatement = checkedStatement.withMarkers(ctx.receiveNonNullNode(checkedStatement.getMarkers(), ctx::receiveMarkers));
+            checkedStatement = checkedStatement.withKeyword(ctx.receiveNonNullNode(checkedStatement.getKeyword(), ctx::receiveTree));
             checkedStatement = checkedStatement.withBlock(ctx.receiveNonNullNode(checkedStatement.getBlock(), ctx::receiveTree));
             return checkedStatement;
         }
@@ -982,6 +1057,7 @@ public class CSharpReceiver implements Receiver<Cs> {
             delegateDeclaration = delegateDeclaration.withId(ctx.receiveNonNullValue(delegateDeclaration.getId(), UUID.class));
             delegateDeclaration = delegateDeclaration.withPrefix(ctx.receiveNonNullNode(delegateDeclaration.getPrefix(), CSharpReceiver::receiveSpace));
             delegateDeclaration = delegateDeclaration.withMarkers(ctx.receiveNonNullNode(delegateDeclaration.getMarkers(), ctx::receiveMarkers));
+            delegateDeclaration = delegateDeclaration.withAttributes(ctx.receiveNonNullNodes(delegateDeclaration.getAttributes(), ctx::receiveTree));
             delegateDeclaration = delegateDeclaration.withModifiers(ctx.receiveNonNullNodes(delegateDeclaration.getModifiers(), ctx::receiveTree));
             delegateDeclaration = delegateDeclaration.getPadding().withReturnType(ctx.receiveNonNullNode(delegateDeclaration.getPadding().getReturnType(), CSharpReceiver::receiveLeftPaddedTree));
             delegateDeclaration = delegateDeclaration.withIdentifier(ctx.receiveNonNullNode(delegateDeclaration.getIdentifier(), ctx::receiveTree));
@@ -1059,6 +1135,61 @@ public class CSharpReceiver implements Receiver<Cs> {
             arrayType = arrayType.withDimensions(ctx.receiveNonNullNodes(arrayType.getDimensions(), ctx::receiveTree));
             arrayType = arrayType.withType(ctx.receiveValue(arrayType.getType(), JavaType.class));
             return arrayType;
+        }
+
+        @Override
+        public Cs.Try visitTry(Cs.Try try_, ReceiverContext ctx) {
+            try_ = try_.withId(ctx.receiveNonNullValue(try_.getId(), UUID.class));
+            try_ = try_.withPrefix(ctx.receiveNonNullNode(try_.getPrefix(), CSharpReceiver::receiveSpace));
+            try_ = try_.withMarkers(ctx.receiveNonNullNode(try_.getMarkers(), ctx::receiveMarkers));
+            try_ = try_.withBody(ctx.receiveNonNullNode(try_.getBody(), ctx::receiveTree));
+            try_ = try_.withCatches(ctx.receiveNonNullNodes(try_.getCatches(), ctx::receiveTree));
+            try_ = try_.getPadding().withFinally(ctx.receiveNode(try_.getPadding().getFinally(), CSharpReceiver::receiveLeftPaddedTree));
+            return try_;
+        }
+
+        @Override
+        public Cs.Try.Catch visitTryCatch(Cs.Try.Catch catch_, ReceiverContext ctx) {
+            catch_ = catch_.withId(ctx.receiveNonNullValue(catch_.getId(), UUID.class));
+            catch_ = catch_.withPrefix(ctx.receiveNonNullNode(catch_.getPrefix(), CSharpReceiver::receiveSpace));
+            catch_ = catch_.withMarkers(ctx.receiveNonNullNode(catch_.getMarkers(), ctx::receiveMarkers));
+            catch_ = catch_.withParameter(ctx.receiveNonNullNode(catch_.getParameter(), ctx::receiveTree));
+            catch_ = catch_.getPadding().withFilterExpression(ctx.receiveNode(catch_.getPadding().getFilterExpression(), CSharpReceiver::receiveLeftPaddedTree));
+            catch_ = catch_.withBody(ctx.receiveNonNullNode(catch_.getBody(), ctx::receiveTree));
+            return catch_;
+        }
+
+        @Override
+        public Cs.ArrowExpressionClause visitArrowExpressionClause(Cs.ArrowExpressionClause arrowExpressionClause, ReceiverContext ctx) {
+            arrowExpressionClause = arrowExpressionClause.withId(ctx.receiveNonNullValue(arrowExpressionClause.getId(), UUID.class));
+            arrowExpressionClause = arrowExpressionClause.withPrefix(ctx.receiveNonNullNode(arrowExpressionClause.getPrefix(), CSharpReceiver::receiveSpace));
+            arrowExpressionClause = arrowExpressionClause.withMarkers(ctx.receiveNonNullNode(arrowExpressionClause.getMarkers(), ctx::receiveMarkers));
+            arrowExpressionClause = arrowExpressionClause.getPadding().withExpression(ctx.receiveNonNullNode(arrowExpressionClause.getPadding().getExpression(), CSharpReceiver::receiveRightPaddedTree));
+            return arrowExpressionClause;
+        }
+
+        @Override
+        public Cs.AccessorDeclaration visitAccessorDeclaration(Cs.AccessorDeclaration accessorDeclaration, ReceiverContext ctx) {
+            accessorDeclaration = accessorDeclaration.withId(ctx.receiveNonNullValue(accessorDeclaration.getId(), UUID.class));
+            accessorDeclaration = accessorDeclaration.withPrefix(ctx.receiveNonNullNode(accessorDeclaration.getPrefix(), CSharpReceiver::receiveSpace));
+            accessorDeclaration = accessorDeclaration.withMarkers(ctx.receiveNonNullNode(accessorDeclaration.getMarkers(), ctx::receiveMarkers));
+            accessorDeclaration = accessorDeclaration.withAttributes(ctx.receiveNonNullNodes(accessorDeclaration.getAttributes(), ctx::receiveTree));
+            accessorDeclaration = accessorDeclaration.withModifiers(ctx.receiveNonNullNodes(accessorDeclaration.getModifiers(), ctx::receiveTree));
+            accessorDeclaration = accessorDeclaration.getPadding().withKind(ctx.receiveNonNullNode(accessorDeclaration.getPadding().getKind(), leftPaddedValueReceiver(org.openrewrite.csharp.tree.Cs.AccessorDeclaration.AccessorKinds.class)));
+            accessorDeclaration = accessorDeclaration.withExpressionBody(ctx.receiveNode(accessorDeclaration.getExpressionBody(), ctx::receiveTree));
+            accessorDeclaration = accessorDeclaration.withBody(ctx.receiveNode(accessorDeclaration.getBody(), ctx::receiveTree));
+            return accessorDeclaration;
+        }
+
+        @Override
+        public Cs.PointerFieldAccess visitPointerFieldAccess(Cs.PointerFieldAccess pointerFieldAccess, ReceiverContext ctx) {
+            pointerFieldAccess = pointerFieldAccess.withId(ctx.receiveNonNullValue(pointerFieldAccess.getId(), UUID.class));
+            pointerFieldAccess = pointerFieldAccess.withPrefix(ctx.receiveNonNullNode(pointerFieldAccess.getPrefix(), CSharpReceiver::receiveSpace));
+            pointerFieldAccess = pointerFieldAccess.withMarkers(ctx.receiveNonNullNode(pointerFieldAccess.getMarkers(), ctx::receiveMarkers));
+            pointerFieldAccess = pointerFieldAccess.withTarget(ctx.receiveNonNullNode(pointerFieldAccess.getTarget(), ctx::receiveTree));
+            pointerFieldAccess = pointerFieldAccess.getPadding().withName(ctx.receiveNonNullNode(pointerFieldAccess.getPadding().getName(), CSharpReceiver::receiveLeftPaddedTree));
+            pointerFieldAccess = pointerFieldAccess.withType(ctx.receiveValue(pointerFieldAccess.getType(), JavaType.class));
+            return pointerFieldAccess;
         }
 
         @Override
@@ -1773,6 +1904,9 @@ public class CSharpReceiver implements Receiver<Cs> {
             @Override
             protected Function<ReceiverContext, Object> computeValue(Class type) {
                 if (type == Cs.CompilationUnit.class) return Factory::createCsCompilationUnit;
+                if (type == Cs.RefExpression.class) return Factory::createCsRefExpression;
+                if (type == Cs.PointerType.class) return Factory::createCsPointerType;
+                if (type == Cs.RefType.class) return Factory::createCsRefType;
                 if (type == Cs.ForEachVariableLoop.class) return Factory::createCsForEachVariableLoop;
                 if (type == Cs.ForEachVariableLoop.Control.class) return Factory::createCsForEachVariableLoopControl;
                 if (type == Cs.Argument.class) return Factory::createCsArgument;
@@ -1781,6 +1915,9 @@ public class CSharpReceiver implements Receiver<Cs> {
                 if (type == Cs.AssignmentOperation.class) return Factory::createCsAssignmentOperation;
                 if (type == Cs.AttributeList.class) return Factory::createCsAttributeList;
                 if (type == Cs.AwaitExpression.class) return Factory::createCsAwaitExpression;
+                if (type == Cs.StackAllocExpression.class) return Factory::createCsStackAllocExpression;
+                if (type == Cs.GotoStatement.class) return Factory::createCsGotoStatement;
+                if (type == Cs.EventDeclaration.class) return Factory::createCsEventDeclaration;
                 if (type == Cs.Binary.class) return Factory::createCsBinary;
                 if (type == Cs.BlockScopeNamespaceDeclaration.class) return Factory::createCsBlockScopeNamespaceDeclaration;
                 if (type == Cs.CollectionExpression.class) return Factory::createCsCollectionExpression;
@@ -1844,6 +1981,7 @@ public class CSharpReceiver implements Receiver<Cs> {
                 if (type == Cs.SwitchStatement.class) return Factory::createCsSwitchStatement;
                 if (type == Cs.LockStatement.class) return Factory::createCsLockStatement;
                 if (type == Cs.FixedStatement.class) return Factory::createCsFixedStatement;
+                if (type == Cs.CheckedExpression.class) return Factory::createCsCheckedExpression;
                 if (type == Cs.CheckedStatement.class) return Factory::createCsCheckedStatement;
                 if (type == Cs.UnsafeStatement.class) return Factory::createCsUnsafeStatement;
                 if (type == Cs.RangeExpression.class) return Factory::createCsRangeExpression;
@@ -1867,6 +2005,11 @@ public class CSharpReceiver implements Receiver<Cs> {
                 if (type == Cs.EnumMemberDeclaration.class) return Factory::createCsEnumMemberDeclaration;
                 if (type == Cs.AliasQualifiedName.class) return Factory::createCsAliasQualifiedName;
                 if (type == Cs.ArrayType.class) return Factory::createCsArrayType;
+                if (type == Cs.Try.class) return Factory::createCsTry;
+                if (type == Cs.Try.Catch.class) return Factory::createCsTryCatch;
+                if (type == Cs.ArrowExpressionClause.class) return Factory::createCsArrowExpressionClause;
+                if (type == Cs.AccessorDeclaration.class) return Factory::createCsAccessorDeclaration;
+                if (type == Cs.PointerFieldAccess.class) return Factory::createCsPointerFieldAccess;
                 if (type == J.AnnotatedType.class) return Factory::createJAnnotatedType;
                 if (type == J.Annotation.class) return Factory::createJAnnotation;
                 if (type == J.ArrayAccess.class) return Factory::createJArrayAccess;
@@ -1963,6 +2106,35 @@ public class CSharpReceiver implements Receiver<Cs> {
             );
         }
 
+        private static Cs.RefExpression createCsRefExpression(ReceiverContext ctx) {
+            return new Cs.RefExpression(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree)
+            );
+        }
+
+        private static Cs.PointerType createCsPointerType(ReceiverContext ctx) {
+            return new Cs.PointerType(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree)
+            );
+        }
+
+        private static Cs.RefType createCsRefType(ReceiverContext ctx) {
+            return new Cs.RefType(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNode(null, ctx::receiveTree),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree),
+                    ctx.receiveValue(null, JavaType.class)
+            );
+        }
+
         private static Cs.ForEachVariableLoop createCsForEachVariableLoop(ReceiverContext ctx) {
             return new Cs.ForEachVariableLoop(
                     ctx.receiveNonNullValue(null, UUID.class),
@@ -2042,6 +2214,39 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveValue(null, JavaType.class)
+            );
+        }
+
+        private static Cs.StackAllocExpression createCsStackAllocExpression(ReceiverContext ctx) {
+            return new Cs.StackAllocExpression(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree)
+            );
+        }
+
+        private static Cs.GotoStatement createCsGotoStatement(ReceiverContext ctx) {
+            return new Cs.GotoStatement(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNode(null, ctx::receiveTree),
+                    ctx.receiveNode(null, ctx::receiveTree)
+            );
+        }
+
+        private static Cs.EventDeclaration createCsEventDeclaration(ReceiverContext ctx) {
+            return new Cs.EventDeclaration(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNodes(null, ctx::receiveTree),
+                    ctx.receiveNonNullNodes(null, ctx::receiveTree),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveLeftPaddedTree),
+                    ctx.receiveNode(null, CSharpReceiver::receiveRightPaddedTree),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree),
+                    ctx.receiveNode(null, CSharpReceiver::receiveContainer)
             );
         }
 
@@ -2173,7 +2378,8 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
-                    ctx.receiveNonNullNode(null, ctx::receiveTree),
+                    ctx.receiveNode(null, ctx::receiveTree),
+                    ctx.receiveNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveLeftPaddedTree)
             );
         }
@@ -2686,11 +2892,22 @@ public class CSharpReceiver implements Receiver<Cs> {
             );
         }
 
+        private static Cs.CheckedExpression createCsCheckedExpression(ReceiverContext ctx) {
+            return new Cs.CheckedExpression(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree)
+            );
+        }
+
         private static Cs.CheckedStatement createCsCheckedStatement(ReceiverContext ctx) {
             return new Cs.CheckedStatement(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree)
             );
         }
@@ -2855,6 +3072,7 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
+                    ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveLeftPaddedTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, CSharpReceiver::receiveContainer),
@@ -2929,6 +3147,61 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
+                    ctx.receiveValue(null, JavaType.class)
+            );
+        }
+
+        private static Cs.Try createCsTry(ReceiverContext ctx) {
+            return new Cs.Try(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree),
+                    ctx.receiveNonNullNodes(null, ctx::receiveTree),
+                    ctx.receiveNode(null, CSharpReceiver::receiveLeftPaddedTree)
+            );
+        }
+
+        private static Cs.Try.Catch createCsTryCatch(ReceiverContext ctx) {
+            return new Cs.Try.Catch(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree),
+                    ctx.receiveNode(null, CSharpReceiver::receiveLeftPaddedTree),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree)
+            );
+        }
+
+        private static Cs.ArrowExpressionClause createCsArrowExpressionClause(ReceiverContext ctx) {
+            return new Cs.ArrowExpressionClause(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree)
+            );
+        }
+
+        private static Cs.AccessorDeclaration createCsAccessorDeclaration(ReceiverContext ctx) {
+            return new Cs.AccessorDeclaration(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNodes(null, ctx::receiveTree),
+                    ctx.receiveNonNullNodes(null, ctx::receiveTree),
+                    ctx.receiveNonNullNode(null, leftPaddedValueReceiver(org.openrewrite.csharp.tree.Cs.AccessorDeclaration.AccessorKinds.class)),
+                    ctx.receiveNode(null, ctx::receiveTree),
+                    ctx.receiveNode(null, ctx::receiveTree)
+            );
+        }
+
+        private static Cs.PointerFieldAccess createCsPointerFieldAccess(ReceiverContext ctx) {
+            return new Cs.PointerFieldAccess(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveLeftPaddedTree),
                     ctx.receiveValue(null, JavaType.class)
             );
         }

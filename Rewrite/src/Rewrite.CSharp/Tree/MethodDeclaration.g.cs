@@ -38,7 +38,7 @@ public partial interface Cs : J
     JRightPadded<TypeTree>? explicitInterfaceSpecifier,
     J.Identifier name,
     JContainer<Statement> parameters,
-    J.Block? body,
+    Statement? body,
     JavaType.Method? methodType,
     JContainer<TypeParameterConstraintClause> typeParameterConstraintClauses
     ) : Cs, Statement, TypedTree, TypedTree<MethodDeclaration>, J<MethodDeclaration>, MutableTree<MethodDeclaration>
@@ -136,9 +136,9 @@ public partial interface Cs : J
         {
             return Padding.WithParameters(JContainer<Statement>.WithElements(_parameters, newParameters));
         }
-        public J.Block? Body => body;
+        public Statement? Body => body;
 
-        public MethodDeclaration WithBody(J.Block? newBody)
+        public MethodDeclaration WithBody(Statement? newBody)
         {
             return ReferenceEquals(newBody, body) ? this : new MethodDeclaration(id, prefix, markers, attributes, modifiers, _typeParameters, returnTypeExpression, _explicitInterfaceSpecifier, name, _parameters, newBody, methodType, _typeParameterConstraintClauses);
         }

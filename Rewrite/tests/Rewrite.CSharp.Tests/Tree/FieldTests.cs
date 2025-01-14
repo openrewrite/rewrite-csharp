@@ -24,6 +24,22 @@ public class FieldTests(ITestOutputHelper output) : RewriteTest(output)
     }
 
     [Fact]
+    void Attributed()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                public static class B
+                {
+                    [ThreadStatic]
+                    static IEventExecutor currentExecutor;
+                }
+                """
+            )
+        );
+    }
+
+    [Fact]
     void Modifiers()
     {
         RewriteRun(

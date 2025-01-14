@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /*
  * -------------------THIS FILE IS AUTO GENERATED--------------------------
  * Changes to this file may cause incorrect behavior and will be lost if
@@ -71,6 +72,35 @@ public class CSharpSender implements Sender<Cs> {
             ctx.sendNodes(compilationUnit, e -> e.getPadding().getMembers(), CSharpSender::sendRightPadded, e -> e.getElement().getId());
             ctx.sendNode(compilationUnit, Cs.CompilationUnit::getEof, CSharpSender::sendSpace);
             return compilationUnit;
+        }
+
+        @Override
+        public Cs.RefExpression visitRefExpression(Cs.RefExpression refExpression, SenderContext ctx) {
+            ctx.sendValue(refExpression, Cs.RefExpression::getId);
+            ctx.sendNode(refExpression, Cs.RefExpression::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(refExpression, Cs.RefExpression::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(refExpression, Cs.RefExpression::getExpression, ctx::sendTree);
+            return refExpression;
+        }
+
+        @Override
+        public Cs.PointerType visitPointerType(Cs.PointerType pointerType, SenderContext ctx) {
+            ctx.sendValue(pointerType, Cs.PointerType::getId);
+            ctx.sendNode(pointerType, Cs.PointerType::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(pointerType, Cs.PointerType::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(pointerType, e -> e.getPadding().getElementType(), CSharpSender::sendRightPadded);
+            return pointerType;
+        }
+
+        @Override
+        public Cs.RefType visitRefType(Cs.RefType refType, SenderContext ctx) {
+            ctx.sendValue(refType, Cs.RefType::getId);
+            ctx.sendNode(refType, Cs.RefType::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(refType, Cs.RefType::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(refType, Cs.RefType::getReadonlyKeyword, ctx::sendTree);
+            ctx.sendNode(refType, Cs.RefType::getTypeIdentifier, ctx::sendTree);
+            ctx.sendTypedValue(refType, Cs.RefType::getType);
+            return refType;
         }
 
         @Override
@@ -153,6 +183,39 @@ public class CSharpSender implements Sender<Cs> {
             ctx.sendNode(awaitExpression, Cs.AwaitExpression::getExpression, ctx::sendTree);
             ctx.sendTypedValue(awaitExpression, Cs.AwaitExpression::getType);
             return awaitExpression;
+        }
+
+        @Override
+        public Cs.StackAllocExpression visitStackAllocExpression(Cs.StackAllocExpression stackAllocExpression, SenderContext ctx) {
+            ctx.sendValue(stackAllocExpression, Cs.StackAllocExpression::getId);
+            ctx.sendNode(stackAllocExpression, Cs.StackAllocExpression::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(stackAllocExpression, Cs.StackAllocExpression::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(stackAllocExpression, Cs.StackAllocExpression::getExpression, ctx::sendTree);
+            return stackAllocExpression;
+        }
+
+        @Override
+        public Cs.GotoStatement visitGotoStatement(Cs.GotoStatement gotoStatement, SenderContext ctx) {
+            ctx.sendValue(gotoStatement, Cs.GotoStatement::getId);
+            ctx.sendNode(gotoStatement, Cs.GotoStatement::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(gotoStatement, Cs.GotoStatement::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(gotoStatement, Cs.GotoStatement::getCaseOrDefaultKeyword, ctx::sendTree);
+            ctx.sendNode(gotoStatement, Cs.GotoStatement::getTarget, ctx::sendTree);
+            return gotoStatement;
+        }
+
+        @Override
+        public Cs.EventDeclaration visitEventDeclaration(Cs.EventDeclaration eventDeclaration, SenderContext ctx) {
+            ctx.sendValue(eventDeclaration, Cs.EventDeclaration::getId);
+            ctx.sendNode(eventDeclaration, Cs.EventDeclaration::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(eventDeclaration, Cs.EventDeclaration::getMarkers, ctx::sendMarkers);
+            ctx.sendNodes(eventDeclaration, Cs.EventDeclaration::getAttributeLists, ctx::sendTree, Tree::getId);
+            ctx.sendNodes(eventDeclaration, Cs.EventDeclaration::getModifiers, ctx::sendTree, Tree::getId);
+            ctx.sendNode(eventDeclaration, e -> e.getPadding().getTypeExpression(), CSharpSender::sendLeftPadded);
+            ctx.sendNode(eventDeclaration, e -> e.getPadding().getInterfaceSpecifier(), CSharpSender::sendRightPadded);
+            ctx.sendNode(eventDeclaration, Cs.EventDeclaration::getName, ctx::sendTree);
+            ctx.sendNode(eventDeclaration, e -> e.getPadding().getAccessors(), CSharpSender::sendContainer);
+            return eventDeclaration;
         }
 
         @Override
@@ -284,6 +347,7 @@ public class CSharpSender implements Sender<Cs> {
             ctx.sendNode(propertyDeclaration, e -> e.getPadding().getInterfaceSpecifier(), CSharpSender::sendRightPadded);
             ctx.sendNode(propertyDeclaration, Cs.PropertyDeclaration::getName, ctx::sendTree);
             ctx.sendNode(propertyDeclaration, Cs.PropertyDeclaration::getAccessors, ctx::sendTree);
+            ctx.sendNode(propertyDeclaration, Cs.PropertyDeclaration::getExpressionBody, ctx::sendTree);
             ctx.sendNode(propertyDeclaration, e -> e.getPadding().getInitializer(), CSharpSender::sendLeftPadded);
             return propertyDeclaration;
         }
@@ -797,10 +861,21 @@ public class CSharpSender implements Sender<Cs> {
         }
 
         @Override
+        public Cs.CheckedExpression visitCheckedExpression(Cs.CheckedExpression checkedExpression, SenderContext ctx) {
+            ctx.sendValue(checkedExpression, Cs.CheckedExpression::getId);
+            ctx.sendNode(checkedExpression, Cs.CheckedExpression::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(checkedExpression, Cs.CheckedExpression::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(checkedExpression, Cs.CheckedExpression::getCheckedOrUncheckedKeyword, ctx::sendTree);
+            ctx.sendNode(checkedExpression, Cs.CheckedExpression::getExpression, ctx::sendTree);
+            return checkedExpression;
+        }
+
+        @Override
         public Cs.CheckedStatement visitCheckedStatement(Cs.CheckedStatement checkedStatement, SenderContext ctx) {
             ctx.sendValue(checkedStatement, Cs.CheckedStatement::getId);
             ctx.sendNode(checkedStatement, Cs.CheckedStatement::getPrefix, CSharpSender::sendSpace);
             ctx.sendNode(checkedStatement, Cs.CheckedStatement::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(checkedStatement, Cs.CheckedStatement::getKeyword, ctx::sendTree);
             ctx.sendNode(checkedStatement, Cs.CheckedStatement::getBlock, ctx::sendTree);
             return checkedStatement;
         }
@@ -964,6 +1039,7 @@ public class CSharpSender implements Sender<Cs> {
             ctx.sendValue(delegateDeclaration, Cs.DelegateDeclaration::getId);
             ctx.sendNode(delegateDeclaration, Cs.DelegateDeclaration::getPrefix, CSharpSender::sendSpace);
             ctx.sendNode(delegateDeclaration, Cs.DelegateDeclaration::getMarkers, ctx::sendMarkers);
+            ctx.sendNodes(delegateDeclaration, Cs.DelegateDeclaration::getAttributes, ctx::sendTree, Tree::getId);
             ctx.sendNodes(delegateDeclaration, Cs.DelegateDeclaration::getModifiers, ctx::sendTree, Tree::getId);
             ctx.sendNode(delegateDeclaration, e -> e.getPadding().getReturnType(), CSharpSender::sendLeftPadded);
             ctx.sendNode(delegateDeclaration, Cs.DelegateDeclaration::getIdentifier, ctx::sendTree);
@@ -1041,6 +1117,61 @@ public class CSharpSender implements Sender<Cs> {
             ctx.sendNodes(arrayType, Cs.ArrayType::getDimensions, ctx::sendTree, Tree::getId);
             ctx.sendTypedValue(arrayType, Cs.ArrayType::getType);
             return arrayType;
+        }
+
+        @Override
+        public Cs.Try visitTry(Cs.Try try_, SenderContext ctx) {
+            ctx.sendValue(try_, Cs.Try::getId);
+            ctx.sendNode(try_, Cs.Try::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(try_, Cs.Try::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(try_, Cs.Try::getBody, ctx::sendTree);
+            ctx.sendNodes(try_, Cs.Try::getCatches, ctx::sendTree, Tree::getId);
+            ctx.sendNode(try_, e -> e.getPadding().getFinally(), CSharpSender::sendLeftPadded);
+            return try_;
+        }
+
+        @Override
+        public Cs.Try.Catch visitTryCatch(Cs.Try.Catch catch_, SenderContext ctx) {
+            ctx.sendValue(catch_, Cs.Try.Catch::getId);
+            ctx.sendNode(catch_, Cs.Try.Catch::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(catch_, Cs.Try.Catch::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(catch_, Cs.Try.Catch::getParameter, ctx::sendTree);
+            ctx.sendNode(catch_, e -> e.getPadding().getFilterExpression(), CSharpSender::sendLeftPadded);
+            ctx.sendNode(catch_, Cs.Try.Catch::getBody, ctx::sendTree);
+            return catch_;
+        }
+
+        @Override
+        public Cs.ArrowExpressionClause visitArrowExpressionClause(Cs.ArrowExpressionClause arrowExpressionClause, SenderContext ctx) {
+            ctx.sendValue(arrowExpressionClause, Cs.ArrowExpressionClause::getId);
+            ctx.sendNode(arrowExpressionClause, Cs.ArrowExpressionClause::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(arrowExpressionClause, Cs.ArrowExpressionClause::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(arrowExpressionClause, e -> e.getPadding().getExpression(), CSharpSender::sendRightPadded);
+            return arrowExpressionClause;
+        }
+
+        @Override
+        public Cs.AccessorDeclaration visitAccessorDeclaration(Cs.AccessorDeclaration accessorDeclaration, SenderContext ctx) {
+            ctx.sendValue(accessorDeclaration, Cs.AccessorDeclaration::getId);
+            ctx.sendNode(accessorDeclaration, Cs.AccessorDeclaration::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(accessorDeclaration, Cs.AccessorDeclaration::getMarkers, ctx::sendMarkers);
+            ctx.sendNodes(accessorDeclaration, Cs.AccessorDeclaration::getAttributes, ctx::sendTree, Tree::getId);
+            ctx.sendNodes(accessorDeclaration, Cs.AccessorDeclaration::getModifiers, ctx::sendTree, Tree::getId);
+            ctx.sendNode(accessorDeclaration, e -> e.getPadding().getKind(), CSharpSender::sendLeftPadded);
+            ctx.sendNode(accessorDeclaration, Cs.AccessorDeclaration::getExpressionBody, ctx::sendTree);
+            ctx.sendNode(accessorDeclaration, Cs.AccessorDeclaration::getBody, ctx::sendTree);
+            return accessorDeclaration;
+        }
+
+        @Override
+        public Cs.PointerFieldAccess visitPointerFieldAccess(Cs.PointerFieldAccess pointerFieldAccess, SenderContext ctx) {
+            ctx.sendValue(pointerFieldAccess, Cs.PointerFieldAccess::getId);
+            ctx.sendNode(pointerFieldAccess, Cs.PointerFieldAccess::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(pointerFieldAccess, Cs.PointerFieldAccess::getMarkers, ctx::sendMarkers);
+            ctx.sendNode(pointerFieldAccess, Cs.PointerFieldAccess::getTarget, ctx::sendTree);
+            ctx.sendNode(pointerFieldAccess, e -> e.getPadding().getName(), CSharpSender::sendLeftPadded);
+            ctx.sendTypedValue(pointerFieldAccess, Cs.PointerFieldAccess::getType);
+            return pointerFieldAccess;
         }
 
         @Override

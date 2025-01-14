@@ -107,7 +107,9 @@ public partial interface Cs : J
         {
             SuppressNullableWarning,
             PointerIndirection,
+            PointerType,
             AddressOf,
+            Spread,
             FromEnd,
         }
         public sealed record PaddingHelper(Cs.Unary T)
