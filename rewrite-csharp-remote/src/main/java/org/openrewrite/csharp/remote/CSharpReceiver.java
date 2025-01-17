@@ -1045,6 +1045,7 @@ public class CSharpReceiver implements Receiver<Cs> {
             indexerDeclaration = indexerDeclaration.withMarkers(ctx.receiveNonNullNode(indexerDeclaration.getMarkers(), ctx::receiveMarkers));
             indexerDeclaration = indexerDeclaration.withModifiers(ctx.receiveNonNullNodes(indexerDeclaration.getModifiers(), ctx::receiveTree));
             indexerDeclaration = indexerDeclaration.withTypeExpression(ctx.receiveNonNullNode(indexerDeclaration.getTypeExpression(), ctx::receiveTree));
+            indexerDeclaration = indexerDeclaration.getPadding().withExplicitInterfaceSpecifier(ctx.receiveNode(indexerDeclaration.getPadding().getExplicitInterfaceSpecifier(), CSharpReceiver::receiveRightPaddedTree));
             indexerDeclaration = indexerDeclaration.withIndexer(ctx.receiveNonNullNode(indexerDeclaration.getIndexer(), ctx::receiveTree));
             indexerDeclaration = indexerDeclaration.getPadding().withParameters(ctx.receiveNonNullNode(indexerDeclaration.getPadding().getParameters(), CSharpReceiver::receiveContainer));
             indexerDeclaration = indexerDeclaration.getPadding().withExpressionBody(ctx.receiveNode(indexerDeclaration.getPadding().getExpressionBody(), CSharpReceiver::receiveLeftPaddedTree));
@@ -3083,6 +3084,7 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNodes(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
+                    ctx.receiveNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer),
                     ctx.receiveNode(null, CSharpReceiver::receiveLeftPaddedTree),

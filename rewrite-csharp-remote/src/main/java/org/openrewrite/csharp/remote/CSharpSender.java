@@ -1027,6 +1027,7 @@ public class CSharpSender implements Sender<Cs> {
             ctx.sendNode(indexerDeclaration, Cs.IndexerDeclaration::getMarkers, ctx::sendMarkers);
             ctx.sendNodes(indexerDeclaration, Cs.IndexerDeclaration::getModifiers, ctx::sendTree, Tree::getId);
             ctx.sendNode(indexerDeclaration, Cs.IndexerDeclaration::getTypeExpression, ctx::sendTree);
+            ctx.sendNode(indexerDeclaration, e -> e.getPadding().getExplicitInterfaceSpecifier(), CSharpSender::sendRightPadded);
             ctx.sendNode(indexerDeclaration, Cs.IndexerDeclaration::getIndexer, ctx::sendTree);
             ctx.sendNode(indexerDeclaration, e -> e.getPadding().getParameters(), CSharpSender::sendContainer);
             ctx.sendNode(indexerDeclaration, e -> e.getPadding().getExpressionBody(), CSharpSender::sendLeftPadded);

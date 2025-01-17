@@ -8753,8 +8753,17 @@ public interface Cs extends J {
 
         /**
          * <pre>
+         * public int IFoo.this[int index]
+         *          ^^^^^
+         * </pre>
+         */
+        @Nullable
+        JRightPadded<TypeTree> explicitInterfaceSpecifier;
+
+        /**
+         * <pre>
          * public TypeName ISomeType.this[int index]
-         *                 ^^^^^^^^^^^^^^
+         *                          ^^^^
          * </pre>
          * Either FieldAccess (when interface qualified) or Identifier ("this")
          */
@@ -8790,6 +8799,14 @@ public interface Cs extends J {
         @Getter
         Block accessors;
 
+        public @Nullable TypeTree getExplicitInterfaceSpecifier() {
+            return explicitInterfaceSpecifier == null ? null : explicitInterfaceSpecifier.getElement();
+        }
+
+        public IndexerDeclaration withExplicitInterfaceSpecifier(@Nullable TypeTree explicitInterfaceSpecifier) {
+            return getPadding().withExplicitInterfaceSpecifier(JRightPadded.withElement(this.explicitInterfaceSpecifier, explicitInterfaceSpecifier));
+        }
+
         @Override
         public JavaType getType() {
             return typeExpression.getType();
@@ -8799,7 +8816,6 @@ public interface Cs extends J {
         public IndexerDeclaration withType(@Nullable JavaType type) {
             return withTypeExpression(typeExpression.withType(type));
         }
-
 
         public List<Expression> getParameters() {
             return parameters.getElements();
@@ -8846,13 +8862,23 @@ public interface Cs extends J {
         public static class Padding {
             private final IndexerDeclaration t;
 
+            public @Nullable JRightPadded<TypeTree> getExplicitInterfaceSpecifier() {
+                return t.explicitInterfaceSpecifier;
+            }
+
+            public IndexerDeclaration withExplicitInterfaceSpecifier(@Nullable JRightPadded<TypeTree> explicitInterfaceSpecifier) {
+                return t.explicitInterfaceSpecifier == explicitInterfaceSpecifier ? t : new IndexerDeclaration(t.id, t.prefix, t.markers,
+                        t.modifiers, t.typeExpression, explicitInterfaceSpecifier, t.indexer, t.parameters,
+                        t.expressionBody, t.accessors);
+            }
+
             public JContainer<Expression> getParameters() {
                 return t.parameters;
             }
 
             public IndexerDeclaration withParameters(JContainer<Expression> parameters) {
                 return t.parameters == parameters ? t : new IndexerDeclaration(t.id, t.prefix, t.markers,
-                        t.modifiers, t.typeExpression, t.indexer, parameters,
+                        t.modifiers, t.typeExpression, t.explicitInterfaceSpecifier, t.indexer, parameters,
                         t.expressionBody, t.accessors);
             }
 
@@ -8862,11 +8888,12 @@ public interface Cs extends J {
 
             public IndexerDeclaration withExpressionBody(@Nullable JLeftPadded<Expression> expressionBody) {
                 return t.expressionBody == expressionBody ? t : new IndexerDeclaration(t.id, t.prefix, t.markers,
-                        t.modifiers, t.typeExpression, t.indexer, t.parameters,
+                        t.modifiers, t.typeExpression, t.explicitInterfaceSpecifier, t.indexer, t.parameters,
                         expressionBody, t.accessors);
             }
         }
     }
+
 
     /**
      * Represents a C# delegate declaration which defines a type that can reference methods.

@@ -172,7 +172,7 @@ public class RewriteTest(ITestOutputHelper output)
                     throw new Exception(error.Message);
                 }
 
-                var unknown = sourceFile.Descendents().OfType<J.Unknown>().SelectMany(x => x.Markers.OfType<ParseExceptionResult>().Select(x => x.TreeType)).ToList();
+                var unknown = sourceFile.Descendents().OfType<J.Unknown.Source>().SelectMany(x => x.Markers.OfType<ParseExceptionResult>().Select(x => x.TreeType)).ToList();
                 if(unknown.Any())
                 {
                     throw new Exception($"LST should not contain unknown nodes: {unknown.First()}");
