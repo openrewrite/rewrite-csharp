@@ -116,6 +116,11 @@ public class DotNetRemotingServerEngine extends AbstractRemotingServerEngine {
 
     }
 
+    @Override
+    public String getLanguageName() {
+        return "CSharp";
+    }
+
     static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
         File destFile = new File(destinationDir, zipEntry.getName());
 
