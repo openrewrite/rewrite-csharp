@@ -682,26 +682,19 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitArgument(ArgumentSyntax node)
     {
-        // if (node.NameColon == null && node.RefKindKeyword.IsKind(SyntaxKind.None))
-        // {
-        //     return Convert<Expression>(node.Expression);
-        // }
-        // else
-        // {
-            var nameColumn = node.NameColon != null
-                ? new JRightPadded<J.Identifier>(
-                    element: MapIdentifier(identifier: node.NameColon.Name.Identifier, type: null),
-                    after: Format(Trailing(node.NameColon.Name)), markers: Markers.EMPTY)
-                : null;
-            return new Cs.Argument(
-                id: Core.Tree.RandomId(),
-                prefix: Format(Leading(node)),
-                markers: Markers.EMPTY,
-                nameColumn: nameColumn,
-                refKindKeyword: VisitKeyword(node.RefKindKeyword),
-                expression: Convert<Expression>(node.Expression)!
-                );
-        // }
+        var nameColumn = node.NameColon != null
+            ? new JRightPadded<J.Identifier>(
+                element: MapIdentifier(identifier: node.NameColon.Name.Identifier, type: null),
+                after: Format(Trailing(node.NameColon.Name)), markers: Markers.EMPTY)
+            : null;
+        return new Cs.Argument(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            nameColumn: nameColumn,
+            refKindKeyword: VisitKeyword(node.RefKindKeyword),
+            expression: Convert<Expression>(node.Expression)!
+            );
     }
 
     public override J.Block VisitBlock(BlockSyntax node)
@@ -937,7 +930,20 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitAttributeArgument(AttributeArgumentSyntax node)
     {
-        return base.VisitAttributeArgument(node);
+        var f = node.NameColon.;
+        var nameColumn = node.NameColon != null
+            ? new JRightPadded<J.Identifier>(
+                element: MapIdentifier(identifier: node.NameColon.Name.Identifier, type: null),
+                after: Format(Trailing(node.NameColon.Name)), markers: Markers.EMPTY)
+            : null;
+        return new Cs.Argument(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            nameColumn: nameColumn,
+            refKindKeyword: null,
+            expression: Convert<Expression>(node.Expression)!
+        );
     }
 
     public override J? VisitAwaitExpression(AwaitExpressionSyntax node)
@@ -4024,6 +4030,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             markers: Markers.EMPTY,
             modifiers: MapModifiers(stl: node.Modifiers),
             typeExpression: MapTypeTree(node.Type),
+            explicitInterfaceSpecifier: ToRightPadded<TypeTree>(node.ExplicitInterfaceSpecifier),
             indexer: new J.Identifier(
                 id: Core.Tree.RandomId(),
                 prefix: Format(Leading(node.ThisKeyword)),

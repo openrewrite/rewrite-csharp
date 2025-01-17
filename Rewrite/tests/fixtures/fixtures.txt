@@ -1,2 +1,13 @@
-https://github.com/Azure/DotNetty
 https://github.com/0x7c13/Notepads
+https://github.com/2dust/v2rayN
+https://github.com/AngleSharp/AngleSharp
+https://github.com/AutoDarkMode/Windows-Auto-Night-Mode
+https://github.com/Azure/DotNetty
+https://github.com/BepInEx/BepInEx
+https://github.com/BluePointLilac/ContextMenuManager
+https://github.com/aalhour/C-Sharp-Algorithms
+https://github.com/atom0s/Steamless
+https://github.com/bchavez/Bogus
+https://github.com/bombomby/optick
+https://github.com/borisdj/EFCore.BulkExtensions
+https://github.com/brandonlw/Psychson

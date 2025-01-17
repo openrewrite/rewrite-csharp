@@ -49,7 +49,7 @@ public class AttributeTests(ITestOutputHelper output) : RewriteTest(output)
     }
 
     [Fact]
-    public void NamedParameter()
+    public void NamedArgument()
     {
         RewriteRun(
             CSharp(

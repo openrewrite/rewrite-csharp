@@ -1244,6 +1244,7 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         indexerDeclaration = indexerDeclaration.withMarkers(visitMarkers(indexerDeclaration.getMarkers(), p));
         indexerDeclaration = indexerDeclaration.withModifiers(ListUtils.map(indexerDeclaration.getModifiers(), el -> (J.Modifier)visit(el, p)));
         indexerDeclaration = indexerDeclaration.withTypeExpression(visitAndCast(indexerDeclaration.getTypeExpression(), p));
+        indexerDeclaration = indexerDeclaration.getPadding().withExplicitInterfaceSpecifier(visitRightPadded(indexerDeclaration.getPadding().getExplicitInterfaceSpecifier(), CsRightPadded.Location.INDEXER_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, p));
         indexerDeclaration = indexerDeclaration.withIndexer(visitAndCast(indexerDeclaration.getIndexer(), p));
         indexerDeclaration = indexerDeclaration.getPadding().withParameters(visitContainer(indexerDeclaration.getPadding().getParameters(), CsContainer.Location.INDEXER_DECLARATION_PARAMETERS, p));
         indexerDeclaration = indexerDeclaration.getPadding().withExpressionBody(visitLeftPadded(indexerDeclaration.getPadding().getExpressionBody(), CsLeftPadded.Location.INDEXER_DECLARATION_EXPRESSION_BODY, p));
