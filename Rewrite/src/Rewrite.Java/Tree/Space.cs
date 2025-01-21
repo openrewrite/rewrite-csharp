@@ -218,7 +218,7 @@ public class Space(
         CASE,
         CASE_PREFIX,
         CASE_BODY,
-        CASE_EXPRESSION,
+        CASE_CASE_LABELS,
         CASE_SUFFIX,
         CATCH_ALTERNATIVE_SUFFIX,
         CATCH_PREFIX,
@@ -344,6 +344,7 @@ public class Space(
         WILDCARD_BOUND,
         WILDCARD_PREFIX,
         YIELD_PREFIX,
+        ERRONEOUS_PREFIX,
     }
 
     private static Space Build(string str, IList<Comment> comments)
