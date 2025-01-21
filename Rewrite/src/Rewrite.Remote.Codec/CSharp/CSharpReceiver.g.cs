@@ -1279,9 +1279,10 @@ public record CSharpReceiver : Receiver
             @case = @case.WithPrefix(ctx.ReceiveNode(@case.Prefix, ReceiveSpace)!);
             @case = @case.WithMarkers(ctx.ReceiveNode(@case.Markers, ctx.ReceiveMarkers)!);
             @case = @case.WithCaseType(ctx.ReceiveValue(@case.CaseType)!);
-            @case = @case.Padding.WithExpressions(ctx.ReceiveNode(@case.Padding.Expressions, ReceiveContainer)!);
+            @case = @case.Padding.WithCaseLabels(ctx.ReceiveNode(@case.Padding.CaseLabels, ReceiveContainer)!);
             @case = @case.Padding.WithStatements(ctx.ReceiveNode(@case.Padding.Statements, ReceiveContainer)!);
             @case = @case.Padding.WithBody(ctx.ReceiveNode(@case.Padding.Body, ReceiveRightPadded));
+            @case = @case.WithGuard(ctx.ReceiveNode(@case.Guard, ctx.ReceiveTree));
             return @case;
         }
 
@@ -1888,6 +1889,15 @@ public record CSharpReceiver : Receiver
             source = source.WithMarkers(ctx.ReceiveNode(source.Markers, ctx.ReceiveMarkers)!);
             source = source.WithText(ctx.ReceiveValue(source.Text)!);
             return source;
+        }
+
+        public override J VisitErroneous(J.Erroneous erroneous, ReceiverContext ctx)
+        {
+            erroneous = erroneous.WithId(ctx.ReceiveValue(erroneous.Id)!);
+            erroneous = erroneous.WithPrefix(ctx.ReceiveNode(erroneous.Prefix, ReceiveSpace)!);
+            erroneous = erroneous.WithMarkers(ctx.ReceiveNode(erroneous.Markers, ctx.ReceiveMarkers)!);
+            erroneous = erroneous.WithText(ctx.ReceiveValue(erroneous.Text)!);
+            return erroneous;
         }
 
     }
@@ -3246,9 +3256,10 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveValue(default(J.Case.Types))!,
-                    ctx.ReceiveNode(default(JContainer<Expression>), ReceiveContainer)!,
+                    ctx.ReceiveNode(default(JContainer<J>), ReceiveContainer)!,
                     ctx.ReceiveNode(default(JContainer<Statement>), ReceiveContainer)!,
-                    ctx.ReceiveNode(default(JRightPadded<J>?), ReceiveRightPadded)!
+                    ctx.ReceiveNode(default(JRightPadded<J>?), ReceiveRightPadded)!,
+                    ctx.ReceiveNode(default(Expression?), ctx.ReceiveTree)!
                 );
             }
 
@@ -3916,6 +3927,16 @@ public record CSharpReceiver : Receiver
             if (type is "Rewrite.RewriteCSharp.Tree.J.Unknown.Source" or "org.openrewrite.java.tree.J$Unknown$Source")
             {
                 return new J.Unknown.Source(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveValue(default(string))!
+                );
+            }
+
+            if (type is "Rewrite.RewriteCSharp.Tree.J.Erroneous" or "org.openrewrite.java.tree.J$Erroneous")
+            {
+                return new J.Erroneous(
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,

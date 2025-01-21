@@ -1270,9 +1270,10 @@ public record CSharpSender : Sender
             ctx.SendNode(@case, v => v.Prefix, SendSpace);
             ctx.SendNode(@case, v => v.Markers, ctx.SendMarkers);
             ctx.SendValue(@case, v => v.CaseType);
-            ctx.SendNode(@case, v => v.Padding.Expressions, SendContainer);
+            ctx.SendNode(@case, v => v.Padding.CaseLabels, SendContainer);
             ctx.SendNode(@case, v => v.Padding.Statements, SendContainer);
             ctx.SendNode(@case, v => v.Padding.Body, SendRightPadded);
+            ctx.SendNode(@case, v => v.Guard, ctx.SendTree);
             return @case;
         }
 
@@ -1893,6 +1894,15 @@ public record CSharpSender : Sender
             ctx.SendNode(source, v => v.Markers, ctx.SendMarkers);
             ctx.SendValue(source, v => v.Text);
             return source;
+        }
+
+        public override J VisitErroneous(J.Erroneous erroneous, SenderContext ctx)
+        {
+            ctx.SendValue(erroneous, v => v.Id);
+            ctx.SendNode(erroneous, v => v.Prefix, SendSpace);
+            ctx.SendNode(erroneous, v => v.Markers, ctx.SendMarkers);
+            ctx.SendValue(erroneous, v => v.Text);
+            return erroneous;
         }
 
         private static void SendContainer<T>(JContainer<T> container, SenderContext ctx)

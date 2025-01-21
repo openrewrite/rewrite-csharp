@@ -31,9 +31,10 @@ public partial interface J : Rewrite.Core.Tree
     Space prefix,
     Markers markers,
     Case.Types caseType,
-    JContainer<Expression> expressions,
+    JContainer<J> caseLabels,
     JContainer<Statement> statements,
-    JRightPadded<J>? body
+    JRightPadded<J>? body,
+    Expression? guard
     ) : J, Statement, J<Case>, MutableTree<Case>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
@@ -70,32 +71,32 @@ public partial interface J : Rewrite.Core.Tree
 
         public Case WithId(Guid newId)
         {
-            return newId == id ? this : new Case(newId, prefix, markers, caseType, _expressions, _statements, _body);
+            return newId == id ? this : new Case(newId, prefix, markers, caseType, _caseLabels, _statements, _body, guard);
         }
         public Space Prefix => prefix;
 
         public Case WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Case(id, newPrefix, markers, caseType, _expressions, _statements, _body);
+            return newPrefix == prefix ? this : new Case(id, newPrefix, markers, caseType, _caseLabels, _statements, _body, guard);
         }
         public Markers Markers => markers;
 
         public Case WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Case(id, prefix, newMarkers, caseType, _expressions, _statements, _body);
+            return ReferenceEquals(newMarkers, markers) ? this : new Case(id, prefix, newMarkers, caseType, _caseLabels, _statements, _body, guard);
         }
         public Types CaseType => caseType;
 
         public Case WithCaseType(Types newCaseType)
         {
-            return newCaseType == caseType ? this : new Case(id, prefix, markers, newCaseType, _expressions, _statements, _body);
+            return newCaseType == caseType ? this : new Case(id, prefix, markers, newCaseType, _caseLabels, _statements, _body, guard);
         }
-        private readonly JContainer<Expression> _expressions = expressions;
-        public IList<Expression> Expressions => _expressions.GetElements();
+        private readonly JContainer<J> _caseLabels = caseLabels;
+        public IList<J> CaseLabels => _caseLabels.GetElements();
 
-        public Case WithExpressions(IList<Expression> newExpressions)
+        public Case WithCaseLabels(IList<J> newCaseLabels)
         {
-            return Padding.WithExpressions(JContainer<Expression>.WithElements(_expressions, newExpressions));
+            return Padding.WithCaseLabels(JContainer<J>.WithElements(_caseLabels, newCaseLabels));
         }
         private readonly JContainer<Statement> _statements = statements;
         public IList<Statement> Statements => _statements.GetElements();
@@ -111,6 +112,12 @@ public partial interface J : Rewrite.Core.Tree
         {
             return Padding.WithBody(JRightPadded<J>.WithElement(_body, newBody));
         }
+        public Expression? Guard => guard;
+
+        public Case WithGuard(Expression? newGuard)
+        {
+            return ReferenceEquals(newGuard, guard) ? this : new Case(id, prefix, markers, caseType, _caseLabels, _statements, _body, newGuard);
+        }
         public enum Types
         {
             Statement,
@@ -118,25 +125,25 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.Case T)
         {
-            public JContainer<Expression> Expressions => T._expressions;
+            public JContainer<J> CaseLabels => T._caseLabels;
 
-            public J.Case WithExpressions(JContainer<Expression> newExpressions)
+            public J.Case WithCaseLabels(JContainer<J> newCaseLabels)
             {
-                return T._expressions == newExpressions ? T : new J.Case(T.Id, T.Prefix, T.Markers, T.CaseType, newExpressions, T._statements, T._body);
+                return T._caseLabels == newCaseLabels ? T : new J.Case(T.Id, T.Prefix, T.Markers, T.CaseType, newCaseLabels, T._statements, T._body, T.Guard);
             }
 
             public JContainer<Statement> Statements => T._statements;
 
             public J.Case WithStatements(JContainer<Statement> newStatements)
             {
-                return T._statements == newStatements ? T : new J.Case(T.Id, T.Prefix, T.Markers, T.CaseType, T._expressions, newStatements, T._body);
+                return T._statements == newStatements ? T : new J.Case(T.Id, T.Prefix, T.Markers, T.CaseType, T._caseLabels, newStatements, T._body, T.Guard);
             }
 
             public JRightPadded<J>? Body => T._body;
 
             public J.Case WithBody(JRightPadded<J>? newBody)
             {
-                return T._body == newBody ? T : new J.Case(T.Id, T.Prefix, T.Markers, T.CaseType, T._expressions, T._statements, newBody);
+                return T._body == newBody ? T : new J.Case(T.Id, T.Prefix, T.Markers, T.CaseType, T._caseLabels, T._statements, newBody, T.Guard);
             }
 
         }

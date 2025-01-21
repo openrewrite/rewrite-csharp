@@ -1288,9 +1288,10 @@ public class CSharpSender implements Sender<Cs> {
             ctx.sendNode(case_, J.Case::getPrefix, CSharpSender::sendSpace);
             ctx.sendNode(case_, J.Case::getMarkers, ctx::sendMarkers);
             ctx.sendValue(case_, J.Case::getType);
-            ctx.sendNode(case_, e -> e.getPadding().getExpressions(), CSharpSender::sendContainer);
+            ctx.sendNode(case_, e -> e.getPadding().getCaseLabels(), CSharpSender::sendContainer);
             ctx.sendNode(case_, e -> e.getPadding().getStatements(), CSharpSender::sendContainer);
             ctx.sendNode(case_, e -> e.getPadding().getBody(), CSharpSender::sendRightPadded);
+            ctx.sendNode(case_, J.Case::getGuard, ctx::sendTree);
             return case_;
         }
 
@@ -1905,6 +1906,15 @@ public class CSharpSender implements Sender<Cs> {
             ctx.sendNode(source, J.Unknown.Source::getMarkers, ctx::sendMarkers);
             ctx.sendValue(source, J.Unknown.Source::getText);
             return source;
+        }
+
+        @Override
+        public J.Erroneous visitErroneous(J.Erroneous erroneous, SenderContext ctx) {
+            ctx.sendValue(erroneous, J.Erroneous::getId);
+            ctx.sendNode(erroneous, J.Erroneous::getPrefix, CSharpSender::sendSpace);
+            ctx.sendNode(erroneous, J.Erroneous::getMarkers, ctx::sendMarkers);
+            ctx.sendValue(erroneous, J.Erroneous::getText);
+            return erroneous;
         }
 
     }

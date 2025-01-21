@@ -850,4 +850,9 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
         return (J.Unknown) super.visitUnknown(unknown, p);
     }
 
+    @Override
+    public J.Erroneous visitErroneous(J.Erroneous erroneous, P p) {
+        return (J.Erroneous) super.visitErroneous(erroneous, p);
+    }
+
 }

@@ -1306,9 +1306,10 @@ public class CSharpReceiver implements Receiver<Cs> {
             case_ = case_.withPrefix(ctx.receiveNonNullNode(case_.getPrefix(), CSharpReceiver::receiveSpace));
             case_ = case_.withMarkers(ctx.receiveNonNullNode(case_.getMarkers(), ctx::receiveMarkers));
             case_ = case_.withType(ctx.receiveNonNullValue(case_.getType(), J.Case.Type.class));
-            case_ = case_.getPadding().withExpressions(ctx.receiveNonNullNode(case_.getPadding().getExpressions(), CSharpReceiver::receiveContainer));
+            case_ = case_.getPadding().withCaseLabels(ctx.receiveNonNullNode(case_.getPadding().getCaseLabels(), CSharpReceiver::receiveContainer));
             case_ = case_.getPadding().withStatements(ctx.receiveNonNullNode(case_.getPadding().getStatements(), CSharpReceiver::receiveContainer));
             case_ = case_.getPadding().withBody(ctx.receiveNode(case_.getPadding().getBody(), CSharpReceiver::receiveRightPaddedTree));
+            case_ = case_.withGuard(ctx.receiveNode(case_.getGuard(), ctx::receiveTree));
             return case_;
         }
 
@@ -1896,6 +1897,15 @@ public class CSharpReceiver implements Receiver<Cs> {
             return source;
         }
 
+        @Override
+        public J.Erroneous visitErroneous(J.Erroneous erroneous, ReceiverContext ctx) {
+            erroneous = erroneous.withId(ctx.receiveNonNullValue(erroneous.getId(), UUID.class));
+            erroneous = erroneous.withPrefix(ctx.receiveNonNullNode(erroneous.getPrefix(), CSharpReceiver::receiveSpace));
+            erroneous = erroneous.withMarkers(ctx.receiveNonNullNode(erroneous.getMarkers(), ctx::receiveMarkers));
+            erroneous = erroneous.withText(ctx.receiveNonNullValue(erroneous.getText(), String.class));
+            return erroneous;
+        }
+
     }
 
     private static class Factory implements ReceiverFactory {
@@ -2078,6 +2088,7 @@ public class CSharpReceiver implements Receiver<Cs> {
                 if (type == J.Yield.class) return Factory::createJYield;
                 if (type == J.Unknown.class) return Factory::createJUnknown;
                 if (type == J.Unknown.Source.class) return Factory::createJUnknownSource;
+                if (type == J.Erroneous.class) return Factory::createJErroneous;
                 throw new IllegalArgumentException("Unknown type: " + type);
             }
         };
@@ -3322,7 +3333,8 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullValue(null, J.Case.Type.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer),
-                    ctx.receiveNode(null, CSharpReceiver::receiveRightPaddedTree)
+                    ctx.receiveNode(null, CSharpReceiver::receiveRightPaddedTree),
+                    ctx.receiveNode(null, ctx::receiveTree)
             );
         }
 
@@ -3933,6 +3945,15 @@ public class CSharpReceiver implements Receiver<Cs> {
 
         private static J.Unknown.Source createJUnknownSource(ReceiverContext ctx) {
             return new J.Unknown.Source(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullValue(null, String.class)
+            );
+        }
+
+        private static J.Erroneous createJErroneous(ReceiverContext ctx) {
+            return new J.Erroneous(
                     ctx.receiveNonNullValue(null, UUID.class),
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
