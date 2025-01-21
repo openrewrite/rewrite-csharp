@@ -369,13 +369,13 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     public override J VisitCase(J.Case @case, PrintOutputCapture<P> p)
     {
         BeforeSyntax(@case, Space.Location.CASE_PREFIX, p);
-        Expression elem = @case.Expressions[0];
+        Expression elem = (Expression)@case.CaseLabels[0];
         if (elem is not J.Identifier identifier || !identifier.SimpleName.Equals("default"))
         {
             p.Append("case");
         }
 
-        VisitContainer("", @case.Padding.Expressions, JContainer.Location.CASE_EXPRESSION, ",", "", p);
+        VisitContainer("", @case.Padding.CaseLabels, JContainer.Location.CASE_CASE_LABELS, ",", "", p);
         VisitSpace(@case.Padding.Statements.Before, Space.Location.CASE, p);
         p.Append(@case.CaseType == J.Case.Types.Statement ? ":" : "->");
         VisitStatements(@case.Padding.Statements.Padding.Elements, JRightPadded.Location.CASE, p);

@@ -25,7 +25,7 @@ partial interface J
                 if (block.Statements.Count != 0)
                 {
                     var caze = (J.Case)block.Statements[0];
-                    javaType.Value = caze.Expressions[0].Type!;
+                    javaType.Value = (caze.CaseLabels[0] as Expression)?.Type!;
                 }
 
                 return block;
