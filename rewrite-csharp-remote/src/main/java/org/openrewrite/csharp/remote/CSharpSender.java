@@ -1727,6 +1727,7 @@ public class CSharpSender implements Sender<Cs> {
             ctx.sendNode(switchExpression, J.SwitchExpression::getMarkers, ctx::sendMarkers);
             ctx.sendNode(switchExpression, J.SwitchExpression::getSelector, ctx::sendTree);
             ctx.sendNode(switchExpression, J.SwitchExpression::getCases, ctx::sendTree);
+            ctx.sendTypedValue(switchExpression, J.SwitchExpression::getType);
             return switchExpression;
         }
 

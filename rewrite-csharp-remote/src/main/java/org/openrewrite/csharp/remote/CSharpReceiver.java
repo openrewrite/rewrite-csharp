@@ -1724,6 +1724,7 @@ public class CSharpReceiver implements Receiver<Cs> {
             switchExpression = switchExpression.withMarkers(ctx.receiveNonNullNode(switchExpression.getMarkers(), ctx::receiveMarkers));
             switchExpression = switchExpression.withSelector(ctx.receiveNonNullNode(switchExpression.getSelector(), ctx::receiveTree));
             switchExpression = switchExpression.withCases(ctx.receiveNonNullNode(switchExpression.getCases(), ctx::receiveTree));
+            switchExpression = switchExpression.withType(ctx.receiveValue(switchExpression.getType(), JavaType.class));
             return switchExpression;
         }
 
@@ -3768,7 +3769,8 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
                     ctx.receiveNonNullNode(null, ctx::receiveMarkers),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
-                    ctx.receiveNonNullNode(null, ctx::receiveTree)
+                    ctx.receiveNonNullNode(null, ctx::receiveTree),
+                    ctx.receiveValue(null, JavaType.class)
             );
         }
 
