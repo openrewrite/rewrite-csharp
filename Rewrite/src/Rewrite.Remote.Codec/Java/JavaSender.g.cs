@@ -610,6 +610,7 @@ public record JavaSender : Sender
             ctx.SendNode(switchExpression, v => v.Markers, ctx.SendMarkers);
             ctx.SendNode(switchExpression, v => v.Selector, ctx.SendTree);
             ctx.SendNode(switchExpression, v => v.Cases, ctx.SendTree);
+            ctx.SendTypedValue(switchExpression, v => v.Type);
             return switchExpression;
         }
 

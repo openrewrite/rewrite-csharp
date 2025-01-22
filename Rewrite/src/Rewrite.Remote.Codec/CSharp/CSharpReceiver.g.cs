@@ -1708,6 +1708,7 @@ public record CSharpReceiver : Receiver
             switchExpression = switchExpression.WithMarkers(ctx.ReceiveNode(switchExpression.Markers, ctx.ReceiveMarkers)!);
             switchExpression = switchExpression.WithSelector(ctx.ReceiveNode(switchExpression.Selector, ReceiveControlParentheses)!);
             switchExpression = switchExpression.WithCases(ctx.ReceiveNode(switchExpression.Cases, ctx.ReceiveTree)!);
+            switchExpression = switchExpression.WithType(ctx.ReceiveValue(switchExpression.Type));
             return switchExpression;
         }
 
@@ -3733,7 +3734,8 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(J.ControlParentheses<Expression>), ReceiveControlParentheses)!,
-                    ctx.ReceiveNode(default(J.Block), ctx.ReceiveTree)!
+                    ctx.ReceiveNode(default(J.Block), ctx.ReceiveTree)!,
+                    ctx.ReceiveValue(default(JavaType?))!
                 );
             }
 
