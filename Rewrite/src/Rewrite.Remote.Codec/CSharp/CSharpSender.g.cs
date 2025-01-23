@@ -1471,6 +1471,17 @@ public record CSharpSender : Sender
             return instanceOf;
         }
 
+        public override J VisitDeconstructionPattern(J.DeconstructionPattern deconstructionPattern, SenderContext ctx)
+        {
+            ctx.SendValue(deconstructionPattern, v => v.Id);
+            ctx.SendNode(deconstructionPattern, v => v.Prefix, SendSpace);
+            ctx.SendNode(deconstructionPattern, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(deconstructionPattern, v => v.Deconstructor, ctx.SendTree);
+            ctx.SendNode(deconstructionPattern, v => v.Padding.Nested, SendContainer);
+            ctx.SendTypedValue(deconstructionPattern, v => v.Type);
+            return deconstructionPattern;
+        }
+
         public override J VisitIntersectionType(J.IntersectionType intersectionType, SenderContext ctx)
         {
             ctx.SendValue(intersectionType, v => v.Id);

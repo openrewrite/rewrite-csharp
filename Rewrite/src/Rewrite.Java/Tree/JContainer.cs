@@ -162,5 +162,6 @@ public class JContainer
         public static readonly Location TRY_RESOURCES = new(Space.Location.TRY_RESOURCES, JRightPadded.Location.TRY_RESOURCE);
         public static readonly Location TYPE_BOUNDS = new(Space.Location.TYPE_BOUNDS, JRightPadded.Location.TYPE_BOUND);
         public static readonly Location TYPE_PARAMETERS = new(Space.Location.TYPE_PARAMETERS, JRightPadded.Location.TYPE_PARAMETER);
+        public static readonly Location DECONSTRUCTION_PATTERN_NESTED = new(Space.Location.DECONSTRUCTION_PATTERN_NESTED, JRightPadded.Location.DECONSTRUCTION_PATTERN_NESTED);
     }
 }
