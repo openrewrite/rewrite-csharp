@@ -9,12 +9,12 @@ namespace Rewrite.RewriteJava.Tree;
 [SuppressMessage("ReSharper", "PossibleUnintendedReferenceComparison")]
 public interface JavaType
 {
-    internal static JavaType[] EMPTY_JAVA_TYPE_ARRAY = [];
-    internal static FullyQualified[] EMPTY_FULLY_QUALIFIED_ARRAY = [];
-    internal static Method[] EMPTY_METHOD_ARRAY = [];
-    internal static Variable[] EMPTY_VARIABLE_ARRAY = [];
+    internal static readonly JavaType[] EMPTY_JAVA_TYPE_ARRAY = [];
+    internal static readonly FullyQualified[] EMPTY_FULLY_QUALIFIED_ARRAY = [];
+    internal static readonly Method[] EMPTY_METHOD_ARRAY = [];
+    internal static readonly Variable[] EMPTY_VARIABLE_ARRAY = [];
     internal static readonly string[] EMPTY_STRING_ARRAY = [];
-    internal static Annotation.ElementValue[] EMPTY_ANNOTATION_VALUE_ARRAY = [];
+    internal static readonly Annotation.ElementValue[] EMPTY_ANNOTATION_VALUE_ARRAY = [];
 
     internal int? ManagedReference => null;
 
