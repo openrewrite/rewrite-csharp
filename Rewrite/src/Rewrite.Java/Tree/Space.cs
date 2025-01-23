@@ -345,6 +345,9 @@ public class Space(
         WILDCARD_PREFIX,
         YIELD_PREFIX,
         ERRONEOUS_PREFIX,
+        DECONSTRUCTION_PATTERN_PREFIX,
+        DECONSTRUCTION_PATTERN_NESTED,
+        DECONSTRUCTION_PATTERN_NESTED_SUFFIX,
     }
 
     private static Space Build(string str, IList<Comment> comments)

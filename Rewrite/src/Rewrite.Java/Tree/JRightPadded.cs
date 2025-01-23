@@ -181,6 +181,7 @@ public abstract class JRightPadded : IHasMarkers
         public static readonly Location TYPE_PARAMETER = new(Space.Location.TYPE_PARAMETER_SUFFIX);
         public static readonly Location TYPE_BOUND = new(Space.Location.TYPE_BOUND_SUFFIX);
         public static readonly Location WHILE_BODY = new(Space.Location.WHILE_BODY_SUFFIX);
+        public static readonly Location DECONSTRUCTION_PATTERN_NESTED = new(Space.Location.DECONSTRUCTION_PATTERN_NESTED_SUFFIX);
     }
 
     public static JRightPadded<T> WithElement<T>(JRightPadded<T> right, T element)

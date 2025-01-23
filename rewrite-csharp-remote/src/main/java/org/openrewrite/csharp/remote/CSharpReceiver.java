@@ -1498,6 +1498,17 @@ public class CSharpReceiver implements Receiver<Cs> {
         }
 
         @Override
+        public J.DeconstructionPattern visitDeconstructionPattern(J.DeconstructionPattern deconstructionPattern, ReceiverContext ctx) {
+            deconstructionPattern = deconstructionPattern.withId(ctx.receiveNonNullValue(deconstructionPattern.getId(), UUID.class));
+            deconstructionPattern = deconstructionPattern.withPrefix(ctx.receiveNonNullNode(deconstructionPattern.getPrefix(), CSharpReceiver::receiveSpace));
+            deconstructionPattern = deconstructionPattern.withMarkers(ctx.receiveNonNullNode(deconstructionPattern.getMarkers(), ctx::receiveMarkers));
+            deconstructionPattern = deconstructionPattern.withDeconstructor(ctx.receiveNonNullNode(deconstructionPattern.getDeconstructor(), ctx::receiveTree));
+            deconstructionPattern = deconstructionPattern.getPadding().withNested(ctx.receiveNonNullNode(deconstructionPattern.getPadding().getNested(), CSharpReceiver::receiveContainer));
+            deconstructionPattern = deconstructionPattern.withType(ctx.receiveValue(deconstructionPattern.getType(), JavaType.class));
+            return deconstructionPattern;
+        }
+
+        @Override
         public J.IntersectionType visitIntersectionType(J.IntersectionType intersectionType, ReceiverContext ctx) {
             intersectionType = intersectionType.withId(ctx.receiveNonNullValue(intersectionType.getId(), UUID.class));
             intersectionType = intersectionType.withPrefix(ctx.receiveNonNullNode(intersectionType.getPrefix(), CSharpReceiver::receiveSpace));
@@ -2050,6 +2061,7 @@ public class CSharpReceiver implements Receiver<Cs> {
                 if (type == J.If.Else.class) return Factory::createJIfElse;
                 if (type == J.Import.class) return Factory::createJImport;
                 if (type == J.InstanceOf.class) return Factory::createJInstanceOf;
+                if (type == J.DeconstructionPattern.class) return Factory::createJDeconstructionPattern;
                 if (type == J.IntersectionType.class) return Factory::createJIntersectionType;
                 if (type == J.Label.class) return Factory::createJLabel;
                 if (type == J.Lambda.class) return Factory::createJLambda;
@@ -3529,6 +3541,17 @@ public class CSharpReceiver implements Receiver<Cs> {
                     ctx.receiveNonNullNode(null, CSharpReceiver::receiveRightPaddedTree),
                     ctx.receiveNonNullNode(null, ctx::receiveTree),
                     ctx.receiveNode(null, ctx::receiveTree),
+                    ctx.receiveValue(null, JavaType.class)
+            );
+        }
+
+        private static J.DeconstructionPattern createJDeconstructionPattern(ReceiverContext ctx) {
+            return new J.DeconstructionPattern(
+                    ctx.receiveNonNullValue(null, UUID.class),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveSpace),
+                    ctx.receiveNonNullNode(null, ctx::receiveMarkers),
+                    ctx.receiveNonNullNode(null, ctx::receiveTree),
+                    ctx.receiveNonNullNode(null, CSharpReceiver::receiveContainer),
                     ctx.receiveValue(null, JavaType.class)
             );
         }
