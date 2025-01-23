@@ -24,6 +24,21 @@ public class EnumDeclarationTests(ITestOutputHelper output) : RewriteTest(output
     }
 
     [Fact]
+    public void EmptyEnum()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                public enum A
+                {
+
+                }
+                """
+            )
+        );
+    }
+
+    [Fact]
     public void EnumWithBaseType()
     {
         RewriteRun(
@@ -33,6 +48,43 @@ public class EnumDeclarationTests(ITestOutputHelper output) : RewriteTest(output
                 public enum A : int
                 {
                     a,
+                    b
+                }
+                """
+            )
+        );
+    }
+
+    [Fact]
+    public void EnumWithValues()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                [Test]
+                public enum A
+                {
+                    a = 1,
+                    b
+                }
+                """
+            )
+        );
+    }
+
+
+    [Fact]
+    public void EnumWithAttributes()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                [Test]
+                public enum A
+                {
+                    [Value(1)]
+                    a,
+                    [Value(2)]
                     b
                 }
                 """

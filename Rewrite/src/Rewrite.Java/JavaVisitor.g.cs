@@ -206,9 +206,10 @@ public class JavaVisitor<P> : TreeVisitor<J, P>
         }
         @case = (J.Case) tempStatement;
         @case = @case.WithMarkers(VisitMarkers(@case.Markers, p));
-        @case = @case.Padding.WithExpressions(VisitContainer(@case.Padding.Expressions, JContainer.Location.CASE_EXPRESSION, p)!);
+        @case = @case.Padding.WithCaseLabels(VisitContainer(@case.Padding.CaseLabels, JContainer.Location.CASE_CASE_LABELS, p)!);
         @case = @case.Padding.WithStatements(VisitContainer(@case.Padding.Statements, JContainer.Location.CASE, p)!);
         @case = @case.Padding.WithBody(@case.Padding.Body == null ? null : VisitRightPadded(@case.Padding.Body, JRightPadded.Location.CASE_BODY, p));
+        @case = @case.WithGuard(VisitAndCast<Expression>(@case.Guard, p));
         return @case;
     }
 
@@ -1047,6 +1048,25 @@ public class JavaVisitor<P> : TreeVisitor<J, P>
         source = source.WithPrefix(VisitSpace(source.Prefix, Space.Location.UNKNOWN_SOURCE_PREFIX, p)!);
         source = source.WithMarkers(VisitMarkers(source.Markers, p));
         return source;
+    }
+
+    public virtual J? VisitErroneous(J.Erroneous erroneous, P p)
+    {
+        erroneous = erroneous.WithPrefix(VisitSpace(erroneous.Prefix, Space.Location.ERRONEOUS_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(erroneous, p);
+        if (tempStatement is not J.Erroneous)
+        {
+            return tempStatement;
+        }
+        erroneous = (J.Erroneous) tempStatement;
+        var tempExpression = (Expression) VisitExpression(erroneous, p);
+        if (tempExpression is not J.Erroneous)
+        {
+            return tempExpression;
+        }
+        erroneous = (J.Erroneous) tempExpression;
+        erroneous = erroneous.WithMarkers(VisitMarkers(erroneous.Markers, p));
+        return erroneous;
     }
 
     public virtual JContainer<T>? VisitContainer<T>(JContainer<T>? container, JContainer.Location loc, P p)

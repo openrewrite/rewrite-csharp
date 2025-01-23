@@ -57,7 +57,7 @@ public partial interface Cs : J
     Markers markers,
     JRightPadded<Expression>? start,
     Expression? end
-    ) : Cs, Expression, Expression<RangeExpression>, MutableTree<RangeExpression>
+    ) : Cs, Expression, Expression<RangeExpression>, J<RangeExpression>, MutableTree<RangeExpression>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

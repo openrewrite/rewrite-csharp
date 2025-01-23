@@ -34,10 +34,10 @@ public class InterfaceDeclarationTests(ITestOutputHelper output) : RewriteTest(o
                 ",
                 spec => spec.AfterRecipe = cu =>
                 {
-                    var bar = cu.Descendents().OfType<J.ClassDeclaration>().First(x => x.Name == "Baz");
-                    bar.DeclarationKind.Should().Be(J.ClassDeclaration.Kind.Types.Interface);
-                    bar.Extends.Should().BeNull();
-                    bar.Implements.Should().NotBeNull();
+                    var bar = cu.Descendents().OfType<Cs.ClassDeclaration>().First(x => x.Name == "Baz");
+                    bar.Kind.KindType.Should().Be(J.ClassDeclaration.Kind.Types.Interface);
+                    bar.Extendings.Should().BeNull();
+                    bar.Implementings.Should().NotBeNull();
                 }
             )
         );
@@ -55,10 +55,10 @@ public class InterfaceDeclarationTests(ITestOutputHelper output) : RewriteTest(o
                 ",
                 spec => spec.AfterRecipe = cu =>
                 {
-                    var bar = cu.Descendents().OfType<J.ClassDeclaration>().First(x => x.Name == "Baz");
-                    bar.DeclarationKind.Should().Be(J.ClassDeclaration.Kind.Types.Interface);
-                    bar.Extends.Should().BeNull();
-                    bar.Implements.Should().NotBeNull();
+                    var bar = cu.Descendents().OfType<Cs.ClassDeclaration>().First(x => x.Name == "Baz");
+                    bar.Kind.KindType.Should().Be(J.ClassDeclaration.Kind.Types.Interface);
+                    bar.Extendings.Should().BeNull();
+                    bar.Implementings.Should().NotBeNull();
                 }
             )
         );
@@ -103,6 +103,19 @@ public class InterfaceDeclarationTests(ITestOutputHelper output) : RewriteTest(o
                     {
 
                     }
+                "
+            )
+        );
+    }
+
+    [Fact]
+    public void InterfaceWithWithoutBodyWithTypeParamsInOut()
+    {
+        RewriteRun(
+            CSharp(
+                @"
+                // comment
+                    interface Foo<in T, out K>;
                 "
             )
         );

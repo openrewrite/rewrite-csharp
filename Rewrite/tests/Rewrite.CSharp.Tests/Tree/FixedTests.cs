@@ -10,7 +10,7 @@ using static Assertions;
 public class FixedTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
-    private void FixedStatement()
+    private void FixedBlock()
     {
         RewriteRun(
             CSharp(
@@ -24,4 +24,50 @@ public class FixedTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
+    [Fact]
+    private void FixedStatement()
+    {
+        RewriteRun(
+            CSharp(
+                """
+
+                fixed(int* p1 = 0)
+                    return p1;
+                """
+            )
+        );
+    }
+    [Fact]
+    private void FixedStatement2()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                public bool M()
+                {
+
+                       /*1*/fixed (byte* arr = &b[s])
+                            /*2*/return/*3*/a/*4*/;
+                }
+                """
+            )
+        );
+    }
+
+    [Fact]
+    private void NestedFixedStatement()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                public bool M()
+                {
+                    fixed(int* p1 = 0)
+                       /*1*/fixed (byte* arr = &b[s])
+                            /*2*/return/*3*/a/*4*/;
+                }
+                """
+            )
+        );
+    }
 }

@@ -15,17 +15,11 @@ public class TryTests(ITestOutputHelper output) : RewriteTest(output)
         RewriteRun(
             CSharp(
                 @"
-                public class Foo
+                try
                 {
-                    void M()
-                    {
-                        try
-                        {
-                        }
-                        finally
-                        {
-                        }
-                    }
+                }
+                finally
+                {
                 }
                 "
             )
@@ -38,22 +32,17 @@ public class TryTests(ITestOutputHelper output) : RewriteTest(output)
         RewriteRun(
             CSharp(
                 @"
-                public class Foo
+                try
                 {
-                    void M()
-                    {
-                        try
-                        {
-                        }
-                        catch (Exception e)
-                        {
-                        }
-                    }
+                }
+                catch (Exception e)
+                {
                 }
                 "
             )
         );
     }
+
 
     [Fact]
     public void CatchWithoutVariableName()
@@ -61,22 +50,16 @@ public class TryTests(ITestOutputHelper output) : RewriteTest(output)
         RewriteRun(
             CSharp(
                 @"
-                public class Foo
+                try
                 {
-                    void M()
-                    {
-                        try
-                        {
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
+                }
+                catch (Exception)
+                {
                 }
                 ",
                 spec => spec.AfterRecipe = cu =>
                 {
-                    var @try = cu.Descendents().OfType<J.Try>().First();
+                    var @try = cu.Descendents().OfType<Cs.Try>().First();
                     var vd = @try.Catches[0].Parameter.Tree;
                     vd.TypeExpression.Should().NotBeNull();
                     vd.Variables.Should().BeEmpty();
@@ -91,26 +74,37 @@ public class TryTests(ITestOutputHelper output) : RewriteTest(output)
         RewriteRun(
             CSharp(
                 @"
-                public class Foo
+                try
                 {
-                    void M()
-                    {
-                        try
-                        {
-                        }
-                        catch
-                        {
-                        }
-                    }
+                }
+                catch
+                {
                 }
                 ",
                 spec => spec.AfterRecipe = cu =>
                 {
-                    var @try = cu.Descendents().OfType<J.Try>().First();
+                    var @try = cu.Descendents().OfType<Cs.Try>().First();
                     var vd = @try.Catches[0].Parameter.Tree;
                     vd.TypeExpression.Should().BeNull();
                     vd.Variables.Should().BeEmpty();
                 }
+            )
+        );
+    }
+
+    [Fact]
+    public void CatchWithWhenFilter()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                try
+                {
+                }
+                catch(Exception e) when (e.Message.StartWith("blah"))
+                {
+                }
+                """
             )
         );
     }

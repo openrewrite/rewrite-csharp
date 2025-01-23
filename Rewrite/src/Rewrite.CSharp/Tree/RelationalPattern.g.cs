@@ -53,7 +53,7 @@ public partial interface Cs : J
     Markers markers,
     JLeftPadded<RelationalPattern.OperatorType> @operator,
     Expression value
-    ) : Cs.Pattern, Expression<RelationalPattern>, MutableTree<RelationalPattern>
+    ) : Cs.Pattern, Expression<RelationalPattern>, J<RelationalPattern>, MutableTree<RelationalPattern>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

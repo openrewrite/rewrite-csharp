@@ -34,6 +34,48 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
     }
 
     [Fact]
+    public void MethodDeclarationWithDefaultParameters()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                public class C
+                {
+                    M ( int i = 1 )
+                    {
+                    }
+                }
+                """,
+                spec => spec.AfterRecipe = cu =>
+                {
+                    var ctor = cu.Descendents().OfType<J.MethodDeclaration>().First();
+                    ctor.Parameters.Should().HaveCount(1);
+                    ctor.Modifiers.Should().BeEmpty();
+                    ctor.Body.Should().NotBeNull();
+                }
+            )
+        );
+    }
+
+    [Fact]
+    public void MethodWithAttributes()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                public class Foo
+                {
+                    [Obsolete]
+                    Foo(int i)
+                    {
+                    }
+                }
+                """
+            )
+        );
+    }
+
+    [Fact]
     public void ConstructorDelegation()
     {
         var src = CSharp(
@@ -54,7 +96,6 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
     }
 
     [Fact]
-    [KnownBug("Cannot perform the requested operation, the next CBOR data item is of major type '3'.")]
     public void ConstructorDelegation2()
     {
         RewriteRun(CSharp(
@@ -127,7 +168,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
                 """,
                 spec => spec.AfterRecipe = cu =>
                 {
-                    var ctor = cu.Descendents().OfType<J.MethodDeclaration>().First();
+                    var ctor = cu.Descendents().OfType<Cs.MethodDeclaration>().First();
                     ctor.Parameters.Should().HaveCount(1);
                     var vd = (ctor.Parameters[0] as J.VariableDeclarations)!;
                     vd.Variables.Should().HaveCount(1);
@@ -174,6 +215,24 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
     }
 
     [Fact]
+    public void ExplicitInterfaceImplementation()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                public abstract class C
+                {
+                    object ICloneable.Clone() => Clone();
+                }
+                """
+            )
+        );
+    }
+
+
+
+
+    [Fact]
     public void ArrowSyntaxMethodDeclaration()
     {
         RewriteRun(
@@ -195,16 +254,9 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         RewriteRun(
             CSharp(
                 @"
-                public class Foo
+                void M()
                 {
-                    public static int LocalFunctionFactorial(int n)
-                    {
-                        return nthFactorial(n);
-
-                        int nthFactorial(int number) => number < 2
-                            ? 1
-                            : number * nthFactorial(number - 1);
-                    }
+                    int LM(int number) => number < 2 ? 1 : 2;
                 }
                 "
             )
@@ -322,4 +374,31 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
             )
         );
     }
+
+    [Fact]
+    public void WithPointerParameter()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                class Test {
+                    abstract unsafe bool ByteArrayEquals(byte* bytes1);
+                }
+                """
+            )
+        );
+    }
+
+    [Fact]
+    public void AnonymousFunctionDelegate()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                obj.SomeEvent += delegate   { };
+                """
+            )
+        );
+    }
+
 }

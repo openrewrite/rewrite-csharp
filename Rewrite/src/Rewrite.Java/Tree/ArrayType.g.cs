@@ -34,7 +34,7 @@ public partial interface J : Rewrite.Core.Tree
     IList<Annotation>? annotations,
     JLeftPadded<Space>? dimension,
     JavaType type
-    ) : J, TypeTree, Expression, Expression<ArrayType>, TypedTree<ArrayType>, TypeTree<ArrayType>, MutableTree<ArrayType>
+    ) : J, TypeTree, Expression, Expression<ArrayType>, TypedTree<ArrayType>, J<ArrayType>, TypeTree<ArrayType>, MutableTree<ArrayType>
     {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {

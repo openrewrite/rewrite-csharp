@@ -159,9 +159,10 @@ public record JavaReceiver : Receiver
             @case = @case.WithPrefix(ctx.ReceiveNode(@case.Prefix, ReceiveSpace)!);
             @case = @case.WithMarkers(ctx.ReceiveNode(@case.Markers, ctx.ReceiveMarkers)!);
             @case = @case.WithCaseType(ctx.ReceiveValue(@case.CaseType)!);
-            @case = @case.Padding.WithExpressions(ctx.ReceiveNode(@case.Padding.Expressions, ReceiveContainer)!);
+            @case = @case.Padding.WithCaseLabels(ctx.ReceiveNode(@case.Padding.CaseLabels, ReceiveContainer)!);
             @case = @case.Padding.WithStatements(ctx.ReceiveNode(@case.Padding.Statements, ReceiveContainer)!);
             @case = @case.Padding.WithBody(ctx.ReceiveNode(@case.Padding.Body, ReceiveRightPadded));
+            @case = @case.WithGuard(ctx.ReceiveNode(@case.Guard, ctx.ReceiveTree));
             return @case;
         }
 
@@ -604,6 +605,7 @@ public record JavaReceiver : Receiver
             switchExpression = switchExpression.WithMarkers(ctx.ReceiveNode(switchExpression.Markers, ctx.ReceiveMarkers)!);
             switchExpression = switchExpression.WithSelector(ctx.ReceiveNode(switchExpression.Selector, ReceiveControlParentheses)!);
             switchExpression = switchExpression.WithCases(ctx.ReceiveNode(switchExpression.Cases, ctx.ReceiveTree)!);
+            switchExpression = switchExpression.WithType(ctx.ReceiveValue(switchExpression.Type));
             return switchExpression;
         }
 
@@ -787,6 +789,15 @@ public record JavaReceiver : Receiver
             return source;
         }
 
+        public override J VisitErroneous(J.Erroneous erroneous, ReceiverContext ctx)
+        {
+            erroneous = erroneous.WithId(ctx.ReceiveValue(erroneous.Id)!);
+            erroneous = erroneous.WithPrefix(ctx.ReceiveNode(erroneous.Prefix, ReceiveSpace)!);
+            erroneous = erroneous.WithMarkers(ctx.ReceiveNode(erroneous.Markers, ctx.ReceiveMarkers)!);
+            erroneous = erroneous.WithText(ctx.ReceiveValue(erroneous.Text)!);
+            return erroneous;
+        }
+
     }
 
     private class Factory : ReceiverFactory
@@ -811,7 +822,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(NameTree), ctx.ReceiveTree)!,
-                    ctx.ReceiveNode(default(JContainer<Expression>), ReceiveContainer)
+                    ctx.ReceiveNode(default(JContainer<Expression>?), ReceiveContainer)!
                 );
             }
 
@@ -823,7 +834,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(J.ArrayDimension), ctx.ReceiveTree)!,
-                    ctx.ReceiveValue(default(JavaType))
+                    ctx.ReceiveValue(default(JavaType?))!
                 );
             }
 
@@ -834,8 +845,8 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(TypeTree), ctx.ReceiveTree)!,
-                    ctx.ReceiveNodes(default(IList<J.Annotation>), ctx.ReceiveTree),
-                    ctx.ReceiveNode(default(JLeftPadded<Space>), ReceiveLeftPadded),
+                    ctx.ReceiveNodes(default(IList<J.Annotation>?), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(JLeftPadded<Space>?), ReceiveLeftPadded)!,
                     ctx.ReceiveValue(default(JavaType))!
                 );
             }
@@ -847,7 +858,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
-                    ctx.ReceiveNode(default(JLeftPadded<Expression>), ReceiveLeftPadded)
+                    ctx.ReceiveNode(default(JLeftPadded<Expression>?), ReceiveLeftPadded)!
                 );
             }
 
@@ -859,7 +870,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(JLeftPadded<Expression>), ReceiveLeftPadded)!,
-                    ctx.ReceiveValue(default(JavaType))
+                    ctx.ReceiveValue(default(JavaType?))!
                 );
             }
 
@@ -872,7 +883,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(JLeftPadded<J.AssignmentOperation.Types>), ReceiveLeftPadded)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
-                    ctx.ReceiveValue(default(JavaType))
+                    ctx.ReceiveValue(default(JavaType?))!
                 );
             }
 
@@ -885,7 +896,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(JLeftPadded<J.Binary.Types>), ReceiveLeftPadded)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
-                    ctx.ReceiveValue(default(JavaType))
+                    ctx.ReceiveValue(default(JavaType?))!
                 );
             }
 
@@ -907,7 +918,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveNode(default(J.Identifier), ctx.ReceiveTree)
+                    ctx.ReceiveNode(default(J.Identifier?), ctx.ReceiveTree)!
                 );
             }
 
@@ -918,9 +929,10 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveValue(default(J.Case.Types))!,
-                    ctx.ReceiveNode(default(JContainer<Expression>), ReceiveContainer)!,
+                    ctx.ReceiveNode(default(JContainer<J>), ReceiveContainer)!,
                     ctx.ReceiveNode(default(JContainer<Statement>), ReceiveContainer)!,
-                    ctx.ReceiveNode(default(JRightPadded<J>), ReceiveRightPadded)
+                    ctx.ReceiveNode(default(JRightPadded<J>?), ReceiveRightPadded)!,
+                    ctx.ReceiveNode(default(Expression?), ctx.ReceiveTree)!
                 );
             }
 
@@ -934,13 +946,13 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNodes(default(IList<J.Modifier>), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(J.ClassDeclaration.Kind), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(J.Identifier), ctx.ReceiveTree)!,
-                    ctx.ReceiveNode(default(JContainer<J.TypeParameter>), ReceiveContainer),
-                    ctx.ReceiveNode(default(JContainer<Statement>), ReceiveContainer),
-                    ctx.ReceiveNode(default(JLeftPadded<TypeTree>), ReceiveLeftPadded),
-                    ctx.ReceiveNode(default(JContainer<TypeTree>), ReceiveContainer),
-                    ctx.ReceiveNode(default(JContainer<TypeTree>), ReceiveContainer),
+                    ctx.ReceiveNode(default(JContainer<J.TypeParameter>?), ReceiveContainer)!,
+                    ctx.ReceiveNode(default(JContainer<Statement>?), ReceiveContainer)!,
+                    ctx.ReceiveNode(default(JLeftPadded<TypeTree>?), ReceiveLeftPadded)!,
+                    ctx.ReceiveNode(default(JContainer<TypeTree>?), ReceiveContainer)!,
+                    ctx.ReceiveNode(default(JContainer<TypeTree>?), ReceiveContainer)!,
                     ctx.ReceiveNode(default(J.Block), ctx.ReceiveTree)!,
-                    ctx.ReceiveValue(default(JavaType.FullyQualified))
+                    ctx.ReceiveValue(default(JavaType.FullyQualified?))!
                 );
             }
 
@@ -962,11 +974,11 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveValue(default(string))!,
-                    ctx.ReceiveValue(default(FileAttributes)),
-                    ctx.ReceiveValue(default(string)),
-                    ctx.ReceiveValue(default(bool)),
-                    ctx.ReceiveValue(default(Checksum)),
-                    ctx.ReceiveNode(default(JRightPadded<J.Package>), ReceiveRightPadded),
+                    ctx.ReceiveValue(default(FileAttributes?))!,
+                    ctx.ReceiveValue(default(string?))!,
+                    ctx.ReceiveValue(default(bool))!,
+                    ctx.ReceiveValue(default(Checksum?))!,
+                    ctx.ReceiveNode(default(JRightPadded<J.Package>?), ReceiveRightPadded)!,
                     ctx.ReceiveNodes(default(IList<JRightPadded<J.Import>>), ReceiveRightPadded)!,
                     ctx.ReceiveNodes(default(IList<J.ClassDeclaration>), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!
@@ -979,7 +991,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveNode(default(J.Identifier), ctx.ReceiveTree)
+                    ctx.ReceiveNode(default(J.Identifier?), ctx.ReceiveTree)!
                 );
             }
 
@@ -1011,7 +1023,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNodes(default(IList<J.Annotation>), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(J.Identifier), ctx.ReceiveTree)!,
-                    ctx.ReceiveNode(default(J.NewClass), ctx.ReceiveTree)
+                    ctx.ReceiveNode(default(J.NewClass?), ctx.ReceiveTree)!
                 );
             }
 
@@ -1022,7 +1034,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNodes(default(IList<JRightPadded<J.EnumValue>>), ReceiveRightPadded)!,
-                    ctx.ReceiveValue(default(bool))
+                    ctx.ReceiveValue(default(bool))!
                 );
             }
 
@@ -1034,7 +1046,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(JLeftPadded<J.Identifier>), ReceiveLeftPadded)!,
-                    ctx.ReceiveValue(default(JavaType))
+                    ctx.ReceiveValue(default(JavaType?))!
                 );
             }
 
@@ -1102,8 +1114,8 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNodes(default(IList<J.Annotation>), ctx.ReceiveTree)!,
                     ctx.ReceiveValue(default(string))!,
-                    ctx.ReceiveValue(default(JavaType)),
-                    ctx.ReceiveValue(default(JavaType.Variable))
+                    ctx.ReceiveValue(default(JavaType?))!,
+                    ctx.ReceiveValue(default(JavaType.Variable?))!
                 );
             }
 
@@ -1115,7 +1127,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(J.ControlParentheses<Expression>), ReceiveControlParentheses)!,
                     ctx.ReceiveNode(default(JRightPadded<Statement>), ReceiveRightPadded)!,
-                    ctx.ReceiveNode(default(J.If.Else), ctx.ReceiveTree)
+                    ctx.ReceiveNode(default(J.If.Else?), ctx.ReceiveTree)!
                 );
             }
 
@@ -1137,7 +1149,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(JLeftPadded<bool>), ReceiveLeftPadded)!,
                     ctx.ReceiveNode(default(J.FieldAccess), ctx.ReceiveTree)!,
-                    ctx.ReceiveNode(default(JLeftPadded<J.Identifier>), ReceiveLeftPadded)
+                    ctx.ReceiveNode(default(JLeftPadded<J.Identifier>?), ReceiveLeftPadded)!
                 );
             }
 
@@ -1149,8 +1161,8 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(JRightPadded<Expression>), ReceiveRightPadded)!,
                     ctx.ReceiveNode(default(J), ctx.ReceiveTree)!,
-                    ctx.ReceiveNode(default(J), ctx.ReceiveTree),
-                    ctx.ReceiveValue(default(JavaType))
+                    ctx.ReceiveNode(default(J?), ctx.ReceiveTree)!,
+                    ctx.ReceiveValue(default(JavaType?))!
                 );
             }
 
@@ -1184,7 +1196,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(J.Lambda.Parameters), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(J), ctx.ReceiveTree)!,
-                    ctx.ReceiveValue(default(JavaType))
+                    ctx.ReceiveValue(default(JavaType?))!
                 );
             }
 
@@ -1194,7 +1206,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveValue(default(bool)),
+                    ctx.ReceiveValue(default(bool))!,
                     ctx.ReceiveNodes(default(IList<JRightPadded<J>>), ReceiveRightPadded)!
                 );
             }
@@ -1205,9 +1217,9 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveValue(default(object)),
-                    ctx.ReceiveValue(default(string)),
-                    ctx.ReceiveValues(default(IList<J.Literal.UnicodeEscape>)),
+                    ctx.ReceiveValue(default(object?))!,
+                    ctx.ReceiveValue(default(string?))!,
+                    ctx.ReceiveValues(default(IList<J.Literal.UnicodeEscape>?))!,
                     ctx.ReceiveValue(default(JavaType.Primitive))!
                 );
             }
@@ -1219,11 +1231,11 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(JRightPadded<Expression>), ReceiveRightPadded)!,
-                    ctx.ReceiveNode(default(JContainer<Expression>), ReceiveContainer),
+                    ctx.ReceiveNode(default(JContainer<Expression>?), ReceiveContainer)!,
                     ctx.ReceiveNode(default(JLeftPadded<J.Identifier>), ReceiveLeftPadded)!,
-                    ctx.ReceiveValue(default(JavaType)),
-                    ctx.ReceiveValue(default(JavaType.Method)),
-                    ctx.ReceiveValue(default(JavaType.Variable))
+                    ctx.ReceiveValue(default(JavaType?))!,
+                    ctx.ReceiveValue(default(JavaType.Method?))!,
+                    ctx.ReceiveValue(default(JavaType.Variable?))!
                 );
             }
 
@@ -1235,14 +1247,14 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNodes(default(IList<J.Annotation>), ctx.ReceiveTree)!,
                     ctx.ReceiveNodes(default(IList<J.Modifier>), ctx.ReceiveTree)!,
-                    ctx.ReceiveNode(default(J.TypeParameters), ctx.ReceiveTree),
-                    ctx.ReceiveNode(default(TypeTree), ctx.ReceiveTree),
+                    ctx.ReceiveNode(default(J.TypeParameters?), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(TypeTree?), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(J.MethodDeclaration.IdentifierWithAnnotations), ReceiveMethodIdentifierWithAnnotations)!,
                     ctx.ReceiveNode(default(JContainer<Statement>), ReceiveContainer)!,
-                    ctx.ReceiveNode(default(JContainer<NameTree>), ReceiveContainer),
-                    ctx.ReceiveNode(default(J.Block), ctx.ReceiveTree),
-                    ctx.ReceiveNode(default(JLeftPadded<Expression>), ReceiveLeftPadded),
-                    ctx.ReceiveValue(default(JavaType.Method))
+                    ctx.ReceiveNode(default(JContainer<NameTree>?), ReceiveContainer)!,
+                    ctx.ReceiveNode(default(J.Block?), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(JLeftPadded<Expression>?), ReceiveLeftPadded)!,
+                    ctx.ReceiveValue(default(JavaType.Method?))!
                 );
             }
 
@@ -1252,11 +1264,11 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveNode(default(JRightPadded<Expression>), ReceiveRightPadded),
-                    ctx.ReceiveNode(default(JContainer<Expression>), ReceiveContainer),
+                    ctx.ReceiveNode(default(JRightPadded<Expression>?), ReceiveRightPadded)!,
+                    ctx.ReceiveNode(default(JContainer<Expression>?), ReceiveContainer)!,
                     ctx.ReceiveNode(default(J.Identifier), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(JContainer<Expression>), ReceiveContainer)!,
-                    ctx.ReceiveValue(default(JavaType.Method))
+                    ctx.ReceiveValue(default(JavaType.Method?))!
                 );
             }
 
@@ -1266,7 +1278,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveValue(default(string)),
+                    ctx.ReceiveValue(default(string?))!,
                     ctx.ReceiveValue(default(J.Modifier.Types))!,
                     ctx.ReceiveNodes(default(IList<J.Annotation>), ctx.ReceiveTree)!
                 );
@@ -1288,10 +1300,10 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveNode(default(TypeTree), ctx.ReceiveTree),
+                    ctx.ReceiveNode(default(TypeTree?), ctx.ReceiveTree)!,
                     ctx.ReceiveNodes(default(IList<J.ArrayDimension>), ctx.ReceiveTree)!,
-                    ctx.ReceiveNode(default(JContainer<Expression>), ReceiveContainer),
-                    ctx.ReceiveValue(default(JavaType))
+                    ctx.ReceiveNode(default(JContainer<Expression>?), ReceiveContainer)!,
+                    ctx.ReceiveValue(default(JavaType?))!
                 );
             }
 
@@ -1311,12 +1323,12 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveNode(default(JRightPadded<Expression>), ReceiveRightPadded),
+                    ctx.ReceiveNode(default(JRightPadded<Expression>?), ReceiveRightPadded)!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
-                    ctx.ReceiveNode(default(TypeTree), ctx.ReceiveTree),
+                    ctx.ReceiveNode(default(TypeTree?), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(JContainer<Expression>), ReceiveContainer)!,
-                    ctx.ReceiveNode(default(J.Block), ctx.ReceiveTree),
-                    ctx.ReceiveValue(default(JavaType.Method))
+                    ctx.ReceiveNode(default(J.Block?), ctx.ReceiveTree)!,
+                    ctx.ReceiveValue(default(JavaType.Method?))!
                 );
             }
 
@@ -1349,8 +1361,8 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(NameTree), ctx.ReceiveTree)!,
-                    ctx.ReceiveNode(default(JContainer<Expression>), ReceiveContainer),
-                    ctx.ReceiveValue(default(JavaType))
+                    ctx.ReceiveNode(default(JContainer<Expression>?), ReceiveContainer)!,
+                    ctx.ReceiveValue(default(JavaType?))!
                 );
             }
 
@@ -1390,7 +1402,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)
+                    ctx.ReceiveNode(default(Expression?), ctx.ReceiveTree)!
                 );
             }
 
@@ -1412,7 +1424,8 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(J.ControlParentheses<Expression>), ReceiveControlParentheses)!,
-                    ctx.ReceiveNode(default(J.Block), ctx.ReceiveTree)!
+                    ctx.ReceiveNode(default(J.Block), ctx.ReceiveTree)!,
+                    ctx.ReceiveValue(default(JavaType?))!
                 );
             }
 
@@ -1436,7 +1449,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(JLeftPadded<Expression>), ReceiveLeftPadded)!,
                     ctx.ReceiveNode(default(JLeftPadded<Expression>), ReceiveLeftPadded)!,
-                    ctx.ReceiveValue(default(JavaType))
+                    ctx.ReceiveValue(default(JavaType?))!
                 );
             }
 
@@ -1456,10 +1469,10 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveNode(default(JContainer<J.Try.Resource>), ReceiveContainer),
+                    ctx.ReceiveNode(default(JContainer<J.Try.Resource>?), ReceiveContainer)!,
                     ctx.ReceiveNode(default(J.Block), ctx.ReceiveTree)!,
                     ctx.ReceiveNodes(default(IList<J.Try.Catch>), ctx.ReceiveTree)!,
-                    ctx.ReceiveNode(default(JLeftPadded<J.Block>), ReceiveLeftPadded)
+                    ctx.ReceiveNode(default(JLeftPadded<J.Block>?), ReceiveLeftPadded)!
                 );
             }
 
@@ -1470,7 +1483,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(TypedTree), ctx.ReceiveTree)!,
-                    ctx.ReceiveValue(default(bool))
+                    ctx.ReceiveValue(default(bool))!
                 );
             }
 
@@ -1505,7 +1518,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNodes(default(IList<J.Annotation>), ctx.ReceiveTree)!,
                     ctx.ReceiveNodes(default(IList<J.Modifier>), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
-                    ctx.ReceiveNode(default(JContainer<TypeTree>), ReceiveContainer)
+                    ctx.ReceiveNode(default(JContainer<TypeTree>?), ReceiveContainer)!
                 );
             }
 
@@ -1528,7 +1541,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(JLeftPadded<J.Unary.Types>), ReceiveLeftPadded)!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
-                    ctx.ReceiveValue(default(JavaType))
+                    ctx.ReceiveValue(default(JavaType?))!
                 );
             }
 
@@ -1540,8 +1553,8 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNodes(default(IList<J.Annotation>), ctx.ReceiveTree)!,
                     ctx.ReceiveNodes(default(IList<J.Modifier>), ctx.ReceiveTree)!,
-                    ctx.ReceiveNode(default(TypeTree), ctx.ReceiveTree),
-                    ctx.ReceiveNode(default(Space), ReceiveSpace),
+                    ctx.ReceiveNode(default(TypeTree?), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(Space?), ReceiveSpace)!,
                     ctx.ReceiveNodes(default(IList<JLeftPadded<Space>>), ReceiveLeftPadded)!,
                     ctx.ReceiveNodes(default(IList<JRightPadded<J.VariableDeclarations.NamedVariable>>), ReceiveRightPadded)!
                 );
@@ -1555,8 +1568,8 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(J.Identifier), ctx.ReceiveTree)!,
                     ctx.ReceiveNodes(default(IList<JLeftPadded<Space>>), ReceiveLeftPadded)!,
-                    ctx.ReceiveNode(default(JLeftPadded<Expression>), ReceiveLeftPadded),
-                    ctx.ReceiveValue(default(JavaType.Variable))
+                    ctx.ReceiveNode(default(JLeftPadded<Expression>?), ReceiveLeftPadded)!,
+                    ctx.ReceiveValue(default(JavaType.Variable?))!
                 );
             }
 
@@ -1577,8 +1590,8 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveNode(default(JLeftPadded<J.Wildcard.Bound>), ReceiveLeftPadded),
-                    ctx.ReceiveNode(default(NameTree), ctx.ReceiveTree)
+                    ctx.ReceiveNode(default(JLeftPadded<J.Wildcard.Bound>?), ReceiveLeftPadded)!,
+                    ctx.ReceiveNode(default(NameTree?), ctx.ReceiveTree)!
                 );
             }
 
@@ -1588,7 +1601,7 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveValue(default(bool)),
+                    ctx.ReceiveValue(default(bool))!,
                     ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!
                 );
             }
@@ -1606,6 +1619,16 @@ public record JavaReceiver : Receiver
             if (type is "Rewrite.RewriteJava.Tree.J.Unknown.Source" or "org.openrewrite.java.tree.J$Unknown$Source")
             {
                 return new J.Unknown.Source(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveValue(default(string))!
+                );
+            }
+
+            if (type is "Rewrite.RewriteJava.Tree.J.Erroneous" or "org.openrewrite.java.tree.J$Erroneous")
+            {
+                return new J.Erroneous(
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,

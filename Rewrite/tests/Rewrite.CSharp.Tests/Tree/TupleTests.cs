@@ -83,4 +83,20 @@ public class TupleTests(ITestOutputHelper output) : RewriteTest(output)
         var lst = src.Parse();
         lst.ToString().ShouldBeSameAs(src.Before);
     }
+
+    [Fact]
+    public void TupleWithNullables()
+    {
+        RewriteRun(CSharp(
+            """
+            public class T
+            {
+                void M()
+                {
+                    (int? x, int y) myTuple;
+                }
+            }
+            """
+        ));
+    }
 }

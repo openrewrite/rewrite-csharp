@@ -125,4 +125,38 @@ public class NullSafeExpressionTests(ITestOutputHelper output) : RewriteTest(out
             )
         );
     }
+
+    [Fact]
+    public void MultiLevelWithSpaces()
+    {
+        RewriteRun(
+            CSharp(
+            """
+            /*1*/a/*2*/?/*3*/.
+            b()/*4*/?/*5*/.
+            c()/*6*/./*7*/
+            d;
+
+            """));
+    }
+
+    [Fact]
+    public void MultiLevelWithSpaces2()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                /*1*/a/*2*/?/*3*/.b()/*4*/?/*5*/.c();
+                """));
+    }
+
+    [Fact]
+    public void FieldWithSpace()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                providerPlans.FirstOrDefault()?/*1*/.SeatMinimum ?? 0;
+                """));
+    }
 }

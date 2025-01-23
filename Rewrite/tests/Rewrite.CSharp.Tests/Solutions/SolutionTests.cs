@@ -11,54 +11,83 @@ namespace Rewrite.CSharp.Tests.Solutions;
 using static Assertions;
 
 [Collection("C# remoting")]
-public class SolutionTests//(ITestOutputHelper output) : RewriteTest(output)
+public class SolutionTests(ITestOutputHelper output) : RewriteTest(output)
 {
-    private readonly ITestOutputHelper _output;
 
-    public SolutionTests(ITestOutputHelper output)
+
+    [Fact]
+    [Exploratory]
+    public void PlayTest()
     {
-        _output = output;
+        var actual = """
+                     hello
+                     there
+                     """;
+        var expected = "hello there";
+        actual.ShouldBeSameAs(expected);
+    }
+
+    [Fact]
+    [Exploratory]
+    public async Task ParseSingleFile()
+    {
+        var src = await File.ReadAllTextAsync(@"C:\projects\openrewrite\rewrite-csharp\Rewrite\tests\fixtures\DotNetty\src\DotNetty.Common\Internal\PlatformDependent0.cs");
+        RewriteRun(CSharp(src));
     }
 
     [Fact]
     [Exploratory]
     public async Task UnknownSyntaxReport()
     {
-        var fixtures = Fixtures.Select(x => (solutionOrProjectPath: (AbsolutePath)x[0], root: (AbsolutePath)x[1]));
+        var fixtures = Fixtures.Select(fixture => (solutionOrProjectPath: (AbsolutePath)fixture[0], root: (AbsolutePath)fixture[1]));
 
         var sourceFiles = (await Task.WhenAll(fixtures.Select(async x =>
-        {
-            var (solutionOrProjectPath, root) = x;
-            _output.WriteLine(solutionOrProjectPath);
-            var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(1000)).Token;
-            var solutionParser = new SolutionParser();
-            var executionContext = new InMemoryExecutionContext(exception => _output.WriteLine(exception.ToString()));
-            IEnumerable<SourceFile> sourceFiles;
-            if (solutionOrProjectPath.Extension == ".sln")
             {
-                var solution = await solutionParser.LoadSolutionAsync(solutionOrProjectPath, cancellationToken);
+                var (solutionOrProjectPath, root) = x;
+                _output.WriteLine(solutionOrProjectPath);
+                var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(1000)).Token;
+                var solutionParser = new SolutionParser();
+                var executionContext = new InMemoryExecutionContext(exception => _output.WriteLine(exception.ToString()));
+                IEnumerable<SourceFile> sourceFiles;
+                if (solutionOrProjectPath.Extension == ".sln")
+                {
+                    var solution = await solutionParser.LoadSolutionAsync(solutionOrProjectPath, cancellationToken);
 
-                var projectPaths = solution.Projects.Select(x => x.FilePath!).ToList();
-                sourceFiles = projectPaths
-                    .SelectMany(projectPath => solutionParser.ParseProjectSources(solution, projectPath, root, executionContext));
-            }
-            else
+                    var projectPaths = solution.Projects.Select(x => x.FilePath!).ToList();
+                    sourceFiles = projectPaths
+                        .SelectMany(projectPath => solutionParser.ParseProjectSources(solution, projectPath, root, executionContext))
+                        .ToList();
+                }
+                else
+                {
+                    var projectParser = new ProjectParser(solutionOrProjectPath, root);
+                    sourceFiles = projectParser.ParseSourceFiles();
+                }
+
+                return sourceFiles.Select(x => (ProjectPath: root, SourceTree: x)).ToList();
+            })))
+            .SelectMany(x => x)
+            .ToList();
+
+        // var items = sourceFiles.Where(x => x.SourceTree is null);
+
+        var brokenIdp = sourceFiles
+            .Select(x =>
             {
-                var projectParser = new ProjectParser(solutionOrProjectPath, root);
-                sourceFiles = projectParser.ParseSourceFiles();
-            }
 
-            return sourceFiles;
-        })))
-            .SelectMany(x => x);
+                var file = x.ProjectPath / x.SourceTree.SourcePath;
 
 
-
-        var report = sourceFiles
-            .SelectMany(x =>
-            {
-                return x.Descendents().OfType<J.Unknown>();
+                var before = File.ReadAllText(file);
+                var after = x.SourceTree.ToString();
+                return (file, before, after, x.SourceTree);
             })
+            .Where(x => x.before != x.after)
+            .Take(20)
+            .ToList();
+
+        var report = sourceFiles.Select(x => x.SourceTree)
+            .SelectMany(x => x.Descendents().OfType<J.Unknown>())
             .Select(x => x.UnknownSource.Markers.OfType<ParseExceptionResult>().Select(y => y.TreeType).First())
             .GroupBy(x => x)
             .Select(x => new
@@ -72,7 +101,21 @@ public class SolutionTests//(ITestOutputHelper output) : RewriteTest(output)
         {
             _output.WriteLine($"{unknownSyntax.Kind}: {unknownSyntax.Count}");
         }
+        _output.WriteLine("=============");
+        _output.WriteLine($"Broken {brokenIdp.Count} / {sourceFiles.Count} Total ({brokenIdp.Count * 100 / sourceFiles.Count }%).");
+        foreach (var (file, before,after, tree) in brokenIdp.Where(x => x.after != null))
+        {
 
+            _output.WriteLine(file);
+            if (tree is ParseError)
+            {
+                _output.WriteLine(after);
+            }
+            else
+            {
+                _output.WriteLine(before.GetDifferences(after!));
+            }
+        }
     }
 
     [Theory]

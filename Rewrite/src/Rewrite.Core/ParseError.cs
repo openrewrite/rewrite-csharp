@@ -118,7 +118,7 @@ public class ParseError(
     {
         return v.IsAdaptableTo(typeof(ParseErrorVisitor<P>));
     }
-    
+
     R? Tree.Accept<R, P>(ITreeVisitor<R, P> v, P p) where R : class
     {
         return (R?)Accept(v.Adapt<Tree, ParseErrorVisitor<P>>(), p);
@@ -154,5 +154,14 @@ public class ParseError(
             readableStream.ReadToEnd(),
             null
         );
+    }
+
+    public override string ToString()
+    {
+        StringBuilder sb = new();
+        sb.AppendLine($"Parse error in {SourcePath}");
+        var parseError = Markers.OfType<ParseExceptionResult>().FirstOrDefault();
+        sb.AppendLine(parseError?.ToString());
+        return sb.ToString();
     }
 }

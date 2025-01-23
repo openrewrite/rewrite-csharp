@@ -27,7 +27,7 @@ public class EnumGenerator : ISourceGenerator
 
               public partial interface CsContainer
               {
-                  public record Location(CsSpace.Location BeforeLocation, CsRightPadded.Location ElementLocation)
+                  public partial record Location(CsSpace.Location BeforeLocation, CsRightPadded.Location ElementLocation)
                   {
                       {{ scanner.CsContainerEnumValues.Render(enumValue => $$"""
                       public static readonly Location {{enumValue}} = new(CsSpace.Location.{{enumValue}}, CsRightPadded.Location.{{enumValue}});
@@ -40,7 +40,7 @@ public class EnumGenerator : ISourceGenerator
 
                public partial interface CsSpace
                {
-                   public record Location
+                   public partial record Location
                    {
                        {{ scanner.CsSpaceEnumValues.Render(enumValue => $$"""
                       public static readonly Location {{enumValue}} = new();
@@ -54,7 +54,7 @@ public class EnumGenerator : ISourceGenerator
 
                public partial interface CsRightPadded
                {
-                   public record Location(CsSpace.Location AfterLocation)
+                   public partial record Location(CsSpace.Location AfterLocation)
                    {
                        {{ scanner.CsRightPaddedEnumValues.Render(enumValue => $$"""
                       public static readonly Location {{enumValue}} = new (CsSpace.Location.{{enumValue}});

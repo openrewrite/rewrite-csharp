@@ -2,6 +2,40 @@ plugins {
     id("org.openrewrite.build.language-library")
 }
 
+
+val latest = if (System.getenv("RELEASE_PUBLICATION") != null) "latest.release" else "latest.integration"
+
+dependencies {
+
+    compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
+    annotationProcessor("com.google.auto.service:auto-service:1.1.1")
+
+    // The bom version can also be set to a specific version
+    // https://github.com/openrewrite/rewrite-recipe-bom/releases
+    implementation(platform("org.openrewrite:rewrite-bom:${latest}"))
+
+    implementation("org.openrewrite:rewrite-core")
+    implementation("org.openrewrite:rewrite-java")
+
+    implementation(project(":rewrite-csharp"))
+    implementation(project(":rewrite-csharp-remote"))
+
+    implementation("org.openrewrite:rewrite-remote:${latest}") {
+        exclude(group = "org.openrewrite", module = "rewrite-remote-java")
+    }
+
+    implementation("io.micrometer:micrometer-core:latest.release")
+    implementation("com.fasterxml.jackson.core:jackson-core")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
+
+    // Need to have a slf4j binding to see any output enabled from the parser.
+    runtimeOnly("ch.qos.logback:logback-classic:1.2.+")
+    testImplementation("org.openrewrite:rewrite-test")
+
+    testRuntimeOnly("org.openrewrite:rewrite-java-17")
+}
+
+
 tasks.register<Zip>("zipDotnetServer") {
     archiveFileName.set("DotnetServer.zip")
     destinationDirectory.set(layout.buildDirectory.dir("tmp"))

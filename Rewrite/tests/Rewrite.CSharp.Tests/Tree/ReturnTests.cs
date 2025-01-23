@@ -42,4 +42,21 @@ public class ReturnTests(ITestOutputHelper output) : RewriteTest(output)
             )
         );
     }
+
+    [Fact]
+    public void MethodCall()
+    {
+        RewriteRun(
+            CSharp(
+                @"
+
+                int M()
+                {
+                    return PlatformDependent0.ByteArrayEquals(array1, array2, length);
+                }
+
+                "
+            )
+        );
+    }
 }

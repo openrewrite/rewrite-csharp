@@ -51,7 +51,7 @@ public partial interface Cs : J
     Markers markers,
     JContainer<TupleElement> elements,
     JavaType? type
-    ) : Cs, TypeTree, Expression, Expression<TupleType>, TypedTree<TupleType>, TypeTree<TupleType>, MutableTree<TupleType>
+    ) : Cs, TypeTree, Expression, Expression<TupleType>, TypedTree<TupleType>, J<TupleType>, TypeTree<TupleType>, MutableTree<TupleType>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

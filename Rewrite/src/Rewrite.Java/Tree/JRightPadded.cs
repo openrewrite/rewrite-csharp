@@ -143,7 +143,7 @@ public abstract class JRightPadded : IHasMarkers
         public static readonly Location ARRAY_INDEX = new(Space.Location.ARRAY_INDEX_SUFFIX);
         public static readonly Location BLOCK_STATEMENT = new(Space.Location.BLOCK_STATEMENT_SUFFIX);
         public static readonly Location CASE = new(Space.Location.CASE_SUFFIX);
-        public static readonly Location CASE_EXPRESSION = new(Space.Location.CASE_EXPRESSION);
+        public static readonly Location CASE_CASE_LABELS = new(Space.Location.CASE_CASE_LABELS);
         public static readonly Location CASE_BODY = new(Space.Location.CASE_BODY);
         public static readonly Location CATCH_ALTERNATIVE = new(Space.Location.CATCH_ALTERNATIVE_SUFFIX);
         public static readonly Location DIMENSION = new(Space.Location.DIMENSION_SUFFIX);

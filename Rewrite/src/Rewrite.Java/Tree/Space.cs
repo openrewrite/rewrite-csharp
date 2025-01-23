@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using Rewrite.Core;
 using Rewrite.Core.Marker;
 
 namespace Rewrite.RewriteJava.Tree;
@@ -174,6 +175,22 @@ public class Space(
         return Build(whitespace, comments);
     }
 
+    public override string? ToString()
+    {
+        StringBuilder p = new();
+        p.Append(Whitespace);
+
+        for (int i = 0; i < comments.Count; ++i)
+        {
+            var comment = comments[i];
+            var text = ((TextComment)comment).Text;
+            p.Append(comment.Multiline ? $"/*{text}*/" : $"//{text}");
+            p.Append(comment.Suffix);
+        }
+
+        return p.ToString();
+    }
+
     public enum Location
     {
         ANY,
@@ -201,7 +218,7 @@ public class Space(
         CASE,
         CASE_PREFIX,
         CASE_BODY,
-        CASE_EXPRESSION,
+        CASE_CASE_LABELS,
         CASE_SUFFIX,
         CATCH_ALTERNATIVE_SUFFIX,
         CATCH_PREFIX,
@@ -327,6 +344,7 @@ public class Space(
         WILDCARD_BOUND,
         WILDCARD_PREFIX,
         YIELD_PREFIX,
+        ERRONEOUS_PREFIX,
     }
 
     private static Space Build(string str, IList<Comment> comments)

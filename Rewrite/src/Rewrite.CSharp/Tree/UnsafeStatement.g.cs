@@ -62,7 +62,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     J.Block block
-    ) : Cs, Statement, MutableTree<UnsafeStatement>
+    ) : Cs, Statement, J<UnsafeStatement>, MutableTree<UnsafeStatement>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {

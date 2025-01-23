@@ -54,8 +54,9 @@ public partial interface Cs : J
     Guid id,
     Space prefix,
     Markers markers,
+    Keyword keyword,
     J.Block block
-    ) : Cs, Statement, MutableTree<CheckedStatement>
+    ) : Cs, Statement, J<CheckedStatement>, MutableTree<CheckedStatement>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
@@ -66,25 +67,31 @@ public partial interface Cs : J
 
         public CheckedStatement WithId(Guid newId)
         {
-            return newId == id ? this : new CheckedStatement(newId, prefix, markers, block);
+            return newId == id ? this : new CheckedStatement(newId, prefix, markers, keyword, block);
         }
         public Space Prefix => prefix;
 
         public CheckedStatement WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new CheckedStatement(id, newPrefix, markers, block);
+            return newPrefix == prefix ? this : new CheckedStatement(id, newPrefix, markers, keyword, block);
         }
         public Markers Markers => markers;
 
         public CheckedStatement WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new CheckedStatement(id, prefix, newMarkers, block);
+            return ReferenceEquals(newMarkers, markers) ? this : new CheckedStatement(id, prefix, newMarkers, keyword, block);
+        }
+        public Cs.Keyword Keyword => keyword;
+
+        public CheckedStatement WithKeyword(Cs.Keyword newKeyword)
+        {
+            return ReferenceEquals(newKeyword, keyword) ? this : new CheckedStatement(id, prefix, markers, newKeyword, block);
         }
         public J.Block Block => block;
 
         public CheckedStatement WithBlock(J.Block newBlock)
         {
-            return ReferenceEquals(newBlock, block) ? this : new CheckedStatement(id, prefix, markers, newBlock);
+            return ReferenceEquals(newBlock, block) ? this : new CheckedStatement(id, prefix, markers, keyword, newBlock);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

@@ -39,7 +39,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     VariableDesignation designation
-    ) : Cs, Cs.Pattern, Expression<VarPattern>, MutableTree<VarPattern>
+    ) : Cs, Cs.Pattern, Expression<VarPattern>, J<VarPattern>, MutableTree<VarPattern>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {

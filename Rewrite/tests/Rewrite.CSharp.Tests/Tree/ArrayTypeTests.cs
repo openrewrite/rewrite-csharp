@@ -20,13 +20,12 @@ public class ArrayTypeTests(ITestOutputHelper output) : RewriteTest(output)
     }
 
     [Fact]
-    [KnownBug("Requires new LST type for Cs.ArrayType to support matrix type arrays")]
     public void TwoDimensional()
     {
         RewriteRun(
             CSharp(
                 """
-                int [,] _arr;
+                int [,] _arr = new int [0,0];
                 """
             )
         );

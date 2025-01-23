@@ -31,7 +31,7 @@ public partial interface J : Rewrite.Core.Tree
     Space prefix,
     Markers markers,
     JRightPadded<Expression> index
-    ) : J, MutableTree<ArrayDimension>
+    ) : J, J<ArrayDimension>, MutableTree<ArrayDimension>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

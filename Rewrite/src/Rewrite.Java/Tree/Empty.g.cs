@@ -30,7 +30,7 @@ public partial interface J : Rewrite.Core.Tree
     Guid id,
     Space prefix,
     Markers markers
-    ) : J, Statement, Expression, TypeTree, Expression<Empty>, TypedTree<Empty>, TypeTree<Empty>, MutableTree<Empty>
+    ) : J, Statement, Expression, TypeTree, Expression<Empty>, TypedTree<Empty>, J<Empty>, TypeTree<Empty>, MutableTree<Empty>
     {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {

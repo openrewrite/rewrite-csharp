@@ -20,6 +20,31 @@ public class ArrayTests(ITestOutputHelper output) : RewriteTest(output)
             )
         );
     }
+    [Fact]
+    public void MultiDimensional()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                int[,] a = new int[1,1];
+                return a[0, 0];
+                """
+            )
+        );
+    }
+
+    [Fact]
+    public void Jagged()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                int[][] a = new int[3][0];
+                a[0][0];
+                """
+            )
+        );
+    }
 
     [Fact]
     public void RangeExpression()
@@ -86,15 +111,5 @@ public class ArrayTests(ITestOutputHelper output) : RewriteTest(output)
 
     }
 
-    [Fact]
-    public void Jagged()
-    {
-        RewriteRun(
-            CSharp(
-                """
-                new int[3][];
-                """
-            )
-        );
-    }
+
 }

@@ -13,6 +13,7 @@ public interface JavaType
     internal static FullyQualified[] EMPTY_FULLY_QUALIFIED_ARRAY = [];
     internal static Method[] EMPTY_METHOD_ARRAY = [];
     internal static Variable[] EMPTY_VARIABLE_ARRAY = [];
+    internal static readonly string[] EMPTY_STRING_ARRAY = [];
     internal static Annotation.ElementValue[] EMPTY_ANNOTATION_VALUE_ARRAY = [];
 
     internal int? ManagedReference => null;
@@ -711,9 +712,10 @@ public interface JavaType
             JavaType? returnType,
             IList<string>? parameterNames,
             IList<JavaType>? parameterTypes,
-            IList<FullyQualified>? thrownExceptions,
+            IList<JavaType>? thrownExceptions,
             IList<FullyQualified>? annotations,
-            IList<string>? defaultValue)
+            IList<string>? defaultValue,
+            IList<string>? declaredFormalTypeNames)
         {
             ManagedReference = managedReference;
             FlagsBitMap = flagsBitMap;
@@ -722,9 +724,10 @@ public interface JavaType
             ReturnType = returnType ?? Unknown.Instance;
             ParameterNames = parameterNames ?? (Enumerable.Empty<string>() as IList<string>)!;
             ParameterTypes = parameterTypes ?? EMPTY_JAVA_TYPE_ARRAY;
-            ThrownExceptions = thrownExceptions ?? EMPTY_FULLY_QUALIFIED_ARRAY;
+            ThrownExceptions = thrownExceptions ?? EMPTY_JAVA_TYPE_ARRAY;
             Annotations = annotations ?? EMPTY_FULLY_QUALIFIED_ARRAY;
             DefaultValue = defaultValue;
+            DeclaredFormalTypeNames = declaredFormalTypeNames ?? EMPTY_STRING_ARRAY;
         }
 
         public int? ManagedReference { get; internal set; }
@@ -753,11 +756,13 @@ public interface JavaType
             return "<constructor>".Equals(Name);
         }
 
-        public IList<FullyQualified> ThrownExceptions { get; set; } = [];
+        public IList<JavaType> ThrownExceptions { get; set; } = [];
 
         public IList<FullyQualified> Annotations { get; internal set; } = [];
 
         public IList<string>? DefaultValue { get; internal set; } = [];
+
+        public IList<string>? DeclaredFormalTypeNames { get; internal set; } = [];
     }
 
     public sealed class Variable : JavaType

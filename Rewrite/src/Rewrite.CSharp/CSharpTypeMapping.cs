@@ -78,6 +78,7 @@ public partial class CSharpTypeMapping : JavaTypeMapping<ISymbol>
             methodSymbol.Parameters.Select(Type).ToList(),
             null,
             null,
+            null,
             null
         );
     }

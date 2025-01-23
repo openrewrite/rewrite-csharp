@@ -17,8 +17,7 @@ public class Program
         {
             foreach (var resultError in result.Errors)
             {
-
-            Console.WriteLine(resultError);
+                Console.WriteLine(resultError);
             }
             throw new AggregateException(result.Errors.Select(e => new ArgumentException(e.ToString())));
         }

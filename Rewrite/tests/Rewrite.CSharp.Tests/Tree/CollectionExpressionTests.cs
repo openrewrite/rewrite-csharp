@@ -70,10 +70,7 @@ public class CollectionExpressionTests(ITestOutputHelper output) : RewriteTest(o
             spec => spec.TypeValidation = new TypeValidation(Unknowns: false),
             CSharp(
                 """
-                class Test {
-                    int[] M(int[] i) {
-                        return [..i];
-                    }
+                a[..i];
                 }
                 """
             )

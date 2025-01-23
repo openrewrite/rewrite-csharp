@@ -32,7 +32,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     J.ControlParentheses<Expression> condition,
     JRightPadded<Statement> body
-    ) : J, Loop, MutableTree<WhileLoop>
+    ) : J, Loop, J<WhileLoop>, MutableTree<WhileLoop>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

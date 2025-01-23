@@ -52,8 +52,8 @@ public partial interface Cs : J
     Guid id,
     Space prefix,
     Markers markers,
-    JContainer<Subpattern> subpatterns
-    ) : Cs, MutableTree<PropertyPatternClause>
+    JContainer<Expression> subpatterns
+    ) : Cs, J<PropertyPatternClause>, MutableTree<PropertyPatternClause>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -103,18 +103,18 @@ public partial interface Cs : J
         {
             return ReferenceEquals(newMarkers, markers) ? this : new PropertyPatternClause(id, prefix, newMarkers, _subpatterns);
         }
-        private readonly JContainer<Cs.Subpattern> _subpatterns = subpatterns;
-        public IList<Cs.Subpattern> Subpatterns => _subpatterns.GetElements();
+        private readonly JContainer<Expression> _subpatterns = subpatterns;
+        public IList<Expression> Subpatterns => _subpatterns.GetElements();
 
-        public PropertyPatternClause WithSubpatterns(IList<Cs.Subpattern> newSubpatterns)
+        public PropertyPatternClause WithSubpatterns(IList<Expression> newSubpatterns)
         {
-            return Padding.WithSubpatterns(JContainer<Cs.Subpattern>.WithElements(_subpatterns, newSubpatterns));
+            return Padding.WithSubpatterns(JContainer<Expression>.WithElements(_subpatterns, newSubpatterns));
         }
         public sealed record PaddingHelper(Cs.PropertyPatternClause T)
         {
-            public JContainer<Cs.Subpattern> Subpatterns => T._subpatterns;
+            public JContainer<Expression> Subpatterns => T._subpatterns;
 
-            public Cs.PropertyPatternClause WithSubpatterns(JContainer<Cs.Subpattern> newSubpatterns)
+            public Cs.PropertyPatternClause WithSubpatterns(JContainer<Expression> newSubpatterns)
             {
                 return T._subpatterns == newSubpatterns ? T : new Cs.PropertyPatternClause(T.Id, T.Prefix, T.Markers, newSubpatterns);
             }

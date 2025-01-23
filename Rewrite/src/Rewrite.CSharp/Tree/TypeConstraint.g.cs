@@ -27,7 +27,7 @@ public partial interface Cs : J
     /// <summary>
     /// Represents a type constraint in a type parameter's constraint clause.
     /// Example: where T : SomeClass
-    ///          where T : IInterface
+    /// where T : IInterface
     /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
@@ -37,7 +37,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     TypeTree typeExpression
-    ) : Cs, Cs.TypeParameterConstraint, TypedTree, TypedTree<TypeConstraint>, MutableTree<TypeConstraint>
+    ) : Cs, Cs.TypeParameterConstraint, TypedTree, TypedTree<TypeConstraint>, J<TypeConstraint>, MutableTree<TypeConstraint>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

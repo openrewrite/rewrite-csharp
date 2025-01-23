@@ -10,18 +10,19 @@
         <Company>Moderne Inc.</Company>
         <PackageIcon>openrewrite.png</PackageIcon>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <VersionPrefix>0.16.5</VersionPrefix>
+        <VersionPrefix>0.19.0</VersionPrefix>
         <RewriteRemoteDir Condition="'$(RewriteRemoteDir)'==''">..\..\..\..\..\moderneinc\rewrite-remote\Rewrite.Remote</RewriteRemoteDir>
         <RemotePrinter>True</RemotePrinter>
         <DebugVisitor>False</DebugVisitor>
         <SanitizeStackTrace>True</SanitizeStackTrace>
+        <EmbeddedServer>true</EmbeddedServer>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(RELEASE_PUBLICATION)'!=''">
-        <RewriteRemoteVersion>0.12.0</RewriteRemoteVersion>
+        <RewriteRemoteVersion>0.15.0</RewriteRemoteVersion>
     </PropertyGroup>
     <PropertyGroup Condition="'$(RELEASE_PUBLICATION)'==''">
-        <RewriteRemoteVersion>0.12.0</RewriteRemoteVersion>
+        <RewriteRemoteVersion>0.15.0</RewriteRemoteVersion>
     </PropertyGroup>
 
     <Import Project="Directory.Build.props.user" Condition="Exists('Directory.Build.props.user')"/>
@@ -30,5 +31,6 @@
       <DefineConstants Condition="'$(RemotePrinter)'">$(DefineConstants);REMOTE_PRINTER</DefineConstants>
       <DefineConstants Condition="'$(DebugVisitor)'">$(DefineConstants);DEBUG_VISITOR</DefineConstants>
       <DefineConstants Condition="'$(SanitizeStackTrace)'">$(DefineConstants);SANITIZE_STACK_TRACE</DefineConstants>
+      <DefineConstants Condition="'$(EmbeddedServer)'">$(DefineConstants);EMBEDDED_SERVER</DefineConstants>
     </PropertyGroup>
 </Project>

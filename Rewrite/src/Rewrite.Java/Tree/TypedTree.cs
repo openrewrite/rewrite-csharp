@@ -6,7 +6,7 @@ using FileAttributes = Rewrite.Core.FileAttributes;
 namespace Rewrite.RewriteJava.Tree;
 
 
-public interface TypedTree<T> : TypedTree where T : TypedTree
+public interface TypedTree<T> : J<T>, TypedTree where T : TypedTree
 {
     public new T WithType(JavaType? type);
     TypedTree TypedTree.WithType(JavaType? type) => WithType(type);

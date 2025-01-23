@@ -32,9 +32,9 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     Keyword? awaitKeyword,
-    JContainer<Expression> expression,
+    JLeftPadded<Expression> expression,
     Statement statement
-    ) : Cs, Statement, MutableTree<UsingStatement>
+    ) : Cs, Statement, J<UsingStatement>, MutableTree<UsingStatement>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -90,12 +90,12 @@ public partial interface Cs : J
         {
             return ReferenceEquals(newAwaitKeyword, awaitKeyword) ? this : new UsingStatement(id, prefix, markers, newAwaitKeyword, _expression, statement);
         }
-        private readonly JContainer<Expression> _expression = expression;
-        public IList<Expression> Expression => _expression.GetElements();
+        private readonly JLeftPadded<Expression> _expression = expression;
+        public Expression Expression => _expression.Element;
 
-        public UsingStatement WithExpression(IList<Expression> newExpression)
+        public UsingStatement WithExpression(Expression newExpression)
         {
-            return Padding.WithExpression(JContainer<Expression>.WithElements(_expression, newExpression));
+            return Padding.WithExpression(_expression.WithElement(newExpression));
         }
         public Statement Statement => statement;
 
@@ -105,9 +105,9 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.UsingStatement T)
         {
-            public JContainer<Expression> Expression => T._expression;
+            public JLeftPadded<Expression> Expression => T._expression;
 
-            public Cs.UsingStatement WithExpression(JContainer<Expression> newExpression)
+            public Cs.UsingStatement WithExpression(JLeftPadded<Expression> newExpression)
             {
                 return T._expression == newExpression ? T : new Cs.UsingStatement(T.Id, T.Prefix, T.Markers, T.AwaitKeyword, newExpression, T.Statement);
             }

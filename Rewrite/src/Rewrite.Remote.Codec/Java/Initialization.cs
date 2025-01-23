@@ -96,10 +96,10 @@ public static class Initialization
                         break;
                     case "thrownExceptions":
                         reader.ReadStartArray();
-                        IList<JavaType.FullyQualified> exceptions = [];
+                        IList<JavaType> exceptions = [];
                         while (reader.PeekState() != CborReaderState.EndArray)
                         {
-                            exceptions.Add(context.Deserialize<JavaType.FullyQualified>(reader)!);
+                            exceptions.Add(context.Deserialize<JavaType>(reader)!);
                         }
 
                         reader.ReadEndArray();
@@ -126,6 +126,17 @@ public static class Initialization
 
                         reader.ReadEndArray();
                         method.DefaultValue = defaultValue;
+                        break;
+                    case "declaredFormalTypeNames":
+                        reader.ReadStartArray();
+                        IList<string> declaredFormalTypeNames = [];
+                        while (reader.PeekState() != CborReaderState.EndArray)
+                        {
+                            declaredFormalTypeNames.Add(reader.ReadTextString());
+                        }
+
+                        reader.ReadEndArray();
+                        method.DeclaredFormalTypeNames = declaredFormalTypeNames;
                         break;
                     default:
                         throw new NotImplementedException(prop);
@@ -604,6 +615,15 @@ public static class Initialization
                 writer.WriteTextString("defaultValue");
                 writer.WriteStartArray(value.DefaultValue.Count);
                 foreach (var defaultValue in value.DefaultValue)
+                    writer.WriteTextString(defaultValue);
+                writer.WriteEndArray();
+            }
+
+            if (value.DeclaredFormalTypeNames != null)
+            {
+                writer.WriteTextString("declaredFormalTypeNames");
+                writer.WriteStartArray(value.DeclaredFormalTypeNames.Count);
+                foreach (var defaultValue in value.DeclaredFormalTypeNames)
                     writer.WriteTextString(defaultValue);
                 writer.WriteEndArray();
             }

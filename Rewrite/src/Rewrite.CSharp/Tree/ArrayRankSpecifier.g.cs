@@ -32,7 +32,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     JContainer<Expression> sizes
-    ) : Cs, Expression, Expression<ArrayRankSpecifier>, MutableTree<ArrayRankSpecifier>
+    ) : Cs, Expression, Expression<ArrayRankSpecifier>, J<ArrayRankSpecifier>, MutableTree<ArrayRankSpecifier>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

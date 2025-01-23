@@ -1,11 +1,11 @@
 /*
  * Copyright 2024 the original author or authors.
  * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Moderne Source Available License (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
+ * https://docs.moderne.io/licensing/moderne-source-available-license
  * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,6 +41,21 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     }
 
     @Override
+    public Cs.RefExpression visitRefExpression(Cs.RefExpression refExpression, P p) {
+        return (Cs.RefExpression) super.visitRefExpression(refExpression, p);
+    }
+
+    @Override
+    public Cs.PointerType visitPointerType(Cs.PointerType pointerType, P p) {
+        return (Cs.PointerType) super.visitPointerType(pointerType, p);
+    }
+
+    @Override
+    public Cs.RefType visitRefType(Cs.RefType refType, P p) {
+        return (Cs.RefType) super.visitRefType(refType, p);
+    }
+
+    @Override
     public Cs.ForEachVariableLoop visitForEachVariableLoop(Cs.ForEachVariableLoop forEachVariableLoop, P p) {
         return (Cs.ForEachVariableLoop) super.visitForEachVariableLoop(forEachVariableLoop, p);
     }
@@ -73,6 +88,21 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     @Override
     public Cs.AwaitExpression visitAwaitExpression(Cs.AwaitExpression awaitExpression, P p) {
         return (Cs.AwaitExpression) super.visitAwaitExpression(awaitExpression, p);
+    }
+
+    @Override
+    public Cs.StackAllocExpression visitStackAllocExpression(Cs.StackAllocExpression stackAllocExpression, P p) {
+        return (Cs.StackAllocExpression) super.visitStackAllocExpression(stackAllocExpression, p);
+    }
+
+    @Override
+    public Cs.GotoStatement visitGotoStatement(Cs.GotoStatement gotoStatement, P p) {
+        return (Cs.GotoStatement) super.visitGotoStatement(gotoStatement, p);
+    }
+
+    @Override
+    public Cs.EventDeclaration visitEventDeclaration(Cs.EventDeclaration eventDeclaration, P p) {
+        return (Cs.EventDeclaration) super.visitEventDeclaration(eventDeclaration, p);
     }
 
     @Override
@@ -391,6 +421,11 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     }
 
     @Override
+    public Cs.CheckedExpression visitCheckedExpression(Cs.CheckedExpression checkedExpression, P p) {
+        return (Cs.CheckedExpression) super.visitCheckedExpression(checkedExpression, p);
+    }
+
+    @Override
     public Cs.CheckedStatement visitCheckedStatement(Cs.CheckedStatement checkedStatement, P p) {
         return (Cs.CheckedStatement) super.visitCheckedStatement(checkedStatement, p);
     }
@@ -403,6 +438,126 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     @Override
     public Cs.RangeExpression visitRangeExpression(Cs.RangeExpression rangeExpression, P p) {
         return (Cs.RangeExpression) super.visitRangeExpression(rangeExpression, p);
+    }
+
+    @Override
+    public Cs.QueryExpression visitQueryExpression(Cs.QueryExpression queryExpression, P p) {
+        return (Cs.QueryExpression) super.visitQueryExpression(queryExpression, p);
+    }
+
+    @Override
+    public Cs.QueryBody visitQueryBody(Cs.QueryBody queryBody, P p) {
+        return (Cs.QueryBody) super.visitQueryBody(queryBody, p);
+    }
+
+    @Override
+    public Cs.FromClause visitFromClause(Cs.FromClause fromClause, P p) {
+        return (Cs.FromClause) super.visitFromClause(fromClause, p);
+    }
+
+    @Override
+    public Cs.LetClause visitLetClause(Cs.LetClause letClause, P p) {
+        return (Cs.LetClause) super.visitLetClause(letClause, p);
+    }
+
+    @Override
+    public Cs.JoinClause visitJoinClause(Cs.JoinClause joinClause, P p) {
+        return (Cs.JoinClause) super.visitJoinClause(joinClause, p);
+    }
+
+    @Override
+    public Cs.JoinIntoClause visitJoinIntoClause(Cs.JoinIntoClause joinIntoClause, P p) {
+        return (Cs.JoinIntoClause) super.visitJoinIntoClause(joinIntoClause, p);
+    }
+
+    @Override
+    public Cs.WhereClause visitWhereClause(Cs.WhereClause whereClause, P p) {
+        return (Cs.WhereClause) super.visitWhereClause(whereClause, p);
+    }
+
+    @Override
+    public Cs.OrderByClause visitOrderByClause(Cs.OrderByClause orderByClause, P p) {
+        return (Cs.OrderByClause) super.visitOrderByClause(orderByClause, p);
+    }
+
+    @Override
+    public Cs.QueryContinuation visitQueryContinuation(Cs.QueryContinuation queryContinuation, P p) {
+        return (Cs.QueryContinuation) super.visitQueryContinuation(queryContinuation, p);
+    }
+
+    @Override
+    public Cs.Ordering visitOrdering(Cs.Ordering ordering, P p) {
+        return (Cs.Ordering) super.visitOrdering(ordering, p);
+    }
+
+    @Override
+    public Cs.SelectClause visitSelectClause(Cs.SelectClause selectClause, P p) {
+        return (Cs.SelectClause) super.visitSelectClause(selectClause, p);
+    }
+
+    @Override
+    public Cs.GroupClause visitGroupClause(Cs.GroupClause groupClause, P p) {
+        return (Cs.GroupClause) super.visitGroupClause(groupClause, p);
+    }
+
+    @Override
+    public Cs.IndexerDeclaration visitIndexerDeclaration(Cs.IndexerDeclaration indexerDeclaration, P p) {
+        return (Cs.IndexerDeclaration) super.visitIndexerDeclaration(indexerDeclaration, p);
+    }
+
+    @Override
+    public Cs.DelegateDeclaration visitDelegateDeclaration(Cs.DelegateDeclaration delegateDeclaration, P p) {
+        return (Cs.DelegateDeclaration) super.visitDelegateDeclaration(delegateDeclaration, p);
+    }
+
+    @Override
+    public Cs.ConversionOperatorDeclaration visitConversionOperatorDeclaration(Cs.ConversionOperatorDeclaration conversionOperatorDeclaration, P p) {
+        return (Cs.ConversionOperatorDeclaration) super.visitConversionOperatorDeclaration(conversionOperatorDeclaration, p);
+    }
+
+    @Override
+    public Cs.TypeParameter visitTypeParameter(Cs.TypeParameter typeParameter, P p) {
+        return (Cs.TypeParameter) super.visitTypeParameter(typeParameter, p);
+    }
+
+    @Override
+    public Cs.EnumDeclaration visitEnumDeclaration(Cs.EnumDeclaration enumDeclaration, P p) {
+        return (Cs.EnumDeclaration) super.visitEnumDeclaration(enumDeclaration, p);
+    }
+
+    @Override
+    public Cs.EnumMemberDeclaration visitEnumMemberDeclaration(Cs.EnumMemberDeclaration enumMemberDeclaration, P p) {
+        return (Cs.EnumMemberDeclaration) super.visitEnumMemberDeclaration(enumMemberDeclaration, p);
+    }
+
+    @Override
+    public Cs.AliasQualifiedName visitAliasQualifiedName(Cs.AliasQualifiedName aliasQualifiedName, P p) {
+        return (Cs.AliasQualifiedName) super.visitAliasQualifiedName(aliasQualifiedName, p);
+    }
+
+    @Override
+    public Cs.ArrayType visitArrayType(Cs.ArrayType arrayType, P p) {
+        return (Cs.ArrayType) super.visitArrayType(arrayType, p);
+    }
+
+    @Override
+    public Cs.Try visitTry(Cs.Try try_, P p) {
+        return (Cs.Try) super.visitTry(try_, p);
+    }
+
+    @Override
+    public Cs.ArrowExpressionClause visitArrowExpressionClause(Cs.ArrowExpressionClause arrowExpressionClause, P p) {
+        return (Cs.ArrowExpressionClause) super.visitArrowExpressionClause(arrowExpressionClause, p);
+    }
+
+    @Override
+    public Cs.AccessorDeclaration visitAccessorDeclaration(Cs.AccessorDeclaration accessorDeclaration, P p) {
+        return (Cs.AccessorDeclaration) super.visitAccessorDeclaration(accessorDeclaration, p);
+    }
+
+    @Override
+    public Cs.PointerFieldAccess visitPointerFieldAccess(Cs.PointerFieldAccess pointerFieldAccess, P p) {
+        return (Cs.PointerFieldAccess) super.visitPointerFieldAccess(pointerFieldAccess, p);
     }
 
     @Override
@@ -566,6 +721,11 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     }
 
     @Override
+    public J.Modifier visitModifier(J.Modifier modifier, P p) {
+        return (J.Modifier) super.visitModifier(modifier, p);
+    }
+
+    @Override
     public J.MultiCatch visitMultiCatch(J.MultiCatch multiCatch, P p) {
         return (J.MultiCatch) super.visitMultiCatch(multiCatch, p);
     }
@@ -688,6 +848,11 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     @Override
     public J.Unknown visitUnknown(J.Unknown unknown, P p) {
         return (J.Unknown) super.visitUnknown(unknown, p);
+    }
+
+    @Override
+    public J.Erroneous visitErroneous(J.Erroneous erroneous, P p) {
+        return (J.Erroneous) super.visitErroneous(erroneous, p);
     }
 
 }

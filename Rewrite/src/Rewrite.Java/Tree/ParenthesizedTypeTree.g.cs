@@ -36,7 +36,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     IList<Annotation> annotations,
     J.Parentheses<TypeTree> parenthesizedType
-    ) : J, TypeTree, Expression, Expression<ParenthesizedTypeTree>, TypedTree<ParenthesizedTypeTree>, TypeTree<ParenthesizedTypeTree>, MutableTree<ParenthesizedTypeTree>
+    ) : J, TypeTree, Expression, Expression<ParenthesizedTypeTree>, TypedTree<ParenthesizedTypeTree>, J<ParenthesizedTypeTree>, TypeTree<ParenthesizedTypeTree>, MutableTree<ParenthesizedTypeTree>
     {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {

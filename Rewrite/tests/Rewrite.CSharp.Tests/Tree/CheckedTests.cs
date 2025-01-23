@@ -23,5 +23,41 @@ public class CheckedTests(ITestOutputHelper output) : RewriteTest(output)
             )
         );
     }
+    [Fact]
+    private void UnCheckedStatement()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                unchecked
+                {
 
+                }
+                """
+            )
+        );
+    }
+
+    [Fact]
+    private void CheckedExpression()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                var a = checked(1);
+                """
+            )
+        );
+    }
+    [Fact]
+    private void UnCheckedExpression()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                var a = unchecked(1);
+                """
+            )
+        );
+    }
 }

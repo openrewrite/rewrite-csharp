@@ -32,7 +32,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     Keyword.KeywordKind kind
-    ) : Cs, MutableTree<Keyword>
+    ) : Cs, J<Keyword>, MutableTree<Keyword>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
@@ -73,6 +73,10 @@ public partial interface Cs : J
             Break,
             Return,
             Not,
+            Default,
+            Case,
+            Checked,
+            Unchecked,
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

@@ -50,7 +50,7 @@ public partial interface Cs : J
     Pattern pattern,
     JLeftPadded<Expression>? whenExpression,
     JLeftPadded<Expression> expression
-    ) : Cs, MutableTree<SwitchExpressionArm>
+    ) : Cs, J<SwitchExpressionArm>, MutableTree<SwitchExpressionArm>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

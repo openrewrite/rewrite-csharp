@@ -39,6 +39,20 @@ public class ConstructorTests(ITestOutputHelper output) : RewriteTest(output)
         var lst = src.Parse();
         lst.ToString().ShouldBeSameAs(src.Before);
     }
+
+    [Fact]
+    public void ConstructorWithArrowStatement()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                class C {
+                    C(P p) => _p = p;
+                }
+                """
+            )
+        );
+    }
 }
 
 
