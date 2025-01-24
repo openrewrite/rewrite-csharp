@@ -150,6 +150,7 @@ public class JContainer
         public static readonly Location ANNOTATION_ARGUMENTS = new(Space.Location.ANNOTATION_ARGUMENTS, JRightPadded.Location.ANNOTATION_ARGUMENT);
         public static readonly Location CASE = new(Space.Location.CASE, JRightPadded.Location.CASE);
         public static readonly Location CASE_CASE_LABELS = new(Space.Location.CASE_CASE_LABELS, JRightPadded.Location.CASE_CASE_LABELS);
+        public static readonly Location DECONSTRUCTION_PATTERN_NESTED = new(Space.Location.DECONSTRUCTION_PATTERN_NESTED, JRightPadded.Location.DECONSTRUCTION_PATTERN_NESTED);
         public static readonly Location IMPLEMENTS = new(Space.Location.IMPLEMENTS, JRightPadded.Location.IMPLEMENTS);
         public static readonly Location PERMITS = new(Space.Location.PERMITS, JRightPadded.Location.PERMITS);
         public static readonly Location LANGUAGE_EXTENSION = new(Space.Location.LANGUAGE_EXTENSION, JRightPadded.Location.LANGUAGE_EXTENSION);
