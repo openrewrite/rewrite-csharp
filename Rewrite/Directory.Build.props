@@ -18,11 +18,8 @@
         <EmbeddedServer>true</EmbeddedServer>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(RELEASE_PUBLICATION)'!=''">
-        <RewriteRemoteVersion>0.15.0</RewriteRemoteVersion>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(RELEASE_PUBLICATION)'==''">
-        <RewriteRemoteVersion>0.15.0</RewriteRemoteVersion>
+    <PropertyGroup>
+        <RewriteRemoteVersion>0.18.1</RewriteRemoteVersion>
     </PropertyGroup>
 
     <Import Project="Directory.Build.props.user" Condition="Exists('Directory.Build.props.user')"/>
