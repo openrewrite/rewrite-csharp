@@ -482,6 +482,15 @@ public class JavaVisitor<P> : TreeVisitor<J, P>
         return instanceOf;
     }
 
+    public virtual J? VisitDeconstructionPattern(J.DeconstructionPattern deconstructionPattern, P p)
+    {
+        deconstructionPattern = deconstructionPattern.WithPrefix(VisitSpace(deconstructionPattern.Prefix, Space.Location.DECONSTRUCTION_PATTERN_PREFIX, p)!);
+        deconstructionPattern = deconstructionPattern.WithMarkers(VisitMarkers(deconstructionPattern.Markers, p));
+        deconstructionPattern = deconstructionPattern.WithDeconstructor(VisitAndCast<Expression>(deconstructionPattern.Deconstructor, p)!);
+        deconstructionPattern = deconstructionPattern.Padding.WithNested(VisitContainer(deconstructionPattern.Padding.Nested, JContainer.Location.DECONSTRUCTION_PATTERN_NESTED, p)!);
+        return deconstructionPattern;
+    }
+
     public virtual J? VisitIntersectionType(J.IntersectionType intersectionType, P p)
     {
         intersectionType = intersectionType.WithPrefix(VisitSpace(intersectionType.Prefix, Space.Location.INTERSECTION_TYPE_PREFIX, p)!);

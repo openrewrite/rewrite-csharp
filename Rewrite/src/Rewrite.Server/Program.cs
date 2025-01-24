@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using Rewrite.Remote.Server;
 using Parser = CommandLine.Parser;
 
 namespace Rewrite.Server;
@@ -24,8 +25,8 @@ public class Program
 
         var options = result.Value;
 
-        var server = new Server(options);
-   
+        var server = new Remote.Server.Server(options);
+
         server.Listen().Wait();
     }
 }

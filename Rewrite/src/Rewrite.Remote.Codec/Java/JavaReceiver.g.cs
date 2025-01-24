@@ -377,6 +377,17 @@ public record JavaReceiver : Receiver
             return instanceOf;
         }
 
+        public override J VisitDeconstructionPattern(J.DeconstructionPattern deconstructionPattern, ReceiverContext ctx)
+        {
+            deconstructionPattern = deconstructionPattern.WithId(ctx.ReceiveValue(deconstructionPattern.Id)!);
+            deconstructionPattern = deconstructionPattern.WithPrefix(ctx.ReceiveNode(deconstructionPattern.Prefix, ReceiveSpace)!);
+            deconstructionPattern = deconstructionPattern.WithMarkers(ctx.ReceiveNode(deconstructionPattern.Markers, ctx.ReceiveMarkers)!);
+            deconstructionPattern = deconstructionPattern.WithDeconstructor(ctx.ReceiveNode(deconstructionPattern.Deconstructor, ctx.ReceiveTree)!);
+            deconstructionPattern = deconstructionPattern.Padding.WithNested(ctx.ReceiveNode(deconstructionPattern.Padding.Nested, ReceiveContainer)!);
+            deconstructionPattern = deconstructionPattern.WithType(ctx.ReceiveValue(deconstructionPattern.Type)!);
+            return deconstructionPattern;
+        }
+
         public override J VisitIntersectionType(J.IntersectionType intersectionType, ReceiverContext ctx)
         {
             intersectionType = intersectionType.WithId(ctx.ReceiveValue(intersectionType.Id)!);
@@ -1163,6 +1174,18 @@ public record JavaReceiver : Receiver
                     ctx.ReceiveNode(default(J), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(J?), ctx.ReceiveTree)!,
                     ctx.ReceiveValue(default(JavaType?))!
+                );
+            }
+
+            if (type is "Rewrite.RewriteJava.Tree.J.DeconstructionPattern" or "org.openrewrite.java.tree.J$DeconstructionPattern")
+            {
+                return new J.DeconstructionPattern(
+                    ctx.ReceiveValue(default(Guid))!,
+                    ctx.ReceiveNode(default(Space), ReceiveSpace)!,
+                    ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
+                    ctx.ReceiveNode(default(Expression), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(JContainer<J>), ReceiveContainer)!,
+                    ctx.ReceiveValue(default(JavaType))!
                 );
             }
 
