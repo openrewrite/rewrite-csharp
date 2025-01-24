@@ -104,4 +104,16 @@ public class LambdaTests(ITestOutputHelper output) : RewriteTest(output)
         RewriteRun(CSharp("Task.Run(async () => {});"));
     }
 
+    [Fact]
+    private void LambdaWithModifiers()
+    {
+        RewriteRun(CSharp("Task.Run( async static () => {});"));
+    }
+
+    [Fact]
+    private void LambdaWithReturnType()
+    {
+        RewriteRun(CSharp("Task.Run( async static bool () => {});"));
+    }
+
 }

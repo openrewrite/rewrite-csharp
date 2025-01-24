@@ -319,6 +319,325 @@ public interface Cs extends J {
         }
     }
 
+    /**
+     * Represents an operator declaration in C# classes, which allows overloading of operators
+     * for custom types.
+     * <p>
+     * For example:
+     * <pre>
+     *     // Unary operator overload
+     *     public static Vector operator +(Vector a)
+     *
+     *     // Binary operator overload
+     *     public static Point operator *(Point p, float scale)
+     *
+     *     // Interface implementation
+     *     IEnumerable<T>.Vector operator +(Vector a)
+     *
+     *     // Conversion operator
+     *     public static explicit operator int(Complex c)
+     *
+     *     // Custom operator
+     *     public static Point operator ++(Point p)
+     * </pre>
+     */
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    final class OperatorDeclaration implements Cs, Statement {
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @With
+        @EqualsAndHashCode.Include
+        @Getter
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        @With
+        @Getter
+        List<AttributeList> attributeLists;
+
+        @With
+        @Getter
+        List<J.Modifier> modifiers;
+
+        /**
+         * <pre>
+         * IEnumerable<T>.Vector operator +(Vector a)
+         * ^^^^^^^^^^^^^^^^^^
+         * </pre>
+         */
+        @Nullable
+        JRightPadded<TypeTree> explicitInterfaceSpecifier;
+
+
+        /**
+         * <pre>
+         * public static Vector operator +(Vector a)
+         *                    ^^^^^^^^
+         * </pre>
+         */
+        @With
+        @Getter
+        Cs.Keyword operatorKeyword;
+
+        /**
+         * <pre>
+         * public static Integer operator checked +(Integer a, Integer b)
+         *                               ^^^^^^^^
+         * </pre>
+         */
+        @With
+        @Getter
+        Cs.@Nullable Keyword checkedKeyword;
+
+        /**
+         * <pre>
+         * public static Vector operator +(Vector a)
+         *                            ^
+         * </pre>
+         */
+        JLeftPadded<Operator> operatorToken;
+
+        /**
+         * <pre>
+         * public static explicit operator int(Complex c)
+         *                                ^^^^
+         * </pre>
+         */
+        @With
+        @Getter
+        TypeTree returnType;
+
+        /**
+         * <pre>
+         * public static Vector operator + (Vector a)
+         *                                ^^^^^^^^^
+         * </pre>
+         */
+        JContainer<Expression> parameters;
+
+        public List<Expression> getParameters() {
+            return parameters.getElements();
+        }
+
+        public OperatorDeclaration withParameters(List<Expression> parameters) {
+            return getPadding().withParameters(JContainer.withElements(this.parameters, parameters));
+        }
+
+        /**
+         * <pre>
+         * public static Vector operator +(...) { ... }
+         *                                      ^^^^^^^
+         * </pre>
+         */
+        @With
+        @Getter
+        J.Block body;
+
+        @With
+        @Getter
+        JavaType.@Nullable Method methodType;
+
+        public @Nullable NameTree getExplicitInterfaceSpecifier() {
+            return explicitInterfaceSpecifier == null ? null : explicitInterfaceSpecifier.getElement();
+        }
+
+        public OperatorDeclaration withExplicitInterfaceSpecifier(@Nullable TypeTree explicitInterfaceSpecifier) {
+            return getPadding().withExplicitInterfaceSpecifier(JRightPadded.withElement(this.explicitInterfaceSpecifier, explicitInterfaceSpecifier));
+        }
+
+        public Operator getOperatorToken() {
+            return operatorToken == null ? null : operatorToken.getElement();
+        }
+
+        public OperatorDeclaration withOperatorToken(@Nullable Operator operatorToken) {
+            return getPadding().withOperatorToken(JLeftPadded.withElement(this.operatorToken, operatorToken));
+        }
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitOperatorDeclaration(this, p);
+        }
+
+        @Override
+        public CoordinateBuilder.Statement getCoordinates() {
+            return new CoordinateBuilder.Statement(this);
+        }
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.t != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        public enum Operator {
+            /**
+             * + token
+             */
+            Plus,
+
+            /**
+             * - token
+             */
+            Minus,
+
+            /**
+             * ! token
+             */
+            Bang,
+
+            /**
+             * ~ token
+             */
+            Tilde,
+
+            /**
+             * ++ token
+             */
+            PlusPlus,
+
+            /**
+             * -- token
+             */
+            MinusMinus,
+
+            /**
+             * * token
+             */
+            Star,
+
+            /**
+             * / token
+             */
+            Division,
+
+            /**
+             * % token
+             */
+            Percent,
+
+            /**
+             * << token
+             */
+            LeftShift,
+
+            /**
+             * >> token
+             */
+            RightShift,
+
+            /**
+             * < token
+             */
+            LessThan,
+
+            /**
+             * > token
+             */
+            GreaterThan,
+
+            /**
+             * <= token
+             */
+            LessThanEquals,
+
+            /**
+             * >= token
+             */
+            GreaterThanEquals,
+
+            /**
+             * == token
+             */
+            Equals,
+
+            /**
+             * != token
+             */
+            NotEquals,
+
+            /**
+             * & token
+             */
+            Ampersand,
+
+            /**
+             * | token
+             */
+            Bar,
+
+            /**
+             * ^ token
+             */
+            Caret,
+
+            /**
+             * true token
+             */
+            True,
+
+            /**
+             * false token
+             */
+            False
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final OperatorDeclaration t;
+
+            public @Nullable JRightPadded<TypeTree> getExplicitInterfaceSpecifier() {
+                return t.explicitInterfaceSpecifier;
+            }
+
+            public OperatorDeclaration withExplicitInterfaceSpecifier(@Nullable JRightPadded<TypeTree> explicitInterfaceSpecifier) {
+                return t.explicitInterfaceSpecifier == explicitInterfaceSpecifier ? t : new OperatorDeclaration(t.id, t.prefix, t.markers,
+                        t.attributeLists, t.modifiers, explicitInterfaceSpecifier, t.operatorKeyword, t.checkedKeyword, t.operatorToken,
+                        t.returnType, t.parameters, t.body, t.methodType);
+            }
+
+            public JLeftPadded<Operator> getOperatorToken() {
+                return t.operatorToken;
+            }
+
+            public OperatorDeclaration withOperatorToken(JLeftPadded<Operator> operatorToken) {
+                return t.operatorToken == operatorToken ? t : new OperatorDeclaration(t.id, t.prefix, t.markers,
+                        t.attributeLists, t.modifiers, t.explicitInterfaceSpecifier, t.operatorKeyword, t.checkedKeyword,
+                        operatorToken, t.returnType, t.parameters, t.body, t.methodType);
+            }
+
+            public JContainer<Expression> getParameters() {
+                return t.parameters;
+            }
+
+            public OperatorDeclaration withParameters(JContainer<Expression> parameters) {
+                return t.parameters == parameters ? t : new OperatorDeclaration(t.id, t.prefix, t.markers,
+                        t.attributeLists, t.modifiers, t.explicitInterfaceSpecifier, t.operatorKeyword, t.checkedKeyword, t.operatorToken,
+                        t.returnType, parameters, t.body, t.methodType);
+            }
+        }
+    }
+
 
     /**
      * Represents a C# ref expression used to pass variables by reference.
@@ -733,6 +1052,98 @@ public interface Cs extends J {
         }
     }
 
+    /**
+     * Represents a name and colon syntax in C#, which is used in various contexts such as named arguments,
+     * tuple elements, and property patterns.
+     * <p>
+     * For example:
+     * <pre>
+     *     // In named arguments
+     *     Method(name: "John", age: 25)
+     *            ^^^^          ^^^^
+     *
+     *     // In tuple literals
+     *     (name: "John", age: 25)
+     *      ^^^^          ^^^^
+     *
+     *     // In property patterns
+     *     { Name: "John", Age: 25 }
+     *      ^^^^          ^^^^
+     * </pre>
+     */
+    @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+    @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+    @RequiredArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    final class NameColon implements Cs {
+        @Nullable
+        @NonFinal
+        transient WeakReference<Padding> padding;
+
+        @With
+        @EqualsAndHashCode.Include
+        @Getter
+        UUID id;
+
+        @With
+        @Getter
+        Space prefix;
+
+        @With
+        @Getter
+        Markers markers;
+
+        /**
+         * <pre>
+         * Method(name: "John")
+         *        ^^^^
+         * </pre>
+         */
+        JRightPadded<J.Identifier> name;
+
+        public J.Identifier getName() {
+            return name.getElement();
+        }
+
+        public NameColon withName(J.Identifier name) {
+            return getPadding().withName(this.name.withElement(name));
+        }
+
+        @Override
+        public <P> J acceptCSharp(CSharpVisitor<P> v, P p) {
+            return v.visitNameColon(this, p);
+        }
+
+        public Padding getPadding() {
+            Padding p;
+            if (this.padding == null) {
+                p = new Padding(this);
+                this.padding = new WeakReference<>(p);
+            } else {
+                p = this.padding.get();
+                if (p == null || p.t != this) {
+                    p = new Padding(this);
+                    this.padding = new WeakReference<>(p);
+                }
+            }
+            return p;
+        }
+
+        @RequiredArgsConstructor
+        public static class Padding {
+            private final NameColon t;
+
+            public JRightPadded<J.Identifier> getName() {
+                return t.name;
+            }
+
+            public NameColon withName(JRightPadded<J.Identifier> name) {
+                return t.name == name ? t : new NameColon(t.id, t.prefix, t.markers, name);
+            }
+        }
+    }
+
+
     @Getter
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -758,6 +1169,7 @@ public interface Cs extends J {
 
         @Nullable
         JRightPadded<Identifier> nameColumn;
+
 
         @Nullable
         @Getter
@@ -1369,7 +1781,7 @@ public interface Cs extends J {
         }
 
         @Nullable
-        JRightPadded<NameTree> interfaceSpecifier;
+        JRightPadded<TypeTree> interfaceSpecifier;
 
         /**
          * <pre>
@@ -1381,7 +1793,7 @@ public interface Cs extends J {
             return interfaceSpecifier == null ? null : interfaceSpecifier.getElement();
         }
 
-        public EventDeclaration withInterfaceSpecifier(@Nullable NameTree interfaceSpecifier) {
+        public EventDeclaration withInterfaceSpecifier(@Nullable TypeTree interfaceSpecifier) {
             return getPadding().withInterfaceSpecifier(JRightPadded.withElement(this.interfaceSpecifier, interfaceSpecifier));
         }
 
@@ -1451,11 +1863,11 @@ public interface Cs extends J {
                         t.modifiers, typeExpression, t.interfaceSpecifier, t.name, t.accessors);
             }
 
-            public @Nullable JRightPadded<NameTree> getInterfaceSpecifier() {
+            public @Nullable JRightPadded<TypeTree> getInterfaceSpecifier() {
                 return t.interfaceSpecifier;
             }
 
-            public EventDeclaration withInterfaceSpecifier(@Nullable JRightPadded<NameTree> interfaceSpecifier) {
+            public EventDeclaration withInterfaceSpecifier(@Nullable JRightPadded<TypeTree> interfaceSpecifier) {
                 return t.interfaceSpecifier == interfaceSpecifier ? t : new EventDeclaration(t.id, t.prefix, t.markers, t.attributeLists,
                         t.modifiers, t.typeExpression, interfaceSpecifier, t.name, t.accessors);
             }
@@ -2541,7 +2953,7 @@ public interface Cs extends J {
         TypeTree typeExpression;
 
         @Nullable
-        JRightPadded<NameTree> interfaceSpecifier;
+        JRightPadded<TypeTree> interfaceSpecifier;
 
         @With
         @Getter
@@ -2576,11 +2988,11 @@ public interface Cs extends J {
             return getPadding().withType(this.typeExpression.withType(type));
         }
 
-        public @Nullable NameTree getInterfaceSpecifier() {
+        public @Nullable TypeTree getInterfaceSpecifier() {
             return interfaceSpecifier != null ? interfaceSpecifier.getElement() : null;
         }
 
-        public PropertyDeclaration withInterfaceSpecifier(@Nullable NameTree interfaceSpecifier) {
+        public PropertyDeclaration withInterfaceSpecifier(@Nullable TypeTree interfaceSpecifier) {
             return getPadding().withInterfaceSpecifier(JRightPadded.withElement(this.interfaceSpecifier, interfaceSpecifier));
         }
 
@@ -2620,11 +3032,11 @@ public interface Cs extends J {
                 return pd.typeExpression;
             }
 
-            public @Nullable JRightPadded<NameTree> getInterfaceSpecifier() {
+            public @Nullable JRightPadded<TypeTree> getInterfaceSpecifier() {
                 return pd.interfaceSpecifier;
             }
 
-            public PropertyDeclaration withInterfaceSpecifier(@Nullable JRightPadded<NameTree> interfaceSpecifier) {
+            public PropertyDeclaration withInterfaceSpecifier(@Nullable JRightPadded<TypeTree> interfaceSpecifier) {
                 return pd.interfaceSpecifier == interfaceSpecifier ? pd : new PropertyDeclaration(pd.id,
                         pd.prefix,
                         pd.markers,
@@ -2711,7 +3123,8 @@ public interface Cs extends J {
             Default,
             Case,
             Checked,
-            Unchecked
+            Unchecked,
+            Operator
         }
     }
 
@@ -2745,6 +3158,11 @@ public interface Cs extends J {
 
         @With
         @Getter
+        @Nullable
+        TypeTree returnType;
+
+        @With
+        @Getter
         List<Modifier> modifiers;
 
         @Override
@@ -2764,6 +3182,7 @@ public interface Cs extends J {
                     prefix,
                     markers,
                     lambdaExpression.withType(type),
+                    returnType,
                     modifiers);
         }
 

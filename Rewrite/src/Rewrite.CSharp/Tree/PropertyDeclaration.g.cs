@@ -34,7 +34,7 @@ public partial interface Cs : J
     IList<AttributeList> attributeLists,
     IList<J.Modifier> modifiers,
     TypeTree typeExpression,
-    JRightPadded<NameTree>? interfaceSpecifier,
+    JRightPadded<TypeTree>? interfaceSpecifier,
     J.Identifier name,
     J.Block? accessors,
     ArrowExpressionClause? expressionBody,
@@ -107,12 +107,12 @@ public partial interface Cs : J
         {
             return ReferenceEquals(newTypeExpression, typeExpression) ? this : new PropertyDeclaration(id, prefix, markers, attributeLists, modifiers, newTypeExpression, _interfaceSpecifier, name, accessors, expressionBody, _initializer);
         }
-        private readonly JRightPadded<NameTree>? _interfaceSpecifier = interfaceSpecifier;
-        public NameTree? InterfaceSpecifier => _interfaceSpecifier?.Element;
+        private readonly JRightPadded<TypeTree>? _interfaceSpecifier = interfaceSpecifier;
+        public TypeTree? InterfaceSpecifier => _interfaceSpecifier?.Element;
 
-        public PropertyDeclaration WithInterfaceSpecifier(NameTree? newInterfaceSpecifier)
+        public PropertyDeclaration WithInterfaceSpecifier(TypeTree? newInterfaceSpecifier)
         {
-            return Padding.WithInterfaceSpecifier(JRightPadded<NameTree>.WithElement(_interfaceSpecifier, newInterfaceSpecifier));
+            return Padding.WithInterfaceSpecifier(JRightPadded<TypeTree>.WithElement(_interfaceSpecifier, newInterfaceSpecifier));
         }
         public J.Identifier Name => name;
 
@@ -141,9 +141,9 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.PropertyDeclaration T)
         {
-            public JRightPadded<NameTree>? InterfaceSpecifier => T._interfaceSpecifier;
+            public JRightPadded<TypeTree>? InterfaceSpecifier => T._interfaceSpecifier;
 
-            public Cs.PropertyDeclaration WithInterfaceSpecifier(JRightPadded<NameTree>? newInterfaceSpecifier)
+            public Cs.PropertyDeclaration WithInterfaceSpecifier(JRightPadded<TypeTree>? newInterfaceSpecifier)
             {
                 return T._interfaceSpecifier == newInterfaceSpecifier ? T : new Cs.PropertyDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T.TypeExpression, newInterfaceSpecifier, T.Name, T.Accessors, T.ExpressionBody, T._initializer);
             }

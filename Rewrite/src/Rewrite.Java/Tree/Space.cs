@@ -26,6 +26,7 @@ public class Space(
     public IList<Comment> Comments => comments;
 
     public string? Whitespace => whitespace;
+    public bool IsEmpty => this == EMPTY;
 
     public Space WithComments(IList<Comment>? newComments)
     {
@@ -35,6 +36,38 @@ public class Space(
     public Space WithWhitespace(string newWhitespace)
     {
         return newWhitespace == Whitespace ? this : new Space(Comments, newWhitespace);
+    }
+
+    public static Space FirstPrefix<T>(IList<T>? trees) where T : J
+    {
+        return (trees == null || trees.Count == 0) ? Space.EMPTY : trees[0].Prefix;
+    }
+
+    /// <summary>
+    /// Formats the first prefix of the list of trees. If the list is not empty and the prefix
+    /// of the first tree does not match the specified prefix, a new list is created with the
+    /// first tree's prefix updated.
+    /// </summary>
+    /// <typeparam name="J2">A type that extends J.</typeparam>
+    /// <param name="trees">The list of trees to format.</param>
+    /// <param name="prefix">The prefix to apply to the first tree.</param>
+    /// <returns>
+    /// A new list with the first tree's prefix updated if necessary; otherwise, the original list.
+    /// </returns>
+    public static IList<J2> FormatFirstPrefix<J2>(IList<J2> trees, Space prefix) where J2 : J
+    {
+        if (trees.Count > 0 && !trees[0].Prefix.Equals(prefix))
+        {
+            // Create a new list to avoid mutating the original list
+            List<J2> formattedTrees = new List<J2>(trees);
+
+            // Update the first element with the new prefix
+            formattedTrees[0] = (J2)formattedTrees[0].WithPrefix(prefix);
+
+            return formattedTrees;
+        }
+
+        return trees;
     }
 
     public static Space Format(string formatting)

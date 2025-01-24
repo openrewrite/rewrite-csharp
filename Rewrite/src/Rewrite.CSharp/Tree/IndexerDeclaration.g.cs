@@ -48,6 +48,7 @@ public partial interface Cs : J
     Markers markers,
     IList<J.Modifier> modifiers,
     TypeTree typeExpression,
+    JRightPadded<TypeTree>? explicitInterfaceSpecifier,
     Expression indexer,
     JContainer<Expression> parameters,
     JLeftPadded<Expression>? expressionBody,
@@ -88,37 +89,44 @@ public partial interface Cs : J
 
         public IndexerDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new IndexerDeclaration(newId, prefix, markers, modifiers, typeExpression, indexer, _parameters, _expressionBody, accessors);
+            return newId == id ? this : new IndexerDeclaration(newId, prefix, markers, modifiers, typeExpression, _explicitInterfaceSpecifier, indexer, _parameters, _expressionBody, accessors);
         }
         public Space Prefix => prefix;
 
         public IndexerDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new IndexerDeclaration(id, newPrefix, markers, modifiers, typeExpression, indexer, _parameters, _expressionBody, accessors);
+            return newPrefix == prefix ? this : new IndexerDeclaration(id, newPrefix, markers, modifiers, typeExpression, _explicitInterfaceSpecifier, indexer, _parameters, _expressionBody, accessors);
         }
         public Markers Markers => markers;
 
         public IndexerDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new IndexerDeclaration(id, prefix, newMarkers, modifiers, typeExpression, indexer, _parameters, _expressionBody, accessors);
+            return ReferenceEquals(newMarkers, markers) ? this : new IndexerDeclaration(id, prefix, newMarkers, modifiers, typeExpression, _explicitInterfaceSpecifier, indexer, _parameters, _expressionBody, accessors);
         }
         public IList<J.Modifier> Modifiers => modifiers;
 
         public IndexerDeclaration WithModifiers(IList<J.Modifier> newModifiers)
         {
-            return newModifiers == modifiers ? this : new IndexerDeclaration(id, prefix, markers, newModifiers, typeExpression, indexer, _parameters, _expressionBody, accessors);
+            return newModifiers == modifiers ? this : new IndexerDeclaration(id, prefix, markers, newModifiers, typeExpression, _explicitInterfaceSpecifier, indexer, _parameters, _expressionBody, accessors);
         }
         public TypeTree TypeExpression => typeExpression;
 
         public IndexerDeclaration WithTypeExpression(TypeTree newTypeExpression)
         {
-            return ReferenceEquals(newTypeExpression, typeExpression) ? this : new IndexerDeclaration(id, prefix, markers, modifiers, newTypeExpression, indexer, _parameters, _expressionBody, accessors);
+            return ReferenceEquals(newTypeExpression, typeExpression) ? this : new IndexerDeclaration(id, prefix, markers, modifiers, newTypeExpression, _explicitInterfaceSpecifier, indexer, _parameters, _expressionBody, accessors);
+        }
+        private readonly JRightPadded<TypeTree>? _explicitInterfaceSpecifier = explicitInterfaceSpecifier;
+        public TypeTree? ExplicitInterfaceSpecifier => _explicitInterfaceSpecifier?.Element;
+
+        public IndexerDeclaration WithExplicitInterfaceSpecifier(TypeTree? newExplicitInterfaceSpecifier)
+        {
+            return Padding.WithExplicitInterfaceSpecifier(JRightPadded<TypeTree>.WithElement(_explicitInterfaceSpecifier, newExplicitInterfaceSpecifier));
         }
         public Expression Indexer => indexer;
 
         public IndexerDeclaration WithIndexer(Expression newIndexer)
         {
-            return ReferenceEquals(newIndexer, indexer) ? this : new IndexerDeclaration(id, prefix, markers, modifiers, typeExpression, newIndexer, _parameters, _expressionBody, accessors);
+            return ReferenceEquals(newIndexer, indexer) ? this : new IndexerDeclaration(id, prefix, markers, modifiers, typeExpression, _explicitInterfaceSpecifier, newIndexer, _parameters, _expressionBody, accessors);
         }
         private readonly JContainer<Expression> _parameters = parameters;
         public IList<Expression> Parameters => _parameters.GetElements();
@@ -138,22 +146,29 @@ public partial interface Cs : J
 
         public IndexerDeclaration WithAccessors(J.Block? newAccessors)
         {
-            return ReferenceEquals(newAccessors, accessors) ? this : new IndexerDeclaration(id, prefix, markers, modifiers, typeExpression, indexer, _parameters, _expressionBody, newAccessors);
+            return ReferenceEquals(newAccessors, accessors) ? this : new IndexerDeclaration(id, prefix, markers, modifiers, typeExpression, _explicitInterfaceSpecifier, indexer, _parameters, _expressionBody, newAccessors);
         }
         public sealed record PaddingHelper(Cs.IndexerDeclaration T)
         {
+            public JRightPadded<TypeTree>? ExplicitInterfaceSpecifier => T._explicitInterfaceSpecifier;
+
+            public Cs.IndexerDeclaration WithExplicitInterfaceSpecifier(JRightPadded<TypeTree>? newExplicitInterfaceSpecifier)
+            {
+                return T._explicitInterfaceSpecifier == newExplicitInterfaceSpecifier ? T : new Cs.IndexerDeclaration(T.Id, T.Prefix, T.Markers, T.Modifiers, T.TypeExpression, newExplicitInterfaceSpecifier, T.Indexer, T._parameters, T._expressionBody, T.Accessors);
+            }
+
             public JContainer<Expression> Parameters => T._parameters;
 
             public Cs.IndexerDeclaration WithParameters(JContainer<Expression> newParameters)
             {
-                return T._parameters == newParameters ? T : new Cs.IndexerDeclaration(T.Id, T.Prefix, T.Markers, T.Modifiers, T.TypeExpression, T.Indexer, newParameters, T._expressionBody, T.Accessors);
+                return T._parameters == newParameters ? T : new Cs.IndexerDeclaration(T.Id, T.Prefix, T.Markers, T.Modifiers, T.TypeExpression, T._explicitInterfaceSpecifier, T.Indexer, newParameters, T._expressionBody, T.Accessors);
             }
 
             public JLeftPadded<Expression>? ExpressionBody => T._expressionBody;
 
             public Cs.IndexerDeclaration WithExpressionBody(JLeftPadded<Expression>? newExpressionBody)
             {
-                return T._expressionBody == newExpressionBody ? T : new Cs.IndexerDeclaration(T.Id, T.Prefix, T.Markers, T.Modifiers, T.TypeExpression, T.Indexer, T._parameters, newExpressionBody, T.Accessors);
+                return T._expressionBody == newExpressionBody ? T : new Cs.IndexerDeclaration(T.Id, T.Prefix, T.Markers, T.Modifiers, T.TypeExpression, T._explicitInterfaceSpecifier, T.Indexer, T._parameters, newExpressionBody, T.Accessors);
             }
 
         }

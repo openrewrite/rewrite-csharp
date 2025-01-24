@@ -113,4 +113,44 @@ public class Cursor
         Parent = this.Parent;
         Value = this.Value;
     }
+
+
+    /// <summary>
+    /// Puts a message on the first enclosing instance of the specified type.
+    /// </summary>
+    /// <param name="key">The message key</param>
+    /// <param name="value">The message value</param>
+    public void PutMessageOnFirstEnclosing<T>(string key, object value) => PutMessageOnFirstEnclosing(typeof(T), key, value);
+
+    /// <summary>
+    /// Puts a message on the first enclosing instance of the specified type.
+    /// </summary>
+    /// <param name="enclosing">The enclosing type to search for</param>
+    /// <param name="key">The message key</param>
+    /// <param name="value">The message value</param>
+    public void PutMessageOnFirstEnclosing(Type enclosing, string key, object value)
+    {
+        if (enclosing.IsInstanceOfType(this.Value))
+        {
+            PutMessage(key, value);
+        }
+        else if (Parent != null)
+        {
+            Parent.PutMessageOnFirstEnclosing(enclosing, key, value);
+        }
+    }
+
+
+    /// <summary>
+    /// Finds the closest message matching the provided key, leaving it in the message map for further access.
+    /// </summary>
+    /// <typeparam name="T">The expected value of the message.</typeparam>
+    /// <param name="key">The message key to find.</param>
+    /// <returns>The closest message matching the provided key in the cursor stack, or <c>null</c> if none.</returns>
+    public T? GetNearestMessage<T>(string key)
+    {
+        T? t = this._messages == null ? default : (T)_messages[key];
+        return t == null && Parent != null ? Parent.GetNearestMessage<T>(key) : t;
+    }
+
 }

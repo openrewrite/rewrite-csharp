@@ -32,6 +32,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     J.Lambda lambdaExpression,
+    TypeTree? returnType,
     IList<J.Modifier> modifiers
     ) : Cs, Statement, Expression, Expression<Lambda>, J<Lambda>, MutableTree<Lambda>
     {
@@ -44,31 +45,37 @@ public partial interface Cs : J
 
         public Lambda WithId(Guid newId)
         {
-            return newId == id ? this : new Lambda(newId, prefix, markers, lambdaExpression, modifiers);
+            return newId == id ? this : new Lambda(newId, prefix, markers, lambdaExpression, returnType, modifiers);
         }
         public Space Prefix => prefix;
 
         public Lambda WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Lambda(id, newPrefix, markers, lambdaExpression, modifiers);
+            return newPrefix == prefix ? this : new Lambda(id, newPrefix, markers, lambdaExpression, returnType, modifiers);
         }
         public Markers Markers => markers;
 
         public Lambda WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Lambda(id, prefix, newMarkers, lambdaExpression, modifiers);
+            return ReferenceEquals(newMarkers, markers) ? this : new Lambda(id, prefix, newMarkers, lambdaExpression, returnType, modifiers);
         }
         public J.Lambda LambdaExpression => lambdaExpression;
 
         public Lambda WithLambdaExpression(J.Lambda newLambdaExpression)
         {
-            return ReferenceEquals(newLambdaExpression, lambdaExpression) ? this : new Lambda(id, prefix, markers, newLambdaExpression, modifiers);
+            return ReferenceEquals(newLambdaExpression, lambdaExpression) ? this : new Lambda(id, prefix, markers, newLambdaExpression, returnType, modifiers);
+        }
+        public TypeTree? ReturnType => returnType;
+
+        public Lambda WithReturnType(TypeTree? newReturnType)
+        {
+            return ReferenceEquals(newReturnType, returnType) ? this : new Lambda(id, prefix, markers, lambdaExpression, newReturnType, modifiers);
         }
         public IList<J.Modifier> Modifiers => modifiers;
 
         public Lambda WithModifiers(IList<J.Modifier> newModifiers)
         {
-            return newModifiers == modifiers ? this : new Lambda(id, prefix, markers, lambdaExpression, newModifiers);
+            return newModifiers == modifiers ? this : new Lambda(id, prefix, markers, lambdaExpression, returnType, newModifiers);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

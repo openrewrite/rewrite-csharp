@@ -54,6 +54,8 @@ public sealed class TextComment(
         return newSuffix == Suffix ? this : new TextComment(multiline, text, newSuffix, Markers);
     }
 
+    Comment Comment.WithSuffix(string newSuffix) => WithSuffix(newSuffix);
+
     public TextComment WithMarkers(Markers newMarkers)
     {
         return ReferenceEquals(newMarkers, markers) ? this : new TextComment(multiline, text, suffix, newMarkers);

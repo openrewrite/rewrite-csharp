@@ -2,6 +2,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.ExceptionServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Serialization;
@@ -68,8 +69,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                 markers: new Markers(Id: Core.Tree.RandomId(),
                     MarkerList:
                     [
-                        ParseExceptionResult.Build(parser: parser, t: new InvalidOperationException(message: "Unsupported AST type."))
-                            // .WithTreeType(node.Kind().ToString())
+                        ParseExceptionResult.Build(parser, ExceptionDispatchInfo.SetCurrentStackTrace(new InvalidOperationException($"Unsupported AST type {node.GetType()}")))
                             .WithTreeType(newTreeType: node.GetType().Name)
                     ]
                 ),
@@ -628,7 +628,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             name: MapIdentifier(node.Identifier, null),
             parameters: MapParameters<Statement>(pls: node.ParameterList)!,
             body: body,
-            methodType: MapType( node) as JavaType.Method,
+            methodType: MapType(node) as JavaType.Method,
             attributes: MapAttributes(node.AttributeLists),
             typeParameterConstraintClauses: MapTypeParameterConstraintClauses(node.ConstraintClauses)
         );
@@ -930,19 +930,30 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitAttributeArgument(AttributeArgumentSyntax node)
     {
-        var f = node.NameColon.;
         var nameColumn = node.NameColon != null
             ? new JRightPadded<J.Identifier>(
                 element: MapIdentifier(identifier: node.NameColon.Name.Identifier, type: null),
                 after: Format(Trailing(node.NameColon.Name)), markers: Markers.EMPTY)
             : null;
+        var expression = Convert<Expression>(node.Expression)!;
+        if (node.NameEquals != null)
+        {
+            expression = new J.Assignment(
+                id: Core.Tree.RandomId(),
+                prefix: Format(Leading(node)),
+                markers: Markers.EMPTY,
+                expression: JLeftPadded.Create(expression, Format(Leading(node.NameEquals.EqualsToken)))!,
+                variable: MapIdentifier(node.NameEquals.Name.Identifier),
+                type: MapType(node)
+            );
+        }
         return new Cs.Argument(
             id: Core.Tree.RandomId(),
             prefix: Format(Leading(node)),
             markers: Markers.EMPTY,
             nameColumn: nameColumn,
             refKindKeyword: null,
-            expression: Convert<Expression>(node.Expression)!
+            expression: expression
         );
     }
 
@@ -2087,21 +2098,19 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     private J? VisitLambdaExpressionSyntax(LambdaExpressionSyntax node)
     {
-        var leadingNodeSpace = Format(Leading(node));
-        var parametersSpace = node.AsyncKeyword.IsKind(SyntaxKind.AsyncKeyword)
-            ? Format(Trailing(node.AsyncKeyword))
-            : Space.EMPTY;
+        var modifiers = MapModifiers(node.Modifiers);
+
         J.Lambda.Parameters parameters = node switch
         {
             ParenthesizedLambdaExpressionSyntax parenthesizedLambdaExpression => new J.Lambda.Parameters(
                 id: Core.Tree.RandomId(),
-                prefix: parametersSpace,
+                prefix: Format(Leading(parenthesizedLambdaExpression.ParameterList.OpenParenToken)),
                 markers: Markers.EMPTY,
                 parenthesized: true,
                 elements: MapParameters<J>(pls: parenthesizedLambdaExpression.ParameterList)!.Elements),
             SimpleLambdaExpressionSyntax simpleLambdaExpression => new J.Lambda.Parameters(
                 id: Core.Tree.RandomId(),
-                prefix: parametersSpace,
+                prefix: Space.EMPTY,
                 markers: Markers.EMPTY,
                 parenthesized: false,
                 elements: [MapParameter<J>(tps: simpleLambdaExpression.Parameter)]),
@@ -2111,19 +2120,21 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
         var jLambda = new J.Lambda(
             id: Core.Tree.RandomId(),
-            prefix: Space.EMPTY,
+            prefix: Format(Leading(node)),
             markers: Markers.EMPTY,
             @params: parameters,
             arrow: Format(Leading(node.ArrowToken)),
             body: Convert<J>(node.Body)!,
             type: MapType( node)
         );
+        var returnType = node is ParenthesizedLambdaExpressionSyntax{ ReturnType: not null } p ? MapTypeTree(p.ReturnType) : null;
         var csLambda = new Cs.Lambda(
             id: Core.Tree.RandomId(),
-            prefix: leadingNodeSpace,
+            prefix: Space.EMPTY,
             markers: Markers.EMPTY,
             lambdaExpression: jLambda,
-            modifiers: MapModifiers(stl: node.Modifiers)
+            returnType: returnType,
+            modifiers: modifiers
         );
         return csLambda;
     }
@@ -3813,7 +3824,47 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitOperatorDeclaration(OperatorDeclarationSyntax node)
     {
-        return base.VisitOperatorDeclaration(node);
+        var @operator = node.OperatorToken.Kind() switch
+        {
+            SyntaxKind.PlusToken => Cs.OperatorDeclaration.Operator.Plus,
+            SyntaxKind.MinusToken => Cs.OperatorDeclaration.Operator.Minus,
+            SyntaxKind.ExclamationToken => Cs.OperatorDeclaration.Operator.Bang,
+            SyntaxKind.TildeToken => Cs.OperatorDeclaration.Operator.Tilde,
+            SyntaxKind.PlusPlusToken => Cs.OperatorDeclaration.Operator.PlusPlus,
+            SyntaxKind.MinusMinusToken => Cs.OperatorDeclaration.Operator.MinusMinus,
+            SyntaxKind.AsteriskToken => Cs.OperatorDeclaration.Operator.Star,
+            SyntaxKind.SlashToken => Cs.OperatorDeclaration.Operator.Division,
+            SyntaxKind.PercentToken => Cs.OperatorDeclaration.Operator.Percent,
+            SyntaxKind.LessThanLessThanToken => Cs.OperatorDeclaration.Operator.LeftShift,
+            SyntaxKind.GreaterThanGreaterThanToken => Cs.OperatorDeclaration.Operator.RightShift,
+            SyntaxKind.LessThanToken => Cs.OperatorDeclaration.Operator.LessThan,
+            SyntaxKind.GreaterThanToken => Cs.OperatorDeclaration.Operator.GreaterThan,
+            SyntaxKind.LessThanEqualsToken => Cs.OperatorDeclaration.Operator.LessThanEquals,
+            SyntaxKind.GreaterThanEqualsToken => Cs.OperatorDeclaration.Operator.GreaterThanEquals,
+            SyntaxKind.EqualsEqualsToken => Cs.OperatorDeclaration.Operator.Equals,
+            SyntaxKind.ExclamationEqualsToken => Cs.OperatorDeclaration.Operator.NotEquals,
+            SyntaxKind.AmpersandToken => Cs.OperatorDeclaration.Operator.Ampersand,
+            SyntaxKind.BarToken => Cs.OperatorDeclaration.Operator.Bar,
+            SyntaxKind.CaretToken => Cs.OperatorDeclaration.Operator.Caret,
+            SyntaxKind.TrueKeyword => Cs.OperatorDeclaration.Operator.True,
+            SyntaxKind.FalseKeyword => Cs.OperatorDeclaration.Operator.False,
+            _ => throw new InvalidOperationException($"Unsupported operator {node.OperatorToken}")
+        };
+        return new Cs.OperatorDeclaration(
+            id: Core.Tree.RandomId(),
+            prefix: Format(Leading(node)),
+            markers: Markers.EMPTY,
+            attributeLists: MapAttributes(node.AttributeLists),
+            modifiers: MapModifiers(node.Modifiers),
+            explicitInterfaceSpecifier: MapExplicitInterfaceSpecifier(node.ExplicitInterfaceSpecifier),
+            operatorKeyword: MapKeyword(node.OperatorKeyword)!,
+            checkedKeyword: MapKeyword(node.CheckedKeyword),
+            operatorToken: JLeftPadded.Create(@operator, Format(Leading(node.OperatorToken))),
+            returnType: Convert<TypeTree>(node.ReturnType)!,
+            parameters: ToJContainer<ParameterSyntax, Expression>(node.ParameterList.Parameters, node.ParameterList.OpenParenToken),
+            body: MapBody(node.Body, node.ExpressionBody, node.SemicolonToken),
+            methodType: MapType(node) as JavaType.Method);
+
     }
 
     public override J? VisitConversionOperatorDeclaration(ConversionOperatorDeclarationSyntax node)
@@ -3956,6 +4007,17 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             : destructor;
     }
 
+    private JRightPadded<TypeTree>? MapExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax? node)
+    {
+        var retval = node != null
+            ? new JRightPadded<TypeTree>(
+                element: Convert<TypeTree>(node.Name)!,
+                after: Format(Leading(node.DotToken)),
+                markers: Markers.EMPTY
+            )
+            : null;
+        return retval;
+    }
     public override J? VisitPropertyDeclaration(PropertyDeclarationSyntax node)
     {
         var typeTree = Convert<TypeTree>(node.Type)!;
@@ -3966,13 +4028,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             attributeLists: MapAttributes(m: node.AttributeLists) ?? [],
             modifiers: MapModifiers(stl: node.Modifiers),
             typeExpression: typeTree,
-            interfaceSpecifier: node.ExplicitInterfaceSpecifier != null
-                ? new JRightPadded<NameTree>(
-                    element: Convert<NameTree>(node.ExplicitInterfaceSpecifier.Name)!,
-                    after: Format(Leading(node.ExplicitInterfaceSpecifier.DotToken)),
-                    markers: Markers.EMPTY
-                )
-                : null,
+            interfaceSpecifier: MapExplicitInterfaceSpecifier(node.ExplicitInterfaceSpecifier),
             name: MapIdentifier(identifier: node.Identifier, type: typeTree.Type),
             accessors: Convert<J.Block>(node.AccessorList),
             expressionBody: Convert<Cs.ArrowExpressionClause>(node.ExpressionBody),
@@ -4007,11 +4063,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             attributeLists: MapAttributes(m: node.AttributeLists) ?? [],
             modifiers: MapModifiers(stl: node.Modifiers),
             typeExpression: JLeftPadded.Create(typeTree, Format(Leading(node.EventKeyword))),
-            interfaceSpecifier: node.ExplicitInterfaceSpecifier != null
-                ? JRightPadded.Create(
-                    Convert<NameTree>(node.ExplicitInterfaceSpecifier.Name)!,
-                    Format(Leading(node.ExplicitInterfaceSpecifier.DotToken)))
-                : null,
+            interfaceSpecifier: MapExplicitInterfaceSpecifier(node.ExplicitInterfaceSpecifier),
             name: MapIdentifier(identifier: node.Identifier, type: typeTree.Type),
             accessors: node.AccessorList != null ? ToJContainer<AccessorDeclarationSyntax, Statement>(node.AccessorList.Accessors, node.AccessorList.OpenBraceToken) : null
 
@@ -4030,7 +4082,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             markers: Markers.EMPTY,
             modifiers: MapModifiers(stl: node.Modifiers),
             typeExpression: MapTypeTree(node.Type),
-            explicitInterfaceSpecifier: ToRightPadded<TypeTree>(node.ExplicitInterfaceSpecifier),
+            explicitInterfaceSpecifier: MapExplicitInterfaceSpecifier(node.ExplicitInterfaceSpecifier),
             indexer: new J.Identifier(
                 id: Core.Tree.RandomId(),
                 prefix: Format(Leading(node.ThisKeyword)),
@@ -4401,9 +4453,17 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             { SyntaxKind.AsyncKeyword, J.Modifier.Types.Async },
         };
 
-    private IList<J.Modifier> MapModifiers(SyntaxTokenList stl)
+    private IList<J.Modifier> MapModifiers(SyntaxTokenList stl) => MapModifiers(SyntaxFactory.Token(SyntaxKind.None), stl);
+    private IList<J.Modifier> MapModifiers(SyntaxToken asyncKeyword, SyntaxTokenList stl)
     {
-        return stl.Select(MapModifier).ToList();
+        var modifiers = new List<J.Modifier>();
+        if (asyncKeyword.IsPresent())
+        {
+            modifiers.Add(MapModifier(asyncKeyword));
+        }
+        modifiers.AddRange(stl.Select(MapModifier));
+        return modifiers;
+
     }
 
     private J.Modifier MapModifier(SyntaxToken token)

@@ -60,6 +60,19 @@ public class UnaryTests(ITestOutputHelper output) : RewriteTest(output)
     }
 
     [Fact]
+    [KnownBug]
+    void NullableFunctionProperty()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                field.Method!();
+                """
+            )
+        );
+    }
+
+    [Fact]
     void IndexExpression()
     {
         RewriteRun(

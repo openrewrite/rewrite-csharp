@@ -56,6 +56,24 @@ public record CSharpSender : Sender
             return compilationUnit;
         }
 
+        public override J VisitOperatorDeclaration(Cs.OperatorDeclaration operatorDeclaration, SenderContext ctx)
+        {
+            ctx.SendValue(operatorDeclaration, v => v.Id);
+            ctx.SendNode(operatorDeclaration, v => v.Prefix, SendSpace);
+            ctx.SendNode(operatorDeclaration, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNodes(operatorDeclaration, v => v.AttributeLists, ctx.SendTree, t => t.Id);
+            ctx.SendNodes(operatorDeclaration, v => v.Modifiers, ctx.SendTree, t => t.Id);
+            ctx.SendNode(operatorDeclaration, v => v.Padding.ExplicitInterfaceSpecifier, SendRightPadded);
+            ctx.SendNode(operatorDeclaration, v => v.OperatorKeyword, ctx.SendTree);
+            ctx.SendNode(operatorDeclaration, v => v.CheckedKeyword, ctx.SendTree);
+            ctx.SendNode(operatorDeclaration, v => v.Padding.OperatorToken, SendLeftPadded);
+            ctx.SendNode(operatorDeclaration, v => v.ReturnType, ctx.SendTree);
+            ctx.SendNode(operatorDeclaration, v => v.Padding.Parameters, SendContainer);
+            ctx.SendNode(operatorDeclaration, v => v.Body, ctx.SendTree);
+            ctx.SendTypedValue(operatorDeclaration, v => v.MethodType);
+            return operatorDeclaration;
+        }
+
         public override J VisitRefExpression(Cs.RefExpression refExpression, SenderContext ctx)
         {
             ctx.SendValue(refExpression, v => v.Id);
@@ -103,6 +121,15 @@ public record CSharpSender : Sender
             ctx.SendNode(control, v => v.Padding.Variable, SendRightPadded);
             ctx.SendNode(control, v => v.Padding.Iterable, SendRightPadded);
             return control;
+        }
+
+        public override J VisitNameColon(Cs.NameColon nameColon, SenderContext ctx)
+        {
+            ctx.SendValue(nameColon, v => v.Id);
+            ctx.SendNode(nameColon, v => v.Prefix, SendSpace);
+            ctx.SendNode(nameColon, v => v.Markers, ctx.SendMarkers);
+            ctx.SendNode(nameColon, v => v.Padding.Name, SendRightPadded);
+            return nameColon;
         }
 
         public override J VisitArgument(Cs.Argument argument, SenderContext ctx)
@@ -349,6 +376,7 @@ public record CSharpSender : Sender
             ctx.SendNode(lambda, v => v.Prefix, SendSpace);
             ctx.SendNode(lambda, v => v.Markers, ctx.SendMarkers);
             ctx.SendNode(lambda, v => v.LambdaExpression, ctx.SendTree);
+            ctx.SendNode(lambda, v => v.ReturnType, ctx.SendTree);
             ctx.SendNodes(lambda, v => v.Modifiers, ctx.SendTree, t => t.Id);
             return lambda;
         }
@@ -1009,6 +1037,7 @@ public record CSharpSender : Sender
             ctx.SendNode(indexerDeclaration, v => v.Markers, ctx.SendMarkers);
             ctx.SendNodes(indexerDeclaration, v => v.Modifiers, ctx.SendTree, t => t.Id);
             ctx.SendNode(indexerDeclaration, v => v.TypeExpression, ctx.SendTree);
+            ctx.SendNode(indexerDeclaration, v => v.Padding.ExplicitInterfaceSpecifier, SendRightPadded);
             ctx.SendNode(indexerDeclaration, v => v.Indexer, ctx.SendTree);
             ctx.SendNode(indexerDeclaration, v => v.Padding.Parameters, SendContainer);
             ctx.SendNode(indexerDeclaration, v => v.Padding.ExpressionBody, SendLeftPadded);

@@ -37,6 +37,28 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         return compilationUnit;
     }
 
+    public virtual J? VisitOperatorDeclaration(Cs.OperatorDeclaration operatorDeclaration, P p)
+    {
+        operatorDeclaration = operatorDeclaration.WithPrefix(VisitSpace(operatorDeclaration.Prefix, CsSpace.Location.OPERATOR_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(operatorDeclaration, p);
+        if (tempStatement is not Cs.OperatorDeclaration)
+        {
+            return tempStatement;
+        }
+        operatorDeclaration = (Cs.OperatorDeclaration) tempStatement;
+        operatorDeclaration = operatorDeclaration.WithMarkers(VisitMarkers(operatorDeclaration.Markers, p));
+        operatorDeclaration = operatorDeclaration.WithAttributeLists(operatorDeclaration.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
+        operatorDeclaration = operatorDeclaration.WithModifiers(operatorDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
+        operatorDeclaration = operatorDeclaration.Padding.WithExplicitInterfaceSpecifier(operatorDeclaration.Padding.ExplicitInterfaceSpecifier == null ? null : VisitRightPadded(operatorDeclaration.Padding.ExplicitInterfaceSpecifier, CsRightPadded.Location.OPERATOR_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, p));
+        operatorDeclaration = operatorDeclaration.WithOperatorKeyword(VisitAndCast<Cs.Keyword>(operatorDeclaration.OperatorKeyword, p)!);
+        operatorDeclaration = operatorDeclaration.WithCheckedKeyword(VisitAndCast<Cs.Keyword>(operatorDeclaration.CheckedKeyword, p));
+        operatorDeclaration = operatorDeclaration.Padding.WithOperatorToken(VisitLeftPadded(operatorDeclaration.Padding.OperatorToken, CsLeftPadded.Location.OPERATOR_DECLARATION_OPERATOR_TOKEN, p)!);
+        operatorDeclaration = operatorDeclaration.WithReturnType(VisitAndCast<TypeTree>(operatorDeclaration.ReturnType, p)!);
+        operatorDeclaration = operatorDeclaration.Padding.WithParameters(VisitContainer(operatorDeclaration.Padding.Parameters, CsContainer.Location.OPERATOR_DECLARATION_PARAMETERS, p)!);
+        operatorDeclaration = operatorDeclaration.WithBody(VisitAndCast<J.Block>(operatorDeclaration.Body, p)!);
+        return operatorDeclaration;
+    }
+
     public virtual J? VisitRefExpression(Cs.RefExpression refExpression, P p)
     {
         refExpression = refExpression.WithPrefix(VisitSpace(refExpression.Prefix, CsSpace.Location.REF_EXPRESSION_PREFIX, p)!);
@@ -102,6 +124,14 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         control = control.Padding.WithVariable(VisitRightPadded(control.Padding.Variable, CsRightPadded.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_VARIABLE, p)!);
         control = control.Padding.WithIterable(VisitRightPadded(control.Padding.Iterable, CsRightPadded.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_ITERABLE, p)!);
         return control;
+    }
+
+    public virtual J? VisitNameColon(Cs.NameColon nameColon, P p)
+    {
+        nameColon = nameColon.WithPrefix(VisitSpace(nameColon.Prefix, CsSpace.Location.NAME_COLON_PREFIX, p)!);
+        nameColon = nameColon.WithMarkers(VisitMarkers(nameColon.Markers, p));
+        nameColon = nameColon.Padding.WithName(VisitRightPadded(nameColon.Padding.Name, CsRightPadded.Location.NAME_COLON_NAME, p)!);
+        return nameColon;
     }
 
     public virtual J? VisitArgument(Cs.Argument argument, P p)
@@ -462,6 +492,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         lambda = (Cs.Lambda) tempExpression;
         lambda = lambda.WithMarkers(VisitMarkers(lambda.Markers, p));
         lambda = lambda.WithLambdaExpression(VisitAndCast<J.Lambda>(lambda.LambdaExpression, p)!);
+        lambda = lambda.WithReturnType(VisitAndCast<TypeTree>(lambda.ReturnType, p));
         lambda = lambda.WithModifiers(lambda.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
         return lambda;
     }
@@ -1324,6 +1355,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         indexerDeclaration = indexerDeclaration.WithMarkers(VisitMarkers(indexerDeclaration.Markers, p));
         indexerDeclaration = indexerDeclaration.WithModifiers(indexerDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
         indexerDeclaration = indexerDeclaration.WithTypeExpression(VisitAndCast<TypeTree>(indexerDeclaration.TypeExpression, p)!);
+        indexerDeclaration = indexerDeclaration.Padding.WithExplicitInterfaceSpecifier(indexerDeclaration.Padding.ExplicitInterfaceSpecifier == null ? null : VisitRightPadded(indexerDeclaration.Padding.ExplicitInterfaceSpecifier, CsRightPadded.Location.INDEXER_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, p));
         indexerDeclaration = indexerDeclaration.WithIndexer(VisitAndCast<Expression>(indexerDeclaration.Indexer, p)!);
         indexerDeclaration = indexerDeclaration.Padding.WithParameters(VisitContainer(indexerDeclaration.Padding.Parameters, CsContainer.Location.INDEXER_DECLARATION_PARAMETERS, p)!);
         indexerDeclaration = indexerDeclaration.Padding.WithExpressionBody(indexerDeclaration.Padding.ExpressionBody == null ? null : VisitLeftPadded(indexerDeclaration.Padding.ExpressionBody, CsLeftPadded.Location.INDEXER_DECLARATION_EXPRESSION_BODY, p));
