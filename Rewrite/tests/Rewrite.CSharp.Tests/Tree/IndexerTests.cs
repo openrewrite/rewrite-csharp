@@ -25,6 +25,22 @@ public class IndexerTests(ITestOutputHelper output) : RewriteTest(output)
     }
 
     [Fact]
+    public void IndexerWithExplicitInterface()
+    {
+        RewriteRun(
+            CSharp("""
+                   class A
+                   {
+                       public int IFace.this[int index]
+                       {
+                           get { return 0; }
+                           set { }
+                       }
+                   }
+                   """));
+    }
+
+    [Fact]
     public void IndexerWithMultipleParameters()
     {
         RewriteRun(

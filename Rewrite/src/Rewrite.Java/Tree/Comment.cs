@@ -17,4 +17,5 @@ public interface Comment
     
     void PrintComment<P>(Cursor cursor, PrintOutputCapture<P> p);
 
+    Comment WithSuffix(string replace);
 }

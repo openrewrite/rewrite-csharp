@@ -54,7 +54,7 @@ public partial interface Cs : J
     IList<AttributeList> attributeLists,
     IList<J.Modifier> modifiers,
     JLeftPadded<TypeTree> typeExpression,
-    JRightPadded<NameTree>? interfaceSpecifier,
+    JRightPadded<TypeTree>? interfaceSpecifier,
     J.Identifier name,
     JContainer<Statement>? accessors
     ) : Cs, Statement, J<EventDeclaration>, MutableTree<EventDeclaration>
@@ -126,12 +126,12 @@ public partial interface Cs : J
         {
             return Padding.WithTypeExpression(_typeExpression.WithElement(newTypeExpression));
         }
-        private readonly JRightPadded<NameTree>? _interfaceSpecifier = interfaceSpecifier;
-        public NameTree? InterfaceSpecifier => _interfaceSpecifier?.Element;
+        private readonly JRightPadded<TypeTree>? _interfaceSpecifier = interfaceSpecifier;
+        public TypeTree? InterfaceSpecifier => _interfaceSpecifier?.Element;
 
-        public EventDeclaration WithInterfaceSpecifier(NameTree? newInterfaceSpecifier)
+        public EventDeclaration WithInterfaceSpecifier(TypeTree? newInterfaceSpecifier)
         {
-            return Padding.WithInterfaceSpecifier(JRightPadded<NameTree>.WithElement(_interfaceSpecifier, newInterfaceSpecifier));
+            return Padding.WithInterfaceSpecifier(JRightPadded<TypeTree>.WithElement(_interfaceSpecifier, newInterfaceSpecifier));
         }
         public J.Identifier Name => name;
 
@@ -155,9 +155,9 @@ public partial interface Cs : J
                 return T._typeExpression == newTypeExpression ? T : new Cs.EventDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, newTypeExpression, T._interfaceSpecifier, T.Name, T._accessors);
             }
 
-            public JRightPadded<NameTree>? InterfaceSpecifier => T._interfaceSpecifier;
+            public JRightPadded<TypeTree>? InterfaceSpecifier => T._interfaceSpecifier;
 
-            public Cs.EventDeclaration WithInterfaceSpecifier(JRightPadded<NameTree>? newInterfaceSpecifier)
+            public Cs.EventDeclaration WithInterfaceSpecifier(JRightPadded<TypeTree>? newInterfaceSpecifier)
             {
                 return T._interfaceSpecifier == newInterfaceSpecifier ? T : new Cs.EventDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T._typeExpression, newInterfaceSpecifier, T.Name, T._accessors);
             }

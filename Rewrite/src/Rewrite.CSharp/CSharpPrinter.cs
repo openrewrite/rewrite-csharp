@@ -55,6 +55,49 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         }
     }
 
+    public override J? VisitOperatorDeclaration(Cs.OperatorDeclaration node, PrintOutputCapture<TState> p)
+    {
+        var @operator = node.OperatorToken switch
+        {
+            Cs.OperatorDeclaration.Operator.Plus => "+",
+            Cs.OperatorDeclaration.Operator.Minus => "-",
+            Cs.OperatorDeclaration.Operator.Bang => "!",
+            Cs.OperatorDeclaration.Operator.Tilde => "~",
+            Cs.OperatorDeclaration.Operator.PlusPlus => "++",
+            Cs.OperatorDeclaration.Operator.MinusMinus => "--",
+            Cs.OperatorDeclaration.Operator.Star => "*",
+            Cs.OperatorDeclaration.Operator.Division => "/",
+            Cs.OperatorDeclaration.Operator.Percent => "%",
+            Cs.OperatorDeclaration.Operator.LeftShift => "<<",
+            Cs.OperatorDeclaration.Operator.RightShift => ">>",
+            Cs.OperatorDeclaration.Operator.LessThan => "<",
+            Cs.OperatorDeclaration.Operator.GreaterThan => ">",
+            Cs.OperatorDeclaration.Operator.LessThanEquals => "<=",
+            Cs.OperatorDeclaration.Operator.GreaterThanEquals => ">=",
+            Cs.OperatorDeclaration.Operator.Equals => "==",
+            Cs.OperatorDeclaration.Operator.NotEquals => "!=",
+            Cs.OperatorDeclaration.Operator.Ampersand => "&",
+            Cs.OperatorDeclaration.Operator.Bar => "|",
+            Cs.OperatorDeclaration.Operator.Caret => "^",
+            Cs.OperatorDeclaration.Operator.True => "true",
+            Cs.OperatorDeclaration.Operator.False => "false",
+            _ => throw new InvalidOperationException("OperatorToken does not have a valid value")
+        };
+        BeforeSyntax(node, CsSpace.Location.POINTER_TYPE_PREFIX, p);
+        Visit(node.AttributeLists, p);
+        Visit(node.Modifiers, p);
+        VisitRightPadded(node.Padding.ExplicitInterfaceSpecifier, CsRightPadded.Location.OPERATOR_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, ".", p);
+        Visit(node.ReturnType, p);
+        Visit(node.OperatorKeyword, p);
+        Visit(node.CheckedKeyword, p);
+        VisitSpace(node.Padding.OperatorToken.Before, CsSpace.Location.OPERATOR_DECLARATION_OPERATOR_TOKEN,  p);
+        p.Append(@operator);
+        VisitContainer("(", node.Padding.Parameters, CsContainer.Location.OPERATOR_DECLARATION_PARAMETERS, ",", ")", p);
+        Visit(node.Body, p);
+        AfterSyntax(node, p);
+        return node;
+    }
+
     public override J? VisitPointerType(Cs.PointerType node, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(node, CsSpace.Location.POINTER_TYPE_PREFIX, p);
@@ -1182,6 +1225,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         }
 
         Visit(node.TypeExpression, p);
+        VisitRightPadded(node.Padding.ExplicitInterfaceSpecifier, CsRightPadded.Location.INDEXER_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, ".", p);
         Visit(node.Indexer, p);
         VisitContainer("[", node.Padding.Parameters, CsContainer.Location.INDEXER_DECLARATION_PARAMETERS, ",", "]", p);
         VisitLeftPadded("", node.Padding.ExpressionBody, CsLeftPadded.Location.INDEXER_DECLARATION_EXPRESSION_BODY, p); //todo: probably should be => as inner block is just wrong representation
@@ -1272,11 +1316,8 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         var javaLambda = lambda.LambdaExpression;
 
         VisitMarkers(lambda.Markers, p);
-        foreach (var modifier in lambda.Modifiers)
-        {
-            _delegate.VisitModifier(modifier, p);
-        }
-
+        Visit(lambda.Modifiers, p);
+        Visit(lambda.ReturnType, p);
         Visit(javaLambda, p);
         AfterSyntax(lambda, p);
         return lambda;
@@ -1635,11 +1676,6 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
                     ")", p);
             }
 
-            var csMethod = _parent.Cursor.GetValue<Cs.MethodDeclaration>();
-            if (csMethod != null)
-            {
-                Visit(csMethod.TypeParameterConstraintClauses, p);
-            }
 
             VisitContainer("throws", method.Padding.Throws, JContainer.Location.THROWS, ",", null, p);
             Visit(method.Body, p);

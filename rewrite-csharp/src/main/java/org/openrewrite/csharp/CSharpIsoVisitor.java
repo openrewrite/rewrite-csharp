@@ -41,6 +41,11 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     }
 
     @Override
+    public Cs.OperatorDeclaration visitOperatorDeclaration(Cs.OperatorDeclaration operatorDeclaration, P p) {
+        return (Cs.OperatorDeclaration) super.visitOperatorDeclaration(operatorDeclaration, p);
+    }
+
+    @Override
     public Cs.RefExpression visitRefExpression(Cs.RefExpression refExpression, P p) {
         return (Cs.RefExpression) super.visitRefExpression(refExpression, p);
     }
@@ -58,6 +63,11 @@ public class CSharpIsoVisitor<P> extends CSharpVisitor<P>
     @Override
     public Cs.ForEachVariableLoop visitForEachVariableLoop(Cs.ForEachVariableLoop forEachVariableLoop, P p) {
         return (Cs.ForEachVariableLoop) super.visitForEachVariableLoop(forEachVariableLoop, p);
+    }
+
+    @Override
+    public Cs.NameColon visitNameColon(Cs.NameColon nameColon, P p) {
+        return (Cs.NameColon) super.visitNameColon(nameColon, p);
     }
 
     @Override

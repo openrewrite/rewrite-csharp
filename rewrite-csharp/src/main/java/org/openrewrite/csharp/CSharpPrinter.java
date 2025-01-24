@@ -31,7 +31,6 @@ import org.openrewrite.java.tree.*;
 import org.openrewrite.marker.Marker;
 import org.openrewrite.marker.Markers;
 
-import javax.swing.plaf.nimbus.State;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
@@ -47,6 +46,51 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
             return super.visit(tree, p);
         }
     }
+
+    @Override
+    public J visitOperatorDeclaration(Cs.OperatorDeclaration node, PrintOutputCapture<P> p) {
+        String operator;
+        switch (node.getOperatorToken()) {
+            case Plus: operator = "+"; break;
+            case Minus: operator = "-"; break;
+            case Bang: operator = "!"; break;
+            case Tilde: operator = "~"; break;
+            case PlusPlus: operator = "++"; break;
+            case MinusMinus: operator = "--"; break;
+            case Star: operator = "*"; break;
+            case Division: operator = "/"; break;
+            case Percent: operator = "%"; break;
+            case LeftShift: operator = "<<"; break;
+            case RightShift: operator = ">>"; break;
+            case LessThan: operator = "<"; break;
+            case GreaterThan: operator = ">"; break;
+            case LessThanEquals: operator = "<="; break;
+            case GreaterThanEquals: operator = ">="; break;
+            case Equals: operator = "=="; break;
+            case NotEquals: operator = "!="; break;
+            case Ampersand: operator = "&"; break;
+            case Bar: operator = "|"; break;
+            case Caret: operator = "^"; break;
+            case True: operator = "true"; break;
+            case False: operator = "false"; break;
+            default: throw new IllegalStateException("OperatorToken does not have a valid value");
+        }
+
+        beforeSyntax(node, CsSpace.Location.POINTER_TYPE_PREFIX, p);
+        visit(node.getAttributeLists(), p);
+        visit(node.getModifiers(), p);
+        visitRightPadded(node.getPadding().getExplicitInterfaceSpecifier(), CsRightPadded.Location.OPERATOR_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, ".", p);
+        visit(node.getReturnType(), p);
+        visit(node.getOperatorKeyword(), p);
+        visit(node.getCheckedKeyword(), p);
+        visitSpace(node.getPadding().getOperatorToken().getBefore(), CsSpace.Location.OPERATOR_DECLARATION_OPERATOR_TOKEN, p);
+        p.append(operator);
+        visitContainer("(", node.getPadding().getParameters(), CsContainer.Location.OPERATOR_DECLARATION_PARAMETERS, ",", ")", p);
+        visit(node.getBody(), p);
+        afterSyntax(node, p);
+        return node;
+    }
+
     public J visitPointerType(Cs.PointerType node, PrintOutputCapture<P> p) {
         beforeSyntax(node, CsSpace.Location.POINTER_TYPE_PREFIX, p);
         visitRightPadded(node.getPadding().getElementType(), CsRightPadded.Location.POINTER_TYPE_ELEMENT_TYPE, "*", p);
@@ -1062,7 +1106,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         visit(propertyDeclaration.getAccessors(), p);
         visit(propertyDeclaration.getExpressionBody(), p);
         visitLeftPadded("=", propertyDeclaration.getPadding().getInitializer(), CsLeftPadded.Location.PROPERTY_DECLARATION_INITIALIZER, p);
-        
+
         afterSyntax(propertyDeclaration, p);
         return propertyDeclaration;
     }
@@ -1125,6 +1169,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
             visit(modifier, p);
         }
         visit(node.getTypeExpression(), p);
+        visitRightPadded(node.getPadding().getExplicitInterfaceSpecifier(), CsRightPadded.Location.INDEXER_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, ".", p);
         visit(node.getIndexer(), p);
         visitContainer("[", node.getPadding().getParameters(), CsContainer.Location.INDEXER_DECLARATION_PARAMETERS, ",", "]", p);
         visitLeftPadded("", node.getPadding().getExpressionBody(), CsLeftPadded.Location.INDEXER_DECLARATION_EXPRESSION_BODY, p);
@@ -1212,7 +1257,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         visitMarkers(lambda.getMarkers(), p);
 
         visit(lambda.getModifiers(), p);
-
+        visit(lambda.getReturnType(), p);
         visit(javaLambda, p);
         afterSyntax(lambda, p);
         return lambda;
@@ -1536,10 +1581,6 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
                 visitContainer("(", method.getPadding().getParameters(), JContainer.Location.METHOD_DECLARATION_PARAMETERS, ",", ")", p);
             }
 
-            if(CSharpPrinter.this.getCursor().getValue() instanceof Cs.MethodDeclaration) {
-                Cs.MethodDeclaration csMethod = CSharpPrinter.this.getCursor().getValue();
-                visit(csMethod.getTypeParameterConstraintClauses(), p);
-            }
 
             visitContainer("throws", method.getPadding().getThrows(), JContainer.Location.THROWS, ",", null, p);
             visit(method.getBody(), p);

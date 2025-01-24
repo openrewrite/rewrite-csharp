@@ -49,4 +49,6 @@ public interface Tree : IHasMarkers, IEquatable<Tree>
     {
         return cursor.FirstEnclosingOrThrow<SourceFile>().Printer<P>(cursor);
     }
+
+    bool IsScope(Tree? tree) => tree?.Id.Equals(Id) ?? false;
 }

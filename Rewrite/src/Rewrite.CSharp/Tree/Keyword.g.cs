@@ -77,6 +77,7 @@ public partial interface Cs : J
             Case,
             Checked,
             Unchecked,
+            Operator,
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

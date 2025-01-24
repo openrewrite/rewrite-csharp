@@ -47,13 +47,13 @@ public partial interface Cs
         JavaType? TypedTree.Type => this.Name.Type;
         public AliasQualifiedName WithType(JavaType? type) => WithName(Name.WithType(type));
     }
-    public partial class ClassDeclaration : Expression<ClassDeclaration>
+    public new partial class ClassDeclaration : Expression<ClassDeclaration>
     {
         public J.ClassDeclaration.Kind Kind => _kind;
         JavaType? TypedTree.Type => type;
         public ClassDeclaration WithType(JavaType? type) => WithType((JavaType.FullyQualified?)type);
     }
-    public partial class MethodDeclaration : Expression<MethodDeclaration>
+    public new partial class MethodDeclaration : Expression<MethodDeclaration>
     {
         public JavaType? Type => this.MethodType;
         public MethodDeclaration WithType(JavaType? type) => WithMethodType(type as JavaType.Method);
@@ -89,7 +89,7 @@ public partial interface Cs
         public JavaType? Type => Pattern.Type;
         public CasePatternSwitchLabel WithType(JavaType? type) => WithPattern(Pattern.WithType(type));
     }
-    public partial class SwitchExpression : Expression<SwitchExpression>
+    public new partial class SwitchExpression : Expression<SwitchExpression>
     {
         public JavaType? Type => Expression.Type;
         public SwitchExpression WithType(JavaType? type) => WithExpression(Expression.WithType(type));
@@ -186,7 +186,7 @@ public partial interface Cs
         public JavaType? Type => Pattern.Type;
         public IsPattern WithType(JavaType? type) => WithPattern(Pattern.WithType(type));
     }
-    public partial class NewClass
+    public new partial class NewClass
     {
         public JavaType? Type => NewClassCore.Type;
         public NewClass WithType(JavaType? type) => WithNewClassCore(NewClassCore.WithType(type));
@@ -204,7 +204,7 @@ public partial interface Cs
         public DeclarationExpression WithType(JavaType? type) => this;
     }
 
-    public partial class Lambda
+    public new partial class Lambda
     {
         public JavaType? Type => LambdaExpression.Type;
         public Lambda WithType(JavaType? type) => WithLambdaExpression(LambdaExpression.WithType(type));

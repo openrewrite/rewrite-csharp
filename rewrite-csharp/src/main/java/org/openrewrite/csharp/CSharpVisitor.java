@@ -51,6 +51,27 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         return compilationUnit;
     }
 
+    public J visitOperatorDeclaration(Cs.OperatorDeclaration operatorDeclaration, P p) {
+        operatorDeclaration = operatorDeclaration.withPrefix(visitSpace(operatorDeclaration.getPrefix(), CsSpace.Location.OPERATOR_DECLARATION_PREFIX, p));
+        Statement tempStatement = (Statement) visitStatement(operatorDeclaration, p);
+        if (!(tempStatement instanceof Cs.OperatorDeclaration))
+        {
+            return tempStatement;
+        }
+        operatorDeclaration = (Cs.OperatorDeclaration) tempStatement;
+        operatorDeclaration = operatorDeclaration.withMarkers(visitMarkers(operatorDeclaration.getMarkers(), p));
+        operatorDeclaration = operatorDeclaration.withAttributeLists(ListUtils.map(operatorDeclaration.getAttributeLists(), el -> (Cs.AttributeList)visit(el, p)));
+        operatorDeclaration = operatorDeclaration.withModifiers(ListUtils.map(operatorDeclaration.getModifiers(), el -> (J.Modifier)visit(el, p)));
+        operatorDeclaration = operatorDeclaration.getPadding().withExplicitInterfaceSpecifier(visitRightPadded(operatorDeclaration.getPadding().getExplicitInterfaceSpecifier(), CsRightPadded.Location.OPERATOR_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, p));
+        operatorDeclaration = operatorDeclaration.withOperatorKeyword(visitAndCast(operatorDeclaration.getOperatorKeyword(), p));
+        operatorDeclaration = operatorDeclaration.withCheckedKeyword(visitAndCast(operatorDeclaration.getCheckedKeyword(), p));
+        operatorDeclaration = operatorDeclaration.getPadding().withOperatorToken(visitLeftPadded(operatorDeclaration.getPadding().getOperatorToken(), CsLeftPadded.Location.OPERATOR_DECLARATION_OPERATOR_TOKEN, p));
+        operatorDeclaration = operatorDeclaration.withReturnType(visitAndCast(operatorDeclaration.getReturnType(), p));
+        operatorDeclaration = operatorDeclaration.getPadding().withParameters(visitContainer(operatorDeclaration.getPadding().getParameters(), CsContainer.Location.OPERATOR_DECLARATION_PARAMETERS, p));
+        operatorDeclaration = operatorDeclaration.withBody(visitAndCast(operatorDeclaration.getBody(), p));
+        return operatorDeclaration;
+    }
+
     public J visitRefExpression(Cs.RefExpression refExpression, P p) {
         refExpression = refExpression.withPrefix(visitSpace(refExpression.getPrefix(), CsSpace.Location.REF_EXPRESSION_PREFIX, p));
         Expression tempExpression = (Expression) visitExpression(refExpression, p);
@@ -111,6 +132,13 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         control = control.getPadding().withVariable(visitRightPadded(control.getPadding().getVariable(), CsRightPadded.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_VARIABLE, p));
         control = control.getPadding().withIterable(visitRightPadded(control.getPadding().getIterable(), CsRightPadded.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_ITERABLE, p));
         return control;
+    }
+
+    public J visitNameColon(Cs.NameColon nameColon, P p) {
+        nameColon = nameColon.withPrefix(visitSpace(nameColon.getPrefix(), CsSpace.Location.NAME_COLON_PREFIX, p));
+        nameColon = nameColon.withMarkers(visitMarkers(nameColon.getMarkers(), p));
+        nameColon = nameColon.getPadding().withName(visitRightPadded(nameColon.getPadding().getName(), CsRightPadded.Location.NAME_COLON_NAME, p));
+        return nameColon;
     }
 
     public J visitArgument(Cs.Argument argument, P p) {
@@ -448,6 +476,7 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         lambda = (Cs.Lambda) tempExpression;
         lambda = lambda.withMarkers(visitMarkers(lambda.getMarkers(), p));
         lambda = lambda.withLambdaExpression(visitAndCast(lambda.getLambdaExpression(), p));
+        lambda = lambda.withReturnType(visitAndCast(lambda.getReturnType(), p));
         lambda = lambda.withModifiers(ListUtils.map(lambda.getModifiers(), el -> (J.Modifier)visit(el, p)));
         return lambda;
     }

@@ -49,12 +49,25 @@ public class AttributeTests(ITestOutputHelper output) : RewriteTest(output)
     }
 
     [Fact]
-    public void NamedArgument()
+    public void NamedArgumentWithColonSpecifier()
     {
         RewriteRun(
             CSharp(
                 """
                 [Skip(value: true)]
+                public class Foo;
+                """
+            )
+        );
+    }
+
+    [Fact]
+    public void NamedArgumentWithPropertySpecifier()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                [Skip(Value = true)]
                 public class Foo;
                 """
             )

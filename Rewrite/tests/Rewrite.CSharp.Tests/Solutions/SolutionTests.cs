@@ -29,9 +29,19 @@ public class SolutionTests(ITestOutputHelper output) : RewriteTest(output)
 
     [Fact]
     [Exploratory]
+    public void RewriteTest()
+    {
+        this.RewriteRun(CSharp("""
+                     var newElements = combinatorSelector.Transform!(element);
+                     """));
+
+    }
+
+    [Fact]
+    [Exploratory]
     public async Task ParseSingleFile()
     {
-        var src = await File.ReadAllTextAsync(@"C:\projects\openrewrite\rewrite-csharp\Rewrite\tests\fixtures\DotNetty\src\DotNetty.Common\Internal\PlatformDependent0.cs");
+        var src = await File.ReadAllTextAsync(@"C:\projects\openrewrite\rewrite-csharp\Rewrite\tests\fixtures\Bogus\Source\Bogus.Tests\SchemaTests\LocaleSchemaTests.cs");
         RewriteRun(CSharp(src));
     }
 
@@ -74,10 +84,7 @@ public class SolutionTests(ITestOutputHelper output) : RewriteTest(output)
         var brokenIdp = sourceFiles
             .Select(x =>
             {
-
                 var file = x.ProjectPath / x.SourceTree.SourcePath;
-
-
                 var before = File.ReadAllText(file);
                 var after = x.SourceTree.ToString();
                 return (file, before, after, x.SourceTree);
