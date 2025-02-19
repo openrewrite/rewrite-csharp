@@ -2148,6 +2148,7 @@ public interface Cs extends J {
 
         @Getter
         @With
+        @Nullable
         JavaType type;
 
         @Override
@@ -5834,6 +5835,7 @@ public interface Cs extends J {
 
         @With
         @Getter
+        @Nullable
         JavaType type;
 
         @Override
