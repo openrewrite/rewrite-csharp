@@ -10,7 +10,7 @@
         <Company>Moderne Inc.</Company>
         <PackageIcon>openrewrite.png</PackageIcon>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <VersionPrefix>0.22.1</VersionPrefix>
+        <VersionPrefix>0.23.0</VersionPrefix>
         <RewriteRemoteDir Condition="'$(RewriteRemoteDir)'==''">..\..\..\..\..\moderneinc\rewrite-remote\Rewrite.Remote</RewriteRemoteDir>
         <RemotePrinter>True</RemotePrinter>
         <DebugVisitor>False</DebugVisitor>
