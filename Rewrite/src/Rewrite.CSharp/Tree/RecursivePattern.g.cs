@@ -65,47 +65,47 @@ public partial interface Cs : J
             return v.VisitRecursivePattern(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public RecursivePattern WithId(Guid newId)
         {
-            return newId == id ? this : new RecursivePattern(newId, prefix, markers, typeQualifier, positionalPattern, propertyPattern, designation);
+            return newId == Id ? this : new RecursivePattern(newId, Prefix, Markers, TypeQualifier, PositionalPattern, PropertyPattern, Designation);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public RecursivePattern WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new RecursivePattern(id, newPrefix, markers, typeQualifier, positionalPattern, propertyPattern, designation);
+            return newPrefix == Prefix ? this : new RecursivePattern(Id, newPrefix, Markers, TypeQualifier, PositionalPattern, PropertyPattern, Designation);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public RecursivePattern WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new RecursivePattern(id, prefix, newMarkers, typeQualifier, positionalPattern, propertyPattern, designation);
+            return ReferenceEquals(newMarkers, Markers) ? this : new RecursivePattern(Id, Prefix, newMarkers, TypeQualifier, PositionalPattern, PropertyPattern, Designation);
         }
-        public TypeTree? TypeQualifier => typeQualifier;
+        public TypeTree? TypeQualifier { get;  set; } = typeQualifier;
 
         public RecursivePattern WithTypeQualifier(TypeTree? newTypeQualifier)
         {
-            return ReferenceEquals(newTypeQualifier, typeQualifier) ? this : new RecursivePattern(id, prefix, markers, newTypeQualifier, positionalPattern, propertyPattern, designation);
+            return ReferenceEquals(newTypeQualifier, TypeQualifier) ? this : new RecursivePattern(Id, Prefix, Markers, newTypeQualifier, PositionalPattern, PropertyPattern, Designation);
         }
-        public Cs.PositionalPatternClause? PositionalPattern => positionalPattern;
+        public Cs.PositionalPatternClause? PositionalPattern { get;  set; } = positionalPattern;
 
         public RecursivePattern WithPositionalPattern(Cs.PositionalPatternClause? newPositionalPattern)
         {
-            return ReferenceEquals(newPositionalPattern, positionalPattern) ? this : new RecursivePattern(id, prefix, markers, typeQualifier, newPositionalPattern, propertyPattern, designation);
+            return ReferenceEquals(newPositionalPattern, PositionalPattern) ? this : new RecursivePattern(Id, Prefix, Markers, TypeQualifier, newPositionalPattern, PropertyPattern, Designation);
         }
-        public Cs.PropertyPatternClause? PropertyPattern => propertyPattern;
+        public Cs.PropertyPatternClause? PropertyPattern { get;  set; } = propertyPattern;
 
         public RecursivePattern WithPropertyPattern(Cs.PropertyPatternClause? newPropertyPattern)
         {
-            return ReferenceEquals(newPropertyPattern, propertyPattern) ? this : new RecursivePattern(id, prefix, markers, typeQualifier, positionalPattern, newPropertyPattern, designation);
+            return ReferenceEquals(newPropertyPattern, PropertyPattern) ? this : new RecursivePattern(Id, Prefix, Markers, TypeQualifier, PositionalPattern, newPropertyPattern, Designation);
         }
-        public Cs.VariableDesignation? Designation => designation;
+        public Cs.VariableDesignation? Designation { get;  set; } = designation;
 
         public RecursivePattern WithDesignation(Cs.VariableDesignation? newDesignation)
         {
-            return ReferenceEquals(newDesignation, designation) ? this : new RecursivePattern(id, prefix, markers, typeQualifier, positionalPattern, propertyPattern, newDesignation);
+            return ReferenceEquals(newDesignation, Designation) ? this : new RecursivePattern(Id, Prefix, Markers, TypeQualifier, PositionalPattern, PropertyPattern, newDesignation);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

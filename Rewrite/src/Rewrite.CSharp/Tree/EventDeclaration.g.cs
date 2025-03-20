@@ -89,57 +89,57 @@ public partial interface Cs : J
             return v.VisitEventDeclaration(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public EventDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new EventDeclaration(newId, prefix, markers, attributeLists, modifiers, _typeExpression, _interfaceSpecifier, name, _accessors);
+            return newId == Id ? this : new EventDeclaration(newId, Prefix, Markers, AttributeLists, Modifiers, _typeExpression, _interfaceSpecifier, Name, _accessors);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public EventDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new EventDeclaration(id, newPrefix, markers, attributeLists, modifiers, _typeExpression, _interfaceSpecifier, name, _accessors);
+            return newPrefix == Prefix ? this : new EventDeclaration(Id, newPrefix, Markers, AttributeLists, Modifiers, _typeExpression, _interfaceSpecifier, Name, _accessors);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public EventDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new EventDeclaration(id, prefix, newMarkers, attributeLists, modifiers, _typeExpression, _interfaceSpecifier, name, _accessors);
+            return ReferenceEquals(newMarkers, Markers) ? this : new EventDeclaration(Id, Prefix, newMarkers, AttributeLists, Modifiers, _typeExpression, _interfaceSpecifier, Name, _accessors);
         }
-        public IList<Cs.AttributeList> AttributeLists => attributeLists;
+        public IList<Cs.AttributeList> AttributeLists { get;  set; } = attributeLists;
 
         public EventDeclaration WithAttributeLists(IList<Cs.AttributeList> newAttributeLists)
         {
-            return newAttributeLists == attributeLists ? this : new EventDeclaration(id, prefix, markers, newAttributeLists, modifiers, _typeExpression, _interfaceSpecifier, name, _accessors);
+            return newAttributeLists == AttributeLists ? this : new EventDeclaration(Id, Prefix, Markers, newAttributeLists, Modifiers, _typeExpression, _interfaceSpecifier, Name, _accessors);
         }
-        public IList<J.Modifier> Modifiers => modifiers;
+        public IList<J.Modifier> Modifiers { get;  set; } = modifiers;
 
         public EventDeclaration WithModifiers(IList<J.Modifier> newModifiers)
         {
-            return newModifiers == modifiers ? this : new EventDeclaration(id, prefix, markers, attributeLists, newModifiers, _typeExpression, _interfaceSpecifier, name, _accessors);
+            return newModifiers == Modifiers ? this : new EventDeclaration(Id, Prefix, Markers, AttributeLists, newModifiers, _typeExpression, _interfaceSpecifier, Name, _accessors);
         }
-        private readonly JLeftPadded<TypeTree> _typeExpression = typeExpression;
+        private JLeftPadded<TypeTree> _typeExpression = typeExpression;
         public TypeTree TypeExpression => _typeExpression.Element;
 
         public EventDeclaration WithTypeExpression(TypeTree newTypeExpression)
         {
             return Padding.WithTypeExpression(_typeExpression.WithElement(newTypeExpression));
         }
-        private readonly JRightPadded<TypeTree>? _interfaceSpecifier = interfaceSpecifier;
+        private JRightPadded<TypeTree>? _interfaceSpecifier = interfaceSpecifier;
         public TypeTree? InterfaceSpecifier => _interfaceSpecifier?.Element;
 
         public EventDeclaration WithInterfaceSpecifier(TypeTree? newInterfaceSpecifier)
         {
             return Padding.WithInterfaceSpecifier(JRightPadded<TypeTree>.WithElement(_interfaceSpecifier, newInterfaceSpecifier));
         }
-        public J.Identifier Name => name;
+        public J.Identifier Name { get;  set; } = name;
 
         public EventDeclaration WithName(J.Identifier newName)
         {
-            return ReferenceEquals(newName, name) ? this : new EventDeclaration(id, prefix, markers, attributeLists, modifiers, _typeExpression, _interfaceSpecifier, newName, _accessors);
+            return ReferenceEquals(newName, Name) ? this : new EventDeclaration(Id, Prefix, Markers, AttributeLists, Modifiers, _typeExpression, _interfaceSpecifier, newName, _accessors);
         }
-        private readonly JContainer<Statement>? _accessors = accessors;
+        private JContainer<Statement>? _accessors = accessors;
         public IList<Statement>? Accessors => _accessors?.GetElements();
 
         public EventDeclaration WithAccessors(IList<Statement>? newAccessors)
@@ -148,25 +148,25 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.EventDeclaration T)
         {
-            public JLeftPadded<TypeTree> TypeExpression => T._typeExpression;
+            public JLeftPadded<TypeTree> TypeExpression { get => T._typeExpression;  set => T._typeExpression = value; }
 
             public Cs.EventDeclaration WithTypeExpression(JLeftPadded<TypeTree> newTypeExpression)
             {
-                return T._typeExpression == newTypeExpression ? T : new Cs.EventDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, newTypeExpression, T._interfaceSpecifier, T.Name, T._accessors);
+                return TypeExpression == newTypeExpression ? T : new Cs.EventDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, newTypeExpression, T._interfaceSpecifier, T.Name, T._accessors);
             }
 
-            public JRightPadded<TypeTree>? InterfaceSpecifier => T._interfaceSpecifier;
+            public JRightPadded<TypeTree>? InterfaceSpecifier { get => T._interfaceSpecifier;  set => T._interfaceSpecifier = value; }
 
             public Cs.EventDeclaration WithInterfaceSpecifier(JRightPadded<TypeTree>? newInterfaceSpecifier)
             {
-                return T._interfaceSpecifier == newInterfaceSpecifier ? T : new Cs.EventDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T._typeExpression, newInterfaceSpecifier, T.Name, T._accessors);
+                return InterfaceSpecifier == newInterfaceSpecifier ? T : new Cs.EventDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T._typeExpression, newInterfaceSpecifier, T.Name, T._accessors);
             }
 
-            public JContainer<Statement>? Accessors => T._accessors;
+            public JContainer<Statement>? Accessors { get => T._accessors;  set => T._accessors = value; }
 
             public Cs.EventDeclaration WithAccessors(JContainer<Statement>? newAccessors)
             {
-                return T._accessors == newAccessors ? T : new Cs.EventDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T._typeExpression, T._interfaceSpecifier, T.Name, newAccessors);
+                return Accessors == newAccessors ? T : new Cs.EventDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T._typeExpression, T._interfaceSpecifier, T.Name, newAccessors);
             }
 
         }

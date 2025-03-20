@@ -54,29 +54,29 @@ public partial interface Cs : J
             return v.VisitRefExpression(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public RefExpression WithId(Guid newId)
         {
-            return newId == id ? this : new RefExpression(newId, prefix, markers, expression);
+            return newId == Id ? this : new RefExpression(newId, Prefix, Markers, Expression);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public RefExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new RefExpression(id, newPrefix, markers, expression);
+            return newPrefix == Prefix ? this : new RefExpression(Id, newPrefix, Markers, Expression);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public RefExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new RefExpression(id, prefix, newMarkers, expression);
+            return ReferenceEquals(newMarkers, Markers) ? this : new RefExpression(Id, Prefix, newMarkers, Expression);
         }
-        public Expression Expression => expression;
+        public Expression Expression { get;  set; } = expression;
 
         public RefExpression WithExpression(Expression newExpression)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new RefExpression(id, prefix, markers, newExpression);
+            return ReferenceEquals(newExpression, Expression) ? this : new RefExpression(Id, Prefix, Markers, newExpression);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

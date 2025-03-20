@@ -62,35 +62,35 @@ public partial interface Cs : J
             return v.VisitQueryExpression(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public QueryExpression WithId(Guid newId)
         {
-            return newId == id ? this : new QueryExpression(newId, prefix, markers, fromClause, body);
+            return newId == Id ? this : new QueryExpression(newId, Prefix, Markers, FromClause, Body);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public QueryExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new QueryExpression(id, newPrefix, markers, fromClause, body);
+            return newPrefix == Prefix ? this : new QueryExpression(Id, newPrefix, Markers, FromClause, Body);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public QueryExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new QueryExpression(id, prefix, newMarkers, fromClause, body);
+            return ReferenceEquals(newMarkers, Markers) ? this : new QueryExpression(Id, Prefix, newMarkers, FromClause, Body);
         }
-        public Cs.FromClause FromClause => fromClause;
+        public Cs.FromClause FromClause { get;  set; } = fromClause;
 
         public QueryExpression WithFromClause(Cs.FromClause newFromClause)
         {
-            return ReferenceEquals(newFromClause, fromClause) ? this : new QueryExpression(id, prefix, markers, newFromClause, body);
+            return ReferenceEquals(newFromClause, FromClause) ? this : new QueryExpression(Id, Prefix, Markers, newFromClause, Body);
         }
-        public Cs.QueryBody Body => body;
+        public Cs.QueryBody Body { get;  set; } = body;
 
         public QueryExpression WithBody(Cs.QueryBody newBody)
         {
-            return ReferenceEquals(newBody, body) ? this : new QueryExpression(id, prefix, markers, fromClause, newBody);
+            return ReferenceEquals(newBody, Body) ? this : new QueryExpression(Id, Prefix, Markers, FromClause, newBody);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

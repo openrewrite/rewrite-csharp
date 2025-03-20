@@ -77,25 +77,25 @@ public partial interface Cs : J
             return v.VisitPointerType(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public PointerType WithId(Guid newId)
         {
-            return newId == id ? this : new PointerType(newId, prefix, markers, _elementType);
+            return newId == Id ? this : new PointerType(newId, Prefix, Markers, _elementType);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public PointerType WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new PointerType(id, newPrefix, markers, _elementType);
+            return newPrefix == Prefix ? this : new PointerType(Id, newPrefix, Markers, _elementType);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public PointerType WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new PointerType(id, prefix, newMarkers, _elementType);
+            return ReferenceEquals(newMarkers, Markers) ? this : new PointerType(Id, Prefix, newMarkers, _elementType);
         }
-        private readonly JRightPadded<TypeTree> _elementType = elementType;
+        private JRightPadded<TypeTree> _elementType = elementType;
         public TypeTree ElementType => _elementType.Element;
 
         public PointerType WithElementType(TypeTree newElementType)
@@ -104,11 +104,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.PointerType T)
         {
-            public JRightPadded<TypeTree> ElementType => T._elementType;
+            public JRightPadded<TypeTree> ElementType { get => T._elementType;  set => T._elementType = value; }
 
             public Cs.PointerType WithElementType(JRightPadded<TypeTree> newElementType)
             {
-                return T._elementType == newElementType ? T : new Cs.PointerType(T.Id, T.Prefix, T.Markers, newElementType);
+                return ElementType == newElementType ? T : new Cs.PointerType(T.Id, T.Prefix, T.Markers, newElementType);
             }
 
         }

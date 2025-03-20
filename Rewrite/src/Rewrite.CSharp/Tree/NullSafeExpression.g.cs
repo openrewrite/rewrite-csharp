@@ -64,25 +64,25 @@ public partial interface Cs : J
             return v.VisitNullSafeExpression(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public NullSafeExpression WithId(Guid newId)
         {
-            return newId == id ? this : new NullSafeExpression(newId, prefix, markers, _expression);
+            return newId == Id ? this : new NullSafeExpression(newId, Prefix, Markers, _expression);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public NullSafeExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new NullSafeExpression(id, newPrefix, markers, _expression);
+            return newPrefix == Prefix ? this : new NullSafeExpression(Id, newPrefix, Markers, _expression);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public NullSafeExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new NullSafeExpression(id, prefix, newMarkers, _expression);
+            return ReferenceEquals(newMarkers, Markers) ? this : new NullSafeExpression(Id, Prefix, newMarkers, _expression);
         }
-        private readonly JRightPadded<Expression> _expression = expression;
+        private JRightPadded<Expression> _expression = expression;
         public Expression Expression => _expression.Element;
 
         public NullSafeExpression WithExpression(Expression newExpression)
@@ -91,11 +91,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.NullSafeExpression T)
         {
-            public JRightPadded<Expression> Expression => T._expression;
+            public JRightPadded<Expression> Expression { get => T._expression;  set => T._expression = value; }
 
             public Cs.NullSafeExpression WithExpression(JRightPadded<Expression> newExpression)
             {
-                return T._expression == newExpression ? T : new Cs.NullSafeExpression(T.Id, T.Prefix, T.Markers, newExpression);
+                return Expression == newExpression ? T : new Cs.NullSafeExpression(T.Id, T.Prefix, T.Markers, newExpression);
             }
 
         }

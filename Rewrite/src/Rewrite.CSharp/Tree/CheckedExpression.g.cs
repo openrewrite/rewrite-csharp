@@ -51,35 +51,35 @@ public partial interface Cs : J
             return v.VisitCheckedExpression(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public CheckedExpression WithId(Guid newId)
         {
-            return newId == id ? this : new CheckedExpression(newId, prefix, markers, checkedOrUncheckedKeyword, expression);
+            return newId == Id ? this : new CheckedExpression(newId, Prefix, Markers, CheckedOrUncheckedKeyword, Expression);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public CheckedExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new CheckedExpression(id, newPrefix, markers, checkedOrUncheckedKeyword, expression);
+            return newPrefix == Prefix ? this : new CheckedExpression(Id, newPrefix, Markers, CheckedOrUncheckedKeyword, Expression);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public CheckedExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new CheckedExpression(id, prefix, newMarkers, checkedOrUncheckedKeyword, expression);
+            return ReferenceEquals(newMarkers, Markers) ? this : new CheckedExpression(Id, Prefix, newMarkers, CheckedOrUncheckedKeyword, Expression);
         }
-        public Cs.Keyword CheckedOrUncheckedKeyword => checkedOrUncheckedKeyword;
+        public Cs.Keyword CheckedOrUncheckedKeyword { get;  set; } = checkedOrUncheckedKeyword;
 
         public CheckedExpression WithCheckedOrUncheckedKeyword(Cs.Keyword newCheckedOrUncheckedKeyword)
         {
-            return ReferenceEquals(newCheckedOrUncheckedKeyword, checkedOrUncheckedKeyword) ? this : new CheckedExpression(id, prefix, markers, newCheckedOrUncheckedKeyword, expression);
+            return ReferenceEquals(newCheckedOrUncheckedKeyword, CheckedOrUncheckedKeyword) ? this : new CheckedExpression(Id, Prefix, Markers, newCheckedOrUncheckedKeyword, Expression);
         }
-        public J.ControlParentheses<Expression> Expression => expression;
+        public J.ControlParentheses<Expression> Expression { get;  set; } = expression;
 
         public CheckedExpression WithExpression(J.ControlParentheses<Expression> newExpression)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new CheckedExpression(id, prefix, markers, checkedOrUncheckedKeyword, newExpression);
+            return ReferenceEquals(newExpression, Expression) ? this : new CheckedExpression(Id, Prefix, Markers, CheckedOrUncheckedKeyword, newExpression);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

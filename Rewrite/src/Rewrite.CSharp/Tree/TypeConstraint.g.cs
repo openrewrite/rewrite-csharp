@@ -69,29 +69,29 @@ public partial interface Cs : J
             return v.VisitTypeConstraint(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public TypeConstraint WithId(Guid newId)
         {
-            return newId == id ? this : new TypeConstraint(newId, prefix, markers, typeExpression);
+            return newId == Id ? this : new TypeConstraint(newId, Prefix, Markers, TypeExpression);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public TypeConstraint WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new TypeConstraint(id, newPrefix, markers, typeExpression);
+            return newPrefix == Prefix ? this : new TypeConstraint(Id, newPrefix, Markers, TypeExpression);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public TypeConstraint WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new TypeConstraint(id, prefix, newMarkers, typeExpression);
+            return ReferenceEquals(newMarkers, Markers) ? this : new TypeConstraint(Id, Prefix, newMarkers, TypeExpression);
         }
-        public TypeTree TypeExpression => typeExpression;
+        public TypeTree TypeExpression { get;  set; } = typeExpression;
 
         public TypeConstraint WithTypeExpression(TypeTree newTypeExpression)
         {
-            return ReferenceEquals(newTypeExpression, typeExpression) ? this : new TypeConstraint(id, prefix, markers, newTypeExpression);
+            return ReferenceEquals(newTypeExpression, TypeExpression) ? this : new TypeConstraint(Id, Prefix, Markers, newTypeExpression);
         }
         public sealed record PaddingHelper(Cs.TypeConstraint T)
         {

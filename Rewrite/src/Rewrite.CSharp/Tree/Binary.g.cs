@@ -67,48 +67,48 @@ public partial interface Cs : J
             return v.VisitBinary(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Binary WithId(Guid newId)
         {
-            return newId == id ? this : new Binary(newId, prefix, markers, left, _operator, right, type);
+            return newId == Id ? this : new Binary(newId, Prefix, Markers, Left, _operator, Right, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Binary WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Binary(id, newPrefix, markers, left, _operator, right, type);
+            return newPrefix == Prefix ? this : new Binary(Id, newPrefix, Markers, Left, _operator, Right, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Binary WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Binary(id, prefix, newMarkers, left, _operator, right, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Binary(Id, Prefix, newMarkers, Left, _operator, Right, Type);
         }
-        public Expression Left => left;
+        public Expression Left { get;  set; } = left;
 
         public Binary WithLeft(Expression newLeft)
         {
-            return ReferenceEquals(newLeft, left) ? this : new Binary(id, prefix, markers, newLeft, _operator, right, type);
+            return ReferenceEquals(newLeft, Left) ? this : new Binary(Id, Prefix, Markers, newLeft, _operator, Right, Type);
         }
-        private readonly JLeftPadded<OperatorType> _operator = @operator;
+        private JLeftPadded<OperatorType> _operator = @operator;
         public OperatorType Operator => _operator.Element;
 
         public Binary WithOperator(OperatorType newOperator)
         {
             return Padding.WithOperator(_operator.WithElement(newOperator));
         }
-        public Expression Right => right;
+        public Expression Right { get;  set; } = right;
 
         public Binary WithRight(Expression newRight)
         {
-            return ReferenceEquals(newRight, right) ? this : new Binary(id, prefix, markers, left, _operator, newRight, type);
+            return ReferenceEquals(newRight, Right) ? this : new Binary(Id, Prefix, Markers, Left, _operator, newRight, Type);
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public Binary WithType(JavaType? newType)
         {
-            return newType == type ? this : new Binary(id, prefix, markers, left, _operator, right, newType);
+            return newType == Type ? this : new Binary(Id, Prefix, Markers, Left, _operator, Right, newType);
         }
         public enum OperatorType
         {
@@ -117,11 +117,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.Binary T)
         {
-            public JLeftPadded<Cs.Binary.OperatorType> Operator => T._operator;
+            public JLeftPadded<Cs.Binary.OperatorType> Operator { get => T._operator;  set => T._operator = value; }
 
             public Cs.Binary WithOperator(JLeftPadded<Cs.Binary.OperatorType> newOperator)
             {
-                return T._operator == newOperator ? T : new Cs.Binary(T.Id, T.Prefix, T.Markers, T.Left, newOperator, T.Right, T.Type);
+                return Operator == newOperator ? T : new Cs.Binary(T.Id, T.Prefix, T.Markers, T.Left, newOperator, T.Right, T.Type);
             }
 
         }

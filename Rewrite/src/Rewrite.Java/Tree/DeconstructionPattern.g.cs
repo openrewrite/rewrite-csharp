@@ -65,50 +65,50 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitDeconstructionPattern(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public DeconstructionPattern WithId(Guid newId)
         {
-            return newId == id ? this : new DeconstructionPattern(newId, prefix, markers, deconstructor, _nested, type);
+            return newId == Id ? this : new DeconstructionPattern(newId, Prefix, Markers, Deconstructor, _nested, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public DeconstructionPattern WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new DeconstructionPattern(id, newPrefix, markers, deconstructor, _nested, type);
+            return newPrefix == Prefix ? this : new DeconstructionPattern(Id, newPrefix, Markers, Deconstructor, _nested, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public DeconstructionPattern WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new DeconstructionPattern(id, prefix, newMarkers, deconstructor, _nested, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new DeconstructionPattern(Id, Prefix, newMarkers, Deconstructor, _nested, Type);
         }
-        public Expression Deconstructor => deconstructor;
+        public Expression Deconstructor { get;  set; } = deconstructor;
 
         public DeconstructionPattern WithDeconstructor(Expression newDeconstructor)
         {
-            return ReferenceEquals(newDeconstructor, deconstructor) ? this : new DeconstructionPattern(id, prefix, markers, newDeconstructor, _nested, type);
+            return ReferenceEquals(newDeconstructor, Deconstructor) ? this : new DeconstructionPattern(Id, Prefix, Markers, newDeconstructor, _nested, Type);
         }
-        private readonly JContainer<J> _nested = nested;
+        private JContainer<J> _nested = nested;
         public IList<J> Nested => _nested.GetElements();
 
         public DeconstructionPattern WithNested(IList<J> newNested)
         {
             return Padding.WithNested(JContainer<J>.WithElements(_nested, newNested));
         }
-        public JavaType Type => type;
+        public JavaType Type { get;  set; } = type;
 
         public DeconstructionPattern WithType(JavaType newType)
         {
-            return newType == type ? this : new DeconstructionPattern(id, prefix, markers, deconstructor, _nested, newType);
+            return newType == Type ? this : new DeconstructionPattern(Id, Prefix, Markers, Deconstructor, _nested, newType);
         }
         public sealed record PaddingHelper(J.DeconstructionPattern T)
         {
-            public JContainer<J> Nested => T._nested;
+            public JContainer<J> Nested { get => T._nested;  set => T._nested = value; }
 
             public J.DeconstructionPattern WithNested(JContainer<J> newNested)
             {
-                return T._nested == newNested ? T : new J.DeconstructionPattern(T.Id, T.Prefix, T.Markers, T.Deconstructor, newNested, T.Type);
+                return Nested == newNested ? T : new J.DeconstructionPattern(T.Id, T.Prefix, T.Markers, T.Deconstructor, newNested, T.Type);
             }
 
         }

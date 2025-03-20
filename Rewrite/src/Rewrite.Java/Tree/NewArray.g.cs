@@ -66,56 +66,56 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitNewArray(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public NewArray WithId(Guid newId)
         {
-            return newId == id ? this : new NewArray(newId, prefix, markers, typeExpression, dimensions, _initializer, type);
+            return newId == Id ? this : new NewArray(newId, Prefix, Markers, TypeExpression, Dimensions, _initializer, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public NewArray WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new NewArray(id, newPrefix, markers, typeExpression, dimensions, _initializer, type);
+            return newPrefix == Prefix ? this : new NewArray(Id, newPrefix, Markers, TypeExpression, Dimensions, _initializer, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public NewArray WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new NewArray(id, prefix, newMarkers, typeExpression, dimensions, _initializer, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new NewArray(Id, Prefix, newMarkers, TypeExpression, Dimensions, _initializer, Type);
         }
-        public TypeTree? TypeExpression => typeExpression;
+        public TypeTree? TypeExpression { get;  set; } = typeExpression;
 
         public NewArray WithTypeExpression(TypeTree? newTypeExpression)
         {
-            return ReferenceEquals(newTypeExpression, typeExpression) ? this : new NewArray(id, prefix, markers, newTypeExpression, dimensions, _initializer, type);
+            return ReferenceEquals(newTypeExpression, TypeExpression) ? this : new NewArray(Id, Prefix, Markers, newTypeExpression, Dimensions, _initializer, Type);
         }
-        public IList<J.ArrayDimension> Dimensions => dimensions;
+        public IList<J.ArrayDimension> Dimensions { get;  set; } = dimensions;
 
         public NewArray WithDimensions(IList<J.ArrayDimension> newDimensions)
         {
-            return newDimensions == dimensions ? this : new NewArray(id, prefix, markers, typeExpression, newDimensions, _initializer, type);
+            return newDimensions == Dimensions ? this : new NewArray(Id, Prefix, Markers, TypeExpression, newDimensions, _initializer, Type);
         }
-        private readonly JContainer<Expression>? _initializer = initializer;
+        private JContainer<Expression>? _initializer = initializer;
         public IList<Expression>? Initializer => _initializer?.GetElements();
 
         public NewArray WithInitializer(IList<Expression>? newInitializer)
         {
             return Padding.WithInitializer(JContainer<Expression>.WithElementsNullable(_initializer, newInitializer));
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public NewArray WithType(JavaType? newType)
         {
-            return newType == type ? this : new NewArray(id, prefix, markers, typeExpression, dimensions, _initializer, newType);
+            return newType == Type ? this : new NewArray(Id, Prefix, Markers, TypeExpression, Dimensions, _initializer, newType);
         }
         public sealed record PaddingHelper(J.NewArray T)
         {
-            public JContainer<Expression>? Initializer => T._initializer;
+            public JContainer<Expression>? Initializer { get => T._initializer;  set => T._initializer = value; }
 
             public J.NewArray WithInitializer(JContainer<Expression>? newInitializer)
             {
-                return T._initializer == newInitializer ? T : new J.NewArray(T.Id, T.Prefix, T.Markers, T.TypeExpression, T.Dimensions, newInitializer, T.Type);
+                return Initializer == newInitializer ? T : new J.NewArray(T.Id, T.Prefix, T.Markers, T.TypeExpression, T.Dimensions, newInitializer, T.Type);
             }
 
         }

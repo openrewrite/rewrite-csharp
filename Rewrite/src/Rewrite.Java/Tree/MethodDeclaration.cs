@@ -10,18 +10,18 @@ public partial interface J : Rewrite.Core.Tree
         {
             return new MethodDeclaration(
                 Id,
-                prefix,
-                markers,
-                leadingAnnotations,
-                modifiers,
+                Prefix,
+                Markers,
+                LeadingAnnotations,
+                Modifiers,
                 _typeParameters,
-                returnTypeExpression,
+                ReturnTypeExpression,
                 _name.WithIdentifier(identifier),
                 _parameters,
                 _throws,
-                body,
+                Body,
                 _defaultValue,
-                methodType);
+                MethodType);
         }
 
         public JavaType? Type => null;

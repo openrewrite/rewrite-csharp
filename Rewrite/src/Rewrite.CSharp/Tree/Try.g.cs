@@ -66,37 +66,37 @@ public partial interface Cs : J
             return v.VisitTry(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Try WithId(Guid newId)
         {
-            return newId == id ? this : new Try(newId, prefix, markers, body, catches, _finally);
+            return newId == Id ? this : new Try(newId, Prefix, Markers, Body, Catches, _finally);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Try WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Try(id, newPrefix, markers, body, catches, _finally);
+            return newPrefix == Prefix ? this : new Try(Id, newPrefix, Markers, Body, Catches, _finally);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Try WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Try(id, prefix, newMarkers, body, catches, _finally);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Try(Id, Prefix, newMarkers, Body, Catches, _finally);
         }
-        public J.Block Body => body;
+        public J.Block Body { get;  set; } = body;
 
         public Try WithBody(J.Block newBody)
         {
-            return ReferenceEquals(newBody, body) ? this : new Try(id, prefix, markers, newBody, catches, _finally);
+            return ReferenceEquals(newBody, Body) ? this : new Try(Id, Prefix, Markers, newBody, Catches, _finally);
         }
-        public IList<Catch> Catches => catches;
+        public IList<Catch> Catches { get;  set; } = catches;
 
         public Try WithCatches(IList<Catch> newCatches)
         {
-            return newCatches == catches ? this : new Try(id, prefix, markers, body, newCatches, _finally);
+            return newCatches == Catches ? this : new Try(Id, Prefix, Markers, Body, newCatches, _finally);
         }
-        private readonly JLeftPadded<J.Block>? _finally = @finally;
+        private JLeftPadded<J.Block>? _finally = @finally;
         public J.Block? Finally => _finally?.Element;
 
         public Try WithFinally(J.Block? newFinally)
@@ -162,50 +162,50 @@ public partial interface Cs : J
                 return v.VisitTryCatch(this, p);
             }
 
-            public Guid Id => id;
+            public Guid Id { get;  set; } = id;
 
             public Catch WithId(Guid newId)
             {
-                return newId == id ? this : new Catch(newId, prefix, markers, parameter, _filterExpression, body);
+                return newId == Id ? this : new Catch(newId, Prefix, Markers, Parameter, _filterExpression, Body);
             }
-            public Space Prefix => prefix;
+            public Space Prefix { get;  set; } = prefix;
 
             public Catch WithPrefix(Space newPrefix)
             {
-                return newPrefix == prefix ? this : new Catch(id, newPrefix, markers, parameter, _filterExpression, body);
+                return newPrefix == Prefix ? this : new Catch(Id, newPrefix, Markers, Parameter, _filterExpression, Body);
             }
-            public Markers Markers => markers;
+            public Markers Markers { get;  set; } = markers;
 
             public Catch WithMarkers(Markers newMarkers)
             {
-                return ReferenceEquals(newMarkers, markers) ? this : new Catch(id, prefix, newMarkers, parameter, _filterExpression, body);
+                return ReferenceEquals(newMarkers, Markers) ? this : new Catch(Id, Prefix, newMarkers, Parameter, _filterExpression, Body);
             }
-            public J.ControlParentheses<J.VariableDeclarations> Parameter => parameter;
+            public J.ControlParentheses<J.VariableDeclarations> Parameter { get;  set; } = parameter;
 
             public Catch WithParameter(J.ControlParentheses<J.VariableDeclarations> newParameter)
             {
-                return ReferenceEquals(newParameter, parameter) ? this : new Catch(id, prefix, markers, newParameter, _filterExpression, body);
+                return ReferenceEquals(newParameter, Parameter) ? this : new Catch(Id, Prefix, Markers, newParameter, _filterExpression, Body);
             }
-            private readonly JLeftPadded<J.ControlParentheses<Expression>>? _filterExpression = filterExpression;
+            private JLeftPadded<J.ControlParentheses<Expression>>? _filterExpression = filterExpression;
             public J.ControlParentheses<Expression>? FilterExpression => _filterExpression?.Element;
 
             public Catch WithFilterExpression(J.ControlParentheses<Expression>? newFilterExpression)
             {
                 return Padding.WithFilterExpression(JLeftPadded<J.ControlParentheses<Expression>>.WithElement(_filterExpression, newFilterExpression));
             }
-            public J.Block Body => body;
+            public J.Block Body { get;  set; } = body;
 
             public Catch WithBody(J.Block newBody)
             {
-                return ReferenceEquals(newBody, body) ? this : new Catch(id, prefix, markers, parameter, _filterExpression, newBody);
+                return ReferenceEquals(newBody, Body) ? this : new Catch(Id, Prefix, Markers, Parameter, _filterExpression, newBody);
             }
             public sealed record PaddingHelper(Cs.Try.Catch T)
             {
-                public JLeftPadded<J.ControlParentheses<Expression>>? FilterExpression => T._filterExpression;
+                public JLeftPadded<J.ControlParentheses<Expression>>? FilterExpression { get => T._filterExpression;  set => T._filterExpression = value; }
 
                 public Cs.Try.Catch WithFilterExpression(JLeftPadded<J.ControlParentheses<Expression>>? newFilterExpression)
                 {
-                    return T._filterExpression == newFilterExpression ? T : new Cs.Try.Catch(T.Id, T.Prefix, T.Markers, T.Parameter, newFilterExpression, T.Body);
+                    return FilterExpression == newFilterExpression ? T : new Cs.Try.Catch(T.Id, T.Prefix, T.Markers, T.Parameter, newFilterExpression, T.Body);
                 }
 
             }
@@ -227,11 +227,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.Try T)
         {
-            public JLeftPadded<J.Block>? Finally => T._finally;
+            public JLeftPadded<J.Block>? Finally { get => T._finally;  set => T._finally = value; }
 
             public Cs.Try WithFinally(JLeftPadded<J.Block>? newFinally)
             {
-                return T._finally == newFinally ? T : new Cs.Try(T.Id, T.Prefix, T.Markers, T.Body, T.Catches, newFinally);
+                return Finally == newFinally ? T : new Cs.Try(T.Id, T.Prefix, T.Markers, T.Body, T.Catches, newFinally);
             }
 
         }

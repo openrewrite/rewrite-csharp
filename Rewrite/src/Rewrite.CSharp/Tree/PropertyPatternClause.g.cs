@@ -85,25 +85,25 @@ public partial interface Cs : J
             return v.VisitPropertyPatternClause(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public PropertyPatternClause WithId(Guid newId)
         {
-            return newId == id ? this : new PropertyPatternClause(newId, prefix, markers, _subpatterns);
+            return newId == Id ? this : new PropertyPatternClause(newId, Prefix, Markers, _subpatterns);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public PropertyPatternClause WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new PropertyPatternClause(id, newPrefix, markers, _subpatterns);
+            return newPrefix == Prefix ? this : new PropertyPatternClause(Id, newPrefix, Markers, _subpatterns);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public PropertyPatternClause WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new PropertyPatternClause(id, prefix, newMarkers, _subpatterns);
+            return ReferenceEquals(newMarkers, Markers) ? this : new PropertyPatternClause(Id, Prefix, newMarkers, _subpatterns);
         }
-        private readonly JContainer<Expression> _subpatterns = subpatterns;
+        private JContainer<Expression> _subpatterns = subpatterns;
         public IList<Expression> Subpatterns => _subpatterns.GetElements();
 
         public PropertyPatternClause WithSubpatterns(IList<Expression> newSubpatterns)
@@ -112,11 +112,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.PropertyPatternClause T)
         {
-            public JContainer<Expression> Subpatterns => T._subpatterns;
+            public JContainer<Expression> Subpatterns { get => T._subpatterns;  set => T._subpatterns = value; }
 
             public Cs.PropertyPatternClause WithSubpatterns(JContainer<Expression> newSubpatterns)
             {
-                return T._subpatterns == newSubpatterns ? T : new Cs.PropertyPatternClause(T.Id, T.Prefix, T.Markers, newSubpatterns);
+                return Subpatterns == newSubpatterns ? T : new Cs.PropertyPatternClause(T.Id, T.Prefix, T.Markers, newSubpatterns);
             }
 
         }

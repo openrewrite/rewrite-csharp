@@ -41,29 +41,29 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitErroneous(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Erroneous WithId(Guid newId)
         {
-            return newId == id ? this : new Erroneous(newId, prefix, markers, text);
+            return newId == Id ? this : new Erroneous(newId, Prefix, Markers, Text);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Erroneous WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Erroneous(id, newPrefix, markers, text);
+            return newPrefix == Prefix ? this : new Erroneous(Id, newPrefix, Markers, Text);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Erroneous WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Erroneous(id, prefix, newMarkers, text);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Erroneous(Id, Prefix, newMarkers, Text);
         }
-        public string Text => text;
+        public string Text { get;  set; } = text;
 
         public Erroneous WithText(string newText)
         {
-            return newText == text ? this : new Erroneous(id, prefix, markers, newText);
+            return newText == Text ? this : new Erroneous(Id, Prefix, Markers, newText);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

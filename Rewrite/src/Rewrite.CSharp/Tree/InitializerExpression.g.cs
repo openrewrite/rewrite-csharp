@@ -78,25 +78,25 @@ public partial interface Cs : J
             return v.VisitInitializerExpression(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public InitializerExpression WithId(Guid newId)
         {
-            return newId == id ? this : new InitializerExpression(newId, prefix, markers, _expressions);
+            return newId == Id ? this : new InitializerExpression(newId, Prefix, Markers, _expressions);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public InitializerExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new InitializerExpression(id, newPrefix, markers, _expressions);
+            return newPrefix == Prefix ? this : new InitializerExpression(Id, newPrefix, Markers, _expressions);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public InitializerExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new InitializerExpression(id, prefix, newMarkers, _expressions);
+            return ReferenceEquals(newMarkers, Markers) ? this : new InitializerExpression(Id, Prefix, newMarkers, _expressions);
         }
-        private readonly JContainer<Expression> _expressions = expressions;
+        private JContainer<Expression> _expressions = expressions;
         public IList<Expression> Expressions => _expressions.GetElements();
 
         public InitializerExpression WithExpressions(IList<Expression> newExpressions)
@@ -105,11 +105,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.InitializerExpression T)
         {
-            public JContainer<Expression> Expressions => T._expressions;
+            public JContainer<Expression> Expressions { get => T._expressions;  set => T._expressions = value; }
 
             public Cs.InitializerExpression WithExpressions(JContainer<Expression> newExpressions)
             {
-                return T._expressions == newExpressions ? T : new Cs.InitializerExpression(T.Id, T.Prefix, T.Markers, newExpressions);
+                return Expressions == newExpressions ? T : new Cs.InitializerExpression(T.Id, T.Prefix, T.Markers, newExpressions);
             }
 
         }

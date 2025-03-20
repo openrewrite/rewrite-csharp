@@ -38,29 +38,29 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitReturn(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Return WithId(Guid newId)
         {
-            return newId == id ? this : new Return(newId, prefix, markers, expression);
+            return newId == Id ? this : new Return(newId, Prefix, Markers, Expression);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Return WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Return(id, newPrefix, markers, expression);
+            return newPrefix == Prefix ? this : new Return(Id, newPrefix, Markers, Expression);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Return WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Return(id, prefix, newMarkers, expression);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Return(Id, Prefix, newMarkers, Expression);
         }
-        public Expression? Expression => expression;
+        public Expression? Expression { get;  set; } = expression;
 
         public Return WithExpression(Expression? newExpression)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new Return(id, prefix, markers, newExpression);
+            return ReferenceEquals(newExpression, Expression) ? this : new Return(Id, Prefix, Markers, newExpression);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

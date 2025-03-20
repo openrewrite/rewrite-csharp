@@ -83,25 +83,25 @@ public partial interface Cs : J
             return v.VisitParenthesizedPattern(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ParenthesizedPattern WithId(Guid newId)
         {
-            return newId == id ? this : new ParenthesizedPattern(newId, prefix, markers, _pattern);
+            return newId == Id ? this : new ParenthesizedPattern(newId, Prefix, Markers, _pattern);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ParenthesizedPattern WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ParenthesizedPattern(id, newPrefix, markers, _pattern);
+            return newPrefix == Prefix ? this : new ParenthesizedPattern(Id, newPrefix, Markers, _pattern);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ParenthesizedPattern WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ParenthesizedPattern(id, prefix, newMarkers, _pattern);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ParenthesizedPattern(Id, Prefix, newMarkers, _pattern);
         }
-        private readonly JContainer<Cs.Pattern> _pattern = pattern;
+        private JContainer<Cs.Pattern> _pattern = pattern;
         public IList<Cs.Pattern> Pattern => _pattern.GetElements();
 
         public ParenthesizedPattern WithPattern(IList<Cs.Pattern> newPattern)
@@ -110,11 +110,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.ParenthesizedPattern T)
         {
-            public JContainer<Cs.Pattern> Pattern => T._pattern;
+            public JContainer<Cs.Pattern> Pattern { get => T._pattern;  set => T._pattern = value; }
 
             public Cs.ParenthesizedPattern WithPattern(JContainer<Cs.Pattern> newPattern)
             {
-                return T._pattern == newPattern ? T : new Cs.ParenthesizedPattern(T.Id, T.Prefix, T.Markers, newPattern);
+                return Pattern == newPattern ? T : new Cs.ParenthesizedPattern(T.Id, T.Prefix, T.Markers, newPattern);
             }
 
         }

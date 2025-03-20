@@ -58,35 +58,35 @@ public partial interface Cs : J
             return v.VisitNewClass(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public NewClass WithId(Guid newId)
         {
-            return newId == id ? this : new NewClass(newId, prefix, markers, newClassCore, initializer);
+            return newId == Id ? this : new NewClass(newId, Prefix, Markers, NewClassCore, Initializer);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public NewClass WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new NewClass(id, newPrefix, markers, newClassCore, initializer);
+            return newPrefix == Prefix ? this : new NewClass(Id, newPrefix, Markers, NewClassCore, Initializer);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public NewClass WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new NewClass(id, prefix, newMarkers, newClassCore, initializer);
+            return ReferenceEquals(newMarkers, Markers) ? this : new NewClass(Id, Prefix, newMarkers, NewClassCore, Initializer);
         }
-        public J.NewClass NewClassCore => newClassCore;
+        public J.NewClass NewClassCore { get;  set; } = newClassCore;
 
         public NewClass WithNewClassCore(J.NewClass newNewClassCore)
         {
-            return ReferenceEquals(newNewClassCore, newClassCore) ? this : new NewClass(id, prefix, markers, newNewClassCore, initializer);
+            return ReferenceEquals(newNewClassCore, NewClassCore) ? this : new NewClass(Id, Prefix, Markers, newNewClassCore, Initializer);
         }
-        public Cs.InitializerExpression? Initializer => initializer;
+        public Cs.InitializerExpression? Initializer { get;  set; } = initializer;
 
         public NewClass WithInitializer(Cs.InitializerExpression? newInitializer)
         {
-            return ReferenceEquals(newInitializer, initializer) ? this : new NewClass(id, prefix, markers, newClassCore, newInitializer);
+            return ReferenceEquals(newInitializer, Initializer) ? this : new NewClass(Id, Prefix, Markers, NewClassCore, newInitializer);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

@@ -73,94 +73,94 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitClassDeclaration(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ClassDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new ClassDeclaration(newId, prefix, markers, leadingAnnotations, modifiers, _declarationKind, name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, body, type);
+            return newId == Id ? this : new ClassDeclaration(newId, Prefix, Markers, LeadingAnnotations, Modifiers, _declarationKind, Name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, Body, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ClassDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ClassDeclaration(id, newPrefix, markers, leadingAnnotations, modifiers, _declarationKind, name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, body, type);
+            return newPrefix == Prefix ? this : new ClassDeclaration(Id, newPrefix, Markers, LeadingAnnotations, Modifiers, _declarationKind, Name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, Body, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ClassDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ClassDeclaration(id, prefix, newMarkers, leadingAnnotations, modifiers, _declarationKind, name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, body, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ClassDeclaration(Id, Prefix, newMarkers, LeadingAnnotations, Modifiers, _declarationKind, Name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, Body, Type);
         }
-        public IList<J.Annotation> LeadingAnnotations => leadingAnnotations;
+        public IList<J.Annotation> LeadingAnnotations { get;  set; } = leadingAnnotations;
 
         public ClassDeclaration WithLeadingAnnotations(IList<J.Annotation> newLeadingAnnotations)
         {
-            return newLeadingAnnotations == leadingAnnotations ? this : new ClassDeclaration(id, prefix, markers, newLeadingAnnotations, modifiers, _declarationKind, name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, body, type);
+            return newLeadingAnnotations == LeadingAnnotations ? this : new ClassDeclaration(Id, Prefix, Markers, newLeadingAnnotations, Modifiers, _declarationKind, Name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, Body, Type);
         }
-        public IList<J.Modifier> Modifiers => modifiers;
+        public IList<J.Modifier> Modifiers { get;  set; } = modifiers;
 
         public ClassDeclaration WithModifiers(IList<J.Modifier> newModifiers)
         {
-            return newModifiers == modifiers ? this : new ClassDeclaration(id, prefix, markers, leadingAnnotations, newModifiers, _declarationKind, name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, body, type);
+            return newModifiers == Modifiers ? this : new ClassDeclaration(Id, Prefix, Markers, LeadingAnnotations, newModifiers, _declarationKind, Name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, Body, Type);
         }
-        private readonly Kind _declarationKind = declarationKind;
+        private Kind _declarationKind = declarationKind;
 
         public ClassDeclaration WithDeclarationKind(Kind newDeclarationKind)
         {
-            return ReferenceEquals(newDeclarationKind, _declarationKind) ? this : new ClassDeclaration(id, prefix, markers, leadingAnnotations, modifiers, _declarationKind, name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, body, type);
+            return ReferenceEquals(newDeclarationKind, DeclarationKind) ? this : new ClassDeclaration(Id, Prefix, Markers, LeadingAnnotations, Modifiers, _declarationKind, Name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, Body, Type);
         }
-        public J.Identifier Name => name;
+        public J.Identifier Name { get;  set; } = name;
 
         public ClassDeclaration WithName(J.Identifier newName)
         {
-            return ReferenceEquals(newName, name) ? this : new ClassDeclaration(id, prefix, markers, leadingAnnotations, modifiers, _declarationKind, newName, _typeParameters, _primaryConstructor, _extends, _implements, _permits, body, type);
+            return ReferenceEquals(newName, Name) ? this : new ClassDeclaration(Id, Prefix, Markers, LeadingAnnotations, Modifiers, _declarationKind, newName, _typeParameters, _primaryConstructor, _extends, _implements, _permits, Body, Type);
         }
-        private readonly JContainer<J.TypeParameter>? _typeParameters = typeParameters;
+        private JContainer<J.TypeParameter>? _typeParameters = typeParameters;
         public IList<J.TypeParameter>? TypeParameters => _typeParameters?.GetElements();
 
         public ClassDeclaration WithTypeParameters(IList<J.TypeParameter>? newTypeParameters)
         {
             return Padding.WithTypeParameters(JContainer<J.TypeParameter>.WithElementsNullable(_typeParameters, newTypeParameters));
         }
-        private readonly JContainer<Statement>? _primaryConstructor = primaryConstructor;
+        private JContainer<Statement>? _primaryConstructor = primaryConstructor;
         public IList<Statement>? PrimaryConstructor => _primaryConstructor?.GetElements();
 
         public ClassDeclaration WithPrimaryConstructor(IList<Statement>? newPrimaryConstructor)
         {
             return Padding.WithPrimaryConstructor(JContainer<Statement>.WithElementsNullable(_primaryConstructor, newPrimaryConstructor));
         }
-        private readonly JLeftPadded<TypeTree>? _extends = extends;
+        private JLeftPadded<TypeTree>? _extends = extends;
         public TypeTree? Extends => _extends?.Element;
 
         public ClassDeclaration WithExtends(TypeTree? newExtends)
         {
             return Padding.WithExtends(JLeftPadded<TypeTree>.WithElement(_extends, newExtends));
         }
-        private readonly JContainer<TypeTree>? _implements = implements;
+        private JContainer<TypeTree>? _implements = implements;
         public IList<TypeTree>? Implements => _implements?.GetElements();
 
         public ClassDeclaration WithImplements(IList<TypeTree>? newImplements)
         {
             return Padding.WithImplements(JContainer<TypeTree>.WithElementsNullable(_implements, newImplements));
         }
-        private readonly JContainer<TypeTree>? _permits = permits;
+        private JContainer<TypeTree>? _permits = permits;
         public IList<TypeTree>? Permits => _permits?.GetElements();
 
         public ClassDeclaration WithPermits(IList<TypeTree>? newPermits)
         {
             return Padding.WithPermits(JContainer<TypeTree>.WithElementsNullable(_permits, newPermits));
         }
-        public J.Block Body => body;
+        public J.Block Body { get;  set; } = body;
 
         public ClassDeclaration WithBody(J.Block newBody)
         {
-            return ReferenceEquals(newBody, body) ? this : new ClassDeclaration(id, prefix, markers, leadingAnnotations, modifiers, _declarationKind, name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, newBody, type);
+            return ReferenceEquals(newBody, Body) ? this : new ClassDeclaration(Id, Prefix, Markers, LeadingAnnotations, Modifiers, _declarationKind, Name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, newBody, Type);
         }
-        public JavaType.FullyQualified? Type => type;
+        public JavaType.FullyQualified? Type { get;  set; } = type;
 
         public ClassDeclaration WithType(JavaType.FullyQualified? newType)
         {
-            return newType == type ? this : new ClassDeclaration(id, prefix, markers, leadingAnnotations, modifiers, _declarationKind, name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, body, newType);
+            return newType == Type ? this : new ClassDeclaration(Id, Prefix, Markers, LeadingAnnotations, Modifiers, _declarationKind, Name, _typeParameters, _primaryConstructor, _extends, _implements, _permits, Body, newType);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]
@@ -178,35 +178,35 @@ public partial interface J : Rewrite.Core.Tree
                 return v.VisitClassDeclarationKind(this, p);
             }
 
-            public Guid Id => id;
+            public Guid Id { get;  set; } = id;
 
             public Kind WithId(Guid newId)
             {
-                return newId == id ? this : new Kind(newId, prefix, markers, annotations, kindType);
+                return newId == Id ? this : new Kind(newId, Prefix, Markers, Annotations, KindType);
             }
-            public Space Prefix => prefix;
+            public Space Prefix { get;  set; } = prefix;
 
             public Kind WithPrefix(Space newPrefix)
             {
-                return newPrefix == prefix ? this : new Kind(id, newPrefix, markers, annotations, kindType);
+                return newPrefix == Prefix ? this : new Kind(Id, newPrefix, Markers, Annotations, KindType);
             }
-            public Markers Markers => markers;
+            public Markers Markers { get;  set; } = markers;
 
             public Kind WithMarkers(Markers newMarkers)
             {
-                return ReferenceEquals(newMarkers, markers) ? this : new Kind(id, prefix, newMarkers, annotations, kindType);
+                return ReferenceEquals(newMarkers, Markers) ? this : new Kind(Id, Prefix, newMarkers, Annotations, KindType);
             }
-            public IList<J.Annotation> Annotations => annotations;
+            public IList<J.Annotation> Annotations { get;  set; } = annotations;
 
             public Kind WithAnnotations(IList<J.Annotation> newAnnotations)
             {
-                return newAnnotations == annotations ? this : new Kind(id, prefix, markers, newAnnotations, kindType);
+                return newAnnotations == Annotations ? this : new Kind(Id, Prefix, Markers, newAnnotations, KindType);
             }
-            public Types KindType => kindType;
+            public Types KindType { get;  set; } = kindType;
 
             public Kind WithKindType(Types newKindType)
             {
-                return newKindType == kindType ? this : new Kind(id, prefix, markers, annotations, newKindType);
+                return newKindType == KindType ? this : new Kind(Id, Prefix, Markers, Annotations, newKindType);
             }
             public enum Types
             {
@@ -234,46 +234,46 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.ClassDeclaration T)
         {
-            public J.ClassDeclaration.Kind DeclarationKind => T._declarationKind;
+            public J.ClassDeclaration.Kind DeclarationKind { get => T._declarationKind;  set => T._declarationKind = value; }
 
             public J.ClassDeclaration WithDeclarationKind(J.ClassDeclaration.Kind newDeclarationKind)
             {
-                return T._declarationKind == newDeclarationKind ? T : new J.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, newDeclarationKind, T.Name, T._typeParameters, T._primaryConstructor, T._extends, T._implements, T._permits, T.Body, T.Type);
+                return DeclarationKind == newDeclarationKind ? T : new J.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, newDeclarationKind, T.Name, T._typeParameters, T._primaryConstructor, T._extends, T._implements, T._permits, T.Body, T.Type);
             }
 
-            public JContainer<J.TypeParameter>? TypeParameters => T._typeParameters;
+            public JContainer<J.TypeParameter>? TypeParameters { get => T._typeParameters;  set => T._typeParameters = value; }
 
             public J.ClassDeclaration WithTypeParameters(JContainer<J.TypeParameter>? newTypeParameters)
             {
-                return T._typeParameters == newTypeParameters ? T : new J.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._declarationKind, T.Name, newTypeParameters, T._primaryConstructor, T._extends, T._implements, T._permits, T.Body, T.Type);
+                return TypeParameters == newTypeParameters ? T : new J.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._declarationKind, T.Name, newTypeParameters, T._primaryConstructor, T._extends, T._implements, T._permits, T.Body, T.Type);
             }
 
-            public JContainer<Statement>? PrimaryConstructor => T._primaryConstructor;
+            public JContainer<Statement>? PrimaryConstructor { get => T._primaryConstructor;  set => T._primaryConstructor = value; }
 
             public J.ClassDeclaration WithPrimaryConstructor(JContainer<Statement>? newPrimaryConstructor)
             {
-                return T._primaryConstructor == newPrimaryConstructor ? T : new J.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._declarationKind, T.Name, T._typeParameters, newPrimaryConstructor, T._extends, T._implements, T._permits, T.Body, T.Type);
+                return PrimaryConstructor == newPrimaryConstructor ? T : new J.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._declarationKind, T.Name, T._typeParameters, newPrimaryConstructor, T._extends, T._implements, T._permits, T.Body, T.Type);
             }
 
-            public JLeftPadded<TypeTree>? Extends => T._extends;
+            public JLeftPadded<TypeTree>? Extends { get => T._extends;  set => T._extends = value; }
 
             public J.ClassDeclaration WithExtends(JLeftPadded<TypeTree>? newExtends)
             {
-                return T._extends == newExtends ? T : new J.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._declarationKind, T.Name, T._typeParameters, T._primaryConstructor, newExtends, T._implements, T._permits, T.Body, T.Type);
+                return Extends == newExtends ? T : new J.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._declarationKind, T.Name, T._typeParameters, T._primaryConstructor, newExtends, T._implements, T._permits, T.Body, T.Type);
             }
 
-            public JContainer<TypeTree>? Implements => T._implements;
+            public JContainer<TypeTree>? Implements { get => T._implements;  set => T._implements = value; }
 
             public J.ClassDeclaration WithImplements(JContainer<TypeTree>? newImplements)
             {
-                return T._implements == newImplements ? T : new J.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._declarationKind, T.Name, T._typeParameters, T._primaryConstructor, T._extends, newImplements, T._permits, T.Body, T.Type);
+                return Implements == newImplements ? T : new J.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._declarationKind, T.Name, T._typeParameters, T._primaryConstructor, T._extends, newImplements, T._permits, T.Body, T.Type);
             }
 
-            public JContainer<TypeTree>? Permits => T._permits;
+            public JContainer<TypeTree>? Permits { get => T._permits;  set => T._permits = value; }
 
             public J.ClassDeclaration WithPermits(JContainer<TypeTree>? newPermits)
             {
-                return T._permits == newPermits ? T : new J.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._declarationKind, T.Name, T._typeParameters, T._primaryConstructor, T._extends, T._implements, newPermits, T.Body, T.Type);
+                return Permits == newPermits ? T : new J.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._declarationKind, T.Name, T._typeParameters, T._primaryConstructor, T._extends, T._implements, newPermits, T.Body, T.Type);
             }
 
         }

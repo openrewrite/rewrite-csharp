@@ -40,35 +40,35 @@ public partial interface Cs : J
             return v.VisitAwaitExpression(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public AwaitExpression WithId(Guid newId)
         {
-            return newId == id ? this : new AwaitExpression(newId, prefix, markers, expression, type);
+            return newId == Id ? this : new AwaitExpression(newId, Prefix, Markers, Expression, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public AwaitExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new AwaitExpression(id, newPrefix, markers, expression, type);
+            return newPrefix == Prefix ? this : new AwaitExpression(Id, newPrefix, Markers, Expression, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public AwaitExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new AwaitExpression(id, prefix, newMarkers, expression, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new AwaitExpression(Id, Prefix, newMarkers, Expression, Type);
         }
-        public J Expression => expression;
+        public J Expression { get;  set; } = expression;
 
         public AwaitExpression WithExpression(J newExpression)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new AwaitExpression(id, prefix, markers, newExpression, type);
+            return ReferenceEquals(newExpression, Expression) ? this : new AwaitExpression(Id, Prefix, Markers, newExpression, Type);
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public AwaitExpression WithType(JavaType? newType)
         {
-            return newType == type ? this : new AwaitExpression(id, prefix, markers, expression, newType);
+            return newType == Type ? this : new AwaitExpression(Id, Prefix, Markers, Expression, newType);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

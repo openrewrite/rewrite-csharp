@@ -48,29 +48,29 @@ public partial interface Cs : J
             return v.VisitSelectClause(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public SelectClause WithId(Guid newId)
         {
-            return newId == id ? this : new SelectClause(newId, prefix, markers, expression);
+            return newId == Id ? this : new SelectClause(newId, Prefix, Markers, Expression);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public SelectClause WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new SelectClause(id, newPrefix, markers, expression);
+            return newPrefix == Prefix ? this : new SelectClause(Id, newPrefix, Markers, Expression);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public SelectClause WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new SelectClause(id, prefix, newMarkers, expression);
+            return ReferenceEquals(newMarkers, Markers) ? this : new SelectClause(Id, Prefix, newMarkers, Expression);
         }
-        public Expression Expression => expression;
+        public Expression Expression { get;  set; } = expression;
 
         public SelectClause WithExpression(Expression newExpression)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new SelectClause(id, prefix, markers, newExpression);
+            return ReferenceEquals(newExpression, Expression) ? this : new SelectClause(Id, Prefix, Markers, newExpression);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

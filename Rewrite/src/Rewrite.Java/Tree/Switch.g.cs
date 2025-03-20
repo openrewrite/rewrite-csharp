@@ -39,35 +39,35 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitSwitch(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Switch WithId(Guid newId)
         {
-            return newId == id ? this : new Switch(newId, prefix, markers, selector, cases);
+            return newId == Id ? this : new Switch(newId, Prefix, Markers, Selector, Cases);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Switch WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Switch(id, newPrefix, markers, selector, cases);
+            return newPrefix == Prefix ? this : new Switch(Id, newPrefix, Markers, Selector, Cases);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Switch WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Switch(id, prefix, newMarkers, selector, cases);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Switch(Id, Prefix, newMarkers, Selector, Cases);
         }
-        public J.ControlParentheses<Expression> Selector => selector;
+        public J.ControlParentheses<Expression> Selector { get;  set; } = selector;
 
         public Switch WithSelector(J.ControlParentheses<Expression> newSelector)
         {
-            return ReferenceEquals(newSelector, selector) ? this : new Switch(id, prefix, markers, newSelector, cases);
+            return ReferenceEquals(newSelector, Selector) ? this : new Switch(Id, Prefix, Markers, newSelector, Cases);
         }
-        public J.Block Cases => cases;
+        public J.Block Cases { get;  set; } = cases;
 
         public Switch WithCases(J.Block newCases)
         {
-            return ReferenceEquals(newCases, cases) ? this : new Switch(id, prefix, markers, selector, newCases);
+            return ReferenceEquals(newCases, Cases) ? this : new Switch(Id, Prefix, Markers, Selector, newCases);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

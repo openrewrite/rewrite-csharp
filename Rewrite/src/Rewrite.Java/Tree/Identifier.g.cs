@@ -41,47 +41,47 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitIdentifier(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Identifier WithId(Guid newId)
         {
-            return newId == id ? this : new Identifier(newId, prefix, markers, annotations, simpleName, type, fieldType);
+            return newId == Id ? this : new Identifier(newId, Prefix, Markers, Annotations, SimpleName, Type, FieldType);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Identifier WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Identifier(id, newPrefix, markers, annotations, simpleName, type, fieldType);
+            return newPrefix == Prefix ? this : new Identifier(Id, newPrefix, Markers, Annotations, SimpleName, Type, FieldType);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Identifier WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Identifier(id, prefix, newMarkers, annotations, simpleName, type, fieldType);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Identifier(Id, Prefix, newMarkers, Annotations, SimpleName, Type, FieldType);
         }
-        public IList<J.Annotation> Annotations => annotations;
+        public IList<J.Annotation> Annotations { get;  set; } = annotations;
 
         public Identifier WithAnnotations(IList<J.Annotation> newAnnotations)
         {
-            return newAnnotations == annotations ? this : new Identifier(id, prefix, markers, newAnnotations, simpleName, type, fieldType);
+            return newAnnotations == Annotations ? this : new Identifier(Id, Prefix, Markers, newAnnotations, SimpleName, Type, FieldType);
         }
-        public string SimpleName => simpleName;
+        public string SimpleName { get;  set; } = simpleName;
 
         public Identifier WithSimpleName(string newSimpleName)
         {
-            return newSimpleName == simpleName ? this : new Identifier(id, prefix, markers, annotations, newSimpleName, type, fieldType);
+            return newSimpleName == SimpleName ? this : new Identifier(Id, Prefix, Markers, Annotations, newSimpleName, Type, FieldType);
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public Identifier WithType(JavaType? newType)
         {
-            return newType == type ? this : new Identifier(id, prefix, markers, annotations, simpleName, newType, fieldType);
+            return newType == Type ? this : new Identifier(Id, Prefix, Markers, Annotations, SimpleName, newType, FieldType);
         }
-        public JavaType.Variable? FieldType => fieldType;
+        public JavaType.Variable? FieldType { get;  set; } = fieldType;
 
         public Identifier WithFieldType(JavaType.Variable? newFieldType)
         {
-            return newFieldType == fieldType ? this : new Identifier(id, prefix, markers, annotations, simpleName, type, newFieldType);
+            return newFieldType == FieldType ? this : new Identifier(Id, Prefix, Markers, Annotations, SimpleName, Type, newFieldType);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

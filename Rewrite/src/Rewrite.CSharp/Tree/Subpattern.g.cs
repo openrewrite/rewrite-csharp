@@ -93,31 +93,31 @@ public partial interface Cs : J
             return v.VisitSubpattern(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Subpattern WithId(Guid newId)
         {
-            return newId == id ? this : new Subpattern(newId, prefix, markers, name, _pattern);
+            return newId == Id ? this : new Subpattern(newId, Prefix, Markers, Name, _pattern);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Subpattern WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Subpattern(id, newPrefix, markers, name, _pattern);
+            return newPrefix == Prefix ? this : new Subpattern(Id, newPrefix, Markers, Name, _pattern);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Subpattern WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Subpattern(id, prefix, newMarkers, name, _pattern);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Subpattern(Id, Prefix, newMarkers, Name, _pattern);
         }
-        public Expression? Name => name;
+        public Expression? Name { get;  set; } = name;
 
         public Subpattern WithName(Expression? newName)
         {
-            return ReferenceEquals(newName, name) ? this : new Subpattern(id, prefix, markers, newName, _pattern);
+            return ReferenceEquals(newName, Name) ? this : new Subpattern(Id, Prefix, Markers, newName, _pattern);
         }
-        private readonly JLeftPadded<Cs.Pattern> _pattern = pattern;
+        private JLeftPadded<Cs.Pattern> _pattern = pattern;
         public Cs.Pattern Pattern => _pattern.Element;
 
         public Subpattern WithPattern(Cs.Pattern newPattern)
@@ -126,11 +126,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.Subpattern T)
         {
-            public JLeftPadded<Cs.Pattern> Pattern => T._pattern;
+            public JLeftPadded<Cs.Pattern> Pattern { get => T._pattern;  set => T._pattern = value; }
 
             public Cs.Subpattern WithPattern(JLeftPadded<Cs.Pattern> newPattern)
             {
-                return T._pattern == newPattern ? T : new Cs.Subpattern(T.Id, T.Prefix, T.Markers, T.Name, newPattern);
+                return Pattern == newPattern ? T : new Cs.Subpattern(T.Id, T.Prefix, T.Markers, T.Name, newPattern);
             }
 
         }

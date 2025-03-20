@@ -41,41 +41,41 @@ public partial interface Cs : J
             return v.VisitArrayType(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ArrayType WithId(Guid newId)
         {
-            return newId == id ? this : new ArrayType(newId, prefix, markers, typeExpression, dimensions, type);
+            return newId == Id ? this : new ArrayType(newId, Prefix, Markers, TypeExpression, Dimensions, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ArrayType WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ArrayType(id, newPrefix, markers, typeExpression, dimensions, type);
+            return newPrefix == Prefix ? this : new ArrayType(Id, newPrefix, Markers, TypeExpression, Dimensions, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ArrayType WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ArrayType(id, prefix, newMarkers, typeExpression, dimensions, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ArrayType(Id, Prefix, newMarkers, TypeExpression, Dimensions, Type);
         }
-        public TypeTree? TypeExpression => typeExpression;
+        public TypeTree? TypeExpression { get;  set; } = typeExpression;
 
         public ArrayType WithTypeExpression(TypeTree? newTypeExpression)
         {
-            return ReferenceEquals(newTypeExpression, typeExpression) ? this : new ArrayType(id, prefix, markers, newTypeExpression, dimensions, type);
+            return ReferenceEquals(newTypeExpression, TypeExpression) ? this : new ArrayType(Id, Prefix, Markers, newTypeExpression, Dimensions, Type);
         }
-        public IList<J.ArrayDimension> Dimensions => dimensions;
+        public IList<J.ArrayDimension> Dimensions { get;  set; } = dimensions;
 
         public ArrayType WithDimensions(IList<J.ArrayDimension> newDimensions)
         {
-            return newDimensions == dimensions ? this : new ArrayType(id, prefix, markers, typeExpression, newDimensions, type);
+            return newDimensions == Dimensions ? this : new ArrayType(Id, Prefix, Markers, TypeExpression, newDimensions, Type);
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public ArrayType WithType(JavaType? newType)
         {
-            return newType == type ? this : new ArrayType(id, prefix, markers, typeExpression, dimensions, newType);
+            return newType == Type ? this : new ArrayType(Id, Prefix, Markers, TypeExpression, Dimensions, newType);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

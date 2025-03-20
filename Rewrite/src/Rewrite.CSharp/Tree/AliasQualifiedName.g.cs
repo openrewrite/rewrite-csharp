@@ -76,44 +76,44 @@ public partial interface Cs : J
             return v.VisitAliasQualifiedName(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public AliasQualifiedName WithId(Guid newId)
         {
-            return newId == id ? this : new AliasQualifiedName(newId, prefix, markers, _alias, name);
+            return newId == Id ? this : new AliasQualifiedName(newId, Prefix, Markers, _alias, Name);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public AliasQualifiedName WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new AliasQualifiedName(id, newPrefix, markers, _alias, name);
+            return newPrefix == Prefix ? this : new AliasQualifiedName(Id, newPrefix, Markers, _alias, Name);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public AliasQualifiedName WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new AliasQualifiedName(id, prefix, newMarkers, _alias, name);
+            return ReferenceEquals(newMarkers, Markers) ? this : new AliasQualifiedName(Id, Prefix, newMarkers, _alias, Name);
         }
-        private readonly JRightPadded<J.Identifier> _alias = alias;
+        private JRightPadded<J.Identifier> _alias = alias;
         public J.Identifier Alias => _alias.Element;
 
         public AliasQualifiedName WithAlias(J.Identifier newAlias)
         {
             return Padding.WithAlias(_alias.WithElement(newAlias));
         }
-        public Expression Name => name;
+        public Expression Name { get;  set; } = name;
 
         public AliasQualifiedName WithName(Expression newName)
         {
-            return ReferenceEquals(newName, name) ? this : new AliasQualifiedName(id, prefix, markers, _alias, newName);
+            return ReferenceEquals(newName, Name) ? this : new AliasQualifiedName(Id, Prefix, Markers, _alias, newName);
         }
         public sealed record PaddingHelper(Cs.AliasQualifiedName T)
         {
-            public JRightPadded<J.Identifier> Alias => T._alias;
+            public JRightPadded<J.Identifier> Alias { get => T._alias;  set => T._alias = value; }
 
             public Cs.AliasQualifiedName WithAlias(JRightPadded<J.Identifier> newAlias)
             {
-                return T._alias == newAlias ? T : new Cs.AliasQualifiedName(T.Id, T.Prefix, T.Markers, newAlias, T.Name);
+                return Alias == newAlias ? T : new Cs.AliasQualifiedName(T.Id, T.Prefix, T.Markers, newAlias, T.Name);
             }
 
         }

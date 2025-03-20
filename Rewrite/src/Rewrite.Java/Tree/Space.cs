@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using Microsoft.CodeAnalysis.Text;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
 
@@ -15,17 +16,58 @@ namespace Rewrite.RewriteJava.Tree;
 #if DEBUG_VISITOR
 [DebuggerStepThrough]
 #endif
-public class Space(
-    IList<Comment> comments,
-    string? whitespace
-)
+public class Space : IEquatable<Space>
 {
+    private readonly Lazy<int> _hashCode;
+    private readonly IList<Comment> _comments;
+
+    private readonly string _whitespace;
+
+    public bool Equals(Space? other)
+    {
+        return Equals(this, other);
+    }
+
+    public static bool Equals(Space? v1, Space? v2)
+    {
+        if (ReferenceEquals(v1, v2)) return true;
+        if (v1 is null && v2 is null) return false;
+        if(v1 is null || v2 is not null) return false;
+        if(v1 is not null || v2 is null) return false;
+
+        return v1!.Comments.SequenceEqual(v2.Comments) && v1.Whitespace == v2.Whitespace;
+    }
+
+    public static bool operator ==(Space? v1, Space? v2) => Equals(v1, v2);
+
+    public static bool operator !=(Space? v1, Space? v2) => !(v1 == v2);
+
+
+    public Space(IList<Comment> comments, string? whitespace)
+    {
+        _comments = comments;
+        _whitespace = whitespace ?? "";
+        _hashCode =  new(() =>
+        {
+            var hashCode = _whitespace.GetHashCode();
+            foreach (var comment in _comments)
+            {
+                HashCode.Combine(hashCode, comment.GetHashCode());
+            }
+
+            return hashCode;
+        });
+    }
+
+
     public static readonly Space EMPTY = new([], "");
+
     public static readonly Space SINGLE_SPACE = new([], " ");
 
-    public IList<Comment> Comments => comments;
+    public IList<Comment> Comments => _comments;
 
-    public string? Whitespace => whitespace;
+    public string Whitespace => _whitespace;
+
     public bool IsEmpty => this == EMPTY;
 
     public Space WithComments(IList<Comment>? newComments)
@@ -119,8 +161,7 @@ public class Space(
                     {
                         inMultiLineComment = false;
                         comment.Length -= 1;
-                        comments.Add(new TextComment(true, comment.ToString(), prefix.ToString(0, prefix.Length - 1),
-                            Markers.EMPTY));
+                        comments.Add(new TextComment(true, comment.ToString(), prefix.ToString(0, prefix.Length - 1), Markers.EMPTY));
                         prefix.Length = 0;
                         comment.Length = 0;
                         continue;
@@ -208,14 +249,14 @@ public class Space(
         return Build(whitespace, comments);
     }
 
-    public override string? ToString()
+    public override string ToString()
     {
         StringBuilder p = new();
         p.Append(Whitespace);
 
-        for (int i = 0; i < comments.Count; ++i)
+        for (int i = 0; i < _comments.Count; ++i)
         {
-            var comment = comments[i];
+            var comment = _comments[i];
             var text = ((TextComment)comment).Text;
             p.Append(comment.Multiline ? $"/*{text}*/" : $"//{text}");
             p.Append(comment.Suffix);
@@ -393,4 +434,14 @@ public class Space(
         ArgumentOutOfRangeException.ThrowIfNegative(fromIndex);
         ArgumentOutOfRangeException.ThrowIfGreaterThan(toIndex, arrayLength);
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is null) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != GetType()) return false;
+        return Equals((Space)obj);
+    }
+
+    public override int GetHashCode() => _hashCode.Value;
 }

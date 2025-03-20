@@ -78,31 +78,31 @@ public partial interface Cs : J
             return v.VisitConstructorInitializer(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ConstructorInitializer WithId(Guid newId)
         {
-            return newId == id ? this : new ConstructorInitializer(newId, prefix, markers, keyword, _arguments);
+            return newId == Id ? this : new ConstructorInitializer(newId, Prefix, Markers, Keyword, _arguments);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ConstructorInitializer WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ConstructorInitializer(id, newPrefix, markers, keyword, _arguments);
+            return newPrefix == Prefix ? this : new ConstructorInitializer(Id, newPrefix, Markers, Keyword, _arguments);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ConstructorInitializer WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ConstructorInitializer(id, prefix, newMarkers, keyword, _arguments);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ConstructorInitializer(Id, Prefix, newMarkers, Keyword, _arguments);
         }
-        public Cs.Keyword Keyword => keyword;
+        public Cs.Keyword Keyword { get;  set; } = keyword;
 
         public ConstructorInitializer WithKeyword(Cs.Keyword newKeyword)
         {
-            return ReferenceEquals(newKeyword, keyword) ? this : new ConstructorInitializer(id, prefix, markers, newKeyword, _arguments);
+            return ReferenceEquals(newKeyword, Keyword) ? this : new ConstructorInitializer(Id, Prefix, Markers, newKeyword, _arguments);
         }
-        private readonly JContainer<Expression> _arguments = arguments;
+        private JContainer<Expression> _arguments = arguments;
         public IList<Expression> Arguments => _arguments.GetElements();
 
         public ConstructorInitializer WithArguments(IList<Expression> newArguments)
@@ -111,11 +111,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.ConstructorInitializer T)
         {
-            public JContainer<Expression> Arguments => T._arguments;
+            public JContainer<Expression> Arguments { get => T._arguments;  set => T._arguments = value; }
 
             public Cs.ConstructorInitializer WithArguments(JContainer<Expression> newArguments)
             {
-                return T._arguments == newArguments ? T : new Cs.ConstructorInitializer(T.Id, T.Prefix, T.Markers, T.Keyword, newArguments);
+                return Arguments == newArguments ? T : new Cs.ConstructorInitializer(T.Id, T.Prefix, T.Markers, T.Keyword, newArguments);
             }
 
         }

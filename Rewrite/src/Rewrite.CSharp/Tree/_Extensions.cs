@@ -9,6 +9,8 @@ partial interface CsContainer
     {
     }
 }
+
+
 public partial interface Cs
 {
 
@@ -40,7 +42,7 @@ public partial interface Cs
     public partial class Subpattern : Expression<Subpattern>
     {
         JavaType? TypedTree.Type => this.Pattern.Type;
-        public Subpattern WithType(JavaType? type) => WithPattern(Pattern.WithType(type));
+        public Subpattern WithType(JavaType? type) => WithPattern((Pattern)Pattern.WithType(type));
     }
     public partial class AliasQualifiedName : Expression<AliasQualifiedName>
     {
@@ -50,7 +52,7 @@ public partial interface Cs
     public new partial class ClassDeclaration : Expression<ClassDeclaration>
     {
         public J.ClassDeclaration.Kind Kind => _kind;
-        JavaType? TypedTree.Type => type;
+        JavaType? TypedTree.Type => Type;
         public ClassDeclaration WithType(JavaType? type) => WithType((JavaType.FullyQualified?)type);
     }
     public new partial class MethodDeclaration : Expression<MethodDeclaration>
@@ -87,7 +89,7 @@ public partial interface Cs
     public partial class CasePatternSwitchLabel : Expression<CasePatternSwitchLabel>
     {
         public JavaType? Type => Pattern.Type;
-        public CasePatternSwitchLabel WithType(JavaType? type) => WithPattern(Pattern.WithType(type));
+        public CasePatternSwitchLabel WithType(JavaType? type) => WithPattern((Pattern)Pattern.WithType(type));
     }
     public new partial class SwitchExpression : Expression<SwitchExpression>
     {
@@ -95,96 +97,99 @@ public partial interface Cs
         public SwitchExpression WithType(JavaType? type) => WithExpression(Expression.WithType(type));
     }
 
-    public partial interface VariableDesignation<T> : VariableDesignation, Expression<T> where T : VariableDesignation
-    {
-        VariableDesignation VariableDesignation.WithType(JavaType? type) => ((TypedTree<T>)this).WithType(type);
-        Expression Expression.WithType(JavaType? type) => ((TypedTree<T>)this).WithType(type);
-    }
+    // public partial interface VariableDesignation<T> : VariableDesignation, Expression<T> where T : VariableDesignation
+    // {
+    //     VariableDesignation VariableDesignation.WithType(JavaType? type) => ((TypedTree<T>)this).WithType(type);
+    //     Expression Expression.WithType(JavaType? type) => ((TypedTree<T>)this).WithType(type);
+    // }
 
-    public partial interface VariableDesignation : Expression
-    {
-        public new VariableDesignation WithType(JavaType? type);
-        Expression Expression.WithType(JavaType? type) => WithType(type);
-    }
-    public partial interface Pattern<T> : Pattern, Expression<T> where T : Pattern
-    {
-        Expression Expression.WithType(JavaType? type) => ((TypedTree<T>)this).WithType(type);
-        Pattern Pattern.WithType(JavaType? type) => ((TypedTree<T>)this).WithType(type);
-    }
-    public partial interface Pattern : Expression
-    {
-        public new Pattern WithType(JavaType? type);
-        Expression Expression.WithType(JavaType? type) => WithType(type);
-    }
+    // public partial interface VariableDesignation : Expression
+    // {
+    //     public new VariableDesignation WithType(JavaType? type);
+    //     Expression Expression.WithType(JavaType? type) => WithType(type);
+    // }
+    // public partial interface Pattern<out T> : Pattern, Expression<T> where T : Pattern
+    // {
+    //     // Expression Expression.WithType(JavaType? type) => ((TypedTree<T>)this).WithType(type);
+    //     // Pattern Pattern.WithType(JavaType? type) => ((TypedTree<T>)this).WithType(type);
+    // }
+    // public partial interface Pattern : Expression
+    // {
+    //     // public new Pattern WithType(JavaType? type);
+    //     // Expression Expression.WithType(JavaType? type) => WithType(type);
+    // }
 
-    public partial class ConstantPattern : Pattern<ConstantPattern>
+    public partial class ConstantPattern
     {
         public JavaType? Type => Value.Type;
         public ConstantPattern WithType(JavaType? type) => WithValue(Value.WithType(type));
 
     }
 
-    public partial class BinaryPattern : Pattern<BinaryPattern>
+    public partial class BinaryPattern
     {
         public JavaType? Type => null;
         public BinaryPattern WithType(JavaType? type) => this;
     }
 
-    public partial class RelationalPattern : Pattern<RelationalPattern>
+    public partial class RelationalPattern
     {
         public JavaType? Type => this.Value.Type;
         public RelationalPattern WithType(JavaType? type) => WithValue(Value.WithType(type));
     }
 
-    public partial class TypePattern : Pattern<TypePattern>
+    public partial class TypePattern
     {
         public JavaType? Type => this.TypeIdentifier.Type;
         public TypePattern WithType(JavaType? type) => WithTypeIdentifier(TypeIdentifier.WithType(type));
     }
 
-    public partial class VarPattern : Pattern<VarPattern>
+    public partial class VarPattern
     {
         public JavaType? Type => this.Designation.Type;
-        public VarPattern WithType(JavaType? type) => this.WithDesignation(Designation.WithType(type));
+        public VarPattern WithType(JavaType? type) => this.WithDesignation((VariableDesignation)Designation.WithType(type));
     }
 
-    public partial class SlicePattern : Pattern<SlicePattern>
+    public partial class SlicePattern
     {
         public JavaType? Type => null;
         public SlicePattern WithType(JavaType? type) => this;
     }
 
-    public partial class RecursivePattern : Pattern<RecursivePattern>
+    public partial class RecursivePattern
     {
         public JavaType? Type => TypeQualifier?.Type;
         public RecursivePattern WithType(JavaType? type) => TypeQualifier != null ? WithTypeQualifier(TypeQualifier.WithType(type)) : this;
     }
 
-    public partial class ListPattern : Pattern<ListPattern>
+    public partial class ListPattern
     {
         public JavaType? Type => Patterns is [{ } singleValue] ? singleValue.Type : null;
         public ListPattern WithType(JavaType? type) => Patterns is [{ } singleValue] ? Padding.WithPatterns(Padding.Patterns.WithElements([singleValue])) : this;
     }
 
-    public partial class ParenthesizedPattern : Pattern<ParenthesizedPattern>
+    public partial class ParenthesizedPattern
     {
         public JavaType? Type => Pattern is [{ } singleValue] ? singleValue.Type : null;
         public ParenthesizedPattern WithType(JavaType? type) => Pattern is [{ } singleValue] ? Padding.WithPattern(Padding.Pattern.WithElements([singleValue])) : this;
     }
 
-    public partial class DiscardPattern : Pattern<DiscardPattern>
+    public partial class DiscardPattern
     {
     }
 
-    public partial class UnaryPattern : Pattern<UnaryPattern>
+    public partial class UnaryPattern
     {
         public JavaType? Type => Pattern.Type;
-        public UnaryPattern WithType(JavaType? type) => WithPattern(Pattern.WithType(type));
+        public UnaryPattern WithType(JavaType? type) => WithPattern((Pattern)Pattern.WithType(type));
     }
     public partial class IsPattern
     {
         public JavaType? Type => Pattern.Type;
-        public IsPattern WithType(JavaType? type) => WithPattern(Pattern.WithType(type));
+        public IsPattern WithType(JavaType? type)
+        {
+            return WithPattern((Pattern)Pattern.WithType(type));
+        }
     }
     public new partial class NewClass
     {
@@ -234,17 +239,17 @@ public partial interface Cs
         public Interpolation WithType(JavaType? type) => WithExpression(Expression.WithType(type));
     }
 
-    public partial class ParenthesizedVariableDesignation : VariableDesignation<ParenthesizedVariableDesignation>
+    public partial class ParenthesizedVariableDesignation : VariableDesignation
     {
     }
 
-    public partial class SingleVariableDesignation : VariableDesignation<SingleVariableDesignation>
+    public partial class SingleVariableDesignation : VariableDesignation
     {
         public JavaType? Type => Name.Type;
         public SingleVariableDesignation WithType(JavaType? type) => WithName(Name.WithType(type));
     }
 
-    public partial class DiscardVariableDesignation : VariableDesignation<DiscardVariableDesignation>
+    public partial class DiscardVariableDesignation : VariableDesignation
     {
         public JavaType? Type => Discard.Type;
         public DiscardVariableDesignation WithType(JavaType? type) => WithDiscard(Discard.WithType(type));

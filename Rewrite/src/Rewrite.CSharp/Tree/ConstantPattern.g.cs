@@ -66,29 +66,29 @@ public partial interface Cs : J
             return v.VisitConstantPattern(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ConstantPattern WithId(Guid newId)
         {
-            return newId == id ? this : new ConstantPattern(newId, prefix, markers, value);
+            return newId == Id ? this : new ConstantPattern(newId, Prefix, Markers, Value);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ConstantPattern WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ConstantPattern(id, newPrefix, markers, value);
+            return newPrefix == Prefix ? this : new ConstantPattern(Id, newPrefix, Markers, Value);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ConstantPattern WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ConstantPattern(id, prefix, newMarkers, value);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ConstantPattern(Id, Prefix, newMarkers, Value);
         }
-        public Expression Value => value;
+        public Expression Value { get;  set; } = value;
 
         public ConstantPattern WithValue(Expression newValue)
         {
-            return ReferenceEquals(newValue, value) ? this : new ConstantPattern(id, prefix, markers, newValue);
+            return ReferenceEquals(newValue, Value) ? this : new ConstantPattern(Id, Prefix, Markers, newValue);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

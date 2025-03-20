@@ -66,50 +66,50 @@ public partial interface Cs : J
             return v.VisitUsingStatement(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public UsingStatement WithId(Guid newId)
         {
-            return newId == id ? this : new UsingStatement(newId, prefix, markers, awaitKeyword, _expression, statement);
+            return newId == Id ? this : new UsingStatement(newId, Prefix, Markers, AwaitKeyword, _expression, Statement);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public UsingStatement WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new UsingStatement(id, newPrefix, markers, awaitKeyword, _expression, statement);
+            return newPrefix == Prefix ? this : new UsingStatement(Id, newPrefix, Markers, AwaitKeyword, _expression, Statement);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public UsingStatement WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new UsingStatement(id, prefix, newMarkers, awaitKeyword, _expression, statement);
+            return ReferenceEquals(newMarkers, Markers) ? this : new UsingStatement(Id, Prefix, newMarkers, AwaitKeyword, _expression, Statement);
         }
-        public Cs.Keyword? AwaitKeyword => awaitKeyword;
+        public Cs.Keyword? AwaitKeyword { get;  set; } = awaitKeyword;
 
         public UsingStatement WithAwaitKeyword(Cs.Keyword? newAwaitKeyword)
         {
-            return ReferenceEquals(newAwaitKeyword, awaitKeyword) ? this : new UsingStatement(id, prefix, markers, newAwaitKeyword, _expression, statement);
+            return ReferenceEquals(newAwaitKeyword, AwaitKeyword) ? this : new UsingStatement(Id, Prefix, Markers, newAwaitKeyword, _expression, Statement);
         }
-        private readonly JLeftPadded<Expression> _expression = expression;
+        private JLeftPadded<Expression> _expression = expression;
         public Expression Expression => _expression.Element;
 
         public UsingStatement WithExpression(Expression newExpression)
         {
             return Padding.WithExpression(_expression.WithElement(newExpression));
         }
-        public Statement Statement => statement;
+        public Statement Statement { get;  set; } = statement;
 
         public UsingStatement WithStatement(Statement newStatement)
         {
-            return ReferenceEquals(newStatement, statement) ? this : new UsingStatement(id, prefix, markers, awaitKeyword, _expression, newStatement);
+            return ReferenceEquals(newStatement, Statement) ? this : new UsingStatement(Id, Prefix, Markers, AwaitKeyword, _expression, newStatement);
         }
         public sealed record PaddingHelper(Cs.UsingStatement T)
         {
-            public JLeftPadded<Expression> Expression => T._expression;
+            public JLeftPadded<Expression> Expression { get => T._expression;  set => T._expression = value; }
 
             public Cs.UsingStatement WithExpression(JLeftPadded<Expression> newExpression)
             {
-                return T._expression == newExpression ? T : new Cs.UsingStatement(T.Id, T.Prefix, T.Markers, T.AwaitKeyword, newExpression, T.Statement);
+                return Expression == newExpression ? T : new Cs.UsingStatement(T.Id, T.Prefix, T.Markers, T.AwaitKeyword, newExpression, T.Statement);
             }
 
         }

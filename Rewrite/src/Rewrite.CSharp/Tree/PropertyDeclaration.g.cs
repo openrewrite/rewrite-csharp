@@ -71,68 +71,68 @@ public partial interface Cs : J
             return v.VisitPropertyDeclaration(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public PropertyDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new PropertyDeclaration(newId, prefix, markers, attributeLists, modifiers, typeExpression, _interfaceSpecifier, name, accessors, expressionBody, _initializer);
+            return newId == Id ? this : new PropertyDeclaration(newId, Prefix, Markers, AttributeLists, Modifiers, TypeExpression, _interfaceSpecifier, Name, Accessors, ExpressionBody, _initializer);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public PropertyDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new PropertyDeclaration(id, newPrefix, markers, attributeLists, modifiers, typeExpression, _interfaceSpecifier, name, accessors, expressionBody, _initializer);
+            return newPrefix == Prefix ? this : new PropertyDeclaration(Id, newPrefix, Markers, AttributeLists, Modifiers, TypeExpression, _interfaceSpecifier, Name, Accessors, ExpressionBody, _initializer);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public PropertyDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new PropertyDeclaration(id, prefix, newMarkers, attributeLists, modifiers, typeExpression, _interfaceSpecifier, name, accessors, expressionBody, _initializer);
+            return ReferenceEquals(newMarkers, Markers) ? this : new PropertyDeclaration(Id, Prefix, newMarkers, AttributeLists, Modifiers, TypeExpression, _interfaceSpecifier, Name, Accessors, ExpressionBody, _initializer);
         }
-        public IList<Cs.AttributeList> AttributeLists => attributeLists;
+        public IList<Cs.AttributeList> AttributeLists { get;  set; } = attributeLists;
 
         public PropertyDeclaration WithAttributeLists(IList<Cs.AttributeList> newAttributeLists)
         {
-            return newAttributeLists == attributeLists ? this : new PropertyDeclaration(id, prefix, markers, newAttributeLists, modifiers, typeExpression, _interfaceSpecifier, name, accessors, expressionBody, _initializer);
+            return newAttributeLists == AttributeLists ? this : new PropertyDeclaration(Id, Prefix, Markers, newAttributeLists, Modifiers, TypeExpression, _interfaceSpecifier, Name, Accessors, ExpressionBody, _initializer);
         }
-        public IList<J.Modifier> Modifiers => modifiers;
+        public IList<J.Modifier> Modifiers { get;  set; } = modifiers;
 
         public PropertyDeclaration WithModifiers(IList<J.Modifier> newModifiers)
         {
-            return newModifiers == modifiers ? this : new PropertyDeclaration(id, prefix, markers, attributeLists, newModifiers, typeExpression, _interfaceSpecifier, name, accessors, expressionBody, _initializer);
+            return newModifiers == Modifiers ? this : new PropertyDeclaration(Id, Prefix, Markers, AttributeLists, newModifiers, TypeExpression, _interfaceSpecifier, Name, Accessors, ExpressionBody, _initializer);
         }
-        public TypeTree TypeExpression => typeExpression;
+        public TypeTree TypeExpression { get;  set; } = typeExpression;
 
         public PropertyDeclaration WithTypeExpression(TypeTree newTypeExpression)
         {
-            return ReferenceEquals(newTypeExpression, typeExpression) ? this : new PropertyDeclaration(id, prefix, markers, attributeLists, modifiers, newTypeExpression, _interfaceSpecifier, name, accessors, expressionBody, _initializer);
+            return ReferenceEquals(newTypeExpression, TypeExpression) ? this : new PropertyDeclaration(Id, Prefix, Markers, AttributeLists, Modifiers, newTypeExpression, _interfaceSpecifier, Name, Accessors, ExpressionBody, _initializer);
         }
-        private readonly JRightPadded<TypeTree>? _interfaceSpecifier = interfaceSpecifier;
+        private JRightPadded<TypeTree>? _interfaceSpecifier = interfaceSpecifier;
         public TypeTree? InterfaceSpecifier => _interfaceSpecifier?.Element;
 
         public PropertyDeclaration WithInterfaceSpecifier(TypeTree? newInterfaceSpecifier)
         {
             return Padding.WithInterfaceSpecifier(JRightPadded<TypeTree>.WithElement(_interfaceSpecifier, newInterfaceSpecifier));
         }
-        public J.Identifier Name => name;
+        public J.Identifier Name { get;  set; } = name;
 
         public PropertyDeclaration WithName(J.Identifier newName)
         {
-            return ReferenceEquals(newName, name) ? this : new PropertyDeclaration(id, prefix, markers, attributeLists, modifiers, typeExpression, _interfaceSpecifier, newName, accessors, expressionBody, _initializer);
+            return ReferenceEquals(newName, Name) ? this : new PropertyDeclaration(Id, Prefix, Markers, AttributeLists, Modifiers, TypeExpression, _interfaceSpecifier, newName, Accessors, ExpressionBody, _initializer);
         }
-        public J.Block? Accessors => accessors;
+        public J.Block? Accessors { get;  set; } = accessors;
 
         public PropertyDeclaration WithAccessors(J.Block? newAccessors)
         {
-            return ReferenceEquals(newAccessors, accessors) ? this : new PropertyDeclaration(id, prefix, markers, attributeLists, modifiers, typeExpression, _interfaceSpecifier, name, newAccessors, expressionBody, _initializer);
+            return ReferenceEquals(newAccessors, Accessors) ? this : new PropertyDeclaration(Id, Prefix, Markers, AttributeLists, Modifiers, TypeExpression, _interfaceSpecifier, Name, newAccessors, ExpressionBody, _initializer);
         }
-        public Cs.ArrowExpressionClause? ExpressionBody => expressionBody;
+        public Cs.ArrowExpressionClause? ExpressionBody { get;  set; } = expressionBody;
 
         public PropertyDeclaration WithExpressionBody(Cs.ArrowExpressionClause? newExpressionBody)
         {
-            return ReferenceEquals(newExpressionBody, expressionBody) ? this : new PropertyDeclaration(id, prefix, markers, attributeLists, modifiers, typeExpression, _interfaceSpecifier, name, accessors, newExpressionBody, _initializer);
+            return ReferenceEquals(newExpressionBody, ExpressionBody) ? this : new PropertyDeclaration(Id, Prefix, Markers, AttributeLists, Modifiers, TypeExpression, _interfaceSpecifier, Name, Accessors, newExpressionBody, _initializer);
         }
-        private readonly JLeftPadded<Expression>? _initializer = initializer;
+        private JLeftPadded<Expression>? _initializer = initializer;
         public Expression? Initializer => _initializer?.Element;
 
         public PropertyDeclaration WithInitializer(Expression? newInitializer)
@@ -141,18 +141,18 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.PropertyDeclaration T)
         {
-            public JRightPadded<TypeTree>? InterfaceSpecifier => T._interfaceSpecifier;
+            public JRightPadded<TypeTree>? InterfaceSpecifier { get => T._interfaceSpecifier;  set => T._interfaceSpecifier = value; }
 
             public Cs.PropertyDeclaration WithInterfaceSpecifier(JRightPadded<TypeTree>? newInterfaceSpecifier)
             {
-                return T._interfaceSpecifier == newInterfaceSpecifier ? T : new Cs.PropertyDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T.TypeExpression, newInterfaceSpecifier, T.Name, T.Accessors, T.ExpressionBody, T._initializer);
+                return InterfaceSpecifier == newInterfaceSpecifier ? T : new Cs.PropertyDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T.TypeExpression, newInterfaceSpecifier, T.Name, T.Accessors, T.ExpressionBody, T._initializer);
             }
 
-            public JLeftPadded<Expression>? Initializer => T._initializer;
+            public JLeftPadded<Expression>? Initializer { get => T._initializer;  set => T._initializer = value; }
 
             public Cs.PropertyDeclaration WithInitializer(JLeftPadded<Expression>? newInitializer)
             {
-                return T._initializer == newInitializer ? T : new Cs.PropertyDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T.TypeExpression, T._interfaceSpecifier, T.Name, T.Accessors, T.ExpressionBody, newInitializer);
+                return Initializer == newInitializer ? T : new Cs.PropertyDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T.TypeExpression, T._interfaceSpecifier, T.Name, T.Accessors, T.ExpressionBody, newInitializer);
             }
 
         }

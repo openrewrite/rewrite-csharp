@@ -64,25 +64,25 @@ public partial interface Cs : J
             return v.VisitArrayRankSpecifier(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ArrayRankSpecifier WithId(Guid newId)
         {
-            return newId == id ? this : new ArrayRankSpecifier(newId, prefix, markers, _sizes);
+            return newId == Id ? this : new ArrayRankSpecifier(newId, Prefix, Markers, _sizes);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ArrayRankSpecifier WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ArrayRankSpecifier(id, newPrefix, markers, _sizes);
+            return newPrefix == Prefix ? this : new ArrayRankSpecifier(Id, newPrefix, Markers, _sizes);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ArrayRankSpecifier WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ArrayRankSpecifier(id, prefix, newMarkers, _sizes);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ArrayRankSpecifier(Id, Prefix, newMarkers, _sizes);
         }
-        private readonly JContainer<Expression> _sizes = sizes;
+        private JContainer<Expression> _sizes = sizes;
         public IList<Expression> Sizes => _sizes.GetElements();
 
         public ArrayRankSpecifier WithSizes(IList<Expression> newSizes)
@@ -91,11 +91,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.ArrayRankSpecifier T)
         {
-            public JContainer<Expression> Sizes => T._sizes;
+            public JContainer<Expression> Sizes { get => T._sizes;  set => T._sizes = value; }
 
             public Cs.ArrayRankSpecifier WithSizes(JContainer<Expression> newSizes)
             {
-                return T._sizes == newSizes ? T : new Cs.ArrayRankSpecifier(T.Id, T.Prefix, T.Markers, newSizes);
+                return Sizes == newSizes ? T : new Cs.ArrayRankSpecifier(T.Id, T.Prefix, T.Markers, newSizes);
             }
 
         }

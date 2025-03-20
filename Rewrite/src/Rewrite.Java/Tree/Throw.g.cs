@@ -38,29 +38,29 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitThrow(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Throw WithId(Guid newId)
         {
-            return newId == id ? this : new Throw(newId, prefix, markers, exception);
+            return newId == Id ? this : new Throw(newId, Prefix, Markers, Exception);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Throw WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Throw(id, newPrefix, markers, exception);
+            return newPrefix == Prefix ? this : new Throw(Id, newPrefix, Markers, Exception);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Throw WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Throw(id, prefix, newMarkers, exception);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Throw(Id, Prefix, newMarkers, Exception);
         }
-        public Expression Exception => exception;
+        public Expression Exception { get;  set; } = exception;
 
         public Throw WithException(Expression newException)
         {
-            return ReferenceEquals(newException, exception) ? this : new Throw(id, prefix, markers, newException);
+            return ReferenceEquals(newException, Exception) ? this : new Throw(Id, Prefix, Markers, newException);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

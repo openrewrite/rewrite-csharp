@@ -64,36 +64,36 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitWildcard(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Wildcard WithId(Guid newId)
         {
-            return newId == id ? this : new Wildcard(newId, prefix, markers, _wildcardBound, boundedType);
+            return newId == Id ? this : new Wildcard(newId, Prefix, Markers, _wildcardBound, BoundedType);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Wildcard WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Wildcard(id, newPrefix, markers, _wildcardBound, boundedType);
+            return newPrefix == Prefix ? this : new Wildcard(Id, newPrefix, Markers, _wildcardBound, BoundedType);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Wildcard WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Wildcard(id, prefix, newMarkers, _wildcardBound, boundedType);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Wildcard(Id, Prefix, newMarkers, _wildcardBound, BoundedType);
         }
-        private readonly JLeftPadded<Bound>? _wildcardBound = wildcardBound;
+        private JLeftPadded<Bound>? _wildcardBound = wildcardBound;
         public Bound? WildcardBound => _wildcardBound?.Element;
 
         public Wildcard WithWildcardBound(Bound? newWildcardBound)
         {
             return Padding.WithWildcardBound(newWildcardBound == null ? null : JLeftPadded<Bound>.WithElement(_wildcardBound, newWildcardBound.Value));
         }
-        public NameTree? BoundedType => boundedType;
+        public NameTree? BoundedType { get;  set; } = boundedType;
 
         public Wildcard WithBoundedType(NameTree? newBoundedType)
         {
-            return ReferenceEquals(newBoundedType, boundedType) ? this : new Wildcard(id, prefix, markers, _wildcardBound, newBoundedType);
+            return ReferenceEquals(newBoundedType, BoundedType) ? this : new Wildcard(Id, Prefix, Markers, _wildcardBound, newBoundedType);
         }
         public enum Bound
         {
@@ -102,11 +102,11 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.Wildcard T)
         {
-            public JLeftPadded<J.Wildcard.Bound>? WildcardBound => T._wildcardBound;
+            public JLeftPadded<J.Wildcard.Bound>? WildcardBound { get => T._wildcardBound;  set => T._wildcardBound = value; }
 
             public J.Wildcard WithWildcardBound(JLeftPadded<J.Wildcard.Bound>? newWildcardBound)
             {
-                return T._wildcardBound == newWildcardBound ? T : new J.Wildcard(T.Id, T.Prefix, T.Markers, newWildcardBound, T.BoundedType);
+                return WildcardBound == newWildcardBound ? T : new J.Wildcard(T.Id, T.Prefix, T.Markers, newWildcardBound, T.BoundedType);
             }
 
         }

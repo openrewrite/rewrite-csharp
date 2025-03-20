@@ -14,8 +14,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     {
     }
 
-    protected void VisitRightPadded<T>(IList<JRightPadded<T>> nodes, JRightPadded.Location location,
-        string suffixBetween, PrintOutputCapture<P> p) where T : J
+    protected virtual void VisitRightPadded<T>(IList<JRightPadded<T>> nodes, JRightPadded.Location location, string suffixBetween, PrintOutputCapture<P> p) where T : J
     {
         for (int i = 0; i < nodes.Count; ++i)
         {
@@ -30,7 +29,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
     }
 
-    public void VisitContainer<T>(string before, JContainer<T>? container, JContainer.Location location,
+    protected virtual void VisitContainer<T>(string before, JContainer<T>? container, JContainer.Location location,
         string suffixBetween, string? after, PrintOutputCapture<P> p) where T : J
     {
         if (container != null)
@@ -60,7 +59,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return space;
     }
 
-    protected void VisitLeftPadded<T>(string? prefix, JLeftPadded<T>? leftPadded, JLeftPadded.Location location,
+    protected virtual void VisitLeftPadded<T>(string? prefix, JLeftPadded<T>? leftPadded, JLeftPadded.Location location,
         PrintOutputCapture<P> p) where T : J
     {
         if (leftPadded != null)
@@ -76,7 +75,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
     }
 
-    protected void VisitRightPadded<T>(JRightPadded<T>? rightPadded, JRightPadded.Location location, string? suffix,
+    protected virtual void VisitRightPadded<T>(JRightPadded<T>? rightPadded, JRightPadded.Location location, string? suffix,
         PrintOutputCapture<P> p) where T : J
     {
         if (rightPadded != null)

@@ -63,35 +63,35 @@ public partial interface Cs : J
             return v.VisitCheckedStatement(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public CheckedStatement WithId(Guid newId)
         {
-            return newId == id ? this : new CheckedStatement(newId, prefix, markers, keyword, block);
+            return newId == Id ? this : new CheckedStatement(newId, Prefix, Markers, Keyword, Block);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public CheckedStatement WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new CheckedStatement(id, newPrefix, markers, keyword, block);
+            return newPrefix == Prefix ? this : new CheckedStatement(Id, newPrefix, Markers, Keyword, Block);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public CheckedStatement WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new CheckedStatement(id, prefix, newMarkers, keyword, block);
+            return ReferenceEquals(newMarkers, Markers) ? this : new CheckedStatement(Id, Prefix, newMarkers, Keyword, Block);
         }
-        public Cs.Keyword Keyword => keyword;
+        public Cs.Keyword Keyword { get;  set; } = keyword;
 
         public CheckedStatement WithKeyword(Cs.Keyword newKeyword)
         {
-            return ReferenceEquals(newKeyword, keyword) ? this : new CheckedStatement(id, prefix, markers, newKeyword, block);
+            return ReferenceEquals(newKeyword, Keyword) ? this : new CheckedStatement(Id, Prefix, Markers, newKeyword, Block);
         }
-        public J.Block Block => block;
+        public J.Block Block { get;  set; } = block;
 
         public CheckedStatement WithBlock(J.Block newBlock)
         {
-            return ReferenceEquals(newBlock, block) ? this : new CheckedStatement(id, prefix, markers, keyword, newBlock);
+            return ReferenceEquals(newBlock, Block) ? this : new CheckedStatement(Id, Prefix, Markers, Keyword, newBlock);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

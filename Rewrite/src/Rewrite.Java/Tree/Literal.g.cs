@@ -41,64 +41,64 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitLiteral(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Literal WithId(Guid newId)
         {
-            return newId == id ? this : new Literal(newId, prefix, markers, value, valueSource, unicodeEscapes, type);
+            return newId == Id ? this : new Literal(newId, Prefix, Markers, Value, ValueSource, UnicodeEscapes, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Literal WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Literal(id, newPrefix, markers, value, valueSource, unicodeEscapes, type);
+            return newPrefix == Prefix ? this : new Literal(Id, newPrefix, Markers, Value, ValueSource, UnicodeEscapes, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Literal WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Literal(id, prefix, newMarkers, value, valueSource, unicodeEscapes, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Literal(Id, Prefix, newMarkers, Value, ValueSource, UnicodeEscapes, Type);
         }
-        public object? Value => value;
+        public object? Value { get;  set; } = value;
 
         public Literal WithValue(object? newValue)
         {
-            return newValue == value ? this : new Literal(id, prefix, markers, newValue, valueSource, unicodeEscapes, type);
+            return newValue == Value ? this : new Literal(Id, Prefix, Markers, newValue, ValueSource, UnicodeEscapes, Type);
         }
-        public string? ValueSource => valueSource;
+        public string? ValueSource { get;  set; } = valueSource;
 
         public Literal WithValueSource(string? newValueSource)
         {
-            return newValueSource == valueSource ? this : new Literal(id, prefix, markers, value, newValueSource, unicodeEscapes, type);
+            return newValueSource == ValueSource ? this : new Literal(Id, Prefix, Markers, Value, newValueSource, UnicodeEscapes, Type);
         }
-        public IList<UnicodeEscape>? UnicodeEscapes => unicodeEscapes;
+        public IList<UnicodeEscape>? UnicodeEscapes { get;  set; } = unicodeEscapes;
 
         public Literal WithUnicodeEscapes(IList<UnicodeEscape>? newUnicodeEscapes)
         {
-            return newUnicodeEscapes == unicodeEscapes ? this : new Literal(id, prefix, markers, value, valueSource, newUnicodeEscapes, type);
+            return newUnicodeEscapes == UnicodeEscapes ? this : new Literal(Id, Prefix, Markers, Value, ValueSource, newUnicodeEscapes, Type);
         }
-        public JavaType.Primitive Type => type;
+        public JavaType.Primitive Type { get;  set; } = type;
 
         public Literal WithType(JavaType.Primitive newType)
         {
-            return newType == type ? this : new Literal(id, prefix, markers, value, valueSource, unicodeEscapes, newType);
+            return newType == Type ? this : new Literal(Id, Prefix, Markers, Value, ValueSource, UnicodeEscapes, newType);
         }
         public sealed record UnicodeEscape(
     int valueSourceIndex,
     string codePoint
         )
         {
-            public int ValueSourceIndex => valueSourceIndex;
+            public int ValueSourceIndex { get;  set; } = valueSourceIndex;
 
             public UnicodeEscape WithValueSourceIndex(int newValueSourceIndex)
             {
-                return newValueSourceIndex == valueSourceIndex ? this : new UnicodeEscape(newValueSourceIndex, codePoint);
+                return newValueSourceIndex == ValueSourceIndex ? this : new UnicodeEscape(newValueSourceIndex, CodePoint);
             }
-            public string CodePoint => codePoint;
+            public string CodePoint { get;  set; } = codePoint;
 
             public UnicodeEscape WithCodePoint(string newCodePoint)
             {
-                return newCodePoint == codePoint ? this : new UnicodeEscape(valueSourceIndex, newCodePoint);
+                return newCodePoint == CodePoint ? this : new UnicodeEscape(ValueSourceIndex, newCodePoint);
             }
         }
         #if DEBUG_VISITOR

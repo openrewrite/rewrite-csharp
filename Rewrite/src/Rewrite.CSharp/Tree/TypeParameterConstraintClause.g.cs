@@ -65,32 +65,32 @@ public partial interface Cs : J
             return v.VisitTypeParameterConstraintClause(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public TypeParameterConstraintClause WithId(Guid newId)
         {
-            return newId == id ? this : new TypeParameterConstraintClause(newId, prefix, markers, _typeParameter, _typeParameterConstraints);
+            return newId == Id ? this : new TypeParameterConstraintClause(newId, Prefix, Markers, _typeParameter, _typeParameterConstraints);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public TypeParameterConstraintClause WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new TypeParameterConstraintClause(id, newPrefix, markers, _typeParameter, _typeParameterConstraints);
+            return newPrefix == Prefix ? this : new TypeParameterConstraintClause(Id, newPrefix, Markers, _typeParameter, _typeParameterConstraints);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public TypeParameterConstraintClause WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new TypeParameterConstraintClause(id, prefix, newMarkers, _typeParameter, _typeParameterConstraints);
+            return ReferenceEquals(newMarkers, Markers) ? this : new TypeParameterConstraintClause(Id, Prefix, newMarkers, _typeParameter, _typeParameterConstraints);
         }
-        private readonly JRightPadded<J.Identifier> _typeParameter = typeParameter;
+        private JRightPadded<J.Identifier> _typeParameter = typeParameter;
         public J.Identifier TypeParameter => _typeParameter.Element;
 
         public TypeParameterConstraintClause WithTypeParameter(J.Identifier newTypeParameter)
         {
             return Padding.WithTypeParameter(_typeParameter.WithElement(newTypeParameter));
         }
-        private readonly JContainer<Cs.TypeParameterConstraint> _typeParameterConstraints = typeParameterConstraints;
+        private JContainer<Cs.TypeParameterConstraint> _typeParameterConstraints = typeParameterConstraints;
         public IList<Cs.TypeParameterConstraint> TypeParameterConstraints => _typeParameterConstraints.GetElements();
 
         public TypeParameterConstraintClause WithTypeParameterConstraints(IList<Cs.TypeParameterConstraint> newTypeParameterConstraints)
@@ -99,18 +99,18 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.TypeParameterConstraintClause T)
         {
-            public JRightPadded<J.Identifier> TypeParameter => T._typeParameter;
+            public JRightPadded<J.Identifier> TypeParameter { get => T._typeParameter;  set => T._typeParameter = value; }
 
             public Cs.TypeParameterConstraintClause WithTypeParameter(JRightPadded<J.Identifier> newTypeParameter)
             {
-                return T._typeParameter == newTypeParameter ? T : new Cs.TypeParameterConstraintClause(T.Id, T.Prefix, T.Markers, newTypeParameter, T._typeParameterConstraints);
+                return TypeParameter == newTypeParameter ? T : new Cs.TypeParameterConstraintClause(T.Id, T.Prefix, T.Markers, newTypeParameter, T._typeParameterConstraints);
             }
 
-            public JContainer<Cs.TypeParameterConstraint> TypeParameterConstraints => T._typeParameterConstraints;
+            public JContainer<Cs.TypeParameterConstraint> TypeParameterConstraints { get => T._typeParameterConstraints;  set => T._typeParameterConstraints = value; }
 
             public Cs.TypeParameterConstraintClause WithTypeParameterConstraints(JContainer<Cs.TypeParameterConstraint> newTypeParameterConstraints)
             {
-                return T._typeParameterConstraints == newTypeParameterConstraints ? T : new Cs.TypeParameterConstraintClause(T.Id, T.Prefix, T.Markers, T._typeParameter, newTypeParameterConstraints);
+                return TypeParameterConstraints == newTypeParameterConstraints ? T : new Cs.TypeParameterConstraintClause(T.Id, T.Prefix, T.Markers, T._typeParameter, newTypeParameterConstraints);
             }
 
         }

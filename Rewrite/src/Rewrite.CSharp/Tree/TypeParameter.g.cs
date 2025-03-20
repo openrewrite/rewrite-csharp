@@ -81,42 +81,42 @@ public partial interface Cs : J
             return v.VisitTypeParameter(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public TypeParameter WithId(Guid newId)
         {
-            return newId == id ? this : new TypeParameter(newId, prefix, markers, attributeLists, _variance, name);
+            return newId == Id ? this : new TypeParameter(newId, Prefix, Markers, AttributeLists, _variance, Name);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public TypeParameter WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new TypeParameter(id, newPrefix, markers, attributeLists, _variance, name);
+            return newPrefix == Prefix ? this : new TypeParameter(Id, newPrefix, Markers, AttributeLists, _variance, Name);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public TypeParameter WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new TypeParameter(id, prefix, newMarkers, attributeLists, _variance, name);
+            return ReferenceEquals(newMarkers, Markers) ? this : new TypeParameter(Id, Prefix, newMarkers, AttributeLists, _variance, Name);
         }
-        public IList<Cs.AttributeList> AttributeLists => attributeLists;
+        public IList<Cs.AttributeList> AttributeLists { get;  set; } = attributeLists;
 
         public TypeParameter WithAttributeLists(IList<Cs.AttributeList> newAttributeLists)
         {
-            return newAttributeLists == attributeLists ? this : new TypeParameter(id, prefix, markers, newAttributeLists, _variance, name);
+            return newAttributeLists == AttributeLists ? this : new TypeParameter(Id, Prefix, Markers, newAttributeLists, _variance, Name);
         }
-        private readonly JLeftPadded<VarianceKind>? _variance = variance;
+        private JLeftPadded<VarianceKind>? _variance = variance;
         public VarianceKind? Variance => _variance?.Element;
 
         public TypeParameter WithVariance(VarianceKind? newVariance)
         {
             return Padding.WithVariance(newVariance == null ? null : JLeftPadded<VarianceKind>.WithElement(_variance, newVariance.Value));
         }
-        public J.Identifier Name => name;
+        public J.Identifier Name { get;  set; } = name;
 
         public TypeParameter WithName(J.Identifier newName)
         {
-            return ReferenceEquals(newName, name) ? this : new TypeParameter(id, prefix, markers, attributeLists, _variance, newName);
+            return ReferenceEquals(newName, Name) ? this : new TypeParameter(Id, Prefix, Markers, AttributeLists, _variance, newName);
         }
         public enum VarianceKind
         {
@@ -125,11 +125,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.TypeParameter T)
         {
-            public JLeftPadded<Cs.TypeParameter.VarianceKind>? Variance => T._variance;
+            public JLeftPadded<Cs.TypeParameter.VarianceKind>? Variance { get => T._variance;  set => T._variance = value; }
 
             public Cs.TypeParameter WithVariance(JLeftPadded<Cs.TypeParameter.VarianceKind>? newVariance)
             {
-                return T._variance == newVariance ? T : new Cs.TypeParameter(T.Id, T.Prefix, T.Markers, T.AttributeLists, newVariance, T.Name);
+                return Variance == newVariance ? T : new Cs.TypeParameter(T.Id, T.Prefix, T.Markers, T.AttributeLists, newVariance, T.Name);
             }
 
         }

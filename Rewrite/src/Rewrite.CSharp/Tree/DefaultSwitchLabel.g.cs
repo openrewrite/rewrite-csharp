@@ -58,29 +58,29 @@ public partial interface Cs : J
             return v.VisitDefaultSwitchLabel(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public DefaultSwitchLabel WithId(Guid newId)
         {
-            return newId == id ? this : new DefaultSwitchLabel(newId, prefix, markers, colonToken);
+            return newId == Id ? this : new DefaultSwitchLabel(newId, Prefix, Markers, ColonToken);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public DefaultSwitchLabel WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new DefaultSwitchLabel(id, newPrefix, markers, colonToken);
+            return newPrefix == Prefix ? this : new DefaultSwitchLabel(Id, newPrefix, Markers, ColonToken);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public DefaultSwitchLabel WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new DefaultSwitchLabel(id, prefix, newMarkers, colonToken);
+            return ReferenceEquals(newMarkers, Markers) ? this : new DefaultSwitchLabel(Id, Prefix, newMarkers, ColonToken);
         }
-        public Space ColonToken => colonToken;
+        public Space ColonToken { get;  set; } = colonToken;
 
         public DefaultSwitchLabel WithColonToken(Space newColonToken)
         {
-            return newColonToken == colonToken ? this : new DefaultSwitchLabel(id, prefix, markers, newColonToken);
+            return newColonToken == ColonToken ? this : new DefaultSwitchLabel(Id, Prefix, Markers, newColonToken);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

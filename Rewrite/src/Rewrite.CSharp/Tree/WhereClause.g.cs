@@ -59,29 +59,29 @@ public partial interface Cs : J
             return v.VisitWhereClause(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public WhereClause WithId(Guid newId)
         {
-            return newId == id ? this : new WhereClause(newId, prefix, markers, condition);
+            return newId == Id ? this : new WhereClause(newId, Prefix, Markers, Condition);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public WhereClause WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new WhereClause(id, newPrefix, markers, condition);
+            return newPrefix == Prefix ? this : new WhereClause(Id, newPrefix, Markers, Condition);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public WhereClause WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new WhereClause(id, prefix, newMarkers, condition);
+            return ReferenceEquals(newMarkers, Markers) ? this : new WhereClause(Id, Prefix, newMarkers, Condition);
         }
-        public Expression Condition => condition;
+        public Expression Condition { get;  set; } = condition;
 
         public WhereClause WithCondition(Expression newCondition)
         {
-            return ReferenceEquals(newCondition, condition) ? this : new WhereClause(id, prefix, markers, newCondition);
+            return ReferenceEquals(newCondition, Condition) ? this : new WhereClause(Id, Prefix, Markers, newCondition);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

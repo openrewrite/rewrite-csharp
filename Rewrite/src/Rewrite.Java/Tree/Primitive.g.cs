@@ -38,29 +38,29 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitPrimitive(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Primitive WithId(Guid newId)
         {
-            return newId == id ? this : new Primitive(newId, prefix, markers, type);
+            return newId == Id ? this : new Primitive(newId, Prefix, Markers, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Primitive WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Primitive(id, newPrefix, markers, type);
+            return newPrefix == Prefix ? this : new Primitive(Id, newPrefix, Markers, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Primitive WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Primitive(id, prefix, newMarkers, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Primitive(Id, Prefix, newMarkers, Type);
         }
-        public JavaType.Primitive Type => type;
+        public JavaType.Primitive Type { get;  set; } = type;
 
         public Primitive WithType(JavaType.Primitive newType)
         {
-            return newType == type ? this : new Primitive(id, prefix, markers, newType);
+            return newType == Type ? this : new Primitive(Id, Prefix, Markers, newType);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

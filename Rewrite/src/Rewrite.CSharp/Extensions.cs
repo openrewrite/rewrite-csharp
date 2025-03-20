@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Rewrite.Core;
+using Rewrite.RewriteCSharp.Tree;
 using Rewrite.RewriteJava.Tree;
 
 namespace Rewrite.RewriteCSharp;
@@ -22,11 +23,35 @@ public static class Extensions
     public static TRoot ReplaceNode<TRoot>(this TRoot root, J oldNode, J newNode)
         where TRoot : Core.Tree
     {
-        var newRoot = new ReplaceVisitor(oldNode, newNode).Visit(root, null);
+        var newRoot = new ReplaceNodeVisitor(oldNode, newNode).Visit(root, null);
         return (TRoot)newRoot!;
     }
 
-    private class ReplaceVisitor(J oldNode, J newNode) : CSharpVisitor<object?>
+
+    private class ReplaceContainerVisitor(J oldNode, J newNode) : CSharpVisitor<object?>
+    {
+        public override JContainer<T>? VisitContainer<T>(JContainer<T>? container, JContainer.Location loc, object? p)
+        {
+            return base.VisitContainer(container, loc, p);
+        }
+
+        protected override JContainer<J2>? VisitContainer<J2>(JContainer<J2>? container, CsContainer.Location loc, object? p)
+        {
+            return base.VisitContainer(container, loc, p);
+        }
+
+        public override J? PreVisit(Core.Tree? tree, object? p)
+        {
+            if (oldNode.Equals(tree))
+            {
+                return newNode;
+            }
+            return base.PreVisit(tree, p);
+        }
+    }
+
+
+    private class ReplaceNodeVisitor(J oldNode, J newNode) : CSharpVisitor<object?>
     {
         public override J? PreVisit(Core.Tree? tree, object? p)
         {
@@ -40,11 +65,11 @@ public static class Extensions
 
     private class SearchVisitor : CSharpVisitor<List<Core.Tree>>
     {
-        public override J? PostVisit(Core.Tree tree, List<Core.Tree> p)
+        public override J? PreVisit(Core.Tree? tree, List<Core.Tree> p)
         {
 
-            p.Add(tree);
-            return base.PostVisit(tree, p);
+            p.Add(tree!);
+            return base.PreVisit(tree!, p);
         }
     }
 }

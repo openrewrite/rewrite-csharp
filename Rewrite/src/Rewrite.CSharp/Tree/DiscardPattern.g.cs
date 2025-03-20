@@ -58,29 +58,29 @@ public partial interface Cs : J
             return v.VisitDiscardPattern(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public DiscardPattern WithId(Guid newId)
         {
-            return newId == id ? this : new DiscardPattern(newId, prefix, markers, type);
+            return newId == Id ? this : new DiscardPattern(newId, Prefix, Markers, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public DiscardPattern WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new DiscardPattern(id, newPrefix, markers, type);
+            return newPrefix == Prefix ? this : new DiscardPattern(Id, newPrefix, Markers, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public DiscardPattern WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new DiscardPattern(id, prefix, newMarkers, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new DiscardPattern(Id, Prefix, newMarkers, Type);
         }
-        public JavaType Type => type;
+        public JavaType Type { get;  set; } = type;
 
         public DiscardPattern WithType(JavaType newType)
         {
-            return newType == type ? this : new DiscardPattern(id, prefix, markers, newType);
+            return newType == Type ? this : new DiscardPattern(Id, Prefix, Markers, newType);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]
