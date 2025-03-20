@@ -81,25 +81,25 @@ public partial interface Cs : J
             return v.VisitNameColon(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public NameColon WithId(Guid newId)
         {
-            return newId == id ? this : new NameColon(newId, prefix, markers, _name);
+            return newId == Id ? this : new NameColon(newId, Prefix, Markers, _name);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public NameColon WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new NameColon(id, newPrefix, markers, _name);
+            return newPrefix == Prefix ? this : new NameColon(Id, newPrefix, Markers, _name);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public NameColon WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new NameColon(id, prefix, newMarkers, _name);
+            return ReferenceEquals(newMarkers, Markers) ? this : new NameColon(Id, Prefix, newMarkers, _name);
         }
-        private readonly JRightPadded<J.Identifier> _name = name;
+        private JRightPadded<J.Identifier> _name = name;
         public J.Identifier Name => _name.Element;
 
         public NameColon WithName(J.Identifier newName)
@@ -108,11 +108,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.NameColon T)
         {
-            public JRightPadded<J.Identifier> Name => T._name;
+            public JRightPadded<J.Identifier> Name { get => T._name;  set => T._name = value; }
 
             public Cs.NameColon WithName(JRightPadded<J.Identifier> newName)
             {
-                return T._name == newName ? T : new Cs.NameColon(T.Id, T.Prefix, T.Markers, newName);
+                return Name == newName ? T : new Cs.NameColon(T.Id, T.Prefix, T.Markers, newName);
             }
 
         }

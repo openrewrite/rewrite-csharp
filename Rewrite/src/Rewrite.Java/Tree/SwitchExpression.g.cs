@@ -40,41 +40,41 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitSwitchExpression(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public SwitchExpression WithId(Guid newId)
         {
-            return newId == id ? this : new SwitchExpression(newId, prefix, markers, selector, cases, type);
+            return newId == Id ? this : new SwitchExpression(newId, Prefix, Markers, Selector, Cases, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public SwitchExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new SwitchExpression(id, newPrefix, markers, selector, cases, type);
+            return newPrefix == Prefix ? this : new SwitchExpression(Id, newPrefix, Markers, Selector, Cases, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public SwitchExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new SwitchExpression(id, prefix, newMarkers, selector, cases, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new SwitchExpression(Id, Prefix, newMarkers, Selector, Cases, Type);
         }
-        public J.ControlParentheses<Expression> Selector => selector;
+        public J.ControlParentheses<Expression> Selector { get;  set; } = selector;
 
         public SwitchExpression WithSelector(J.ControlParentheses<Expression> newSelector)
         {
-            return ReferenceEquals(newSelector, selector) ? this : new SwitchExpression(id, prefix, markers, newSelector, cases, type);
+            return ReferenceEquals(newSelector, Selector) ? this : new SwitchExpression(Id, Prefix, Markers, newSelector, Cases, Type);
         }
-        public J.Block Cases => cases;
+        public J.Block Cases { get;  set; } = cases;
 
         public SwitchExpression WithCases(J.Block newCases)
         {
-            return ReferenceEquals(newCases, cases) ? this : new SwitchExpression(id, prefix, markers, selector, newCases, type);
+            return ReferenceEquals(newCases, Cases) ? this : new SwitchExpression(Id, Prefix, Markers, Selector, newCases, Type);
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public SwitchExpression WithType(JavaType? newType)
         {
-            return newType == type ? this : new SwitchExpression(id, prefix, markers, selector, cases, newType);
+            return newType == Type ? this : new SwitchExpression(Id, Prefix, Markers, Selector, Cases, newType);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

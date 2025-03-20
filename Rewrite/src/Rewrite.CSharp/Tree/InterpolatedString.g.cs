@@ -66,50 +66,50 @@ public partial interface Cs : J
             return v.VisitInterpolatedString(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public InterpolatedString WithId(Guid newId)
         {
-            return newId == id ? this : new InterpolatedString(newId, prefix, markers, start, _parts, end);
+            return newId == Id ? this : new InterpolatedString(newId, Prefix, Markers, Start, _parts, End);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public InterpolatedString WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new InterpolatedString(id, newPrefix, markers, start, _parts, end);
+            return newPrefix == Prefix ? this : new InterpolatedString(Id, newPrefix, Markers, Start, _parts, End);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public InterpolatedString WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new InterpolatedString(id, prefix, newMarkers, start, _parts, end);
+            return ReferenceEquals(newMarkers, Markers) ? this : new InterpolatedString(Id, Prefix, newMarkers, Start, _parts, End);
         }
-        public string Start => start;
+        public string Start { get;  set; } = start;
 
         public InterpolatedString WithStart(string newStart)
         {
-            return newStart == start ? this : new InterpolatedString(id, prefix, markers, newStart, _parts, end);
+            return newStart == Start ? this : new InterpolatedString(Id, Prefix, Markers, newStart, _parts, End);
         }
-        private readonly IList<JRightPadded<Expression>> _parts = parts;
+        private IList<JRightPadded<Expression>> _parts = parts;
         public IList<Expression> Parts => _parts.Elements();
 
         public InterpolatedString WithParts(IList<Expression> newParts)
         {
             return Padding.WithParts(_parts.WithElements(newParts));
         }
-        public string End => end;
+        public string End { get;  set; } = end;
 
         public InterpolatedString WithEnd(string newEnd)
         {
-            return newEnd == end ? this : new InterpolatedString(id, prefix, markers, start, _parts, newEnd);
+            return newEnd == End ? this : new InterpolatedString(Id, Prefix, Markers, Start, _parts, newEnd);
         }
         public sealed record PaddingHelper(Cs.InterpolatedString T)
         {
-            public IList<JRightPadded<Expression>> Parts => T._parts;
+            public IList<JRightPadded<Expression>> Parts { get => T._parts;  set => T._parts = value; }
 
             public Cs.InterpolatedString WithParts(IList<JRightPadded<Expression>> newParts)
             {
-                return T._parts == newParts ? T : new Cs.InterpolatedString(T.Id, T.Prefix, T.Markers, T.Start, newParts, T.End);
+                return Parts == newParts ? T : new Cs.InterpolatedString(T.Id, T.Prefix, T.Markers, T.Start, newParts, T.End);
             }
 
         }

@@ -66,44 +66,44 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitTry(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Try WithId(Guid newId)
         {
-            return newId == id ? this : new Try(newId, prefix, markers, _resources, body, catches, _finally);
+            return newId == Id ? this : new Try(newId, Prefix, Markers, _resources, Body, Catches, _finally);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Try WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Try(id, newPrefix, markers, _resources, body, catches, _finally);
+            return newPrefix == Prefix ? this : new Try(Id, newPrefix, Markers, _resources, Body, Catches, _finally);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Try WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Try(id, prefix, newMarkers, _resources, body, catches, _finally);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Try(Id, Prefix, newMarkers, _resources, Body, Catches, _finally);
         }
-        private readonly JContainer<Resource>? _resources = resources;
+        private JContainer<Resource>? _resources = resources;
         public IList<Resource>? Resources => _resources?.GetElements();
 
         public Try WithResources(IList<Resource>? newResources)
         {
             return Padding.WithResources(JContainer<Resource>.WithElementsNullable(_resources, newResources));
         }
-        public J.Block Body => body;
+        public J.Block Body { get;  set; } = body;
 
         public Try WithBody(J.Block newBody)
         {
-            return ReferenceEquals(newBody, body) ? this : new Try(id, prefix, markers, _resources, newBody, catches, _finally);
+            return ReferenceEquals(newBody, Body) ? this : new Try(Id, Prefix, Markers, _resources, newBody, Catches, _finally);
         }
-        public IList<Catch> Catches => catches;
+        public IList<Catch> Catches { get;  set; } = catches;
 
         public Try WithCatches(IList<Catch> newCatches)
         {
-            return newCatches == catches ? this : new Try(id, prefix, markers, _resources, body, newCatches, _finally);
+            return newCatches == Catches ? this : new Try(Id, Prefix, Markers, _resources, Body, newCatches, _finally);
         }
-        private readonly JLeftPadded<J.Block>? _finally = @finally;
+        private JLeftPadded<J.Block>? _finally = @finally;
         public J.Block? Finally => _finally?.Element;
 
         public Try WithFinally(J.Block? newFinally)
@@ -126,35 +126,35 @@ public partial interface J : Rewrite.Core.Tree
                 return v.VisitTryResource(this, p);
             }
 
-            public Guid Id => id;
+            public Guid Id { get;  set; } = id;
 
             public Resource WithId(Guid newId)
             {
-                return newId == id ? this : new Resource(newId, prefix, markers, variableDeclarations, terminatedWithSemicolon);
+                return newId == Id ? this : new Resource(newId, Prefix, Markers, VariableDeclarations, TerminatedWithSemicolon);
             }
-            public Space Prefix => prefix;
+            public Space Prefix { get;  set; } = prefix;
 
             public Resource WithPrefix(Space newPrefix)
             {
-                return newPrefix == prefix ? this : new Resource(id, newPrefix, markers, variableDeclarations, terminatedWithSemicolon);
+                return newPrefix == Prefix ? this : new Resource(Id, newPrefix, Markers, VariableDeclarations, TerminatedWithSemicolon);
             }
-            public Markers Markers => markers;
+            public Markers Markers { get;  set; } = markers;
 
             public Resource WithMarkers(Markers newMarkers)
             {
-                return ReferenceEquals(newMarkers, markers) ? this : new Resource(id, prefix, newMarkers, variableDeclarations, terminatedWithSemicolon);
+                return ReferenceEquals(newMarkers, Markers) ? this : new Resource(Id, Prefix, newMarkers, VariableDeclarations, TerminatedWithSemicolon);
             }
-            public TypedTree VariableDeclarations => variableDeclarations;
+            public TypedTree VariableDeclarations { get;  set; } = variableDeclarations;
 
             public Resource WithVariableDeclarations(TypedTree newVariableDeclarations)
             {
-                return ReferenceEquals(newVariableDeclarations, variableDeclarations) ? this : new Resource(id, prefix, markers, newVariableDeclarations, terminatedWithSemicolon);
+                return ReferenceEquals(newVariableDeclarations, VariableDeclarations) ? this : new Resource(Id, Prefix, Markers, newVariableDeclarations, TerminatedWithSemicolon);
             }
-            public bool TerminatedWithSemicolon => terminatedWithSemicolon;
+            public bool TerminatedWithSemicolon { get;  set; } = terminatedWithSemicolon;
 
             public Resource WithTerminatedWithSemicolon(bool newTerminatedWithSemicolon)
             {
-                return newTerminatedWithSemicolon == terminatedWithSemicolon ? this : new Resource(id, prefix, markers, variableDeclarations, newTerminatedWithSemicolon);
+                return newTerminatedWithSemicolon == TerminatedWithSemicolon ? this : new Resource(Id, Prefix, Markers, VariableDeclarations, newTerminatedWithSemicolon);
             }
             #if DEBUG_VISITOR
             [DebuggerStepThrough]
@@ -187,35 +187,35 @@ public partial interface J : Rewrite.Core.Tree
                 return v.VisitCatch(this, p);
             }
 
-            public Guid Id => id;
+            public Guid Id { get;  set; } = id;
 
             public Catch WithId(Guid newId)
             {
-                return newId == id ? this : new Catch(newId, prefix, markers, parameter, body);
+                return newId == Id ? this : new Catch(newId, Prefix, Markers, Parameter, Body);
             }
-            public Space Prefix => prefix;
+            public Space Prefix { get;  set; } = prefix;
 
             public Catch WithPrefix(Space newPrefix)
             {
-                return newPrefix == prefix ? this : new Catch(id, newPrefix, markers, parameter, body);
+                return newPrefix == Prefix ? this : new Catch(Id, newPrefix, Markers, Parameter, Body);
             }
-            public Markers Markers => markers;
+            public Markers Markers { get;  set; } = markers;
 
             public Catch WithMarkers(Markers newMarkers)
             {
-                return ReferenceEquals(newMarkers, markers) ? this : new Catch(id, prefix, newMarkers, parameter, body);
+                return ReferenceEquals(newMarkers, Markers) ? this : new Catch(Id, Prefix, newMarkers, Parameter, Body);
             }
-            public J.ControlParentheses<J.VariableDeclarations> Parameter => parameter;
+            public J.ControlParentheses<J.VariableDeclarations> Parameter { get;  set; } = parameter;
 
             public Catch WithParameter(J.ControlParentheses<J.VariableDeclarations> newParameter)
             {
-                return ReferenceEquals(newParameter, parameter) ? this : new Catch(id, prefix, markers, newParameter, body);
+                return ReferenceEquals(newParameter, Parameter) ? this : new Catch(Id, Prefix, Markers, newParameter, Body);
             }
-            public J.Block Body => body;
+            public J.Block Body { get;  set; } = body;
 
             public Catch WithBody(J.Block newBody)
             {
-                return ReferenceEquals(newBody, body) ? this : new Catch(id, prefix, markers, parameter, newBody);
+                return ReferenceEquals(newBody, Body) ? this : new Catch(Id, Prefix, Markers, Parameter, newBody);
             }
             #if DEBUG_VISITOR
             [DebuggerStepThrough]
@@ -234,18 +234,18 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.Try T)
         {
-            public JContainer<J.Try.Resource>? Resources => T._resources;
+            public JContainer<J.Try.Resource>? Resources { get => T._resources;  set => T._resources = value; }
 
             public J.Try WithResources(JContainer<J.Try.Resource>? newResources)
             {
-                return T._resources == newResources ? T : new J.Try(T.Id, T.Prefix, T.Markers, newResources, T.Body, T.Catches, T._finally);
+                return Resources == newResources ? T : new J.Try(T.Id, T.Prefix, T.Markers, newResources, T.Body, T.Catches, T._finally);
             }
 
-            public JLeftPadded<J.Block>? Finally => T._finally;
+            public JLeftPadded<J.Block>? Finally { get => T._finally;  set => T._finally = value; }
 
             public J.Try WithFinally(JLeftPadded<J.Block>? newFinally)
             {
-                return T._finally == newFinally ? T : new J.Try(T.Id, T.Prefix, T.Markers, T._resources, T.Body, T.Catches, newFinally);
+                return Finally == newFinally ? T : new J.Try(T.Id, T.Prefix, T.Markers, T._resources, T.Body, T.Catches, newFinally);
             }
 
         }

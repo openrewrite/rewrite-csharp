@@ -68,86 +68,86 @@ public partial interface Cs : J
             return v.VisitBlockScopeNamespaceDeclaration(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public BlockScopeNamespaceDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new BlockScopeNamespaceDeclaration(newId, prefix, markers, _name, _externs, _usings, _members, end);
+            return newId == Id ? this : new BlockScopeNamespaceDeclaration(newId, Prefix, Markers, _name, _externs, _usings, _members, End);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public BlockScopeNamespaceDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new BlockScopeNamespaceDeclaration(id, newPrefix, markers, _name, _externs, _usings, _members, end);
+            return newPrefix == Prefix ? this : new BlockScopeNamespaceDeclaration(Id, newPrefix, Markers, _name, _externs, _usings, _members, End);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public BlockScopeNamespaceDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new BlockScopeNamespaceDeclaration(id, prefix, newMarkers, _name, _externs, _usings, _members, end);
+            return ReferenceEquals(newMarkers, Markers) ? this : new BlockScopeNamespaceDeclaration(Id, Prefix, newMarkers, _name, _externs, _usings, _members, End);
         }
-        private readonly JRightPadded<Expression> _name = name;
+        private JRightPadded<Expression> _name = name;
         public Expression Name => _name.Element;
 
         public BlockScopeNamespaceDeclaration WithName(Expression newName)
         {
             return Padding.WithName(_name.WithElement(newName));
         }
-        private readonly IList<JRightPadded<Cs.ExternAlias>> _externs = externs;
+        private IList<JRightPadded<Cs.ExternAlias>> _externs = externs;
         public IList<Cs.ExternAlias> Externs => _externs.Elements();
 
         public BlockScopeNamespaceDeclaration WithExterns(IList<Cs.ExternAlias> newExterns)
         {
             return Padding.WithExterns(_externs.WithElements(newExterns));
         }
-        private readonly IList<JRightPadded<Cs.UsingDirective>> _usings = usings;
+        private IList<JRightPadded<Cs.UsingDirective>> _usings = usings;
         public IList<Cs.UsingDirective> Usings => _usings.Elements();
 
         public BlockScopeNamespaceDeclaration WithUsings(IList<Cs.UsingDirective> newUsings)
         {
             return Padding.WithUsings(_usings.WithElements(newUsings));
         }
-        private readonly IList<JRightPadded<Statement>> _members = members;
+        private IList<JRightPadded<Statement>> _members = members;
         public IList<Statement> Members => _members.Elements();
 
         public BlockScopeNamespaceDeclaration WithMembers(IList<Statement> newMembers)
         {
             return Padding.WithMembers(_members.WithElements(newMembers));
         }
-        public Space End => end;
+        public Space End { get;  set; } = end;
 
         public BlockScopeNamespaceDeclaration WithEnd(Space newEnd)
         {
-            return newEnd == end ? this : new BlockScopeNamespaceDeclaration(id, prefix, markers, _name, _externs, _usings, _members, newEnd);
+            return newEnd == End ? this : new BlockScopeNamespaceDeclaration(Id, Prefix, Markers, _name, _externs, _usings, _members, newEnd);
         }
         public sealed record PaddingHelper(Cs.BlockScopeNamespaceDeclaration T)
         {
-            public JRightPadded<Expression> Name => T._name;
+            public JRightPadded<Expression> Name { get => T._name;  set => T._name = value; }
 
             public Cs.BlockScopeNamespaceDeclaration WithName(JRightPadded<Expression> newName)
             {
-                return T._name == newName ? T : new Cs.BlockScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, newName, T._externs, T._usings, T._members, T.End);
+                return Name == newName ? T : new Cs.BlockScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, newName, T._externs, T._usings, T._members, T.End);
             }
 
-            public IList<JRightPadded<Cs.ExternAlias>> Externs => T._externs;
+            public IList<JRightPadded<Cs.ExternAlias>> Externs { get => T._externs;  set => T._externs = value; }
 
             public Cs.BlockScopeNamespaceDeclaration WithExterns(IList<JRightPadded<Cs.ExternAlias>> newExterns)
             {
-                return T._externs == newExterns ? T : new Cs.BlockScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, newExterns, T._usings, T._members, T.End);
+                return Externs == newExterns ? T : new Cs.BlockScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, newExterns, T._usings, T._members, T.End);
             }
 
-            public IList<JRightPadded<Cs.UsingDirective>> Usings => T._usings;
+            public IList<JRightPadded<Cs.UsingDirective>> Usings { get => T._usings;  set => T._usings = value; }
 
             public Cs.BlockScopeNamespaceDeclaration WithUsings(IList<JRightPadded<Cs.UsingDirective>> newUsings)
             {
-                return T._usings == newUsings ? T : new Cs.BlockScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, T._externs, newUsings, T._members, T.End);
+                return Usings == newUsings ? T : new Cs.BlockScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, T._externs, newUsings, T._members, T.End);
             }
 
-            public IList<JRightPadded<Statement>> Members => T._members;
+            public IList<JRightPadded<Statement>> Members { get => T._members;  set => T._members = value; }
 
             public Cs.BlockScopeNamespaceDeclaration WithMembers(IList<JRightPadded<Statement>> newMembers)
             {
-                return T._members == newMembers ? T : new Cs.BlockScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, T._externs, T._usings, newMembers, T.End);
+                return Members == newMembers ? T : new Cs.BlockScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, T._externs, T._usings, newMembers, T.End);
             }
 
         }

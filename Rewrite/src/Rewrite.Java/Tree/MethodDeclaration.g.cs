@@ -97,169 +97,169 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitMethodDeclaration(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public MethodDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new MethodDeclaration(newId, prefix, markers, leadingAnnotations, modifiers, _typeParameters, returnTypeExpression, _name, _parameters, _throws, body, _defaultValue, methodType);
+            return newId == Id ? this : new MethodDeclaration(newId, Prefix, Markers, LeadingAnnotations, Modifiers, _typeParameters, ReturnTypeExpression, _name, _parameters, _throws, Body, _defaultValue, MethodType);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public MethodDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new MethodDeclaration(id, newPrefix, markers, leadingAnnotations, modifiers, _typeParameters, returnTypeExpression, _name, _parameters, _throws, body, _defaultValue, methodType);
+            return newPrefix == Prefix ? this : new MethodDeclaration(Id, newPrefix, Markers, LeadingAnnotations, Modifiers, _typeParameters, ReturnTypeExpression, _name, _parameters, _throws, Body, _defaultValue, MethodType);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public MethodDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new MethodDeclaration(id, prefix, newMarkers, leadingAnnotations, modifiers, _typeParameters, returnTypeExpression, _name, _parameters, _throws, body, _defaultValue, methodType);
+            return ReferenceEquals(newMarkers, Markers) ? this : new MethodDeclaration(Id, Prefix, newMarkers, LeadingAnnotations, Modifiers, _typeParameters, ReturnTypeExpression, _name, _parameters, _throws, Body, _defaultValue, MethodType);
         }
-        public IList<J.Annotation> LeadingAnnotations => leadingAnnotations;
+        public IList<J.Annotation> LeadingAnnotations { get;  set; } = leadingAnnotations;
 
         public MethodDeclaration WithLeadingAnnotations(IList<J.Annotation> newLeadingAnnotations)
         {
-            return newLeadingAnnotations == leadingAnnotations ? this : new MethodDeclaration(id, prefix, markers, newLeadingAnnotations, modifiers, _typeParameters, returnTypeExpression, _name, _parameters, _throws, body, _defaultValue, methodType);
+            return newLeadingAnnotations == LeadingAnnotations ? this : new MethodDeclaration(Id, Prefix, Markers, newLeadingAnnotations, Modifiers, _typeParameters, ReturnTypeExpression, _name, _parameters, _throws, Body, _defaultValue, MethodType);
         }
-        public IList<J.Modifier> Modifiers => modifiers;
+        public IList<J.Modifier> Modifiers { get;  set; } = modifiers;
 
         public MethodDeclaration WithModifiers(IList<J.Modifier> newModifiers)
         {
-            return newModifiers == modifiers ? this : new MethodDeclaration(id, prefix, markers, leadingAnnotations, newModifiers, _typeParameters, returnTypeExpression, _name, _parameters, _throws, body, _defaultValue, methodType);
+            return newModifiers == Modifiers ? this : new MethodDeclaration(Id, Prefix, Markers, LeadingAnnotations, newModifiers, _typeParameters, ReturnTypeExpression, _name, _parameters, _throws, Body, _defaultValue, MethodType);
         }
-        private readonly J.TypeParameters? _typeParameters = typeParameters;
-        public TypeTree? ReturnTypeExpression => returnTypeExpression;
+        private J.TypeParameters? _typeParameters = typeParameters;
+        public TypeTree? ReturnTypeExpression { get;  set; } = returnTypeExpression;
 
         public MethodDeclaration WithReturnTypeExpression(TypeTree? newReturnTypeExpression)
         {
-            return ReferenceEquals(newReturnTypeExpression, returnTypeExpression) ? this : new MethodDeclaration(id, prefix, markers, leadingAnnotations, modifiers, _typeParameters, newReturnTypeExpression, _name, _parameters, _throws, body, _defaultValue, methodType);
+            return ReferenceEquals(newReturnTypeExpression, ReturnTypeExpression) ? this : new MethodDeclaration(Id, Prefix, Markers, LeadingAnnotations, Modifiers, _typeParameters, newReturnTypeExpression, _name, _parameters, _throws, Body, _defaultValue, MethodType);
         }
-        private readonly IdentifierWithAnnotations _name = name;
-        private readonly JContainer<Statement> _parameters = parameters;
+        private IdentifierWithAnnotations _name = name;
+        private JContainer<Statement> _parameters = parameters;
         public IList<Statement> Parameters => _parameters.GetElements();
 
         public MethodDeclaration WithParameters(IList<Statement> newParameters)
         {
             return Padding.WithParameters(JContainer<Statement>.WithElements(_parameters, newParameters));
         }
-        private readonly JContainer<NameTree>? _throws = throws;
+        private JContainer<NameTree>? _throws = throws;
         public IList<NameTree>? Throws => _throws?.GetElements();
 
         public MethodDeclaration WithThrows(IList<NameTree>? newThrows)
         {
             return Padding.WithThrows(JContainer<NameTree>.WithElementsNullable(_throws, newThrows));
         }
-        public J.Block? Body => body;
+        public J.Block? Body { get;  set; } = body;
 
         public MethodDeclaration WithBody(J.Block? newBody)
         {
-            return ReferenceEquals(newBody, body) ? this : new MethodDeclaration(id, prefix, markers, leadingAnnotations, modifiers, _typeParameters, returnTypeExpression, _name, _parameters, _throws, newBody, _defaultValue, methodType);
+            return ReferenceEquals(newBody, Body) ? this : new MethodDeclaration(Id, Prefix, Markers, LeadingAnnotations, Modifiers, _typeParameters, ReturnTypeExpression, _name, _parameters, _throws, newBody, _defaultValue, MethodType);
         }
-        private readonly JLeftPadded<Expression>? _defaultValue = defaultValue;
+        private JLeftPadded<Expression>? _defaultValue = defaultValue;
         public Expression? DefaultValue => _defaultValue?.Element;
 
         public MethodDeclaration WithDefaultValue(Expression? newDefaultValue)
         {
             return Padding.WithDefaultValue(JLeftPadded<Expression>.WithElement(_defaultValue, newDefaultValue));
         }
-        public JavaType.Method? MethodType => methodType;
+        public JavaType.Method? MethodType { get;  set; } = methodType;
 
         public MethodDeclaration WithMethodType(JavaType.Method? newMethodType)
         {
-            return newMethodType == methodType ? this : new MethodDeclaration(id, prefix, markers, leadingAnnotations, modifiers, _typeParameters, returnTypeExpression, _name, _parameters, _throws, body, _defaultValue, newMethodType);
+            return newMethodType == MethodType ? this : new MethodDeclaration(Id, Prefix, Markers, LeadingAnnotations, Modifiers, _typeParameters, ReturnTypeExpression, _name, _parameters, _throws, Body, _defaultValue, newMethodType);
         }
         public sealed record IdentifierWithAnnotations(
     J.Identifier identifier,
     IList<J.Annotation> annotations
         )
         {
-            public J.Identifier Identifier => identifier;
+            public J.Identifier Identifier { get;  set; } = identifier;
 
             public IdentifierWithAnnotations WithIdentifier(J.Identifier newIdentifier)
             {
-                return ReferenceEquals(newIdentifier, identifier) ? this : new IdentifierWithAnnotations(newIdentifier, annotations);
+                return ReferenceEquals(newIdentifier, Identifier) ? this : new IdentifierWithAnnotations(newIdentifier, Annotations);
             }
-            public IList<J.Annotation> Annotations => annotations;
+            public IList<J.Annotation> Annotations { get;  set; } = annotations;
 
             public IdentifierWithAnnotations WithAnnotations(IList<J.Annotation> newAnnotations)
             {
-                return newAnnotations == annotations ? this : new IdentifierWithAnnotations(identifier, newAnnotations);
+                return newAnnotations == Annotations ? this : new IdentifierWithAnnotations(Identifier, newAnnotations);
             }
         }
         public sealed record PaddingHelper(J.MethodDeclaration T)
         {
-            public J.TypeParameters? TypeParameters => T._typeParameters;
+            public J.TypeParameters? TypeParameters { get => T._typeParameters;  set => T._typeParameters = value; }
 
             public J.MethodDeclaration WithTypeParameters(J.TypeParameters? newTypeParameters)
             {
-                return T._typeParameters == newTypeParameters ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, newTypeParameters, T.ReturnTypeExpression, T._name, T._parameters, T._throws, T.Body, T._defaultValue, T.MethodType);
+                return TypeParameters == newTypeParameters ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, newTypeParameters, T.ReturnTypeExpression, T._name, T._parameters, T._throws, T.Body, T._defaultValue, T.MethodType);
             }
 
-            public J.MethodDeclaration.IdentifierWithAnnotations Name => T._name;
+            public J.MethodDeclaration.IdentifierWithAnnotations Name { get => T._name;  set => T._name = value; }
 
             public J.MethodDeclaration WithName(J.MethodDeclaration.IdentifierWithAnnotations newName)
             {
-                return T._name == newName ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, newName, T._parameters, T._throws, T.Body, T._defaultValue, T.MethodType);
+                return Name == newName ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, newName, T._parameters, T._throws, T.Body, T._defaultValue, T.MethodType);
             }
 
-            public JContainer<Statement> Parameters => T._parameters;
+            public JContainer<Statement> Parameters { get => T._parameters;  set => T._parameters = value; }
 
             public J.MethodDeclaration WithParameters(JContainer<Statement> newParameters)
             {
-                return T._parameters == newParameters ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, T._name, newParameters, T._throws, T.Body, T._defaultValue, T.MethodType);
+                return Parameters == newParameters ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, T._name, newParameters, T._throws, T.Body, T._defaultValue, T.MethodType);
             }
 
-            public JContainer<NameTree>? Throws => T._throws;
+            public JContainer<NameTree>? Throws { get => T._throws;  set => T._throws = value; }
 
             public J.MethodDeclaration WithThrows(JContainer<NameTree>? newThrows)
             {
-                return T._throws == newThrows ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, T._name, T._parameters, newThrows, T.Body, T._defaultValue, T.MethodType);
+                return Throws == newThrows ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, T._name, T._parameters, newThrows, T.Body, T._defaultValue, T.MethodType);
             }
 
-            public JLeftPadded<Expression>? DefaultValue => T._defaultValue;
+            public JLeftPadded<Expression>? DefaultValue { get => T._defaultValue;  set => T._defaultValue = value; }
 
             public J.MethodDeclaration WithDefaultValue(JLeftPadded<Expression>? newDefaultValue)
             {
-                return T._defaultValue == newDefaultValue ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, T._name, T._parameters, T._throws, T.Body, newDefaultValue, T.MethodType);
+                return DefaultValue == newDefaultValue ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, T._name, T._parameters, T._throws, T.Body, newDefaultValue, T.MethodType);
             }
 
         }
 
         public sealed record AnnotationsHelper(J.MethodDeclaration T)
         {
-            public J.TypeParameters? TypeParameters => T._typeParameters;
+            public J.TypeParameters? TypeParameters { get => T._typeParameters;  set => T._typeParameters = value; }
 
             public J.MethodDeclaration WithTypeParameters(J.TypeParameters? newTypeParameters)
             {
-                return T._typeParameters == newTypeParameters ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, newTypeParameters, T.ReturnTypeExpression, T._name, T._parameters, T._throws, T.Body, T._defaultValue, T.MethodType);
+                return TypeParameters == newTypeParameters ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, newTypeParameters, T.ReturnTypeExpression, T._name, T._parameters, T._throws, T.Body, T._defaultValue, T.MethodType);
             }
 
-            public J.MethodDeclaration.IdentifierWithAnnotations Name => T._name;
+            public J.MethodDeclaration.IdentifierWithAnnotations Name { get => T._name;  set => T._name = value; }
 
             public J.MethodDeclaration WithName(J.MethodDeclaration.IdentifierWithAnnotations newName)
             {
-                return T._name == newName ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, newName, T._parameters, T._throws, T.Body, T._defaultValue, T.MethodType);
+                return Name == newName ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, newName, T._parameters, T._throws, T.Body, T._defaultValue, T.MethodType);
             }
 
-            public JContainer<Statement> Parameters => T._parameters;
+            public JContainer<Statement> Parameters { get => T._parameters;  set => T._parameters = value; }
 
             public J.MethodDeclaration WithParameters(JContainer<Statement> newParameters)
             {
-                return T._parameters == newParameters ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, T._name, newParameters, T._throws, T.Body, T._defaultValue, T.MethodType);
+                return Parameters == newParameters ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, T._name, newParameters, T._throws, T.Body, T._defaultValue, T.MethodType);
             }
 
-            public JContainer<NameTree>? Throws => T._throws;
+            public JContainer<NameTree>? Throws { get => T._throws;  set => T._throws = value; }
 
             public J.MethodDeclaration WithThrows(JContainer<NameTree>? newThrows)
             {
-                return T._throws == newThrows ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, T._name, T._parameters, newThrows, T.Body, T._defaultValue, T.MethodType);
+                return Throws == newThrows ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, T._name, T._parameters, newThrows, T.Body, T._defaultValue, T.MethodType);
             }
 
-            public JLeftPadded<Expression>? DefaultValue => T._defaultValue;
+            public JLeftPadded<Expression>? DefaultValue { get => T._defaultValue;  set => T._defaultValue = value; }
 
             public J.MethodDeclaration WithDefaultValue(JLeftPadded<Expression>? newDefaultValue)
             {
-                return T._defaultValue == newDefaultValue ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, T._name, T._parameters, T._throws, T.Body, newDefaultValue, T.MethodType);
+                return DefaultValue == newDefaultValue ? T : new J.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, T._name, T._parameters, T._throws, T.Body, newDefaultValue, T.MethodType);
             }
 
         }

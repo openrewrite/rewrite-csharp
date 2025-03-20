@@ -66,50 +66,50 @@ public partial interface Cs : J
             return v.VisitArgument(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Argument WithId(Guid newId)
         {
-            return newId == id ? this : new Argument(newId, prefix, markers, _nameColumn, refKindKeyword, expression);
+            return newId == Id ? this : new Argument(newId, Prefix, Markers, _nameColumn, RefKindKeyword, Expression);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Argument WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Argument(id, newPrefix, markers, _nameColumn, refKindKeyword, expression);
+            return newPrefix == Prefix ? this : new Argument(Id, newPrefix, Markers, _nameColumn, RefKindKeyword, Expression);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Argument WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Argument(id, prefix, newMarkers, _nameColumn, refKindKeyword, expression);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Argument(Id, Prefix, newMarkers, _nameColumn, RefKindKeyword, Expression);
         }
-        private readonly JRightPadded<J.Identifier>? _nameColumn = nameColumn;
+        private JRightPadded<J.Identifier>? _nameColumn = nameColumn;
         public J.Identifier? NameColumn => _nameColumn?.Element;
 
         public Argument WithNameColumn(J.Identifier? newNameColumn)
         {
             return Padding.WithNameColumn(JRightPadded<J.Identifier>.WithElement(_nameColumn, newNameColumn));
         }
-        public Cs.Keyword? RefKindKeyword => refKindKeyword;
+        public Cs.Keyword? RefKindKeyword { get;  set; } = refKindKeyword;
 
         public Argument WithRefKindKeyword(Cs.Keyword? newRefKindKeyword)
         {
-            return ReferenceEquals(newRefKindKeyword, refKindKeyword) ? this : new Argument(id, prefix, markers, _nameColumn, newRefKindKeyword, expression);
+            return ReferenceEquals(newRefKindKeyword, RefKindKeyword) ? this : new Argument(Id, Prefix, Markers, _nameColumn, newRefKindKeyword, Expression);
         }
-        public Expression Expression => expression;
+        public Expression Expression { get;  set; } = expression;
 
         public Argument WithExpression(Expression newExpression)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new Argument(id, prefix, markers, _nameColumn, refKindKeyword, newExpression);
+            return ReferenceEquals(newExpression, Expression) ? this : new Argument(Id, Prefix, Markers, _nameColumn, RefKindKeyword, newExpression);
         }
         public sealed record PaddingHelper(Cs.Argument T)
         {
-            public JRightPadded<J.Identifier>? NameColumn => T._nameColumn;
+            public JRightPadded<J.Identifier>? NameColumn { get => T._nameColumn;  set => T._nameColumn = value; }
 
             public Cs.Argument WithNameColumn(JRightPadded<J.Identifier>? newNameColumn)
             {
-                return T._nameColumn == newNameColumn ? T : new Cs.Argument(T.Id, T.Prefix, T.Markers, newNameColumn, T.RefKindKeyword, T.Expression);
+                return NameColumn == newNameColumn ? T : new Cs.Argument(T.Id, T.Prefix, T.Markers, newNameColumn, T.RefKindKeyword, T.Expression);
             }
 
         }

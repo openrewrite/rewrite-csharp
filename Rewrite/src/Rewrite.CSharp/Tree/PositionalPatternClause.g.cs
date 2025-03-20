@@ -83,25 +83,25 @@ public partial interface Cs : J
             return v.VisitPositionalPatternClause(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public PositionalPatternClause WithId(Guid newId)
         {
-            return newId == id ? this : new PositionalPatternClause(newId, prefix, markers, _subpatterns);
+            return newId == Id ? this : new PositionalPatternClause(newId, Prefix, Markers, _subpatterns);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public PositionalPatternClause WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new PositionalPatternClause(id, newPrefix, markers, _subpatterns);
+            return newPrefix == Prefix ? this : new PositionalPatternClause(Id, newPrefix, Markers, _subpatterns);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public PositionalPatternClause WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new PositionalPatternClause(id, prefix, newMarkers, _subpatterns);
+            return ReferenceEquals(newMarkers, Markers) ? this : new PositionalPatternClause(Id, Prefix, newMarkers, _subpatterns);
         }
-        private readonly JContainer<Cs.Subpattern> _subpatterns = subpatterns;
+        private JContainer<Cs.Subpattern> _subpatterns = subpatterns;
         public IList<Cs.Subpattern> Subpatterns => _subpatterns.GetElements();
 
         public PositionalPatternClause WithSubpatterns(IList<Cs.Subpattern> newSubpatterns)
@@ -110,11 +110,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.PositionalPatternClause T)
         {
-            public JContainer<Cs.Subpattern> Subpatterns => T._subpatterns;
+            public JContainer<Cs.Subpattern> Subpatterns { get => T._subpatterns;  set => T._subpatterns = value; }
 
             public Cs.PositionalPatternClause WithSubpatterns(JContainer<Cs.Subpattern> newSubpatterns)
             {
-                return T._subpatterns == newSubpatterns ? T : new Cs.PositionalPatternClause(T.Id, T.Prefix, T.Markers, newSubpatterns);
+                return Subpatterns == newSubpatterns ? T : new Cs.PositionalPatternClause(T.Id, T.Prefix, T.Markers, newSubpatterns);
             }
 
         }

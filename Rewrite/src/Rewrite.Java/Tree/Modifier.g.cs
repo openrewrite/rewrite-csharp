@@ -40,41 +40,41 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitModifier(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Modifier WithId(Guid newId)
         {
-            return newId == id ? this : new Modifier(newId, prefix, markers, keyword, modifierType, annotations);
+            return newId == Id ? this : new Modifier(newId, Prefix, Markers, Keyword, ModifierType, Annotations);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Modifier WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Modifier(id, newPrefix, markers, keyword, modifierType, annotations);
+            return newPrefix == Prefix ? this : new Modifier(Id, newPrefix, Markers, Keyword, ModifierType, Annotations);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Modifier WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Modifier(id, prefix, newMarkers, keyword, modifierType, annotations);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Modifier(Id, Prefix, newMarkers, Keyword, ModifierType, Annotations);
         }
-        public string? Keyword => keyword;
+        public string? Keyword { get;  set; } = keyword;
 
         public Modifier WithKeyword(string? newKeyword)
         {
-            return newKeyword == keyword ? this : new Modifier(id, prefix, markers, newKeyword, modifierType, annotations);
+            return newKeyword == Keyword ? this : new Modifier(Id, Prefix, Markers, newKeyword, ModifierType, Annotations);
         }
-        public Types ModifierType => modifierType;
+        public Types ModifierType { get;  set; } = modifierType;
 
         public Modifier WithModifierType(Types newModifierType)
         {
-            return newModifierType == modifierType ? this : new Modifier(id, prefix, markers, keyword, newModifierType, annotations);
+            return newModifierType == ModifierType ? this : new Modifier(Id, Prefix, Markers, Keyword, newModifierType, Annotations);
         }
-        public IList<J.Annotation> Annotations => annotations;
+        public IList<J.Annotation> Annotations { get;  set; } = annotations;
 
         public Modifier WithAnnotations(IList<J.Annotation> newAnnotations)
         {
-            return newAnnotations == annotations ? this : new Modifier(id, prefix, markers, keyword, modifierType, newAnnotations);
+            return newAnnotations == Annotations ? this : new Modifier(Id, Prefix, Markers, Keyword, ModifierType, newAnnotations);
         }
         public enum Types
         {

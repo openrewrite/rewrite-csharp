@@ -56,35 +56,35 @@ public partial interface Cs : J
             return v.VisitConstructor(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Constructor WithId(Guid newId)
         {
-            return newId == id ? this : new Constructor(newId, prefix, markers, initializer, constructorCore);
+            return newId == Id ? this : new Constructor(newId, Prefix, Markers, Initializer, ConstructorCore);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Constructor WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Constructor(id, newPrefix, markers, initializer, constructorCore);
+            return newPrefix == Prefix ? this : new Constructor(Id, newPrefix, Markers, Initializer, ConstructorCore);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Constructor WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Constructor(id, prefix, newMarkers, initializer, constructorCore);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Constructor(Id, Prefix, newMarkers, Initializer, ConstructorCore);
         }
-        public Cs.ConstructorInitializer? Initializer => initializer;
+        public Cs.ConstructorInitializer? Initializer { get;  set; } = initializer;
 
         public Constructor WithInitializer(Cs.ConstructorInitializer? newInitializer)
         {
-            return ReferenceEquals(newInitializer, initializer) ? this : new Constructor(id, prefix, markers, newInitializer, constructorCore);
+            return ReferenceEquals(newInitializer, Initializer) ? this : new Constructor(Id, Prefix, Markers, newInitializer, ConstructorCore);
         }
-        public J.MethodDeclaration ConstructorCore => constructorCore;
+        public J.MethodDeclaration ConstructorCore { get;  set; } = constructorCore;
 
         public Constructor WithConstructorCore(J.MethodDeclaration newConstructorCore)
         {
-            return ReferenceEquals(newConstructorCore, constructorCore) ? this : new Constructor(id, prefix, markers, initializer, newConstructorCore);
+            return ReferenceEquals(newConstructorCore, ConstructorCore) ? this : new Constructor(Id, Prefix, Markers, Initializer, newConstructorCore);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

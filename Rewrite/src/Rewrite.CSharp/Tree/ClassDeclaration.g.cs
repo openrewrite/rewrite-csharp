@@ -74,137 +74,137 @@ public partial interface Cs : J
             return v.VisitClassDeclaration(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ClassDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new ClassDeclaration(newId, prefix, markers, attributeList, modifiers, _kind, name, _typeParameters, _primaryConstructor, _extendings, _implementings, body, _typeParameterConstraintClauses, type);
+            return newId == Id ? this : new ClassDeclaration(newId, Prefix, Markers, AttributeList, Modifiers, _kind, Name, _typeParameters, _primaryConstructor, _extendings, _implementings, Body, _typeParameterConstraintClauses, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ClassDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ClassDeclaration(id, newPrefix, markers, attributeList, modifiers, _kind, name, _typeParameters, _primaryConstructor, _extendings, _implementings, body, _typeParameterConstraintClauses, type);
+            return newPrefix == Prefix ? this : new ClassDeclaration(Id, newPrefix, Markers, AttributeList, Modifiers, _kind, Name, _typeParameters, _primaryConstructor, _extendings, _implementings, Body, _typeParameterConstraintClauses, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ClassDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ClassDeclaration(id, prefix, newMarkers, attributeList, modifiers, _kind, name, _typeParameters, _primaryConstructor, _extendings, _implementings, body, _typeParameterConstraintClauses, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ClassDeclaration(Id, Prefix, newMarkers, AttributeList, Modifiers, _kind, Name, _typeParameters, _primaryConstructor, _extendings, _implementings, Body, _typeParameterConstraintClauses, Type);
         }
-        public IList<Cs.AttributeList> AttributeList => attributeList;
+        public IList<Cs.AttributeList> AttributeList { get;  set; } = attributeList;
 
         public ClassDeclaration WithAttributeList(IList<Cs.AttributeList> newAttributeList)
         {
-            return newAttributeList == attributeList ? this : new ClassDeclaration(id, prefix, markers, newAttributeList, modifiers, _kind, name, _typeParameters, _primaryConstructor, _extendings, _implementings, body, _typeParameterConstraintClauses, type);
+            return newAttributeList == AttributeList ? this : new ClassDeclaration(Id, Prefix, Markers, newAttributeList, Modifiers, _kind, Name, _typeParameters, _primaryConstructor, _extendings, _implementings, Body, _typeParameterConstraintClauses, Type);
         }
-        public IList<J.Modifier> Modifiers => modifiers;
+        public IList<J.Modifier> Modifiers { get;  set; } = modifiers;
 
         public ClassDeclaration WithModifiers(IList<J.Modifier> newModifiers)
         {
-            return newModifiers == modifiers ? this : new ClassDeclaration(id, prefix, markers, attributeList, newModifiers, _kind, name, _typeParameters, _primaryConstructor, _extendings, _implementings, body, _typeParameterConstraintClauses, type);
+            return newModifiers == Modifiers ? this : new ClassDeclaration(Id, Prefix, Markers, AttributeList, newModifiers, _kind, Name, _typeParameters, _primaryConstructor, _extendings, _implementings, Body, _typeParameterConstraintClauses, Type);
         }
-        private readonly J.ClassDeclaration.Kind _kind = kind;
+        private J.ClassDeclaration.Kind _kind = kind;
 
         public ClassDeclaration WithKind(J.ClassDeclaration.Kind newKind)
         {
-            return ReferenceEquals(newKind, _kind) ? this : new ClassDeclaration(id, prefix, markers, attributeList, modifiers, _kind, name, _typeParameters, _primaryConstructor, _extendings, _implementings, body, _typeParameterConstraintClauses, type);
+            return ReferenceEquals(newKind, Kind) ? this : new ClassDeclaration(Id, Prefix, Markers, AttributeList, Modifiers, _kind, Name, _typeParameters, _primaryConstructor, _extendings, _implementings, Body, _typeParameterConstraintClauses, Type);
         }
-        public J.Identifier Name => name;
+        public J.Identifier Name { get;  set; } = name;
 
         public ClassDeclaration WithName(J.Identifier newName)
         {
-            return ReferenceEquals(newName, name) ? this : new ClassDeclaration(id, prefix, markers, attributeList, modifiers, _kind, newName, _typeParameters, _primaryConstructor, _extendings, _implementings, body, _typeParameterConstraintClauses, type);
+            return ReferenceEquals(newName, Name) ? this : new ClassDeclaration(Id, Prefix, Markers, AttributeList, Modifiers, _kind, newName, _typeParameters, _primaryConstructor, _extendings, _implementings, Body, _typeParameterConstraintClauses, Type);
         }
-        private readonly JContainer<Cs.TypeParameter>? _typeParameters = typeParameters;
+        private JContainer<Cs.TypeParameter>? _typeParameters = typeParameters;
         public IList<Cs.TypeParameter>? TypeParameters => _typeParameters?.GetElements();
 
         public ClassDeclaration WithTypeParameters(IList<Cs.TypeParameter>? newTypeParameters)
         {
             return Padding.WithTypeParameters(JContainer<Cs.TypeParameter>.WithElementsNullable(_typeParameters, newTypeParameters));
         }
-        private readonly JContainer<Statement>? _primaryConstructor = primaryConstructor;
+        private JContainer<Statement>? _primaryConstructor = primaryConstructor;
         public IList<Statement>? PrimaryConstructor => _primaryConstructor?.GetElements();
 
         public ClassDeclaration WithPrimaryConstructor(IList<Statement>? newPrimaryConstructor)
         {
             return Padding.WithPrimaryConstructor(JContainer<Statement>.WithElementsNullable(_primaryConstructor, newPrimaryConstructor));
         }
-        private readonly JLeftPadded<TypeTree>? _extendings = extendings;
+        private JLeftPadded<TypeTree>? _extendings = extendings;
         public TypeTree? Extendings => _extendings?.Element;
 
         public ClassDeclaration WithExtendings(TypeTree? newExtendings)
         {
             return Padding.WithExtendings(JLeftPadded<TypeTree>.WithElement(_extendings, newExtendings));
         }
-        private readonly JContainer<TypeTree>? _implementings = implementings;
+        private JContainer<TypeTree>? _implementings = implementings;
         public IList<TypeTree>? Implementings => _implementings?.GetElements();
 
         public ClassDeclaration WithImplementings(IList<TypeTree>? newImplementings)
         {
             return Padding.WithImplementings(JContainer<TypeTree>.WithElementsNullable(_implementings, newImplementings));
         }
-        public J.Block? Body => body;
+        public J.Block? Body { get;  set; } = body;
 
         public ClassDeclaration WithBody(J.Block? newBody)
         {
-            return ReferenceEquals(newBody, body) ? this : new ClassDeclaration(id, prefix, markers, attributeList, modifiers, _kind, name, _typeParameters, _primaryConstructor, _extendings, _implementings, newBody, _typeParameterConstraintClauses, type);
+            return ReferenceEquals(newBody, Body) ? this : new ClassDeclaration(Id, Prefix, Markers, AttributeList, Modifiers, _kind, Name, _typeParameters, _primaryConstructor, _extendings, _implementings, newBody, _typeParameterConstraintClauses, Type);
         }
-        private readonly JContainer<Cs.TypeParameterConstraintClause>? _typeParameterConstraintClauses = typeParameterConstraintClauses;
+        private JContainer<Cs.TypeParameterConstraintClause>? _typeParameterConstraintClauses = typeParameterConstraintClauses;
         public IList<Cs.TypeParameterConstraintClause>? TypeParameterConstraintClauses => _typeParameterConstraintClauses?.GetElements();
 
         public ClassDeclaration WithTypeParameterConstraintClauses(IList<Cs.TypeParameterConstraintClause>? newTypeParameterConstraintClauses)
         {
             return Padding.WithTypeParameterConstraintClauses(JContainer<Cs.TypeParameterConstraintClause>.WithElementsNullable(_typeParameterConstraintClauses, newTypeParameterConstraintClauses));
         }
-        public JavaType.FullyQualified? Type => type;
+        public JavaType.FullyQualified? Type { get;  set; } = type;
 
         public ClassDeclaration WithType(JavaType.FullyQualified? newType)
         {
-            return newType == type ? this : new ClassDeclaration(id, prefix, markers, attributeList, modifiers, _kind, name, _typeParameters, _primaryConstructor, _extendings, _implementings, body, _typeParameterConstraintClauses, newType);
+            return newType == Type ? this : new ClassDeclaration(Id, Prefix, Markers, AttributeList, Modifiers, _kind, Name, _typeParameters, _primaryConstructor, _extendings, _implementings, Body, _typeParameterConstraintClauses, newType);
         }
         public sealed record PaddingHelper(Cs.ClassDeclaration T)
         {
-            public J.ClassDeclaration.Kind Kind => T._kind;
+            public J.ClassDeclaration.Kind Kind { get => T._kind;  set => T._kind = value; }
 
             public Cs.ClassDeclaration WithKind(J.ClassDeclaration.Kind newKind)
             {
-                return T._kind == newKind ? T : new Cs.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeList, T.Modifiers, newKind, T.Name, T._typeParameters, T._primaryConstructor, T._extendings, T._implementings, T.Body, T._typeParameterConstraintClauses, T.Type);
+                return Kind == newKind ? T : new Cs.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeList, T.Modifiers, newKind, T.Name, T._typeParameters, T._primaryConstructor, T._extendings, T._implementings, T.Body, T._typeParameterConstraintClauses, T.Type);
             }
 
-            public JContainer<Cs.TypeParameter>? TypeParameters => T._typeParameters;
+            public JContainer<Cs.TypeParameter>? TypeParameters { get => T._typeParameters;  set => T._typeParameters = value; }
 
             public Cs.ClassDeclaration WithTypeParameters(JContainer<Cs.TypeParameter>? newTypeParameters)
             {
-                return T._typeParameters == newTypeParameters ? T : new Cs.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeList, T.Modifiers, T._kind, T.Name, newTypeParameters, T._primaryConstructor, T._extendings, T._implementings, T.Body, T._typeParameterConstraintClauses, T.Type);
+                return TypeParameters == newTypeParameters ? T : new Cs.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeList, T.Modifiers, T._kind, T.Name, newTypeParameters, T._primaryConstructor, T._extendings, T._implementings, T.Body, T._typeParameterConstraintClauses, T.Type);
             }
 
-            public JContainer<Statement>? PrimaryConstructor => T._primaryConstructor;
+            public JContainer<Statement>? PrimaryConstructor { get => T._primaryConstructor;  set => T._primaryConstructor = value; }
 
             public Cs.ClassDeclaration WithPrimaryConstructor(JContainer<Statement>? newPrimaryConstructor)
             {
-                return T._primaryConstructor == newPrimaryConstructor ? T : new Cs.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeList, T.Modifiers, T._kind, T.Name, T._typeParameters, newPrimaryConstructor, T._extendings, T._implementings, T.Body, T._typeParameterConstraintClauses, T.Type);
+                return PrimaryConstructor == newPrimaryConstructor ? T : new Cs.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeList, T.Modifiers, T._kind, T.Name, T._typeParameters, newPrimaryConstructor, T._extendings, T._implementings, T.Body, T._typeParameterConstraintClauses, T.Type);
             }
 
-            public JLeftPadded<TypeTree>? Extendings => T._extendings;
+            public JLeftPadded<TypeTree>? Extendings { get => T._extendings;  set => T._extendings = value; }
 
             public Cs.ClassDeclaration WithExtendings(JLeftPadded<TypeTree>? newExtendings)
             {
-                return T._extendings == newExtendings ? T : new Cs.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeList, T.Modifiers, T._kind, T.Name, T._typeParameters, T._primaryConstructor, newExtendings, T._implementings, T.Body, T._typeParameterConstraintClauses, T.Type);
+                return Extendings == newExtendings ? T : new Cs.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeList, T.Modifiers, T._kind, T.Name, T._typeParameters, T._primaryConstructor, newExtendings, T._implementings, T.Body, T._typeParameterConstraintClauses, T.Type);
             }
 
-            public JContainer<TypeTree>? Implementings => T._implementings;
+            public JContainer<TypeTree>? Implementings { get => T._implementings;  set => T._implementings = value; }
 
             public Cs.ClassDeclaration WithImplementings(JContainer<TypeTree>? newImplementings)
             {
-                return T._implementings == newImplementings ? T : new Cs.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeList, T.Modifiers, T._kind, T.Name, T._typeParameters, T._primaryConstructor, T._extendings, newImplementings, T.Body, T._typeParameterConstraintClauses, T.Type);
+                return Implementings == newImplementings ? T : new Cs.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeList, T.Modifiers, T._kind, T.Name, T._typeParameters, T._primaryConstructor, T._extendings, newImplementings, T.Body, T._typeParameterConstraintClauses, T.Type);
             }
 
-            public JContainer<Cs.TypeParameterConstraintClause>? TypeParameterConstraintClauses => T._typeParameterConstraintClauses;
+            public JContainer<Cs.TypeParameterConstraintClause>? TypeParameterConstraintClauses { get => T._typeParameterConstraintClauses;  set => T._typeParameterConstraintClauses = value; }
 
             public Cs.ClassDeclaration WithTypeParameterConstraintClauses(JContainer<Cs.TypeParameterConstraintClause>? newTypeParameterConstraintClauses)
             {
-                return T._typeParameterConstraintClauses == newTypeParameterConstraintClauses ? T : new Cs.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeList, T.Modifiers, T._kind, T.Name, T._typeParameters, T._primaryConstructor, T._extendings, T._implementings, T.Body, newTypeParameterConstraintClauses, T.Type);
+                return TypeParameterConstraintClauses == newTypeParameterConstraintClauses ? T : new Cs.ClassDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeList, T.Modifiers, T._kind, T.Name, T._typeParameters, T._primaryConstructor, T._extendings, T._implementings, T.Body, newTypeParameterConstraintClauses, T.Type);
             }
 
         }

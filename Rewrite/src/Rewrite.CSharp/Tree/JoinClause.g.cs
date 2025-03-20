@@ -87,52 +87,52 @@ public partial interface Cs : J
             return v.VisitJoinClause(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public JoinClause WithId(Guid newId)
         {
-            return newId == id ? this : new JoinClause(newId, prefix, markers, _identifier, _inExpression, _leftExpression, rightExpression, _into);
+            return newId == Id ? this : new JoinClause(newId, Prefix, Markers, _identifier, _inExpression, _leftExpression, RightExpression, _into);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public JoinClause WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new JoinClause(id, newPrefix, markers, _identifier, _inExpression, _leftExpression, rightExpression, _into);
+            return newPrefix == Prefix ? this : new JoinClause(Id, newPrefix, Markers, _identifier, _inExpression, _leftExpression, RightExpression, _into);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public JoinClause WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new JoinClause(id, prefix, newMarkers, _identifier, _inExpression, _leftExpression, rightExpression, _into);
+            return ReferenceEquals(newMarkers, Markers) ? this : new JoinClause(Id, Prefix, newMarkers, _identifier, _inExpression, _leftExpression, RightExpression, _into);
         }
-        private readonly JRightPadded<J.Identifier> _identifier = identifier;
+        private JRightPadded<J.Identifier> _identifier = identifier;
         public J.Identifier Identifier => _identifier.Element;
 
         public JoinClause WithIdentifier(J.Identifier newIdentifier)
         {
             return Padding.WithIdentifier(_identifier.WithElement(newIdentifier));
         }
-        private readonly JRightPadded<Expression> _inExpression = inExpression;
+        private JRightPadded<Expression> _inExpression = inExpression;
         public Expression InExpression => _inExpression.Element;
 
         public JoinClause WithInExpression(Expression newInExpression)
         {
             return Padding.WithInExpression(_inExpression.WithElement(newInExpression));
         }
-        private readonly JRightPadded<Expression> _leftExpression = leftExpression;
+        private JRightPadded<Expression> _leftExpression = leftExpression;
         public Expression LeftExpression => _leftExpression.Element;
 
         public JoinClause WithLeftExpression(Expression newLeftExpression)
         {
             return Padding.WithLeftExpression(_leftExpression.WithElement(newLeftExpression));
         }
-        public Expression RightExpression => rightExpression;
+        public Expression RightExpression { get;  set; } = rightExpression;
 
         public JoinClause WithRightExpression(Expression newRightExpression)
         {
-            return ReferenceEquals(newRightExpression, rightExpression) ? this : new JoinClause(id, prefix, markers, _identifier, _inExpression, _leftExpression, newRightExpression, _into);
+            return ReferenceEquals(newRightExpression, RightExpression) ? this : new JoinClause(Id, Prefix, Markers, _identifier, _inExpression, _leftExpression, newRightExpression, _into);
         }
-        private readonly JLeftPadded<Cs.JoinIntoClause>? _into = into;
+        private JLeftPadded<Cs.JoinIntoClause>? _into = into;
         public Cs.JoinIntoClause? Into => _into?.Element;
 
         public JoinClause WithInto(Cs.JoinIntoClause? newInto)
@@ -141,32 +141,32 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.JoinClause T)
         {
-            public JRightPadded<J.Identifier> Identifier => T._identifier;
+            public JRightPadded<J.Identifier> Identifier { get => T._identifier;  set => T._identifier = value; }
 
             public Cs.JoinClause WithIdentifier(JRightPadded<J.Identifier> newIdentifier)
             {
-                return T._identifier == newIdentifier ? T : new Cs.JoinClause(T.Id, T.Prefix, T.Markers, newIdentifier, T._inExpression, T._leftExpression, T.RightExpression, T._into);
+                return Identifier == newIdentifier ? T : new Cs.JoinClause(T.Id, T.Prefix, T.Markers, newIdentifier, T._inExpression, T._leftExpression, T.RightExpression, T._into);
             }
 
-            public JRightPadded<Expression> InExpression => T._inExpression;
+            public JRightPadded<Expression> InExpression { get => T._inExpression;  set => T._inExpression = value; }
 
             public Cs.JoinClause WithInExpression(JRightPadded<Expression> newInExpression)
             {
-                return T._inExpression == newInExpression ? T : new Cs.JoinClause(T.Id, T.Prefix, T.Markers, T._identifier, newInExpression, T._leftExpression, T.RightExpression, T._into);
+                return InExpression == newInExpression ? T : new Cs.JoinClause(T.Id, T.Prefix, T.Markers, T._identifier, newInExpression, T._leftExpression, T.RightExpression, T._into);
             }
 
-            public JRightPadded<Expression> LeftExpression => T._leftExpression;
+            public JRightPadded<Expression> LeftExpression { get => T._leftExpression;  set => T._leftExpression = value; }
 
             public Cs.JoinClause WithLeftExpression(JRightPadded<Expression> newLeftExpression)
             {
-                return T._leftExpression == newLeftExpression ? T : new Cs.JoinClause(T.Id, T.Prefix, T.Markers, T._identifier, T._inExpression, newLeftExpression, T.RightExpression, T._into);
+                return LeftExpression == newLeftExpression ? T : new Cs.JoinClause(T.Id, T.Prefix, T.Markers, T._identifier, T._inExpression, newLeftExpression, T.RightExpression, T._into);
             }
 
-            public JLeftPadded<Cs.JoinIntoClause>? Into => T._into;
+            public JLeftPadded<Cs.JoinIntoClause>? Into { get => T._into;  set => T._into = value; }
 
             public Cs.JoinClause WithInto(JLeftPadded<Cs.JoinIntoClause>? newInto)
             {
-                return T._into == newInto ? T : new Cs.JoinClause(T.Id, T.Prefix, T.Markers, T._identifier, T._inExpression, T._leftExpression, T.RightExpression, newInto);
+                return Into == newInto ? T : new Cs.JoinClause(T.Id, T.Prefix, T.Markers, T._identifier, T._inExpression, T._leftExpression, T.RightExpression, newInto);
             }
 
         }

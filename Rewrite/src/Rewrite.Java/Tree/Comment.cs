@@ -7,14 +7,14 @@ namespace Rewrite.RewriteJava.Tree;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "PossibleUnintendedReferenceComparison")]
-public interface Comment
+public interface Comment : IEquatable<Comment>
 {
     public bool Multiline { get; }
 
     public string Suffix { get; }
 
     public Markers Markers { get; }
-    
+
     void PrintComment<P>(Cursor cursor, PrintOutputCapture<P> p);
 
     Comment WithSuffix(string replace);

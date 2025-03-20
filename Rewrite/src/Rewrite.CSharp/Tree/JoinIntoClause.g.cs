@@ -58,29 +58,29 @@ public partial interface Cs : J
             return v.VisitJoinIntoClause(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public JoinIntoClause WithId(Guid newId)
         {
-            return newId == id ? this : new JoinIntoClause(newId, prefix, markers, identifier);
+            return newId == Id ? this : new JoinIntoClause(newId, Prefix, Markers, Identifier);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public JoinIntoClause WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new JoinIntoClause(id, newPrefix, markers, identifier);
+            return newPrefix == Prefix ? this : new JoinIntoClause(Id, newPrefix, Markers, Identifier);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public JoinIntoClause WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new JoinIntoClause(id, prefix, newMarkers, identifier);
+            return ReferenceEquals(newMarkers, Markers) ? this : new JoinIntoClause(Id, Prefix, newMarkers, Identifier);
         }
-        public J.Identifier Identifier => identifier;
+        public J.Identifier Identifier { get;  set; } = identifier;
 
         public JoinIntoClause WithIdentifier(J.Identifier newIdentifier)
         {
-            return ReferenceEquals(newIdentifier, identifier) ? this : new JoinIntoClause(id, prefix, markers, newIdentifier);
+            return ReferenceEquals(newIdentifier, Identifier) ? this : new JoinIntoClause(Id, Prefix, Markers, newIdentifier);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

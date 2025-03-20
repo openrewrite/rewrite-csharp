@@ -73,108 +73,108 @@ public partial interface Cs : J
             return v.VisitCompilationUnit(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public CompilationUnit WithId(Guid newId)
         {
-            return newId == id ? this : new CompilationUnit(newId, prefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _externs, _usings, attributeLists, _members, eof);
+            return newId == Id ? this : new CompilationUnit(newId, Prefix, Markers, SourcePath, FileAttributes, CharsetName, CharsetBomMarked, Checksum, _externs, _usings, AttributeLists, _members, Eof);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public CompilationUnit WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new CompilationUnit(id, newPrefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _externs, _usings, attributeLists, _members, eof);
+            return newPrefix == Prefix ? this : new CompilationUnit(Id, newPrefix, Markers, SourcePath, FileAttributes, CharsetName, CharsetBomMarked, Checksum, _externs, _usings, AttributeLists, _members, Eof);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public CompilationUnit WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new CompilationUnit(id, prefix, newMarkers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _externs, _usings, attributeLists, _members, eof);
+            return ReferenceEquals(newMarkers, Markers) ? this : new CompilationUnit(Id, Prefix, newMarkers, SourcePath, FileAttributes, CharsetName, CharsetBomMarked, Checksum, _externs, _usings, AttributeLists, _members, Eof);
         }
-        public string SourcePath => sourcePath;
+        public string SourcePath { get;  set; } = sourcePath;
 
         public CompilationUnit WithSourcePath(string newSourcePath)
         {
-            return newSourcePath == sourcePath ? this : new CompilationUnit(id, prefix, markers, newSourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _externs, _usings, attributeLists, _members, eof);
+            return newSourcePath == SourcePath ? this : new CompilationUnit(Id, Prefix, Markers, newSourcePath, FileAttributes, CharsetName, CharsetBomMarked, Checksum, _externs, _usings, AttributeLists, _members, Eof);
         }
-        public FileAttributes? FileAttributes => fileAttributes;
+        public FileAttributes? FileAttributes { get;  set; } = fileAttributes;
 
         public CompilationUnit WithFileAttributes(FileAttributes? newFileAttributes)
         {
-            return newFileAttributes == fileAttributes ? this : new CompilationUnit(id, prefix, markers, sourcePath, newFileAttributes, charsetName, charsetBomMarked, checksum, _externs, _usings, attributeLists, _members, eof);
+            return newFileAttributes == FileAttributes ? this : new CompilationUnit(Id, Prefix, Markers, SourcePath, newFileAttributes, CharsetName, CharsetBomMarked, Checksum, _externs, _usings, AttributeLists, _members, Eof);
         }
-        public string? CharsetName => charsetName;
+        public string? CharsetName { get;  set; } = charsetName;
 
         public CompilationUnit WithCharsetName(string? newCharsetName)
         {
-            return newCharsetName == charsetName ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, newCharsetName, charsetBomMarked, checksum, _externs, _usings, attributeLists, _members, eof);
+            return newCharsetName == CharsetName ? this : new CompilationUnit(Id, Prefix, Markers, SourcePath, FileAttributes, newCharsetName, CharsetBomMarked, Checksum, _externs, _usings, AttributeLists, _members, Eof);
         }
-        public bool CharsetBomMarked => charsetBomMarked;
+        public bool CharsetBomMarked { get;  set; } = charsetBomMarked;
 
         public CompilationUnit WithCharsetBomMarked(bool newCharsetBomMarked)
         {
-            return newCharsetBomMarked == charsetBomMarked ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, charsetName, newCharsetBomMarked, checksum, _externs, _usings, attributeLists, _members, eof);
+            return newCharsetBomMarked == CharsetBomMarked ? this : new CompilationUnit(Id, Prefix, Markers, SourcePath, FileAttributes, CharsetName, newCharsetBomMarked, Checksum, _externs, _usings, AttributeLists, _members, Eof);
         }
-        public Checksum? Checksum => checksum;
+        public Checksum? Checksum { get;  set; } = checksum;
 
         public CompilationUnit WithChecksum(Checksum? newChecksum)
         {
-            return newChecksum == checksum ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, newChecksum, _externs, _usings, attributeLists, _members, eof);
+            return newChecksum == Checksum ? this : new CompilationUnit(Id, Prefix, Markers, SourcePath, FileAttributes, CharsetName, CharsetBomMarked, newChecksum, _externs, _usings, AttributeLists, _members, Eof);
         }
-        private readonly IList<JRightPadded<Cs.ExternAlias>> _externs = externs;
+        private IList<JRightPadded<Cs.ExternAlias>> _externs = externs;
         public IList<Cs.ExternAlias> Externs => _externs.Elements();
 
         public CompilationUnit WithExterns(IList<Cs.ExternAlias> newExterns)
         {
             return Padding.WithExterns(_externs.WithElements(newExterns));
         }
-        private readonly IList<JRightPadded<Cs.UsingDirective>> _usings = usings;
+        private IList<JRightPadded<Cs.UsingDirective>> _usings = usings;
         public IList<Cs.UsingDirective> Usings => _usings.Elements();
 
         public CompilationUnit WithUsings(IList<Cs.UsingDirective> newUsings)
         {
             return Padding.WithUsings(_usings.WithElements(newUsings));
         }
-        public IList<Cs.AttributeList> AttributeLists => attributeLists;
+        public IList<Cs.AttributeList> AttributeLists { get;  set; } = attributeLists;
 
         public CompilationUnit WithAttributeLists(IList<Cs.AttributeList> newAttributeLists)
         {
-            return newAttributeLists == attributeLists ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _externs, _usings, newAttributeLists, _members, eof);
+            return newAttributeLists == AttributeLists ? this : new CompilationUnit(Id, Prefix, Markers, SourcePath, FileAttributes, CharsetName, CharsetBomMarked, Checksum, _externs, _usings, newAttributeLists, _members, Eof);
         }
-        private readonly IList<JRightPadded<Statement>> _members = members;
+        private IList<JRightPadded<Statement>> _members = members;
         public IList<Statement> Members => _members.Elements();
 
         public CompilationUnit WithMembers(IList<Statement> newMembers)
         {
             return Padding.WithMembers(_members.WithElements(newMembers));
         }
-        public Space Eof => eof;
+        public Space Eof { get;  set; } = eof;
 
         public CompilationUnit WithEof(Space newEof)
         {
-            return newEof == eof ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _externs, _usings, attributeLists, _members, newEof);
+            return newEof == Eof ? this : new CompilationUnit(Id, Prefix, Markers, SourcePath, FileAttributes, CharsetName, CharsetBomMarked, Checksum, _externs, _usings, AttributeLists, _members, newEof);
         }
         public sealed record PaddingHelper(Cs.CompilationUnit T)
         {
-            public IList<JRightPadded<Cs.ExternAlias>> Externs => T._externs;
+            public IList<JRightPadded<Cs.ExternAlias>> Externs { get => T._externs;  set => T._externs = value; }
 
             public Cs.CompilationUnit WithExterns(IList<JRightPadded<Cs.ExternAlias>> newExterns)
             {
-                return T._externs == newExterns ? T : new Cs.CompilationUnit(T.Id, T.Prefix, T.Markers, T.SourcePath, T.FileAttributes, T.CharsetName, T.CharsetBomMarked, T.Checksum, newExterns, T._usings, T.AttributeLists, T._members, T.Eof);
+                return Externs == newExterns ? T : new Cs.CompilationUnit(T.Id, T.Prefix, T.Markers, T.SourcePath, T.FileAttributes, T.CharsetName, T.CharsetBomMarked, T.Checksum, newExterns, T._usings, T.AttributeLists, T._members, T.Eof);
             }
 
-            public IList<JRightPadded<Cs.UsingDirective>> Usings => T._usings;
+            public IList<JRightPadded<Cs.UsingDirective>> Usings { get => T._usings;  set => T._usings = value; }
 
             public Cs.CompilationUnit WithUsings(IList<JRightPadded<Cs.UsingDirective>> newUsings)
             {
-                return T._usings == newUsings ? T : new Cs.CompilationUnit(T.Id, T.Prefix, T.Markers, T.SourcePath, T.FileAttributes, T.CharsetName, T.CharsetBomMarked, T.Checksum, T._externs, newUsings, T.AttributeLists, T._members, T.Eof);
+                return Usings == newUsings ? T : new Cs.CompilationUnit(T.Id, T.Prefix, T.Markers, T.SourcePath, T.FileAttributes, T.CharsetName, T.CharsetBomMarked, T.Checksum, T._externs, newUsings, T.AttributeLists, T._members, T.Eof);
             }
 
-            public IList<JRightPadded<Statement>> Members => T._members;
+            public IList<JRightPadded<Statement>> Members { get => T._members;  set => T._members = value; }
 
             public Cs.CompilationUnit WithMembers(IList<JRightPadded<Statement>> newMembers)
             {
-                return T._members == newMembers ? T : new Cs.CompilationUnit(T.Id, T.Prefix, T.Markers, T.SourcePath, T.FileAttributes, T.CharsetName, T.CharsetBomMarked, T.Checksum, T._externs, T._usings, T.AttributeLists, newMembers, T.Eof);
+                return Members == newMembers ? T : new Cs.CompilationUnit(T.Id, T.Prefix, T.Markers, T.SourcePath, T.FileAttributes, T.CharsetName, T.CharsetBomMarked, T.Checksum, T._externs, T._usings, T.AttributeLists, newMembers, T.Eof);
             }
 
         }

@@ -61,41 +61,41 @@ public partial interface Cs : J
             return v.VisitQueryBody(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public QueryBody WithId(Guid newId)
         {
-            return newId == id ? this : new QueryBody(newId, prefix, markers, clauses, selectOrGroup, continuation);
+            return newId == Id ? this : new QueryBody(newId, Prefix, Markers, Clauses, SelectOrGroup, Continuation);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public QueryBody WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new QueryBody(id, newPrefix, markers, clauses, selectOrGroup, continuation);
+            return newPrefix == Prefix ? this : new QueryBody(Id, newPrefix, Markers, Clauses, SelectOrGroup, Continuation);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public QueryBody WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new QueryBody(id, prefix, newMarkers, clauses, selectOrGroup, continuation);
+            return ReferenceEquals(newMarkers, Markers) ? this : new QueryBody(Id, Prefix, newMarkers, Clauses, SelectOrGroup, Continuation);
         }
-        public IList<Cs.QueryClause> Clauses => clauses;
+        public IList<Cs.QueryClause> Clauses { get;  set; } = clauses;
 
         public QueryBody WithClauses(IList<Cs.QueryClause> newClauses)
         {
-            return newClauses == clauses ? this : new QueryBody(id, prefix, markers, newClauses, selectOrGroup, continuation);
+            return newClauses == Clauses ? this : new QueryBody(Id, Prefix, Markers, newClauses, SelectOrGroup, Continuation);
         }
-        public Cs.SelectOrGroupClause? SelectOrGroup => selectOrGroup;
+        public Cs.SelectOrGroupClause? SelectOrGroup { get;  set; } = selectOrGroup;
 
         public QueryBody WithSelectOrGroup(Cs.SelectOrGroupClause? newSelectOrGroup)
         {
-            return ReferenceEquals(newSelectOrGroup, selectOrGroup) ? this : new QueryBody(id, prefix, markers, clauses, newSelectOrGroup, continuation);
+            return ReferenceEquals(newSelectOrGroup, SelectOrGroup) ? this : new QueryBody(Id, Prefix, Markers, Clauses, newSelectOrGroup, Continuation);
         }
-        public Cs.QueryContinuation? Continuation => continuation;
+        public Cs.QueryContinuation? Continuation { get;  set; } = continuation;
 
         public QueryBody WithContinuation(Cs.QueryContinuation? newContinuation)
         {
-            return ReferenceEquals(newContinuation, continuation) ? this : new QueryBody(id, prefix, markers, clauses, selectOrGroup, newContinuation);
+            return ReferenceEquals(newContinuation, Continuation) ? this : new QueryBody(Id, Prefix, Markers, Clauses, SelectOrGroup, newContinuation);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

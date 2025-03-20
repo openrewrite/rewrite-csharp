@@ -39,29 +39,29 @@ public partial interface Cs : J
             return v.VisitKeyword(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Keyword WithId(Guid newId)
         {
-            return newId == id ? this : new Keyword(newId, prefix, markers, kind);
+            return newId == Id ? this : new Keyword(newId, Prefix, Markers, Kind);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Keyword WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Keyword(id, newPrefix, markers, kind);
+            return newPrefix == Prefix ? this : new Keyword(Id, newPrefix, Markers, Kind);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Keyword WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Keyword(id, prefix, newMarkers, kind);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Keyword(Id, Prefix, newMarkers, Kind);
         }
-        public KeywordKind Kind => kind;
+        public KeywordKind Kind { get;  set; } = kind;
 
         public Keyword WithKind(KeywordKind newKind)
         {
-            return newKind == kind ? this : new Keyword(id, prefix, markers, newKind);
+            return newKind == Kind ? this : new Keyword(Id, Prefix, Markers, newKind);
         }
         public enum KeywordKind
         {

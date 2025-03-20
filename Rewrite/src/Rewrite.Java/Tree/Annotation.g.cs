@@ -64,31 +64,31 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitAnnotation(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Annotation WithId(Guid newId)
         {
-            return newId == id ? this : new Annotation(newId, prefix, markers, annotationType, _arguments);
+            return newId == Id ? this : new Annotation(newId, Prefix, Markers, AnnotationType, _arguments);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Annotation WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Annotation(id, newPrefix, markers, annotationType, _arguments);
+            return newPrefix == Prefix ? this : new Annotation(Id, newPrefix, Markers, AnnotationType, _arguments);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Annotation WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Annotation(id, prefix, newMarkers, annotationType, _arguments);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Annotation(Id, Prefix, newMarkers, AnnotationType, _arguments);
         }
-        public NameTree AnnotationType => annotationType;
+        public NameTree AnnotationType { get;  set; } = annotationType;
 
         public Annotation WithAnnotationType(NameTree newAnnotationType)
         {
-            return ReferenceEquals(newAnnotationType, annotationType) ? this : new Annotation(id, prefix, markers, newAnnotationType, _arguments);
+            return ReferenceEquals(newAnnotationType, AnnotationType) ? this : new Annotation(Id, Prefix, Markers, newAnnotationType, _arguments);
         }
-        private readonly JContainer<Expression>? _arguments = arguments;
+        private JContainer<Expression>? _arguments = arguments;
         public IList<Expression>? Arguments => _arguments?.GetElements();
 
         public Annotation WithArguments(IList<Expression>? newArguments)
@@ -97,11 +97,11 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.Annotation T)
         {
-            public JContainer<Expression>? Arguments => T._arguments;
+            public JContainer<Expression>? Arguments { get => T._arguments;  set => T._arguments = value; }
 
             public J.Annotation WithArguments(JContainer<Expression>? newArguments)
             {
-                return T._arguments == newArguments ? T : new J.Annotation(T.Id, T.Prefix, T.Markers, T.AnnotationType, newArguments);
+                return Arguments == newArguments ? T : new J.Annotation(T.Id, T.Prefix, T.Markers, T.AnnotationType, newArguments);
             }
 
         }

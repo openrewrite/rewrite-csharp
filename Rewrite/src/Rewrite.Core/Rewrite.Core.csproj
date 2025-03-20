@@ -8,6 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Rewrite.Analyzers\Rewrite.Analyzers.csproj"
+                          OutputItemType="Analyzer" />
+    </ItemGroup>
+    <ItemGroup>
       <PackageReference Include="Castle.Core" Version="5.0.0" />
     </ItemGroup>
     <ItemGroup>

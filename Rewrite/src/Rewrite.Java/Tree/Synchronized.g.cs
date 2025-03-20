@@ -39,35 +39,35 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitSynchronized(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Synchronized WithId(Guid newId)
         {
-            return newId == id ? this : new Synchronized(newId, prefix, markers, @lock, body);
+            return newId == Id ? this : new Synchronized(newId, Prefix, Markers, Lock, Body);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Synchronized WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Synchronized(id, newPrefix, markers, @lock, body);
+            return newPrefix == Prefix ? this : new Synchronized(Id, newPrefix, Markers, Lock, Body);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Synchronized WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Synchronized(id, prefix, newMarkers, @lock, body);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Synchronized(Id, Prefix, newMarkers, Lock, Body);
         }
-        public J.ControlParentheses<Expression> Lock => @lock;
+        public J.ControlParentheses<Expression> Lock { get;  set; } = @lock;
 
         public Synchronized WithLock(J.ControlParentheses<Expression> newLock)
         {
-            return ReferenceEquals(newLock, @lock) ? this : new Synchronized(id, prefix, markers, newLock, body);
+            return ReferenceEquals(newLock, Lock) ? this : new Synchronized(Id, Prefix, Markers, newLock, Body);
         }
-        public J.Block Body => body;
+        public J.Block Body { get;  set; } = body;
 
         public Synchronized WithBody(J.Block newBody)
         {
-            return ReferenceEquals(newBody, body) ? this : new Synchronized(id, prefix, markers, @lock, newBody);
+            return ReferenceEquals(newBody, Body) ? this : new Synchronized(Id, Prefix, Markers, Lock, newBody);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

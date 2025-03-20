@@ -12,6 +12,10 @@ public class Cursor
 
     private Dictionary<string, object>? _messages;
 
+    public Cursor() : this(null, ROOT_VALUE)
+    {
+        
+    }
     public Cursor(Cursor? parent, object? value)
     {
         _parent = parent;
@@ -66,7 +70,7 @@ public class Cursor
                throw new InvalidOperationException("Expected to find enclosing " + typeof(T).Name);
     }
 
-    private T? FirstEnclosing<T>()
+    public T? FirstEnclosing<T>()
     {
         var c = this;
         while (c != null)

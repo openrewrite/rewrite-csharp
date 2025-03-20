@@ -41,47 +41,47 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitArrayType(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ArrayType WithId(Guid newId)
         {
-            return newId == id ? this : new ArrayType(newId, prefix, markers, elementType, annotations, dimension, type);
+            return newId == Id ? this : new ArrayType(newId, Prefix, Markers, ElementType, Annotations, Dimension, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ArrayType WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ArrayType(id, newPrefix, markers, elementType, annotations, dimension, type);
+            return newPrefix == Prefix ? this : new ArrayType(Id, newPrefix, Markers, ElementType, Annotations, Dimension, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ArrayType WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ArrayType(id, prefix, newMarkers, elementType, annotations, dimension, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ArrayType(Id, Prefix, newMarkers, ElementType, Annotations, Dimension, Type);
         }
-        public TypeTree ElementType => elementType;
+        public TypeTree ElementType { get;  set; } = elementType;
 
         public ArrayType WithElementType(TypeTree newElementType)
         {
-            return ReferenceEquals(newElementType, elementType) ? this : new ArrayType(id, prefix, markers, newElementType, annotations, dimension, type);
+            return ReferenceEquals(newElementType, ElementType) ? this : new ArrayType(Id, Prefix, Markers, newElementType, Annotations, Dimension, Type);
         }
-        public IList<J.Annotation>? Annotations => annotations;
+        public IList<J.Annotation>? Annotations { get;  set; } = annotations;
 
         public ArrayType WithAnnotations(IList<J.Annotation>? newAnnotations)
         {
-            return newAnnotations == annotations ? this : new ArrayType(id, prefix, markers, elementType, newAnnotations, dimension, type);
+            return newAnnotations == Annotations ? this : new ArrayType(Id, Prefix, Markers, ElementType, newAnnotations, Dimension, Type);
         }
-        public JLeftPadded<Space>? Dimension => dimension;
+        public JLeftPadded<Space>? Dimension { get;  set; } = dimension;
 
         public ArrayType WithDimension(JLeftPadded<Space>? newDimension)
         {
-            return newDimension == dimension ? this : new ArrayType(id, prefix, markers, elementType, annotations, newDimension, type);
+            return newDimension == Dimension ? this : new ArrayType(Id, Prefix, Markers, ElementType, Annotations, newDimension, Type);
         }
-        public JavaType Type => type;
+        public JavaType Type { get;  set; } = type;
 
         public ArrayType WithType(JavaType newType)
         {
-            return newType == type ? this : new ArrayType(id, prefix, markers, elementType, annotations, dimension, newType);
+            return newType == Type ? this : new ArrayType(Id, Prefix, Markers, ElementType, Annotations, Dimension, newType);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

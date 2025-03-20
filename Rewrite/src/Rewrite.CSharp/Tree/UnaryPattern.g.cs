@@ -58,35 +58,35 @@ public partial interface Cs : J
             return v.VisitUnaryPattern(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public UnaryPattern WithId(Guid newId)
         {
-            return newId == id ? this : new UnaryPattern(newId, prefix, markers, @operator, pattern);
+            return newId == Id ? this : new UnaryPattern(newId, Prefix, Markers, Operator, Pattern);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public UnaryPattern WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new UnaryPattern(id, newPrefix, markers, @operator, pattern);
+            return newPrefix == Prefix ? this : new UnaryPattern(Id, newPrefix, Markers, Operator, Pattern);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public UnaryPattern WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new UnaryPattern(id, prefix, newMarkers, @operator, pattern);
+            return ReferenceEquals(newMarkers, Markers) ? this : new UnaryPattern(Id, Prefix, newMarkers, Operator, Pattern);
         }
-        public Cs.Keyword Operator => @operator;
+        public Cs.Keyword Operator { get;  set; } = @operator;
 
         public UnaryPattern WithOperator(Cs.Keyword newOperator)
         {
-            return ReferenceEquals(newOperator, @operator) ? this : new UnaryPattern(id, prefix, markers, newOperator, pattern);
+            return ReferenceEquals(newOperator, Operator) ? this : new UnaryPattern(Id, Prefix, Markers, newOperator, Pattern);
         }
-        public Cs.Pattern Pattern => pattern;
+        public Cs.Pattern Pattern { get;  set; } = pattern;
 
         public UnaryPattern WithPattern(Cs.Pattern newPattern)
         {
-            return ReferenceEquals(newPattern, pattern) ? this : new UnaryPattern(id, prefix, markers, @operator, newPattern);
+            return ReferenceEquals(newPattern, Pattern) ? this : new UnaryPattern(Id, Prefix, Markers, Operator, newPattern);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

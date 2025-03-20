@@ -63,25 +63,25 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitControlParentheses(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public J.ControlParentheses<J2> WithId(Guid newId)
         {
-            return newId == id ? this : new J.ControlParentheses<J2>(newId, prefix, markers, _tree);
+            return newId == Id ? this : new J.ControlParentheses<J2>(newId, Prefix, Markers, _tree);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public J.ControlParentheses<J2> WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new J.ControlParentheses<J2>(id, newPrefix, markers, _tree);
+            return newPrefix == Prefix ? this : new J.ControlParentheses<J2>(Id, newPrefix, Markers, _tree);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public J.ControlParentheses<J2> WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new J.ControlParentheses<J2>(id, prefix, newMarkers, _tree);
+            return ReferenceEquals(newMarkers, Markers) ? this : new J.ControlParentheses<J2>(Id, Prefix, newMarkers, _tree);
         }
-        private readonly JRightPadded<J2> _tree = tree;
+        private JRightPadded<J2> _tree = tree;
         public J2 Tree => _tree.Element;
 
         public J.ControlParentheses<J2> WithTree(J2 newTree)
@@ -90,11 +90,11 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.ControlParentheses<J2> T)
         {
-            public JRightPadded<J2> Tree => T._tree;
+            public JRightPadded<J2> Tree { get => T._tree;  set => T._tree = value; }
 
             public J.ControlParentheses<J2> WithTree(JRightPadded<J2> newTree)
             {
-                return T._tree == newTree ? T : new J.ControlParentheses<J2>(T.Id, T.Prefix, T.Markers, newTree);
+                return Tree == newTree ? T : new J.ControlParentheses<J2>(T.Id, T.Prefix, T.Markers, newTree);
             }
 
         }

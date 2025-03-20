@@ -63,25 +63,25 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitArrayDimension(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ArrayDimension WithId(Guid newId)
         {
-            return newId == id ? this : new ArrayDimension(newId, prefix, markers, _index);
+            return newId == Id ? this : new ArrayDimension(newId, Prefix, Markers, _index);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ArrayDimension WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ArrayDimension(id, newPrefix, markers, _index);
+            return newPrefix == Prefix ? this : new ArrayDimension(Id, newPrefix, Markers, _index);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ArrayDimension WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ArrayDimension(id, prefix, newMarkers, _index);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ArrayDimension(Id, Prefix, newMarkers, _index);
         }
-        private readonly JRightPadded<Expression> _index = index;
+        private JRightPadded<Expression> _index = index;
         public Expression Index => _index.Element;
 
         public ArrayDimension WithIndex(Expression newIndex)
@@ -90,11 +90,11 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.ArrayDimension T)
         {
-            public JRightPadded<Expression> Index => T._index;
+            public JRightPadded<Expression> Index { get => T._index;  set => T._index = value; }
 
             public J.ArrayDimension WithIndex(JRightPadded<Expression> newIndex)
             {
-                return T._index == newIndex ? T : new J.ArrayDimension(T.Id, T.Prefix, T.Markers, newIndex);
+                return Index == newIndex ? T : new J.ArrayDimension(T.Id, T.Prefix, T.Markers, newIndex);
             }
 
         }

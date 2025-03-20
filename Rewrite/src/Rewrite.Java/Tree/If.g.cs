@@ -65,42 +65,42 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitIf(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public If WithId(Guid newId)
         {
-            return newId == id ? this : new If(newId, prefix, markers, ifCondition, _thenPart, elsePart);
+            return newId == Id ? this : new If(newId, Prefix, Markers, IfCondition, _thenPart, ElsePart);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public If WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new If(id, newPrefix, markers, ifCondition, _thenPart, elsePart);
+            return newPrefix == Prefix ? this : new If(Id, newPrefix, Markers, IfCondition, _thenPart, ElsePart);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public If WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new If(id, prefix, newMarkers, ifCondition, _thenPart, elsePart);
+            return ReferenceEquals(newMarkers, Markers) ? this : new If(Id, Prefix, newMarkers, IfCondition, _thenPart, ElsePart);
         }
-        public J.ControlParentheses<Expression> IfCondition => ifCondition;
+        public J.ControlParentheses<Expression> IfCondition { get;  set; } = ifCondition;
 
         public If WithIfCondition(J.ControlParentheses<Expression> newIfCondition)
         {
-            return ReferenceEquals(newIfCondition, ifCondition) ? this : new If(id, prefix, markers, newIfCondition, _thenPart, elsePart);
+            return ReferenceEquals(newIfCondition, IfCondition) ? this : new If(Id, Prefix, Markers, newIfCondition, _thenPart, ElsePart);
         }
-        private readonly JRightPadded<Statement> _thenPart = thenPart;
+        private JRightPadded<Statement> _thenPart = thenPart;
         public Statement ThenPart => _thenPart.Element;
 
         public If WithThenPart(Statement newThenPart)
         {
             return Padding.WithThenPart(_thenPart.WithElement(newThenPart));
         }
-        public Else? ElsePart => elsePart;
+        public Else? ElsePart { get;  set; } = elsePart;
 
         public If WithElsePart(Else? newElsePart)
         {
-            return ReferenceEquals(newElsePart, elsePart) ? this : new If(id, prefix, markers, ifCondition, _thenPart, newElsePart);
+            return ReferenceEquals(newElsePart, ElsePart) ? this : new If(Id, Prefix, Markers, IfCondition, _thenPart, newElsePart);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]
@@ -142,25 +142,25 @@ public partial interface J : Rewrite.Core.Tree
                 return v.VisitElse(this, p);
             }
 
-            public Guid Id => id;
+            public Guid Id { get;  set; } = id;
 
             public Else WithId(Guid newId)
             {
-                return newId == id ? this : new Else(newId, prefix, markers, _body);
+                return newId == Id ? this : new Else(newId, Prefix, Markers, _body);
             }
-            public Space Prefix => prefix;
+            public Space Prefix { get;  set; } = prefix;
 
             public Else WithPrefix(Space newPrefix)
             {
-                return newPrefix == prefix ? this : new Else(id, newPrefix, markers, _body);
+                return newPrefix == Prefix ? this : new Else(Id, newPrefix, Markers, _body);
             }
-            public Markers Markers => markers;
+            public Markers Markers { get;  set; } = markers;
 
             public Else WithMarkers(Markers newMarkers)
             {
-                return ReferenceEquals(newMarkers, markers) ? this : new Else(id, prefix, newMarkers, _body);
+                return ReferenceEquals(newMarkers, Markers) ? this : new Else(Id, Prefix, newMarkers, _body);
             }
-            private readonly JRightPadded<Statement> _body = body;
+            private JRightPadded<Statement> _body = body;
             public Statement Body => _body.Element;
 
             public Else WithBody(Statement newBody)
@@ -169,11 +169,11 @@ public partial interface J : Rewrite.Core.Tree
             }
             public sealed record PaddingHelper(J.If.Else T)
             {
-                public JRightPadded<Statement> Body => T._body;
+                public JRightPadded<Statement> Body { get => T._body;  set => T._body = value; }
 
                 public J.If.Else WithBody(JRightPadded<Statement> newBody)
                 {
-                    return T._body == newBody ? T : new J.If.Else(T.Id, T.Prefix, T.Markers, newBody);
+                    return Body == newBody ? T : new J.If.Else(T.Id, T.Prefix, T.Markers, newBody);
                 }
 
             }
@@ -195,11 +195,11 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.If T)
         {
-            public JRightPadded<Statement> ThenPart => T._thenPart;
+            public JRightPadded<Statement> ThenPart { get => T._thenPart;  set => T._thenPart = value; }
 
             public J.If WithThenPart(JRightPadded<Statement> newThenPart)
             {
-                return T._thenPart == newThenPart ? T : new J.If(T.Id, T.Prefix, T.Markers, T.IfCondition, newThenPart, T.ElsePart);
+                return ThenPart == newThenPart ? T : new J.If(T.Id, T.Prefix, T.Markers, T.IfCondition, newThenPart, T.ElsePart);
             }
 
         }

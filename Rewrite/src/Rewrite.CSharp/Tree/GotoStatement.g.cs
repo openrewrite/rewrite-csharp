@@ -57,35 +57,35 @@ public partial interface Cs : J
             return v.VisitGotoStatement(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public GotoStatement WithId(Guid newId)
         {
-            return newId == id ? this : new GotoStatement(newId, prefix, markers, caseOrDefaultKeyword, target);
+            return newId == Id ? this : new GotoStatement(newId, Prefix, Markers, CaseOrDefaultKeyword, Target);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public GotoStatement WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new GotoStatement(id, newPrefix, markers, caseOrDefaultKeyword, target);
+            return newPrefix == Prefix ? this : new GotoStatement(Id, newPrefix, Markers, CaseOrDefaultKeyword, Target);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public GotoStatement WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new GotoStatement(id, prefix, newMarkers, caseOrDefaultKeyword, target);
+            return ReferenceEquals(newMarkers, Markers) ? this : new GotoStatement(Id, Prefix, newMarkers, CaseOrDefaultKeyword, Target);
         }
-        public Cs.Keyword? CaseOrDefaultKeyword => caseOrDefaultKeyword;
+        public Cs.Keyword? CaseOrDefaultKeyword { get;  set; } = caseOrDefaultKeyword;
 
         public GotoStatement WithCaseOrDefaultKeyword(Cs.Keyword? newCaseOrDefaultKeyword)
         {
-            return ReferenceEquals(newCaseOrDefaultKeyword, caseOrDefaultKeyword) ? this : new GotoStatement(id, prefix, markers, newCaseOrDefaultKeyword, target);
+            return ReferenceEquals(newCaseOrDefaultKeyword, CaseOrDefaultKeyword) ? this : new GotoStatement(Id, Prefix, Markers, newCaseOrDefaultKeyword, Target);
         }
-        public Expression? Target => target;
+        public Expression? Target { get;  set; } = target;
 
         public GotoStatement WithTarget(Expression? newTarget)
         {
-            return ReferenceEquals(newTarget, target) ? this : new GotoStatement(id, prefix, markers, caseOrDefaultKeyword, newTarget);
+            return ReferenceEquals(newTarget, Target) ? this : new GotoStatement(Id, Prefix, Markers, CaseOrDefaultKeyword, newTarget);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

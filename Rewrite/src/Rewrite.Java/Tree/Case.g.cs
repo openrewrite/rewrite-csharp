@@ -67,56 +67,56 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitCase(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Case WithId(Guid newId)
         {
-            return newId == id ? this : new Case(newId, prefix, markers, caseType, _caseLabels, _statements, _body, guard);
+            return newId == Id ? this : new Case(newId, Prefix, Markers, CaseType, _caseLabels, _statements, _body, Guard);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Case WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Case(id, newPrefix, markers, caseType, _caseLabels, _statements, _body, guard);
+            return newPrefix == Prefix ? this : new Case(Id, newPrefix, Markers, CaseType, _caseLabels, _statements, _body, Guard);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Case WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Case(id, prefix, newMarkers, caseType, _caseLabels, _statements, _body, guard);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Case(Id, Prefix, newMarkers, CaseType, _caseLabels, _statements, _body, Guard);
         }
-        public Types CaseType => caseType;
+        public Types CaseType { get;  set; } = caseType;
 
         public Case WithCaseType(Types newCaseType)
         {
-            return newCaseType == caseType ? this : new Case(id, prefix, markers, newCaseType, _caseLabels, _statements, _body, guard);
+            return newCaseType == CaseType ? this : new Case(Id, Prefix, Markers, newCaseType, _caseLabels, _statements, _body, Guard);
         }
-        private readonly JContainer<J> _caseLabels = caseLabels;
+        private JContainer<J> _caseLabels = caseLabels;
         public IList<J> CaseLabels => _caseLabels.GetElements();
 
         public Case WithCaseLabels(IList<J> newCaseLabels)
         {
             return Padding.WithCaseLabels(JContainer<J>.WithElements(_caseLabels, newCaseLabels));
         }
-        private readonly JContainer<Statement> _statements = statements;
+        private JContainer<Statement> _statements = statements;
         public IList<Statement> Statements => _statements.GetElements();
 
         public Case WithStatements(IList<Statement> newStatements)
         {
             return Padding.WithStatements(JContainer<Statement>.WithElements(_statements, newStatements));
         }
-        private readonly JRightPadded<J>? _body = body;
+        private JRightPadded<J>? _body = body;
         public J? Body => _body?.Element;
 
         public Case WithBody(J? newBody)
         {
             return Padding.WithBody(JRightPadded<J>.WithElement(_body, newBody));
         }
-        public Expression? Guard => guard;
+        public Expression? Guard { get;  set; } = guard;
 
         public Case WithGuard(Expression? newGuard)
         {
-            return ReferenceEquals(newGuard, guard) ? this : new Case(id, prefix, markers, caseType, _caseLabels, _statements, _body, newGuard);
+            return ReferenceEquals(newGuard, Guard) ? this : new Case(Id, Prefix, Markers, CaseType, _caseLabels, _statements, _body, newGuard);
         }
         public enum Types
         {
@@ -125,25 +125,25 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.Case T)
         {
-            public JContainer<J> CaseLabels => T._caseLabels;
+            public JContainer<J> CaseLabels { get => T._caseLabels;  set => T._caseLabels = value; }
 
             public J.Case WithCaseLabels(JContainer<J> newCaseLabels)
             {
-                return T._caseLabels == newCaseLabels ? T : new J.Case(T.Id, T.Prefix, T.Markers, T.CaseType, newCaseLabels, T._statements, T._body, T.Guard);
+                return CaseLabels == newCaseLabels ? T : new J.Case(T.Id, T.Prefix, T.Markers, T.CaseType, newCaseLabels, T._statements, T._body, T.Guard);
             }
 
-            public JContainer<Statement> Statements => T._statements;
+            public JContainer<Statement> Statements { get => T._statements;  set => T._statements = value; }
 
             public J.Case WithStatements(JContainer<Statement> newStatements)
             {
-                return T._statements == newStatements ? T : new J.Case(T.Id, T.Prefix, T.Markers, T.CaseType, T._caseLabels, newStatements, T._body, T.Guard);
+                return Statements == newStatements ? T : new J.Case(T.Id, T.Prefix, T.Markers, T.CaseType, T._caseLabels, newStatements, T._body, T.Guard);
             }
 
-            public JRightPadded<J>? Body => T._body;
+            public JRightPadded<J>? Body { get => T._body;  set => T._body = value; }
 
             public J.Case WithBody(JRightPadded<J>? newBody)
             {
-                return T._body == newBody ? T : new J.Case(T.Id, T.Prefix, T.Markers, T.CaseType, T._caseLabels, T._statements, newBody, T.Guard);
+                return Body == newBody ? T : new J.Case(T.Id, T.Prefix, T.Markers, T.CaseType, T._caseLabels, T._statements, newBody, T.Guard);
             }
 
         }

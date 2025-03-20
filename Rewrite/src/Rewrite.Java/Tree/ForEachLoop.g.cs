@@ -64,31 +64,31 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitForEachLoop(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ForEachLoop WithId(Guid newId)
         {
-            return newId == id ? this : new ForEachLoop(newId, prefix, markers, loopControl, _body);
+            return newId == Id ? this : new ForEachLoop(newId, Prefix, Markers, LoopControl, _body);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ForEachLoop WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ForEachLoop(id, newPrefix, markers, loopControl, _body);
+            return newPrefix == Prefix ? this : new ForEachLoop(Id, newPrefix, Markers, LoopControl, _body);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ForEachLoop WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ForEachLoop(id, prefix, newMarkers, loopControl, _body);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ForEachLoop(Id, Prefix, newMarkers, LoopControl, _body);
         }
-        public Control LoopControl => loopControl;
+        public Control LoopControl { get;  set; } = loopControl;
 
         public ForEachLoop WithLoopControl(Control newLoopControl)
         {
-            return ReferenceEquals(newLoopControl, loopControl) ? this : new ForEachLoop(id, prefix, markers, newLoopControl, _body);
+            return ReferenceEquals(newLoopControl, LoopControl) ? this : new ForEachLoop(Id, Prefix, Markers, newLoopControl, _body);
         }
-        private readonly JRightPadded<Statement> _body = body;
+        private JRightPadded<Statement> _body = body;
         public Statement Body => _body.Element;
 
         public ForEachLoop WithBody(Statement newBody)
@@ -136,32 +136,32 @@ public partial interface J : Rewrite.Core.Tree
                 return v.VisitForEachControl(this, p);
             }
 
-            public Guid Id => id;
+            public Guid Id { get;  set; } = id;
 
             public Control WithId(Guid newId)
             {
-                return newId == id ? this : new Control(newId, prefix, markers, _variable, _iterable);
+                return newId == Id ? this : new Control(newId, Prefix, Markers, _variable, _iterable);
             }
-            public Space Prefix => prefix;
+            public Space Prefix { get;  set; } = prefix;
 
             public Control WithPrefix(Space newPrefix)
             {
-                return newPrefix == prefix ? this : new Control(id, newPrefix, markers, _variable, _iterable);
+                return newPrefix == Prefix ? this : new Control(Id, newPrefix, Markers, _variable, _iterable);
             }
-            public Markers Markers => markers;
+            public Markers Markers { get;  set; } = markers;
 
             public Control WithMarkers(Markers newMarkers)
             {
-                return ReferenceEquals(newMarkers, markers) ? this : new Control(id, prefix, newMarkers, _variable, _iterable);
+                return ReferenceEquals(newMarkers, Markers) ? this : new Control(Id, Prefix, newMarkers, _variable, _iterable);
             }
-            private readonly JRightPadded<J.VariableDeclarations> _variable = variable;
+            private JRightPadded<J.VariableDeclarations> _variable = variable;
             public J.VariableDeclarations Variable => _variable.Element;
 
             public Control WithVariable(J.VariableDeclarations newVariable)
             {
                 return Padding.WithVariable(_variable.WithElement(newVariable));
             }
-            private readonly JRightPadded<Expression> _iterable = iterable;
+            private JRightPadded<Expression> _iterable = iterable;
             public Expression Iterable => _iterable.Element;
 
             public Control WithIterable(Expression newIterable)
@@ -170,18 +170,18 @@ public partial interface J : Rewrite.Core.Tree
             }
             public sealed record PaddingHelper(J.ForEachLoop.Control T)
             {
-                public JRightPadded<J.VariableDeclarations> Variable => T._variable;
+                public JRightPadded<J.VariableDeclarations> Variable { get => T._variable;  set => T._variable = value; }
 
                 public J.ForEachLoop.Control WithVariable(JRightPadded<J.VariableDeclarations> newVariable)
                 {
-                    return T._variable == newVariable ? T : new J.ForEachLoop.Control(T.Id, T.Prefix, T.Markers, newVariable, T._iterable);
+                    return Variable == newVariable ? T : new J.ForEachLoop.Control(T.Id, T.Prefix, T.Markers, newVariable, T._iterable);
                 }
 
-                public JRightPadded<Expression> Iterable => T._iterable;
+                public JRightPadded<Expression> Iterable { get => T._iterable;  set => T._iterable = value; }
 
                 public J.ForEachLoop.Control WithIterable(JRightPadded<Expression> newIterable)
                 {
-                    return T._iterable == newIterable ? T : new J.ForEachLoop.Control(T.Id, T.Prefix, T.Markers, T._variable, newIterable);
+                    return Iterable == newIterable ? T : new J.ForEachLoop.Control(T.Id, T.Prefix, T.Markers, T._variable, newIterable);
                 }
 
             }
@@ -203,11 +203,11 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.ForEachLoop T)
         {
-            public JRightPadded<Statement> Body => T._body;
+            public JRightPadded<Statement> Body { get => T._body;  set => T._body = value; }
 
             public J.ForEachLoop WithBody(JRightPadded<Statement> newBody)
             {
-                return T._body == newBody ? T : new J.ForEachLoop(T.Id, T.Prefix, T.Markers, T.LoopControl, newBody);
+                return Body == newBody ? T : new J.ForEachLoop(T.Id, T.Prefix, T.Markers, T.LoopControl, newBody);
             }
 
         }

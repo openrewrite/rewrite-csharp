@@ -39,29 +39,29 @@ public partial interface Cs : J
             return v.VisitStackAllocExpression(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public StackAllocExpression WithId(Guid newId)
         {
-            return newId == id ? this : new StackAllocExpression(newId, prefix, markers, expression);
+            return newId == Id ? this : new StackAllocExpression(newId, Prefix, Markers, Expression);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public StackAllocExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new StackAllocExpression(id, newPrefix, markers, expression);
+            return newPrefix == Prefix ? this : new StackAllocExpression(Id, newPrefix, Markers, Expression);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public StackAllocExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new StackAllocExpression(id, prefix, newMarkers, expression);
+            return ReferenceEquals(newMarkers, Markers) ? this : new StackAllocExpression(Id, Prefix, newMarkers, Expression);
         }
-        public J.NewArray Expression => expression;
+        public J.NewArray Expression { get;  set; } = expression;
 
         public StackAllocExpression WithExpression(J.NewArray newExpression)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new StackAllocExpression(id, prefix, markers, newExpression);
+            return ReferenceEquals(newExpression, Expression) ? this : new StackAllocExpression(Id, Prefix, Markers, newExpression);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

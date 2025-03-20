@@ -93,54 +93,54 @@ public partial interface Cs : J
             return v.VisitAccessorDeclaration(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public AccessorDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new AccessorDeclaration(newId, prefix, markers, attributes, modifiers, _kind, expressionBody, body);
+            return newId == Id ? this : new AccessorDeclaration(newId, Prefix, Markers, Attributes, Modifiers, _kind, ExpressionBody, Body);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public AccessorDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new AccessorDeclaration(id, newPrefix, markers, attributes, modifiers, _kind, expressionBody, body);
+            return newPrefix == Prefix ? this : new AccessorDeclaration(Id, newPrefix, Markers, Attributes, Modifiers, _kind, ExpressionBody, Body);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public AccessorDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new AccessorDeclaration(id, prefix, newMarkers, attributes, modifiers, _kind, expressionBody, body);
+            return ReferenceEquals(newMarkers, Markers) ? this : new AccessorDeclaration(Id, Prefix, newMarkers, Attributes, Modifiers, _kind, ExpressionBody, Body);
         }
-        public IList<Cs.AttributeList> Attributes => attributes;
+        public IList<Cs.AttributeList> Attributes { get;  set; } = attributes;
 
         public AccessorDeclaration WithAttributes(IList<Cs.AttributeList> newAttributes)
         {
-            return newAttributes == attributes ? this : new AccessorDeclaration(id, prefix, markers, newAttributes, modifiers, _kind, expressionBody, body);
+            return newAttributes == Attributes ? this : new AccessorDeclaration(Id, Prefix, Markers, newAttributes, Modifiers, _kind, ExpressionBody, Body);
         }
-        public IList<J.Modifier> Modifiers => modifiers;
+        public IList<J.Modifier> Modifiers { get;  set; } = modifiers;
 
         public AccessorDeclaration WithModifiers(IList<J.Modifier> newModifiers)
         {
-            return newModifiers == modifiers ? this : new AccessorDeclaration(id, prefix, markers, attributes, newModifiers, _kind, expressionBody, body);
+            return newModifiers == Modifiers ? this : new AccessorDeclaration(Id, Prefix, Markers, Attributes, newModifiers, _kind, ExpressionBody, Body);
         }
-        private readonly JLeftPadded<AccessorKinds> _kind = kind;
+        private JLeftPadded<AccessorKinds> _kind = kind;
         public AccessorKinds Kind => _kind.Element;
 
         public AccessorDeclaration WithKind(AccessorKinds newKind)
         {
             return Padding.WithKind(_kind.WithElement(newKind));
         }
-        public Cs.ArrowExpressionClause? ExpressionBody => expressionBody;
+        public Cs.ArrowExpressionClause? ExpressionBody { get;  set; } = expressionBody;
 
         public AccessorDeclaration WithExpressionBody(Cs.ArrowExpressionClause? newExpressionBody)
         {
-            return ReferenceEquals(newExpressionBody, expressionBody) ? this : new AccessorDeclaration(id, prefix, markers, attributes, modifiers, _kind, newExpressionBody, body);
+            return ReferenceEquals(newExpressionBody, ExpressionBody) ? this : new AccessorDeclaration(Id, Prefix, Markers, Attributes, Modifiers, _kind, newExpressionBody, Body);
         }
-        public J.Block? Body => body;
+        public J.Block? Body { get;  set; } = body;
 
         public AccessorDeclaration WithBody(J.Block? newBody)
         {
-            return ReferenceEquals(newBody, body) ? this : new AccessorDeclaration(id, prefix, markers, attributes, modifiers, _kind, expressionBody, newBody);
+            return ReferenceEquals(newBody, Body) ? this : new AccessorDeclaration(Id, Prefix, Markers, Attributes, Modifiers, _kind, ExpressionBody, newBody);
         }
         public enum AccessorKinds
         {
@@ -152,11 +152,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.AccessorDeclaration T)
         {
-            public JLeftPadded<Cs.AccessorDeclaration.AccessorKinds> Kind => T._kind;
+            public JLeftPadded<Cs.AccessorDeclaration.AccessorKinds> Kind { get => T._kind;  set => T._kind = value; }
 
             public Cs.AccessorDeclaration WithKind(JLeftPadded<Cs.AccessorDeclaration.AccessorKinds> newKind)
             {
-                return T._kind == newKind ? T : new Cs.AccessorDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, newKind, T.ExpressionBody, T.Body);
+                return Kind == newKind ? T : new Cs.AccessorDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, newKind, T.ExpressionBody, T.Body);
             }
 
         }

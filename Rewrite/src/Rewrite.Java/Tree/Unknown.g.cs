@@ -41,29 +41,29 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitUnknown(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Unknown WithId(Guid newId)
         {
-            return newId == id ? this : new Unknown(newId, prefix, markers, unknownSource);
+            return newId == Id ? this : new Unknown(newId, Prefix, Markers, UnknownSource);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Unknown WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Unknown(id, newPrefix, markers, unknownSource);
+            return newPrefix == Prefix ? this : new Unknown(Id, newPrefix, Markers, UnknownSource);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Unknown WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Unknown(id, prefix, newMarkers, unknownSource);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Unknown(Id, Prefix, newMarkers, UnknownSource);
         }
-        public Source UnknownSource => unknownSource;
+        public Source UnknownSource { get;  set; } = unknownSource;
 
         public Unknown WithUnknownSource(Source newUnknownSource)
         {
-            return ReferenceEquals(newUnknownSource, unknownSource) ? this : new Unknown(id, prefix, markers, newUnknownSource);
+            return ReferenceEquals(newUnknownSource, UnknownSource) ? this : new Unknown(Id, Prefix, Markers, newUnknownSource);
         }
         /// <summary>
         /// This class only exists to clean up the printed results from `SearchResult` markers.
@@ -84,29 +84,29 @@ public partial interface J : Rewrite.Core.Tree
                 return v.VisitUnknownSource(this, p);
             }
 
-            public Guid Id => id;
+            public Guid Id { get;  set; } = id;
 
             public Source WithId(Guid newId)
             {
-                return newId == id ? this : new Source(newId, prefix, markers, text);
+                return newId == Id ? this : new Source(newId, Prefix, Markers, Text);
             }
-            public Space Prefix => prefix;
+            public Space Prefix { get;  set; } = prefix;
 
             public Source WithPrefix(Space newPrefix)
             {
-                return newPrefix == prefix ? this : new Source(id, newPrefix, markers, text);
+                return newPrefix == Prefix ? this : new Source(Id, newPrefix, Markers, Text);
             }
-            public Markers Markers => markers;
+            public Markers Markers { get;  set; } = markers;
 
             public Source WithMarkers(Markers newMarkers)
             {
-                return ReferenceEquals(newMarkers, markers) ? this : new Source(id, prefix, newMarkers, text);
+                return ReferenceEquals(newMarkers, Markers) ? this : new Source(Id, Prefix, newMarkers, Text);
             }
-            public string Text => text;
+            public string Text { get;  set; } = text;
 
             public Source WithText(string newText)
             {
-                return newText == text ? this : new Source(id, prefix, markers, newText);
+                return newText == Text ? this : new Source(Id, Prefix, Markers, newText);
             }
             #if DEBUG_VISITOR
             [DebuggerStepThrough]

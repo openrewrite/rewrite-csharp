@@ -68,55 +68,55 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitVariableDeclarations(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public VariableDeclarations WithId(Guid newId)
         {
-            return newId == id ? this : new VariableDeclarations(newId, prefix, markers, leadingAnnotations, modifiers, typeExpression, varargs, dimensionsBeforeName, _variables);
+            return newId == Id ? this : new VariableDeclarations(newId, Prefix, Markers, LeadingAnnotations, Modifiers, TypeExpression, Varargs, DimensionsBeforeName, _variables);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public VariableDeclarations WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new VariableDeclarations(id, newPrefix, markers, leadingAnnotations, modifiers, typeExpression, varargs, dimensionsBeforeName, _variables);
+            return newPrefix == Prefix ? this : new VariableDeclarations(Id, newPrefix, Markers, LeadingAnnotations, Modifiers, TypeExpression, Varargs, DimensionsBeforeName, _variables);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public VariableDeclarations WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new VariableDeclarations(id, prefix, newMarkers, leadingAnnotations, modifiers, typeExpression, varargs, dimensionsBeforeName, _variables);
+            return ReferenceEquals(newMarkers, Markers) ? this : new VariableDeclarations(Id, Prefix, newMarkers, LeadingAnnotations, Modifiers, TypeExpression, Varargs, DimensionsBeforeName, _variables);
         }
-        public IList<J.Annotation> LeadingAnnotations => leadingAnnotations;
+        public IList<J.Annotation> LeadingAnnotations { get;  set; } = leadingAnnotations;
 
         public VariableDeclarations WithLeadingAnnotations(IList<J.Annotation> newLeadingAnnotations)
         {
-            return newLeadingAnnotations == leadingAnnotations ? this : new VariableDeclarations(id, prefix, markers, newLeadingAnnotations, modifiers, typeExpression, varargs, dimensionsBeforeName, _variables);
+            return newLeadingAnnotations == LeadingAnnotations ? this : new VariableDeclarations(Id, Prefix, Markers, newLeadingAnnotations, Modifiers, TypeExpression, Varargs, DimensionsBeforeName, _variables);
         }
-        public IList<J.Modifier> Modifiers => modifiers;
+        public IList<J.Modifier> Modifiers { get;  set; } = modifiers;
 
         public VariableDeclarations WithModifiers(IList<J.Modifier> newModifiers)
         {
-            return newModifiers == modifiers ? this : new VariableDeclarations(id, prefix, markers, leadingAnnotations, newModifiers, typeExpression, varargs, dimensionsBeforeName, _variables);
+            return newModifiers == Modifiers ? this : new VariableDeclarations(Id, Prefix, Markers, LeadingAnnotations, newModifiers, TypeExpression, Varargs, DimensionsBeforeName, _variables);
         }
-        public TypeTree? TypeExpression => typeExpression;
+        public TypeTree? TypeExpression { get;  set; } = typeExpression;
 
         public VariableDeclarations WithTypeExpression(TypeTree? newTypeExpression)
         {
-            return ReferenceEquals(newTypeExpression, typeExpression) ? this : new VariableDeclarations(id, prefix, markers, leadingAnnotations, modifiers, newTypeExpression, varargs, dimensionsBeforeName, _variables);
+            return ReferenceEquals(newTypeExpression, TypeExpression) ? this : new VariableDeclarations(Id, Prefix, Markers, LeadingAnnotations, Modifiers, newTypeExpression, Varargs, DimensionsBeforeName, _variables);
         }
-        public Space? Varargs => varargs;
+        public Space? Varargs { get;  set; } = varargs;
 
         public VariableDeclarations WithVarargs(Space? newVarargs)
         {
-            return newVarargs == varargs ? this : new VariableDeclarations(id, prefix, markers, leadingAnnotations, modifiers, typeExpression, newVarargs, dimensionsBeforeName, _variables);
+            return newVarargs == Varargs ? this : new VariableDeclarations(Id, Prefix, Markers, LeadingAnnotations, Modifiers, TypeExpression, newVarargs, DimensionsBeforeName, _variables);
         }
-        public IList<JLeftPadded<Space>> DimensionsBeforeName => dimensionsBeforeName;
+        public IList<JLeftPadded<Space>> DimensionsBeforeName { get;  set; } = dimensionsBeforeName;
 
         public VariableDeclarations WithDimensionsBeforeName(IList<JLeftPadded<Space>> newDimensionsBeforeName)
         {
-            return newDimensionsBeforeName == dimensionsBeforeName ? this : new VariableDeclarations(id, prefix, markers, leadingAnnotations, modifiers, typeExpression, varargs, newDimensionsBeforeName, _variables);
+            return newDimensionsBeforeName == DimensionsBeforeName ? this : new VariableDeclarations(Id, Prefix, Markers, LeadingAnnotations, Modifiers, TypeExpression, Varargs, newDimensionsBeforeName, _variables);
         }
-        private readonly IList<JRightPadded<NamedVariable>> _variables = variables;
+        private IList<JRightPadded<NamedVariable>> _variables = variables;
         public IList<NamedVariable> Variables => _variables.Elements();
 
         public VariableDeclarations WithVariables(IList<NamedVariable> newVariables)
@@ -166,56 +166,56 @@ public partial interface J : Rewrite.Core.Tree
                 return v.VisitVariable(this, p);
             }
 
-            public Guid Id => id;
+            public Guid Id { get;  set; } = id;
 
             public NamedVariable WithId(Guid newId)
             {
-                return newId == id ? this : new NamedVariable(newId, prefix, markers, name, dimensionsAfterName, _initializer, variableType);
+                return newId == Id ? this : new NamedVariable(newId, Prefix, Markers, Name, DimensionsAfterName, _initializer, VariableType);
             }
-            public Space Prefix => prefix;
+            public Space Prefix { get;  set; } = prefix;
 
             public NamedVariable WithPrefix(Space newPrefix)
             {
-                return newPrefix == prefix ? this : new NamedVariable(id, newPrefix, markers, name, dimensionsAfterName, _initializer, variableType);
+                return newPrefix == Prefix ? this : new NamedVariable(Id, newPrefix, Markers, Name, DimensionsAfterName, _initializer, VariableType);
             }
-            public Markers Markers => markers;
+            public Markers Markers { get;  set; } = markers;
 
             public NamedVariable WithMarkers(Markers newMarkers)
             {
-                return ReferenceEquals(newMarkers, markers) ? this : new NamedVariable(id, prefix, newMarkers, name, dimensionsAfterName, _initializer, variableType);
+                return ReferenceEquals(newMarkers, Markers) ? this : new NamedVariable(Id, Prefix, newMarkers, Name, DimensionsAfterName, _initializer, VariableType);
             }
-            public J.Identifier Name => name;
+            public J.Identifier Name { get;  set; } = name;
 
             public NamedVariable WithName(J.Identifier newName)
             {
-                return ReferenceEquals(newName, name) ? this : new NamedVariable(id, prefix, markers, newName, dimensionsAfterName, _initializer, variableType);
+                return ReferenceEquals(newName, Name) ? this : new NamedVariable(Id, Prefix, Markers, newName, DimensionsAfterName, _initializer, VariableType);
             }
-            public IList<JLeftPadded<Space>> DimensionsAfterName => dimensionsAfterName;
+            public IList<JLeftPadded<Space>> DimensionsAfterName { get;  set; } = dimensionsAfterName;
 
             public NamedVariable WithDimensionsAfterName(IList<JLeftPadded<Space>> newDimensionsAfterName)
             {
-                return newDimensionsAfterName == dimensionsAfterName ? this : new NamedVariable(id, prefix, markers, name, newDimensionsAfterName, _initializer, variableType);
+                return newDimensionsAfterName == DimensionsAfterName ? this : new NamedVariable(Id, Prefix, Markers, Name, newDimensionsAfterName, _initializer, VariableType);
             }
-            private readonly JLeftPadded<Expression>? _initializer = initializer;
+            private JLeftPadded<Expression>? _initializer = initializer;
             public Expression? Initializer => _initializer?.Element;
 
             public NamedVariable WithInitializer(Expression? newInitializer)
             {
                 return Padding.WithInitializer(JLeftPadded<Expression>.WithElement(_initializer, newInitializer));
             }
-            public JavaType.Variable? VariableType => variableType;
+            public JavaType.Variable? VariableType { get;  set; } = variableType;
 
             public NamedVariable WithVariableType(JavaType.Variable? newVariableType)
             {
-                return newVariableType == variableType ? this : new NamedVariable(id, prefix, markers, name, dimensionsAfterName, _initializer, newVariableType);
+                return newVariableType == VariableType ? this : new NamedVariable(Id, Prefix, Markers, Name, DimensionsAfterName, _initializer, newVariableType);
             }
             public sealed record PaddingHelper(J.VariableDeclarations.NamedVariable T)
             {
-                public JLeftPadded<Expression>? Initializer => T._initializer;
+                public JLeftPadded<Expression>? Initializer { get => T._initializer;  set => T._initializer = value; }
 
                 public J.VariableDeclarations.NamedVariable WithInitializer(JLeftPadded<Expression>? newInitializer)
                 {
-                    return T._initializer == newInitializer ? T : new J.VariableDeclarations.NamedVariable(T.Id, T.Prefix, T.Markers, T.Name, T.DimensionsAfterName, newInitializer, T.VariableType);
+                    return Initializer == newInitializer ? T : new J.VariableDeclarations.NamedVariable(T.Id, T.Prefix, T.Markers, T.Name, T.DimensionsAfterName, newInitializer, T.VariableType);
                 }
 
             }
@@ -237,11 +237,11 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.VariableDeclarations T)
         {
-            public IList<JRightPadded<J.VariableDeclarations.NamedVariable>> Variables => T._variables;
+            public IList<JRightPadded<J.VariableDeclarations.NamedVariable>> Variables { get => T._variables;  set => T._variables = value; }
 
             public J.VariableDeclarations WithVariables(IList<JRightPadded<J.VariableDeclarations.NamedVariable>> newVariables)
             {
-                return T._variables == newVariables ? T : new J.VariableDeclarations(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T.TypeExpression, T.Varargs, T.DimensionsBeforeName, newVariables);
+                return Variables == newVariables ? T : new J.VariableDeclarations(T.Id, T.Prefix, T.Markers, T.LeadingAnnotations, T.Modifiers, T.TypeExpression, T.Varargs, T.DimensionsBeforeName, newVariables);
             }
 
         }

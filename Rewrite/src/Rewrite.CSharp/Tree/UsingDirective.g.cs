@@ -68,86 +68,86 @@ public partial interface Cs : J
             return v.VisitUsingDirective(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public UsingDirective WithId(Guid newId)
         {
-            return newId == id ? this : new UsingDirective(newId, prefix, markers, _global, _static, _unsafe, _alias, namespaceOrType);
+            return newId == Id ? this : new UsingDirective(newId, Prefix, Markers, _global, _static, _unsafe, _alias, NamespaceOrType);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public UsingDirective WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new UsingDirective(id, newPrefix, markers, _global, _static, _unsafe, _alias, namespaceOrType);
+            return newPrefix == Prefix ? this : new UsingDirective(Id, newPrefix, Markers, _global, _static, _unsafe, _alias, NamespaceOrType);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public UsingDirective WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new UsingDirective(id, prefix, newMarkers, _global, _static, _unsafe, _alias, namespaceOrType);
+            return ReferenceEquals(newMarkers, Markers) ? this : new UsingDirective(Id, Prefix, newMarkers, _global, _static, _unsafe, _alias, NamespaceOrType);
         }
-        private readonly JRightPadded<bool> _global = global;
+        private JRightPadded<bool> _global = global;
         public bool Global => _global.Element;
 
         public UsingDirective WithGlobal(bool newGlobal)
         {
             return Padding.WithGlobal(_global.WithElement(newGlobal));
         }
-        private readonly JLeftPadded<bool> _static = @static;
+        private JLeftPadded<bool> _static = @static;
         public bool Static => _static.Element;
 
         public UsingDirective WithStatic(bool newStatic)
         {
             return Padding.WithStatic(_static.WithElement(newStatic));
         }
-        private readonly JLeftPadded<bool> _unsafe = @unsafe;
+        private JLeftPadded<bool> _unsafe = @unsafe;
         public bool Unsafe => _unsafe.Element;
 
         public UsingDirective WithUnsafe(bool newUnsafe)
         {
             return Padding.WithUnsafe(_unsafe.WithElement(newUnsafe));
         }
-        private readonly JRightPadded<J.Identifier>? _alias = alias;
+        private JRightPadded<J.Identifier>? _alias = alias;
         public J.Identifier? Alias => _alias?.Element;
 
         public UsingDirective WithAlias(J.Identifier? newAlias)
         {
             return Padding.WithAlias(JRightPadded<J.Identifier>.WithElement(_alias, newAlias));
         }
-        public TypeTree NamespaceOrType => namespaceOrType;
+        public TypeTree NamespaceOrType { get;  set; } = namespaceOrType;
 
         public UsingDirective WithNamespaceOrType(TypeTree newNamespaceOrType)
         {
-            return ReferenceEquals(newNamespaceOrType, namespaceOrType) ? this : new UsingDirective(id, prefix, markers, _global, _static, _unsafe, _alias, newNamespaceOrType);
+            return ReferenceEquals(newNamespaceOrType, NamespaceOrType) ? this : new UsingDirective(Id, Prefix, Markers, _global, _static, _unsafe, _alias, newNamespaceOrType);
         }
         public sealed record PaddingHelper(Cs.UsingDirective T)
         {
-            public JRightPadded<bool> Global => T._global;
+            public JRightPadded<bool> Global { get => T._global;  set => T._global = value; }
 
             public Cs.UsingDirective WithGlobal(JRightPadded<bool> newGlobal)
             {
-                return T._global == newGlobal ? T : new Cs.UsingDirective(T.Id, T.Prefix, T.Markers, newGlobal, T._static, T._unsafe, T._alias, T.NamespaceOrType);
+                return Global == newGlobal ? T : new Cs.UsingDirective(T.Id, T.Prefix, T.Markers, newGlobal, T._static, T._unsafe, T._alias, T.NamespaceOrType);
             }
 
-            public JLeftPadded<bool> Static => T._static;
+            public JLeftPadded<bool> Static { get => T._static;  set => T._static = value; }
 
             public Cs.UsingDirective WithStatic(JLeftPadded<bool> newStatic)
             {
-                return T._static == newStatic ? T : new Cs.UsingDirective(T.Id, T.Prefix, T.Markers, T._global, newStatic, T._unsafe, T._alias, T.NamespaceOrType);
+                return Static == newStatic ? T : new Cs.UsingDirective(T.Id, T.Prefix, T.Markers, T._global, newStatic, T._unsafe, T._alias, T.NamespaceOrType);
             }
 
-            public JLeftPadded<bool> Unsafe => T._unsafe;
+            public JLeftPadded<bool> Unsafe { get => T._unsafe;  set => T._unsafe = value; }
 
             public Cs.UsingDirective WithUnsafe(JLeftPadded<bool> newUnsafe)
             {
-                return T._unsafe == newUnsafe ? T : new Cs.UsingDirective(T.Id, T.Prefix, T.Markers, T._global, T._static, newUnsafe, T._alias, T.NamespaceOrType);
+                return Unsafe == newUnsafe ? T : new Cs.UsingDirective(T.Id, T.Prefix, T.Markers, T._global, T._static, newUnsafe, T._alias, T.NamespaceOrType);
             }
 
-            public JRightPadded<J.Identifier>? Alias => T._alias;
+            public JRightPadded<J.Identifier>? Alias { get => T._alias;  set => T._alias = value; }
 
             public Cs.UsingDirective WithAlias(JRightPadded<J.Identifier>? newAlias)
             {
-                return T._alias == newAlias ? T : new Cs.UsingDirective(T.Id, T.Prefix, T.Markers, T._global, T._static, T._unsafe, newAlias, T.NamespaceOrType);
+                return Alias == newAlias ? T : new Cs.UsingDirective(T.Id, T.Prefix, T.Markers, T._global, T._static, T._unsafe, newAlias, T.NamespaceOrType);
             }
 
         }

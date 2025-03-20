@@ -65,50 +65,50 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitFieldAccess(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public FieldAccess WithId(Guid newId)
         {
-            return newId == id ? this : new FieldAccess(newId, prefix, markers, target, _name, type);
+            return newId == Id ? this : new FieldAccess(newId, Prefix, Markers, Target, _name, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public FieldAccess WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new FieldAccess(id, newPrefix, markers, target, _name, type);
+            return newPrefix == Prefix ? this : new FieldAccess(Id, newPrefix, Markers, Target, _name, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public FieldAccess WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new FieldAccess(id, prefix, newMarkers, target, _name, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new FieldAccess(Id, Prefix, newMarkers, Target, _name, Type);
         }
-        public Expression Target => target;
+        public Expression Target { get;  set; } = target;
 
         public FieldAccess WithTarget(Expression newTarget)
         {
-            return ReferenceEquals(newTarget, target) ? this : new FieldAccess(id, prefix, markers, newTarget, _name, type);
+            return ReferenceEquals(newTarget, Target) ? this : new FieldAccess(Id, Prefix, Markers, newTarget, _name, Type);
         }
-        private readonly JLeftPadded<J.Identifier> _name = name;
+        private JLeftPadded<J.Identifier> _name = name;
         public J.Identifier Name => _name.Element;
 
         public FieldAccess WithName(J.Identifier newName)
         {
             return Padding.WithName(_name.WithElement(newName));
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public FieldAccess WithType(JavaType? newType)
         {
-            return newType == type ? this : new FieldAccess(id, prefix, markers, target, _name, newType);
+            return newType == Type ? this : new FieldAccess(Id, Prefix, Markers, Target, _name, newType);
         }
         public sealed record PaddingHelper(J.FieldAccess T)
         {
-            public JLeftPadded<J.Identifier> Name => T._name;
+            public JLeftPadded<J.Identifier> Name { get => T._name;  set => T._name = value; }
 
             public J.FieldAccess WithName(JLeftPadded<J.Identifier> newName)
             {
-                return T._name == newName ? T : new J.FieldAccess(T.Id, T.Prefix, T.Markers, T.Target, newName, T.Type);
+                return Name == newName ? T : new J.FieldAccess(T.Id, T.Prefix, T.Markers, T.Target, newName, T.Type);
             }
 
         }

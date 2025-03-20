@@ -87,31 +87,31 @@ public partial interface Cs : J
             return v.VisitIsPattern(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public IsPattern WithId(Guid newId)
         {
-            return newId == id ? this : new IsPattern(newId, prefix, markers, expression, _pattern);
+            return newId == Id ? this : new IsPattern(newId, Prefix, Markers, Expression, _pattern);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public IsPattern WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new IsPattern(id, newPrefix, markers, expression, _pattern);
+            return newPrefix == Prefix ? this : new IsPattern(Id, newPrefix, Markers, Expression, _pattern);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public IsPattern WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new IsPattern(id, prefix, newMarkers, expression, _pattern);
+            return ReferenceEquals(newMarkers, Markers) ? this : new IsPattern(Id, Prefix, newMarkers, Expression, _pattern);
         }
-        public Expression Expression => expression;
+        public Expression Expression { get;  set; } = expression;
 
         public IsPattern WithExpression(Expression newExpression)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new IsPattern(id, prefix, markers, newExpression, _pattern);
+            return ReferenceEquals(newExpression, Expression) ? this : new IsPattern(Id, Prefix, Markers, newExpression, _pattern);
         }
-        private readonly JLeftPadded<Cs.Pattern> _pattern = pattern;
+        private JLeftPadded<Cs.Pattern> _pattern = pattern;
         public Cs.Pattern Pattern => _pattern.Element;
 
         public IsPattern WithPattern(Cs.Pattern newPattern)
@@ -120,11 +120,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.IsPattern T)
         {
-            public JLeftPadded<Cs.Pattern> Pattern => T._pattern;
+            public JLeftPadded<Cs.Pattern> Pattern { get => T._pattern;  set => T._pattern = value; }
 
             public Cs.IsPattern WithPattern(JLeftPadded<Cs.Pattern> newPattern)
             {
-                return T._pattern == newPattern ? T : new Cs.IsPattern(T.Id, T.Prefix, T.Markers, T.Expression, newPattern);
+                return Pattern == newPattern ? T : new Cs.IsPattern(T.Id, T.Prefix, T.Markers, T.Expression, newPattern);
             }
 
         }

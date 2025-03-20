@@ -48,29 +48,29 @@ public partial interface Cs : J
             return v.VisitDiscardVariableDesignation(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public DiscardVariableDesignation WithId(Guid newId)
         {
-            return newId == id ? this : new DiscardVariableDesignation(newId, prefix, markers, discard);
+            return newId == Id ? this : new DiscardVariableDesignation(newId, Prefix, Markers, Discard);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public DiscardVariableDesignation WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new DiscardVariableDesignation(id, newPrefix, markers, discard);
+            return newPrefix == Prefix ? this : new DiscardVariableDesignation(Id, newPrefix, Markers, Discard);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public DiscardVariableDesignation WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new DiscardVariableDesignation(id, prefix, newMarkers, discard);
+            return ReferenceEquals(newMarkers, Markers) ? this : new DiscardVariableDesignation(Id, Prefix, newMarkers, Discard);
         }
-        public J.Identifier Discard => discard;
+        public J.Identifier Discard { get;  set; } = discard;
 
         public DiscardVariableDesignation WithDiscard(J.Identifier newDiscard)
         {
-            return ReferenceEquals(newDiscard, discard) ? this : new DiscardVariableDesignation(id, prefix, markers, newDiscard);
+            return ReferenceEquals(newDiscard, Discard) ? this : new DiscardVariableDesignation(Id, Prefix, Markers, newDiscard);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

@@ -87,44 +87,44 @@ public partial interface Cs : J
             return v.VisitLetClause(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public LetClause WithId(Guid newId)
         {
-            return newId == id ? this : new LetClause(newId, prefix, markers, _identifier, expression);
+            return newId == Id ? this : new LetClause(newId, Prefix, Markers, _identifier, Expression);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public LetClause WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new LetClause(id, newPrefix, markers, _identifier, expression);
+            return newPrefix == Prefix ? this : new LetClause(Id, newPrefix, Markers, _identifier, Expression);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public LetClause WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new LetClause(id, prefix, newMarkers, _identifier, expression);
+            return ReferenceEquals(newMarkers, Markers) ? this : new LetClause(Id, Prefix, newMarkers, _identifier, Expression);
         }
-        private readonly JRightPadded<J.Identifier> _identifier = identifier;
+        private JRightPadded<J.Identifier> _identifier = identifier;
         public J.Identifier Identifier => _identifier.Element;
 
         public LetClause WithIdentifier(J.Identifier newIdentifier)
         {
             return Padding.WithIdentifier(_identifier.WithElement(newIdentifier));
         }
-        public Expression Expression => expression;
+        public Expression Expression { get;  set; } = expression;
 
         public LetClause WithExpression(Expression newExpression)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new LetClause(id, prefix, markers, _identifier, newExpression);
+            return ReferenceEquals(newExpression, Expression) ? this : new LetClause(Id, Prefix, Markers, _identifier, newExpression);
         }
         public sealed record PaddingHelper(Cs.LetClause T)
         {
-            public JRightPadded<J.Identifier> Identifier => T._identifier;
+            public JRightPadded<J.Identifier> Identifier { get => T._identifier;  set => T._identifier = value; }
 
             public Cs.LetClause WithIdentifier(JRightPadded<J.Identifier> newIdentifier)
             {
-                return T._identifier == newIdentifier ? T : new Cs.LetClause(T.Id, T.Prefix, T.Markers, newIdentifier, T.Expression);
+                return Identifier == newIdentifier ? T : new Cs.LetClause(T.Id, T.Prefix, T.Markers, newIdentifier, T.Expression);
             }
 
         }

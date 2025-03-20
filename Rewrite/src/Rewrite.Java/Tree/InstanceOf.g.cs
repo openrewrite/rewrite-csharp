@@ -66,56 +66,56 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitInstanceOf(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public InstanceOf WithId(Guid newId)
         {
-            return newId == id ? this : new InstanceOf(newId, prefix, markers, _expression, clazz, pattern, type);
+            return newId == Id ? this : new InstanceOf(newId, Prefix, Markers, _expression, Clazz, Pattern, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public InstanceOf WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new InstanceOf(id, newPrefix, markers, _expression, clazz, pattern, type);
+            return newPrefix == Prefix ? this : new InstanceOf(Id, newPrefix, Markers, _expression, Clazz, Pattern, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public InstanceOf WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new InstanceOf(id, prefix, newMarkers, _expression, clazz, pattern, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new InstanceOf(Id, Prefix, newMarkers, _expression, Clazz, Pattern, Type);
         }
-        private readonly JRightPadded<Expression> _expression = expression;
+        private JRightPadded<Expression> _expression = expression;
         public Expression Expression => _expression.Element;
 
         public InstanceOf WithExpression(Expression newExpression)
         {
             return Padding.WithExpression(_expression.WithElement(newExpression));
         }
-        public J Clazz => clazz;
+        public J Clazz { get;  set; } = clazz;
 
         public InstanceOf WithClazz(J newClazz)
         {
-            return ReferenceEquals(newClazz, clazz) ? this : new InstanceOf(id, prefix, markers, _expression, newClazz, pattern, type);
+            return ReferenceEquals(newClazz, Clazz) ? this : new InstanceOf(Id, Prefix, Markers, _expression, newClazz, Pattern, Type);
         }
-        public J? Pattern => pattern;
+        public J? Pattern { get;  set; } = pattern;
 
         public InstanceOf WithPattern(J? newPattern)
         {
-            return ReferenceEquals(newPattern, pattern) ? this : new InstanceOf(id, prefix, markers, _expression, clazz, newPattern, type);
+            return ReferenceEquals(newPattern, Pattern) ? this : new InstanceOf(Id, Prefix, Markers, _expression, Clazz, newPattern, Type);
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public InstanceOf WithType(JavaType? newType)
         {
-            return newType == type ? this : new InstanceOf(id, prefix, markers, _expression, clazz, pattern, newType);
+            return newType == Type ? this : new InstanceOf(Id, Prefix, Markers, _expression, Clazz, Pattern, newType);
         }
         public sealed record PaddingHelper(J.InstanceOf T)
         {
-            public JRightPadded<Expression> Expression => T._expression;
+            public JRightPadded<Expression> Expression { get => T._expression;  set => T._expression = value; }
 
             public J.InstanceOf WithExpression(JRightPadded<Expression> newExpression)
             {
-                return T._expression == newExpression ? T : new J.InstanceOf(T.Id, T.Prefix, T.Markers, newExpression, T.Clazz, T.Pattern, T.Type);
+                return Expression == newExpression ? T : new J.InstanceOf(T.Id, T.Prefix, T.Markers, newExpression, T.Clazz, T.Pattern, T.Type);
             }
 
         }

@@ -43,29 +43,29 @@ public partial interface Cs : J
             return v.VisitClassOrStructConstraint(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ClassOrStructConstraint WithId(Guid newId)
         {
-            return newId == id ? this : new ClassOrStructConstraint(newId, prefix, markers, kind);
+            return newId == Id ? this : new ClassOrStructConstraint(newId, Prefix, Markers, Kind);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ClassOrStructConstraint WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ClassOrStructConstraint(id, newPrefix, markers, kind);
+            return newPrefix == Prefix ? this : new ClassOrStructConstraint(Id, newPrefix, Markers, Kind);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ClassOrStructConstraint WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ClassOrStructConstraint(id, prefix, newMarkers, kind);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ClassOrStructConstraint(Id, Prefix, newMarkers, Kind);
         }
-        public TypeKind Kind => kind;
+        public TypeKind Kind { get;  set; } = kind;
 
         public ClassOrStructConstraint WithKind(TypeKind newKind)
         {
-            return newKind == kind ? this : new ClassOrStructConstraint(id, prefix, markers, newKind);
+            return newKind == Kind ? this : new ClassOrStructConstraint(Id, Prefix, Markers, newKind);
         }
         public enum TypeKind
         {

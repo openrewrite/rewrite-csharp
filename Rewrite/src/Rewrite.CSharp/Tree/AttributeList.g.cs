@@ -65,32 +65,32 @@ public partial interface Cs : J
             return v.VisitAttributeList(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public AttributeList WithId(Guid newId)
         {
-            return newId == id ? this : new AttributeList(newId, prefix, markers, _target, _attributes);
+            return newId == Id ? this : new AttributeList(newId, Prefix, Markers, _target, _attributes);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public AttributeList WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new AttributeList(id, newPrefix, markers, _target, _attributes);
+            return newPrefix == Prefix ? this : new AttributeList(Id, newPrefix, Markers, _target, _attributes);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public AttributeList WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new AttributeList(id, prefix, newMarkers, _target, _attributes);
+            return ReferenceEquals(newMarkers, Markers) ? this : new AttributeList(Id, Prefix, newMarkers, _target, _attributes);
         }
-        private readonly JRightPadded<J.Identifier>? _target = target;
+        private JRightPadded<J.Identifier>? _target = target;
         public J.Identifier? Target => _target?.Element;
 
         public AttributeList WithTarget(J.Identifier? newTarget)
         {
             return Padding.WithTarget(JRightPadded<J.Identifier>.WithElement(_target, newTarget));
         }
-        private readonly IList<JRightPadded<J.Annotation>> _attributes = attributes;
+        private IList<JRightPadded<J.Annotation>> _attributes = attributes;
         public IList<J.Annotation> Attributes => _attributes.Elements();
 
         public AttributeList WithAttributes(IList<J.Annotation> newAttributes)
@@ -99,18 +99,18 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.AttributeList T)
         {
-            public JRightPadded<J.Identifier>? Target => T._target;
+            public JRightPadded<J.Identifier>? Target { get => T._target;  set => T._target = value; }
 
             public Cs.AttributeList WithTarget(JRightPadded<J.Identifier>? newTarget)
             {
-                return T._target == newTarget ? T : new Cs.AttributeList(T.Id, T.Prefix, T.Markers, newTarget, T._attributes);
+                return Target == newTarget ? T : new Cs.AttributeList(T.Id, T.Prefix, T.Markers, newTarget, T._attributes);
             }
 
-            public IList<JRightPadded<J.Annotation>> Attributes => T._attributes;
+            public IList<JRightPadded<J.Annotation>> Attributes { get => T._attributes;  set => T._attributes = value; }
 
             public Cs.AttributeList WithAttributes(IList<JRightPadded<J.Annotation>> newAttributes)
             {
-                return T._attributes == newAttributes ? T : new Cs.AttributeList(T.Id, T.Prefix, T.Markers, T._target, newAttributes);
+                return Attributes == newAttributes ? T : new Cs.AttributeList(T.Id, T.Prefix, T.Markers, T._target, newAttributes);
             }
 
         }

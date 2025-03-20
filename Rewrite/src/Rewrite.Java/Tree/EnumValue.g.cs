@@ -40,41 +40,41 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitEnumValue(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public EnumValue WithId(Guid newId)
         {
-            return newId == id ? this : new EnumValue(newId, prefix, markers, annotations, name, initializer);
+            return newId == Id ? this : new EnumValue(newId, Prefix, Markers, Annotations, Name, Initializer);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public EnumValue WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new EnumValue(id, newPrefix, markers, annotations, name, initializer);
+            return newPrefix == Prefix ? this : new EnumValue(Id, newPrefix, Markers, Annotations, Name, Initializer);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public EnumValue WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new EnumValue(id, prefix, newMarkers, annotations, name, initializer);
+            return ReferenceEquals(newMarkers, Markers) ? this : new EnumValue(Id, Prefix, newMarkers, Annotations, Name, Initializer);
         }
-        public IList<J.Annotation> Annotations => annotations;
+        public IList<J.Annotation> Annotations { get;  set; } = annotations;
 
         public EnumValue WithAnnotations(IList<J.Annotation> newAnnotations)
         {
-            return newAnnotations == annotations ? this : new EnumValue(id, prefix, markers, newAnnotations, name, initializer);
+            return newAnnotations == Annotations ? this : new EnumValue(Id, Prefix, Markers, newAnnotations, Name, Initializer);
         }
-        public J.Identifier Name => name;
+        public J.Identifier Name { get;  set; } = name;
 
         public EnumValue WithName(J.Identifier newName)
         {
-            return ReferenceEquals(newName, name) ? this : new EnumValue(id, prefix, markers, annotations, newName, initializer);
+            return ReferenceEquals(newName, Name) ? this : new EnumValue(Id, Prefix, Markers, Annotations, newName, Initializer);
         }
-        public J.NewClass? Initializer => initializer;
+        public J.NewClass? Initializer { get;  set; } = initializer;
 
         public EnumValue WithInitializer(J.NewClass? newInitializer)
         {
-            return ReferenceEquals(newInitializer, initializer) ? this : new EnumValue(id, prefix, markers, annotations, name, newInitializer);
+            return ReferenceEquals(newInitializer, Initializer) ? this : new EnumValue(Id, Prefix, Markers, Annotations, Name, newInitializer);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

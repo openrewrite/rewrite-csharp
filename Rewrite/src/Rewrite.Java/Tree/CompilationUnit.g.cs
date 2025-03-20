@@ -71,94 +71,94 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitCompilationUnit(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public CompilationUnit WithId(Guid newId)
         {
-            return newId == id ? this : new CompilationUnit(newId, prefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _packageDeclaration, _imports, classes, eof);
+            return newId == Id ? this : new CompilationUnit(newId, Prefix, Markers, SourcePath, FileAttributes, CharsetName, CharsetBomMarked, Checksum, _packageDeclaration, _imports, Classes, Eof);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public CompilationUnit WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new CompilationUnit(id, newPrefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _packageDeclaration, _imports, classes, eof);
+            return newPrefix == Prefix ? this : new CompilationUnit(Id, newPrefix, Markers, SourcePath, FileAttributes, CharsetName, CharsetBomMarked, Checksum, _packageDeclaration, _imports, Classes, Eof);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public CompilationUnit WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new CompilationUnit(id, prefix, newMarkers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _packageDeclaration, _imports, classes, eof);
+            return ReferenceEquals(newMarkers, Markers) ? this : new CompilationUnit(Id, Prefix, newMarkers, SourcePath, FileAttributes, CharsetName, CharsetBomMarked, Checksum, _packageDeclaration, _imports, Classes, Eof);
         }
-        public string SourcePath => sourcePath;
+        public string SourcePath { get;  set; } = sourcePath;
 
         public CompilationUnit WithSourcePath(string newSourcePath)
         {
-            return newSourcePath == sourcePath ? this : new CompilationUnit(id, prefix, markers, newSourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _packageDeclaration, _imports, classes, eof);
+            return newSourcePath == SourcePath ? this : new CompilationUnit(Id, Prefix, Markers, newSourcePath, FileAttributes, CharsetName, CharsetBomMarked, Checksum, _packageDeclaration, _imports, Classes, Eof);
         }
-        public FileAttributes? FileAttributes => fileAttributes;
+        public FileAttributes? FileAttributes { get;  set; } = fileAttributes;
 
         public CompilationUnit WithFileAttributes(FileAttributes? newFileAttributes)
         {
-            return newFileAttributes == fileAttributes ? this : new CompilationUnit(id, prefix, markers, sourcePath, newFileAttributes, charsetName, charsetBomMarked, checksum, _packageDeclaration, _imports, classes, eof);
+            return newFileAttributes == FileAttributes ? this : new CompilationUnit(Id, Prefix, Markers, SourcePath, newFileAttributes, CharsetName, CharsetBomMarked, Checksum, _packageDeclaration, _imports, Classes, Eof);
         }
-        public string? CharsetName => charsetName;
+        public string? CharsetName { get;  set; } = charsetName;
 
         public CompilationUnit WithCharsetName(string? newCharsetName)
         {
-            return newCharsetName == charsetName ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, newCharsetName, charsetBomMarked, checksum, _packageDeclaration, _imports, classes, eof);
+            return newCharsetName == CharsetName ? this : new CompilationUnit(Id, Prefix, Markers, SourcePath, FileAttributes, newCharsetName, CharsetBomMarked, Checksum, _packageDeclaration, _imports, Classes, Eof);
         }
-        public bool CharsetBomMarked => charsetBomMarked;
+        public bool CharsetBomMarked { get;  set; } = charsetBomMarked;
 
         public CompilationUnit WithCharsetBomMarked(bool newCharsetBomMarked)
         {
-            return newCharsetBomMarked == charsetBomMarked ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, charsetName, newCharsetBomMarked, checksum, _packageDeclaration, _imports, classes, eof);
+            return newCharsetBomMarked == CharsetBomMarked ? this : new CompilationUnit(Id, Prefix, Markers, SourcePath, FileAttributes, CharsetName, newCharsetBomMarked, Checksum, _packageDeclaration, _imports, Classes, Eof);
         }
-        public Checksum? Checksum => checksum;
+        public Checksum? Checksum { get;  set; } = checksum;
 
         public CompilationUnit WithChecksum(Checksum? newChecksum)
         {
-            return newChecksum == checksum ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, newChecksum, _packageDeclaration, _imports, classes, eof);
+            return newChecksum == Checksum ? this : new CompilationUnit(Id, Prefix, Markers, SourcePath, FileAttributes, CharsetName, CharsetBomMarked, newChecksum, _packageDeclaration, _imports, Classes, Eof);
         }
-        private readonly JRightPadded<J.Package>? _packageDeclaration = packageDeclaration;
+        private JRightPadded<J.Package>? _packageDeclaration = packageDeclaration;
         public J.Package? PackageDeclaration => _packageDeclaration?.Element;
 
         public CompilationUnit WithPackageDeclaration(J.Package? newPackageDeclaration)
         {
             return Padding.WithPackageDeclaration(JRightPadded<J.Package>.WithElement(_packageDeclaration, newPackageDeclaration));
         }
-        private readonly IList<JRightPadded<J.Import>> _imports = imports;
+        private IList<JRightPadded<J.Import>> _imports = imports;
         public IList<J.Import> Imports => _imports.Elements();
 
         public CompilationUnit WithImports(IList<J.Import> newImports)
         {
             return Padding.WithImports(_imports.WithElements(newImports));
         }
-        public IList<J.ClassDeclaration> Classes => classes;
+        public IList<J.ClassDeclaration> Classes { get;  set; } = classes;
 
         public CompilationUnit WithClasses(IList<J.ClassDeclaration> newClasses)
         {
-            return newClasses == classes ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _packageDeclaration, _imports, newClasses, eof);
+            return newClasses == Classes ? this : new CompilationUnit(Id, Prefix, Markers, SourcePath, FileAttributes, CharsetName, CharsetBomMarked, Checksum, _packageDeclaration, _imports, newClasses, Eof);
         }
-        public Space Eof => eof;
+        public Space Eof { get;  set; } = eof;
 
         public CompilationUnit WithEof(Space newEof)
         {
-            return newEof == eof ? this : new CompilationUnit(id, prefix, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, _packageDeclaration, _imports, classes, newEof);
+            return newEof == Eof ? this : new CompilationUnit(Id, Prefix, Markers, SourcePath, FileAttributes, CharsetName, CharsetBomMarked, Checksum, _packageDeclaration, _imports, Classes, newEof);
         }
         public sealed record PaddingHelper(J.CompilationUnit T)
         {
-            public JRightPadded<J.Package>? PackageDeclaration => T._packageDeclaration;
+            public JRightPadded<J.Package>? PackageDeclaration { get => T._packageDeclaration;  set => T._packageDeclaration = value; }
 
             public J.CompilationUnit WithPackageDeclaration(JRightPadded<J.Package>? newPackageDeclaration)
             {
-                return T._packageDeclaration == newPackageDeclaration ? T : new J.CompilationUnit(T.Id, T.Prefix, T.Markers, T.SourcePath, T.FileAttributes, T.CharsetName, T.CharsetBomMarked, T.Checksum, newPackageDeclaration, T._imports, T.Classes, T.Eof);
+                return PackageDeclaration == newPackageDeclaration ? T : new J.CompilationUnit(T.Id, T.Prefix, T.Markers, T.SourcePath, T.FileAttributes, T.CharsetName, T.CharsetBomMarked, T.Checksum, newPackageDeclaration, T._imports, T.Classes, T.Eof);
             }
 
-            public IList<JRightPadded<J.Import>> Imports => T._imports;
+            public IList<JRightPadded<J.Import>> Imports { get => T._imports;  set => T._imports = value; }
 
             public J.CompilationUnit WithImports(IList<JRightPadded<J.Import>> newImports)
             {
-                return T._imports == newImports ? T : new J.CompilationUnit(T.Id, T.Prefix, T.Markers, T.SourcePath, T.FileAttributes, T.CharsetName, T.CharsetBomMarked, T.Checksum, T._packageDeclaration, newImports, T.Classes, T.Eof);
+                return Imports == newImports ? T : new J.CompilationUnit(T.Id, T.Prefix, T.Markers, T.SourcePath, T.FileAttributes, T.CharsetName, T.CharsetBomMarked, T.Checksum, T._packageDeclaration, newImports, T.Classes, T.Eof);
             }
 
         }
