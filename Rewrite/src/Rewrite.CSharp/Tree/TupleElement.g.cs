@@ -44,35 +44,35 @@ public partial interface Cs : J
             return v.VisitTupleElement(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public TupleElement WithId(Guid newId)
         {
-            return newId == id ? this : new TupleElement(newId, prefix, markers, type, name);
+            return newId == Id ? this : new TupleElement(newId, Prefix, Markers, Type, Name);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public TupleElement WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new TupleElement(id, newPrefix, markers, type, name);
+            return newPrefix == Prefix ? this : new TupleElement(Id, newPrefix, Markers, Type, Name);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public TupleElement WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new TupleElement(id, prefix, newMarkers, type, name);
+            return ReferenceEquals(newMarkers, Markers) ? this : new TupleElement(Id, Prefix, newMarkers, Type, Name);
         }
-        public TypeTree Type => type;
+        public TypeTree Type { get;  set; } = type;
 
         public TupleElement WithType(TypeTree newType)
         {
-            return ReferenceEquals(newType, type) ? this : new TupleElement(id, prefix, markers, newType, name);
+            return ReferenceEquals(newType, Type) ? this : new TupleElement(Id, Prefix, Markers, newType, Name);
         }
-        public J.Identifier? Name => name;
+        public J.Identifier? Name { get;  set; } = name;
 
         public TupleElement WithName(J.Identifier? newName)
         {
-            return ReferenceEquals(newName, name) ? this : new TupleElement(id, prefix, markers, type, newName);
+            return ReferenceEquals(newName, Name) ? this : new TupleElement(Id, Prefix, Markers, Type, newName);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

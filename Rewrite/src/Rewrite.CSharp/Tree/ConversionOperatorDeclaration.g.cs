@@ -83,63 +83,63 @@ public partial interface Cs : J
             return v.VisitConversionOperatorDeclaration(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ConversionOperatorDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new ConversionOperatorDeclaration(newId, prefix, markers, modifiers, _kind, _returnType, _parameters, _expressionBody, body);
+            return newId == Id ? this : new ConversionOperatorDeclaration(newId, Prefix, Markers, Modifiers, _kind, _returnType, _parameters, _expressionBody, Body);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ConversionOperatorDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ConversionOperatorDeclaration(id, newPrefix, markers, modifiers, _kind, _returnType, _parameters, _expressionBody, body);
+            return newPrefix == Prefix ? this : new ConversionOperatorDeclaration(Id, newPrefix, Markers, Modifiers, _kind, _returnType, _parameters, _expressionBody, Body);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ConversionOperatorDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ConversionOperatorDeclaration(id, prefix, newMarkers, modifiers, _kind, _returnType, _parameters, _expressionBody, body);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ConversionOperatorDeclaration(Id, Prefix, newMarkers, Modifiers, _kind, _returnType, _parameters, _expressionBody, Body);
         }
-        public IList<J.Modifier> Modifiers => modifiers;
+        public IList<J.Modifier> Modifiers { get;  set; } = modifiers;
 
         public ConversionOperatorDeclaration WithModifiers(IList<J.Modifier> newModifiers)
         {
-            return newModifiers == modifiers ? this : new ConversionOperatorDeclaration(id, prefix, markers, newModifiers, _kind, _returnType, _parameters, _expressionBody, body);
+            return newModifiers == Modifiers ? this : new ConversionOperatorDeclaration(Id, Prefix, Markers, newModifiers, _kind, _returnType, _parameters, _expressionBody, Body);
         }
-        private readonly JLeftPadded<ExplicitImplicit> _kind = kind;
+        private JLeftPadded<ExplicitImplicit> _kind = kind;
         public ExplicitImplicit Kind => _kind.Element;
 
         public ConversionOperatorDeclaration WithKind(ExplicitImplicit newKind)
         {
             return Padding.WithKind(_kind.WithElement(newKind));
         }
-        private readonly JLeftPadded<TypeTree> _returnType = returnType;
+        private JLeftPadded<TypeTree> _returnType = returnType;
         public TypeTree ReturnType => _returnType.Element;
 
         public ConversionOperatorDeclaration WithReturnType(TypeTree newReturnType)
         {
             return Padding.WithReturnType(_returnType.WithElement(newReturnType));
         }
-        private readonly JContainer<Statement> _parameters = parameters;
+        private JContainer<Statement> _parameters = parameters;
         public IList<Statement> Parameters => _parameters.GetElements();
 
         public ConversionOperatorDeclaration WithParameters(IList<Statement> newParameters)
         {
             return Padding.WithParameters(JContainer<Statement>.WithElements(_parameters, newParameters));
         }
-        private readonly JLeftPadded<Expression>? _expressionBody = expressionBody;
+        private JLeftPadded<Expression>? _expressionBody = expressionBody;
         public Expression? ExpressionBody => _expressionBody?.Element;
 
         public ConversionOperatorDeclaration WithExpressionBody(Expression? newExpressionBody)
         {
             return Padding.WithExpressionBody(JLeftPadded<Expression>.WithElement(_expressionBody, newExpressionBody));
         }
-        public J.Block? Body => body;
+        public J.Block? Body { get;  set; } = body;
 
         public ConversionOperatorDeclaration WithBody(J.Block? newBody)
         {
-            return ReferenceEquals(newBody, body) ? this : new ConversionOperatorDeclaration(id, prefix, markers, modifiers, _kind, _returnType, _parameters, _expressionBody, newBody);
+            return ReferenceEquals(newBody, Body) ? this : new ConversionOperatorDeclaration(Id, Prefix, Markers, Modifiers, _kind, _returnType, _parameters, _expressionBody, newBody);
         }
         public enum ExplicitImplicit
         {
@@ -148,32 +148,32 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.ConversionOperatorDeclaration T)
         {
-            public JLeftPadded<Cs.ConversionOperatorDeclaration.ExplicitImplicit> Kind => T._kind;
+            public JLeftPadded<Cs.ConversionOperatorDeclaration.ExplicitImplicit> Kind { get => T._kind;  set => T._kind = value; }
 
             public Cs.ConversionOperatorDeclaration WithKind(JLeftPadded<Cs.ConversionOperatorDeclaration.ExplicitImplicit> newKind)
             {
-                return T._kind == newKind ? T : new Cs.ConversionOperatorDeclaration(T.Id, T.Prefix, T.Markers, T.Modifiers, newKind, T._returnType, T._parameters, T._expressionBody, T.Body);
+                return Kind == newKind ? T : new Cs.ConversionOperatorDeclaration(T.Id, T.Prefix, T.Markers, T.Modifiers, newKind, T._returnType, T._parameters, T._expressionBody, T.Body);
             }
 
-            public JLeftPadded<TypeTree> ReturnType => T._returnType;
+            public JLeftPadded<TypeTree> ReturnType { get => T._returnType;  set => T._returnType = value; }
 
             public Cs.ConversionOperatorDeclaration WithReturnType(JLeftPadded<TypeTree> newReturnType)
             {
-                return T._returnType == newReturnType ? T : new Cs.ConversionOperatorDeclaration(T.Id, T.Prefix, T.Markers, T.Modifiers, T._kind, newReturnType, T._parameters, T._expressionBody, T.Body);
+                return ReturnType == newReturnType ? T : new Cs.ConversionOperatorDeclaration(T.Id, T.Prefix, T.Markers, T.Modifiers, T._kind, newReturnType, T._parameters, T._expressionBody, T.Body);
             }
 
-            public JContainer<Statement> Parameters => T._parameters;
+            public JContainer<Statement> Parameters { get => T._parameters;  set => T._parameters = value; }
 
             public Cs.ConversionOperatorDeclaration WithParameters(JContainer<Statement> newParameters)
             {
-                return T._parameters == newParameters ? T : new Cs.ConversionOperatorDeclaration(T.Id, T.Prefix, T.Markers, T.Modifiers, T._kind, T._returnType, newParameters, T._expressionBody, T.Body);
+                return Parameters == newParameters ? T : new Cs.ConversionOperatorDeclaration(T.Id, T.Prefix, T.Markers, T.Modifiers, T._kind, T._returnType, newParameters, T._expressionBody, T.Body);
             }
 
-            public JLeftPadded<Expression>? ExpressionBody => T._expressionBody;
+            public JLeftPadded<Expression>? ExpressionBody { get => T._expressionBody;  set => T._expressionBody = value; }
 
             public Cs.ConversionOperatorDeclaration WithExpressionBody(JLeftPadded<Expression>? newExpressionBody)
             {
-                return T._expressionBody == newExpressionBody ? T : new Cs.ConversionOperatorDeclaration(T.Id, T.Prefix, T.Markers, T.Modifiers, T._kind, T._returnType, T._parameters, newExpressionBody, T.Body);
+                return ExpressionBody == newExpressionBody ? T : new Cs.ConversionOperatorDeclaration(T.Id, T.Prefix, T.Markers, T.Modifiers, T._kind, T._returnType, T._parameters, newExpressionBody, T.Body);
             }
 
         }

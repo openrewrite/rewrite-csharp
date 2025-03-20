@@ -66,39 +66,39 @@ public partial interface Cs : J
             return v.VisitInterpolation(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Interpolation WithId(Guid newId)
         {
-            return newId == id ? this : new Interpolation(newId, prefix, markers, _expression, _alignment, _format);
+            return newId == Id ? this : new Interpolation(newId, Prefix, Markers, _expression, _alignment, _format);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Interpolation WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Interpolation(id, newPrefix, markers, _expression, _alignment, _format);
+            return newPrefix == Prefix ? this : new Interpolation(Id, newPrefix, Markers, _expression, _alignment, _format);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Interpolation WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Interpolation(id, prefix, newMarkers, _expression, _alignment, _format);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Interpolation(Id, Prefix, newMarkers, _expression, _alignment, _format);
         }
-        private readonly JRightPadded<Expression> _expression = expression;
+        private JRightPadded<Expression> _expression = expression;
         public Expression Expression => _expression.Element;
 
         public Interpolation WithExpression(Expression newExpression)
         {
             return Padding.WithExpression(_expression.WithElement(newExpression));
         }
-        private readonly JRightPadded<Expression>? _alignment = alignment;
+        private JRightPadded<Expression>? _alignment = alignment;
         public Expression? Alignment => _alignment?.Element;
 
         public Interpolation WithAlignment(Expression? newAlignment)
         {
             return Padding.WithAlignment(JRightPadded<Expression>.WithElement(_alignment, newAlignment));
         }
-        private readonly JRightPadded<Expression>? _format = format;
+        private JRightPadded<Expression>? _format = format;
         public Expression? Format => _format?.Element;
 
         public Interpolation WithFormat(Expression? newFormat)
@@ -107,25 +107,25 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.Interpolation T)
         {
-            public JRightPadded<Expression> Expression => T._expression;
+            public JRightPadded<Expression> Expression { get => T._expression;  set => T._expression = value; }
 
             public Cs.Interpolation WithExpression(JRightPadded<Expression> newExpression)
             {
-                return T._expression == newExpression ? T : new Cs.Interpolation(T.Id, T.Prefix, T.Markers, newExpression, T._alignment, T._format);
+                return Expression == newExpression ? T : new Cs.Interpolation(T.Id, T.Prefix, T.Markers, newExpression, T._alignment, T._format);
             }
 
-            public JRightPadded<Expression>? Alignment => T._alignment;
+            public JRightPadded<Expression>? Alignment { get => T._alignment;  set => T._alignment = value; }
 
             public Cs.Interpolation WithAlignment(JRightPadded<Expression>? newAlignment)
             {
-                return T._alignment == newAlignment ? T : new Cs.Interpolation(T.Id, T.Prefix, T.Markers, T._expression, newAlignment, T._format);
+                return Alignment == newAlignment ? T : new Cs.Interpolation(T.Id, T.Prefix, T.Markers, T._expression, newAlignment, T._format);
             }
 
-            public JRightPadded<Expression>? Format => T._format;
+            public JRightPadded<Expression>? Format { get => T._format;  set => T._format = value; }
 
             public Cs.Interpolation WithFormat(JRightPadded<Expression>? newFormat)
             {
-                return T._format == newFormat ? T : new Cs.Interpolation(T.Id, T.Prefix, T.Markers, T._expression, T._alignment, newFormat);
+                return Format == newFormat ? T : new Cs.Interpolation(T.Id, T.Prefix, T.Markers, T._expression, T._alignment, newFormat);
             }
 
         }

@@ -76,29 +76,29 @@ public partial interface Cs : J
             return v.VisitDestructorDeclaration(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public DestructorDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new DestructorDeclaration(newId, prefix, markers, methodCore);
+            return newId == Id ? this : new DestructorDeclaration(newId, Prefix, Markers, MethodCore);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public DestructorDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new DestructorDeclaration(id, newPrefix, markers, methodCore);
+            return newPrefix == Prefix ? this : new DestructorDeclaration(Id, newPrefix, Markers, MethodCore);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public DestructorDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new DestructorDeclaration(id, prefix, newMarkers, methodCore);
+            return ReferenceEquals(newMarkers, Markers) ? this : new DestructorDeclaration(Id, Prefix, newMarkers, MethodCore);
         }
-        public J.MethodDeclaration MethodCore => methodCore;
+        public J.MethodDeclaration MethodCore { get;  set; } = methodCore;
 
         public DestructorDeclaration WithMethodCore(J.MethodDeclaration newMethodCore)
         {
-            return ReferenceEquals(newMethodCore, methodCore) ? this : new DestructorDeclaration(id, prefix, markers, newMethodCore);
+            return ReferenceEquals(newMethodCore, MethodCore) ? this : new DestructorDeclaration(Id, Prefix, Markers, newMethodCore);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

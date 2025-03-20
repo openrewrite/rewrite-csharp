@@ -85,36 +85,36 @@ public partial interface Cs : J
             return v.VisitRelationalPattern(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public RelationalPattern WithId(Guid newId)
         {
-            return newId == id ? this : new RelationalPattern(newId, prefix, markers, _operator, value);
+            return newId == Id ? this : new RelationalPattern(newId, Prefix, Markers, _operator, Value);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public RelationalPattern WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new RelationalPattern(id, newPrefix, markers, _operator, value);
+            return newPrefix == Prefix ? this : new RelationalPattern(Id, newPrefix, Markers, _operator, Value);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public RelationalPattern WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new RelationalPattern(id, prefix, newMarkers, _operator, value);
+            return ReferenceEquals(newMarkers, Markers) ? this : new RelationalPattern(Id, Prefix, newMarkers, _operator, Value);
         }
-        private readonly JLeftPadded<OperatorType> _operator = @operator;
+        private JLeftPadded<OperatorType> _operator = @operator;
         public OperatorType Operator => _operator.Element;
 
         public RelationalPattern WithOperator(OperatorType newOperator)
         {
             return Padding.WithOperator(_operator.WithElement(newOperator));
         }
-        public Expression Value => value;
+        public Expression Value { get;  set; } = value;
 
         public RelationalPattern WithValue(Expression newValue)
         {
-            return ReferenceEquals(newValue, value) ? this : new RelationalPattern(id, prefix, markers, _operator, newValue);
+            return ReferenceEquals(newValue, Value) ? this : new RelationalPattern(Id, Prefix, Markers, _operator, newValue);
         }
         public enum OperatorType
         {
@@ -125,11 +125,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.RelationalPattern T)
         {
-            public JLeftPadded<Cs.RelationalPattern.OperatorType> Operator => T._operator;
+            public JLeftPadded<Cs.RelationalPattern.OperatorType> Operator { get => T._operator;  set => T._operator = value; }
 
             public Cs.RelationalPattern WithOperator(JLeftPadded<Cs.RelationalPattern.OperatorType> newOperator)
             {
-                return T._operator == newOperator ? T : new Cs.RelationalPattern(T.Id, T.Prefix, T.Markers, newOperator, T.Value);
+                return Operator == newOperator ? T : new Cs.RelationalPattern(T.Id, T.Prefix, T.Markers, newOperator, T.Value);
             }
 
         }

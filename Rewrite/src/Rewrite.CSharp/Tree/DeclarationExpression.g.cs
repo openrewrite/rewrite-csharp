@@ -64,35 +64,35 @@ public partial interface Cs : J
             return v.VisitDeclarationExpression(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public DeclarationExpression WithId(Guid newId)
         {
-            return newId == id ? this : new DeclarationExpression(newId, prefix, markers, typeExpression, variables);
+            return newId == Id ? this : new DeclarationExpression(newId, Prefix, Markers, TypeExpression, Variables);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public DeclarationExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new DeclarationExpression(id, newPrefix, markers, typeExpression, variables);
+            return newPrefix == Prefix ? this : new DeclarationExpression(Id, newPrefix, Markers, TypeExpression, Variables);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public DeclarationExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new DeclarationExpression(id, prefix, newMarkers, typeExpression, variables);
+            return ReferenceEquals(newMarkers, Markers) ? this : new DeclarationExpression(Id, Prefix, newMarkers, TypeExpression, Variables);
         }
-        public TypeTree? TypeExpression => typeExpression;
+        public TypeTree? TypeExpression { get;  set; } = typeExpression;
 
         public DeclarationExpression WithTypeExpression(TypeTree? newTypeExpression)
         {
-            return ReferenceEquals(newTypeExpression, typeExpression) ? this : new DeclarationExpression(id, prefix, markers, newTypeExpression, variables);
+            return ReferenceEquals(newTypeExpression, TypeExpression) ? this : new DeclarationExpression(Id, Prefix, Markers, newTypeExpression, Variables);
         }
-        public Cs.VariableDesignation Variables => variables;
+        public Cs.VariableDesignation Variables { get;  set; } = variables;
 
         public DeclarationExpression WithVariables(Cs.VariableDesignation newVariables)
         {
-            return ReferenceEquals(newVariables, variables) ? this : new DeclarationExpression(id, prefix, markers, typeExpression, newVariables);
+            return ReferenceEquals(newVariables, Variables) ? this : new DeclarationExpression(Id, Prefix, Markers, TypeExpression, newVariables);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

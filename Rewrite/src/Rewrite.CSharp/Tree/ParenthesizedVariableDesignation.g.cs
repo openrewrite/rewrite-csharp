@@ -78,44 +78,44 @@ public partial interface Cs : J
             return v.VisitParenthesizedVariableDesignation(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ParenthesizedVariableDesignation WithId(Guid newId)
         {
-            return newId == id ? this : new ParenthesizedVariableDesignation(newId, prefix, markers, _variables, type);
+            return newId == Id ? this : new ParenthesizedVariableDesignation(newId, Prefix, Markers, _variables, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ParenthesizedVariableDesignation WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ParenthesizedVariableDesignation(id, newPrefix, markers, _variables, type);
+            return newPrefix == Prefix ? this : new ParenthesizedVariableDesignation(Id, newPrefix, Markers, _variables, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ParenthesizedVariableDesignation WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ParenthesizedVariableDesignation(id, prefix, newMarkers, _variables, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ParenthesizedVariableDesignation(Id, Prefix, newMarkers, _variables, Type);
         }
-        private readonly JContainer<Cs.VariableDesignation> _variables = variables;
+        private JContainer<Cs.VariableDesignation> _variables = variables;
         public IList<Cs.VariableDesignation> Variables => _variables.GetElements();
 
         public ParenthesizedVariableDesignation WithVariables(IList<Cs.VariableDesignation> newVariables)
         {
             return Padding.WithVariables(JContainer<Cs.VariableDesignation>.WithElements(_variables, newVariables));
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public ParenthesizedVariableDesignation WithType(JavaType? newType)
         {
-            return newType == type ? this : new ParenthesizedVariableDesignation(id, prefix, markers, _variables, newType);
+            return newType == Type ? this : new ParenthesizedVariableDesignation(Id, Prefix, Markers, _variables, newType);
         }
         public sealed record PaddingHelper(Cs.ParenthesizedVariableDesignation T)
         {
-            public JContainer<Cs.VariableDesignation> Variables => T._variables;
+            public JContainer<Cs.VariableDesignation> Variables { get => T._variables;  set => T._variables = value; }
 
             public Cs.ParenthesizedVariableDesignation WithVariables(JContainer<Cs.VariableDesignation> newVariables)
             {
-                return T._variables == newVariables ? T : new Cs.ParenthesizedVariableDesignation(T.Id, T.Prefix, T.Markers, newVariables, T.Type);
+                return Variables == newVariables ? T : new Cs.ParenthesizedVariableDesignation(T.Id, T.Prefix, T.Markers, newVariables, T.Type);
             }
 
         }

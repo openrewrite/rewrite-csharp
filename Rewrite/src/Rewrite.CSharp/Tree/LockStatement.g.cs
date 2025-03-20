@@ -84,31 +84,31 @@ public partial interface Cs : J
             return v.VisitLockStatement(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public LockStatement WithId(Guid newId)
         {
-            return newId == id ? this : new LockStatement(newId, prefix, markers, expression, _statement);
+            return newId == Id ? this : new LockStatement(newId, Prefix, Markers, Expression, _statement);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public LockStatement WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new LockStatement(id, newPrefix, markers, expression, _statement);
+            return newPrefix == Prefix ? this : new LockStatement(Id, newPrefix, Markers, Expression, _statement);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public LockStatement WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new LockStatement(id, prefix, newMarkers, expression, _statement);
+            return ReferenceEquals(newMarkers, Markers) ? this : new LockStatement(Id, Prefix, newMarkers, Expression, _statement);
         }
-        public J.ControlParentheses<Expression> Expression => expression;
+        public J.ControlParentheses<Expression> Expression { get;  set; } = expression;
 
         public LockStatement WithExpression(J.ControlParentheses<Expression> newExpression)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new LockStatement(id, prefix, markers, newExpression, _statement);
+            return ReferenceEquals(newExpression, Expression) ? this : new LockStatement(Id, Prefix, Markers, newExpression, _statement);
         }
-        private readonly JRightPadded<Statement> _statement = statement;
+        private JRightPadded<Statement> _statement = statement;
         public Statement Statement => _statement.Element;
 
         public LockStatement WithStatement(Statement newStatement)
@@ -117,11 +117,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.LockStatement T)
         {
-            public JRightPadded<Statement> Statement => T._statement;
+            public JRightPadded<Statement> Statement { get => T._statement;  set => T._statement = value; }
 
             public Cs.LockStatement WithStatement(JRightPadded<Statement> newStatement)
             {
-                return T._statement == newStatement ? T : new Cs.LockStatement(T.Id, T.Prefix, T.Markers, T.Expression, newStatement);
+                return Statement == newStatement ? T : new Cs.LockStatement(T.Id, T.Prefix, T.Markers, T.Expression, newStatement);
             }
 
         }

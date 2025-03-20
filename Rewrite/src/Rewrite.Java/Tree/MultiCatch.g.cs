@@ -63,25 +63,25 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitMultiCatch(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public MultiCatch WithId(Guid newId)
         {
-            return newId == id ? this : new MultiCatch(newId, prefix, markers, _alternatives);
+            return newId == Id ? this : new MultiCatch(newId, Prefix, Markers, _alternatives);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public MultiCatch WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new MultiCatch(id, newPrefix, markers, _alternatives);
+            return newPrefix == Prefix ? this : new MultiCatch(Id, newPrefix, Markers, _alternatives);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public MultiCatch WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new MultiCatch(id, prefix, newMarkers, _alternatives);
+            return ReferenceEquals(newMarkers, Markers) ? this : new MultiCatch(Id, Prefix, newMarkers, _alternatives);
         }
-        private readonly IList<JRightPadded<NameTree>> _alternatives = alternatives;
+        private IList<JRightPadded<NameTree>> _alternatives = alternatives;
         public IList<NameTree> Alternatives => _alternatives.Elements();
 
         public MultiCatch WithAlternatives(IList<NameTree> newAlternatives)
@@ -90,11 +90,11 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.MultiCatch T)
         {
-            public IList<JRightPadded<NameTree>> Alternatives => T._alternatives;
+            public IList<JRightPadded<NameTree>> Alternatives { get => T._alternatives;  set => T._alternatives = value; }
 
             public J.MultiCatch WithAlternatives(IList<JRightPadded<NameTree>> newAlternatives)
             {
-                return T._alternatives == newAlternatives ? T : new J.MultiCatch(T.Id, T.Prefix, T.Markers, newAlternatives);
+                return Alternatives == newAlternatives ? T : new J.MultiCatch(T.Id, T.Prefix, T.Markers, newAlternatives);
             }
 
         }

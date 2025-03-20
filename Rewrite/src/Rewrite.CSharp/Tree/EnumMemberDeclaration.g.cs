@@ -80,37 +80,37 @@ public partial interface Cs : J
             return v.VisitEnumMemberDeclaration(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public EnumMemberDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new EnumMemberDeclaration(newId, prefix, markers, attributeLists, name, _initializer);
+            return newId == Id ? this : new EnumMemberDeclaration(newId, Prefix, Markers, AttributeLists, Name, _initializer);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public EnumMemberDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new EnumMemberDeclaration(id, newPrefix, markers, attributeLists, name, _initializer);
+            return newPrefix == Prefix ? this : new EnumMemberDeclaration(Id, newPrefix, Markers, AttributeLists, Name, _initializer);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public EnumMemberDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new EnumMemberDeclaration(id, prefix, newMarkers, attributeLists, name, _initializer);
+            return ReferenceEquals(newMarkers, Markers) ? this : new EnumMemberDeclaration(Id, Prefix, newMarkers, AttributeLists, Name, _initializer);
         }
-        public IList<Cs.AttributeList> AttributeLists => attributeLists;
+        public IList<Cs.AttributeList> AttributeLists { get;  set; } = attributeLists;
 
         public EnumMemberDeclaration WithAttributeLists(IList<Cs.AttributeList> newAttributeLists)
         {
-            return newAttributeLists == attributeLists ? this : new EnumMemberDeclaration(id, prefix, markers, newAttributeLists, name, _initializer);
+            return newAttributeLists == AttributeLists ? this : new EnumMemberDeclaration(Id, Prefix, Markers, newAttributeLists, Name, _initializer);
         }
-        public J.Identifier Name => name;
+        public J.Identifier Name { get;  set; } = name;
 
         public EnumMemberDeclaration WithName(J.Identifier newName)
         {
-            return ReferenceEquals(newName, name) ? this : new EnumMemberDeclaration(id, prefix, markers, attributeLists, newName, _initializer);
+            return ReferenceEquals(newName, Name) ? this : new EnumMemberDeclaration(Id, Prefix, Markers, AttributeLists, newName, _initializer);
         }
-        private readonly JLeftPadded<Expression>? _initializer = initializer;
+        private JLeftPadded<Expression>? _initializer = initializer;
         public Expression? Initializer => _initializer?.Element;
 
         public EnumMemberDeclaration WithInitializer(Expression? newInitializer)
@@ -119,11 +119,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.EnumMemberDeclaration T)
         {
-            public JLeftPadded<Expression>? Initializer => T._initializer;
+            public JLeftPadded<Expression>? Initializer { get => T._initializer;  set => T._initializer = value; }
 
             public Cs.EnumMemberDeclaration WithInitializer(JLeftPadded<Expression>? newInitializer)
             {
-                return T._initializer == newInitializer ? T : new Cs.EnumMemberDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Name, newInitializer);
+                return Initializer == newInitializer ? T : new Cs.EnumMemberDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Name, newInitializer);
             }
 
         }

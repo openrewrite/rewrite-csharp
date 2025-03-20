@@ -41,47 +41,47 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitLambda(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Lambda WithId(Guid newId)
         {
-            return newId == id ? this : new Lambda(newId, prefix, markers, @params, arrow, body, type);
+            return newId == Id ? this : new Lambda(newId, Prefix, Markers, Params, Arrow, Body, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Lambda WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Lambda(id, newPrefix, markers, @params, arrow, body, type);
+            return newPrefix == Prefix ? this : new Lambda(Id, newPrefix, Markers, Params, Arrow, Body, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Lambda WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Lambda(id, prefix, newMarkers, @params, arrow, body, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Lambda(Id, Prefix, newMarkers, Params, Arrow, Body, Type);
         }
-        public Parameters Params => @params;
+        public Parameters Params { get;  set; } = @params;
 
         public Lambda WithParams(Parameters newParams)
         {
-            return ReferenceEquals(newParams, @params) ? this : new Lambda(id, prefix, markers, newParams, arrow, body, type);
+            return ReferenceEquals(newParams, Params) ? this : new Lambda(Id, Prefix, Markers, newParams, Arrow, Body, Type);
         }
-        public Space Arrow => arrow;
+        public Space Arrow { get;  set; } = arrow;
 
         public Lambda WithArrow(Space newArrow)
         {
-            return newArrow == arrow ? this : new Lambda(id, prefix, markers, @params, newArrow, body, type);
+            return newArrow == Arrow ? this : new Lambda(Id, Prefix, Markers, Params, newArrow, Body, Type);
         }
-        public J Body => body;
+        public J Body { get;  set; } = body;
 
         public Lambda WithBody(J newBody)
         {
-            return ReferenceEquals(newBody, body) ? this : new Lambda(id, prefix, markers, @params, arrow, newBody, type);
+            return ReferenceEquals(newBody, Body) ? this : new Lambda(Id, Prefix, Markers, Params, Arrow, newBody, Type);
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public Lambda WithType(JavaType? newType)
         {
-            return newType == type ? this : new Lambda(id, prefix, markers, @params, arrow, body, newType);
+            return newType == Type ? this : new Lambda(Id, Prefix, Markers, Params, Arrow, Body, newType);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]
@@ -124,31 +124,31 @@ public partial interface J : Rewrite.Core.Tree
                 return v.VisitLambdaParameters(this, p);
             }
 
-            public Guid Id => id;
+            public Guid Id { get;  set; } = id;
 
             public Parameters WithId(Guid newId)
             {
-                return newId == id ? this : new Parameters(newId, prefix, markers, parenthesized, _elements);
+                return newId == Id ? this : new Parameters(newId, Prefix, Markers, Parenthesized, _elements);
             }
-            public Space Prefix => prefix;
+            public Space Prefix { get;  set; } = prefix;
 
             public Parameters WithPrefix(Space newPrefix)
             {
-                return newPrefix == prefix ? this : new Parameters(id, newPrefix, markers, parenthesized, _elements);
+                return newPrefix == Prefix ? this : new Parameters(Id, newPrefix, Markers, Parenthesized, _elements);
             }
-            public Markers Markers => markers;
+            public Markers Markers { get;  set; } = markers;
 
             public Parameters WithMarkers(Markers newMarkers)
             {
-                return ReferenceEquals(newMarkers, markers) ? this : new Parameters(id, prefix, newMarkers, parenthesized, _elements);
+                return ReferenceEquals(newMarkers, Markers) ? this : new Parameters(Id, Prefix, newMarkers, Parenthesized, _elements);
             }
-            public bool Parenthesized => parenthesized;
+            public bool Parenthesized { get;  set; } = parenthesized;
 
             public Parameters WithParenthesized(bool newParenthesized)
             {
-                return newParenthesized == parenthesized ? this : new Parameters(id, prefix, markers, newParenthesized, _elements);
+                return newParenthesized == Parenthesized ? this : new Parameters(Id, Prefix, Markers, newParenthesized, _elements);
             }
-            private readonly IList<JRightPadded<J>> _elements = elements;
+            private IList<JRightPadded<J>> _elements = elements;
             public IList<J> Elements => _elements.Elements();
 
             public Parameters WithElements(IList<J> newElements)
@@ -157,11 +157,11 @@ public partial interface J : Rewrite.Core.Tree
             }
             public sealed record PaddingHelper(J.Lambda.Parameters T)
             {
-                public IList<JRightPadded<J>> Elements => T._elements;
+                public IList<JRightPadded<J>> Elements { get => T._elements;  set => T._elements = value; }
 
                 public J.Lambda.Parameters WithElements(IList<JRightPadded<J>> newElements)
                 {
-                    return T._elements == newElements ? T : new J.Lambda.Parameters(T.Id, T.Prefix, T.Markers, T.Parenthesized, newElements);
+                    return Elements == newElements ? T : new J.Lambda.Parameters(T.Id, T.Prefix, T.Markers, T.Parenthesized, newElements);
                 }
 
             }

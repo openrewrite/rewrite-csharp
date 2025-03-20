@@ -76,25 +76,25 @@ public partial interface Cs : J
             return v.VisitDefaultExpression(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public DefaultExpression WithId(Guid newId)
         {
-            return newId == id ? this : new DefaultExpression(newId, prefix, markers, _typeOperator);
+            return newId == Id ? this : new DefaultExpression(newId, Prefix, Markers, _typeOperator);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public DefaultExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new DefaultExpression(id, newPrefix, markers, _typeOperator);
+            return newPrefix == Prefix ? this : new DefaultExpression(Id, newPrefix, Markers, _typeOperator);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public DefaultExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new DefaultExpression(id, prefix, newMarkers, _typeOperator);
+            return ReferenceEquals(newMarkers, Markers) ? this : new DefaultExpression(Id, Prefix, newMarkers, _typeOperator);
         }
-        private readonly JContainer<TypeTree>? _typeOperator = typeOperator;
+        private JContainer<TypeTree>? _typeOperator = typeOperator;
         public IList<TypeTree>? TypeOperator => _typeOperator?.GetElements();
 
         public DefaultExpression WithTypeOperator(IList<TypeTree>? newTypeOperator)
@@ -103,11 +103,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.DefaultExpression T)
         {
-            public JContainer<TypeTree>? TypeOperator => T._typeOperator;
+            public JContainer<TypeTree>? TypeOperator { get => T._typeOperator;  set => T._typeOperator = value; }
 
             public Cs.DefaultExpression WithTypeOperator(JContainer<TypeTree>? newTypeOperator)
             {
-                return T._typeOperator == newTypeOperator ? T : new Cs.DefaultExpression(T.Id, T.Prefix, T.Markers, newTypeOperator);
+                return TypeOperator == newTypeOperator ? T : new Cs.DefaultExpression(T.Id, T.Prefix, T.Markers, newTypeOperator);
             }
 
         }

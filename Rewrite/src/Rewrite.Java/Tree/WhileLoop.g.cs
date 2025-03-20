@@ -64,31 +64,31 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitWhileLoop(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public WhileLoop WithId(Guid newId)
         {
-            return newId == id ? this : new WhileLoop(newId, prefix, markers, condition, _body);
+            return newId == Id ? this : new WhileLoop(newId, Prefix, Markers, Condition, _body);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public WhileLoop WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new WhileLoop(id, newPrefix, markers, condition, _body);
+            return newPrefix == Prefix ? this : new WhileLoop(Id, newPrefix, Markers, Condition, _body);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public WhileLoop WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new WhileLoop(id, prefix, newMarkers, condition, _body);
+            return ReferenceEquals(newMarkers, Markers) ? this : new WhileLoop(Id, Prefix, newMarkers, Condition, _body);
         }
-        public J.ControlParentheses<Expression> Condition => condition;
+        public J.ControlParentheses<Expression> Condition { get;  set; } = condition;
 
         public WhileLoop WithCondition(J.ControlParentheses<Expression> newCondition)
         {
-            return ReferenceEquals(newCondition, condition) ? this : new WhileLoop(id, prefix, markers, newCondition, _body);
+            return ReferenceEquals(newCondition, Condition) ? this : new WhileLoop(Id, Prefix, Markers, newCondition, _body);
         }
-        private readonly JRightPadded<Statement> _body = body;
+        private JRightPadded<Statement> _body = body;
         public Statement Body => _body.Element;
 
         public WhileLoop WithBody(Statement newBody)
@@ -97,11 +97,11 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.WhileLoop T)
         {
-            public JRightPadded<Statement> Body => T._body;
+            public JRightPadded<Statement> Body { get => T._body;  set => T._body = value; }
 
             public J.WhileLoop WithBody(JRightPadded<Statement> newBody)
             {
-                return T._body == newBody ? T : new J.WhileLoop(T.Id, T.Prefix, T.Markers, T.Condition, newBody);
+                return Body == newBody ? T : new J.WhileLoop(T.Id, T.Prefix, T.Markers, T.Condition, newBody);
             }
 
         }

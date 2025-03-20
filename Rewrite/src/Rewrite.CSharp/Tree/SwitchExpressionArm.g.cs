@@ -82,38 +82,38 @@ public partial interface Cs : J
             return v.VisitSwitchExpressionArm(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public SwitchExpressionArm WithId(Guid newId)
         {
-            return newId == id ? this : new SwitchExpressionArm(newId, prefix, markers, pattern, _whenExpression, _expression);
+            return newId == Id ? this : new SwitchExpressionArm(newId, Prefix, Markers, Pattern, _whenExpression, _expression);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public SwitchExpressionArm WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new SwitchExpressionArm(id, newPrefix, markers, pattern, _whenExpression, _expression);
+            return newPrefix == Prefix ? this : new SwitchExpressionArm(Id, newPrefix, Markers, Pattern, _whenExpression, _expression);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public SwitchExpressionArm WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new SwitchExpressionArm(id, prefix, newMarkers, pattern, _whenExpression, _expression);
+            return ReferenceEquals(newMarkers, Markers) ? this : new SwitchExpressionArm(Id, Prefix, newMarkers, Pattern, _whenExpression, _expression);
         }
-        public Cs.Pattern Pattern => pattern;
+        public Cs.Pattern Pattern { get;  set; } = pattern;
 
         public SwitchExpressionArm WithPattern(Cs.Pattern newPattern)
         {
-            return ReferenceEquals(newPattern, pattern) ? this : new SwitchExpressionArm(id, prefix, markers, newPattern, _whenExpression, _expression);
+            return ReferenceEquals(newPattern, Pattern) ? this : new SwitchExpressionArm(Id, Prefix, Markers, newPattern, _whenExpression, _expression);
         }
-        private readonly JLeftPadded<Expression>? _whenExpression = whenExpression;
+        private JLeftPadded<Expression>? _whenExpression = whenExpression;
         public Expression? WhenExpression => _whenExpression?.Element;
 
         public SwitchExpressionArm WithWhenExpression(Expression? newWhenExpression)
         {
             return Padding.WithWhenExpression(JLeftPadded<Expression>.WithElement(_whenExpression, newWhenExpression));
         }
-        private readonly JLeftPadded<Expression> _expression = expression;
+        private JLeftPadded<Expression> _expression = expression;
         public Expression Expression => _expression.Element;
 
         public SwitchExpressionArm WithExpression(Expression newExpression)
@@ -122,18 +122,18 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.SwitchExpressionArm T)
         {
-            public JLeftPadded<Expression>? WhenExpression => T._whenExpression;
+            public JLeftPadded<Expression>? WhenExpression { get => T._whenExpression;  set => T._whenExpression = value; }
 
             public Cs.SwitchExpressionArm WithWhenExpression(JLeftPadded<Expression>? newWhenExpression)
             {
-                return T._whenExpression == newWhenExpression ? T : new Cs.SwitchExpressionArm(T.Id, T.Prefix, T.Markers, T.Pattern, newWhenExpression, T._expression);
+                return WhenExpression == newWhenExpression ? T : new Cs.SwitchExpressionArm(T.Id, T.Prefix, T.Markers, T.Pattern, newWhenExpression, T._expression);
             }
 
-            public JLeftPadded<Expression> Expression => T._expression;
+            public JLeftPadded<Expression> Expression { get => T._expression;  set => T._expression = value; }
 
             public Cs.SwitchExpressionArm WithExpression(JLeftPadded<Expression> newExpression)
             {
-                return T._expression == newExpression ? T : new Cs.SwitchExpressionArm(T.Id, T.Prefix, T.Markers, T.Pattern, T._whenExpression, newExpression);
+                return Expression == newExpression ? T : new Cs.SwitchExpressionArm(T.Id, T.Prefix, T.Markers, T.Pattern, T._whenExpression, newExpression);
             }
 
         }

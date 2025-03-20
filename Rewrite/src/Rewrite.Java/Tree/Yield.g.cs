@@ -39,35 +39,35 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitYield(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Yield WithId(Guid newId)
         {
-            return newId == id ? this : new Yield(newId, prefix, markers, @implicit, value);
+            return newId == Id ? this : new Yield(newId, Prefix, Markers, Implicit, Value);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Yield WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Yield(id, newPrefix, markers, @implicit, value);
+            return newPrefix == Prefix ? this : new Yield(Id, newPrefix, Markers, Implicit, Value);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Yield WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Yield(id, prefix, newMarkers, @implicit, value);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Yield(Id, Prefix, newMarkers, Implicit, Value);
         }
-        public bool Implicit => @implicit;
+        public bool Implicit { get;  set; } = @implicit;
 
         public Yield WithImplicit(bool newImplicit)
         {
-            return newImplicit == @implicit ? this : new Yield(id, prefix, markers, newImplicit, value);
+            return newImplicit == Implicit ? this : new Yield(Id, Prefix, Markers, newImplicit, Value);
         }
-        public Expression Value => value;
+        public Expression Value { get;  set; } = value;
 
         public Yield WithValue(Expression newValue)
         {
-            return ReferenceEquals(newValue, value) ? this : new Yield(id, prefix, markers, @implicit, newValue);
+            return ReferenceEquals(newValue, Value) ? this : new Yield(Id, Prefix, Markers, Implicit, newValue);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

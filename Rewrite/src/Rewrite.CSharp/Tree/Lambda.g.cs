@@ -41,41 +41,41 @@ public partial interface Cs : J
             return v.VisitLambda(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Lambda WithId(Guid newId)
         {
-            return newId == id ? this : new Lambda(newId, prefix, markers, lambdaExpression, returnType, modifiers);
+            return newId == Id ? this : new Lambda(newId, Prefix, Markers, LambdaExpression, ReturnType, Modifiers);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Lambda WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Lambda(id, newPrefix, markers, lambdaExpression, returnType, modifiers);
+            return newPrefix == Prefix ? this : new Lambda(Id, newPrefix, Markers, LambdaExpression, ReturnType, Modifiers);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Lambda WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Lambda(id, prefix, newMarkers, lambdaExpression, returnType, modifiers);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Lambda(Id, Prefix, newMarkers, LambdaExpression, ReturnType, Modifiers);
         }
-        public J.Lambda LambdaExpression => lambdaExpression;
+        public J.Lambda LambdaExpression { get;  set; } = lambdaExpression;
 
         public Lambda WithLambdaExpression(J.Lambda newLambdaExpression)
         {
-            return ReferenceEquals(newLambdaExpression, lambdaExpression) ? this : new Lambda(id, prefix, markers, newLambdaExpression, returnType, modifiers);
+            return ReferenceEquals(newLambdaExpression, LambdaExpression) ? this : new Lambda(Id, Prefix, Markers, newLambdaExpression, ReturnType, Modifiers);
         }
-        public TypeTree? ReturnType => returnType;
+        public TypeTree? ReturnType { get;  set; } = returnType;
 
         public Lambda WithReturnType(TypeTree? newReturnType)
         {
-            return ReferenceEquals(newReturnType, returnType) ? this : new Lambda(id, prefix, markers, lambdaExpression, newReturnType, modifiers);
+            return ReferenceEquals(newReturnType, ReturnType) ? this : new Lambda(Id, Prefix, Markers, LambdaExpression, newReturnType, Modifiers);
         }
-        public IList<J.Modifier> Modifiers => modifiers;
+        public IList<J.Modifier> Modifiers { get;  set; } = modifiers;
 
         public Lambda WithModifiers(IList<J.Modifier> newModifiers)
         {
-            return newModifiers == modifiers ? this : new Lambda(id, prefix, markers, lambdaExpression, returnType, newModifiers);
+            return newModifiers == Modifiers ? this : new Lambda(Id, Prefix, Markers, LambdaExpression, ReturnType, newModifiers);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

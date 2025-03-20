@@ -40,41 +40,41 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitArrayAccess(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ArrayAccess WithId(Guid newId)
         {
-            return newId == id ? this : new ArrayAccess(newId, prefix, markers, indexed, dimension, type);
+            return newId == Id ? this : new ArrayAccess(newId, Prefix, Markers, Indexed, Dimension, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ArrayAccess WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ArrayAccess(id, newPrefix, markers, indexed, dimension, type);
+            return newPrefix == Prefix ? this : new ArrayAccess(Id, newPrefix, Markers, Indexed, Dimension, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ArrayAccess WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ArrayAccess(id, prefix, newMarkers, indexed, dimension, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ArrayAccess(Id, Prefix, newMarkers, Indexed, Dimension, Type);
         }
-        public Expression Indexed => indexed;
+        public Expression Indexed { get;  set; } = indexed;
 
         public ArrayAccess WithIndexed(Expression newIndexed)
         {
-            return ReferenceEquals(newIndexed, indexed) ? this : new ArrayAccess(id, prefix, markers, newIndexed, dimension, type);
+            return ReferenceEquals(newIndexed, Indexed) ? this : new ArrayAccess(Id, Prefix, Markers, newIndexed, Dimension, Type);
         }
-        public J.ArrayDimension Dimension => dimension;
+        public J.ArrayDimension Dimension { get;  set; } = dimension;
 
         public ArrayAccess WithDimension(J.ArrayDimension newDimension)
         {
-            return ReferenceEquals(newDimension, dimension) ? this : new ArrayAccess(id, prefix, markers, indexed, newDimension, type);
+            return ReferenceEquals(newDimension, Dimension) ? this : new ArrayAccess(Id, Prefix, Markers, Indexed, newDimension, Type);
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public ArrayAccess WithType(JavaType? newType)
         {
-            return newType == type ? this : new ArrayAccess(id, prefix, markers, indexed, dimension, newType);
+            return newType == Type ? this : new ArrayAccess(Id, Prefix, Markers, Indexed, Dimension, newType);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

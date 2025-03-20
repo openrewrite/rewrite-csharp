@@ -11,6 +11,7 @@ namespace Rewrite.RewriteCSharp;
 
 public class CSharpParser : Core.Parser
 {
+    public static CSharpParser Instance { get; } = new Builder().Build();
     private readonly IEnumerable<MetadataReference> _references;
 
     private CSharpParser(IEnumerable<MetadataReference> references)

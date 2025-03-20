@@ -64,25 +64,25 @@ public partial interface Cs : J
             return v.VisitExternAlias(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ExternAlias WithId(Guid newId)
         {
-            return newId == id ? this : new ExternAlias(newId, prefix, markers, _identifier);
+            return newId == Id ? this : new ExternAlias(newId, Prefix, Markers, _identifier);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ExternAlias WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ExternAlias(id, newPrefix, markers, _identifier);
+            return newPrefix == Prefix ? this : new ExternAlias(Id, newPrefix, Markers, _identifier);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ExternAlias WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ExternAlias(id, prefix, newMarkers, _identifier);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ExternAlias(Id, Prefix, newMarkers, _identifier);
         }
-        private readonly JLeftPadded<J.Identifier> _identifier = identifier;
+        private JLeftPadded<J.Identifier> _identifier = identifier;
         public J.Identifier Identifier => _identifier.Element;
 
         public ExternAlias WithIdentifier(J.Identifier newIdentifier)
@@ -91,11 +91,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.ExternAlias T)
         {
-            public JLeftPadded<J.Identifier> Identifier => T._identifier;
+            public JLeftPadded<J.Identifier> Identifier { get => T._identifier;  set => T._identifier = value; }
 
             public Cs.ExternAlias WithIdentifier(JLeftPadded<J.Identifier> newIdentifier)
             {
-                return T._identifier == newIdentifier ? T : new Cs.ExternAlias(T.Id, T.Prefix, T.Markers, newIdentifier);
+                return Identifier == newIdentifier ? T : new Cs.ExternAlias(T.Id, T.Prefix, T.Markers, newIdentifier);
             }
 
         }

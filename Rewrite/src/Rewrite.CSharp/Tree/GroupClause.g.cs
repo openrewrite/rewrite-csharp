@@ -74,44 +74,44 @@ public partial interface Cs : J
             return v.VisitGroupClause(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public GroupClause WithId(Guid newId)
         {
-            return newId == id ? this : new GroupClause(newId, prefix, markers, _groupExpression, key);
+            return newId == Id ? this : new GroupClause(newId, Prefix, Markers, _groupExpression, Key);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public GroupClause WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new GroupClause(id, newPrefix, markers, _groupExpression, key);
+            return newPrefix == Prefix ? this : new GroupClause(Id, newPrefix, Markers, _groupExpression, Key);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public GroupClause WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new GroupClause(id, prefix, newMarkers, _groupExpression, key);
+            return ReferenceEquals(newMarkers, Markers) ? this : new GroupClause(Id, Prefix, newMarkers, _groupExpression, Key);
         }
-        private readonly JRightPadded<Expression> _groupExpression = groupExpression;
+        private JRightPadded<Expression> _groupExpression = groupExpression;
         public Expression GroupExpression => _groupExpression.Element;
 
         public GroupClause WithGroupExpression(Expression newGroupExpression)
         {
             return Padding.WithGroupExpression(_groupExpression.WithElement(newGroupExpression));
         }
-        public Expression Key => key;
+        public Expression Key { get;  set; } = key;
 
         public GroupClause WithKey(Expression newKey)
         {
-            return ReferenceEquals(newKey, key) ? this : new GroupClause(id, prefix, markers, _groupExpression, newKey);
+            return ReferenceEquals(newKey, Key) ? this : new GroupClause(Id, Prefix, Markers, _groupExpression, newKey);
         }
         public sealed record PaddingHelper(Cs.GroupClause T)
         {
-            public JRightPadded<Expression> GroupExpression => T._groupExpression;
+            public JRightPadded<Expression> GroupExpression { get => T._groupExpression;  set => T._groupExpression = value; }
 
             public Cs.GroupClause WithGroupExpression(JRightPadded<Expression> newGroupExpression)
             {
-                return T._groupExpression == newGroupExpression ? T : new Cs.GroupClause(T.Id, T.Prefix, T.Markers, newGroupExpression, T.Key);
+                return GroupExpression == newGroupExpression ? T : new Cs.GroupClause(T.Id, T.Prefix, T.Markers, newGroupExpression, T.Key);
             }
 
         }

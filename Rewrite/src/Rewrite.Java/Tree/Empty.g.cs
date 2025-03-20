@@ -37,23 +37,23 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitEmpty(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Empty WithId(Guid newId)
         {
-            return newId == id ? this : new Empty(newId, prefix, markers);
+            return newId == Id ? this : new Empty(newId, Prefix, Markers);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Empty WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Empty(id, newPrefix, markers);
+            return newPrefix == Prefix ? this : new Empty(Id, newPrefix, Markers);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Empty WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Empty(id, prefix, newMarkers);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Empty(Id, Prefix, newMarkers);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

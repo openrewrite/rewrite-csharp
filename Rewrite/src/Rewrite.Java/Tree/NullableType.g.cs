@@ -64,31 +64,31 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitNullableType(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public NullableType WithId(Guid newId)
         {
-            return newId == id ? this : new NullableType(newId, prefix, markers, annotations, _typeTree);
+            return newId == Id ? this : new NullableType(newId, Prefix, Markers, Annotations, _typeTree);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public NullableType WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new NullableType(id, newPrefix, markers, annotations, _typeTree);
+            return newPrefix == Prefix ? this : new NullableType(Id, newPrefix, Markers, Annotations, _typeTree);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public NullableType WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new NullableType(id, prefix, newMarkers, annotations, _typeTree);
+            return ReferenceEquals(newMarkers, Markers) ? this : new NullableType(Id, Prefix, newMarkers, Annotations, _typeTree);
         }
-        public IList<J.Annotation> Annotations => annotations;
+        public IList<J.Annotation> Annotations { get;  set; } = annotations;
 
         public NullableType WithAnnotations(IList<J.Annotation> newAnnotations)
         {
-            return newAnnotations == annotations ? this : new NullableType(id, prefix, markers, newAnnotations, _typeTree);
+            return newAnnotations == Annotations ? this : new NullableType(Id, Prefix, Markers, newAnnotations, _typeTree);
         }
-        private readonly JRightPadded<TypeTree> _typeTree = typeTree;
+        private JRightPadded<TypeTree> _typeTree = typeTree;
         public TypeTree TypeTree => _typeTree.Element;
 
         public NullableType WithTypeTree(TypeTree newTypeTree)
@@ -97,11 +97,11 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.NullableType T)
         {
-            public JRightPadded<TypeTree> TypeTree => T._typeTree;
+            public JRightPadded<TypeTree> TypeTree { get => T._typeTree;  set => T._typeTree = value; }
 
             public J.NullableType WithTypeTree(JRightPadded<TypeTree> newTypeTree)
             {
-                return T._typeTree == newTypeTree ? T : new J.NullableType(T.Id, T.Prefix, T.Markers, T.Annotations, newTypeTree);
+                return TypeTree == newTypeTree ? T : new J.NullableType(T.Id, T.Prefix, T.Markers, T.Annotations, newTypeTree);
             }
 
         }

@@ -84,25 +84,25 @@ public partial interface Cs : J
             return v.VisitImplicitElementAccess(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ImplicitElementAccess WithId(Guid newId)
         {
-            return newId == id ? this : new ImplicitElementAccess(newId, prefix, markers, _argumentList);
+            return newId == Id ? this : new ImplicitElementAccess(newId, Prefix, Markers, _argumentList);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ImplicitElementAccess WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ImplicitElementAccess(id, newPrefix, markers, _argumentList);
+            return newPrefix == Prefix ? this : new ImplicitElementAccess(Id, newPrefix, Markers, _argumentList);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ImplicitElementAccess WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ImplicitElementAccess(id, prefix, newMarkers, _argumentList);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ImplicitElementAccess(Id, Prefix, newMarkers, _argumentList);
         }
-        private readonly JContainer<Cs.Argument> _argumentList = argumentList;
+        private JContainer<Cs.Argument> _argumentList = argumentList;
         public IList<Cs.Argument> ArgumentList => _argumentList.GetElements();
 
         public ImplicitElementAccess WithArgumentList(IList<Cs.Argument> newArgumentList)
@@ -111,11 +111,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.ImplicitElementAccess T)
         {
-            public JContainer<Cs.Argument> ArgumentList => T._argumentList;
+            public JContainer<Cs.Argument> ArgumentList { get => T._argumentList;  set => T._argumentList = value; }
 
             public Cs.ImplicitElementAccess WithArgumentList(JContainer<Cs.Argument> newArgumentList)
             {
-                return T._argumentList == newArgumentList ? T : new Cs.ImplicitElementAccess(T.Id, T.Prefix, T.Markers, newArgumentList);
+                return ArgumentList == newArgumentList ? T : new Cs.ImplicitElementAccess(T.Id, T.Prefix, T.Markers, newArgumentList);
             }
 
         }

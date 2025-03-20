@@ -51,29 +51,29 @@ public partial interface Cs : J
             return v.VisitSingleVariableDesignation(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public SingleVariableDesignation WithId(Guid newId)
         {
-            return newId == id ? this : new SingleVariableDesignation(newId, prefix, markers, name);
+            return newId == Id ? this : new SingleVariableDesignation(newId, Prefix, Markers, Name);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public SingleVariableDesignation WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new SingleVariableDesignation(id, newPrefix, markers, name);
+            return newPrefix == Prefix ? this : new SingleVariableDesignation(Id, newPrefix, Markers, Name);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public SingleVariableDesignation WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new SingleVariableDesignation(id, prefix, newMarkers, name);
+            return ReferenceEquals(newMarkers, Markers) ? this : new SingleVariableDesignation(Id, Prefix, newMarkers, Name);
         }
-        public J.Identifier Name => name;
+        public J.Identifier Name { get;  set; } = name;
 
         public SingleVariableDesignation WithName(J.Identifier newName)
         {
-            return ReferenceEquals(newName, name) ? this : new SingleVariableDesignation(id, prefix, markers, newName);
+            return ReferenceEquals(newName, Name) ? this : new SingleVariableDesignation(Id, Prefix, Markers, newName);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

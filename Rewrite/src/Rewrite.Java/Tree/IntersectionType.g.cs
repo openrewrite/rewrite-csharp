@@ -63,25 +63,25 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitIntersectionType(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public IntersectionType WithId(Guid newId)
         {
-            return newId == id ? this : new IntersectionType(newId, prefix, markers, _bounds);
+            return newId == Id ? this : new IntersectionType(newId, Prefix, Markers, _bounds);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public IntersectionType WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new IntersectionType(id, newPrefix, markers, _bounds);
+            return newPrefix == Prefix ? this : new IntersectionType(Id, newPrefix, Markers, _bounds);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public IntersectionType WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new IntersectionType(id, prefix, newMarkers, _bounds);
+            return ReferenceEquals(newMarkers, Markers) ? this : new IntersectionType(Id, Prefix, newMarkers, _bounds);
         }
-        private readonly JContainer<TypeTree> _bounds = bounds;
+        private JContainer<TypeTree> _bounds = bounds;
         public IList<TypeTree> Bounds => _bounds.GetElements();
 
         public IntersectionType WithBounds(IList<TypeTree> newBounds)
@@ -90,11 +90,11 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.IntersectionType T)
         {
-            public JContainer<TypeTree> Bounds => T._bounds;
+            public JContainer<TypeTree> Bounds { get => T._bounds;  set => T._bounds = value; }
 
             public J.IntersectionType WithBounds(JContainer<TypeTree> newBounds)
             {
-                return T._bounds == newBounds ? T : new J.IntersectionType(T.Id, T.Prefix, T.Markers, newBounds);
+                return Bounds == newBounds ? T : new J.IntersectionType(T.Id, T.Prefix, T.Markers, newBounds);
             }
 
         }

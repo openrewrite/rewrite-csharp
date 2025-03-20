@@ -79,25 +79,25 @@ public partial interface Cs : J
             return v.VisitTupleExpression(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public TupleExpression WithId(Guid newId)
         {
-            return newId == id ? this : new TupleExpression(newId, prefix, markers, _arguments);
+            return newId == Id ? this : new TupleExpression(newId, Prefix, Markers, _arguments);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public TupleExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new TupleExpression(id, newPrefix, markers, _arguments);
+            return newPrefix == Prefix ? this : new TupleExpression(Id, newPrefix, Markers, _arguments);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public TupleExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new TupleExpression(id, prefix, newMarkers, _arguments);
+            return ReferenceEquals(newMarkers, Markers) ? this : new TupleExpression(Id, Prefix, newMarkers, _arguments);
         }
-        private readonly JContainer<Cs.Argument> _arguments = arguments;
+        private JContainer<Cs.Argument> _arguments = arguments;
         public IList<Cs.Argument> Arguments => _arguments.GetElements();
 
         public TupleExpression WithArguments(IList<Cs.Argument> newArguments)
@@ -106,11 +106,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.TupleExpression T)
         {
-            public JContainer<Cs.Argument> Arguments => T._arguments;
+            public JContainer<Cs.Argument> Arguments { get => T._arguments;  set => T._arguments = value; }
 
             public Cs.TupleExpression WithArguments(JContainer<Cs.Argument> newArguments)
             {
-                return T._arguments == newArguments ? T : new Cs.TupleExpression(T.Id, T.Prefix, T.Markers, newArguments);
+                return Arguments == newArguments ? T : new Cs.TupleExpression(T.Id, T.Prefix, T.Markers, newArguments);
             }
 
         }

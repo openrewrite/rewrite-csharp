@@ -43,35 +43,35 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitParenthesizedTypeTree(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ParenthesizedTypeTree WithId(Guid newId)
         {
-            return newId == id ? this : new ParenthesizedTypeTree(newId, prefix, markers, annotations, parenthesizedType);
+            return newId == Id ? this : new ParenthesizedTypeTree(newId, Prefix, Markers, Annotations, ParenthesizedType);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ParenthesizedTypeTree WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ParenthesizedTypeTree(id, newPrefix, markers, annotations, parenthesizedType);
+            return newPrefix == Prefix ? this : new ParenthesizedTypeTree(Id, newPrefix, Markers, Annotations, ParenthesizedType);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ParenthesizedTypeTree WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ParenthesizedTypeTree(id, prefix, newMarkers, annotations, parenthesizedType);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ParenthesizedTypeTree(Id, Prefix, newMarkers, Annotations, ParenthesizedType);
         }
-        public IList<J.Annotation> Annotations => annotations;
+        public IList<J.Annotation> Annotations { get;  set; } = annotations;
 
         public ParenthesizedTypeTree WithAnnotations(IList<J.Annotation> newAnnotations)
         {
-            return newAnnotations == annotations ? this : new ParenthesizedTypeTree(id, prefix, markers, newAnnotations, parenthesizedType);
+            return newAnnotations == Annotations ? this : new ParenthesizedTypeTree(Id, Prefix, Markers, newAnnotations, ParenthesizedType);
         }
-        public J.Parentheses<TypeTree> ParenthesizedType => parenthesizedType;
+        public J.Parentheses<TypeTree> ParenthesizedType { get;  set; } = parenthesizedType;
 
         public ParenthesizedTypeTree WithParenthesizedType(J.Parentheses<TypeTree> newParenthesizedType)
         {
-            return ReferenceEquals(newParenthesizedType, parenthesizedType) ? this : new ParenthesizedTypeTree(id, prefix, markers, annotations, newParenthesizedType);
+            return ReferenceEquals(newParenthesizedType, ParenthesizedType) ? this : new ParenthesizedTypeTree(Id, Prefix, Markers, Annotations, newParenthesizedType);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

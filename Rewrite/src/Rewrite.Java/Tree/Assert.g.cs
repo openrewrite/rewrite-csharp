@@ -39,35 +39,35 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitAssert(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Assert WithId(Guid newId)
         {
-            return newId == id ? this : new Assert(newId, prefix, markers, condition, detail);
+            return newId == Id ? this : new Assert(newId, Prefix, Markers, Condition, Detail);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Assert WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Assert(id, newPrefix, markers, condition, detail);
+            return newPrefix == Prefix ? this : new Assert(Id, newPrefix, Markers, Condition, Detail);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Assert WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Assert(id, prefix, newMarkers, condition, detail);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Assert(Id, Prefix, newMarkers, Condition, Detail);
         }
-        public Expression Condition => condition;
+        public Expression Condition { get;  set; } = condition;
 
         public Assert WithCondition(Expression newCondition)
         {
-            return ReferenceEquals(newCondition, condition) ? this : new Assert(id, prefix, markers, newCondition, detail);
+            return ReferenceEquals(newCondition, Condition) ? this : new Assert(Id, Prefix, Markers, newCondition, Detail);
         }
-        public JLeftPadded<Expression>? Detail => detail;
+        public JLeftPadded<Expression>? Detail { get;  set; } = detail;
 
         public Assert WithDetail(JLeftPadded<Expression>? newDetail)
         {
-            return newDetail == detail ? this : new Assert(id, prefix, markers, condition, newDetail);
+            return newDetail == Detail ? this : new Assert(Id, Prefix, Markers, Condition, newDetail);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

@@ -83,44 +83,44 @@ public partial interface Cs : J
             return v.VisitTupleType(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public TupleType WithId(Guid newId)
         {
-            return newId == id ? this : new TupleType(newId, prefix, markers, _elements, type);
+            return newId == Id ? this : new TupleType(newId, Prefix, Markers, _elements, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public TupleType WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new TupleType(id, newPrefix, markers, _elements, type);
+            return newPrefix == Prefix ? this : new TupleType(Id, newPrefix, Markers, _elements, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public TupleType WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new TupleType(id, prefix, newMarkers, _elements, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new TupleType(Id, Prefix, newMarkers, _elements, Type);
         }
-        private readonly JContainer<Cs.TupleElement> _elements = elements;
+        private JContainer<Cs.TupleElement> _elements = elements;
         public IList<Cs.TupleElement> Elements => _elements.GetElements();
 
         public TupleType WithElements(IList<Cs.TupleElement> newElements)
         {
             return Padding.WithElements(JContainer<Cs.TupleElement>.WithElements(_elements, newElements));
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public TupleType WithType(JavaType? newType)
         {
-            return newType == type ? this : new TupleType(id, prefix, markers, _elements, newType);
+            return newType == Type ? this : new TupleType(Id, Prefix, Markers, _elements, newType);
         }
         public sealed record PaddingHelper(Cs.TupleType T)
         {
-            public JContainer<Cs.TupleElement> Elements => T._elements;
+            public JContainer<Cs.TupleElement> Elements { get => T._elements;  set => T._elements = value; }
 
             public Cs.TupleType WithElements(JContainer<Cs.TupleElement> newElements)
             {
-                return T._elements == newElements ? T : new Cs.TupleType(T.Id, T.Prefix, T.Markers, newElements, T.Type);
+                return Elements == newElements ? T : new Cs.TupleType(T.Id, T.Prefix, T.Markers, newElements, T.Type);
             }
 
         }

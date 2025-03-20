@@ -73,82 +73,82 @@ public partial interface Cs : J
             return v.VisitMethodDeclaration(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public MethodDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new MethodDeclaration(newId, prefix, markers, attributes, modifiers, _typeParameters, returnTypeExpression, _explicitInterfaceSpecifier, name, _parameters, body, methodType, _typeParameterConstraintClauses);
+            return newId == Id ? this : new MethodDeclaration(newId, Prefix, Markers, Attributes, Modifiers, _typeParameters, ReturnTypeExpression, _explicitInterfaceSpecifier, Name, _parameters, Body, MethodType, _typeParameterConstraintClauses);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public MethodDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new MethodDeclaration(id, newPrefix, markers, attributes, modifiers, _typeParameters, returnTypeExpression, _explicitInterfaceSpecifier, name, _parameters, body, methodType, _typeParameterConstraintClauses);
+            return newPrefix == Prefix ? this : new MethodDeclaration(Id, newPrefix, Markers, Attributes, Modifiers, _typeParameters, ReturnTypeExpression, _explicitInterfaceSpecifier, Name, _parameters, Body, MethodType, _typeParameterConstraintClauses);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public MethodDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new MethodDeclaration(id, prefix, newMarkers, attributes, modifiers, _typeParameters, returnTypeExpression, _explicitInterfaceSpecifier, name, _parameters, body, methodType, _typeParameterConstraintClauses);
+            return ReferenceEquals(newMarkers, Markers) ? this : new MethodDeclaration(Id, Prefix, newMarkers, Attributes, Modifiers, _typeParameters, ReturnTypeExpression, _explicitInterfaceSpecifier, Name, _parameters, Body, MethodType, _typeParameterConstraintClauses);
         }
-        public IList<Cs.AttributeList> Attributes => attributes;
+        public IList<Cs.AttributeList> Attributes { get;  set; } = attributes;
 
         public MethodDeclaration WithAttributes(IList<Cs.AttributeList> newAttributes)
         {
-            return newAttributes == attributes ? this : new MethodDeclaration(id, prefix, markers, newAttributes, modifiers, _typeParameters, returnTypeExpression, _explicitInterfaceSpecifier, name, _parameters, body, methodType, _typeParameterConstraintClauses);
+            return newAttributes == Attributes ? this : new MethodDeclaration(Id, Prefix, Markers, newAttributes, Modifiers, _typeParameters, ReturnTypeExpression, _explicitInterfaceSpecifier, Name, _parameters, Body, MethodType, _typeParameterConstraintClauses);
         }
-        public IList<J.Modifier> Modifiers => modifiers;
+        public IList<J.Modifier> Modifiers { get;  set; } = modifiers;
 
         public MethodDeclaration WithModifiers(IList<J.Modifier> newModifiers)
         {
-            return newModifiers == modifiers ? this : new MethodDeclaration(id, prefix, markers, attributes, newModifiers, _typeParameters, returnTypeExpression, _explicitInterfaceSpecifier, name, _parameters, body, methodType, _typeParameterConstraintClauses);
+            return newModifiers == Modifiers ? this : new MethodDeclaration(Id, Prefix, Markers, Attributes, newModifiers, _typeParameters, ReturnTypeExpression, _explicitInterfaceSpecifier, Name, _parameters, Body, MethodType, _typeParameterConstraintClauses);
         }
-        private readonly JContainer<Cs.TypeParameter>? _typeParameters = typeParameters;
+        private JContainer<Cs.TypeParameter>? _typeParameters = typeParameters;
         public IList<Cs.TypeParameter>? TypeParameters => _typeParameters?.GetElements();
 
         public MethodDeclaration WithTypeParameters(IList<Cs.TypeParameter>? newTypeParameters)
         {
             return Padding.WithTypeParameters(JContainer<Cs.TypeParameter>.WithElementsNullable(_typeParameters, newTypeParameters));
         }
-        public TypeTree ReturnTypeExpression => returnTypeExpression;
+        public TypeTree ReturnTypeExpression { get;  set; } = returnTypeExpression;
 
         public MethodDeclaration WithReturnTypeExpression(TypeTree newReturnTypeExpression)
         {
-            return ReferenceEquals(newReturnTypeExpression, returnTypeExpression) ? this : new MethodDeclaration(id, prefix, markers, attributes, modifiers, _typeParameters, newReturnTypeExpression, _explicitInterfaceSpecifier, name, _parameters, body, methodType, _typeParameterConstraintClauses);
+            return ReferenceEquals(newReturnTypeExpression, ReturnTypeExpression) ? this : new MethodDeclaration(Id, Prefix, Markers, Attributes, Modifiers, _typeParameters, newReturnTypeExpression, _explicitInterfaceSpecifier, Name, _parameters, Body, MethodType, _typeParameterConstraintClauses);
         }
-        private readonly JRightPadded<TypeTree>? _explicitInterfaceSpecifier = explicitInterfaceSpecifier;
+        private JRightPadded<TypeTree>? _explicitInterfaceSpecifier = explicitInterfaceSpecifier;
         public TypeTree? ExplicitInterfaceSpecifier => _explicitInterfaceSpecifier?.Element;
 
         public MethodDeclaration WithExplicitInterfaceSpecifier(TypeTree? newExplicitInterfaceSpecifier)
         {
             return Padding.WithExplicitInterfaceSpecifier(JRightPadded<TypeTree>.WithElement(_explicitInterfaceSpecifier, newExplicitInterfaceSpecifier));
         }
-        public J.Identifier Name => name;
+        public J.Identifier Name { get;  set; } = name;
 
         public MethodDeclaration WithName(J.Identifier newName)
         {
-            return ReferenceEquals(newName, name) ? this : new MethodDeclaration(id, prefix, markers, attributes, modifiers, _typeParameters, returnTypeExpression, _explicitInterfaceSpecifier, newName, _parameters, body, methodType, _typeParameterConstraintClauses);
+            return ReferenceEquals(newName, Name) ? this : new MethodDeclaration(Id, Prefix, Markers, Attributes, Modifiers, _typeParameters, ReturnTypeExpression, _explicitInterfaceSpecifier, newName, _parameters, Body, MethodType, _typeParameterConstraintClauses);
         }
-        private readonly JContainer<Statement> _parameters = parameters;
+        private JContainer<Statement> _parameters = parameters;
         public IList<Statement> Parameters => _parameters.GetElements();
 
         public MethodDeclaration WithParameters(IList<Statement> newParameters)
         {
             return Padding.WithParameters(JContainer<Statement>.WithElements(_parameters, newParameters));
         }
-        public Statement? Body => body;
+        public Statement? Body { get;  set; } = body;
 
         public MethodDeclaration WithBody(Statement? newBody)
         {
-            return ReferenceEquals(newBody, body) ? this : new MethodDeclaration(id, prefix, markers, attributes, modifiers, _typeParameters, returnTypeExpression, _explicitInterfaceSpecifier, name, _parameters, newBody, methodType, _typeParameterConstraintClauses);
+            return ReferenceEquals(newBody, Body) ? this : new MethodDeclaration(Id, Prefix, Markers, Attributes, Modifiers, _typeParameters, ReturnTypeExpression, _explicitInterfaceSpecifier, Name, _parameters, newBody, MethodType, _typeParameterConstraintClauses);
         }
-        public JavaType.Method? MethodType => methodType;
+        public JavaType.Method? MethodType { get;  set; } = methodType;
 
         public MethodDeclaration WithMethodType(JavaType.Method? newMethodType)
         {
-            return newMethodType == methodType ? this : new MethodDeclaration(id, prefix, markers, attributes, modifiers, _typeParameters, returnTypeExpression, _explicitInterfaceSpecifier, name, _parameters, body, newMethodType, _typeParameterConstraintClauses);
+            return newMethodType == MethodType ? this : new MethodDeclaration(Id, Prefix, Markers, Attributes, Modifiers, _typeParameters, ReturnTypeExpression, _explicitInterfaceSpecifier, Name, _parameters, Body, newMethodType, _typeParameterConstraintClauses);
         }
-        private readonly JContainer<Cs.TypeParameterConstraintClause> _typeParameterConstraintClauses = typeParameterConstraintClauses;
+        private JContainer<Cs.TypeParameterConstraintClause> _typeParameterConstraintClauses = typeParameterConstraintClauses;
         public IList<Cs.TypeParameterConstraintClause> TypeParameterConstraintClauses => _typeParameterConstraintClauses.GetElements();
 
         public MethodDeclaration WithTypeParameterConstraintClauses(IList<Cs.TypeParameterConstraintClause> newTypeParameterConstraintClauses)
@@ -157,32 +157,32 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.MethodDeclaration T)
         {
-            public JContainer<Cs.TypeParameter>? TypeParameters => T._typeParameters;
+            public JContainer<Cs.TypeParameter>? TypeParameters { get => T._typeParameters;  set => T._typeParameters = value; }
 
             public Cs.MethodDeclaration WithTypeParameters(JContainer<Cs.TypeParameter>? newTypeParameters)
             {
-                return T._typeParameters == newTypeParameters ? T : new Cs.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, newTypeParameters, T.ReturnTypeExpression, T._explicitInterfaceSpecifier, T.Name, T._parameters, T.Body, T.MethodType, T._typeParameterConstraintClauses);
+                return TypeParameters == newTypeParameters ? T : new Cs.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, newTypeParameters, T.ReturnTypeExpression, T._explicitInterfaceSpecifier, T.Name, T._parameters, T.Body, T.MethodType, T._typeParameterConstraintClauses);
             }
 
-            public JRightPadded<TypeTree>? ExplicitInterfaceSpecifier => T._explicitInterfaceSpecifier;
+            public JRightPadded<TypeTree>? ExplicitInterfaceSpecifier { get => T._explicitInterfaceSpecifier;  set => T._explicitInterfaceSpecifier = value; }
 
             public Cs.MethodDeclaration WithExplicitInterfaceSpecifier(JRightPadded<TypeTree>? newExplicitInterfaceSpecifier)
             {
-                return T._explicitInterfaceSpecifier == newExplicitInterfaceSpecifier ? T : new Cs.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, newExplicitInterfaceSpecifier, T.Name, T._parameters, T.Body, T.MethodType, T._typeParameterConstraintClauses);
+                return ExplicitInterfaceSpecifier == newExplicitInterfaceSpecifier ? T : new Cs.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, newExplicitInterfaceSpecifier, T.Name, T._parameters, T.Body, T.MethodType, T._typeParameterConstraintClauses);
             }
 
-            public JContainer<Statement> Parameters => T._parameters;
+            public JContainer<Statement> Parameters { get => T._parameters;  set => T._parameters = value; }
 
             public Cs.MethodDeclaration WithParameters(JContainer<Statement> newParameters)
             {
-                return T._parameters == newParameters ? T : new Cs.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, T._explicitInterfaceSpecifier, T.Name, newParameters, T.Body, T.MethodType, T._typeParameterConstraintClauses);
+                return Parameters == newParameters ? T : new Cs.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, T._explicitInterfaceSpecifier, T.Name, newParameters, T.Body, T.MethodType, T._typeParameterConstraintClauses);
             }
 
-            public JContainer<Cs.TypeParameterConstraintClause> TypeParameterConstraintClauses => T._typeParameterConstraintClauses;
+            public JContainer<Cs.TypeParameterConstraintClause> TypeParameterConstraintClauses { get => T._typeParameterConstraintClauses;  set => T._typeParameterConstraintClauses = value; }
 
             public Cs.MethodDeclaration WithTypeParameterConstraintClauses(JContainer<Cs.TypeParameterConstraintClause> newTypeParameterConstraintClauses)
             {
-                return T._typeParameterConstraintClauses == newTypeParameterConstraintClauses ? T : new Cs.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, T._explicitInterfaceSpecifier, T.Name, T._parameters, T.Body, T.MethodType, newTypeParameterConstraintClauses);
+                return TypeParameterConstraintClauses == newTypeParameterConstraintClauses ? T : new Cs.MethodDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, T._typeParameters, T.ReturnTypeExpression, T._explicitInterfaceSpecifier, T.Name, T._parameters, T.Body, T.MethodType, newTypeParameterConstraintClauses);
             }
 
         }

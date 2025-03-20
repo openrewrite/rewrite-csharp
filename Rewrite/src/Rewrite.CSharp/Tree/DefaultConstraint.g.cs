@@ -46,23 +46,23 @@ public partial interface Cs : J
             return v.VisitDefaultConstraint(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public DefaultConstraint WithId(Guid newId)
         {
-            return newId == id ? this : new DefaultConstraint(newId, prefix, markers);
+            return newId == Id ? this : new DefaultConstraint(newId, Prefix, Markers);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public DefaultConstraint WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new DefaultConstraint(id, newPrefix, markers);
+            return newPrefix == Prefix ? this : new DefaultConstraint(Id, newPrefix, Markers);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public DefaultConstraint WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new DefaultConstraint(id, prefix, newMarkers);
+            return ReferenceEquals(newMarkers, Markers) ? this : new DefaultConstraint(Id, Prefix, newMarkers);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

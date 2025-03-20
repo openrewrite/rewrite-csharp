@@ -39,35 +39,35 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitPackage(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Package WithId(Guid newId)
         {
-            return newId == id ? this : new Package(newId, prefix, markers, expression, annotations);
+            return newId == Id ? this : new Package(newId, Prefix, Markers, Expression, Annotations);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Package WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Package(id, newPrefix, markers, expression, annotations);
+            return newPrefix == Prefix ? this : new Package(Id, newPrefix, Markers, Expression, Annotations);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Package WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Package(id, prefix, newMarkers, expression, annotations);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Package(Id, Prefix, newMarkers, Expression, Annotations);
         }
-        public Expression Expression => expression;
+        public Expression Expression { get;  set; } = expression;
 
         public Package WithExpression(Expression newExpression)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new Package(id, prefix, markers, newExpression, annotations);
+            return ReferenceEquals(newExpression, Expression) ? this : new Package(Id, Prefix, Markers, newExpression, Annotations);
         }
-        public IList<J.Annotation> Annotations => annotations;
+        public IList<J.Annotation> Annotations { get;  set; } = annotations;
 
         public Package WithAnnotations(IList<J.Annotation> newAnnotations)
         {
-            return newAnnotations == annotations ? this : new Package(id, prefix, markers, expression, newAnnotations);
+            return newAnnotations == Annotations ? this : new Package(Id, Prefix, Markers, Expression, newAnnotations);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

@@ -93,44 +93,44 @@ public partial interface Cs : J
             return v.VisitListPattern(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ListPattern WithId(Guid newId)
         {
-            return newId == id ? this : new ListPattern(newId, prefix, markers, _patterns, designation);
+            return newId == Id ? this : new ListPattern(newId, Prefix, Markers, _patterns, Designation);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ListPattern WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ListPattern(id, newPrefix, markers, _patterns, designation);
+            return newPrefix == Prefix ? this : new ListPattern(Id, newPrefix, Markers, _patterns, Designation);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ListPattern WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ListPattern(id, prefix, newMarkers, _patterns, designation);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ListPattern(Id, Prefix, newMarkers, _patterns, Designation);
         }
-        private readonly JContainer<Cs.Pattern> _patterns = patterns;
+        private JContainer<Cs.Pattern> _patterns = patterns;
         public IList<Cs.Pattern> Patterns => _patterns.GetElements();
 
         public ListPattern WithPatterns(IList<Cs.Pattern> newPatterns)
         {
             return Padding.WithPatterns(JContainer<Cs.Pattern>.WithElements(_patterns, newPatterns));
         }
-        public Cs.VariableDesignation? Designation => designation;
+        public Cs.VariableDesignation? Designation { get;  set; } = designation;
 
         public ListPattern WithDesignation(Cs.VariableDesignation? newDesignation)
         {
-            return ReferenceEquals(newDesignation, designation) ? this : new ListPattern(id, prefix, markers, _patterns, newDesignation);
+            return ReferenceEquals(newDesignation, Designation) ? this : new ListPattern(Id, Prefix, Markers, _patterns, newDesignation);
         }
         public sealed record PaddingHelper(Cs.ListPattern T)
         {
-            public JContainer<Cs.Pattern> Patterns => T._patterns;
+            public JContainer<Cs.Pattern> Patterns { get => T._patterns;  set => T._patterns = value; }
 
             public Cs.ListPattern WithPatterns(JContainer<Cs.Pattern> newPatterns)
             {
-                return T._patterns == newPatterns ? T : new Cs.ListPattern(T.Id, T.Prefix, T.Markers, newPatterns, T.Designation);
+                return Patterns == newPatterns ? T : new Cs.ListPattern(T.Id, T.Prefix, T.Markers, newPatterns, T.Designation);
             }
 
         }

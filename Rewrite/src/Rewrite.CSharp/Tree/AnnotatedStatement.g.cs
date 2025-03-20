@@ -40,35 +40,35 @@ public partial interface Cs : J
             return v.VisitAnnotatedStatement(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public AnnotatedStatement WithId(Guid newId)
         {
-            return newId == id ? this : new AnnotatedStatement(newId, prefix, markers, attributeLists, statement);
+            return newId == Id ? this : new AnnotatedStatement(newId, Prefix, Markers, AttributeLists, Statement);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public AnnotatedStatement WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new AnnotatedStatement(id, newPrefix, markers, attributeLists, statement);
+            return newPrefix == Prefix ? this : new AnnotatedStatement(Id, newPrefix, Markers, AttributeLists, Statement);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public AnnotatedStatement WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new AnnotatedStatement(id, prefix, newMarkers, attributeLists, statement);
+            return ReferenceEquals(newMarkers, Markers) ? this : new AnnotatedStatement(Id, Prefix, newMarkers, AttributeLists, Statement);
         }
-        public IList<Cs.AttributeList> AttributeLists => attributeLists;
+        public IList<Cs.AttributeList> AttributeLists { get;  set; } = attributeLists;
 
         public AnnotatedStatement WithAttributeLists(IList<Cs.AttributeList> newAttributeLists)
         {
-            return newAttributeLists == attributeLists ? this : new AnnotatedStatement(id, prefix, markers, newAttributeLists, statement);
+            return newAttributeLists == AttributeLists ? this : new AnnotatedStatement(Id, Prefix, Markers, newAttributeLists, Statement);
         }
-        public Statement Statement => statement;
+        public Statement Statement { get;  set; } = statement;
 
         public AnnotatedStatement WithStatement(Statement newStatement)
         {
-            return ReferenceEquals(newStatement, statement) ? this : new AnnotatedStatement(id, prefix, markers, attributeLists, newStatement);
+            return ReferenceEquals(newStatement, Statement) ? this : new AnnotatedStatement(Id, Prefix, Markers, AttributeLists, newStatement);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

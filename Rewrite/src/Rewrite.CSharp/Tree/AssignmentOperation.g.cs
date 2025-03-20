@@ -67,48 +67,48 @@ public partial interface Cs : J
             return v.VisitAssignmentOperation(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public AssignmentOperation WithId(Guid newId)
         {
-            return newId == id ? this : new AssignmentOperation(newId, prefix, markers, variable, _operator, assignment, type);
+            return newId == Id ? this : new AssignmentOperation(newId, Prefix, Markers, Variable, _operator, Assignment, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public AssignmentOperation WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new AssignmentOperation(id, newPrefix, markers, variable, _operator, assignment, type);
+            return newPrefix == Prefix ? this : new AssignmentOperation(Id, newPrefix, Markers, Variable, _operator, Assignment, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public AssignmentOperation WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new AssignmentOperation(id, prefix, newMarkers, variable, _operator, assignment, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new AssignmentOperation(Id, Prefix, newMarkers, Variable, _operator, Assignment, Type);
         }
-        public Expression Variable => variable;
+        public Expression Variable { get;  set; } = variable;
 
         public AssignmentOperation WithVariable(Expression newVariable)
         {
-            return ReferenceEquals(newVariable, variable) ? this : new AssignmentOperation(id, prefix, markers, newVariable, _operator, assignment, type);
+            return ReferenceEquals(newVariable, Variable) ? this : new AssignmentOperation(Id, Prefix, Markers, newVariable, _operator, Assignment, Type);
         }
-        private readonly JLeftPadded<OperatorType> _operator = @operator;
+        private JLeftPadded<OperatorType> _operator = @operator;
         public OperatorType Operator => _operator.Element;
 
         public AssignmentOperation WithOperator(OperatorType newOperator)
         {
             return Padding.WithOperator(_operator.WithElement(newOperator));
         }
-        public Expression Assignment => assignment;
+        public Expression Assignment { get;  set; } = assignment;
 
         public AssignmentOperation WithAssignment(Expression newAssignment)
         {
-            return ReferenceEquals(newAssignment, assignment) ? this : new AssignmentOperation(id, prefix, markers, variable, _operator, newAssignment, type);
+            return ReferenceEquals(newAssignment, Assignment) ? this : new AssignmentOperation(Id, Prefix, Markers, Variable, _operator, newAssignment, Type);
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public AssignmentOperation WithType(JavaType? newType)
         {
-            return newType == type ? this : new AssignmentOperation(id, prefix, markers, variable, _operator, assignment, newType);
+            return newType == Type ? this : new AssignmentOperation(Id, Prefix, Markers, Variable, _operator, Assignment, newType);
         }
         public enum OperatorType
         {
@@ -116,11 +116,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.AssignmentOperation T)
         {
-            public JLeftPadded<Cs.AssignmentOperation.OperatorType> Operator => T._operator;
+            public JLeftPadded<Cs.AssignmentOperation.OperatorType> Operator { get => T._operator;  set => T._operator = value; }
 
             public Cs.AssignmentOperation WithOperator(JLeftPadded<Cs.AssignmentOperation.OperatorType> newOperator)
             {
-                return T._operator == newOperator ? T : new Cs.AssignmentOperation(T.Id, T.Prefix, T.Markers, T.Variable, newOperator, T.Assignment, T.Type);
+                return Operator == newOperator ? T : new Cs.AssignmentOperation(T.Id, T.Prefix, T.Markers, T.Variable, newOperator, T.Assignment, T.Type);
             }
 
         }

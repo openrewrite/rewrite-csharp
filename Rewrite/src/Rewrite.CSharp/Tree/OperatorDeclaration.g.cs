@@ -91,86 +91,86 @@ public partial interface Cs : J
             return v.VisitOperatorDeclaration(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public OperatorDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new OperatorDeclaration(newId, prefix, markers, attributeLists, modifiers, _explicitInterfaceSpecifier, operatorKeyword, checkedKeyword, _operatorToken, returnType, _parameters, body, methodType);
+            return newId == Id ? this : new OperatorDeclaration(newId, Prefix, Markers, AttributeLists, Modifiers, _explicitInterfaceSpecifier, OperatorKeyword, CheckedKeyword, _operatorToken, ReturnType, _parameters, Body, MethodType);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public OperatorDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new OperatorDeclaration(id, newPrefix, markers, attributeLists, modifiers, _explicitInterfaceSpecifier, operatorKeyword, checkedKeyword, _operatorToken, returnType, _parameters, body, methodType);
+            return newPrefix == Prefix ? this : new OperatorDeclaration(Id, newPrefix, Markers, AttributeLists, Modifiers, _explicitInterfaceSpecifier, OperatorKeyword, CheckedKeyword, _operatorToken, ReturnType, _parameters, Body, MethodType);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public OperatorDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new OperatorDeclaration(id, prefix, newMarkers, attributeLists, modifiers, _explicitInterfaceSpecifier, operatorKeyword, checkedKeyword, _operatorToken, returnType, _parameters, body, methodType);
+            return ReferenceEquals(newMarkers, Markers) ? this : new OperatorDeclaration(Id, Prefix, newMarkers, AttributeLists, Modifiers, _explicitInterfaceSpecifier, OperatorKeyword, CheckedKeyword, _operatorToken, ReturnType, _parameters, Body, MethodType);
         }
-        public IList<Cs.AttributeList> AttributeLists => attributeLists;
+        public IList<Cs.AttributeList> AttributeLists { get;  set; } = attributeLists;
 
         public OperatorDeclaration WithAttributeLists(IList<Cs.AttributeList> newAttributeLists)
         {
-            return newAttributeLists == attributeLists ? this : new OperatorDeclaration(id, prefix, markers, newAttributeLists, modifiers, _explicitInterfaceSpecifier, operatorKeyword, checkedKeyword, _operatorToken, returnType, _parameters, body, methodType);
+            return newAttributeLists == AttributeLists ? this : new OperatorDeclaration(Id, Prefix, Markers, newAttributeLists, Modifiers, _explicitInterfaceSpecifier, OperatorKeyword, CheckedKeyword, _operatorToken, ReturnType, _parameters, Body, MethodType);
         }
-        public IList<J.Modifier> Modifiers => modifiers;
+        public IList<J.Modifier> Modifiers { get;  set; } = modifiers;
 
         public OperatorDeclaration WithModifiers(IList<J.Modifier> newModifiers)
         {
-            return newModifiers == modifiers ? this : new OperatorDeclaration(id, prefix, markers, attributeLists, newModifiers, _explicitInterfaceSpecifier, operatorKeyword, checkedKeyword, _operatorToken, returnType, _parameters, body, methodType);
+            return newModifiers == Modifiers ? this : new OperatorDeclaration(Id, Prefix, Markers, AttributeLists, newModifiers, _explicitInterfaceSpecifier, OperatorKeyword, CheckedKeyword, _operatorToken, ReturnType, _parameters, Body, MethodType);
         }
-        private readonly JRightPadded<TypeTree>? _explicitInterfaceSpecifier = explicitInterfaceSpecifier;
+        private JRightPadded<TypeTree>? _explicitInterfaceSpecifier = explicitInterfaceSpecifier;
         public TypeTree? ExplicitInterfaceSpecifier => _explicitInterfaceSpecifier?.Element;
 
         public OperatorDeclaration WithExplicitInterfaceSpecifier(TypeTree? newExplicitInterfaceSpecifier)
         {
             return Padding.WithExplicitInterfaceSpecifier(JRightPadded<TypeTree>.WithElement(_explicitInterfaceSpecifier, newExplicitInterfaceSpecifier));
         }
-        public Cs.Keyword OperatorKeyword => operatorKeyword;
+        public Cs.Keyword OperatorKeyword { get;  set; } = operatorKeyword;
 
         public OperatorDeclaration WithOperatorKeyword(Cs.Keyword newOperatorKeyword)
         {
-            return ReferenceEquals(newOperatorKeyword, operatorKeyword) ? this : new OperatorDeclaration(id, prefix, markers, attributeLists, modifiers, _explicitInterfaceSpecifier, newOperatorKeyword, checkedKeyword, _operatorToken, returnType, _parameters, body, methodType);
+            return ReferenceEquals(newOperatorKeyword, OperatorKeyword) ? this : new OperatorDeclaration(Id, Prefix, Markers, AttributeLists, Modifiers, _explicitInterfaceSpecifier, newOperatorKeyword, CheckedKeyword, _operatorToken, ReturnType, _parameters, Body, MethodType);
         }
-        public Cs.Keyword? CheckedKeyword => checkedKeyword;
+        public Cs.Keyword? CheckedKeyword { get;  set; } = checkedKeyword;
 
         public OperatorDeclaration WithCheckedKeyword(Cs.Keyword? newCheckedKeyword)
         {
-            return ReferenceEquals(newCheckedKeyword, checkedKeyword) ? this : new OperatorDeclaration(id, prefix, markers, attributeLists, modifiers, _explicitInterfaceSpecifier, operatorKeyword, newCheckedKeyword, _operatorToken, returnType, _parameters, body, methodType);
+            return ReferenceEquals(newCheckedKeyword, CheckedKeyword) ? this : new OperatorDeclaration(Id, Prefix, Markers, AttributeLists, Modifiers, _explicitInterfaceSpecifier, OperatorKeyword, newCheckedKeyword, _operatorToken, ReturnType, _parameters, Body, MethodType);
         }
-        private readonly JLeftPadded<Operator> _operatorToken = operatorToken;
+        private JLeftPadded<Operator> _operatorToken = operatorToken;
         public Operator OperatorToken => _operatorToken.Element;
 
         public OperatorDeclaration WithOperatorToken(Operator newOperatorToken)
         {
             return Padding.WithOperatorToken(_operatorToken.WithElement(newOperatorToken));
         }
-        public TypeTree ReturnType => returnType;
+        public TypeTree ReturnType { get;  set; } = returnType;
 
         public OperatorDeclaration WithReturnType(TypeTree newReturnType)
         {
-            return ReferenceEquals(newReturnType, returnType) ? this : new OperatorDeclaration(id, prefix, markers, attributeLists, modifiers, _explicitInterfaceSpecifier, operatorKeyword, checkedKeyword, _operatorToken, newReturnType, _parameters, body, methodType);
+            return ReferenceEquals(newReturnType, ReturnType) ? this : new OperatorDeclaration(Id, Prefix, Markers, AttributeLists, Modifiers, _explicitInterfaceSpecifier, OperatorKeyword, CheckedKeyword, _operatorToken, newReturnType, _parameters, Body, MethodType);
         }
-        private readonly JContainer<Expression> _parameters = parameters;
+        private JContainer<Expression> _parameters = parameters;
         public IList<Expression> Parameters => _parameters.GetElements();
 
         public OperatorDeclaration WithParameters(IList<Expression> newParameters)
         {
             return Padding.WithParameters(JContainer<Expression>.WithElements(_parameters, newParameters));
         }
-        public J.Block Body => body;
+        public J.Block Body { get;  set; } = body;
 
         public OperatorDeclaration WithBody(J.Block newBody)
         {
-            return ReferenceEquals(newBody, body) ? this : new OperatorDeclaration(id, prefix, markers, attributeLists, modifiers, _explicitInterfaceSpecifier, operatorKeyword, checkedKeyword, _operatorToken, returnType, _parameters, newBody, methodType);
+            return ReferenceEquals(newBody, Body) ? this : new OperatorDeclaration(Id, Prefix, Markers, AttributeLists, Modifiers, _explicitInterfaceSpecifier, OperatorKeyword, CheckedKeyword, _operatorToken, ReturnType, _parameters, newBody, MethodType);
         }
-        public JavaType.Method? MethodType => methodType;
+        public JavaType.Method? MethodType { get;  set; } = methodType;
 
         public OperatorDeclaration WithMethodType(JavaType.Method? newMethodType)
         {
-            return newMethodType == methodType ? this : new OperatorDeclaration(id, prefix, markers, attributeLists, modifiers, _explicitInterfaceSpecifier, operatorKeyword, checkedKeyword, _operatorToken, returnType, _parameters, body, newMethodType);
+            return newMethodType == MethodType ? this : new OperatorDeclaration(Id, Prefix, Markers, AttributeLists, Modifiers, _explicitInterfaceSpecifier, OperatorKeyword, CheckedKeyword, _operatorToken, ReturnType, _parameters, Body, newMethodType);
         }
         public enum Operator
         {
@@ -199,25 +199,25 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.OperatorDeclaration T)
         {
-            public JRightPadded<TypeTree>? ExplicitInterfaceSpecifier => T._explicitInterfaceSpecifier;
+            public JRightPadded<TypeTree>? ExplicitInterfaceSpecifier { get => T._explicitInterfaceSpecifier;  set => T._explicitInterfaceSpecifier = value; }
 
             public Cs.OperatorDeclaration WithExplicitInterfaceSpecifier(JRightPadded<TypeTree>? newExplicitInterfaceSpecifier)
             {
-                return T._explicitInterfaceSpecifier == newExplicitInterfaceSpecifier ? T : new Cs.OperatorDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, newExplicitInterfaceSpecifier, T.OperatorKeyword, T.CheckedKeyword, T._operatorToken, T.ReturnType, T._parameters, T.Body, T.MethodType);
+                return ExplicitInterfaceSpecifier == newExplicitInterfaceSpecifier ? T : new Cs.OperatorDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, newExplicitInterfaceSpecifier, T.OperatorKeyword, T.CheckedKeyword, T._operatorToken, T.ReturnType, T._parameters, T.Body, T.MethodType);
             }
 
-            public JLeftPadded<Cs.OperatorDeclaration.Operator> OperatorToken => T._operatorToken;
+            public JLeftPadded<Cs.OperatorDeclaration.Operator> OperatorToken { get => T._operatorToken;  set => T._operatorToken = value; }
 
             public Cs.OperatorDeclaration WithOperatorToken(JLeftPadded<Cs.OperatorDeclaration.Operator> newOperatorToken)
             {
-                return T._operatorToken == newOperatorToken ? T : new Cs.OperatorDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T._explicitInterfaceSpecifier, T.OperatorKeyword, T.CheckedKeyword, newOperatorToken, T.ReturnType, T._parameters, T.Body, T.MethodType);
+                return OperatorToken == newOperatorToken ? T : new Cs.OperatorDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T._explicitInterfaceSpecifier, T.OperatorKeyword, T.CheckedKeyword, newOperatorToken, T.ReturnType, T._parameters, T.Body, T.MethodType);
             }
 
-            public JContainer<Expression> Parameters => T._parameters;
+            public JContainer<Expression> Parameters { get => T._parameters;  set => T._parameters = value; }
 
             public Cs.OperatorDeclaration WithParameters(JContainer<Expression> newParameters)
             {
-                return T._parameters == newParameters ? T : new Cs.OperatorDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T._explicitInterfaceSpecifier, T.OperatorKeyword, T.CheckedKeyword, T._operatorToken, T.ReturnType, newParameters, T.Body, T.MethodType);
+                return Parameters == newParameters ? T : new Cs.OperatorDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T._explicitInterfaceSpecifier, T.OperatorKeyword, T.CheckedKeyword, T._operatorToken, T.ReturnType, newParameters, T.Body, T.MethodType);
             }
 
         }

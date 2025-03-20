@@ -64,44 +64,44 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitLabel(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Label WithId(Guid newId)
         {
-            return newId == id ? this : new Label(newId, prefix, markers, _name, statement);
+            return newId == Id ? this : new Label(newId, Prefix, Markers, _name, Statement);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Label WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Label(id, newPrefix, markers, _name, statement);
+            return newPrefix == Prefix ? this : new Label(Id, newPrefix, Markers, _name, Statement);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Label WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Label(id, prefix, newMarkers, _name, statement);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Label(Id, Prefix, newMarkers, _name, Statement);
         }
-        private readonly JRightPadded<J.Identifier> _name = name;
+        private JRightPadded<J.Identifier> _name = name;
         public J.Identifier Name => _name.Element;
 
         public Label WithName(J.Identifier newName)
         {
             return Padding.WithName(_name.WithElement(newName));
         }
-        public Statement Statement => statement;
+        public Statement Statement { get;  set; } = statement;
 
         public Label WithStatement(Statement newStatement)
         {
-            return ReferenceEquals(newStatement, statement) ? this : new Label(id, prefix, markers, _name, newStatement);
+            return ReferenceEquals(newStatement, Statement) ? this : new Label(Id, Prefix, Markers, _name, newStatement);
         }
         public sealed record PaddingHelper(J.Label T)
         {
-            public JRightPadded<J.Identifier> Name => T._name;
+            public JRightPadded<J.Identifier> Name { get => T._name;  set => T._name = value; }
 
             public J.Label WithName(JRightPadded<J.Identifier> newName)
             {
-                return T._name == newName ? T : new J.Label(T.Id, T.Prefix, T.Markers, newName, T.Statement);
+                return Name == newName ? T : new J.Label(T.Id, T.Prefix, T.Markers, newName, T.Statement);
             }
 
         }

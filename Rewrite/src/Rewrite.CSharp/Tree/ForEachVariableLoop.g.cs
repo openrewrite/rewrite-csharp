@@ -65,31 +65,31 @@ public partial interface Cs : J
             return v.VisitForEachVariableLoop(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ForEachVariableLoop WithId(Guid newId)
         {
-            return newId == id ? this : new ForEachVariableLoop(newId, prefix, markers, controlElement, _body);
+            return newId == Id ? this : new ForEachVariableLoop(newId, Prefix, Markers, ControlElement, _body);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ForEachVariableLoop WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ForEachVariableLoop(id, newPrefix, markers, controlElement, _body);
+            return newPrefix == Prefix ? this : new ForEachVariableLoop(Id, newPrefix, Markers, ControlElement, _body);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ForEachVariableLoop WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ForEachVariableLoop(id, prefix, newMarkers, controlElement, _body);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ForEachVariableLoop(Id, Prefix, newMarkers, ControlElement, _body);
         }
-        public Control ControlElement => controlElement;
+        public Control ControlElement { get;  set; } = controlElement;
 
         public ForEachVariableLoop WithControlElement(Control newControlElement)
         {
-            return ReferenceEquals(newControlElement, controlElement) ? this : new ForEachVariableLoop(id, prefix, markers, newControlElement, _body);
+            return ReferenceEquals(newControlElement, ControlElement) ? this : new ForEachVariableLoop(Id, Prefix, Markers, newControlElement, _body);
         }
-        private readonly JRightPadded<Statement> _body = body;
+        private JRightPadded<Statement> _body = body;
         public Statement Body => _body.Element;
 
         public ForEachVariableLoop WithBody(Statement newBody)
@@ -137,32 +137,32 @@ public partial interface Cs : J
                 return v.VisitForEachVariableLoopControl(this, p);
             }
 
-            public Guid Id => id;
+            public Guid Id { get;  set; } = id;
 
             public Control WithId(Guid newId)
             {
-                return newId == id ? this : new Control(newId, prefix, markers, _variable, _iterable);
+                return newId == Id ? this : new Control(newId, Prefix, Markers, _variable, _iterable);
             }
-            public Space Prefix => prefix;
+            public Space Prefix { get;  set; } = prefix;
 
             public Control WithPrefix(Space newPrefix)
             {
-                return newPrefix == prefix ? this : new Control(id, newPrefix, markers, _variable, _iterable);
+                return newPrefix == Prefix ? this : new Control(Id, newPrefix, Markers, _variable, _iterable);
             }
-            public Markers Markers => markers;
+            public Markers Markers { get;  set; } = markers;
 
             public Control WithMarkers(Markers newMarkers)
             {
-                return ReferenceEquals(newMarkers, markers) ? this : new Control(id, prefix, newMarkers, _variable, _iterable);
+                return ReferenceEquals(newMarkers, Markers) ? this : new Control(Id, Prefix, newMarkers, _variable, _iterable);
             }
-            private readonly JRightPadded<Expression> _variable = variable;
+            private JRightPadded<Expression> _variable = variable;
             public Expression Variable => _variable.Element;
 
             public Control WithVariable(Expression newVariable)
             {
                 return Padding.WithVariable(_variable.WithElement(newVariable));
             }
-            private readonly JRightPadded<Expression> _iterable = iterable;
+            private JRightPadded<Expression> _iterable = iterable;
             public Expression Iterable => _iterable.Element;
 
             public Control WithIterable(Expression newIterable)
@@ -171,18 +171,18 @@ public partial interface Cs : J
             }
             public sealed record PaddingHelper(Cs.ForEachVariableLoop.Control T)
             {
-                public JRightPadded<Expression> Variable => T._variable;
+                public JRightPadded<Expression> Variable { get => T._variable;  set => T._variable = value; }
 
                 public Cs.ForEachVariableLoop.Control WithVariable(JRightPadded<Expression> newVariable)
                 {
-                    return T._variable == newVariable ? T : new Cs.ForEachVariableLoop.Control(T.Id, T.Prefix, T.Markers, newVariable, T._iterable);
+                    return Variable == newVariable ? T : new Cs.ForEachVariableLoop.Control(T.Id, T.Prefix, T.Markers, newVariable, T._iterable);
                 }
 
-                public JRightPadded<Expression> Iterable => T._iterable;
+                public JRightPadded<Expression> Iterable { get => T._iterable;  set => T._iterable = value; }
 
                 public Cs.ForEachVariableLoop.Control WithIterable(JRightPadded<Expression> newIterable)
                 {
-                    return T._iterable == newIterable ? T : new Cs.ForEachVariableLoop.Control(T.Id, T.Prefix, T.Markers, T._variable, newIterable);
+                    return Iterable == newIterable ? T : new Cs.ForEachVariableLoop.Control(T.Id, T.Prefix, T.Markers, T._variable, newIterable);
                 }
 
             }
@@ -204,11 +204,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.ForEachVariableLoop T)
         {
-            public JRightPadded<Statement> Body => T._body;
+            public JRightPadded<Statement> Body { get => T._body;  set => T._body = value; }
 
             public Cs.ForEachVariableLoop WithBody(JRightPadded<Statement> newBody)
             {
-                return T._body == newBody ? T : new Cs.ForEachVariableLoop(T.Id, T.Prefix, T.Markers, T.ControlElement, newBody);
+                return Body == newBody ? T : new Cs.ForEachVariableLoop(T.Id, T.Prefix, T.Markers, T.ControlElement, newBody);
             }
 
         }

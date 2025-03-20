@@ -8,6 +8,24 @@ using static Assertions;
 public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(output)
 {
     [Fact]
+    public void BaseParameters()
+    {
+        RewriteRun(
+            CSharp(
+                """
+                class   PlayTests(ITestOutputHelper output) : RewriteTest( output    ) {
+
+                }
+                """, c =>
+                {
+                    c.AfterRecipe = comp => { _output.WriteLine(comp.ToString()); };
+                }
+            )
+        );
+    }
+
+
+    [Fact]
     public void ModifierAndClassWithoutBody()
     {
         RewriteRun(

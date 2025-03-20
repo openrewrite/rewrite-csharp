@@ -20,6 +20,7 @@
 
     <PropertyGroup>
         <RewriteRemoteVersion>0.18.1</RewriteRemoteVersion>
+        <MicrosoftCodeAnalysisVersion>4.12.0</MicrosoftCodeAnalysisVersion>
     </PropertyGroup>
 
     <Import Project="Directory.Build.props.user" Condition="Exists('Directory.Build.props.user')"/>

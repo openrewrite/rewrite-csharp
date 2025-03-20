@@ -59,23 +59,23 @@ public partial interface Cs : J
             return v.VisitSlicePattern(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public SlicePattern WithId(Guid newId)
         {
-            return newId == id ? this : new SlicePattern(newId, prefix, markers);
+            return newId == Id ? this : new SlicePattern(newId, Prefix, Markers);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public SlicePattern WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new SlicePattern(id, newPrefix, markers);
+            return newPrefix == Prefix ? this : new SlicePattern(Id, newPrefix, Markers);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public SlicePattern WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new SlicePattern(id, prefix, newMarkers);
+            return ReferenceEquals(newMarkers, Markers) ? this : new SlicePattern(Id, Prefix, newMarkers);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

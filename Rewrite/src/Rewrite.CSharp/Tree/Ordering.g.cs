@@ -72,36 +72,36 @@ public partial interface Cs : J
             return v.VisitOrdering(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Ordering WithId(Guid newId)
         {
-            return newId == id ? this : new Ordering(newId, prefix, markers, _expression, direction);
+            return newId == Id ? this : new Ordering(newId, Prefix, Markers, _expression, Direction);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Ordering WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Ordering(id, newPrefix, markers, _expression, direction);
+            return newPrefix == Prefix ? this : new Ordering(Id, newPrefix, Markers, _expression, Direction);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Ordering WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Ordering(id, prefix, newMarkers, _expression, direction);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Ordering(Id, Prefix, newMarkers, _expression, Direction);
         }
-        private readonly JRightPadded<Expression> _expression = expression;
+        private JRightPadded<Expression> _expression = expression;
         public Expression Expression => _expression.Element;
 
         public Ordering WithExpression(Expression newExpression)
         {
             return Padding.WithExpression(_expression.WithElement(newExpression));
         }
-        public DirectionKind? Direction => direction;
+        public DirectionKind? Direction { get;  set; } = direction;
 
         public Ordering WithDirection(DirectionKind? newDirection)
         {
-            return newDirection == direction ? this : new Ordering(id, prefix, markers, _expression, newDirection);
+            return newDirection == Direction ? this : new Ordering(Id, Prefix, Markers, _expression, newDirection);
         }
         public enum DirectionKind
         {
@@ -110,11 +110,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.Ordering T)
         {
-            public JRightPadded<Expression> Expression => T._expression;
+            public JRightPadded<Expression> Expression { get => T._expression;  set => T._expression = value; }
 
             public Cs.Ordering WithExpression(JRightPadded<Expression> newExpression)
             {
-                return T._expression == newExpression ? T : new Cs.Ordering(T.Id, T.Prefix, T.Markers, newExpression, T.Direction);
+                return Expression == newExpression ? T : new Cs.Ordering(T.Id, T.Prefix, T.Markers, newExpression, T.Direction);
             }
 
         }

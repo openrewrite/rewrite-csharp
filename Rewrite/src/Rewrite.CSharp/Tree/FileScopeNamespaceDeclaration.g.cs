@@ -67,46 +67,46 @@ public partial interface Cs : J
             return v.VisitFileScopeNamespaceDeclaration(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public FileScopeNamespaceDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new FileScopeNamespaceDeclaration(newId, prefix, markers, _name, _externs, _usings, _members);
+            return newId == Id ? this : new FileScopeNamespaceDeclaration(newId, Prefix, Markers, _name, _externs, _usings, _members);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public FileScopeNamespaceDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new FileScopeNamespaceDeclaration(id, newPrefix, markers, _name, _externs, _usings, _members);
+            return newPrefix == Prefix ? this : new FileScopeNamespaceDeclaration(Id, newPrefix, Markers, _name, _externs, _usings, _members);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public FileScopeNamespaceDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new FileScopeNamespaceDeclaration(id, prefix, newMarkers, _name, _externs, _usings, _members);
+            return ReferenceEquals(newMarkers, Markers) ? this : new FileScopeNamespaceDeclaration(Id, Prefix, newMarkers, _name, _externs, _usings, _members);
         }
-        private readonly JRightPadded<Expression> _name = name;
+        private JRightPadded<Expression> _name = name;
         public Expression Name => _name.Element;
 
         public FileScopeNamespaceDeclaration WithName(Expression newName)
         {
             return Padding.WithName(_name.WithElement(newName));
         }
-        private readonly IList<JRightPadded<Cs.ExternAlias>> _externs = externs;
+        private IList<JRightPadded<Cs.ExternAlias>> _externs = externs;
         public IList<Cs.ExternAlias> Externs => _externs.Elements();
 
         public FileScopeNamespaceDeclaration WithExterns(IList<Cs.ExternAlias> newExterns)
         {
             return Padding.WithExterns(_externs.WithElements(newExterns));
         }
-        private readonly IList<JRightPadded<Cs.UsingDirective>> _usings = usings;
+        private IList<JRightPadded<Cs.UsingDirective>> _usings = usings;
         public IList<Cs.UsingDirective> Usings => _usings.Elements();
 
         public FileScopeNamespaceDeclaration WithUsings(IList<Cs.UsingDirective> newUsings)
         {
             return Padding.WithUsings(_usings.WithElements(newUsings));
         }
-        private readonly IList<JRightPadded<Statement>> _members = members;
+        private IList<JRightPadded<Statement>> _members = members;
         public IList<Statement> Members => _members.Elements();
 
         public FileScopeNamespaceDeclaration WithMembers(IList<Statement> newMembers)
@@ -115,32 +115,32 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.FileScopeNamespaceDeclaration T)
         {
-            public JRightPadded<Expression> Name => T._name;
+            public JRightPadded<Expression> Name { get => T._name;  set => T._name = value; }
 
             public Cs.FileScopeNamespaceDeclaration WithName(JRightPadded<Expression> newName)
             {
-                return T._name == newName ? T : new Cs.FileScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, newName, T._externs, T._usings, T._members);
+                return Name == newName ? T : new Cs.FileScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, newName, T._externs, T._usings, T._members);
             }
 
-            public IList<JRightPadded<Cs.ExternAlias>> Externs => T._externs;
+            public IList<JRightPadded<Cs.ExternAlias>> Externs { get => T._externs;  set => T._externs = value; }
 
             public Cs.FileScopeNamespaceDeclaration WithExterns(IList<JRightPadded<Cs.ExternAlias>> newExterns)
             {
-                return T._externs == newExterns ? T : new Cs.FileScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, newExterns, T._usings, T._members);
+                return Externs == newExterns ? T : new Cs.FileScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, newExterns, T._usings, T._members);
             }
 
-            public IList<JRightPadded<Cs.UsingDirective>> Usings => T._usings;
+            public IList<JRightPadded<Cs.UsingDirective>> Usings { get => T._usings;  set => T._usings = value; }
 
             public Cs.FileScopeNamespaceDeclaration WithUsings(IList<JRightPadded<Cs.UsingDirective>> newUsings)
             {
-                return T._usings == newUsings ? T : new Cs.FileScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, T._externs, newUsings, T._members);
+                return Usings == newUsings ? T : new Cs.FileScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, T._externs, newUsings, T._members);
             }
 
-            public IList<JRightPadded<Statement>> Members => T._members;
+            public IList<JRightPadded<Statement>> Members { get => T._members;  set => T._members = value; }
 
             public Cs.FileScopeNamespaceDeclaration WithMembers(IList<JRightPadded<Statement>> newMembers)
             {
-                return T._members == newMembers ? T : new Cs.FileScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, T._externs, T._usings, newMembers);
+                return Members == newMembers ? T : new Cs.FileScopeNamespaceDeclaration(T.Id, T.Prefix, T.Markers, T._name, T._externs, T._usings, newMembers);
             }
 
         }

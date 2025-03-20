@@ -46,23 +46,23 @@ public partial interface Cs : J
             return v.VisitConstructorConstraint(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ConstructorConstraint WithId(Guid newId)
         {
-            return newId == id ? this : new ConstructorConstraint(newId, prefix, markers);
+            return newId == Id ? this : new ConstructorConstraint(newId, Prefix, Markers);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ConstructorConstraint WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ConstructorConstraint(id, newPrefix, markers);
+            return newPrefix == Prefix ? this : new ConstructorConstraint(Id, newPrefix, Markers);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ConstructorConstraint WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ConstructorConstraint(id, prefix, newMarkers);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ConstructorConstraint(Id, Prefix, newMarkers);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

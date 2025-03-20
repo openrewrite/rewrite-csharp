@@ -81,50 +81,50 @@ public partial interface Cs : J
             return v.VisitCasePatternSwitchLabel(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public CasePatternSwitchLabel WithId(Guid newId)
         {
-            return newId == id ? this : new CasePatternSwitchLabel(newId, prefix, markers, pattern, _whenClause, colonToken);
+            return newId == Id ? this : new CasePatternSwitchLabel(newId, Prefix, Markers, Pattern, _whenClause, ColonToken);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public CasePatternSwitchLabel WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new CasePatternSwitchLabel(id, newPrefix, markers, pattern, _whenClause, colonToken);
+            return newPrefix == Prefix ? this : new CasePatternSwitchLabel(Id, newPrefix, Markers, Pattern, _whenClause, ColonToken);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public CasePatternSwitchLabel WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new CasePatternSwitchLabel(id, prefix, newMarkers, pattern, _whenClause, colonToken);
+            return ReferenceEquals(newMarkers, Markers) ? this : new CasePatternSwitchLabel(Id, Prefix, newMarkers, Pattern, _whenClause, ColonToken);
         }
-        public Cs.Pattern Pattern => pattern;
+        public Cs.Pattern Pattern { get;  set; } = pattern;
 
         public CasePatternSwitchLabel WithPattern(Cs.Pattern newPattern)
         {
-            return ReferenceEquals(newPattern, pattern) ? this : new CasePatternSwitchLabel(id, prefix, markers, newPattern, _whenClause, colonToken);
+            return ReferenceEquals(newPattern, Pattern) ? this : new CasePatternSwitchLabel(Id, Prefix, Markers, newPattern, _whenClause, ColonToken);
         }
-        private readonly JLeftPadded<Expression>? _whenClause = whenClause;
+        private JLeftPadded<Expression>? _whenClause = whenClause;
         public Expression? WhenClause => _whenClause?.Element;
 
         public CasePatternSwitchLabel WithWhenClause(Expression? newWhenClause)
         {
             return Padding.WithWhenClause(JLeftPadded<Expression>.WithElement(_whenClause, newWhenClause));
         }
-        public Space ColonToken => colonToken;
+        public Space ColonToken { get;  set; } = colonToken;
 
         public CasePatternSwitchLabel WithColonToken(Space newColonToken)
         {
-            return newColonToken == colonToken ? this : new CasePatternSwitchLabel(id, prefix, markers, pattern, _whenClause, newColonToken);
+            return newColonToken == ColonToken ? this : new CasePatternSwitchLabel(Id, Prefix, Markers, Pattern, _whenClause, newColonToken);
         }
         public sealed record PaddingHelper(Cs.CasePatternSwitchLabel T)
         {
-            public JLeftPadded<Expression>? WhenClause => T._whenClause;
+            public JLeftPadded<Expression>? WhenClause { get => T._whenClause;  set => T._whenClause = value; }
 
             public Cs.CasePatternSwitchLabel WithWhenClause(JLeftPadded<Expression>? newWhenClause)
             {
-                return T._whenClause == newWhenClause ? T : new Cs.CasePatternSwitchLabel(T.Id, T.Prefix, T.Markers, T.Pattern, newWhenClause, T.ColonToken);
+                return WhenClause == newWhenClause ? T : new Cs.CasePatternSwitchLabel(T.Id, T.Prefix, T.Markers, T.Pattern, newWhenClause, T.ColonToken);
             }
 
         }

@@ -70,58 +70,58 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitBlock(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Block WithId(Guid newId)
         {
-            return newId == id ? this : new Block(newId, prefix, markers, _static, _statements, end);
+            return newId == Id ? this : new Block(newId, Prefix, Markers, _static, _statements, End);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Block WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Block(id, newPrefix, markers, _static, _statements, end);
+            return newPrefix == Prefix ? this : new Block(Id, newPrefix, Markers, _static, _statements, End);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Block WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Block(id, prefix, newMarkers, _static, _statements, end);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Block(Id, Prefix, newMarkers, _static, _statements, End);
         }
-        private readonly JRightPadded<bool> _static = @static;
+        private JRightPadded<bool> _static = @static;
         public bool Static => _static.Element;
 
         public Block WithStatic(bool newStatic)
         {
             return Padding.WithStatic(_static.WithElement(newStatic));
         }
-        private readonly IList<JRightPadded<Statement>> _statements = statements;
+        private IList<JRightPadded<Statement>> _statements = statements;
         public IList<Statement> Statements => _statements.Elements();
 
         public Block WithStatements(IList<Statement> newStatements)
         {
             return Padding.WithStatements(_statements.WithElements(newStatements));
         }
-        public Space End => end;
+        public Space End { get;  set; } = end;
 
         public Block WithEnd(Space newEnd)
         {
-            return newEnd == end ? this : new Block(id, prefix, markers, _static, _statements, newEnd);
+            return newEnd == End ? this : new Block(Id, Prefix, Markers, _static, _statements, newEnd);
         }
         public sealed record PaddingHelper(J.Block T)
         {
-            public JRightPadded<bool> Static => T._static;
+            public JRightPadded<bool> Static { get => T._static;  set => T._static = value; }
 
             public J.Block WithStatic(JRightPadded<bool> newStatic)
             {
-                return T._static == newStatic ? T : new J.Block(T.Id, T.Prefix, T.Markers, newStatic, T._statements, T.End);
+                return Static == newStatic ? T : new J.Block(T.Id, T.Prefix, T.Markers, newStatic, T._statements, T.End);
             }
 
-            public IList<JRightPadded<Statement>> Statements => T._statements;
+            public IList<JRightPadded<Statement>> Statements { get => T._statements;  set => T._statements = value; }
 
             public J.Block WithStatements(IList<JRightPadded<Statement>> newStatements)
             {
-                return T._statements == newStatements ? T : new J.Block(T.Id, T.Prefix, T.Markers, T._static, newStatements, T.End);
+                return Statements == newStatements ? T : new J.Block(T.Id, T.Prefix, T.Markers, T._static, newStatements, T.End);
             }
 
         }

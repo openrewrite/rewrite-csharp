@@ -66,42 +66,42 @@ public partial interface Cs : J
             return v.VisitUnary(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Unary WithId(Guid newId)
         {
-            return newId == id ? this : new Unary(newId, prefix, markers, _operator, expression, type);
+            return newId == Id ? this : new Unary(newId, Prefix, Markers, _operator, Expression, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Unary WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Unary(id, newPrefix, markers, _operator, expression, type);
+            return newPrefix == Prefix ? this : new Unary(Id, newPrefix, Markers, _operator, Expression, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Unary WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Unary(id, prefix, newMarkers, _operator, expression, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Unary(Id, Prefix, newMarkers, _operator, Expression, Type);
         }
-        private readonly JLeftPadded<Types> _operator = @operator;
+        private JLeftPadded<Types> _operator = @operator;
         public Types Operator => _operator.Element;
 
         public Unary WithOperator(Types newOperator)
         {
             return Padding.WithOperator(_operator.WithElement(newOperator));
         }
-        public Expression Expression => expression;
+        public Expression Expression { get;  set; } = expression;
 
         public Unary WithExpression(Expression newExpression)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new Unary(id, prefix, markers, _operator, newExpression, type);
+            return ReferenceEquals(newExpression, Expression) ? this : new Unary(Id, Prefix, Markers, _operator, newExpression, Type);
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public Unary WithType(JavaType? newType)
         {
-            return newType == type ? this : new Unary(id, prefix, markers, _operator, expression, newType);
+            return newType == Type ? this : new Unary(Id, Prefix, Markers, _operator, Expression, newType);
         }
         public enum Types
         {
@@ -114,11 +114,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.Unary T)
         {
-            public JLeftPadded<Cs.Unary.Types> Operator => T._operator;
+            public JLeftPadded<Cs.Unary.Types> Operator { get => T._operator;  set => T._operator = value; }
 
             public Cs.Unary WithOperator(JLeftPadded<Cs.Unary.Types> newOperator)
             {
-                return T._operator == newOperator ? T : new Cs.Unary(T.Id, T.Prefix, T.Markers, newOperator, T.Expression, T.Type);
+                return Operator == newOperator ? T : new Cs.Unary(T.Id, T.Prefix, T.Markers, newOperator, T.Expression, T.Type);
             }
 
         }

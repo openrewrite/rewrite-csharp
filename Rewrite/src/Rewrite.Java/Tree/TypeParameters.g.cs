@@ -64,31 +64,31 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitTypeParameters(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public TypeParameters WithId(Guid newId)
         {
-            return newId == id ? this : new TypeParameters(newId, prefix, markers, annotations, _parameters);
+            return newId == Id ? this : new TypeParameters(newId, Prefix, Markers, Annotations, _parameters);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public TypeParameters WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new TypeParameters(id, newPrefix, markers, annotations, _parameters);
+            return newPrefix == Prefix ? this : new TypeParameters(Id, newPrefix, Markers, Annotations, _parameters);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public TypeParameters WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new TypeParameters(id, prefix, newMarkers, annotations, _parameters);
+            return ReferenceEquals(newMarkers, Markers) ? this : new TypeParameters(Id, Prefix, newMarkers, Annotations, _parameters);
         }
-        public IList<J.Annotation> Annotations => annotations;
+        public IList<J.Annotation> Annotations { get;  set; } = annotations;
 
         public TypeParameters WithAnnotations(IList<J.Annotation> newAnnotations)
         {
-            return newAnnotations == annotations ? this : new TypeParameters(id, prefix, markers, newAnnotations, _parameters);
+            return newAnnotations == Annotations ? this : new TypeParameters(Id, Prefix, Markers, newAnnotations, _parameters);
         }
-        private readonly IList<JRightPadded<J.TypeParameter>> _parameters = parameters;
+        private IList<JRightPadded<J.TypeParameter>> _parameters = parameters;
         public IList<J.TypeParameter> Parameters => _parameters.Elements();
 
         public TypeParameters WithParameters(IList<J.TypeParameter> newParameters)
@@ -97,11 +97,11 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.TypeParameters T)
         {
-            public IList<JRightPadded<J.TypeParameter>> Parameters => T._parameters;
+            public IList<JRightPadded<J.TypeParameter>> Parameters { get => T._parameters;  set => T._parameters = value; }
 
             public J.TypeParameters WithParameters(IList<JRightPadded<J.TypeParameter>> newParameters)
             {
-                return T._parameters == newParameters ? T : new J.TypeParameters(T.Id, T.Prefix, T.Markers, T.Annotations, newParameters);
+                return Parameters == newParameters ? T : new J.TypeParameters(T.Id, T.Prefix, T.Markers, T.Annotations, newParameters);
             }
 
         }

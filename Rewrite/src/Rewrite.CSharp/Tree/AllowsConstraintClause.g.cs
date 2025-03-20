@@ -68,25 +68,25 @@ public partial interface Cs : J
             return v.VisitAllowsConstraintClause(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public AllowsConstraintClause WithId(Guid newId)
         {
-            return newId == id ? this : new AllowsConstraintClause(newId, prefix, markers, _expressions);
+            return newId == Id ? this : new AllowsConstraintClause(newId, Prefix, Markers, _expressions);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public AllowsConstraintClause WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new AllowsConstraintClause(id, newPrefix, markers, _expressions);
+            return newPrefix == Prefix ? this : new AllowsConstraintClause(Id, newPrefix, Markers, _expressions);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public AllowsConstraintClause WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new AllowsConstraintClause(id, prefix, newMarkers, _expressions);
+            return ReferenceEquals(newMarkers, Markers) ? this : new AllowsConstraintClause(Id, Prefix, newMarkers, _expressions);
         }
-        private readonly JContainer<Cs.AllowsConstraint> _expressions = expressions;
+        private JContainer<Cs.AllowsConstraint> _expressions = expressions;
         public IList<Cs.AllowsConstraint> Expressions => _expressions.GetElements();
 
         public AllowsConstraintClause WithExpressions(IList<Cs.AllowsConstraint> newExpressions)
@@ -95,11 +95,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.AllowsConstraintClause T)
         {
-            public JContainer<Cs.AllowsConstraint> Expressions => T._expressions;
+            public JContainer<Cs.AllowsConstraint> Expressions { get => T._expressions;  set => T._expressions = value; }
 
             public Cs.AllowsConstraintClause WithExpressions(JContainer<Cs.AllowsConstraint> newExpressions)
             {
-                return T._expressions == newExpressions ? T : new Cs.AllowsConstraintClause(T.Id, T.Prefix, T.Markers, newExpressions);
+                return Expressions == newExpressions ? T : new Cs.AllowsConstraintClause(T.Id, T.Prefix, T.Markers, newExpressions);
             }
 
         }

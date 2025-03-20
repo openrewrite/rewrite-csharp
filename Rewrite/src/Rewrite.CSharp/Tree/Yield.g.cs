@@ -49,35 +49,35 @@ public partial interface Cs : J
             return v.VisitYield(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Yield WithId(Guid newId)
         {
-            return newId == id ? this : new Yield(newId, prefix, markers, returnOrBreakKeyword, expression);
+            return newId == Id ? this : new Yield(newId, Prefix, Markers, ReturnOrBreakKeyword, Expression);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Yield WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Yield(id, newPrefix, markers, returnOrBreakKeyword, expression);
+            return newPrefix == Prefix ? this : new Yield(Id, newPrefix, Markers, ReturnOrBreakKeyword, Expression);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Yield WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Yield(id, prefix, newMarkers, returnOrBreakKeyword, expression);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Yield(Id, Prefix, newMarkers, ReturnOrBreakKeyword, Expression);
         }
-        public Cs.Keyword ReturnOrBreakKeyword => returnOrBreakKeyword;
+        public Cs.Keyword ReturnOrBreakKeyword { get;  set; } = returnOrBreakKeyword;
 
         public Yield WithReturnOrBreakKeyword(Cs.Keyword newReturnOrBreakKeyword)
         {
-            return ReferenceEquals(newReturnOrBreakKeyword, returnOrBreakKeyword) ? this : new Yield(id, prefix, markers, newReturnOrBreakKeyword, expression);
+            return ReferenceEquals(newReturnOrBreakKeyword, ReturnOrBreakKeyword) ? this : new Yield(Id, Prefix, Markers, newReturnOrBreakKeyword, Expression);
         }
-        public Expression? Expression => expression;
+        public Expression? Expression { get;  set; } = expression;
 
         public Yield WithExpression(Expression? newExpression)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new Yield(id, prefix, markers, returnOrBreakKeyword, newExpression);
+            return ReferenceEquals(newExpression, Expression) ? this : new Yield(Id, Prefix, Markers, ReturnOrBreakKeyword, newExpression);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

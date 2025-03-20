@@ -69,29 +69,29 @@ public partial interface Cs : J
             return v.VisitUnsafeStatement(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public UnsafeStatement WithId(Guid newId)
         {
-            return newId == id ? this : new UnsafeStatement(newId, prefix, markers, block);
+            return newId == Id ? this : new UnsafeStatement(newId, Prefix, Markers, Block);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public UnsafeStatement WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new UnsafeStatement(id, newPrefix, markers, block);
+            return newPrefix == Prefix ? this : new UnsafeStatement(Id, newPrefix, Markers, Block);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public UnsafeStatement WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new UnsafeStatement(id, prefix, newMarkers, block);
+            return ReferenceEquals(newMarkers, Markers) ? this : new UnsafeStatement(Id, Prefix, newMarkers, Block);
         }
-        public J.Block Block => block;
+        public J.Block Block { get;  set; } = block;
 
         public UnsafeStatement WithBlock(J.Block newBlock)
         {
-            return ReferenceEquals(newBlock, block) ? this : new UnsafeStatement(id, prefix, markers, newBlock);
+            return ReferenceEquals(newBlock, Block) ? this : new UnsafeStatement(Id, Prefix, Markers, newBlock);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

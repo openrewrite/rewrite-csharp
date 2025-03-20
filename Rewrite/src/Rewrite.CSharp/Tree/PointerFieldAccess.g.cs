@@ -66,50 +66,50 @@ public partial interface Cs : J
             return v.VisitPointerFieldAccess(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public PointerFieldAccess WithId(Guid newId)
         {
-            return newId == id ? this : new PointerFieldAccess(newId, prefix, markers, target, _name, type);
+            return newId == Id ? this : new PointerFieldAccess(newId, Prefix, Markers, Target, _name, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public PointerFieldAccess WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new PointerFieldAccess(id, newPrefix, markers, target, _name, type);
+            return newPrefix == Prefix ? this : new PointerFieldAccess(Id, newPrefix, Markers, Target, _name, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public PointerFieldAccess WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new PointerFieldAccess(id, prefix, newMarkers, target, _name, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new PointerFieldAccess(Id, Prefix, newMarkers, Target, _name, Type);
         }
-        public Expression Target => target;
+        public Expression Target { get;  set; } = target;
 
         public PointerFieldAccess WithTarget(Expression newTarget)
         {
-            return ReferenceEquals(newTarget, target) ? this : new PointerFieldAccess(id, prefix, markers, newTarget, _name, type);
+            return ReferenceEquals(newTarget, Target) ? this : new PointerFieldAccess(Id, Prefix, Markers, newTarget, _name, Type);
         }
-        private readonly JLeftPadded<J.Identifier> _name = name;
+        private JLeftPadded<J.Identifier> _name = name;
         public J.Identifier Name => _name.Element;
 
         public PointerFieldAccess WithName(J.Identifier newName)
         {
             return Padding.WithName(_name.WithElement(newName));
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public PointerFieldAccess WithType(JavaType? newType)
         {
-            return newType == type ? this : new PointerFieldAccess(id, prefix, markers, target, _name, newType);
+            return newType == Type ? this : new PointerFieldAccess(Id, Prefix, Markers, Target, _name, newType);
         }
         public sealed record PaddingHelper(Cs.PointerFieldAccess T)
         {
-            public JLeftPadded<J.Identifier> Name => T._name;
+            public JLeftPadded<J.Identifier> Name { get => T._name;  set => T._name = value; }
 
             public Cs.PointerFieldAccess WithName(JLeftPadded<J.Identifier> newName)
             {
-                return T._name == newName ? T : new Cs.PointerFieldAccess(T.Id, T.Prefix, T.Markers, T.Target, newName, T.Type);
+                return Name == newName ? T : new Cs.PointerFieldAccess(T.Id, T.Prefix, T.Markers, T.Target, newName, T.Type);
             }
 
         }

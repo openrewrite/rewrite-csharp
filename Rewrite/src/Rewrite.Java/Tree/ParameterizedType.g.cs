@@ -65,50 +65,50 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitParameterizedType(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ParameterizedType WithId(Guid newId)
         {
-            return newId == id ? this : new ParameterizedType(newId, prefix, markers, clazz, _typeParameters, type);
+            return newId == Id ? this : new ParameterizedType(newId, Prefix, Markers, Clazz, _typeParameters, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ParameterizedType WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ParameterizedType(id, newPrefix, markers, clazz, _typeParameters, type);
+            return newPrefix == Prefix ? this : new ParameterizedType(Id, newPrefix, Markers, Clazz, _typeParameters, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ParameterizedType WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ParameterizedType(id, prefix, newMarkers, clazz, _typeParameters, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ParameterizedType(Id, Prefix, newMarkers, Clazz, _typeParameters, Type);
         }
-        public NameTree Clazz => clazz;
+        public NameTree Clazz { get;  set; } = clazz;
 
         public ParameterizedType WithClazz(NameTree newClazz)
         {
-            return ReferenceEquals(newClazz, clazz) ? this : new ParameterizedType(id, prefix, markers, newClazz, _typeParameters, type);
+            return ReferenceEquals(newClazz, Clazz) ? this : new ParameterizedType(Id, Prefix, Markers, newClazz, _typeParameters, Type);
         }
-        private readonly JContainer<Expression>? _typeParameters = typeParameters;
+        private JContainer<Expression>? _typeParameters = typeParameters;
         public IList<Expression>? TypeParameters => _typeParameters?.GetElements();
 
         public ParameterizedType WithTypeParameters(IList<Expression>? newTypeParameters)
         {
             return Padding.WithTypeParameters(JContainer<Expression>.WithElementsNullable(_typeParameters, newTypeParameters));
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public ParameterizedType WithType(JavaType? newType)
         {
-            return newType == type ? this : new ParameterizedType(id, prefix, markers, clazz, _typeParameters, newType);
+            return newType == Type ? this : new ParameterizedType(Id, Prefix, Markers, Clazz, _typeParameters, newType);
         }
         public sealed record PaddingHelper(J.ParameterizedType T)
         {
-            public JContainer<Expression>? TypeParameters => T._typeParameters;
+            public JContainer<Expression>? TypeParameters { get => T._typeParameters;  set => T._typeParameters = value; }
 
             public J.ParameterizedType WithTypeParameters(JContainer<Expression>? newTypeParameters)
             {
-                return T._typeParameters == newTypeParameters ? T : new J.ParameterizedType(T.Id, T.Prefix, T.Markers, T.Clazz, newTypeParameters, T.Type);
+                return TypeParameters == newTypeParameters ? T : new J.ParameterizedType(T.Id, T.Prefix, T.Markers, T.Clazz, newTypeParameters, T.Type);
             }
 
         }

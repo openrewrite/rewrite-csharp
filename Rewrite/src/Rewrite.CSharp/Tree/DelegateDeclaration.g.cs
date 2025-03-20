@@ -90,64 +90,64 @@ public partial interface Cs : J
             return v.VisitDelegateDeclaration(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public DelegateDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new DelegateDeclaration(newId, prefix, markers, attributes, modifiers, _returnType, identifier, _typeParameters, _parameters, _typeParameterConstraintClauses);
+            return newId == Id ? this : new DelegateDeclaration(newId, Prefix, Markers, Attributes, Modifiers, _returnType, Identifier, _typeParameters, _parameters, _typeParameterConstraintClauses);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public DelegateDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new DelegateDeclaration(id, newPrefix, markers, attributes, modifiers, _returnType, identifier, _typeParameters, _parameters, _typeParameterConstraintClauses);
+            return newPrefix == Prefix ? this : new DelegateDeclaration(Id, newPrefix, Markers, Attributes, Modifiers, _returnType, Identifier, _typeParameters, _parameters, _typeParameterConstraintClauses);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public DelegateDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new DelegateDeclaration(id, prefix, newMarkers, attributes, modifiers, _returnType, identifier, _typeParameters, _parameters, _typeParameterConstraintClauses);
+            return ReferenceEquals(newMarkers, Markers) ? this : new DelegateDeclaration(Id, Prefix, newMarkers, Attributes, Modifiers, _returnType, Identifier, _typeParameters, _parameters, _typeParameterConstraintClauses);
         }
-        public IList<Cs.AttributeList> Attributes => attributes;
+        public IList<Cs.AttributeList> Attributes { get;  set; } = attributes;
 
         public DelegateDeclaration WithAttributes(IList<Cs.AttributeList> newAttributes)
         {
-            return newAttributes == attributes ? this : new DelegateDeclaration(id, prefix, markers, newAttributes, modifiers, _returnType, identifier, _typeParameters, _parameters, _typeParameterConstraintClauses);
+            return newAttributes == Attributes ? this : new DelegateDeclaration(Id, Prefix, Markers, newAttributes, Modifiers, _returnType, Identifier, _typeParameters, _parameters, _typeParameterConstraintClauses);
         }
-        public IList<J.Modifier> Modifiers => modifiers;
+        public IList<J.Modifier> Modifiers { get;  set; } = modifiers;
 
         public DelegateDeclaration WithModifiers(IList<J.Modifier> newModifiers)
         {
-            return newModifiers == modifiers ? this : new DelegateDeclaration(id, prefix, markers, attributes, newModifiers, _returnType, identifier, _typeParameters, _parameters, _typeParameterConstraintClauses);
+            return newModifiers == Modifiers ? this : new DelegateDeclaration(Id, Prefix, Markers, Attributes, newModifiers, _returnType, Identifier, _typeParameters, _parameters, _typeParameterConstraintClauses);
         }
-        private readonly JLeftPadded<TypeTree> _returnType = returnType;
+        private JLeftPadded<TypeTree> _returnType = returnType;
         public TypeTree ReturnType => _returnType.Element;
 
         public DelegateDeclaration WithReturnType(TypeTree newReturnType)
         {
             return Padding.WithReturnType(_returnType.WithElement(newReturnType));
         }
-        public J.Identifier Identifier => identifier;
+        public J.Identifier Identifier { get;  set; } = identifier;
 
         public DelegateDeclaration WithIdentifier(J.Identifier newIdentifier)
         {
-            return ReferenceEquals(newIdentifier, identifier) ? this : new DelegateDeclaration(id, prefix, markers, attributes, modifiers, _returnType, newIdentifier, _typeParameters, _parameters, _typeParameterConstraintClauses);
+            return ReferenceEquals(newIdentifier, Identifier) ? this : new DelegateDeclaration(Id, Prefix, Markers, Attributes, Modifiers, _returnType, newIdentifier, _typeParameters, _parameters, _typeParameterConstraintClauses);
         }
-        private readonly JContainer<Cs.TypeParameter>? _typeParameters = typeParameters;
+        private JContainer<Cs.TypeParameter>? _typeParameters = typeParameters;
         public IList<Cs.TypeParameter>? TypeParameters => _typeParameters?.GetElements();
 
         public DelegateDeclaration WithTypeParameters(IList<Cs.TypeParameter>? newTypeParameters)
         {
             return Padding.WithTypeParameters(JContainer<Cs.TypeParameter>.WithElementsNullable(_typeParameters, newTypeParameters));
         }
-        private readonly JContainer<Statement> _parameters = parameters;
+        private JContainer<Statement> _parameters = parameters;
         public IList<Statement> Parameters => _parameters.GetElements();
 
         public DelegateDeclaration WithParameters(IList<Statement> newParameters)
         {
             return Padding.WithParameters(JContainer<Statement>.WithElements(_parameters, newParameters));
         }
-        private readonly JContainer<Cs.TypeParameterConstraintClause>? _typeParameterConstraintClauses = typeParameterConstraintClauses;
+        private JContainer<Cs.TypeParameterConstraintClause>? _typeParameterConstraintClauses = typeParameterConstraintClauses;
         public IList<Cs.TypeParameterConstraintClause>? TypeParameterConstraintClauses => _typeParameterConstraintClauses?.GetElements();
 
         public DelegateDeclaration WithTypeParameterConstraintClauses(IList<Cs.TypeParameterConstraintClause>? newTypeParameterConstraintClauses)
@@ -156,32 +156,32 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.DelegateDeclaration T)
         {
-            public JLeftPadded<TypeTree> ReturnType => T._returnType;
+            public JLeftPadded<TypeTree> ReturnType { get => T._returnType;  set => T._returnType = value; }
 
             public Cs.DelegateDeclaration WithReturnType(JLeftPadded<TypeTree> newReturnType)
             {
-                return T._returnType == newReturnType ? T : new Cs.DelegateDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, newReturnType, T.Identifier, T._typeParameters, T._parameters, T._typeParameterConstraintClauses);
+                return ReturnType == newReturnType ? T : new Cs.DelegateDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, newReturnType, T.Identifier, T._typeParameters, T._parameters, T._typeParameterConstraintClauses);
             }
 
-            public JContainer<Cs.TypeParameter>? TypeParameters => T._typeParameters;
+            public JContainer<Cs.TypeParameter>? TypeParameters { get => T._typeParameters;  set => T._typeParameters = value; }
 
             public Cs.DelegateDeclaration WithTypeParameters(JContainer<Cs.TypeParameter>? newTypeParameters)
             {
-                return T._typeParameters == newTypeParameters ? T : new Cs.DelegateDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, T._returnType, T.Identifier, newTypeParameters, T._parameters, T._typeParameterConstraintClauses);
+                return TypeParameters == newTypeParameters ? T : new Cs.DelegateDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, T._returnType, T.Identifier, newTypeParameters, T._parameters, T._typeParameterConstraintClauses);
             }
 
-            public JContainer<Statement> Parameters => T._parameters;
+            public JContainer<Statement> Parameters { get => T._parameters;  set => T._parameters = value; }
 
             public Cs.DelegateDeclaration WithParameters(JContainer<Statement> newParameters)
             {
-                return T._parameters == newParameters ? T : new Cs.DelegateDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, T._returnType, T.Identifier, T._typeParameters, newParameters, T._typeParameterConstraintClauses);
+                return Parameters == newParameters ? T : new Cs.DelegateDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, T._returnType, T.Identifier, T._typeParameters, newParameters, T._typeParameterConstraintClauses);
             }
 
-            public JContainer<Cs.TypeParameterConstraintClause>? TypeParameterConstraintClauses => T._typeParameterConstraintClauses;
+            public JContainer<Cs.TypeParameterConstraintClause>? TypeParameterConstraintClauses { get => T._typeParameterConstraintClauses;  set => T._typeParameterConstraintClauses = value; }
 
             public Cs.DelegateDeclaration WithTypeParameterConstraintClauses(JContainer<Cs.TypeParameterConstraintClause>? newTypeParameterConstraintClauses)
             {
-                return T._typeParameterConstraintClauses == newTypeParameterConstraintClauses ? T : new Cs.DelegateDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, T._returnType, T.Identifier, T._typeParameters, T._parameters, newTypeParameterConstraintClauses);
+                return TypeParameterConstraintClauses == newTypeParameterConstraintClauses ? T : new Cs.DelegateDeclaration(T.Id, T.Prefix, T.Markers, T.Attributes, T.Modifiers, T._returnType, T.Identifier, T._typeParameters, T._parameters, newTypeParameterConstraintClauses);
             }
 
         }

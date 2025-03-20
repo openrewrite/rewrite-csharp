@@ -10,7 +10,7 @@ partial interface J
         public NewClass WithType(JavaType? type)
         {
             if (type == Clazz?.Type) return this;
-            return new NewClass(Id, prefix, markers, _enclosing, @new, clazz?.WithType(type), _arguments, body, constructorType);
+            return new NewClass(Id, Prefix, Markers, _enclosing, New, Clazz?.WithType(type), _arguments, Body, ConstructorType);
         }
 
     }

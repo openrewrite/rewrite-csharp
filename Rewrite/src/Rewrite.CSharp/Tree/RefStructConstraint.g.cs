@@ -42,23 +42,23 @@ public partial interface Cs : J
             return v.VisitRefStructConstraint(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public RefStructConstraint WithId(Guid newId)
         {
-            return newId == id ? this : new RefStructConstraint(newId, prefix, markers);
+            return newId == Id ? this : new RefStructConstraint(newId, Prefix, Markers);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public RefStructConstraint WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new RefStructConstraint(id, newPrefix, markers);
+            return newPrefix == Prefix ? this : new RefStructConstraint(Id, newPrefix, Markers);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public RefStructConstraint WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new RefStructConstraint(id, prefix, newMarkers);
+            return ReferenceEquals(newMarkers, Markers) ? this : new RefStructConstraint(Id, Prefix, newMarkers);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

@@ -87,31 +87,31 @@ public partial interface Cs : J
             return v.VisitSwitchSection(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public SwitchSection WithId(Guid newId)
         {
-            return newId == id ? this : new SwitchSection(newId, prefix, markers, labels, _statements);
+            return newId == Id ? this : new SwitchSection(newId, Prefix, Markers, Labels, _statements);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public SwitchSection WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new SwitchSection(id, newPrefix, markers, labels, _statements);
+            return newPrefix == Prefix ? this : new SwitchSection(Id, newPrefix, Markers, Labels, _statements);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public SwitchSection WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new SwitchSection(id, prefix, newMarkers, labels, _statements);
+            return ReferenceEquals(newMarkers, Markers) ? this : new SwitchSection(Id, Prefix, newMarkers, Labels, _statements);
         }
-        public IList<Cs.SwitchLabel> Labels => labels;
+        public IList<Cs.SwitchLabel> Labels { get;  set; } = labels;
 
         public SwitchSection WithLabels(IList<Cs.SwitchLabel> newLabels)
         {
-            return newLabels == labels ? this : new SwitchSection(id, prefix, markers, newLabels, _statements);
+            return newLabels == Labels ? this : new SwitchSection(Id, Prefix, Markers, newLabels, _statements);
         }
-        private readonly IList<JRightPadded<Statement>> _statements = statements;
+        private IList<JRightPadded<Statement>> _statements = statements;
         public IList<Statement> Statements => _statements.Elements();
 
         public SwitchSection WithStatements(IList<Statement> newStatements)
@@ -120,11 +120,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.SwitchSection T)
         {
-            public IList<JRightPadded<Statement>> Statements => T._statements;
+            public IList<JRightPadded<Statement>> Statements { get => T._statements;  set => T._statements = value; }
 
             public Cs.SwitchSection WithStatements(IList<JRightPadded<Statement>> newStatements)
             {
-                return T._statements == newStatements ? T : new Cs.SwitchSection(T.Id, T.Prefix, T.Markers, T.Labels, newStatements);
+                return Statements == newStatements ? T : new Cs.SwitchSection(T.Id, T.Prefix, T.Markers, T.Labels, newStatements);
             }
 
         }

@@ -67,78 +67,78 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitMethodInvocation(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public MethodInvocation WithId(Guid newId)
         {
-            return newId == id ? this : new MethodInvocation(newId, prefix, markers, _select, _typeParameters, name, _arguments, methodType);
+            return newId == Id ? this : new MethodInvocation(newId, Prefix, Markers, _select, _typeParameters, Name, _arguments, MethodType);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public MethodInvocation WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new MethodInvocation(id, newPrefix, markers, _select, _typeParameters, name, _arguments, methodType);
+            return newPrefix == Prefix ? this : new MethodInvocation(Id, newPrefix, Markers, _select, _typeParameters, Name, _arguments, MethodType);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public MethodInvocation WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new MethodInvocation(id, prefix, newMarkers, _select, _typeParameters, name, _arguments, methodType);
+            return ReferenceEquals(newMarkers, Markers) ? this : new MethodInvocation(Id, Prefix, newMarkers, _select, _typeParameters, Name, _arguments, MethodType);
         }
-        private readonly JRightPadded<Expression>? _select = select;
+        private JRightPadded<Expression>? _select = select;
         public Expression? Select => _select?.Element;
 
         public MethodInvocation WithSelect(Expression? newSelect)
         {
             return Padding.WithSelect(JRightPadded<Expression>.WithElement(_select, newSelect));
         }
-        private readonly JContainer<Expression>? _typeParameters = typeParameters;
+        private JContainer<Expression>? _typeParameters = typeParameters;
         public IList<Expression>? TypeParameters => _typeParameters?.GetElements();
 
         public MethodInvocation WithTypeParameters(IList<Expression>? newTypeParameters)
         {
             return Padding.WithTypeParameters(JContainer<Expression>.WithElementsNullable(_typeParameters, newTypeParameters));
         }
-        public J.Identifier Name => name;
+        public J.Identifier Name { get;  set; } = name;
 
         public MethodInvocation WithName(J.Identifier newName)
         {
-            return ReferenceEquals(newName, name) ? this : new MethodInvocation(id, prefix, markers, _select, _typeParameters, newName, _arguments, methodType);
+            return ReferenceEquals(newName, Name) ? this : new MethodInvocation(Id, Prefix, Markers, _select, _typeParameters, newName, _arguments, MethodType);
         }
-        private readonly JContainer<Expression> _arguments = arguments;
+        private JContainer<Expression> _arguments = arguments;
         public IList<Expression> Arguments => _arguments.GetElements();
 
         public MethodInvocation WithArguments(IList<Expression> newArguments)
         {
             return Padding.WithArguments(JContainer<Expression>.WithElements(_arguments, newArguments));
         }
-        public JavaType.Method? MethodType => methodType;
+        public JavaType.Method? MethodType { get;  set; } = methodType;
 
         public MethodInvocation WithMethodType(JavaType.Method? newMethodType)
         {
-            return newMethodType == methodType ? this : new MethodInvocation(id, prefix, markers, _select, _typeParameters, name, _arguments, newMethodType);
+            return newMethodType == MethodType ? this : new MethodInvocation(Id, Prefix, Markers, _select, _typeParameters, Name, _arguments, newMethodType);
         }
         public sealed record PaddingHelper(J.MethodInvocation T)
         {
-            public JRightPadded<Expression>? Select => T._select;
+            public JRightPadded<Expression>? Select { get => T._select;  set => T._select = value; }
 
             public J.MethodInvocation WithSelect(JRightPadded<Expression>? newSelect)
             {
-                return T._select == newSelect ? T : new J.MethodInvocation(T.Id, T.Prefix, T.Markers, newSelect, T._typeParameters, T.Name, T._arguments, T.MethodType);
+                return Select == newSelect ? T : new J.MethodInvocation(T.Id, T.Prefix, T.Markers, newSelect, T._typeParameters, T.Name, T._arguments, T.MethodType);
             }
 
-            public JContainer<Expression>? TypeParameters => T._typeParameters;
+            public JContainer<Expression>? TypeParameters { get => T._typeParameters;  set => T._typeParameters = value; }
 
             public J.MethodInvocation WithTypeParameters(JContainer<Expression>? newTypeParameters)
             {
-                return T._typeParameters == newTypeParameters ? T : new J.MethodInvocation(T.Id, T.Prefix, T.Markers, T._select, newTypeParameters, T.Name, T._arguments, T.MethodType);
+                return TypeParameters == newTypeParameters ? T : new J.MethodInvocation(T.Id, T.Prefix, T.Markers, T._select, newTypeParameters, T.Name, T._arguments, T.MethodType);
             }
 
-            public JContainer<Expression> Arguments => T._arguments;
+            public JContainer<Expression> Arguments { get => T._arguments;  set => T._arguments = value; }
 
             public J.MethodInvocation WithArguments(JContainer<Expression> newArguments)
             {
-                return T._arguments == newArguments ? T : new J.MethodInvocation(T.Id, T.Prefix, T.Markers, T._select, T._typeParameters, T.Name, newArguments, T.MethodType);
+                return Arguments == newArguments ? T : new J.MethodInvocation(T.Id, T.Prefix, T.Markers, T._select, T._typeParameters, T.Name, newArguments, T.MethodType);
             }
 
         }

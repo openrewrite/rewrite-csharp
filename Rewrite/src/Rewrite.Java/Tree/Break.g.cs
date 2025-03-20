@@ -38,29 +38,29 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitBreak(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Break WithId(Guid newId)
         {
-            return newId == id ? this : new Break(newId, prefix, markers, label);
+            return newId == Id ? this : new Break(newId, Prefix, Markers, Label);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Break WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Break(id, newPrefix, markers, label);
+            return newPrefix == Prefix ? this : new Break(Id, newPrefix, Markers, Label);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Break WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Break(id, prefix, newMarkers, label);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Break(Id, Prefix, newMarkers, Label);
         }
-        public J.Identifier? Label => label;
+        public J.Identifier? Label { get;  set; } = label;
 
         public Break WithLabel(J.Identifier? newLabel)
         {
-            return ReferenceEquals(newLabel, label) ? this : new Break(id, prefix, markers, newLabel);
+            return ReferenceEquals(newLabel, Label) ? this : new Break(Id, Prefix, Markers, newLabel);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

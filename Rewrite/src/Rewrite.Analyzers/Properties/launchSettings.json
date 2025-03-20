@@ -1,7 +1,11 @@
 {
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "Generators": {
+    "Generators - CSharp": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "../Rewrite.CSharp/Rewrite.CSharp.csproj"
+    },
+    "Generators - Java": {
       "commandName": "DebugRoslynComponent",
       "targetProject": "../Rewrite.Java/Rewrite.Java.csproj"
     }

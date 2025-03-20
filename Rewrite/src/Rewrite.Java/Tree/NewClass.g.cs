@@ -68,76 +68,76 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitNewClass(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public NewClass WithId(Guid newId)
         {
-            return newId == id ? this : new NewClass(newId, prefix, markers, _enclosing, @new, clazz, _arguments, body, constructorType);
+            return newId == Id ? this : new NewClass(newId, Prefix, Markers, _enclosing, New, Clazz, _arguments, Body, ConstructorType);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public NewClass WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new NewClass(id, newPrefix, markers, _enclosing, @new, clazz, _arguments, body, constructorType);
+            return newPrefix == Prefix ? this : new NewClass(Id, newPrefix, Markers, _enclosing, New, Clazz, _arguments, Body, ConstructorType);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public NewClass WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new NewClass(id, prefix, newMarkers, _enclosing, @new, clazz, _arguments, body, constructorType);
+            return ReferenceEquals(newMarkers, Markers) ? this : new NewClass(Id, Prefix, newMarkers, _enclosing, New, Clazz, _arguments, Body, ConstructorType);
         }
-        private readonly JRightPadded<Expression>? _enclosing = enclosing;
+        private JRightPadded<Expression>? _enclosing = enclosing;
         public Expression? Enclosing => _enclosing?.Element;
 
         public NewClass WithEnclosing(Expression? newEnclosing)
         {
             return Padding.WithEnclosing(JRightPadded<Expression>.WithElement(_enclosing, newEnclosing));
         }
-        public Space New => @new;
+        public Space New { get;  set; } = @new;
 
         public NewClass WithNew(Space newNew)
         {
-            return newNew == @new ? this : new NewClass(id, prefix, markers, _enclosing, newNew, clazz, _arguments, body, constructorType);
+            return newNew == New ? this : new NewClass(Id, Prefix, Markers, _enclosing, newNew, Clazz, _arguments, Body, ConstructorType);
         }
-        public TypeTree? Clazz => clazz;
+        public TypeTree? Clazz { get;  set; } = clazz;
 
         public NewClass WithClazz(TypeTree? newClazz)
         {
-            return ReferenceEquals(newClazz, clazz) ? this : new NewClass(id, prefix, markers, _enclosing, @new, newClazz, _arguments, body, constructorType);
+            return ReferenceEquals(newClazz, Clazz) ? this : new NewClass(Id, Prefix, Markers, _enclosing, New, newClazz, _arguments, Body, ConstructorType);
         }
-        private readonly JContainer<Expression> _arguments = arguments;
+        private JContainer<Expression> _arguments = arguments;
         public IList<Expression> Arguments => _arguments.GetElements();
 
         public NewClass WithArguments(IList<Expression> newArguments)
         {
             return Padding.WithArguments(JContainer<Expression>.WithElements(_arguments, newArguments));
         }
-        public J.Block? Body => body;
+        public J.Block? Body { get;  set; } = body;
 
         public NewClass WithBody(J.Block? newBody)
         {
-            return ReferenceEquals(newBody, body) ? this : new NewClass(id, prefix, markers, _enclosing, @new, clazz, _arguments, newBody, constructorType);
+            return ReferenceEquals(newBody, Body) ? this : new NewClass(Id, Prefix, Markers, _enclosing, New, Clazz, _arguments, newBody, ConstructorType);
         }
-        public JavaType.Method? ConstructorType => constructorType;
+        public JavaType.Method? ConstructorType { get;  set; } = constructorType;
 
         public NewClass WithConstructorType(JavaType.Method? newConstructorType)
         {
-            return newConstructorType == constructorType ? this : new NewClass(id, prefix, markers, _enclosing, @new, clazz, _arguments, body, newConstructorType);
+            return newConstructorType == ConstructorType ? this : new NewClass(Id, Prefix, Markers, _enclosing, New, Clazz, _arguments, Body, newConstructorType);
         }
         public sealed record PaddingHelper(J.NewClass T)
         {
-            public JRightPadded<Expression>? Enclosing => T._enclosing;
+            public JRightPadded<Expression>? Enclosing { get => T._enclosing;  set => T._enclosing = value; }
 
             public J.NewClass WithEnclosing(JRightPadded<Expression>? newEnclosing)
             {
-                return T._enclosing == newEnclosing ? T : new J.NewClass(T.Id, T.Prefix, T.Markers, newEnclosing, T.New, T.Clazz, T._arguments, T.Body, T.ConstructorType);
+                return Enclosing == newEnclosing ? T : new J.NewClass(T.Id, T.Prefix, T.Markers, newEnclosing, T.New, T.Clazz, T._arguments, T.Body, T.ConstructorType);
             }
 
-            public JContainer<Expression> Arguments => T._arguments;
+            public JContainer<Expression> Arguments { get => T._arguments;  set => T._arguments = value; }
 
             public J.NewClass WithArguments(JContainer<Expression> newArguments)
             {
-                return T._arguments == newArguments ? T : new J.NewClass(T.Id, T.Prefix, T.Markers, T._enclosing, T.New, T.Clazz, newArguments, T.Body, T.ConstructorType);
+                return Arguments == newArguments ? T : new J.NewClass(T.Id, T.Prefix, T.Markers, T._enclosing, T.New, T.Clazz, newArguments, T.Body, T.ConstructorType);
             }
 
         }

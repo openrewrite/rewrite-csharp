@@ -39,35 +39,35 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitAnnotatedType(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public AnnotatedType WithId(Guid newId)
         {
-            return newId == id ? this : new AnnotatedType(newId, prefix, markers, annotations, typeExpression);
+            return newId == Id ? this : new AnnotatedType(newId, Prefix, Markers, Annotations, TypeExpression);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public AnnotatedType WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new AnnotatedType(id, newPrefix, markers, annotations, typeExpression);
+            return newPrefix == Prefix ? this : new AnnotatedType(Id, newPrefix, Markers, Annotations, TypeExpression);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public AnnotatedType WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new AnnotatedType(id, prefix, newMarkers, annotations, typeExpression);
+            return ReferenceEquals(newMarkers, Markers) ? this : new AnnotatedType(Id, Prefix, newMarkers, Annotations, TypeExpression);
         }
-        public IList<J.Annotation> Annotations => annotations;
+        public IList<J.Annotation> Annotations { get;  set; } = annotations;
 
         public AnnotatedType WithAnnotations(IList<J.Annotation> newAnnotations)
         {
-            return newAnnotations == annotations ? this : new AnnotatedType(id, prefix, markers, newAnnotations, typeExpression);
+            return newAnnotations == Annotations ? this : new AnnotatedType(Id, Prefix, Markers, newAnnotations, TypeExpression);
         }
-        public TypeTree TypeExpression => typeExpression;
+        public TypeTree TypeExpression { get;  set; } = typeExpression;
 
         public AnnotatedType WithTypeExpression(TypeTree newTypeExpression)
         {
-            return ReferenceEquals(newTypeExpression, typeExpression) ? this : new AnnotatedType(id, prefix, markers, annotations, newTypeExpression);
+            return ReferenceEquals(newTypeExpression, TypeExpression) ? this : new AnnotatedType(Id, Prefix, Markers, Annotations, newTypeExpression);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

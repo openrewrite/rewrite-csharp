@@ -58,35 +58,35 @@ public partial interface Cs : J
             return v.VisitQueryContinuation(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public QueryContinuation WithId(Guid newId)
         {
-            return newId == id ? this : new QueryContinuation(newId, prefix, markers, identifier, body);
+            return newId == Id ? this : new QueryContinuation(newId, Prefix, Markers, Identifier, Body);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public QueryContinuation WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new QueryContinuation(id, newPrefix, markers, identifier, body);
+            return newPrefix == Prefix ? this : new QueryContinuation(Id, newPrefix, Markers, Identifier, Body);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public QueryContinuation WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new QueryContinuation(id, prefix, newMarkers, identifier, body);
+            return ReferenceEquals(newMarkers, Markers) ? this : new QueryContinuation(Id, Prefix, newMarkers, Identifier, Body);
         }
-        public J.Identifier Identifier => identifier;
+        public J.Identifier Identifier { get;  set; } = identifier;
 
         public QueryContinuation WithIdentifier(J.Identifier newIdentifier)
         {
-            return ReferenceEquals(newIdentifier, identifier) ? this : new QueryContinuation(id, prefix, markers, newIdentifier, body);
+            return ReferenceEquals(newIdentifier, Identifier) ? this : new QueryContinuation(Id, Prefix, Markers, newIdentifier, Body);
         }
-        public Cs.QueryBody Body => body;
+        public Cs.QueryBody Body { get;  set; } = body;
 
         public QueryContinuation WithBody(Cs.QueryBody newBody)
         {
-            return ReferenceEquals(newBody, body) ? this : new QueryContinuation(id, prefix, markers, identifier, newBody);
+            return ReferenceEquals(newBody, Body) ? this : new QueryContinuation(Id, Prefix, Markers, Identifier, newBody);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

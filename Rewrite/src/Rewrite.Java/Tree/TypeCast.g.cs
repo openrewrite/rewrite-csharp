@@ -39,35 +39,35 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitTypeCast(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public TypeCast WithId(Guid newId)
         {
-            return newId == id ? this : new TypeCast(newId, prefix, markers, clazz, expression);
+            return newId == Id ? this : new TypeCast(newId, Prefix, Markers, Clazz, Expression);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public TypeCast WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new TypeCast(id, newPrefix, markers, clazz, expression);
+            return newPrefix == Prefix ? this : new TypeCast(Id, newPrefix, Markers, Clazz, Expression);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public TypeCast WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new TypeCast(id, prefix, newMarkers, clazz, expression);
+            return ReferenceEquals(newMarkers, Markers) ? this : new TypeCast(Id, Prefix, newMarkers, Clazz, Expression);
         }
-        public J.ControlParentheses<TypeTree> Clazz => clazz;
+        public J.ControlParentheses<TypeTree> Clazz { get;  set; } = clazz;
 
         public TypeCast WithClazz(J.ControlParentheses<TypeTree> newClazz)
         {
-            return ReferenceEquals(newClazz, clazz) ? this : new TypeCast(id, prefix, markers, newClazz, expression);
+            return ReferenceEquals(newClazz, Clazz) ? this : new TypeCast(Id, Prefix, Markers, newClazz, Expression);
         }
-        public Expression Expression => expression;
+        public Expression Expression { get;  set; } = expression;
 
         public TypeCast WithExpression(Expression newExpression)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new TypeCast(id, prefix, markers, clazz, newExpression);
+            return ReferenceEquals(newExpression, Expression) ? this : new TypeCast(Id, Prefix, Markers, Clazz, newExpression);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

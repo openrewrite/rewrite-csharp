@@ -82,50 +82,50 @@ public partial interface Cs : J
             return v.VisitFromClause(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public FromClause WithId(Guid newId)
         {
-            return newId == id ? this : new FromClause(newId, prefix, markers, typeIdentifier, _identifier, expression);
+            return newId == Id ? this : new FromClause(newId, Prefix, Markers, TypeIdentifier, _identifier, Expression);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public FromClause WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new FromClause(id, newPrefix, markers, typeIdentifier, _identifier, expression);
+            return newPrefix == Prefix ? this : new FromClause(Id, newPrefix, Markers, TypeIdentifier, _identifier, Expression);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public FromClause WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new FromClause(id, prefix, newMarkers, typeIdentifier, _identifier, expression);
+            return ReferenceEquals(newMarkers, Markers) ? this : new FromClause(Id, Prefix, newMarkers, TypeIdentifier, _identifier, Expression);
         }
-        public TypeTree? TypeIdentifier => typeIdentifier;
+        public TypeTree? TypeIdentifier { get;  set; } = typeIdentifier;
 
         public FromClause WithTypeIdentifier(TypeTree? newTypeIdentifier)
         {
-            return ReferenceEquals(newTypeIdentifier, typeIdentifier) ? this : new FromClause(id, prefix, markers, newTypeIdentifier, _identifier, expression);
+            return ReferenceEquals(newTypeIdentifier, TypeIdentifier) ? this : new FromClause(Id, Prefix, Markers, newTypeIdentifier, _identifier, Expression);
         }
-        private readonly JRightPadded<J.Identifier> _identifier = identifier;
+        private JRightPadded<J.Identifier> _identifier = identifier;
         public J.Identifier Identifier => _identifier.Element;
 
         public FromClause WithIdentifier(J.Identifier newIdentifier)
         {
             return Padding.WithIdentifier(_identifier.WithElement(newIdentifier));
         }
-        public Expression Expression => expression;
+        public Expression Expression { get;  set; } = expression;
 
         public FromClause WithExpression(Expression newExpression)
         {
-            return ReferenceEquals(newExpression, expression) ? this : new FromClause(id, prefix, markers, typeIdentifier, _identifier, newExpression);
+            return ReferenceEquals(newExpression, Expression) ? this : new FromClause(Id, Prefix, Markers, TypeIdentifier, _identifier, newExpression);
         }
         public sealed record PaddingHelper(Cs.FromClause T)
         {
-            public JRightPadded<J.Identifier> Identifier => T._identifier;
+            public JRightPadded<J.Identifier> Identifier { get => T._identifier;  set => T._identifier = value; }
 
             public Cs.FromClause WithIdentifier(JRightPadded<J.Identifier> newIdentifier)
             {
-                return T._identifier == newIdentifier ? T : new Cs.FromClause(T.Id, T.Prefix, T.Markers, T.TypeIdentifier, newIdentifier, T.Expression);
+                return Identifier == newIdentifier ? T : new Cs.FromClause(T.Id, T.Prefix, T.Markers, T.TypeIdentifier, newIdentifier, T.Expression);
             }
 
         }

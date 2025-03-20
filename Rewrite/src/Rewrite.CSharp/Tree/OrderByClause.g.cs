@@ -83,25 +83,25 @@ public partial interface Cs : J
             return v.VisitOrderByClause(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public OrderByClause WithId(Guid newId)
         {
-            return newId == id ? this : new OrderByClause(newId, prefix, markers, _orderings);
+            return newId == Id ? this : new OrderByClause(newId, Prefix, Markers, _orderings);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public OrderByClause WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new OrderByClause(id, newPrefix, markers, _orderings);
+            return newPrefix == Prefix ? this : new OrderByClause(Id, newPrefix, Markers, _orderings);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public OrderByClause WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new OrderByClause(id, prefix, newMarkers, _orderings);
+            return ReferenceEquals(newMarkers, Markers) ? this : new OrderByClause(Id, Prefix, newMarkers, _orderings);
         }
-        private readonly IList<JRightPadded<Cs.Ordering>> _orderings = orderings;
+        private IList<JRightPadded<Cs.Ordering>> _orderings = orderings;
         public IList<Cs.Ordering> Orderings => _orderings.Elements();
 
         public OrderByClause WithOrderings(IList<Cs.Ordering> newOrderings)
@@ -110,11 +110,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.OrderByClause T)
         {
-            public IList<JRightPadded<Cs.Ordering>> Orderings => T._orderings;
+            public IList<JRightPadded<Cs.Ordering>> Orderings { get => T._orderings;  set => T._orderings = value; }
 
             public Cs.OrderByClause WithOrderings(IList<JRightPadded<Cs.Ordering>> newOrderings)
             {
-                return T._orderings == newOrderings ? T : new Cs.OrderByClause(T.Id, T.Prefix, T.Markers, newOrderings);
+                return Orderings == newOrderings ? T : new Cs.OrderByClause(T.Id, T.Prefix, T.Markers, newOrderings);
             }
 
         }

@@ -65,50 +65,50 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitAssignment(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Assignment WithId(Guid newId)
         {
-            return newId == id ? this : new Assignment(newId, prefix, markers, variable, _expression, type);
+            return newId == Id ? this : new Assignment(newId, Prefix, Markers, Variable, _expression, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Assignment WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Assignment(id, newPrefix, markers, variable, _expression, type);
+            return newPrefix == Prefix ? this : new Assignment(Id, newPrefix, Markers, Variable, _expression, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Assignment WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Assignment(id, prefix, newMarkers, variable, _expression, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Assignment(Id, Prefix, newMarkers, Variable, _expression, Type);
         }
-        public Expression Variable => variable;
+        public Expression Variable { get;  set; } = variable;
 
         public Assignment WithVariable(Expression newVariable)
         {
-            return ReferenceEquals(newVariable, variable) ? this : new Assignment(id, prefix, markers, newVariable, _expression, type);
+            return ReferenceEquals(newVariable, Variable) ? this : new Assignment(Id, Prefix, Markers, newVariable, _expression, Type);
         }
-        private readonly JLeftPadded<Expression> _expression = expression;
+        private JLeftPadded<Expression> _expression = expression;
         public Expression Expression => _expression.Element;
 
         public Assignment WithExpression(Expression newExpression)
         {
             return Padding.WithExpression(_expression.WithElement(newExpression));
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public Assignment WithType(JavaType? newType)
         {
-            return newType == type ? this : new Assignment(id, prefix, markers, variable, _expression, newType);
+            return newType == Type ? this : new Assignment(Id, Prefix, Markers, Variable, _expression, newType);
         }
         public sealed record PaddingHelper(J.Assignment T)
         {
-            public JLeftPadded<Expression> Expression => T._expression;
+            public JLeftPadded<Expression> Expression { get => T._expression;  set => T._expression = value; }
 
             public J.Assignment WithExpression(JLeftPadded<Expression> newExpression)
             {
-                return T._expression == newExpression ? T : new J.Assignment(T.Id, T.Prefix, T.Markers, T.Variable, newExpression, T.Type);
+                return Expression == newExpression ? T : new J.Assignment(T.Id, T.Prefix, T.Markers, T.Variable, newExpression, T.Type);
             }
 
         }

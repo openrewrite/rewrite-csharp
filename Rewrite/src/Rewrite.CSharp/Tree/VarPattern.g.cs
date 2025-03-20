@@ -46,29 +46,29 @@ public partial interface Cs : J
             return v.VisitVarPattern(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public VarPattern WithId(Guid newId)
         {
-            return newId == id ? this : new VarPattern(newId, prefix, markers, designation);
+            return newId == Id ? this : new VarPattern(newId, Prefix, Markers, Designation);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public VarPattern WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new VarPattern(id, newPrefix, markers, designation);
+            return newPrefix == Prefix ? this : new VarPattern(Id, newPrefix, Markers, Designation);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public VarPattern WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new VarPattern(id, prefix, newMarkers, designation);
+            return ReferenceEquals(newMarkers, Markers) ? this : new VarPattern(Id, Prefix, newMarkers, Designation);
         }
-        public Cs.VariableDesignation Designation => designation;
+        public Cs.VariableDesignation Designation { get;  set; } = designation;
 
         public VarPattern WithDesignation(Cs.VariableDesignation newDesignation)
         {
-            return ReferenceEquals(newDesignation, designation) ? this : new VarPattern(id, prefix, markers, newDesignation);
+            return ReferenceEquals(newDesignation, Designation) ? this : new VarPattern(Id, Prefix, Markers, newDesignation);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

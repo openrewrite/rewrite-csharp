@@ -82,32 +82,32 @@ public partial interface Cs : J
             return v.VisitSwitchExpression(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public SwitchExpression WithId(Guid newId)
         {
-            return newId == id ? this : new SwitchExpression(newId, prefix, markers, _expression, _arms);
+            return newId == Id ? this : new SwitchExpression(newId, Prefix, Markers, _expression, _arms);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public SwitchExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new SwitchExpression(id, newPrefix, markers, _expression, _arms);
+            return newPrefix == Prefix ? this : new SwitchExpression(Id, newPrefix, Markers, _expression, _arms);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public SwitchExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new SwitchExpression(id, prefix, newMarkers, _expression, _arms);
+            return ReferenceEquals(newMarkers, Markers) ? this : new SwitchExpression(Id, Prefix, newMarkers, _expression, _arms);
         }
-        private readonly JRightPadded<Expression> _expression = expression;
+        private JRightPadded<Expression> _expression = expression;
         public Expression Expression => _expression.Element;
 
         public SwitchExpression WithExpression(Expression newExpression)
         {
             return Padding.WithExpression(_expression.WithElement(newExpression));
         }
-        private readonly JContainer<Cs.SwitchExpressionArm> _arms = arms;
+        private JContainer<Cs.SwitchExpressionArm> _arms = arms;
         public IList<Cs.SwitchExpressionArm> Arms => _arms.GetElements();
 
         public SwitchExpression WithArms(IList<Cs.SwitchExpressionArm> newArms)
@@ -116,18 +116,18 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.SwitchExpression T)
         {
-            public JRightPadded<Expression> Expression => T._expression;
+            public JRightPadded<Expression> Expression { get => T._expression;  set => T._expression = value; }
 
             public Cs.SwitchExpression WithExpression(JRightPadded<Expression> newExpression)
             {
-                return T._expression == newExpression ? T : new Cs.SwitchExpression(T.Id, T.Prefix, T.Markers, newExpression, T._arms);
+                return Expression == newExpression ? T : new Cs.SwitchExpression(T.Id, T.Prefix, T.Markers, newExpression, T._arms);
             }
 
-            public JContainer<Cs.SwitchExpressionArm> Arms => T._arms;
+            public JContainer<Cs.SwitchExpressionArm> Arms { get => T._arms;  set => T._arms = value; }
 
             public Cs.SwitchExpression WithArms(JContainer<Cs.SwitchExpressionArm> newArms)
             {
-                return T._arms == newArms ? T : new Cs.SwitchExpression(T.Id, T.Prefix, T.Markers, T._expression, newArms);
+                return Arms == newArms ? T : new Cs.SwitchExpression(T.Id, T.Prefix, T.Markers, T._expression, newArms);
             }
 
         }

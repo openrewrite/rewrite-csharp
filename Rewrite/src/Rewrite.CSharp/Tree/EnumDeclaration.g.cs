@@ -87,51 +87,51 @@ public partial interface Cs : J
             return v.VisitEnumDeclaration(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public EnumDeclaration WithId(Guid newId)
         {
-            return newId == id ? this : new EnumDeclaration(newId, prefix, markers, attributeLists, modifiers, _name, _baseType, _members);
+            return newId == Id ? this : new EnumDeclaration(newId, Prefix, Markers, AttributeLists, Modifiers, _name, _baseType, _members);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public EnumDeclaration WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new EnumDeclaration(id, newPrefix, markers, attributeLists, modifiers, _name, _baseType, _members);
+            return newPrefix == Prefix ? this : new EnumDeclaration(Id, newPrefix, Markers, AttributeLists, Modifiers, _name, _baseType, _members);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public EnumDeclaration WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new EnumDeclaration(id, prefix, newMarkers, attributeLists, modifiers, _name, _baseType, _members);
+            return ReferenceEquals(newMarkers, Markers) ? this : new EnumDeclaration(Id, Prefix, newMarkers, AttributeLists, Modifiers, _name, _baseType, _members);
         }
-        public IList<Cs.AttributeList>? AttributeLists => attributeLists;
+        public IList<Cs.AttributeList>? AttributeLists { get;  set; } = attributeLists;
 
         public EnumDeclaration WithAttributeLists(IList<Cs.AttributeList>? newAttributeLists)
         {
-            return newAttributeLists == attributeLists ? this : new EnumDeclaration(id, prefix, markers, newAttributeLists, modifiers, _name, _baseType, _members);
+            return newAttributeLists == AttributeLists ? this : new EnumDeclaration(Id, Prefix, Markers, newAttributeLists, Modifiers, _name, _baseType, _members);
         }
-        public IList<J.Modifier> Modifiers => modifiers;
+        public IList<J.Modifier> Modifiers { get;  set; } = modifiers;
 
         public EnumDeclaration WithModifiers(IList<J.Modifier> newModifiers)
         {
-            return newModifiers == modifiers ? this : new EnumDeclaration(id, prefix, markers, attributeLists, newModifiers, _name, _baseType, _members);
+            return newModifiers == Modifiers ? this : new EnumDeclaration(Id, Prefix, Markers, AttributeLists, newModifiers, _name, _baseType, _members);
         }
-        private readonly JLeftPadded<J.Identifier> _name = name;
+        private JLeftPadded<J.Identifier> _name = name;
         public J.Identifier Name => _name.Element;
 
         public EnumDeclaration WithName(J.Identifier newName)
         {
             return Padding.WithName(_name.WithElement(newName));
         }
-        private readonly JLeftPadded<TypeTree>? _baseType = baseType;
+        private JLeftPadded<TypeTree>? _baseType = baseType;
         public TypeTree? BaseType => _baseType?.Element;
 
         public EnumDeclaration WithBaseType(TypeTree? newBaseType)
         {
             return Padding.WithBaseType(JLeftPadded<TypeTree>.WithElement(_baseType, newBaseType));
         }
-        private readonly JContainer<Expression>? _members = members;
+        private JContainer<Expression>? _members = members;
         public IList<Expression>? Members => _members?.GetElements();
 
         public EnumDeclaration WithMembers(IList<Expression>? newMembers)
@@ -140,25 +140,25 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.EnumDeclaration T)
         {
-            public JLeftPadded<J.Identifier> Name => T._name;
+            public JLeftPadded<J.Identifier> Name { get => T._name;  set => T._name = value; }
 
             public Cs.EnumDeclaration WithName(JLeftPadded<J.Identifier> newName)
             {
-                return T._name == newName ? T : new Cs.EnumDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, newName, T._baseType, T._members);
+                return Name == newName ? T : new Cs.EnumDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, newName, T._baseType, T._members);
             }
 
-            public JLeftPadded<TypeTree>? BaseType => T._baseType;
+            public JLeftPadded<TypeTree>? BaseType { get => T._baseType;  set => T._baseType = value; }
 
             public Cs.EnumDeclaration WithBaseType(JLeftPadded<TypeTree>? newBaseType)
             {
-                return T._baseType == newBaseType ? T : new Cs.EnumDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T._name, newBaseType, T._members);
+                return BaseType == newBaseType ? T : new Cs.EnumDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T._name, newBaseType, T._members);
             }
 
-            public JContainer<Expression>? Members => T._members;
+            public JContainer<Expression>? Members { get => T._members;  set => T._members = value; }
 
             public Cs.EnumDeclaration WithMembers(JContainer<Expression>? newMembers)
             {
-                return T._members == newMembers ? T : new Cs.EnumDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T._name, T._baseType, newMembers);
+                return Members == newMembers ? T : new Cs.EnumDeclaration(T.Id, T.Prefix, T.Markers, T.AttributeLists, T.Modifiers, T._name, T._baseType, newMembers);
             }
 
         }

@@ -57,41 +57,41 @@ public partial interface Cs : J
             return v.VisitRefType(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public RefType WithId(Guid newId)
         {
-            return newId == id ? this : new RefType(newId, prefix, markers, readonlyKeyword, typeIdentifier, type);
+            return newId == Id ? this : new RefType(newId, Prefix, Markers, ReadonlyKeyword, TypeIdentifier, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public RefType WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new RefType(id, newPrefix, markers, readonlyKeyword, typeIdentifier, type);
+            return newPrefix == Prefix ? this : new RefType(Id, newPrefix, Markers, ReadonlyKeyword, TypeIdentifier, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public RefType WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new RefType(id, prefix, newMarkers, readonlyKeyword, typeIdentifier, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new RefType(Id, Prefix, newMarkers, ReadonlyKeyword, TypeIdentifier, Type);
         }
-        public J.Modifier? ReadonlyKeyword => readonlyKeyword;
+        public J.Modifier? ReadonlyKeyword { get;  set; } = readonlyKeyword;
 
         public RefType WithReadonlyKeyword(J.Modifier? newReadonlyKeyword)
         {
-            return ReferenceEquals(newReadonlyKeyword, readonlyKeyword) ? this : new RefType(id, prefix, markers, newReadonlyKeyword, typeIdentifier, type);
+            return ReferenceEquals(newReadonlyKeyword, ReadonlyKeyword) ? this : new RefType(Id, Prefix, Markers, newReadonlyKeyword, TypeIdentifier, Type);
         }
-        public TypeTree TypeIdentifier => typeIdentifier;
+        public TypeTree TypeIdentifier { get;  set; } = typeIdentifier;
 
         public RefType WithTypeIdentifier(TypeTree newTypeIdentifier)
         {
-            return ReferenceEquals(newTypeIdentifier, typeIdentifier) ? this : new RefType(id, prefix, markers, readonlyKeyword, newTypeIdentifier, type);
+            return ReferenceEquals(newTypeIdentifier, TypeIdentifier) ? this : new RefType(Id, Prefix, Markers, ReadonlyKeyword, newTypeIdentifier, Type);
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public RefType WithType(JavaType? newType)
         {
-            return newType == type ? this : new RefType(id, prefix, markers, readonlyKeyword, typeIdentifier, newType);
+            return newType == Type ? this : new RefType(Id, Prefix, Markers, ReadonlyKeyword, TypeIdentifier, newType);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

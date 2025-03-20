@@ -38,29 +38,29 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitContinue(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Continue WithId(Guid newId)
         {
-            return newId == id ? this : new Continue(newId, prefix, markers, label);
+            return newId == Id ? this : new Continue(newId, Prefix, Markers, Label);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Continue WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Continue(id, newPrefix, markers, label);
+            return newPrefix == Prefix ? this : new Continue(Id, newPrefix, Markers, Label);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Continue WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Continue(id, prefix, newMarkers, label);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Continue(Id, Prefix, newMarkers, Label);
         }
-        public J.Identifier? Label => label;
+        public J.Identifier? Label { get;  set; } = label;
 
         public Continue WithLabel(J.Identifier? newLabel)
         {
-            return ReferenceEquals(newLabel, label) ? this : new Continue(id, prefix, markers, newLabel);
+            return ReferenceEquals(newLabel, Label) ? this : new Continue(Id, Prefix, Markers, newLabel);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

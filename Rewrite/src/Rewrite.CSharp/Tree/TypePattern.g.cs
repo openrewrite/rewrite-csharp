@@ -63,35 +63,35 @@ public partial interface Cs : J
             return v.VisitTypePattern(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public TypePattern WithId(Guid newId)
         {
-            return newId == id ? this : new TypePattern(newId, prefix, markers, typeIdentifier, designation);
+            return newId == Id ? this : new TypePattern(newId, Prefix, Markers, TypeIdentifier, Designation);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public TypePattern WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new TypePattern(id, newPrefix, markers, typeIdentifier, designation);
+            return newPrefix == Prefix ? this : new TypePattern(Id, newPrefix, Markers, TypeIdentifier, Designation);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public TypePattern WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new TypePattern(id, prefix, newMarkers, typeIdentifier, designation);
+            return ReferenceEquals(newMarkers, Markers) ? this : new TypePattern(Id, Prefix, newMarkers, TypeIdentifier, Designation);
         }
-        public TypeTree TypeIdentifier => typeIdentifier;
+        public TypeTree TypeIdentifier { get;  set; } = typeIdentifier;
 
         public TypePattern WithTypeIdentifier(TypeTree newTypeIdentifier)
         {
-            return ReferenceEquals(newTypeIdentifier, typeIdentifier) ? this : new TypePattern(id, prefix, markers, newTypeIdentifier, designation);
+            return ReferenceEquals(newTypeIdentifier, TypeIdentifier) ? this : new TypePattern(Id, Prefix, Markers, newTypeIdentifier, Designation);
         }
-        public Cs.VariableDesignation? Designation => designation;
+        public Cs.VariableDesignation? Designation { get;  set; } = designation;
 
         public TypePattern WithDesignation(Cs.VariableDesignation? newDesignation)
         {
-            return ReferenceEquals(newDesignation, designation) ? this : new TypePattern(id, prefix, markers, typeIdentifier, newDesignation);
+            return ReferenceEquals(newDesignation, Designation) ? this : new TypePattern(Id, Prefix, Markers, TypeIdentifier, newDesignation);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

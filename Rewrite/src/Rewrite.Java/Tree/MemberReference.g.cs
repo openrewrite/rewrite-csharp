@@ -68,84 +68,84 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitMemberReference(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public MemberReference WithId(Guid newId)
         {
-            return newId == id ? this : new MemberReference(newId, prefix, markers, _containing, _typeParameters, _reference, type, methodType, variableType);
+            return newId == Id ? this : new MemberReference(newId, Prefix, Markers, _containing, _typeParameters, _reference, Type, MethodType, VariableType);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public MemberReference WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new MemberReference(id, newPrefix, markers, _containing, _typeParameters, _reference, type, methodType, variableType);
+            return newPrefix == Prefix ? this : new MemberReference(Id, newPrefix, Markers, _containing, _typeParameters, _reference, Type, MethodType, VariableType);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public MemberReference WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new MemberReference(id, prefix, newMarkers, _containing, _typeParameters, _reference, type, methodType, variableType);
+            return ReferenceEquals(newMarkers, Markers) ? this : new MemberReference(Id, Prefix, newMarkers, _containing, _typeParameters, _reference, Type, MethodType, VariableType);
         }
-        private readonly JRightPadded<Expression> _containing = containing;
+        private JRightPadded<Expression> _containing = containing;
         public Expression Containing => _containing.Element;
 
         public MemberReference WithContaining(Expression newContaining)
         {
             return Padding.WithContaining(_containing.WithElement(newContaining));
         }
-        private readonly JContainer<Expression>? _typeParameters = typeParameters;
+        private JContainer<Expression>? _typeParameters = typeParameters;
         public IList<Expression>? TypeParameters => _typeParameters?.GetElements();
 
         public MemberReference WithTypeParameters(IList<Expression>? newTypeParameters)
         {
             return Padding.WithTypeParameters(JContainer<Expression>.WithElementsNullable(_typeParameters, newTypeParameters));
         }
-        private readonly JLeftPadded<J.Identifier> _reference = reference;
+        private JLeftPadded<J.Identifier> _reference = reference;
         public J.Identifier Reference => _reference.Element;
 
         public MemberReference WithReference(J.Identifier newReference)
         {
             return Padding.WithReference(_reference.WithElement(newReference));
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public MemberReference WithType(JavaType? newType)
         {
-            return newType == type ? this : new MemberReference(id, prefix, markers, _containing, _typeParameters, _reference, newType, methodType, variableType);
+            return newType == Type ? this : new MemberReference(Id, Prefix, Markers, _containing, _typeParameters, _reference, newType, MethodType, VariableType);
         }
-        public JavaType.Method? MethodType => methodType;
+        public JavaType.Method? MethodType { get;  set; } = methodType;
 
         public MemberReference WithMethodType(JavaType.Method? newMethodType)
         {
-            return newMethodType == methodType ? this : new MemberReference(id, prefix, markers, _containing, _typeParameters, _reference, type, newMethodType, variableType);
+            return newMethodType == MethodType ? this : new MemberReference(Id, Prefix, Markers, _containing, _typeParameters, _reference, Type, newMethodType, VariableType);
         }
-        public JavaType.Variable? VariableType => variableType;
+        public JavaType.Variable? VariableType { get;  set; } = variableType;
 
         public MemberReference WithVariableType(JavaType.Variable? newVariableType)
         {
-            return newVariableType == variableType ? this : new MemberReference(id, prefix, markers, _containing, _typeParameters, _reference, type, methodType, newVariableType);
+            return newVariableType == VariableType ? this : new MemberReference(Id, Prefix, Markers, _containing, _typeParameters, _reference, Type, MethodType, newVariableType);
         }
         public sealed record PaddingHelper(J.MemberReference T)
         {
-            public JRightPadded<Expression> Containing => T._containing;
+            public JRightPadded<Expression> Containing { get => T._containing;  set => T._containing = value; }
 
             public J.MemberReference WithContaining(JRightPadded<Expression> newContaining)
             {
-                return T._containing == newContaining ? T : new J.MemberReference(T.Id, T.Prefix, T.Markers, newContaining, T._typeParameters, T._reference, T.Type, T.MethodType, T.VariableType);
+                return Containing == newContaining ? T : new J.MemberReference(T.Id, T.Prefix, T.Markers, newContaining, T._typeParameters, T._reference, T.Type, T.MethodType, T.VariableType);
             }
 
-            public JContainer<Expression>? TypeParameters => T._typeParameters;
+            public JContainer<Expression>? TypeParameters { get => T._typeParameters;  set => T._typeParameters = value; }
 
             public J.MemberReference WithTypeParameters(JContainer<Expression>? newTypeParameters)
             {
-                return T._typeParameters == newTypeParameters ? T : new J.MemberReference(T.Id, T.Prefix, T.Markers, T._containing, newTypeParameters, T._reference, T.Type, T.MethodType, T.VariableType);
+                return TypeParameters == newTypeParameters ? T : new J.MemberReference(T.Id, T.Prefix, T.Markers, T._containing, newTypeParameters, T._reference, T.Type, T.MethodType, T.VariableType);
             }
 
-            public JLeftPadded<J.Identifier> Reference => T._reference;
+            public JLeftPadded<J.Identifier> Reference { get => T._reference;  set => T._reference = value; }
 
             public J.MemberReference WithReference(JLeftPadded<J.Identifier> newReference)
             {
-                return T._reference == newReference ? T : new J.MemberReference(T.Id, T.Prefix, T.Markers, T._containing, T._typeParameters, newReference, T.Type, T.MethodType, T.VariableType);
+                return Reference == newReference ? T : new J.MemberReference(T.Id, T.Prefix, T.Markers, T._containing, T._typeParameters, newReference, T.Type, T.MethodType, T.VariableType);
             }
 
         }

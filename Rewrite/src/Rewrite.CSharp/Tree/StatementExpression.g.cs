@@ -39,29 +39,29 @@ public partial interface Cs : J
             return v.VisitStatementExpression(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public StatementExpression WithId(Guid newId)
         {
-            return newId == id ? this : new StatementExpression(newId, prefix, markers, statement);
+            return newId == Id ? this : new StatementExpression(newId, Prefix, Markers, Statement);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public StatementExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new StatementExpression(id, newPrefix, markers, statement);
+            return newPrefix == Prefix ? this : new StatementExpression(Id, newPrefix, Markers, Statement);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public StatementExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new StatementExpression(id, prefix, newMarkers, statement);
+            return ReferenceEquals(newMarkers, Markers) ? this : new StatementExpression(Id, Prefix, newMarkers, Statement);
         }
-        public Statement Statement => statement;
+        public Statement Statement { get;  set; } = statement;
 
         public StatementExpression WithStatement(Statement newStatement)
         {
-            return ReferenceEquals(newStatement, statement) ? this : new StatementExpression(id, prefix, markers, newStatement);
+            return ReferenceEquals(newStatement, Statement) ? this : new StatementExpression(Id, Prefix, Markers, newStatement);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

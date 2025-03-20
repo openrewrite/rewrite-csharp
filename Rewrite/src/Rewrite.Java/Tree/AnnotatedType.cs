@@ -6,7 +6,7 @@ partial interface J
     {
         public JavaType? Type => TypeExpression.Type;
 
-        public AnnotatedType WithType(JavaType? type) => WithTypeExpression(TypeExpression.WithType(type));
+        public AnnotatedType WithType(JavaType? type) => WithTypeExpression((TypeTree)TypeExpression.WithType(type));
 
     }
 }

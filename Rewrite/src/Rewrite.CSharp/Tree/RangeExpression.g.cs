@@ -89,44 +89,44 @@ public partial interface Cs : J
             return v.VisitRangeExpression(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public RangeExpression WithId(Guid newId)
         {
-            return newId == id ? this : new RangeExpression(newId, prefix, markers, _start, end);
+            return newId == Id ? this : new RangeExpression(newId, Prefix, Markers, _start, End);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public RangeExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new RangeExpression(id, newPrefix, markers, _start, end);
+            return newPrefix == Prefix ? this : new RangeExpression(Id, newPrefix, Markers, _start, End);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public RangeExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new RangeExpression(id, prefix, newMarkers, _start, end);
+            return ReferenceEquals(newMarkers, Markers) ? this : new RangeExpression(Id, Prefix, newMarkers, _start, End);
         }
-        private readonly JRightPadded<Expression>? _start = start;
+        private JRightPadded<Expression>? _start = start;
         public Expression? Start => _start?.Element;
 
         public RangeExpression WithStart(Expression? newStart)
         {
             return Padding.WithStart(JRightPadded<Expression>.WithElement(_start, newStart));
         }
-        public Expression? End => end;
+        public Expression? End { get;  set; } = end;
 
         public RangeExpression WithEnd(Expression? newEnd)
         {
-            return ReferenceEquals(newEnd, end) ? this : new RangeExpression(id, prefix, markers, _start, newEnd);
+            return ReferenceEquals(newEnd, End) ? this : new RangeExpression(Id, Prefix, Markers, _start, newEnd);
         }
         public sealed record PaddingHelper(Cs.RangeExpression T)
         {
-            public JRightPadded<Expression>? Start => T._start;
+            public JRightPadded<Expression>? Start { get => T._start;  set => T._start = value; }
 
             public Cs.RangeExpression WithStart(JRightPadded<Expression>? newStart)
             {
-                return T._start == newStart ? T : new Cs.RangeExpression(T.Id, T.Prefix, T.Markers, newStart, T.End);
+                return Start == newStart ? T : new Cs.RangeExpression(T.Id, T.Prefix, T.Markers, newStart, T.End);
             }
 
         }

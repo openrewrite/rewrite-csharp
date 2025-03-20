@@ -66,64 +66,64 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitTernary(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Ternary WithId(Guid newId)
         {
-            return newId == id ? this : new Ternary(newId, prefix, markers, condition, _truePart, _falsePart, type);
+            return newId == Id ? this : new Ternary(newId, Prefix, Markers, Condition, _truePart, _falsePart, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Ternary WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Ternary(id, newPrefix, markers, condition, _truePart, _falsePart, type);
+            return newPrefix == Prefix ? this : new Ternary(Id, newPrefix, Markers, Condition, _truePart, _falsePart, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Ternary WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Ternary(id, prefix, newMarkers, condition, _truePart, _falsePart, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Ternary(Id, Prefix, newMarkers, Condition, _truePart, _falsePart, Type);
         }
-        public Expression Condition => condition;
+        public Expression Condition { get;  set; } = condition;
 
         public Ternary WithCondition(Expression newCondition)
         {
-            return ReferenceEquals(newCondition, condition) ? this : new Ternary(id, prefix, markers, newCondition, _truePart, _falsePart, type);
+            return ReferenceEquals(newCondition, Condition) ? this : new Ternary(Id, Prefix, Markers, newCondition, _truePart, _falsePart, Type);
         }
-        private readonly JLeftPadded<Expression> _truePart = truePart;
+        private JLeftPadded<Expression> _truePart = truePart;
         public Expression TruePart => _truePart.Element;
 
         public Ternary WithTruePart(Expression newTruePart)
         {
             return Padding.WithTruePart(_truePart.WithElement(newTruePart));
         }
-        private readonly JLeftPadded<Expression> _falsePart = falsePart;
+        private JLeftPadded<Expression> _falsePart = falsePart;
         public Expression FalsePart => _falsePart.Element;
 
         public Ternary WithFalsePart(Expression newFalsePart)
         {
             return Padding.WithFalsePart(_falsePart.WithElement(newFalsePart));
         }
-        public JavaType? Type => type;
+        public JavaType? Type { get;  set; } = type;
 
         public Ternary WithType(JavaType? newType)
         {
-            return newType == type ? this : new Ternary(id, prefix, markers, condition, _truePart, _falsePart, newType);
+            return newType == Type ? this : new Ternary(Id, Prefix, Markers, Condition, _truePart, _falsePart, newType);
         }
         public sealed record PaddingHelper(J.Ternary T)
         {
-            public JLeftPadded<Expression> TruePart => T._truePart;
+            public JLeftPadded<Expression> TruePart { get => T._truePart;  set => T._truePart = value; }
 
             public J.Ternary WithTruePart(JLeftPadded<Expression> newTruePart)
             {
-                return T._truePart == newTruePart ? T : new J.Ternary(T.Id, T.Prefix, T.Markers, T.Condition, newTruePart, T._falsePart, T.Type);
+                return TruePart == newTruePart ? T : new J.Ternary(T.Id, T.Prefix, T.Markers, T.Condition, newTruePart, T._falsePart, T.Type);
             }
 
-            public JLeftPadded<Expression> FalsePart => T._falsePart;
+            public JLeftPadded<Expression> FalsePart { get => T._falsePart;  set => T._falsePart = value; }
 
             public J.Ternary WithFalsePart(JLeftPadded<Expression> newFalsePart)
             {
-                return T._falsePart == newFalsePart ? T : new J.Ternary(T.Id, T.Prefix, T.Markers, T.Condition, T._truePart, newFalsePart, T.Type);
+                return FalsePart == newFalsePart ? T : new J.Ternary(T.Id, T.Prefix, T.Markers, T.Condition, T._truePart, newFalsePart, T.Type);
             }
 
         }

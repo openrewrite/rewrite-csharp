@@ -65,35 +65,35 @@ public partial interface Cs : J
             return v.VisitFixedStatement(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public FixedStatement WithId(Guid newId)
         {
-            return newId == id ? this : new FixedStatement(newId, prefix, markers, declarations, block);
+            return newId == Id ? this : new FixedStatement(newId, Prefix, Markers, Declarations, Block);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public FixedStatement WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new FixedStatement(id, newPrefix, markers, declarations, block);
+            return newPrefix == Prefix ? this : new FixedStatement(Id, newPrefix, Markers, Declarations, Block);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public FixedStatement WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new FixedStatement(id, prefix, newMarkers, declarations, block);
+            return ReferenceEquals(newMarkers, Markers) ? this : new FixedStatement(Id, Prefix, newMarkers, Declarations, Block);
         }
-        public J.ControlParentheses<J.VariableDeclarations> Declarations => declarations;
+        public J.ControlParentheses<J.VariableDeclarations> Declarations { get;  set; } = declarations;
 
         public FixedStatement WithDeclarations(J.ControlParentheses<J.VariableDeclarations> newDeclarations)
         {
-            return ReferenceEquals(newDeclarations, declarations) ? this : new FixedStatement(id, prefix, markers, newDeclarations, block);
+            return ReferenceEquals(newDeclarations, Declarations) ? this : new FixedStatement(Id, Prefix, Markers, newDeclarations, Block);
         }
-        public J.Block Block => block;
+        public J.Block Block { get;  set; } = block;
 
         public FixedStatement WithBlock(J.Block newBlock)
         {
-            return ReferenceEquals(newBlock, block) ? this : new FixedStatement(id, prefix, markers, declarations, newBlock);
+            return ReferenceEquals(newBlock, Block) ? this : new FixedStatement(Id, Prefix, Markers, Declarations, newBlock);
         }
         #if DEBUG_VISITOR
         [DebuggerStepThrough]

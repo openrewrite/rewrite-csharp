@@ -65,38 +65,38 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitImport(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public Import WithId(Guid newId)
         {
-            return newId == id ? this : new Import(newId, prefix, markers, _static, qualid, _alias);
+            return newId == Id ? this : new Import(newId, Prefix, Markers, _static, Qualid, _alias);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public Import WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new Import(id, newPrefix, markers, _static, qualid, _alias);
+            return newPrefix == Prefix ? this : new Import(Id, newPrefix, Markers, _static, Qualid, _alias);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public Import WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new Import(id, prefix, newMarkers, _static, qualid, _alias);
+            return ReferenceEquals(newMarkers, Markers) ? this : new Import(Id, Prefix, newMarkers, _static, Qualid, _alias);
         }
-        private readonly JLeftPadded<bool> _static = @static;
+        private JLeftPadded<bool> _static = @static;
         public bool Static => _static.Element;
 
         public Import WithStatic(bool newStatic)
         {
             return Padding.WithStatic(_static.WithElement(newStatic));
         }
-        public J.FieldAccess Qualid => qualid;
+        public J.FieldAccess Qualid { get;  set; } = qualid;
 
         public Import WithQualid(J.FieldAccess newQualid)
         {
-            return ReferenceEquals(newQualid, qualid) ? this : new Import(id, prefix, markers, _static, newQualid, _alias);
+            return ReferenceEquals(newQualid, Qualid) ? this : new Import(Id, Prefix, Markers, _static, newQualid, _alias);
         }
-        private readonly JLeftPadded<J.Identifier>? _alias = alias;
+        private JLeftPadded<J.Identifier>? _alias = alias;
         public J.Identifier? Alias => _alias?.Element;
 
         public Import WithAlias(J.Identifier? newAlias)
@@ -105,18 +105,18 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.Import T)
         {
-            public JLeftPadded<bool> Static => T._static;
+            public JLeftPadded<bool> Static { get => T._static;  set => T._static = value; }
 
             public J.Import WithStatic(JLeftPadded<bool> newStatic)
             {
-                return T._static == newStatic ? T : new J.Import(T.Id, T.Prefix, T.Markers, newStatic, T.Qualid, T._alias);
+                return Static == newStatic ? T : new J.Import(T.Id, T.Prefix, T.Markers, newStatic, T.Qualid, T._alias);
             }
 
-            public JLeftPadded<J.Identifier>? Alias => T._alias;
+            public JLeftPadded<J.Identifier>? Alias { get => T._alias;  set => T._alias = value; }
 
             public J.Import WithAlias(JLeftPadded<J.Identifier>? newAlias)
             {
-                return T._alias == newAlias ? T : new J.Import(T.Id, T.Prefix, T.Markers, T._static, T.Qualid, newAlias);
+                return Alias == newAlias ? T : new J.Import(T.Id, T.Prefix, T.Markers, T._static, T.Qualid, newAlias);
             }
 
         }

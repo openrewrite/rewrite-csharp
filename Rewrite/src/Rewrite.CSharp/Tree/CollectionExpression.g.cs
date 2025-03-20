@@ -65,44 +65,44 @@ public partial interface Cs : J
             return v.VisitCollectionExpression(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public CollectionExpression WithId(Guid newId)
         {
-            return newId == id ? this : new CollectionExpression(newId, prefix, markers, _elements, type);
+            return newId == Id ? this : new CollectionExpression(newId, Prefix, Markers, _elements, Type);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public CollectionExpression WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new CollectionExpression(id, newPrefix, markers, _elements, type);
+            return newPrefix == Prefix ? this : new CollectionExpression(Id, newPrefix, Markers, _elements, Type);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public CollectionExpression WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new CollectionExpression(id, prefix, newMarkers, _elements, type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new CollectionExpression(Id, Prefix, newMarkers, _elements, Type);
         }
-        private readonly IList<JRightPadded<Expression>> _elements = elements;
+        private IList<JRightPadded<Expression>> _elements = elements;
         public IList<Expression> Elements => _elements.Elements();
 
         public CollectionExpression WithElements(IList<Expression> newElements)
         {
             return Padding.WithElements(_elements.WithElements(newElements));
         }
-        public JavaType Type => type;
+        public JavaType Type { get;  set; } = type;
 
         public CollectionExpression WithType(JavaType newType)
         {
-            return newType == type ? this : new CollectionExpression(id, prefix, markers, _elements, newType);
+            return newType == Type ? this : new CollectionExpression(Id, Prefix, Markers, _elements, newType);
         }
         public sealed record PaddingHelper(Cs.CollectionExpression T)
         {
-            public IList<JRightPadded<Expression>> Elements => T._elements;
+            public IList<JRightPadded<Expression>> Elements { get => T._elements;  set => T._elements = value; }
 
             public Cs.CollectionExpression WithElements(IList<JRightPadded<Expression>> newElements)
             {
-                return T._elements == newElements ? T : new Cs.CollectionExpression(T.Id, T.Prefix, T.Markers, newElements, T.Type);
+                return Elements == newElements ? T : new Cs.CollectionExpression(T.Id, T.Prefix, T.Markers, newElements, T.Type);
             }
 
         }

@@ -81,25 +81,25 @@ public partial interface Cs : J
             return v.VisitArrowExpressionClause(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public ArrowExpressionClause WithId(Guid newId)
         {
-            return newId == id ? this : new ArrowExpressionClause(newId, prefix, markers, _expression);
+            return newId == Id ? this : new ArrowExpressionClause(newId, Prefix, Markers, _expression);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public ArrowExpressionClause WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new ArrowExpressionClause(id, newPrefix, markers, _expression);
+            return newPrefix == Prefix ? this : new ArrowExpressionClause(Id, newPrefix, Markers, _expression);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public ArrowExpressionClause WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new ArrowExpressionClause(id, prefix, newMarkers, _expression);
+            return ReferenceEquals(newMarkers, Markers) ? this : new ArrowExpressionClause(Id, Prefix, newMarkers, _expression);
         }
-        private readonly JRightPadded<Expression> _expression = expression;
+        private JRightPadded<Expression> _expression = expression;
         public Expression Expression => _expression.Element;
 
         public ArrowExpressionClause WithExpression(Expression newExpression)
@@ -108,11 +108,11 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.ArrowExpressionClause T)
         {
-            public JRightPadded<Expression> Expression => T._expression;
+            public JRightPadded<Expression> Expression { get => T._expression;  set => T._expression = value; }
 
             public Cs.ArrowExpressionClause WithExpression(JRightPadded<Expression> newExpression)
             {
-                return T._expression == newExpression ? T : new Cs.ArrowExpressionClause(T.Id, T.Prefix, T.Markers, newExpression);
+                return Expression == newExpression ? T : new Cs.ArrowExpressionClause(T.Id, T.Prefix, T.Markers, newExpression);
             }
 
         }

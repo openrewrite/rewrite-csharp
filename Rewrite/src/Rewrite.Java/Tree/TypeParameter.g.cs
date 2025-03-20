@@ -66,43 +66,43 @@ public partial interface J : Rewrite.Core.Tree
             return v.VisitTypeParameter(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public TypeParameter WithId(Guid newId)
         {
-            return newId == id ? this : new TypeParameter(newId, prefix, markers, annotations, modifiers, name, _bounds);
+            return newId == Id ? this : new TypeParameter(newId, Prefix, Markers, Annotations, Modifiers, Name, _bounds);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public TypeParameter WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new TypeParameter(id, newPrefix, markers, annotations, modifiers, name, _bounds);
+            return newPrefix == Prefix ? this : new TypeParameter(Id, newPrefix, Markers, Annotations, Modifiers, Name, _bounds);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public TypeParameter WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new TypeParameter(id, prefix, newMarkers, annotations, modifiers, name, _bounds);
+            return ReferenceEquals(newMarkers, Markers) ? this : new TypeParameter(Id, Prefix, newMarkers, Annotations, Modifiers, Name, _bounds);
         }
-        public IList<J.Annotation> Annotations => annotations;
+        public IList<J.Annotation> Annotations { get;  set; } = annotations;
 
         public TypeParameter WithAnnotations(IList<J.Annotation> newAnnotations)
         {
-            return newAnnotations == annotations ? this : new TypeParameter(id, prefix, markers, newAnnotations, modifiers, name, _bounds);
+            return newAnnotations == Annotations ? this : new TypeParameter(Id, Prefix, Markers, newAnnotations, Modifiers, Name, _bounds);
         }
-        public IList<J.Modifier> Modifiers => modifiers;
+        public IList<J.Modifier> Modifiers { get;  set; } = modifiers;
 
         public TypeParameter WithModifiers(IList<J.Modifier> newModifiers)
         {
-            return newModifiers == modifiers ? this : new TypeParameter(id, prefix, markers, annotations, newModifiers, name, _bounds);
+            return newModifiers == Modifiers ? this : new TypeParameter(Id, Prefix, Markers, Annotations, newModifiers, Name, _bounds);
         }
-        public Expression Name => name;
+        public Expression Name { get;  set; } = name;
 
         public TypeParameter WithName(Expression newName)
         {
-            return ReferenceEquals(newName, name) ? this : new TypeParameter(id, prefix, markers, annotations, modifiers, newName, _bounds);
+            return ReferenceEquals(newName, Name) ? this : new TypeParameter(Id, Prefix, Markers, Annotations, Modifiers, newName, _bounds);
         }
-        private readonly JContainer<TypeTree>? _bounds = bounds;
+        private JContainer<TypeTree>? _bounds = bounds;
         public IList<TypeTree>? Bounds => _bounds?.GetElements();
 
         public TypeParameter WithBounds(IList<TypeTree>? newBounds)
@@ -111,11 +111,11 @@ public partial interface J : Rewrite.Core.Tree
         }
         public sealed record PaddingHelper(J.TypeParameter T)
         {
-            public JContainer<TypeTree>? Bounds => T._bounds;
+            public JContainer<TypeTree>? Bounds { get => T._bounds;  set => T._bounds = value; }
 
             public J.TypeParameter WithBounds(JContainer<TypeTree>? newBounds)
             {
-                return T._bounds == newBounds ? T : new J.TypeParameter(T.Id, T.Prefix, T.Markers, T.Annotations, T.Modifiers, T.Name, newBounds);
+                return Bounds == newBounds ? T : new J.TypeParameter(T.Id, T.Prefix, T.Markers, T.Annotations, T.Modifiers, T.Name, newBounds);
             }
 
         }

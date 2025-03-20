@@ -89,32 +89,32 @@ public partial interface Cs : J
             return v.VisitSwitchStatement(this, p);
         }
 
-        public Guid Id => id;
+        public Guid Id { get;  set; } = id;
 
         public SwitchStatement WithId(Guid newId)
         {
-            return newId == id ? this : new SwitchStatement(newId, prefix, markers, _expression, _sections);
+            return newId == Id ? this : new SwitchStatement(newId, Prefix, Markers, _expression, _sections);
         }
-        public Space Prefix => prefix;
+        public Space Prefix { get;  set; } = prefix;
 
         public SwitchStatement WithPrefix(Space newPrefix)
         {
-            return newPrefix == prefix ? this : new SwitchStatement(id, newPrefix, markers, _expression, _sections);
+            return newPrefix == Prefix ? this : new SwitchStatement(Id, newPrefix, Markers, _expression, _sections);
         }
-        public Markers Markers => markers;
+        public Markers Markers { get;  set; } = markers;
 
         public SwitchStatement WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, markers) ? this : new SwitchStatement(id, prefix, newMarkers, _expression, _sections);
+            return ReferenceEquals(newMarkers, Markers) ? this : new SwitchStatement(Id, Prefix, newMarkers, _expression, _sections);
         }
-        private readonly JContainer<Expression> _expression = expression;
+        private JContainer<Expression> _expression = expression;
         public IList<Expression> Expression => _expression.GetElements();
 
         public SwitchStatement WithExpression(IList<Expression> newExpression)
         {
             return Padding.WithExpression(JContainer<Expression>.WithElements(_expression, newExpression));
         }
-        private readonly JContainer<Cs.SwitchSection> _sections = sections;
+        private JContainer<Cs.SwitchSection> _sections = sections;
         public IList<Cs.SwitchSection> Sections => _sections.GetElements();
 
         public SwitchStatement WithSections(IList<Cs.SwitchSection> newSections)
@@ -123,18 +123,18 @@ public partial interface Cs : J
         }
         public sealed record PaddingHelper(Cs.SwitchStatement T)
         {
-            public JContainer<Expression> Expression => T._expression;
+            public JContainer<Expression> Expression { get => T._expression;  set => T._expression = value; }
 
             public Cs.SwitchStatement WithExpression(JContainer<Expression> newExpression)
             {
-                return T._expression == newExpression ? T : new Cs.SwitchStatement(T.Id, T.Prefix, T.Markers, newExpression, T._sections);
+                return Expression == newExpression ? T : new Cs.SwitchStatement(T.Id, T.Prefix, T.Markers, newExpression, T._sections);
             }
 
-            public JContainer<Cs.SwitchSection> Sections => T._sections;
+            public JContainer<Cs.SwitchSection> Sections { get => T._sections;  set => T._sections = value; }
 
             public Cs.SwitchStatement WithSections(JContainer<Cs.SwitchSection> newSections)
             {
-                return T._sections == newSections ? T : new Cs.SwitchStatement(T.Id, T.Prefix, T.Markers, T._expression, newSections);
+                return Sections == newSections ? T : new Cs.SwitchStatement(T.Id, T.Prefix, T.Markers, T._expression, newSections);
             }
 
         }
