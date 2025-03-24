@@ -1,6 +1,6 @@
 <Project>
     <ItemGroup>
-        <None Include="$(SolutionDir)resources\$(PackageIcon)" Pack="true" PackagePath="" />
+        <None Include="$(MSBuildThisFileDirectory)resources\$(PackageIcon)" Pack="true" PackagePath="" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" PrivateAssets="all"/>
@@ -9,9 +9,10 @@
         <Using Include="JetBrains.Annotations" />
     </ItemGroup>
     <Target Name="EnsuringPackageIconPresence" BeforeTargets="Pack">
+        <Message Importance="high" Text="$(OutputPath)$(PackageIcon)"/>
         <Copy
-                SourceFiles="$(SolutionDir)resources\$(PackageIcon)"
-                DestinationFiles="$(TargetDir)$(PackageIcon)"
+                SourceFiles="$(MSBuildThisFileDirectory)resources\$(PackageIcon)"
+                DestinationFiles="$(OutputPath)$(PackageIcon)"
                 SkipUnchangedFiles="true"/>
     </Target>
 </Project>

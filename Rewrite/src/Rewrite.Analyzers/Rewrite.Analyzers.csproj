@@ -5,6 +5,8 @@
         <IncludeBuildOutput>false</IncludeBuildOutput> <!-- disable convention based nuget creation - we're controlling it fully manually -->
         <NoWarn>NU5128</NoWarn>
         <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
+        <BuildOutputTargetFolder>analyzers</BuildOutputTargetFolder>
+        <IncludeSymbols>false</IncludeSymbols>
     </PropertyGroup>
 
     <ItemGroup>
