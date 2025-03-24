@@ -12,7 +12,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nuke.Common" Version="8.1.0" />
+    <PackageReference Include="Nuke.Common" Version="9.0.4" />
+    <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
+
   </ItemGroup>
 
   <ItemGroup>

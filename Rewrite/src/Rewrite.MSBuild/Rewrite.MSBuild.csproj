@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <PackageIcon>moderne.png</PackageIcon>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="log4net" Version="2.0.17" />
+        <PackageReference Include="Microsoft.Build" Version="17.10.4" ExcludeAssets="runtime"/>
+        <PackageReference Include="Microsoft.Build.Locator" Version="1.7.8"/>
+        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.12.0" NoWarn="NU5104"  />
+        <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.12.0" NoWarn="NU5104"  />
+        <PackageReference Include="NuGet.PackageManagement" Version="6.10.1" />
+        <PackageReference Include="NuGet.ProjectModel" Version="6.10.1" />
+        <PackageReference Include="NuGet.Protocol" Version="6.10.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
+        <ProjectReference Include="..\Rewrite.CSharp\Rewrite.CSharp.csproj" />
+        <ProjectReference Include="..\Rewrite.Xml\Rewrite.Xml.csproj" />
+    </ItemGroup>
+
+
+</Project>

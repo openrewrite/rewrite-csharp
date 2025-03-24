@@ -19,15 +19,8 @@
         <ProjectReference Include="..\Rewrite.Xml\Rewrite.Xml.csproj" />
         <ProjectReference Include="..\Rewrite.Yaml\Rewrite.Yaml.csproj" />
         <ProjectReference Include="..\Rewrite.Remote.Codec\Rewrite.Remote.Codec.csproj" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(RELEASE_BUILD)'==''">
-      <ProjectReference Include="$(RewriteRemoteDir)\src\Rewrite.Remote\Rewrite.Remote.csproj" />
-      <ProjectReference Include="$(RewriteRemoteDir)\src\Rewrite.Remote.Server\Rewrite.Remote.Server.csproj" />
-    </ItemGroup>
-    <ItemGroup Condition="'$(RELEASE_BUILD)'!=''">
-      <PackageReference Include="Rewrite.Remote" Version="$(RewriteRemoteVersion)"/>
-      <PackageReference Include="Rewrite.Remote.Server" Version="$(RewriteRemoteVersion)"/>
+        <ProjectReference Include="..\Rewrite.Remote\Rewrite.Remote.csproj" />
+        <ProjectReference Include="..\Rewrite.Remote.Server\Rewrite.Remote.Server.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -24,6 +24,7 @@ env:
   GRADLE_ENTERPRISE_CACHE_USERNAME: ${{ secrets.gradle_enterprise_cache_username }}
   GRADLE_ENTERPRISE_CACHE_PASSWORD: ${{ secrets.gradle_enterprise_cache_password }}
   RELEASE_BUILD: "true"
+  CI: true
 
 jobs:
   build:
@@ -52,9 +53,21 @@ jobs:
           ./gradlew ${{ env.GRADLE_SWITCHES }} assemble
           (cd Rewrite && dotnet restore Rewrite.sln --no-cache --force --force-evaluate)
           (cd Rewrite && dotnet publish Rewrite.sln --no-restore)
-      - name: test
+
+      - name: DotNet Tests
         run: |
-          (cd Rewrite && dotnet test Rewrite.sln --filter "Category!=KnownBug & Category!=Exploratory & Category!=Roslyn")
+          ./build.sh Test
+
+      - name: Report .NET Test Results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Unit Tests
+          path: artifacts/test-results/*.trx
+          reporter: dotnet-trx
+
+      - name: Java Tests
+        run: |
           ./gradlew ${{ env.GRADLE_SWITCHES }} test
 
       - name: publish-java-snapshots
@@ -66,12 +79,10 @@ jobs:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.OSSRH_SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.OSSRH_SIGNING_PASSWORD }}
 
-      - name: publish-dotnet-snapshots
+      - name: dotnet-ci-build
         if: github.event_name != 'pull_request'
-        run: |
-          cd Rewrite
-          mkdir ~/localNugetFeed
-          dotnet pack --version-suffix rc.${{ github.run_number }} --output ~/localNuGetFeed Rewrite.sln
-          dotnet nuget push ~/localNuGetFeed/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{env.NUGET_API_KEY}}
+        run: ./build.sh CIBuild
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+

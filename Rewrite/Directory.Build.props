@@ -11,17 +11,18 @@
         <PackageIcon>openrewrite.png</PackageIcon>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <VersionPrefix>0.23.0</VersionPrefix>
-        <RewriteRemoteDir Condition="'$(RewriteRemoteDir)'==''">..\..\..\..\..\moderneinc\rewrite-remote\Rewrite.Remote</RewriteRemoteDir>
-        <RemotePrinter>True</RemotePrinter>
+        <RemotePrinter>False</RemotePrinter>
         <DebugVisitor>False</DebugVisitor>
         <SanitizeStackTrace>True</SanitizeStackTrace>
         <EmbeddedServer>true</EmbeddedServer>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <PropertyGroup>
-        <RewriteRemoteVersion>0.18.1</RewriteRemoteVersion>
         <MicrosoftCodeAnalysisVersion>4.12.0</MicrosoftCodeAnalysisVersion>
     </PropertyGroup>
+
 
     <Import Project="Directory.Build.props.user" Condition="Exists('Directory.Build.props.user')"/>
 

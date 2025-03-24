@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Rewrite.Core;
 using Rewrite.Core.Quark;
+using Rewrite.CSharp.Tests;
 using Rewrite.RewriteCSharp;
 using Rewrite.RewriteJava.Tree;
 using Xunit.Abstractions;
@@ -178,7 +179,10 @@ public class RewriteTest(ITestOutputHelper output)
                     throw new Exception($"LST should not contain unknown nodes: {unknown.First()}");
                 }
 
-                _output.WriteLine(sourceFile.RenderLstTree());
+                if(!EnvironmentInfo.IsCI)
+                {
+                    _output.WriteLine(sourceFile.RenderLstTree());
+                }
                 var markers = sourceFile.Markers;
 
                 sourceSpecIter.MoveNext().Should().BeTrue();
