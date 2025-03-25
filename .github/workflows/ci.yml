@@ -70,6 +70,9 @@ jobs:
           path: artifacts/test-results/*.trx
           reporter: dotnet-trx
 
+
+
+
       - name: java-build
         run: |
           ./gradlew ${{ env.GRADLE_SWITCHES }} assemble
@@ -77,6 +80,15 @@ jobs:
       - name: Java Tests
         run: |
           ./gradlew ${{ env.GRADLE_SWITCHES }} test
+
+      - name: Report Java Test Results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Unit Tests
+          path: rewrite-csharp-remote-server/build/test-results/test/*.xml
+          reporter: java-junit
+
 
       - name: publish-java-snapshots
         if: github.event_name != 'pull_request'
@@ -87,10 +99,6 @@ jobs:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.OSSRH_SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.OSSRH_SIGNING_PASSWORD }}
 
-      - name: dotnet-ci-build
-        if: github.event_name != 'pull_request'
-        run: ./build.sh CIBuild
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
 
 
