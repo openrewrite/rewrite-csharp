@@ -79,6 +79,17 @@ class Build : NukeBuild
                 .SetProject(Solution.Path)
                 .SetVersion(Version.NuGetPackageVersion)
                 .SetOutputDirectory(ArtifactsDirectory));
+
+        });
+
+    Target PublishServer => _ => _
+        .Description("Publishes server")
+        .DependsOn(Restore)
+        .Executes(() =>
+        {
+            DotNetPublish(c => c
+                .SetProject(Solution.src.Rewrite_Server)
+                .SetVersion(Version.NuGetPackageVersion));
         });
 
     Target Test => _ => _
@@ -126,7 +137,7 @@ class Build : NukeBuild
         });
 
     Target CIBuild => _ => _
-        .DependsOn(Compile);
+        .DependsOn(PublishServer, Test);
 
     Target CIRelease => _ => _
         .DependsOn(Pack, NugetPush);

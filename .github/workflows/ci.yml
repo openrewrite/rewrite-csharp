@@ -58,9 +58,9 @@ jobs:
 #          (cd Rewrite && dotnet restore Rewrite.sln --no-cache --force --force-evaluate)
 #          (cd Rewrite && dotnet publish Rewrite.sln --no-restore)
 
-      - name: DotNet Tests
+      - name: DotNet Build & Test
         run: |
-          ./build.sh Test
+          ./build.sh CIBuild
 
       - name: Report .NET Test Results
         if: always()

@@ -32,6 +32,7 @@
         "GradleAssemble",
         "NugetPush",
         "Pack",
+        "PublishServer",
         "Restore",
         "Test"
       ]
