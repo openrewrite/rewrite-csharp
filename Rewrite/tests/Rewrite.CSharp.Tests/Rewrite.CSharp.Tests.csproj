@@ -32,11 +32,8 @@
         </PackageReference>
     </ItemGroup>
 
-    <ItemGroup Condition="'$(RELEASE_BUILD)'==''">
-      <ProjectReference Include="$(RewriteRemoteDir)\src\Rewrite.MSBuild\Rewrite.MSBuild.csproj" />
-    </ItemGroup>
-    <ItemGroup Condition="'$(RELEASE_BUILD)'!=''">
-      <PackageReference Include="Rewrite.MSBuild" Version="0.8.5" />
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Rewrite.MSBuild\Rewrite.MSBuild.csproj" />
     </ItemGroup>
 
     <ItemGroup>
