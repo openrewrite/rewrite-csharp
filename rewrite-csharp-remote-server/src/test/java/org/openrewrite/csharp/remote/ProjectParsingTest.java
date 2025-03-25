@@ -16,6 +16,7 @@
 
 package org.openrewrite.csharp.remote;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.Cursor;
 import org.openrewrite.InMemoryExecutionContext;
@@ -31,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ProjectParsingTest {
 
+    @SneakyThrows
     @Test
     public void testParse() {
         WatchableExecutionContext ctx =
@@ -50,7 +52,7 @@ public class ProjectParsingTest {
               .getContextClassLoader()
               .getResource(
                 "ModerneHelloWorld/ModerneHelloWorld.sln")
-              .getPath());
+                    .toURI());
             client.findAllProjects(pathToSolution, ctx)
               .forEach(proj -> client.parseProjectSources(proj,
                   pathToSolution,
