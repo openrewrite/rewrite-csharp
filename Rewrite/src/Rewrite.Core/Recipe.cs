@@ -14,6 +14,7 @@ public abstract class Recipe
             return _descriptor ??= new RecipeDescriptor(
                 Name,
                 DisplayName,
+                InstanceName,
                 Description,
                 Tags,
                 EstimatedEffortPerOccurrence,

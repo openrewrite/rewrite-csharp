@@ -16,6 +16,7 @@ public class RecipeOptionsTest
         findClassDescriptor.Should().BeEquivalentTo(new RecipeDescriptor(
             "Rewrite.CSharp.Tests.RecipeOptionsTest+TestRecipe",
             "Test Recipe",
+            "Test Recipe Instance",
             "Test Recipe Description",
             new HashSet<string>(),
             TimeSpan.FromMinutes(5),
