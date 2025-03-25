@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Rewrite.Recipes</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
+      <ProjectReference Include="..\Rewrite.CSharp\Rewrite.CSharp.csproj" />
+      <ProjectReference Include="..\Rewrite.Java\Rewrite.Java.csproj" />
+      <ProjectReference Include="..\Rewrite.Json\Rewrite.Json.csproj" />
+      <ProjectReference Include="..\Rewrite.Properties\Rewrite.Properties.csproj" />
+    </ItemGroup>
+
+</Project>

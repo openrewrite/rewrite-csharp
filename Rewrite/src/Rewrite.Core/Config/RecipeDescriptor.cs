@@ -9,6 +9,7 @@ public class RecipeDescriptor
     // Properties with public getters and private setters to maintain immutability
     public string Name { get; }
     public string DisplayName { get; }
+    public string InstanceName { get; }
     public string Description { get; }
     public ISet<string> Tags { get; }
     public TimeSpan? EstimatedEffortPerOccurrence { get; }
@@ -21,13 +22,21 @@ public class RecipeDescriptor
     public Uri Source { get; }
 
     // Constructor to initialize the properties
-    public RecipeDescriptor(string name, string displayName, string description, ISet<string> tags,
-        TimeSpan? estimatedEffortPerOccurrence, List<OptionDescriptor> options, List<RecipeDescriptor> recipeList,
+    public RecipeDescriptor(
+        string name,
+        string displayName,
+        string instanceName,
+        string description,
+        ISet<string> tags,
+        TimeSpan? estimatedEffortPerOccurrence,
+        List<OptionDescriptor> options,
+        List<RecipeDescriptor> recipeList,
         /*List<DataTableDescriptor> dataTables, List<Maintainer> maintainers, List<Contributor> contributors,
         List<RecipeExample> examples,*/ Uri source)
     {
         Name = name;
         DisplayName = displayName;
+        InstanceName = instanceName;
         Description = description;
         Tags = tags;
         EstimatedEffortPerOccurrence = estimatedEffortPerOccurrence;
@@ -60,6 +69,7 @@ public class RecipeDescriptor
     public RecipeDescriptor With(
         string? name = null,
         string? displayName = null,
+        string? instanceName = null,
         string? description = null,
         HashSet<string>? tags = null,
         TimeSpan? estimatedEffortPerOccurrence = null,
@@ -74,6 +84,7 @@ public class RecipeDescriptor
         return new RecipeDescriptor(
             name ?? this.Name,
             displayName ?? this.DisplayName,
+            instanceName ?? this.InstanceName,
             description ?? this.Description,
             tags ?? this.Tags,
             estimatedEffortPerOccurrence ?? this.EstimatedEffortPerOccurrence,

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+        <RootNamespace>Rewrite.Recipes</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector" Version="6.0.0"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.0-release-24352-06" />
+        <PackageReference Include="xunit" Version="2.8.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Rewrite.Recipes\Rewrite.Recipes.csproj" />
+      <ProjectReference Include="..\..\src\Rewrite.Test.CSharp\Rewrite.Test.CSharp.csproj" />
+      <ProjectReference Include="..\..\src\Rewrite.Test.Engine.Remote\Rewrite.Test.Engine.Remote.csproj" />
+      <ProjectReference Include="..\..\src\Rewrite.Test\Rewrite.Test.csproj" />
+    </ItemGroup>
+
+</Project>
