@@ -16,6 +16,7 @@ public class AutoFormatterTests(ITestOutputHelper output) : RewriteTest(output)
         RewriteRun(CSharp(
             before: """
                 public class Foo { public int   A {    get;  set;   } }
+                
                 """,
             after: """
                    public class Foo
