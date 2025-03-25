@@ -1,8 +1,14 @@
-﻿namespace Rewrite.RewriteCSharp.Format;
+﻿using System.Runtime.InteropServices;
+
+namespace Rewrite.RewriteCSharp.Format;
 
 internal record FormatStyle(string Indentation, string NewLine)
     {
-        const string DefaultNewLine = "\r\n";
+        static FormatStyle()
+        {
+            DefaultNewLine = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "\r\n" : "\n";
+        }
+        static string DefaultNewLine;
         public bool UseTabs => Indentation == "\t";
         public int IdentationSize => Indentation.Length;
 
