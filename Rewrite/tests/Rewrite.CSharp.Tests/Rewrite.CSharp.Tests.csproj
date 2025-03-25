@@ -33,10 +33,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Rewrite.MSBuild\Rewrite.MSBuild.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
         <Using Include="Xunit.Assert" Alias="Assert"/>
         <Using Include="Nuke.Common"/>
         <Using Include="Nuke.Common"/>
@@ -54,8 +50,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Rewrite.Test.CSharp\Rewrite.Test.CSharp.csproj" />
-      <ProjectReference Include="..\..\src\Rewrite.Test.Engine.Remote\Rewrite.Test.Engine.Remote.csproj" />
+        <ProjectReference Include="..\..\src\Rewrite.MSBuild\Rewrite.MSBuild.csproj" />
+        <ProjectReference Include="..\..\src\Rewrite.Test.CSharp\Rewrite.Test.CSharp.csproj" />
+        <ProjectReference Include="..\..\src\Rewrite.Test.Engine.Remote\Rewrite.Test.Engine.Remote.csproj" />
     </ItemGroup>
 
 </Project>
