@@ -8,10 +8,10 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class PropertyDeclarationTests(ITestOutputHelper output) : RewriteTest(output)
+public class PropertyDeclarationTests : RewriteTest
 {
 
-    [Fact]
+    [Test]
     void SimpleAutoPropertyDeclaration()
     {
         RewriteRun(
@@ -30,7 +30,7 @@ public class PropertyDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     void AutoPropertyWithInitializerDeclaration()
     {
         RewriteRun(
@@ -50,7 +50,7 @@ public class PropertyDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     void SimpleExplicitPropertyDeclaration()
     {
         RewriteRun(
@@ -83,7 +83,7 @@ public class PropertyDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     void ExpressionBodyAccessorsPropertyDeclaration()
     {
         RewriteRun(
@@ -107,7 +107,7 @@ public class PropertyDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     void ExpressionBodyPropertyDeclaration()
     {
         RewriteRun(
@@ -123,7 +123,7 @@ public class PropertyDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     void BinaryExpressionProperty()
     {
         var sourceSpec = CSharp(
@@ -136,7 +136,7 @@ public class PropertyDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         RewriteRun(sourceSpec);
     }
 
-    [Fact]
+    [Test]
     void UnaryExpressionProperty()
     {
         var sourceSpec = CSharp(
@@ -150,7 +150,7 @@ public class PropertyDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
     }
 
 
-    [Fact]
+    [Test]
     void AccessorWithAnnotation()
     {
         var sourceSpec = CSharp(

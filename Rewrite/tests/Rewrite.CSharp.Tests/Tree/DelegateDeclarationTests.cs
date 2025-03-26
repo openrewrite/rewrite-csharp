@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class DelegateDeclarationTests(ITestOutputHelper output) : RewriteTest(output)
+public class DelegateDeclarationTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void SimpleDelegateDeclaration()
     {
         RewriteRun(
@@ -19,7 +19,7 @@ public class DelegateDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     public void DelegateWithParameters()
     {
         RewriteRun(
@@ -31,7 +31,7 @@ public class DelegateDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     public void GenericDelegate()
     {
         RewriteRun(
@@ -43,7 +43,7 @@ public class DelegateDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     public void DelegateWithMultipleTypeParameters()
     {
         RewriteRun(
@@ -55,7 +55,7 @@ public class DelegateDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     public void DelegateWithConstraints()
     {
         RewriteRun(
@@ -67,7 +67,7 @@ public class DelegateDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     public void DelegateWithNullableParameter()
     {
         RewriteRun(
@@ -79,7 +79,7 @@ public class DelegateDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     public void DelegateWithRefParameter()
     {
         RewriteRun(
@@ -91,7 +91,7 @@ public class DelegateDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     public void DelegateWithOutParameter()
     {
         RewriteRun(
@@ -103,7 +103,7 @@ public class DelegateDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     public void NestedDelegate()
     {
         RewriteRun(

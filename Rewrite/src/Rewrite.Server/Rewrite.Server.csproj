@@ -12,22 +12,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
-        <ProjectReference Include="..\Rewrite.CSharp\Rewrite.CSharp.csproj" />
-        <ProjectReference Include="..\Rewrite.Json\Rewrite.Json.csproj" />
-        <ProjectReference Include="..\Rewrite.Properties\Rewrite.Properties.csproj" />
-        <ProjectReference Include="..\Rewrite.Xml\Rewrite.Xml.csproj" />
-        <ProjectReference Include="..\Rewrite.Yaml\Rewrite.Yaml.csproj" />
+        <ProjectReference Include="..\Rewrite.MSBuild\Rewrite.MSBuild.csproj" />
         <ProjectReference Include="..\Rewrite.Remote.Codec\Rewrite.Remote.Codec.csproj" />
-        <ProjectReference Include="..\Rewrite.Remote\Rewrite.Remote.csproj" />
-        <ProjectReference Include="..\Rewrite.Remote.Server\Rewrite.Remote.Server.csproj" />
+
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="CommandLineParser" Version="2.9.1" />
-      <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="$(MicrosoftCodeAnalysisVersion)" NoWarn="NU5104"  />
-      <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="$(MicrosoftCodeAnalysisVersion)" NoWarn="NU5104"  />
-      <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="$(MicrosoftCodeAnalysisVersion)" NoWarn="NU5104"  />
+        <PackageReference Include="Serilog" Version="4.2.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+        <PackageReference Include="CommandLineParser" Version="2.9.1" />
+        <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="$(MicrosoftCodeAnalysisVersion)" NoWarn="NU5104"  />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="$(MicrosoftCodeAnalysisVersion)" NoWarn="NU5104"  />
+        <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="$(MicrosoftCodeAnalysisVersion)" NoWarn="NU5104"  />
+        <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
     </ItemGroup>
 
 </Project>

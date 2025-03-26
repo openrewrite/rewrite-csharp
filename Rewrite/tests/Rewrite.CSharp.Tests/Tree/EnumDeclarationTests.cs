@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class EnumDeclarationTests(ITestOutputHelper output) : RewriteTest(output)
+public class EnumDeclarationTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void BasicEnum()
     {
         RewriteRun(
@@ -23,7 +23,7 @@ public class EnumDeclarationTests(ITestOutputHelper output) : RewriteTest(output
         );
     }
 
-    [Fact]
+    [Test]
     public void EmptyEnum()
     {
         RewriteRun(
@@ -38,7 +38,7 @@ public class EnumDeclarationTests(ITestOutputHelper output) : RewriteTest(output
         );
     }
 
-    [Fact]
+    [Test]
     public void EnumWithBaseType()
     {
         RewriteRun(
@@ -55,7 +55,7 @@ public class EnumDeclarationTests(ITestOutputHelper output) : RewriteTest(output
         );
     }
 
-    [Fact]
+    [Test]
     public void EnumWithValues()
     {
         RewriteRun(
@@ -73,7 +73,7 @@ public class EnumDeclarationTests(ITestOutputHelper output) : RewriteTest(output
     }
 
 
-    [Fact]
+    [Test]
     public void EnumWithAttributes()
     {
         RewriteRun(

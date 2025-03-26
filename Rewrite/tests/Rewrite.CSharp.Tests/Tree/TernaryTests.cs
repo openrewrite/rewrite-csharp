@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class TernaryTests(ITestOutputHelper output) : RewriteTest(output)
+public class TernaryTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void Simple()
     {
         RewriteRun(
@@ -22,7 +22,7 @@ public class TernaryTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void Space()
     {
         RewriteRun(

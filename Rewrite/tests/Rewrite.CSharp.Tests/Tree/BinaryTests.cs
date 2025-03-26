@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class BinaryTests(ITestOutputHelper output) : RewriteTest(output)
+public class BinaryTests : RewriteTest
 {
-    [Fact]
+    [Test]
     void Arithmetic()
     {
         RewriteRun(
@@ -33,7 +33,7 @@ public class BinaryTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void BooleanLogic()
     {
         RewriteRun(
@@ -53,7 +53,7 @@ public class BinaryTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void NullCoalescing()
     {
         RewriteRun(
@@ -71,7 +71,7 @@ public class BinaryTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void As()
     {
         RewriteRun(

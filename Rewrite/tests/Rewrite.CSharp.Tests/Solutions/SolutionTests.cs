@@ -3,20 +3,18 @@ using System.Runtime.ExceptionServices;
 using System.Text.RegularExpressions;
 using Rewrite.MSBuild;
 using Rewrite.RewriteCSharp.Marker;
-using Rewrite.RewriteJson.Tree;
 using Rewrite.Test.CSharp;
 
 namespace Rewrite.CSharp.Tests.Solutions;
 
 using static Assertions;
 
-[Collection("C# remoting")]
-public class SolutionTests(ITestOutputHelper output) : RewriteTest(output)
+public class SolutionTests : RewriteTest
 {
 
 
-    [Fact]
-    [Exploratory]
+    [Test]
+    [Explicit]
     public void PlayTest()
     {
         var actual = """
@@ -27,8 +25,8 @@ public class SolutionTests(ITestOutputHelper output) : RewriteTest(output)
         actual.ShouldBeSameAs(expected);
     }
 
-    [Fact]
-    [Exploratory]
+    [Test]
+    [Explicit]
     public void RewriteTest()
     {
         this.RewriteRun(CSharp("""
@@ -37,23 +35,23 @@ public class SolutionTests(ITestOutputHelper output) : RewriteTest(output)
 
     }
 
-    [Fact]
-    [Exploratory]
+    [Test]
+    [Explicit]
     public async Task ParseSingleFile()
     {
         var src = await File.ReadAllTextAsync(@"C:\projects\openrewrite\rewrite-csharp\Rewrite\tests\fixtures\Bogus\Source\Bogus.Tests\SchemaTests\LocaleSchemaTests.cs");
         RewriteRun(CSharp(src));
     }
 
-    [Fact]
-    [Exploratory]
+    [Test]
+    [Explicit]
     public async Task UnknownSyntaxReport()
     {
-        var fixtures = Fixtures.Select(fixture => (solutionOrProjectPath: (AbsolutePath)fixture[0], root: (AbsolutePath)fixture[1]));
-
-        var sourceFiles = (await Task.WhenAll(fixtures.Select(async x =>
+        // Type.GetType("Nuke.Common.ParameterService")
+        // AbsolutePath path = NukeBuild.RootDirectory;
+        var sourceFiles = (await Task.WhenAll(Fixtures().Select(async x =>
             {
-                var (solutionOrProjectPath, root) = x;
+                var (solutionOrProjectPath, root) = x();
                 _output.WriteLine(solutionOrProjectPath);
                 var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(1000)).Token;
                 var solutionParser = new SolutionParser();
@@ -125,9 +123,9 @@ public class SolutionTests(ITestOutputHelper output) : RewriteTest(output)
         }
     }
 
-    [Theory]
-    [MemberData(nameof(Fixtures))]
-    [Exploratory]
+    [Test]
+    [MethodDataSource(nameof(Fixtures))]
+    [Explicit]
     public async Task ParseSolution(AbsolutePath solutionPath, AbsolutePath root)
     {
         var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(1000)).Token;
@@ -179,31 +177,28 @@ public class SolutionTests(ITestOutputHelper output) : RewriteTest(output)
         }
     }
 
-    public static IEnumerable<object[]> Fixtures
+    public IEnumerable<Func<(AbsolutePath SolutionOrProject, AbsolutePath RootDir)>> Fixtures()
     {
-        get
+        var fixturesDirectory = NukeBuild.RootDirectory / "Rewrite" / "tests" / "fixtures";
+        if (!fixturesDirectory.Exists())
+            yield break;
+        foreach (var fixture in fixturesDirectory.GetDirectories())
         {
-            var fixturesDirectory = NukeBuild.RootDirectory / "Rewrite" / "tests" / "fixtures";
-            if (!fixturesDirectory.Exists())
-                yield break;
-            foreach (var fixture in fixturesDirectory.GetDirectories())
+            var result = fixture.GlobFiles("**/*.sln").ToList();
+            if (result.Count == 0)
             {
-                var result = fixture.GlobFiles("**/*.sln").ToList();
-                if (result.Count == 0)
-                {
-                    result = fixture.GlobFiles("**/*.csproj").ToList();
-                }
-
-                foreach (var slnOrProj in result)
-                {
-                    var root = fixturesDirectory / fixturesDirectory.GetUnixRelativePathTo(slnOrProj).ToString().Split("/")[0];
-                    yield return new[] { slnOrProj, root  };
-                }
+                result = fixture.GlobFiles("**/*.csproj").ToList();
             }
-            // return fixturesDirectory
-            //     .GetDirectories()
-            //     .SelectMany(x => x.GlobFiles("*.sln"))
-            //     .Select(x => new object[] { x, (AbsolutePath)fixturesDirectory.GetUnixRelativePathTo(x).ToString().Split("/")[0] });
+
+            foreach (var slnOrProj in result)
+            {
+                var root = fixturesDirectory / fixturesDirectory.GetUnixRelativePathTo(slnOrProj).ToString().Split("/")[0];
+                yield return () => (slnOrProj, root);
+            }
         }
     }
 }
+
+internal class NukeHelper : NukeBuild
+{}
+

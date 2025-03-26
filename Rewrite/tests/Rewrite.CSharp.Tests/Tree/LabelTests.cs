@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class LabelTests(ITestOutputHelper output) : RewriteTest(output)
+public class LabelTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void Simple()
     {
         RewriteRun(

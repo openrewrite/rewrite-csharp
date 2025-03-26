@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ThrowTests(ITestOutputHelper output) : RewriteTest(output)
+public class ThrowTests : RewriteTest
 {
-    [Fact]
+    [Test]
     void SimpleThrowStatement()
     {
         RewriteRun(
@@ -23,7 +23,7 @@ public class ThrowTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void EmptyThrowStatement()
     {
         RewriteRun(
@@ -51,7 +51,7 @@ public class ThrowTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void ThrowExpression()
     {
         RewriteRun(

@@ -5,10 +5,10 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ForLoopTests(ITestOutputHelper output) : RewriteTest(output)
+public class ForLoopTests : RewriteTest
 {
 
-    [Fact]
+    [Test]
     void ForLoopMultipleInit()
     {
         RewriteRun(
@@ -27,7 +27,7 @@ public class ForLoopTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void ForLoop()
     {
         RewriteRun(
@@ -44,7 +44,7 @@ public class ForLoopTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void InfiniteLoop()
     {
         RewriteRun(
@@ -61,7 +61,7 @@ public class ForLoopTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void Format()
     {
         RewriteRun(
@@ -78,7 +78,7 @@ public class ForLoopTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void FormatInfiniteLoop()
     {
         RewriteRun(
@@ -94,7 +94,7 @@ public class ForLoopTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void FormatLoopNoInit()
     {
         RewriteRun(
@@ -110,7 +110,7 @@ public class ForLoopTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void FormatLoopNoCondition()
     {
         RewriteRun(
@@ -127,7 +127,7 @@ public class ForLoopTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void StatementTerminatorForSingleLineForLoops()
     {
         RewriteRun(
@@ -143,7 +143,7 @@ public class ForLoopTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void InitializerIsAnAssignment()
     {
         RewriteRun(
@@ -162,7 +162,7 @@ public class ForLoopTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void MultiVariableInitialization()
     {
         RewriteRun(
@@ -178,7 +178,7 @@ public class ForLoopTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void MultiInitExpressions()
     {
         RewriteRun(

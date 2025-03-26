@@ -7,9 +7,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class NullSafeExpressionTests(ITestOutputHelper output) : RewriteTest(output)
+public class NullSafeExpressionTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void Space()
     {
         RewriteRun(
@@ -27,7 +27,7 @@ public class NullSafeExpressionTests(ITestOutputHelper output) : RewriteTest(out
         );
     }
 
-    [Fact]
+    [Test]
     public void NestedMethodCall()
     {
         RewriteRun(
@@ -45,7 +45,7 @@ public class NullSafeExpressionTests(ITestOutputHelper output) : RewriteTest(out
         );
     }
 
-    [Fact]
+    [Test]
     public void FieldAccess()
     {
         RewriteRun(
@@ -70,7 +70,7 @@ public class NullSafeExpressionTests(ITestOutputHelper output) : RewriteTest(out
         );
     }
 
-    [Fact]
+    [Test]
     public void NullSafeArrayAccess()
     {
         var src = CSharp(
@@ -85,7 +85,7 @@ public class NullSafeExpressionTests(ITestOutputHelper output) : RewriteTest(out
             """);
     }
 
-    [Fact]
+    [Test]
     public void SequentialFieldAccess()
     {
         RewriteRun(
@@ -107,7 +107,7 @@ public class NullSafeExpressionTests(ITestOutputHelper output) : RewriteTest(out
     }
 
 
-    [Fact]
+    [Test]
     public void ArrayAccess()
     {
         RewriteRun(
@@ -126,7 +126,7 @@ public class NullSafeExpressionTests(ITestOutputHelper output) : RewriteTest(out
         );
     }
 
-    [Fact]
+    [Test]
     public void MultiLevelWithSpaces()
     {
         RewriteRun(
@@ -140,7 +140,7 @@ public class NullSafeExpressionTests(ITestOutputHelper output) : RewriteTest(out
             """));
     }
 
-    [Fact]
+    [Test]
     public void MultiLevelWithSpaces2()
     {
         RewriteRun(
@@ -150,7 +150,7 @@ public class NullSafeExpressionTests(ITestOutputHelper output) : RewriteTest(out
                 """));
     }
 
-    [Fact]
+    [Test]
     public void FieldWithSpace()
     {
         RewriteRun(

@@ -6,9 +6,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class DestructorTests(ITestOutputHelper output) : RewriteTest(output)
+public class DestructorTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void BasicDestructor()
     {
         RewriteRun(
@@ -22,7 +22,7 @@ public class DestructorTests(ITestOutputHelper output) : RewriteTest(output)
                    """));
     }
 
-    [Fact]
+    [Test]
     public void DestructorWithBody()
     {
         RewriteRun(
@@ -38,7 +38,7 @@ public class DestructorTests(ITestOutputHelper output) : RewriteTest(output)
                    """));
     }
 
-    [Fact]
+    [Test]
     public void PartialDestructor()
     {
         RewriteRun(
@@ -52,7 +52,7 @@ public class DestructorTests(ITestOutputHelper output) : RewriteTest(output)
                    """));
     }
 
-    [Fact]
+    [Test]
     public void NestedClassDestructor()
     {
         RewriteRun(
@@ -69,7 +69,7 @@ public class DestructorTests(ITestOutputHelper output) : RewriteTest(output)
                    """));
     }
 
-    [Fact]
+    [Test]
     public void DestructorWithAttributes()
     {
         RewriteRun(
@@ -84,7 +84,7 @@ public class DestructorTests(ITestOutputHelper output) : RewriteTest(output)
                    """));
     }
 
-    [Fact]
+    [Test]
     public void ExpressionBodiedDestructor()
     {
         RewriteRun(

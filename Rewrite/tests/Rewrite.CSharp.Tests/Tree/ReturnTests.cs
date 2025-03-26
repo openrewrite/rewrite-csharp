@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ReturnTests(ITestOutputHelper output) : RewriteTest(output)
+public class ReturnTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void Simple()
     {
         RewriteRun(
@@ -25,7 +25,7 @@ public class ReturnTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void Void()
     {
         RewriteRun(
@@ -43,7 +43,7 @@ public class ReturnTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void MethodCall()
     {
         RewriteRun(

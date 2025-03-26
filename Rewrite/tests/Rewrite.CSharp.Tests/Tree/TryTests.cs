@@ -7,9 +7,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class TryTests(ITestOutputHelper output) : RewriteTest(output)
+public class TryTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void TryFinallyOnly()
     {
         RewriteRun(
@@ -26,7 +26,7 @@ public class TryTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void RegularCatch()
     {
         RewriteRun(
@@ -44,7 +44,7 @@ public class TryTests(ITestOutputHelper output) : RewriteTest(output)
     }
 
 
-    [Fact]
+    [Test]
     public void CatchWithoutVariableName()
     {
         RewriteRun(
@@ -68,7 +68,7 @@ public class TryTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void CatchAll()
     {
         RewriteRun(
@@ -92,7 +92,7 @@ public class TryTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void CatchWithWhenFilter()
     {
         RewriteRun(

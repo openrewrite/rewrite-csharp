@@ -6,9 +6,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class MemberAccessTests(ITestOutputHelper output) : RewriteTest(output)
+public class MemberAccessTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void MultilineLinq()
     {
         var src = CSharp(
@@ -25,7 +25,7 @@ public class MemberAccessTests(ITestOutputHelper output) : RewriteTest(output)
         RewriteRun(src);
     }
 
-    [Fact]
+    [Test]
     public void Space()
     {
         RewriteRun(
@@ -43,7 +43,7 @@ public class MemberAccessTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void SimpleFieldAccess()
     {
         RewriteRun(

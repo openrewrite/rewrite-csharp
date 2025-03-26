@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class SwitchStatementTests(ITestOutputHelper output) : RewriteTest(output)
+public class SwitchStatementTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void Simple()
     {
         RewriteRun(
@@ -28,7 +28,7 @@ public class SwitchStatementTests(ITestOutputHelper output) : RewriteTest(output
         );
     }
 
-    [Fact]
+    [Test]
     public void SwitchWithClause()
     {
         RewriteRun(
@@ -45,7 +45,7 @@ public class SwitchStatementTests(ITestOutputHelper output) : RewriteTest(output
         );
     }
 
-    [Fact]
+    [Test]
     void MultipleLabelsOnSingleArm()
     {
         RewriteRun(

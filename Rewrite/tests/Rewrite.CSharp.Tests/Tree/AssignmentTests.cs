@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class AssignmentTests(ITestOutputHelper output) : RewriteTest(output)
+public class AssignmentTests : RewriteTest
 {
-    [Fact]
+    [Test]
     private void Simple()
     {
         RewriteRun(
@@ -26,7 +26,7 @@ public class AssignmentTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void AssignmentOperation()
     {
         RewriteRun(
@@ -55,7 +55,7 @@ public class AssignmentTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void NullCoalescing()
     {
         RewriteRun(

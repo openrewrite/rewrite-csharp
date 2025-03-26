@@ -7,14 +7,13 @@ using Rewrite.Core.Quark;
 using Rewrite.CSharp.Tests;
 using Rewrite.RewriteCSharp;
 using Rewrite.RewriteJava.Tree;
-using Xunit.Abstractions;
 using ExecutionContext = Rewrite.Core.ExecutionContext;
 
 namespace Rewrite.Test;
 
-public class RewriteTest(ITestOutputHelper output)
+public class RewriteTest
 {
-    protected readonly ITestOutputHelper _output = output;
+    protected readonly ITestOutputHelper _output = new();
 
     public void RewriteRun(params SourceSpec[] sourceSpecs)
     {
@@ -179,7 +178,13 @@ public class RewriteTest(ITestOutputHelper output)
                     throw new Exception($"LST should not contain unknown nodes: {unknown.First()}");
                 }
 
-                if(!EnvironmentInfo.IsCI)
+                var customProperties = TestContext.Parameters.ToDictionary(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase) ?? new Dictionary<string, string>();
+                bool shouldRenderLst = !EnvironmentInfo.IsCI;
+                if (customProperties.TryGetValue("RenderLST", out var renderLst) && bool.TryParse(renderLst, out var renderLstValue))
+                {
+                    shouldRenderLst = renderLstValue;
+                }
+                if(shouldRenderLst)
                 {
                     _output.WriteLine(sourceFile.RenderLstTree());
                 }

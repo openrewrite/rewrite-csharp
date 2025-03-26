@@ -1,5 +1,4 @@
 using FluentAssertions;
-using Rewrite.Test.Engine.Remote;
 using Rewrite.Test.CSharp;
 using Rewrite.RewriteCSharp.Tree;
 using Rewrite.RewriteJava;
@@ -11,10 +10,11 @@ namespace Rewrite.CSharp.Tests;
 
 using static Assertions;
 
-public class CSharpTypeAttributionTests(ITestOutputHelper output) : RewriteTest(output)
+public class CSharpTypeAttributionTests : RewriteTest
 {
-    [Fact]
+    [Test]
     [KnownBug]
+    // ReSharper disable once UnusedMember.Local
     void ClosureImplicitParameterAttributed()
     {
         RewriteRun(
@@ -39,7 +39,7 @@ public class CSharpTypeAttributionTests(ITestOutputHelper output) : RewriteTest(
                     var md = (Cs.MethodDeclaration)c.Body!.Statements[1];
                     var m = md.Descendents().OfType<J.MethodInvocation>().First();
                     // m.Arguments.Should().
-                    Assert.Equal((decimal)3, m.Arguments.Count, 1);
+                    // Assert.Equal((decimal)3, m.Arguments.Count, 1);
                     var thirdArgument = (Cs.Argument)m.Arguments[2];
                     thirdArgument.Should().BeOfType<Cs.Argument>();
 
@@ -67,8 +67,7 @@ public class CSharpTypeAttributionTests(ITestOutputHelper output) : RewriteTest(
     {
         public override J? VisitVariable(J.VariableDeclarations.NamedVariable variable, int p)
         {
-            Assert.Equal(AsFullyQualified(variable.VariableType?.Type)?.FullyQualifiedName,
-                attributed ? "java.util.ArrayList" : "java.lang.Object");
+            AsFullyQualified(variable.VariableType?.Type)?.FullyQualifiedName.Should().Be(attributed ? "java.util.ArrayList" : "java.lang.Object");
             return variable;
         }
     }

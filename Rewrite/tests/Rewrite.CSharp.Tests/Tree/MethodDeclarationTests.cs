@@ -7,9 +7,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(output)
+public class MethodDeclarationTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void Constructor()
     {
         RewriteRun(
@@ -33,7 +33,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         );
     }
 
-    [Fact]
+    [Test]
     public void MethodDeclarationWithDefaultParameters()
     {
         RewriteRun(
@@ -57,7 +57,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         );
     }
 
-    [Fact]
+    [Test]
     public void MethodWithAttributes()
     {
         RewriteRun(
@@ -75,7 +75,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         );
     }
 
-    [Fact]
+    [Test]
     public void ConstructorDelegation()
     {
         var src = CSharp(
@@ -95,7 +95,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         lst.ToString().ShouldBeSameAs(src.Before);
     }
 
-    [Fact]
+    [Test]
     public void ConstructorDelegation2()
     {
         RewriteRun(CSharp(
@@ -113,7 +113,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         ));
     }
 
-    [Fact]
+    [Test]
     public void StaticConstructor()
     {
         RewriteRun(
@@ -135,7 +135,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         );
     }
 
-    [Fact]
+    [Test]
     public void NoParamsVoidMethodDeclaration()
     {
         RewriteRun(
@@ -153,7 +153,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         );
     }
 
-    [Fact]
+    [Test]
     public void ParamWithDefault()
     {
         RewriteRun(
@@ -179,7 +179,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         );
     }
 
-    [Fact]
+    [Test]
     public void VarargsParameter()
     {
         RewriteRun(
@@ -196,7 +196,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         );
     }
 
-    [Fact]
+    [Test]
     public void OverrideModifier()
     {
         RewriteRun(
@@ -214,7 +214,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         );
     }
 
-    [Fact]
+    [Test]
     public void ExplicitInterfaceImplementation()
     {
         RewriteRun(
@@ -232,7 +232,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
 
 
 
-    [Fact]
+    [Test]
     public void ArrowSyntaxMethodDeclaration()
     {
         RewriteRun(
@@ -248,7 +248,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
     }
 
 
-    [Fact]
+    [Test]
     public void ArrowLocalFunctionDeclaration()
     {
         RewriteRun(
@@ -263,7 +263,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         );
     }
 
-    [Fact]
+    [Test]
     public void LocalFunctionDeclaration()
     {
         RewriteRun(
@@ -288,7 +288,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         );
     }
 
-    [Fact]
+    [Test]
     void AnonymousMethodDeclaration()
     {
         RewriteRun(
@@ -304,7 +304,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         );
     }
 
-    [Fact]
+    [Test]
     void GenericMethodDeclarationWithSingleTypeConstraint()
     {
         RewriteRun(
@@ -318,7 +318,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         );
     }
 
-    [Fact]
+    [Test]
     public void NoBodyClass()
     {
         RewriteRun(
@@ -332,7 +332,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         );
     }
 
-    [Fact]
+    [Test]
     public void GenericMethodDeclarationWithClassConstraint()
     {
         RewriteRun(
@@ -347,7 +347,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
     }
 
 
-    [Fact]
+    [Test]
     public void GenericMethodDeclarationWithNewConstraint()
     {
         RewriteRun(
@@ -361,7 +361,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         );
     }
 
-    [Fact]
+    [Test]
     public void TypeParameterWithMultipleConstraints()
     {
         RewriteRun(
@@ -375,7 +375,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         );
     }
 
-    [Fact]
+    [Test]
     public void WithPointerParameter()
     {
         RewriteRun(
@@ -389,7 +389,7 @@ public class MethodDeclarationTests(ITestOutputHelper output) : RewriteTest(outp
         );
     }
 
-    [Fact]
+    [Test]
     public void AnonymousFunctionDelegate()
     {
         RewriteRun(

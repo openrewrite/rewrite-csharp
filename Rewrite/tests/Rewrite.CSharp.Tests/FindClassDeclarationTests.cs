@@ -5,14 +5,14 @@ namespace Rewrite.CSharp.Tests;
 
 using static Assertions;
 
-public class FindClassDeclarationTests(ITestOutputHelper output) : RewriteTest(output)
+public class FindClassDeclarationTests : RewriteTest
 {
     protected override void Defaults(RecipeSpec spec)
     {
         spec.Recipe = new FindClass();
     }
 
-    [Fact]
+    [Test]
     public void ModifierAndClassWithoutBody()
     {
         RewriteRun(
@@ -29,7 +29,7 @@ public class FindClassDeclarationTests(ITestOutputHelper output) : RewriteTest(o
         );
     }
 
-    [Fact]
+    [Test]
     public void ClassWithoutBody()
     {
         RewriteRun(
@@ -48,7 +48,7 @@ public class FindClassDeclarationTests(ITestOutputHelper output) : RewriteTest(o
 
 
 
-    [Fact]
+    [Test]
     public void ClassWithEmptyPrimaryCtorWithoutBody()
     {
         RewriteRun(
@@ -65,7 +65,7 @@ public class FindClassDeclarationTests(ITestOutputHelper output) : RewriteTest(o
         );
     }
 
-    [Fact]
+    [Test]
     public void ClassWithEmptyPrimaryCtorWithEmptyBody()
     {
         RewriteRun(
@@ -88,7 +88,7 @@ public class FindClassDeclarationTests(ITestOutputHelper output) : RewriteTest(o
         );
     }
 
-    [Fact]
+    [Test]
     [KnownBug]
     public void ClassWithoutBody2()
     {

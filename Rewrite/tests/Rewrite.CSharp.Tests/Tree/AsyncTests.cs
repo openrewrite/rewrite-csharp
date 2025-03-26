@@ -6,9 +6,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 using static Assertions;
 
 
-public class AsyncTests(ITestOutputHelper output) : RewriteTest(output)
+public class AsyncTests : RewriteTest
 {
-    [Fact]
+    [Test]
     private void Simple()
     {
         RewriteRun(
@@ -25,7 +25,7 @@ public class AsyncTests(ITestOutputHelper output) : RewriteTest(output)
           )
         );
     }
-    [Fact]
+    [Test]
     private void AwaitStatement()
     {
         RewriteRun(
@@ -44,7 +44,7 @@ public class AsyncTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void AsyncLambda()
     {
         RewriteRun(

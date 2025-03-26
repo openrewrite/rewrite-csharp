@@ -1,11 +1,6 @@
 ﻿using System.Formats.Cbor;
 using System.Net;
 using System.Net.Sockets;
-using log4net;
-using log4net.Appender;
-using log4net.Core;
-using log4net.Layout;
-using log4net.Repository.Hierarchy;
 using Microsoft.CodeAnalysis;
 using NuGet.Configuration;
 using PeterO.Cbor;
@@ -22,12 +17,20 @@ using Rewrite.RewriteJson.Tree;
 using Rewrite.RewriteProperties.Tree;
 using Rewrite.RewriteXml.Tree;
 using Rewrite.RewriteYaml.Tree;
+using Serilog;
 
 namespace Rewrite.Remote.Server;
 
 public class Server
 {
-    private static readonly ILog log = LogManager.GetLogger(typeof(Server));
+    private const int Ok = 0;
+    private const int Error = 1;
+    private RemotingMessenger? _messenger;
+    private readonly Options _options;
+
+    private RemotingContext? _remotingContext;
+    private Solution? _solution;
+    private readonly ILogger _log;
 
     static Server()
     {
@@ -56,7 +59,6 @@ public class Server
             Markers? markers = null;
             string? text = null;
             while (reader.PeekState() != CborReaderState.EndMap)
-            {
                 switch (reader.ReadTextString())
                 {
                     case "id":
@@ -72,64 +74,23 @@ public class Server
                         text = (string?)context.Deserialize(typeof(string), reader);
                         break;
                 }
-            }
 
             reader.ReadEndMap();
             return new Properties.Value(id, prefix!, markers!, text!);
         });
     }
 
-    private const int Ok = 0;
-    private const int Error = 1;
-
-    private RemotingContext? _remotingContext;
-    private RemotingMessenger? _messenger;
-    private Solution? _solution;
-    private Options _options;
-
     public Server(Options options)
     {
-        this._options = options;
+        _options = options;
+        var loggerConfig = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.Console();
+        if (options.LogFilePath != null) loggerConfig = loggerConfig.WriteTo.File(options.LogFilePath);
 
-        var hierarchy = (Hierarchy)LogManager.GetRepository();
-
-        var patternLayout = new PatternLayout
-        {
-            ConversionPattern = "%date [%thread] %-5level %logger - %message%newline"
-        };
-        patternLayout.ActivateOptions();
-
+        Log.Logger = loggerConfig.CreateLogger();
+        _log = Log.ForContext<Server>();
         ProjectParser.Init();
-        IAppender appender;
-        if (options.LogFilePath != null)
-        {
-            var fileAppender = new FileAppender
-            {
-                AppendToFile = false,
-                File = options.LogFilePath,
-                Layout = patternLayout,
-            };
-            fileAppender.ActivateOptions();
-            appender = fileAppender;
-        }
-        else
-        {
-            var fileAppender = new ConsoleAppender
-            {
-                Layout = patternLayout,
-            };
-            fileAppender.ActivateOptions();
-            appender = fileAppender;
-        }
-
-        hierarchy.Root.AddAppender(appender);
-
-        var memory = new MemoryAppender();
-        memory.ActivateOptions();
-        hierarchy.Root.AddAppender(memory);
-
-        hierarchy.Root.Level = Level.Debug;
-        hierarchy.Configured = true;
     }
 
     public async Task Listen()
@@ -139,7 +100,7 @@ public class Server
         _remotingContext = new RemotingContext();
 
         _messenger = new RemotingMessenger(_remotingContext,
-            additionalHandlers: new Dictionary<string, Func<NetworkStream, RemotingContext, CancellationToken, Task>>
+            new Dictionary<string, Func<NetworkStream, RemotingContext, CancellationToken, Task>>
             {
                 { "parse-project-sources", ParseProjectSources },
                 { "list-projects", ListProjects },
@@ -152,23 +113,12 @@ public class Server
         {
             var ipAddress = IPAddress.Loopback;
             var endPoint = new IPEndPoint(ipAddress, port);
-
-            Console.WriteLine($"starting server on port ({port}) ...");
-            if (log.IsDebugEnabled)
-            {
-                log.Debug($"starting server on port ({port}) ...");
-            }
-
+            _log.Debug($"Starting server on port ({port}) ...");
             server.Bind(endPoint);
             server.Listen(5);
-            Console.WriteLine($"Server started ({port}) ...");
-            if (log.IsDebugEnabled)
-            {
-                log.Debug($"Server started ({port}) ...");
-            }
+            _log.Debug($"Server started ({port}) ...");
 
             while (server.Poll((int)double.Min(timeout.TotalMicroseconds, int.MaxValue), SelectMode.SelectRead))
-            {
                 try
                 {
                     using var client = await server.AcceptAsync();
@@ -176,27 +126,22 @@ public class Server
                 }
                 catch (Exception e)
                 {
-                    log.Error($"Failure while serving client: {e}");
+                    _log.Error($"Failure while serving client: {e}");
                 }
-            }
         }
         catch (SocketException e)
         {
-            log.Error($"Failed to start on port {port}\n{e}");
+            _log.Error($"Failed to start on port {port}\n{e}");
             throw;
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            log.Error(e);
+            _log.Error(e, "An exception occurred while running the application");
             throw;
         }
         finally
         {
-            if (log.IsDebugEnabled)
-            {
-                log.Error("Closing server");
-            }
+            _log.Error("Closing server");
 
             server.Close();
         }
@@ -215,41 +160,34 @@ public class Server
 
             var rawCredential = rawSource["credential"];
             if (rawCredential is { IsNull: false })
-            {
                 packageSource.Credentials =
                     new PackageSourceCredential(source,
                         rawCredential["username"].AsString(),
                         rawCredential["password"].AsString(),
                         true,
                         null);
-            }
 
             return packageSource;
         }).ToList();
 
         var commandEnd = CBORObject.Read(stream);
 
-        log.Info($$"""
-                   Handling InstallRecipe Request: {
-                       packageId: {{packageId}},
-                       packageVersion: {{packageVersion}},
-                       packageSources: [{{sources}}],
-                       includeDefaultSource: [{{includeDefaultSource}}],
-                   }
-                   """);
+        _log.Information($$"""
+                          Handling InstallRecipe Request: {
+                              packageId: {{packageId}},
+                              packageVersion: {{packageVersion}},
+                              packageSources: [{{sources}}],
+                              includeDefaultSource: [{{includeDefaultSource}}],
+                          }
+                          """);
 
-        if (sources.Count == 0 && !includeDefaultSource)
-        {
-            throw new ArgumentException("No sources provided");
-        }
+        if (sources.Count == 0 && !includeDefaultSource) throw new ArgumentException("No sources provided");
 
         var installableRecipes = await
-            NugetManager.InstallRecipeAsync(packageId, packageVersion, includeDefaultSource ? sources.Concat([new PackageSource("https://api.nuget.org/v3/index.json")]).ToList() : sources, _options.NugetPackagesFolder, cancellationToken);
+            NugetManager.InstallRecipeAsync(packageId, packageVersion, includeDefaultSource ? sources.Concat([new PackageSource("https://api.nuget.org/v3/index.json")]).ToList() : sources, _options.NugetPackagesFolder,
+                cancellationToken);
 
-        if (log.IsDebugEnabled)
-        {
-            log.Debug($"Found {installableRecipes.Recipes.Count} recipes for package {packageId}");
-        }
+        _log.Debug($"Found {installableRecipes.Recipes.Count} recipes for package {packageId}");
 
 
         CBORObject.Write((int)RemotingMessageType.Response, stream);
@@ -268,13 +206,13 @@ public class Server
                             {
                                 { "name", od.Name },
                                 { "type", od.Type },
-                                { "required", od.Required },
+                                { "required", od.Required }
                             })
                         }
                     }).ToList()
                 },
                 { "repository", installableRecipes.Repository },
-                { "version", installableRecipes.Version },
+                { "version", installableRecipes.Version }
             },
             stream
         );
@@ -292,10 +230,7 @@ public class Server
 
         var optionsObj = CBORObject.Read(stream);
 
-        foreach (var optionsObjEntry in optionsObj.Entries)
-        {
-            options.Add(optionsObjEntry.Key.AsString(), optionsObjEntry.Value.ToObject);
-        }
+        foreach (var optionsObjEntry in optionsObj.Entries) options.Add(optionsObjEntry.Key.AsString(), optionsObjEntry.Value.ToObject);
 
         var inputStream = RemoteUtils.ReadToCommandEnd(stream);
 
@@ -303,30 +238,24 @@ public class Server
         var ctx = new InMemoryExecutionContext();
         RemotingExecutionContextView.View(ctx).RemotingContext = context;
 
-        log.Info($$"""
-                   Handling LoadRecipeAssemblyAndRunVisitor Request: {
-                       recipeName: {{recipeName}},
-                       packageId: {{packageId}},
-                       packageVersion: {{packageVersion}},
-                       options: {{options}},
-                       sourceFilePath: {{((SourceFile)received).SourcePath}}
-                   }
-                   """);
+        _log.Information($$"""
+                          Handling LoadRecipeAssemblyAndRunVisitor Request: {
+                              recipeName: {{recipeName}},
+                              packageId: {{packageId}},
+                              packageVersion: {{packageVersion}},
+                              options: {{options}},
+                              sourceFilePath: {{((SourceFile)received).SourcePath}}
+                          }
+                          """);
 
-        if (log.IsDebugEnabled)
-        {
-            log.Debug("Trying to load recipe assembly");
-        }
+        _log.Debug("Trying to load recipe assembly");
 
         var loadedRecipe = await
             NugetManager.LoadRecipeAssemblyAsync(recipeName, packageId, packageVersion, _options.NugetPackagesFolder,
                 options,
                 cancellationToken);
 
-        if (log.IsDebugEnabled)
-        {
-            log.Debug($"Recipe {loadedRecipe.Descriptor.Name} was successfully loaded into the assembly. \nTrying to run it on the SourceFile");
-        }
+        _log.Debug($"Recipe {loadedRecipe.Descriptor.Name} was successfully loaded into the assembly. \nTrying to run it on the SourceFile");
 
         var treeVisitor = loadedRecipe.GetVisitor();
 
@@ -336,14 +265,11 @@ public class Server
         }
         else
         {
-            log.Warn($"SourceFile of type [{received.GetType()}] is not acceptable");
+            _log.Warning($"SourceFile of type [{received.GetType()}] is not acceptable");
             RemotingMessenger._state = received;
         }
 
-        if (RemotingMessenger._state == null)
-        {
-            throw new InvalidOperationException("_state cannot be null");
-        }
+        if (RemotingMessenger._state == null) throw new InvalidOperationException("_state cannot be null");
 
         CBORObject.Write((int)RemotingMessageType.Response, stream);
         CBORObject.Write(Ok, stream);
@@ -358,13 +284,13 @@ public class Server
         var rootDir = CBORObject.Read(stream).AsString();
         var commandEnd = CBORObject.Read(stream);
 
-        log.Info($$"""
-                   Handling ParseProjectSources Request: {
-                       projectFile: {{projectFile}},
-                       solutionFile: {{solutionFile}},
-                       rootDir: {{rootDir}},
-                   }
-                   """);
+        _log.Information($$"""
+                          Handling ParseProjectSources Request: {
+                              projectFile: {{projectFile}},
+                              solutionFile: {{solutionFile}},
+                              rootDir: {{rootDir}},
+                          }
+                          """);
 
         if (_solution is null || _solution.FilePath != solutionFile)
         {
@@ -372,12 +298,12 @@ public class Server
             CBORObject.Write(Error, stream);
             if (_solution is null)
             {
-                log.Error($"Failed to handle request. Solution {solutionFile} was not loaded using `list-projects`");
+                _log.Error($"Failed to handle request. Solution {solutionFile} was not loaded using `list-projects`");
                 CBORObject.Write($"Solution {solutionFile} was not loaded using `list-projects`", stream);
             }
             else
             {
-                log.Error(
+                _log.Error(
                     $"Failed to handle request. Solution {solutionFile} does not match loaded solution {_solution.FilePath}");
                 CBORObject.Write($"Solution {solutionFile} does not match loaded solution {_solution.FilePath}",
                     stream);
@@ -386,27 +312,18 @@ public class Server
             return Task.CompletedTask;
         }
 
-        if (log.IsDebugEnabled)
-        {
-            log.Debug($"Requesting all sources for project {projectFile}");
-        }
+        _log.Debug($"Requesting all sources for project {projectFile}");
 
         var sourceFiles =
             new SolutionParser().ParseProjectSources(_solution, projectFile, rootDir, new InMemoryExecutionContext())
                 .ToList();
 
-        if (log.IsDebugEnabled)
-        {
-            log.Debug($"Sending back the following sources: [{sourceFiles}]");
-        }
+        _log.Debug($"Sending back the following sources: [{sourceFiles}]");
 
         CBORObject.Write((int)RemotingMessageType.Response, stream);
         CBORObject.Write(Ok, stream);
         CBORObject.Write(sourceFiles.Count, stream);
-        foreach (var sourceFile in sourceFiles)
-        {
-            RemotingMessenger.SendTree(context, stream, sourceFile, default);
-        }
+        foreach (var sourceFile in sourceFiles) RemotingMessenger.SendTree(context, stream, sourceFile, default);
 
         return Task.CompletedTask;
     }
@@ -418,11 +335,11 @@ public class Server
         var commandEnd = CBORObject.Read(stream);
 
 
-        log.Info($$"""
-                   Handling ListProjects Request: {
-                       solutionFile: {{solutionFile}},
-                   }
-                   """);
+        _log.Information($$"""
+                          Handling ListProjects Request: {
+                              solutionFile: {{solutionFile}},
+                          }
+                          """);
         _solution = await new SolutionParser().LoadSolutionAsync(solutionFile, cancellationToken);
 
         CBORObject.Write((int)RemotingMessageType.Response, stream);
@@ -434,10 +351,7 @@ public class Server
             // apply `Distinct()` as there may be multiple target frameworks
             .Distinct().ToList();
 
-        if (log.IsDebugEnabled)
-        {
-            log.Debug($"Found the following projects [{projects}]");
-        }
+        _log.Debug($"Found the following projects [{projects}]");
 
         CBORObject.Write(projects, stream);
     }
@@ -445,7 +359,7 @@ public class Server
 
     private async Task HandleClient(Socket socket)
     {
-        log.Info($"Received a new client connection {socket.RemoteEndPoint}");
+        _log.Information($"Received a new client connection {socket.RemoteEndPoint}");
         _remotingContext?.Connect(socket);
         await using var stream = new NetworkStream(socket);
         do
@@ -454,51 +368,41 @@ public class Server
             try
             {
                 var messageType = (RemotingMessageType)CBORObject.Read(stream).AsInt32();
-                if (messageType != RemotingMessageType.Request)
-                {
-                    throw new ArgumentException($"Unexpected message type {messageType}");
-                }
+                if (messageType != RemotingMessageType.Request) throw new ArgumentException($"Unexpected message type {messageType}");
 
 
                 var cancellationTokenSource = new CancellationTokenSource(_options.Timeout);
                 var requestHandlingTask = _messenger!.ProcessRequest(stream, cancellationTokenSource.Token);
                 if (await Task.WhenAny(requestHandlingTask, Task.Delay(_options.Timeout, CancellationToken.None)) ==
                     requestHandlingTask)
-                {
                     dataWritten = await requestHandlingTask;
-                }
                 else
-                {
                     throw new TimeoutException($"Request was not fulfilled withing given {_options.Timeout} timeout");
-                }
 
                 if (!dataWritten && stream.CanWrite)
-                {
                     try
                     {
-                        log.Error("Response was not completed after processing");
+                        _log.Error("Response was not completed after processing");
                         CBORObject.Write((int)RemotingMessageType.Response, stream);
                         CBORObject.Write(Error, stream);
                         CBORObject.Write("Response was not completed", stream);
                     }
                     catch (IOException exception)
                     {
-                        log.Error("Failed to write response", exception);
+                        _log.Error("Failed to write response", exception);
                         // the socket was closed
                         // Console.Error.WriteLine(ignore);
                         break;
                     }
                     catch (Exception exception)
                     {
-                        log.Error("Unexpected response sending exception", exception);
+                        _log.Error("Unexpected response sending exception", exception);
                     }
-                }
             }
             catch (Exception e)
             {
-                log.Error("Response handling exception", e);
+                _log.Error("Response handling exception", e);
                 if (!dataWritten && stream.CanWrite)
-                {
                     try
                     {
                         CBORObject.Write((int)RemotingMessageType.Response, stream);
@@ -507,14 +411,13 @@ public class Server
                     }
                     catch (IOException exception)
                     {
-                        log.Error("Failed to write response", exception);
+                        _log.Error("Failed to write response", exception);
                         break;
                     }
                     catch (Exception exception)
                     {
-                        log.Error("Unexpected response sending exception", exception);
+                        _log.Error("Unexpected response sending exception", exception);
                     }
-                }
             }
             finally
             {
@@ -525,10 +428,6 @@ public class Server
                  socket.Available > 0);
 
 
-        log.Info($"Client socket disconnected {socket.RemoteEndPoint}");
+        _log.Information($"Client socket disconnected {socket.RemoteEndPoint}");
     }
-
-
-
-
 }

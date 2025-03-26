@@ -6,9 +6,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ConstructorTests(ITestOutputHelper output) : RewriteTest(output)
+public class ConstructorTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void VanillaConstructor()
     {
         var src = CSharp("""
@@ -22,7 +22,7 @@ public class ConstructorTests(ITestOutputHelper output) : RewriteTest(output)
         lst.ToString().ShouldBeSameAs(src.Before);
     }
 
-    [Fact]
+    [Test]
     public void ConstructorWithThisCall()
     {
         var src = CSharp("""
@@ -40,7 +40,7 @@ public class ConstructorTests(ITestOutputHelper output) : RewriteTest(output)
         lst.ToString().ShouldBeSameAs(src.Before);
     }
 
-    [Fact]
+    [Test]
     public void ConstructorWithArrowStatement()
     {
         RewriteRun(

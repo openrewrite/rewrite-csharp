@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(output)
+public class ClassDeclarationTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void BaseParameters()
     {
         RewriteRun(
@@ -25,7 +25,7 @@ public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(outpu
     }
 
 
-    [Fact]
+    [Test]
     public void ModifierAndClassWithoutBody()
     {
         RewriteRun(
@@ -37,7 +37,7 @@ public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     public void ClassWithoutBody()
     {
         RewriteRun(
@@ -50,7 +50,7 @@ public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(outpu
     }
 
 
-    [Fact]
+    [Test]
     public void ClassWithEmptyPrimaryCtorWithoutBody()
     {
         RewriteRun(
@@ -62,7 +62,7 @@ public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     public void ClassWithEmptyPrimaryCtorWithEmptyBody()
     {
         RewriteRun(
@@ -77,7 +77,7 @@ public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     public void ClassWithPrimaryCtorWithEmptyBody()
     {
         RewriteRun(
@@ -89,7 +89,7 @@ public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     public void NestedClass()
     {
         RewriteRun(
@@ -104,7 +104,7 @@ public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     public void TypeParameter()
     {
         RewriteRun(
@@ -116,7 +116,7 @@ public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     public void TypeParameterWithTypeConstraint()
     {
         RewriteRun(
@@ -128,7 +128,7 @@ public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     public void TypeParameterWithClassConstraint()
     {
         var src = CSharp(
@@ -142,7 +142,7 @@ public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     public void TypeParameterWithStructConstraint()
     {
         RewriteRun(
@@ -154,7 +154,7 @@ public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     public void TypeParameterWithNewConstraint()
     {
         RewriteRun(
@@ -166,7 +166,7 @@ public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     public void TypeParameterWithMultipleConstraints()
     {
         RewriteRun(
@@ -178,7 +178,7 @@ public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     public void MultipleTypeConstraints()
     {
         RewriteRun(
@@ -194,7 +194,7 @@ public class ClassDeclarationTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     public void ClassDeclarationWithAttribute()
     {
         RewriteRun(

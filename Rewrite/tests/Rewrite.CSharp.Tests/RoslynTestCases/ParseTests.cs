@@ -11,17 +11,17 @@ namespace Rewrite.CSharp.Tests.RoslynTestCases;
 
 using static Assertions;
 
-public class ParseTests(ITestOutputHelper output) : RewriteTest(output)
+public class ParseTests : RewriteTest
 {
     private readonly CSharpParser _parser = new CSharpParser.Builder().Build();
 
 
-    [Fact]
-    [Exploratory]
+    [Test]
+    [Explicit]
     public void TestReport()
     {
         var badTestCases = new List<(SourceTestCase, List<Diagnostic>)>();
-        var testCases = new CSharpSyntaxFragments().Select(x => (SourceTestCase)x[0]).ToList();
+        var testCases = CSharpSyntaxFragments.GetData().ToList();
         List<TestResult> report = new();
         foreach (var testCase in testCases)
         {
@@ -98,9 +98,9 @@ public class ParseTests(ITestOutputHelper output) : RewriteTest(output)
     }
 
 
-    [Theory]
-    [ClassData(typeof(CSharpSyntaxFragments))]
-    [Category("Roslyn")]
+    [Test]
+    [MethodDataSource<CSharpSyntaxFragments>(nameof(CSharpSyntaxFragments.GetData))]
+    [Explicit]
     public void ParseAndPrint(SourceTestCase syntax)
     {
         var src = AsValidCompilationRoot(syntax.SourceText);

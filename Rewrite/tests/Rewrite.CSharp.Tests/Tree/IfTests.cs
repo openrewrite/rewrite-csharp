@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class IfTests(ITestOutputHelper output) : RewriteTest(output)
+public class IfTests : RewriteTest
 {
-    [Fact]
+    [Test]
     void IfElse()
     {
         RewriteRun(
@@ -27,7 +27,7 @@ public class IfTests(ITestOutputHelper output) : RewriteTest(output)
     }
 
 
-    [Fact]
+    [Test]
     void NoElse()
     {
         RewriteRun(
@@ -42,7 +42,7 @@ public class IfTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void SingleLineIfElseStatements()
     {
         RewriteRun(
@@ -57,7 +57,7 @@ public class IfTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void ElseWithTrailingSpace()
     {
         RewriteRun(

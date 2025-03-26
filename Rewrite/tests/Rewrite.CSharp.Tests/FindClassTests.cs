@@ -5,14 +5,14 @@ namespace Rewrite.CSharp.Tests;
 
 using static Assertions;
 
-public class FindClassTests(ITestOutputHelper output) : RewriteTest(output)
+public class FindClassTests : RewriteTest
 {
     protected override void Defaults(RecipeSpec spec)
     {
         spec.Recipe = new FindClass();
     }
 
-    [Fact]
+    [Test]
     public void FindSimpleClassTest()
     {
         RewriteRun(
@@ -27,7 +27,7 @@ public class FindClassTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void FindInterfaceTest()
     {
         RewriteRun(
@@ -42,7 +42,7 @@ public class FindClassTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void FindRecordTest()
     {
         RewriteRun(
@@ -57,7 +57,7 @@ public class FindClassTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void FindNestedClasses()
     {
         RewriteRun(

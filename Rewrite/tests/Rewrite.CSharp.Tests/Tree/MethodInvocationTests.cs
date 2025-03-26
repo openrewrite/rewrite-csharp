@@ -6,9 +6,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class MethodInvocationTests(ITestOutputHelper output) : RewriteTest(output)
+public class MethodInvocationTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void NoReceiver()
     {
         RewriteRun(
@@ -23,7 +23,7 @@ public class MethodInvocationTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     public void InvocationOnThis()
     {
         RewriteRun(
@@ -38,7 +38,7 @@ public class MethodInvocationTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     public void InvocationSpacing()
     {
         RewriteRun(
@@ -50,7 +50,7 @@ public class MethodInvocationTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     public void InvocationWithNamedParameters()
     {
         var src = CSharp(
@@ -69,7 +69,7 @@ public class MethodInvocationTests(ITestOutputHelper output) : RewriteTest(outpu
         lst.ToString().ShouldBeSameAs(src.Before);
     }
 
-    [Fact]
+    [Test]
     public void InvocationWithOutParameter()
     {
         var src = CSharp(
@@ -88,7 +88,7 @@ public class MethodInvocationTests(ITestOutputHelper output) : RewriteTest(outpu
         lst.ToString().ShouldBeSameAs(src.Before);
     }
 
-    [Fact]
+    [Test]
     public void InvocationWithRefParameter()
     {
         var src = CSharp(
@@ -108,7 +108,7 @@ public class MethodInvocationTests(ITestOutputHelper output) : RewriteTest(outpu
         lst.ToString().ShouldBeSameAs(src.Before);
     }
 
-    [Fact]
+    [Test]
     public void InvocationWithGenerics()
     {
         RewriteRun(
@@ -128,7 +128,7 @@ public class MethodInvocationTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     public void QualifiedInvocationWithGenerics()
     {
         RewriteRun(
@@ -148,7 +148,7 @@ public class MethodInvocationTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     public void InvocationOfDelegateReturnedByArrayAccess()
     {
         RewriteRun(
@@ -161,7 +161,7 @@ public class MethodInvocationTests(ITestOutputHelper output) : RewriteTest(outpu
 
     }
 
-    [Fact]
+    [Test]
     public void InvocationOfDelegateReturnedByMethod()
     {
         RewriteRun(
@@ -184,7 +184,7 @@ public class MethodInvocationTests(ITestOutputHelper output) : RewriteTest(outpu
 
     }
 
-    [Fact]
+    [Test]
     public void ArgumentOnNewLine()
     {
         RewriteRun(

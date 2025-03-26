@@ -6,9 +6,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ArrayAccessTests(ITestOutputHelper output) : RewriteTest(output)
+public class ArrayAccessTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void OneDimensional()
     {
         RewriteRun(
@@ -21,7 +21,7 @@ public class ArrayAccessTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void Space()
     {
         RewriteRun(

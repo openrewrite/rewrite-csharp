@@ -7,9 +7,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class CheckedTests(ITestOutputHelper output) : RewriteTest(output)
+public class CheckedTests : RewriteTest
 {
-    [Fact]
+    [Test]
     private void CheckedStatement()
     {
         RewriteRun(
@@ -23,7 +23,7 @@ public class CheckedTests(ITestOutputHelper output) : RewriteTest(output)
             )
         );
     }
-    [Fact]
+    [Test]
     private void UnCheckedStatement()
     {
         RewriteRun(
@@ -38,7 +38,7 @@ public class CheckedTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void CheckedExpression()
     {
         RewriteRun(
@@ -49,7 +49,7 @@ public class CheckedTests(ITestOutputHelper output) : RewriteTest(output)
             )
         );
     }
-    [Fact]
+    [Test]
     private void UnCheckedExpression()
     {
         RewriteRun(

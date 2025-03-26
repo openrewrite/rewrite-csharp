@@ -5,10 +5,10 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ParenthesesTests(ITestOutputHelper output) : RewriteTest(output)
+public class ParenthesesTests : RewriteTest
 {
 
-    [Fact]
+    [Test]
     void Parentheses() {
         RewriteRun(
             CSharp(
@@ -21,7 +21,7 @@ public class ParenthesesTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void ParenthesesWithComments() {
         RewriteRun(
             CSharp(

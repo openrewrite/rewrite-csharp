@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class FieldTests(ITestOutputHelper output) : RewriteTest(output)
+public class FieldTests : RewriteTest
 {
-    [Fact]
+    [Test]
     void Simple()
     {
         RewriteRun(
@@ -23,7 +23,7 @@ public class FieldTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void Attributed()
     {
         RewriteRun(
@@ -39,7 +39,7 @@ public class FieldTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void Modifiers()
     {
         RewriteRun(
@@ -57,7 +57,7 @@ public class FieldTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void Visibility()
     {
         RewriteRun(
@@ -77,7 +77,7 @@ public class FieldTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void ComplexNestedAccess()
     {
         RewriteRun(

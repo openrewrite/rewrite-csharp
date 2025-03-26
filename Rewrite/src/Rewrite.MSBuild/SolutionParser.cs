@@ -1,5 +1,4 @@
 using System.Reflection;
-using log4net;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
 using Rewrite.Core;
@@ -9,8 +8,6 @@ namespace Rewrite.MSBuild;
 
 public class SolutionParser
 {
-    private static readonly ILog log = LogManager.GetLogger(typeof(SolutionParser));
-    
     public async Task<Solution> LoadSolutionAsync(string solutionFilePath, CancellationToken cancellationToken)
     {
         var workspace = MSBuildWorkspace.Create();

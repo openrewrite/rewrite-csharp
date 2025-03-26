@@ -7,7 +7,7 @@ namespace Rewrite.CSharp.Tests;
 
 public class RecipeOptionsTest
 {
-    [Fact]
+    [Test]
     public void testDescriptorResolution()
     {
         var findClass = new TestRecipe();

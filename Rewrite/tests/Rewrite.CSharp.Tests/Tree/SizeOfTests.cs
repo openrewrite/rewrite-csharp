@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class SizeOfTests(ITestOutputHelper output) : RewriteTest(output)
+public class SizeOfTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void SimpleSizeOf()
     {
         RewriteRun(
@@ -23,7 +23,7 @@ public class SizeOfTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void SimpleSizeOfWithComments()
     {
         RewriteRun(

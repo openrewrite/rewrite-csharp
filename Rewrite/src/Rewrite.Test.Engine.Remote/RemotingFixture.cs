@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using Rewrite.Core;
 using Rewrite.Remote;
 using Rewrite.Test;
-using Xunit;
+using Assembly = System.Reflection.Assembly;
 
 namespace Rewrite.Test.Engine.Remote;
 

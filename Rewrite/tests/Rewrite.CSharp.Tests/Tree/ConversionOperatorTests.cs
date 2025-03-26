@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ConversionOperatorTests(ITestOutputHelper output) : RewriteTest(output)
+public class ConversionOperatorTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void ImplicitConversion()
     {
         RewriteRun(
@@ -27,7 +27,7 @@ public class ConversionOperatorTests(ITestOutputHelper output) : RewriteTest(out
         );
     }
 
-    [Fact]
+    [Test]
     public void ExplicitConversion()
     {
         RewriteRun(
@@ -47,7 +47,7 @@ public class ConversionOperatorTests(ITestOutputHelper output) : RewriteTest(out
         );
     }
 
-    [Fact]
+    [Test]
     public void ConversionWithGenerics()
     {
         RewriteRun(
@@ -67,7 +67,7 @@ public class ConversionOperatorTests(ITestOutputHelper output) : RewriteTest(out
         );
     }
 
-    [Fact]
+    [Test]
     public void ConversionBetweenClasses()
     {
         RewriteRun(
@@ -92,7 +92,7 @@ public class ConversionOperatorTests(ITestOutputHelper output) : RewriteTest(out
         );
     }
 
-    [Fact]
+    [Test]
     public void ConversionWithNullable()
     {
         RewriteRun(
@@ -112,7 +112,7 @@ public class ConversionOperatorTests(ITestOutputHelper output) : RewriteTest(out
         );
     }
 
-    [Fact]
+    [Test]
     public void ConversionOperatorWithAttributes()
     {
         RewriteRun(
@@ -134,7 +134,7 @@ public class ConversionOperatorTests(ITestOutputHelper output) : RewriteTest(out
         );
     }
 
-    [Fact]
+    [Test]
     public void ConversionWithConstraints()
     {
         RewriteRun(
@@ -155,7 +155,7 @@ public class ConversionOperatorTests(ITestOutputHelper output) : RewriteTest(out
     }
 
 
-    [Fact]
+    [Test]
     public void MultipleConversionOperators()
     {
         RewriteRun(

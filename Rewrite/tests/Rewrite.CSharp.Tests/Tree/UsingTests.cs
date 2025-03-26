@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class UsingStatementTests(ITestOutputHelper output) : RewriteTest(output)
+public class UsingStatementTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void BasicUsing()
     {
         RewriteRun(
@@ -22,7 +22,7 @@ public class UsingStatementTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void UsingDeclaration()
     {
         RewriteRun(
@@ -35,7 +35,7 @@ public class UsingStatementTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void MultipleResources()
     {
         RewriteRun(
@@ -51,7 +51,7 @@ public class UsingStatementTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void UsingWithoutBraces()
     {
         RewriteRun(
@@ -64,7 +64,7 @@ public class UsingStatementTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void NestedUsing()
     {
         RewriteRun(
@@ -82,7 +82,7 @@ public class UsingStatementTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void UsingWithMultipleDeclarations()
     {
         RewriteRun(
@@ -97,7 +97,7 @@ public class UsingStatementTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void UsingWithExplicitType()
     {
         RewriteRun(
@@ -112,7 +112,7 @@ public class UsingStatementTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void UsingWithNull()
     {
         RewriteRun(
@@ -127,7 +127,7 @@ public class UsingStatementTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void UsingWithAwait()
     {
         RewriteRun(
@@ -142,7 +142,7 @@ public class UsingStatementTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void UsingDeclarationWithAwait()
     {
         RewriteRun(

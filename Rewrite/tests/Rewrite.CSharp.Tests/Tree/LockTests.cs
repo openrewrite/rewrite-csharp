@@ -7,9 +7,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class LockTests(ITestOutputHelper output) : RewriteTest(output)
+public class LockTests : RewriteTest
 {
-    [Fact]
+    [Test]
     private void LockStatement()
     {
         RewriteRun(
@@ -23,7 +23,7 @@ public class LockTests(ITestOutputHelper output) : RewriteTest(output)
             )
         );
     }
-    [Fact]
+    [Test]
     private void LockNoBlock()
     {
         RewriteRun(

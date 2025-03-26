@@ -7,9 +7,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class LinqTests(ITestOutputHelper output) : RewriteTest(output)
+public class LinqTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void SimpleSelectClause()
     {
         RewriteRun(
@@ -22,7 +22,7 @@ public class LinqTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void SelectWithProjection()
     {
         RewriteRun(
@@ -35,7 +35,7 @@ public class LinqTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void SimpleGroupBy()
     {
         RewriteRun(
@@ -48,7 +48,7 @@ public class LinqTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void GroupByWithProjection()
     {
         RewriteRun(
@@ -61,7 +61,7 @@ public class LinqTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void SimpleOrderBy()
     {
         RewriteRun(
@@ -75,7 +75,7 @@ public class LinqTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void OrderByWithDirection()
     {
         RewriteRun(
@@ -89,7 +89,7 @@ public class LinqTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void MultipleOrderings()
     {
         RewriteRun(
@@ -103,7 +103,7 @@ public class LinqTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void JoinInto()
     {
         RewriteRun(
@@ -117,7 +117,7 @@ public class LinqTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void ComplexLinqQuery()
     {
         RewriteRun(

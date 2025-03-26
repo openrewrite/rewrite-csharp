@@ -8,16 +8,16 @@ using Rewrite.Core.Marker;
 namespace Rewrite.CSharp.Tests;
 
 [Exploratory]
-public class    PlayTests(ITestOutputHelper output) : RewriteTest(output)
+public class PlayTests : RewriteTest
 {
     /// <summary>
     /// Some pretty print tests for string delta report
     /// </summary>
-    [Theory]
-    [Exploratory]
-    [InlineData("abc\n123", "abc123")]
-    [InlineData("abc123", "abc134")]
-    [InlineData("""
+    [Test]
+    [Explicit]
+    [Arguments("abc\n123", "abc123")]
+    [Arguments("abc123", "abc134")]
+    [Arguments("""
                 one
                 two
                 three
@@ -36,8 +36,8 @@ public class    PlayTests(ITestOutputHelper output) : RewriteTest(output)
         after.ShouldBeSameAs(before);
     }
 
-    [Fact]
-    [Exploratory]
+    [Test]
+    [Explicit]
     public void MyTest()
     {
         var root = new CSharpParser.Builder().Build().Parse(
@@ -56,26 +56,9 @@ public class    PlayTests(ITestOutputHelper output) : RewriteTest(output)
         _output.WriteLine(root.ToString());
     }
 
-    [Fact]
-    public void ParseTests()
-    {
-        var root = new CSharpParser.Builder().Build().Parse(
-            """
-            public class Foo
-            {
-                void Main()
-                {
-                    a.Hello().There;
-                }
-            }
-            """
-        );
-        var node = root.Descendents().OfType<J.MethodDeclaration>().First().Body!.Statements[0];
-        _output.WriteLine(node.ToString());
-    }
 
-    [Fact]
-    [Exploratory]
+    [Test]
+    [Explicit]
     public void TestCursor()
     {
         var node = CSharpParser.Instance.Parse(

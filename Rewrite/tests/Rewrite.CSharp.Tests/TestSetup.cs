@@ -1,35 +1,29 @@
-﻿
+﻿namespace Rewrite.CSharp.Tests;
 
-using System.Reflection;
-using Rewrite.Test.Engine.Remote;
-using Xunit.Abstractions;
-using Xunit.Sdk;
-
-[assembly: Xunit.TestFramework("Rewrite.CSharp.Tests.TestSetup", "Rewrite.CSharp.Tests")]
-
-namespace Rewrite.CSharp.Tests;
-
-public sealed class TestSetup : XunitTestFramework, IDisposable
+public static class TestSetup
 {
-    private IDisposable _fixture = null!;
-    public TestSetup(IMessageSink messageSink)
-        :base(messageSink)
+    [Before(HookType.Assembly)]
+    public static void BeforeAssembly()
     {
-    }
-
-    protected override ITestFrameworkExecutor CreateExecutor(AssemblyName assemblyName)
-    {
-#if REMOTE_PRINTER
-        _fixture = new RemotingFixture();
-#else
-        _fixture = new LocalPrinterFixture();
-#endif
-
-        return base.CreateExecutor(assemblyName);
-    }
-
-    public new void Dispose()
-    {
-        _fixture.Dispose();
+        ITestExecutionContext.SetCurrent(new LocalTestExecutionContext());
+        var localPrinter = new LocalPrinterFactory();
+        IPrinterFactory.Set(new LocalPrinterFactory());
+        IPrinterFactory.Default = localPrinter;
+        // Initialization.Initialize();
+        // ITestExecutionContext.SetCurrent(new LocalTestExecutionContext());
+        // var localPrinter = new LocalPrinterFactory();
+        // IPrinterFactory.Set(localPrinter);
+        // IPrinterFactory.Default = localPrinter;
+        // Initialization.Initialize();
+        // SenderContext.Register(typeof(Cs), () => new CSharpSender());
+        // ReceiverContext.Register(typeof(Cs), () => new CSharpReceiver());
+        // SenderContext.Register(typeof(Json), () => new JsonSender());
+        // ReceiverContext.Register(typeof(Json), () => new JsonReceiver());
+        // SenderContext.Register(typeof(Xml), () => new XmlSender());
+        // ReceiverContext.Register(typeof(Xml), () => new XmlReceiver());
+        // SenderContext.Register(typeof(Yaml), () => new YamlSender());
+        // ReceiverContext.Register(typeof(Yaml), () => new YamlReceiver());
+        // SenderContext.Register(typeof(Properties), () => new PropertiesSender());
+        // ReceiverContext.Register(typeof(Properties), () => new PropertiesReceiver());
     }
 }

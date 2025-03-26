@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ForEachLoopTests(ITestOutputHelper output) : RewriteTest(output)
+public class ForEachLoopTests : RewriteTest
 {
-    [Fact]
+    [Test]
     void SimpleForEachLoop()
     {
         RewriteRun(
@@ -33,7 +33,7 @@ public class ForEachLoopTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void CommentsForEachLoop()
     {
         RewriteRun(
@@ -48,7 +48,7 @@ public class ForEachLoopTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void MultiVariableForEachLoop()
     {
         RewriteRun(
@@ -64,7 +64,7 @@ public class ForEachLoopTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void ForEachAwait()
     {
         RewriteRun(

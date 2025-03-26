@@ -2,9 +2,9 @@
 
 using static Assertions;
 
-public class GotoStatementTests(ITestOutputHelper output) : RewriteTest(output)
+public class GotoStatementTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void SimpleGoto()
     {
         RewriteRun(
@@ -21,7 +21,7 @@ public class GotoStatementTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void GotoInLoop()
     {
         RewriteRun(
@@ -42,7 +42,7 @@ public class GotoStatementTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void GotoWithSwitch()
     {
         RewriteRun(
@@ -63,7 +63,7 @@ public class GotoStatementTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void GotoInNestedBlocks()
     {
         RewriteRun(
@@ -83,7 +83,7 @@ public class GotoStatementTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void GotoWithTryFinally()
     {
         RewriteRun(
@@ -107,7 +107,7 @@ public class GotoStatementTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void MultipleGotoSameLabel()
     {
         RewriteRun(
@@ -127,7 +127,7 @@ public class GotoStatementTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void GotoDefaultCase()
     {
         RewriteRun(

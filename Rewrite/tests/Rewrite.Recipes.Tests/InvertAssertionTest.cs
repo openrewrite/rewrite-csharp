@@ -1,21 +1,18 @@
 using Rewrite.Test;
 using Rewrite.Test.CSharp;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace Rewrite.Recipes;
 
 using static Assertions;
 
-[Collection("C# remoting")]
-public class Tests(ITestOutputHelper output) : RewriteTest(output)
+public class Tests : RewriteTest
 {
     protected override void Defaults(RecipeSpec spec)
     {
         spec.Recipe = new InvertAssertion();
     }
 
-    [Fact]
+    [Test]
     public void VerifyItWorksTest()
     {
         RewriteRun(
@@ -28,7 +25,7 @@ public class Tests(ITestOutputHelper output) : RewriteTest(output)
                             bool a = false;
                             Assert.True(!a);
                         }
-                    }             
+                    }
                 """,
                 """
                     class MyClass
@@ -38,7 +35,7 @@ public class Tests(ITestOutputHelper output) : RewriteTest(output)
                             bool a = false;
                             Assert.False(a);
                         }
-                    }             
+                    }
                 """
             )
         );

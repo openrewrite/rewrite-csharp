@@ -4,16 +4,15 @@ using Rewrite.Core.Marker;
 using Rewrite.Recipes;
 using Rewrite.RewriteJava.Tree;
 using Rewrite.Test;
-using Xunit;
-using Xunit.Abstractions;
+
 using FileAttributes = Rewrite.Core.FileAttributes;
 
 namespace Rewrite.Java.Tests;
 
-public class FindClassTests(ITestOutputHelper output) : RewriteTest(output)
+public class FindClassTests : RewriteTest
 {
 
-    [Fact]
+    [Test]
     public void Test1()
     {
         var source = new J.CompilationUnit(

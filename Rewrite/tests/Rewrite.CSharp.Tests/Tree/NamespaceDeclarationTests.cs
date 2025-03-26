@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class NamespaceDeclarationTests(ITestOutputHelper output) : RewriteTest(output)
+public class NamespaceDeclarationTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void EmptyBlockScopeNamespace()
     {
         RewriteRun(
@@ -20,7 +20,7 @@ public class NamespaceDeclarationTests(ITestOutputHelper output) : RewriteTest(o
         );
     }
 
-    [Fact]
+    [Test]
     public void EmptyBlockScopeNamespaceWithTrailingSemicolon()
     {
         RewriteRun(
@@ -33,7 +33,7 @@ public class NamespaceDeclarationTests(ITestOutputHelper output) : RewriteTest(o
         );
     }
 
-    [Fact]
+    [Test]
     public void EmptyFileScopeNamespaceWithTrailingSemicolon()
     {
         RewriteRun(
@@ -45,7 +45,7 @@ public class NamespaceDeclarationTests(ITestOutputHelper output) : RewriteTest(o
         );
     }
 
-    [Fact]
+    [Test]
     public void QualifiedFileScopeNamespace()
     {
         RewriteRun(

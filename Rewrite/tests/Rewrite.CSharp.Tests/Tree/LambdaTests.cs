@@ -5,10 +5,10 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class LambdaTests(ITestOutputHelper output) : RewriteTest(output)
+public class LambdaTests : RewriteTest
 {
 
-    [Fact]
+    [Test]
     void SimpleLambda()
     {
         RewriteRun(
@@ -21,7 +21,7 @@ public class LambdaTests(ITestOutputHelper output) : RewriteTest(output)
             )
         );
     }
-    [Fact]
+    [Test]
     void SimpleLambdaWithComments()
     {
         RewriteRun(
@@ -36,7 +36,7 @@ public class LambdaTests(ITestOutputHelper output) : RewriteTest(output)
     }
 
 
-    [Fact]
+    [Test]
     void SimpleLambdaWithBlockBody()
     {
         RewriteRun(
@@ -53,7 +53,7 @@ public class LambdaTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void ParenthesizedMultiArgsLambda()
     {
         RewriteRun(
@@ -67,7 +67,7 @@ public class LambdaTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void ParenthesizedMultiArgsLambdaWithComments()
     {
         RewriteRun(
@@ -81,7 +81,7 @@ public class LambdaTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void ParenthesizedMultiArgsLambdaWithBlockBody()
     {
         RewriteRun(
@@ -98,19 +98,19 @@ public class LambdaTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void AsyncLambda()
     {
         RewriteRun(CSharp("Task.Run(async () => {});"));
     }
 
-    [Fact]
+    [Test]
     private void LambdaWithModifiers()
     {
         RewriteRun(CSharp("Task.Run( async static () => {});"));
     }
 
-    [Fact]
+    [Test]
     private void LambdaWithReturnType()
     {
         RewriteRun(CSharp("Task.Run( async static bool () => {});"));

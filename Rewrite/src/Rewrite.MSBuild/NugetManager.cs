@@ -1,7 +1,6 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
-using log4net;
 using NuGet.Common;
 using NuGet.Configuration;
 using NuGet.Frameworks;
@@ -15,21 +14,19 @@ using NuGet.Protocol.Core.Types;
 using NuGet.Resolver;
 using NuGet.Versioning;
 using Rewrite.Core;
+using Serilog;
+using ILogger = Serilog.ILogger;
 
 namespace Rewrite.MSBuild;
 
 public class NugetManager
 {
-    private static readonly ILog log = LogManager.GetLogger(typeof(NugetManager));
-
+    private static ILogger _logger = Serilog.Log.ForContext<NugetManager>();
     public static async Task<InstallableRemotingRecipe> InstallRecipeAsync(string packageId, string packageVersion,
         List<PackageSource> packageSources,
         string packagesPath,
         CancellationToken cancellationToken)
     {
-        var logger = NugetManagerLogger.Instance;
-
-
         var frameworkName = Assembly.GetExecutingAssembly().GetCustomAttributes(true)
             .OfType<TargetFrameworkAttribute>()
             .Select(x => x.FrameworkName)
@@ -39,8 +36,7 @@ public class NugetManager
             : NuGetFramework.ParseFrameworkName(frameworkName, new DefaultFrameworkNameProvider());
 
         var nuGetVersion = packageVersion.ToUpper() is "LATEST" or "RELEASE"
-            ? await FindLatestVersionAsync(packageId, packageVersion.Equals("LATEST", StringComparison.CurrentCultureIgnoreCase), packageSources, logger,
-                cancellationToken)
+            ? await FindLatestVersionAsync(packageId, packageVersion.Equals("LATEST", StringComparison.CurrentCultureIgnoreCase), packageSources, cancellationToken)
             : new NuGetVersion(packageVersion);
 
         var packageIdentityToResolve = new PackageIdentity(packageId, nuGetVersion);
@@ -51,20 +47,18 @@ public class NugetManager
         var packageManager = new NuGetPackageManager(sourceRepositoryProvider, settings, packagesPath);
         var packageExists = packageManager.PackageExistsInPackagesFolder(packageIdentityToResolve);
 
-        if (log.IsDebugEnabled)
-        {
-            log.Debug(packageExists
+
+        _logger.Debug(packageExists
                 ? $"Skip package {packageId}:{packageVersion} downloading since it already exists in the package store"
                 : $"Downloading package {packageId}:{packageVersion}");
-        }
+
 
         var (packageReader, source) =
             packageExists
-                ? (new PackageArchiveReader(
-                    packageManager.PackagesFolderNuGetProject.GetInstalledPackageFilePath(packageIdentityToResolve)), $"{Uri.UriSchemeFile}://{packagesPath}")
+                ? (new PackageArchiveReader(packageManager.PackagesFolderNuGetProject.GetInstalledPackageFilePath(packageIdentityToResolve)), $"{Uri.UriSchemeFile}://{packagesPath}")
                 : await DownloadNupkgAsync(packageId, packageVersion, packageSources,
                     settings,
-                    logger, packageManager,
+                    packageManager,
                     packageIdentityToResolve, cancellationToken);
 
         using (packageReader)
@@ -72,17 +66,11 @@ public class NugetManager
 
             var nuspecReader = await packageReader.GetNuspecReaderAsync(cancellationToken);
 
-            if (log.IsDebugEnabled)
-            {
-                log.Debug($"Resolved nuspec {nuspecReader}");
-            }
+            _logger.Debug($"Resolved nuspec {nuspecReader}");
 
             var identity = nuspecReader.GetIdentity();
 
-            if (log.IsDebugEnabled)
-            {
-                log.Debug($"Resolved package identity {identity}");
-            }
+            _logger.Debug($"Resolved package identity {identity}");
 
             var dependency = FindDependencyGroup(currentFramework, nuspecReader) ??
                              throw new InvalidOperationException("Dependency group not found");
@@ -93,15 +81,11 @@ public class NugetManager
             var assemblies =
                 LoadFrameworkSpecificGroupItemsToAssembly(currentFramework, packageReader, identity, installedPath);
             var recipes = assemblies.SelectMany(FindAllRecipes).ToList();
+            _logger.Debug($"Found {recipes.Count}");
 
-            if (log.IsDebugEnabled)
+            if (recipes.Count > 0)
             {
-                log.Debug($"Found {recipes.Count}");
-
-                if (recipes.Count > 0)
-                {
-                    log.Debug($"Found the following recipes [{recipes}]");
-                }
+                _logger.Debug($"Found the following recipes [{recipes}]");
             }
 
             var mappedRecipes = recipes.Select(r =>
@@ -114,14 +98,13 @@ public class NugetManager
         }
     }
 
-    private static async Task<NuGetVersion> FindLatestVersionAsync(string packageId, bool includePrerelease, List<PackageSource> packageSources, ILogger logger, CancellationToken cancellationToken)
+    private static async Task<NuGetVersion> FindLatestVersionAsync(string packageId, bool includePrerelease, List<PackageSource> packageSources, CancellationToken cancellationToken)
     {
         return (await Task.WhenAll(packageSources.Select(s => Repository.Factory.GetCoreV3(s))
                 .Select(async repository =>
                 {
                     var resource = await repository.GetResourceAsync<PackageSearchResource>(cancellationToken);
-                    var packages = await resource.SearchAsync(packageId, new SearchFilter(includePrerelease), 0, 100, logger,
-                        cancellationToken);
+                    var packages = await resource.SearchAsync(packageId, new SearchFilter(includePrerelease), 0, 100, NugetLogger.Instance, cancellationToken);
                     var iPackageSearchMetadata = packages.FirstOrDefault(psm => psm.Identity.Id == packageId);
                     if (iPackageSearchMetadata == null)
                     {
@@ -137,15 +120,11 @@ public class NugetManager
 
     private static async Task<(PackageArchiveReader, string)> DownloadNupkgAsync(string packageId, string packageVersion,
         List<PackageSource> packageSources,
-        ISettings settings, ILogger logger, NuGetPackageManager packageManager,
+        ISettings settings, NuGetPackageManager packageManager,
         PackageIdentity packageIdentityToResolve,
         CancellationToken cancellationToken)
     {
-
-        if (log.IsDebugEnabled)
-        {
-            log.Debug($"Downloading package {packageId}:{packageVersion}");
-        }
+        _logger.Debug($"Downloading package {packageId}:{packageVersion}");
 
 
         var allowPrereleaseVersions = true;
@@ -155,7 +134,7 @@ public class NugetManager
         var projectContext = new ProjectContext
         {
             PackageExtractionContext = new PackageExtractionContext(PackageSaveMode.Defaultv3,
-                XmlDocFileSaveMode.Compress, ClientPolicyContext.GetClientPolicy(settings, logger), logger)
+                XmlDocFileSaveMode.Compress, ClientPolicyContext.GetClientPolicy(settings, NugetLogger.Instance), NugetLogger.Instance)
         };
 
 
@@ -165,7 +144,7 @@ public class NugetManager
         {
             if (await sourceRepository.GetResource<FindPackageByIdResource>().DoesPackageExistAsync(
                     packageIdentityToResolve.Id,
-                    packageIdentityToResolve.Version, resolutionContext.SourceCacheContext, logger, cancellationToken))
+                    packageIdentityToResolve.Version, resolutionContext.SourceCacheContext, NugetLogger.Instance, cancellationToken))
             {
                 packageSourceRepository = sourceRepository;
                 break;
@@ -185,11 +164,8 @@ public class NugetManager
             [],
             cancellationToken);
 
-        if (log.IsDebugEnabled)
-        {
-            log.Debug(
-                $"Package {packageId}:{packageVersion} has been successfully downloaded and stored at {packageManager.PackagesFolderNuGetProject}");
-        }
+
+        _logger.Debug($"Package {packageId}:{packageVersion} has been successfully downloaded and stored at {packageManager.PackagesFolderNuGetProject}");
 
         return (new PackageArchiveReader(
             packageManager.PackagesFolderNuGetProject.GetInstalledPackageFilePath(packageIdentityToResolve)), packageSourceRepository.PackageSource.Source);
@@ -297,10 +273,7 @@ public class NugetManager
         NuGetFramework currentFramework,
         FolderNuGetProject folderNuGetProject, CancellationToken cancellationToken)
     {
-        if (log.IsDebugEnabled)
-        {
-            log.Debug($"Loading assemblies for {dependencyGroup}");
-        }
+        _logger.Debug($"Loading assemblies for {dependencyGroup}");
 
         foreach (var dependencyGroupPackage in dependencyGroup.Packages)
         {
@@ -310,10 +283,7 @@ public class NugetManager
             if (AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == packageIdentity.Id) !=
                 null)
             {
-                if (log.IsDebugEnabled)
-                {
-                    log.Debug($"Skipping already loaded {packageIdentity.Id} assembly.");
-                }
+                _logger.Debug($"Skipping already loaded {packageIdentity.Id} assembly.");
 
                 continue;
             }
@@ -351,10 +321,7 @@ public class NugetManager
         var findFrameworkSpecificGroup = FindFrameworkSpecificGroup(packageReader, currentFramework);
         foreach (var item in findFrameworkSpecificGroup.Items.Where(it => it.EndsWith(".dll")))
         {
-            if (log.IsDebugEnabled)
-            {
-                log.Debug($"Loading assembly {item}");
-            }
+            _logger.Debug($"Loading assembly {item}");
 
             // if (AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == packageIdentity.Id) !=
             //     null)
@@ -369,10 +336,9 @@ public class NugetManager
             }
             catch (FileLoadException e)
             {
-                if (log.IsDebugEnabled)
-                {
-                    log.Debug($"Failed to load assembly {item}\n{e}");
-                }
+
+                _logger.Debug($"Failed to load assembly {item}\n{e}");
+
             }
             // }
         }
@@ -441,18 +407,18 @@ public class NugetManager
             .OrderBy(pdg => pdg.Items.Count())
             .First();
     }
-
-    class NugetManagerLogger : ILogger
+    class NugetLogger : NuGet.Common.ILogger
     {
-        private static ILogger? _instance;
+        private static ILogger _logger = Serilog.Log.ForContext<NugetLogger>();
+        private static NuGet.Common.ILogger? _instance;
 
-        public static ILogger Instance
+        public static NuGet.Common.ILogger Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new NugetManagerLogger();
+                    _instance = new NugetLogger();
                 }
 
                 return _instance;
@@ -461,37 +427,37 @@ public class NugetManager
 
         public void LogDebug(string data)
         {
-            log.Debug(data);
+            _logger.Debug(data);
         }
 
         public void LogVerbose(string data)
         {
-            log.Debug(data);
+            _logger.Debug(data);
         }
 
         public void LogInformation(string data)
         {
-            log.Info(data);
+            _logger.Information(data);
         }
 
         public void LogMinimal(string data)
         {
-            log.Info(data);
+            _logger.Information(data);
         }
 
         public void LogWarning(string data)
         {
-            log.Warn(data);
+            _logger.Warning(data);
         }
 
         public void LogError(string data)
         {
-            log.Error(data);
+            _logger.Error(data);
         }
 
         public void LogInformationSummary(string data)
         {
-            log.Info(data);
+            _logger.Information(data);
         }
 
         public void Log(LogLevel level, string data)
@@ -500,17 +466,17 @@ public class NugetManager
             {
                 case LogLevel.Debug:
                 case LogLevel.Verbose:
-                    log.Debug(data);
+                    _logger.Debug(data);
                     break;
                 case LogLevel.Information:
                 case LogLevel.Minimal:
-                    log.Info(data);
+                    _logger.Information(data);
                     break;
                 case LogLevel.Warning:
-                    log.Warn(data);
+                    _logger.Warning(data);
                     break;
                 case LogLevel.Error:
-                    log.Error(data);
+                    _logger.Error(data);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(level), level, null);

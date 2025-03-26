@@ -6,7 +6,6 @@ using Rewrite.RewriteCSharp.Tree;
 using Rewrite.RewriteJava;
 using Rewrite.RewriteJava.Tree;
 using Rewrite.Test;
-using Xunit;
 using ExecutionContext = Rewrite.Core.ExecutionContext;
 
 namespace Rewrite.Test.CSharp;

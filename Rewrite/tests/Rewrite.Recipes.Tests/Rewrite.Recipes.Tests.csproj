@@ -11,15 +11,11 @@
 
     <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.0"/>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.0-release-24352-06" />
-        <PackageReference Include="xunit" Version="2.8.1" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1"/>
+        <PackageReference Include="TUnit" Version="0.19.6"/>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Rewrite.Recipes\Rewrite.Recipes.csproj" />
-      <ProjectReference Include="..\..\src\Rewrite.Test.CSharp\Rewrite.Test.CSharp.csproj" />
-      <ProjectReference Include="..\..\src\Rewrite.Test.Engine.Remote\Rewrite.Test.Engine.Remote.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.Test\Rewrite.Test.csproj" />
     </ItemGroup>
 

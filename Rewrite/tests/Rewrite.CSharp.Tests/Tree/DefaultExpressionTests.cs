@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class DefaultExpressionTests(ITestOutputHelper output) : RewriteTest(output)
+public class DefaultExpressionTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void DefaultLiteral()
     {
         RewriteRun(
@@ -18,7 +18,7 @@ public class DefaultExpressionTests(ITestOutputHelper output) : RewriteTest(outp
             )
         );
     }
-    [Fact]
+    [Test]
     public void DefaultOperator()
     {
         RewriteRun(

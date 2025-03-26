@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class RefTypeTests(ITestOutputHelper output) : RewriteTest(output)
+public class RefTypeTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void SimpleRefParameter()
     {
         RewriteRun(
@@ -22,7 +22,7 @@ public class RefTypeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void RefReturnType()
     {
         RewriteRun(
@@ -37,7 +37,7 @@ public class RefTypeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void RefLocalVariable()
     {
         RewriteRun(
@@ -53,7 +53,7 @@ public class RefTypeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void RefReadonlyParameter()
     {
         RewriteRun(
@@ -68,7 +68,7 @@ public class RefTypeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void RefReadonlyReturn()
     {
         RewriteRun(
@@ -83,7 +83,7 @@ public class RefTypeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void RefStructType()
     {
         RewriteRun(
@@ -98,7 +98,7 @@ public class RefTypeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void MultipleRefParameters()
     {
         RewriteRun(
@@ -115,7 +115,7 @@ public class RefTypeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void RefPropertyReturn()
     {
         RewriteRun(
@@ -131,7 +131,7 @@ public class RefTypeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void RefExtensionMethod()
     {
         RewriteRun(
@@ -149,7 +149,7 @@ public class RefTypeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void RefFieldInRefStruct()
     {
         RewriteRun(

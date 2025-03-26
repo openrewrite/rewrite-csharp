@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ArrayTypeTests(ITestOutputHelper output) : RewriteTest(output)
+public class ArrayTypeTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void OneDimensional()
     {
         RewriteRun(
@@ -19,7 +19,7 @@ public class ArrayTypeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void TwoDimensional()
     {
         RewriteRun(
@@ -31,7 +31,7 @@ public class ArrayTypeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void Jagged()
     {
         RewriteRun(
@@ -43,7 +43,7 @@ public class ArrayTypeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void Space()
     {
         RewriteRun(

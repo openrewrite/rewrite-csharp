@@ -1,8 +1,8 @@
 ﻿namespace Rewrite.CSharp.Tests.Tree;
 using static Assertions;
-public class GlobalTests(ITestOutputHelper output) : RewriteTest(output)
+public class GlobalTests : RewriteTest
 {
-    [Fact]
+    [Test]
     void TopLevelProgram()
     {
         RewriteRun(

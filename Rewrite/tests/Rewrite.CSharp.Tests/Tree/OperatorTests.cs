@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class OperatorDeclarationTests(ITestOutputHelper output) : RewriteTest(output)
+public class OperatorDeclarationTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void UnaryOperator()
     {
         RewriteRun(
@@ -22,7 +22,7 @@ public class OperatorDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     public void BinaryOperator()
     {
         RewriteRun(
@@ -37,7 +37,7 @@ public class OperatorDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     public void ConversionOperator()
     {
         RewriteRun(
@@ -52,7 +52,7 @@ public class OperatorDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     public void ImplicitConversionOperator()
     {
         RewriteRun(
@@ -67,7 +67,7 @@ public class OperatorDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     public void OverloadedComparisonOperator()
     {
         RewriteRun(
@@ -83,7 +83,7 @@ public class OperatorDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     public void CustomIndexOperator()
     {
         RewriteRun(
@@ -102,7 +102,7 @@ public class OperatorDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     public void CheckedOperator()
     {
         RewriteRun(
@@ -117,7 +117,7 @@ public class OperatorDeclarationTests(ITestOutputHelper output) : RewriteTest(ou
         );
     }
 
-    [Fact]
+    [Test]
     public void OperatorWithAttributes()
     {
         RewriteRun(

@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class SwitchExpressionTests(ITestOutputHelper output) : RewriteTest(output)
+public class SwitchExpressionTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void Basic()
     {
         RewriteRun(
@@ -23,7 +23,7 @@ public class SwitchExpressionTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     void TuplePattern()
     {
         RewriteRun(
@@ -39,7 +39,7 @@ public class SwitchExpressionTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     void TypePattern()
     {
         RewriteRun(
@@ -54,7 +54,7 @@ public class SwitchExpressionTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     void RangePattern()
     {
         RewriteRun(
@@ -72,7 +72,7 @@ public class SwitchExpressionTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     void TypePatternWithWhenClause()
     {
         RewriteRun(
@@ -87,7 +87,7 @@ public class SwitchExpressionTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     void PropertyPattern()
     {
         RewriteRun(
@@ -102,7 +102,7 @@ public class SwitchExpressionTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     void PropertyPatternWithDesignator()
     {
         RewriteRun(
@@ -117,7 +117,7 @@ public class SwitchExpressionTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     void PositionalPattern()
     {
         RewriteRun(
@@ -133,7 +133,7 @@ public class SwitchExpressionTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     void NullCheckPattern()
     {
         RewriteRun(
@@ -149,7 +149,7 @@ public class SwitchExpressionTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     void MultiplePatternsUsingOr()
     {
         RewriteRun(
@@ -164,7 +164,7 @@ public class SwitchExpressionTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     void NestedPatterns()
     {
         RewriteRun(
@@ -183,7 +183,7 @@ public class SwitchExpressionTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     void RecursivePatterns()
     {
         RewriteRun(
@@ -199,7 +199,7 @@ public class SwitchExpressionTests(ITestOutputHelper output) : RewriteTest(outpu
         );
     }
 
-    [Fact]
+    [Test]
     void PatternMatchingWithRecords()
     {
         RewriteRun(

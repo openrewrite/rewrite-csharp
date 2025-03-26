@@ -6,9 +6,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class DoWhileTests(ITestOutputHelper output) : RewriteTest(output)
+public class DoWhileTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void BasicDoWhile()
     {
         RewriteRun(
@@ -20,7 +20,7 @@ public class DoWhileTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void NonBlockStatement()
     {
         RewriteRun(

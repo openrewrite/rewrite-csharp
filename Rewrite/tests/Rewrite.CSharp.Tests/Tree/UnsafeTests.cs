@@ -7,9 +7,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class UnsafeTests(ITestOutputHelper output) : RewriteTest(output)
+public class UnsafeTests : RewriteTest
 {
-    [Fact]
+    [Test]
     private void UnsafeStatement()
     {
         RewriteRun(

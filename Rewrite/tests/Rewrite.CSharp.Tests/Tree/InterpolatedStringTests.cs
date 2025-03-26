@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class InterpolatedStringTests(ITestOutputHelper output) : RewriteTest(output)
+public class InterpolatedStringTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void SingleLine()
     {
         RewriteRun(
@@ -22,7 +22,7 @@ public class InterpolatedStringTests(ITestOutputHelper output) : RewriteTest(out
         );
     }
 
-    [Fact]
+    [Test]
     public void Interpolated()
     {
         RewriteRun(
@@ -37,7 +37,7 @@ public class InterpolatedStringTests(ITestOutputHelper output) : RewriteTest(out
         );
     }
 
-    [Fact]
+    [Test]
     public void MultiLine()
     {
         RewriteRun(
@@ -54,7 +54,7 @@ public class InterpolatedStringTests(ITestOutputHelper output) : RewriteTest(out
         );
     }
 
-    [Fact]
+    [Test]
     public void Alignment()
     {
         RewriteRun(
@@ -69,7 +69,7 @@ public class InterpolatedStringTests(ITestOutputHelper output) : RewriteTest(out
         );
     }
 
-    [Fact]
+    [Test]
     public void AlignmentAndFormat()
     {
         RewriteRun(

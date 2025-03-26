@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class UnaryTests(ITestOutputHelper output) : RewriteTest(output)
+public class UnaryTests : RewriteTest
 {
-    [Fact]
+    [Test]
     void Format()
     {
         RewriteRun(
@@ -31,7 +31,7 @@ public class UnaryTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void Negation()
     {
         RewriteRun(
@@ -45,7 +45,7 @@ public class UnaryTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void NullWarningSuppress()
     {
         RewriteRun(
@@ -59,7 +59,7 @@ public class UnaryTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     [KnownBug]
     void NullableFunctionProperty()
     {
@@ -72,7 +72,7 @@ public class UnaryTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void IndexExpression()
     {
         RewriteRun(
@@ -84,7 +84,7 @@ public class UnaryTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void AddressOfExpression()
     {
         RewriteRun(
@@ -96,7 +96,7 @@ public class UnaryTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void PointerIndirection()
     {
         RewriteRun(
@@ -108,7 +108,7 @@ public class UnaryTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     void PointerType()
     {
         RewriteRun(

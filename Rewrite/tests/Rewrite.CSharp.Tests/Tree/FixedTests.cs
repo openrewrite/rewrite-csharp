@@ -7,9 +7,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class FixedTests(ITestOutputHelper output) : RewriteTest(output)
+public class FixedTests : RewriteTest
 {
-    [Fact]
+    [Test]
     private void FixedBlock()
     {
         RewriteRun(
@@ -24,7 +24,7 @@ public class FixedTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void FixedStatement()
     {
         RewriteRun(
@@ -37,7 +37,7 @@ public class FixedTests(ITestOutputHelper output) : RewriteTest(output)
             )
         );
     }
-    [Fact]
+    [Test]
     private void FixedStatement2()
     {
         RewriteRun(
@@ -54,7 +54,7 @@ public class FixedTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void NestedFixedStatement()
     {
         RewriteRun(

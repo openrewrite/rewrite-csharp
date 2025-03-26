@@ -1,6 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
 using Rewrite.Remote.Server;
+using Serilog;
 using Parser = CommandLine.Parser;
+
 
 var result = new Parser(ps =>
     {

@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class DirectiveTests(ITestOutputHelper output) : RewriteTest(output)
+public class DirectiveTests : RewriteTest
 {
-    [Fact]
+    [Test]
     void ConditionalPragma()
     {
         RewriteRun(
@@ -20,7 +20,7 @@ public class DirectiveTests(ITestOutputHelper output) : RewriteTest(output)
           )
         );
     }
-    [Fact]
+    [Test]
     void NullableDirective()
     {
         RewriteRun(

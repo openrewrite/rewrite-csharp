@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class UsingDirectiveTests(ITestOutputHelper output) : RewriteTest(output)
+public class UsingDirectiveTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void Simple()
     {
         RewriteRun(
@@ -24,7 +24,7 @@ public class UsingDirectiveTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void InFileNamespace()
     {
         RewriteRun(
@@ -40,7 +40,7 @@ public class UsingDirectiveTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void InBlockNamespace()
     {
         RewriteRun(
@@ -55,7 +55,7 @@ public class UsingDirectiveTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void Global()
     {
         RewriteRun(
@@ -72,7 +72,7 @@ public class UsingDirectiveTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void Static()
     {
         RewriteRun(
@@ -89,7 +89,7 @@ public class UsingDirectiveTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void Alias()
     {
         RewriteRun(
@@ -106,7 +106,7 @@ public class UsingDirectiveTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void AliasUnnamed()
     {
         RewriteRun(

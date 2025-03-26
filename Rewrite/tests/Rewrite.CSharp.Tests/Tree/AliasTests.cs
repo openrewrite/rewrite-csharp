@@ -6,9 +6,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class AliasTests(ITestOutputHelper output) : RewriteTest(output)
+public class AliasTests: RewriteTest
 {
-    [Fact]
+    [Test]
     public void AliasInvocation()
     {
         RewriteRun(
@@ -22,7 +22,7 @@ public class AliasTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void AliasMember()
     {
         RewriteRun(
@@ -36,7 +36,7 @@ public class AliasTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void GlobalAlias()
     {
         RewriteRun(

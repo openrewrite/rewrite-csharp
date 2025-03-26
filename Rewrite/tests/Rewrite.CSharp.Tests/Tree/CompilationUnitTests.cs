@@ -6,9 +6,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class CompilationUnitTests(ITestOutputHelper output) : RewriteTest(output)
+public class CompilationUnitTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void Empty()
     {
         RewriteRun(
@@ -20,7 +20,7 @@ public class CompilationUnitTests(ITestOutputHelper output) : RewriteTest(output
         );
     }
 
-    [Fact]
+    [Test]
     public void OnlyComment()
     {
         RewriteRun(
@@ -32,7 +32,7 @@ public class CompilationUnitTests(ITestOutputHelper output) : RewriteTest(output
         );
     }
 
-    [Fact]
+    [Test]
     public void EndsWithCrlf()
     {
         RewriteRun(CSharp("class A{} \r\n"));

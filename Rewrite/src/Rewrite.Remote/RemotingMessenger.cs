@@ -1,14 +1,14 @@
 using System.Formats.Cbor;
 using System.Net.Sockets;
-using log4net;
 using PeterO.Cbor;
 using Rewrite.Core;
+using Serilog;
 
 namespace Rewrite.Remote;
 
 public class RemotingMessenger
 {
-    private static readonly ILog log = LogManager.GetLogger(typeof(RemotingMessenger));
+    private static readonly ILogger log = Log.Logger.ForContext<RemotingMessenger>();
 
     private const int Ok = 0;
     private const int Error = 1;
@@ -31,21 +31,18 @@ public class RemotingMessenger
     public async Task<bool> ProcessRequest(NetworkStream stream, CancellationToken cancellationToken)
     {
         var command = CBORObject.Read(stream).AsString();
-        if (log.IsDebugEnabled)
-        {
-            log.Debug($"Received a new client[{stream.Socket.RemoteEndPoint}]'s request command[{command}]");
-        }
+        log.Debug($"Received a new client[{stream.Socket.RemoteEndPoint}]'s request command[{command}]");
 
         switch (command)
         {
             case "hello":
-                log.Info("Handling \"hello\" Request");
+                log.Information("Handling \"hello\" Request");
                 CBORObject.Read(stream);
                 CBORObject.Write((int)RemotingMessageType.Response, stream);
                 CBORObject.Write(Ok, stream);
                 break;
             case "reset":
-                log.Info("Handling \"reset\" Request");
+                log.Information("Handling \"reset\" Request");
                 _state = null;
                 _context = _context.Copy();
                 _context.Connect(stream.Socket);
@@ -98,7 +95,7 @@ public class RemotingMessenger
         var recipeId = CBORObject.Read(stream).AsString();
         var recipeOptions = CBORObject.Read(stream);
 
-        log.Info($"Handling \"LoadRecipe\" Request for Id[{recipeId}] with options {recipeOptions}");
+        log.Information($"Handling \"LoadRecipe\" Request for Id[{recipeId}] with options {recipeOptions}");
 
         var recipe = _context.NewRecipe(recipeId, recipeOptions);
         _recipes.Add(recipe);
@@ -114,7 +111,7 @@ public class RemotingMessenger
         var recipeIndex = CBORObject.Read(stream).AsInt32();
         var recipe = _recipes[recipeIndex];
 
-        log.Info($"Handling \"RunRecipe\" Request for index {recipe}");
+        log.Information($"Handling \"RunRecipe\" Request for index {recipe}");
 
         var inputStream = RemoteUtils.ReadToCommandEnd(stream);
 

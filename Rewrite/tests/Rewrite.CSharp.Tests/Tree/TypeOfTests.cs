@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class TypeOfTests(ITestOutputHelper output) : RewriteTest(output)
+public class TypeOfTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void SimpleTypeOf()
     {
         RewriteRun(
@@ -23,7 +23,7 @@ public class TypeOfTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void SimpleTypeOfWithComments()
     {
         RewriteRun(

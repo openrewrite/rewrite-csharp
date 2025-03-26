@@ -1,5 +1,4 @@
 using System.Reflection;
-using log4net;
 using Microsoft.Build.Definition;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Locator;
@@ -10,6 +9,7 @@ using Rewrite.Core;
 using Rewrite.Core.Marker;
 using Rewrite.RewriteCSharp;
 using Rewrite.RewriteJava.Tree;
+using Serilog;
 using static Rewrite.RewriteJava.Tree.Space;
 using FileAttributes = Rewrite.Core.FileAttributes;
 using Project = Microsoft.Build.Evaluation.Project;
@@ -18,8 +18,6 @@ namespace Rewrite.MSBuild;
 
 public class ProjectParser
 {
-
-    private static readonly ILog log = LogManager.GetLogger(typeof(ProjectParser));
 
     static ProjectParser()
     {

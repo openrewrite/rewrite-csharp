@@ -5,10 +5,10 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class IsPatternTests(ITestOutputHelper output) : RewriteTest(output)
+public class IsPatternTests : RewriteTest
 {
 
-    [Fact]
+    [Test]
     private void IsType()
     {
         RewriteRun(
@@ -20,7 +20,7 @@ public class IsPatternTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void IsTypeWithVariable()
     {
         RewriteRun(
@@ -32,7 +32,7 @@ public class IsPatternTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void IsTypeWithDiscard()
     {
         RewriteRun(
@@ -44,7 +44,7 @@ public class IsPatternTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void IsVarWithTupleDeconstruction()
     {
         RewriteRun(
@@ -56,7 +56,7 @@ public class IsPatternTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void IsIntConstant()
     {
         RewriteRun(
@@ -68,7 +68,7 @@ public class IsPatternTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void IsStringConstant()
     {
         RewriteRun(
@@ -80,7 +80,7 @@ public class IsPatternTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void IsPropertyPattern()
     {
         RewriteRun(
@@ -92,7 +92,7 @@ public class IsPatternTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void IsVarPattern()
     {
         RewriteRun(
@@ -104,7 +104,7 @@ public class IsPatternTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void IsPositional()
     {
         RewriteRun(
@@ -116,7 +116,7 @@ public class IsPatternTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void IsRelational()
     {
         RewriteRun(
@@ -128,7 +128,7 @@ public class IsPatternTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void IsArray()
     {
         RewriteRun(
@@ -140,7 +140,7 @@ public class IsPatternTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void PropertyNameNested()
     {
         RewriteRun(

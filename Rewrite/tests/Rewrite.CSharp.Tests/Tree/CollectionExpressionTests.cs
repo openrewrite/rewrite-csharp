@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class CollectionExpressionTests(ITestOutputHelper output) : RewriteTest(output)
+public class CollectionExpressionTests : RewriteTest
 {
-    [Fact]
+    [Test]
     void Space()
     {
         RewriteRun(
@@ -21,7 +21,7 @@ public class CollectionExpressionTests(ITestOutputHelper output) : RewriteTest(o
         );
     }
 
-    [Fact]
+    [Test]
     void Empty()
     {
         RewriteRun(
@@ -35,7 +35,7 @@ public class CollectionExpressionTests(ITestOutputHelper output) : RewriteTest(o
         );
     }
 
-    [Fact]
+    [Test]
     void Multiple()
     {
         RewriteRun(
@@ -49,7 +49,7 @@ public class CollectionExpressionTests(ITestOutputHelper output) : RewriteTest(o
         );
     }
 
-    [Fact]
+    [Test]
     void TrailingComma()
     {
         RewriteRun(
@@ -63,7 +63,7 @@ public class CollectionExpressionTests(ITestOutputHelper output) : RewriteTest(o
         );
     }
 
-    [Fact]
+    [Test]
     void Spread()
     {
         RewriteRun(

@@ -6,9 +6,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 using static Assertions;
 
 
-public class ArrayTests(ITestOutputHelper output) : RewriteTest(output)
+public class ArrayTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void OneDimensional()
     {
         RewriteRun(
@@ -20,7 +20,7 @@ public class ArrayTests(ITestOutputHelper output) : RewriteTest(output)
             )
         );
     }
-    [Fact]
+    [Test]
     public void MultiDimensional()
     {
         RewriteRun(
@@ -33,7 +33,7 @@ public class ArrayTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void Jagged()
     {
         RewriteRun(
@@ -46,7 +46,7 @@ public class ArrayTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void RangeExpression()
     {
         RewriteRun(
@@ -58,7 +58,7 @@ public class ArrayTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void ImplicitArray()
     {
         RewriteRun(
@@ -73,7 +73,7 @@ public class ArrayTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void Initializer()
     {
         RewriteRun(
@@ -86,7 +86,7 @@ public class ArrayTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void InitializerWithTrailingComma()
     {
         RewriteRun(
@@ -98,7 +98,7 @@ public class ArrayTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void ArrayWithEmptyInitializer()
     {
         RewriteRun(

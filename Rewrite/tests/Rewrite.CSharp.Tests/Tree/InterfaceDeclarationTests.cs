@@ -7,10 +7,10 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class InterfaceDeclarationTests(ITestOutputHelper output) : RewriteTest(output)
+public class InterfaceDeclarationTests : RewriteTest
 {
 
-    [Fact]
+    [Test]
     public void ModifierAndInterfaceWithoutBody()
     {
         RewriteRun(
@@ -23,7 +23,7 @@ public class InterfaceDeclarationTests(ITestOutputHelper output) : RewriteTest(o
         );
     }
 
-    [Fact]
+    [Test]
     public void InterfaceExtendingSingle()
     {
         RewriteRun(
@@ -43,7 +43,7 @@ public class InterfaceDeclarationTests(ITestOutputHelper output) : RewriteTest(o
         );
     }
 
-    [Fact]
+    [Test]
     public void InterfaceExtendingMultiple()
     {
         RewriteRun(
@@ -64,7 +64,7 @@ public class InterfaceDeclarationTests(ITestOutputHelper output) : RewriteTest(o
         );
     }
 
-    [Fact]
+    [Test]
     public void ClassWithoutBody()
     {
         RewriteRun(
@@ -79,7 +79,7 @@ public class InterfaceDeclarationTests(ITestOutputHelper output) : RewriteTest(o
 
 
 
-    [Fact]
+    [Test]
     public void InterfaceWithWithoutBodyWithTypeParams()
     {
         RewriteRun(
@@ -92,7 +92,7 @@ public class InterfaceDeclarationTests(ITestOutputHelper output) : RewriteTest(o
         );
     }
 
-    [Fact]
+    [Test]
     public void InterfaceWithEmptyBody()
     {
         RewriteRun(
@@ -108,7 +108,7 @@ public class InterfaceDeclarationTests(ITestOutputHelper output) : RewriteTest(o
         );
     }
 
-    [Fact]
+    [Test]
     public void InterfaceWithWithoutBodyWithTypeParamsInOut()
     {
         RewriteRun(

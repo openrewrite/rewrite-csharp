@@ -6,9 +6,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class IndexerTests(ITestOutputHelper output) : RewriteTest(output)
+public class IndexerTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void BasicIndexer()
     {
         RewriteRun(
@@ -24,7 +24,7 @@ public class IndexerTests(ITestOutputHelper output) : RewriteTest(output)
                    """));
     }
 
-    [Fact]
+    [Test]
     public void IndexerWithExplicitInterface()
     {
         RewriteRun(
@@ -40,7 +40,7 @@ public class IndexerTests(ITestOutputHelper output) : RewriteTest(output)
                    """));
     }
 
-    [Fact]
+    [Test]
     public void IndexerWithMultipleParameters()
     {
         RewriteRun(
@@ -56,7 +56,7 @@ public class IndexerTests(ITestOutputHelper output) : RewriteTest(output)
                    """));
     }
 
-    [Fact]
+    [Test]
     public void ReadOnlyIndexer()
     {
         RewriteRun(
@@ -68,7 +68,7 @@ public class IndexerTests(ITestOutputHelper output) : RewriteTest(output)
                    """));
     }
 
-    [Fact]
+    [Test]
     public void IndexerWithAttributes()
     {
         RewriteRun(
@@ -84,7 +84,7 @@ public class IndexerTests(ITestOutputHelper output) : RewriteTest(output)
                    """));
     }
 
-    [Fact]
+    [Test]
     public void InterfaceIndexer()
     {
         RewriteRun(
@@ -96,7 +96,7 @@ public class IndexerTests(ITestOutputHelper output) : RewriteTest(output)
                    """));
     }
 
-    [Fact]
+    [Test]
     public void IndexerWithModifiers()
     {
         RewriteRun(
@@ -112,7 +112,7 @@ public class IndexerTests(ITestOutputHelper output) : RewriteTest(output)
                    """));
     }
 
-    [Fact]
+    [Test]
     public void AutoImplementedIndexer()
     {
         RewriteRun(
@@ -124,7 +124,7 @@ public class IndexerTests(ITestOutputHelper output) : RewriteTest(output)
                    """));
     }
 
-    [Fact]
+    [Test]
     public void ExpressionBodiedIndexer()
     {
         RewriteRun(

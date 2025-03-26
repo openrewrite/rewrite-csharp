@@ -7,9 +7,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class LiteralTests(ITestOutputHelper output) : RewriteTest(output)
+public class LiteralTests : RewriteTest
 {
-    [Fact]
+    [Test]
     private void Boolean()
     {
         RewriteRun(
@@ -25,7 +25,7 @@ public class LiteralTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void Number()
     {
         RewriteRun(
@@ -50,7 +50,7 @@ public class LiteralTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void NativeInts()
     {
         RewriteRun(
@@ -66,7 +66,7 @@ public class LiteralTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     private void Null()
     {
         RewriteRun(

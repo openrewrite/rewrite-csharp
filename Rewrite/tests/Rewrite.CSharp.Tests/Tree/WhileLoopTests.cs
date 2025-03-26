@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class WhileLoopTests(ITestOutputHelper output) : RewriteTest(output)
+public class WhileLoopTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void EmptyBody()
     {
         RewriteRun(
@@ -27,7 +27,7 @@ public class WhileLoopTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void WithBreak()
     {
         RewriteRun(
@@ -46,7 +46,7 @@ public class WhileLoopTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void WithContinue()
     {
         RewriteRun(

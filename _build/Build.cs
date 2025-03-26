@@ -72,10 +72,12 @@ class Build : NukeBuild
 
     Target Pack => _ => _
         .Description("Creates nuget packages inside artifacts directory")
-        .DependsOn(Restore)
+        .DependsOn(Restore, Compile)
         .Executes(() =>
         {
             DotNetPack(x => x
+                .EnableNoBuild()
+                .EnableNoRestore()
                 .SetProject(Solution.Path)
                 .SetVersion(Version.NuGetPackageVersion)
                 .SetOutputDirectory(ArtifactsDirectory));

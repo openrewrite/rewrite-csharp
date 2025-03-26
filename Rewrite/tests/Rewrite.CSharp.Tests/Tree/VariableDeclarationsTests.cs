@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class VariableDeclarationsTests(ITestOutputHelper output) : RewriteTest(output)
+public class VariableDeclarationsTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void Space()
     {
         RewriteRun(
@@ -26,7 +26,7 @@ public class VariableDeclarationsTests(ITestOutputHelper output) : RewriteTest(o
         );
     }
 
-    [Fact]
+    [Test]
     void Modifiers()
     {
         RewriteRun(

@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class YieldTests(ITestOutputHelper output) : RewriteTest(output)
+public class YieldTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void YieldReturn()
     {
         RewriteRun(
@@ -21,7 +21,7 @@ public class YieldTests(ITestOutputHelper output) : RewriteTest(output)
             )
         );
     }
-    [Fact]
+    [Test]
     public void YieldBreak()
     {
         RewriteRun(

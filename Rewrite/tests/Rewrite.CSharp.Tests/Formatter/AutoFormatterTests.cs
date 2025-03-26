@@ -3,14 +3,14 @@
 namespace Rewrite.CSharp.Tests.Formatter;
 using static Assertions;
 
-public class AutoFormatterTests(ITestOutputHelper output) : RewriteTest(output)
+public class AutoFormatterTest : RewriteTest
 {
     protected override void Defaults(RecipeSpec spec)
     {
         spec.Recipe = new AutoFormatRecipe();
     }
 
-    [Fact]
+    [Test]
     public void FormatBasic()
     {
         RewriteRun(CSharp(
@@ -26,7 +26,7 @@ public class AutoFormatterTests(ITestOutputHelper output) : RewriteTest(output)
                    """));
     }
 
-    [Fact]
+    [Test]
     public void PartialFormat()
     {
         var spec = CSharp(

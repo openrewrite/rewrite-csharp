@@ -12,13 +12,12 @@
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisVersion)" NoWarn="NU5104"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
+        <ProjectReference Include="..\Rewrite.Remote\Rewrite.Remote.csproj" />
         <ProjectReference Include="..\Rewrite.Json\Rewrite.Json.csproj" />
         <ProjectReference Include="..\Rewrite.Properties\Rewrite.Properties.csproj" />
         <ProjectReference Include="..\Rewrite.Xml\Rewrite.Xml.csproj" />
         <ProjectReference Include="..\Rewrite.Yaml\Rewrite.Yaml.csproj" />
         <ProjectReference Include="..\Rewrite.CSharp\Rewrite.CSharp.csproj" />
-        <ProjectReference Include="..\Rewrite.Remote\Rewrite.Remote.csproj" />
     </ItemGroup>
 
 </Project>

@@ -6,9 +6,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class StackAllocTests(ITestOutputHelper output) : RewriteTest(output)
+public class StackAllocTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void BasicStackAlloc()
     {
         RewriteRun(
@@ -19,7 +19,7 @@ public class StackAllocTests(ITestOutputHelper output) : RewriteTest(output)
             )
         );
     }
-    [Fact]
+    [Test]
     public void StackAllocWithInitializer()
     {
         RewriteRun(
@@ -31,7 +31,7 @@ public class StackAllocTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void ImplicitStackAlloc()
     {
         RewriteRun(
@@ -43,7 +43,7 @@ public class StackAllocTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void VariableAssignedStackAlloc()
     {
         RewriteRun(

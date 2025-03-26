@@ -7,9 +7,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class TupleTests(ITestOutputHelper output) : RewriteTest(output)
+public class TupleTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void TupleDeconstruction()
     {
         var src = CSharp(
@@ -27,7 +27,7 @@ public class TupleTests(ITestOutputHelper output) : RewriteTest(output)
         var lst = src.Parse();
         lst.ToString().ShouldBeSameAs(src.Before);
     }
-    [Fact]
+    [Test]
     public void TupleExpression()
     {
         var src = CSharp(
@@ -46,7 +46,7 @@ public class TupleTests(ITestOutputHelper output) : RewriteTest(output)
         lst.ToString().ShouldBeSameAs(src.Before);
     }
 
-    [Fact]
+    [Test]
     public void NamedTupleType()
     {
         var src = CSharp(
@@ -65,7 +65,7 @@ public class TupleTests(ITestOutputHelper output) : RewriteTest(output)
         lst.ToString().ShouldBeSameAs(src.Before);
     }
 
-    [Fact]
+    [Test]
     public void BasicTupleType()
     {
         var src = CSharp(
@@ -84,7 +84,7 @@ public class TupleTests(ITestOutputHelper output) : RewriteTest(output)
         lst.ToString().ShouldBeSameAs(src.Before);
     }
 
-    [Fact]
+    [Test]
     public void TupleWithNullables()
     {
         RewriteRun(CSharp(

@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class AttributeTests(ITestOutputHelper output) : RewriteTest(output)
+public class AttributeTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void Simple()
     {
         RewriteRun(
@@ -22,7 +22,7 @@ public class AttributeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void TrailingComma()
     {
         RewriteRun(
@@ -35,7 +35,7 @@ public class AttributeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void Multiple()
     {
         RewriteRun(
@@ -48,7 +48,7 @@ public class AttributeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void NamedArgumentWithColonSpecifier()
     {
         RewriteRun(
@@ -61,7 +61,7 @@ public class AttributeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void NamedArgumentWithPropertySpecifier()
     {
         RewriteRun(
@@ -74,7 +74,7 @@ public class AttributeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void NamedProperty()
     {
         RewriteRun(
@@ -87,7 +87,7 @@ public class AttributeTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void CompilationUnit()
     {
         RewriteRun(

@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class BlockTests(ITestOutputHelper output) : RewriteTest(output)
+public class BlockTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void MultipleStatementBlock()
     {
         RewriteRun(

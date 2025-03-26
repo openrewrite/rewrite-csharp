@@ -11,13 +11,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Rewrite.MSBuild\Rewrite.MSBuild.csproj" />
-        <ProjectReference Include="..\Rewrite.Remote\Rewrite.Remote.csproj" />
-        <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
-        <ProjectReference Include="..\Rewrite.CSharp\Rewrite.CSharp.csproj" />
-        <ProjectReference Include="..\Rewrite.Json\Rewrite.Json.csproj" />
-        <ProjectReference Include="..\Rewrite.Properties\Rewrite.Properties.csproj" />
-        <ProjectReference Include="..\Rewrite.Xml\Rewrite.Xml.csproj" />
-        <ProjectReference Include="..\Rewrite.Yaml\Rewrite.Yaml.csproj" />
         <ProjectReference Include="..\Rewrite.Remote.Codec\Rewrite.Remote.Codec.csproj" />
     </ItemGroup>
 

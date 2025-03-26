@@ -6,9 +6,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 using static Assertions;
 
 
-public class BaseExpressionTests(ITestOutputHelper output) : RewriteTest(output)
+public class BaseExpressionTests : RewriteTest
 {
-    [Fact]
+    [Test]
     private void BaseExpresion()
     {
         RewriteRun(

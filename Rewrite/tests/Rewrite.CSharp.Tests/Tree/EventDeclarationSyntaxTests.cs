@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class EventDeclarationSyntaxTests(ITestOutputHelper output) : RewriteTest(output)
+public class EventDeclarationSyntaxTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void BasicEvent()
     {
         RewriteRun(
@@ -22,7 +22,7 @@ public class EventDeclarationSyntaxTests(ITestOutputHelper output) : RewriteTest
         );
     }
 
-    [Fact]
+    [Test]
     public void EventWithExplicitInterface()
     {
         RewriteRun(
@@ -37,7 +37,7 @@ public class EventDeclarationSyntaxTests(ITestOutputHelper output) : RewriteTest
         );
     }
 
-    [Fact]
+    [Test]
     public void CustomDelegateEvent()
     {
         RewriteRun(
@@ -53,7 +53,7 @@ public class EventDeclarationSyntaxTests(ITestOutputHelper output) : RewriteTest
         );
     }
 
-    [Fact]
+    [Test]
     public void StaticEvent()
     {
         RewriteRun(
@@ -68,7 +68,7 @@ public class EventDeclarationSyntaxTests(ITestOutputHelper output) : RewriteTest
         );
     }
 
-    [Fact]
+    [Test]
     public void EventWithAccessor()
     {
         RewriteRun(
@@ -88,7 +88,7 @@ public class EventDeclarationSyntaxTests(ITestOutputHelper output) : RewriteTest
         );
     }
 
-    [Fact]
+    [Test]
     public void GenericEvent()
     {
         RewriteRun(
@@ -103,7 +103,7 @@ public class EventDeclarationSyntaxTests(ITestOutputHelper output) : RewriteTest
         );
     }
 
-    [Fact]
+    [Test]
     public void PrivateProtectedEvent()
     {
         RewriteRun(
@@ -118,7 +118,7 @@ public class EventDeclarationSyntaxTests(ITestOutputHelper output) : RewriteTest
         );
     }
 
-    [Fact]
+    [Test]
     public void AbstractEvent()
     {
         RewriteRun(
@@ -133,7 +133,7 @@ public class EventDeclarationSyntaxTests(ITestOutputHelper output) : RewriteTest
         );
     }
 
-    [Fact]
+    [Test]
     public void VirtualEvent()
     {
         RewriteRun(
@@ -148,7 +148,7 @@ public class EventDeclarationSyntaxTests(ITestOutputHelper output) : RewriteTest
         );
     }
 
-    [Fact]
+    [Test]
     public void EventWithAttributes()
     {
         RewriteRun(
@@ -164,7 +164,7 @@ public class EventDeclarationSyntaxTests(ITestOutputHelper output) : RewriteTest
         );
     }
 
-    [Fact]
+    [Test]
     public void EventWithDocumentation()
     {
         RewriteRun(

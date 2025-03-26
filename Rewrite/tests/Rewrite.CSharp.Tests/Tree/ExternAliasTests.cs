@@ -5,9 +5,9 @@ namespace Rewrite.CSharp.Tests.Tree;
 
 using static Assertions;
 
-public class ExternAliasTests(ITestOutputHelper output) : RewriteTest(output)
+public class ExternAliasTests : RewriteTest
 {
-    [Fact]
+    [Test]
     public void CompilationUnit()
     {
         RewriteRun(
@@ -19,7 +19,7 @@ public class ExternAliasTests(ITestOutputHelper output) : RewriteTest(output)
         );
     }
 
-    [Fact]
+    [Test]
     public void FileNamespace()
     {
         RewriteRun(
