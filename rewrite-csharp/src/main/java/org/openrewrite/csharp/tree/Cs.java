@@ -1,12 +1,12 @@
 /*
  * Copyright 2024 the original author or authors.
- * &lt;p>
+ * <p>
  * Licensed under the Moderne Source Available License (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * &lt;p>
+ * <p>
  * https://docs.moderne.io/licensing/moderne-source-available-license
- * &lt;p>
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -322,9 +322,9 @@ public interface Cs extends J {
     /**
      * Represents an operator declaration in C# classes, which allows overloading of operators
      * for custom types.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Unary operator overload
      *     public static Vector operator +(Vector a)
      *
@@ -339,7 +339,7 @@ public interface Cs extends J {
      *
      *     // Custom operator
      *     public static Point operator ++(Point p)
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -372,58 +372,58 @@ public interface Cs extends J {
         List<J.Modifier> modifiers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * IEnumerable<T>.Vector operator +(Vector a)
          * ^^^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Nullable
         JRightPadded<TypeTree> explicitInterfaceSpecifier;
 
 
         /**
-         * &lt;pre>
+         * <pre>
          * public static Vector operator +(Vector a)
          *                    ^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
         Cs.Keyword operatorKeyword;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public static Integer operator checked +(Integer a, Integer b)
          *                               ^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
         Cs.@Nullable Keyword checkedKeyword;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public static Vector operator +(Vector a)
          *                            ^
-         * &lt;/pre>
+         * </pre>
          */
         JLeftPadded<Operator> operatorToken;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public static explicit operator int(Complex c)
          *                                ^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
         TypeTree returnType;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public static Vector operator + (Vector a)
          *                                ^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JContainer<Expression> parameters;
 
@@ -436,10 +436,10 @@ public interface Cs extends J {
         }
 
         /**
-         * &lt;pre>
+         * <pre>
          * public static Vector operator +(...) { ... }
          *                                      ^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -537,32 +537,32 @@ public interface Cs extends J {
             Percent,
 
             /**
-             * &lt;&lt; token
+             * << token
              */
             LeftShift,
 
             /**
-             * &gt;> token
+             * >> token
              */
             RightShift,
 
             /**
-             * &lt; token
+             * < token
              */
             LessThan,
 
             /**
-             * &gt; token
+             * > token
              */
             GreaterThan,
 
             /**
-             * &lt;= token
+             * <= token
              */
             LessThanEquals,
 
             /**
-             * &gt;= token
+             * >= token
              */
             GreaterThanEquals,
 
@@ -577,7 +577,7 @@ public interface Cs extends J {
             NotEquals,
 
             /**
-             * &amp; token
+             * & token
              */
             Ampersand,
 
@@ -641,9 +641,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# ref expression used to pass variables by reference.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Method call with ref argument
      *     Process(ref value);
      *
@@ -655,7 +655,7 @@ public interface Cs extends J {
      *
      *     // Ref property return
      *     public ref int Property => ref field;
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -676,10 +676,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * Process(ref value)
          *            ^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -708,9 +708,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# pointer type declaration.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Basic pointer declaration
      *     int* ptr;
      *        ^
@@ -718,7 +718,7 @@ public interface Cs extends J {
      *     // Pointer to pointer
      *     int** ptr;
      *         ^
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -744,10 +744,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * int* ptr;
          * ^^^
-         * &lt;/pre>
+         * </pre>
          */
         JRightPadded<TypeTree> elementType;
 
@@ -811,9 +811,9 @@ public interface Cs extends J {
     /**
      * Represents a C# ref type, which indicates that a type is passed or returned by reference.
      * Used in method parameters, return types, and local variable declarations.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Method parameter
      *     void Process(ref int value)
      *
@@ -825,7 +825,7 @@ public interface Cs extends J {
      *
      *     // Property
      *     ref readonly int Property => ref field;
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -846,10 +846,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * ref readonly int number
          *     ^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -857,10 +857,10 @@ public interface Cs extends J {
         Modifier readonlyKeyword;
 
         /**
-         * &lt;pre>
+         * <pre>
          * ref readonly int number
          *              ^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -1055,9 +1055,9 @@ public interface Cs extends J {
     /**
      * Represents a name and colon syntax in C#, which is used in various contexts such as named arguments,
      * tuple elements, and property patterns.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // In named arguments
      *     Method(name: "John", age: 25)
      *            ^^^^          ^^^^
@@ -1069,7 +1069,7 @@ public interface Cs extends J {
      *     // In property patterns
      *     { Name: "John", Age: 25 }
      *      ^^^^          ^^^^
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -1094,10 +1094,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * Method(name: "John")
          *        ^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JRightPadded<J.Identifier> name;
 
@@ -1626,9 +1626,9 @@ public interface Cs extends J {
     /**
      * Represents a C# goto statement, which performs an unconditional jump to a labeled statement,
      * case label, or default label within a switch statement.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple goto statement
      *     goto Label;
      *
@@ -1641,7 +1641,7 @@ public interface Cs extends J {
      *     // With label declaration
      *     Label:
      *     Console.WriteLine("At label");
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -1662,12 +1662,12 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * goto case 1;
          *      ^^^^
          * goto default;
          *      ^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -1675,12 +1675,12 @@ public interface Cs extends J {
         Keyword caseOrDefaultKeyword;
 
         /**
-         * &lt;pre>
+         * <pre>
          * goto case 1;
          *           ^
          * goto Label;
          *      ^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -1700,9 +1700,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# event declaration.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      * // Simple event declaration
      * public event EventHandler OnClick;
      *
@@ -1720,7 +1720,7 @@ public interface Cs extends J {
      *
      * // Static event
      * public static event Action StaticEvent;
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -1745,20 +1745,20 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * [Obsolete] public event EventHandler OnClick;
          * ^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
         List<AttributeList> attributeLists;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public event EventHandler OnClick;
          * ^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -1767,10 +1767,10 @@ public interface Cs extends J {
         JLeftPadded<TypeTree> typeExpression;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public event EventHandler OnClick;
          *             ^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         public TypeTree getTypeExpression() {
             return typeExpression.getElement();
@@ -1784,10 +1784,10 @@ public interface Cs extends J {
         JRightPadded<TypeTree> interfaceSpecifier;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public event EventHandler INotifyPropertyChanged.OnPropertyChanged;
          *                          ^^^^^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         public @Nullable NameTree getInterfaceSpecifier() {
             return interfaceSpecifier == null ? null : interfaceSpecifier.getElement();
@@ -1798,20 +1798,20 @@ public interface Cs extends J {
         }
 
         /**
-         * &lt;pre>
+         * <pre>
          * public event EventHandler OnClick;
          *                          ^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
         Identifier name;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public event EventHandler OnChange {
          *                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Nullable
         JContainer<Statement> accessors;
@@ -3977,10 +3977,10 @@ public interface Cs extends J {
     /**
      * Represents a constructor constraint in a where clause.
      * Example:
-     * &lt;pre>
+     * <pre>
      * where T : new()
      *           ^^^^^
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -4008,10 +4008,10 @@ public interface Cs extends J {
     /**
      * Represents a default constraint in a where clause.
      * Example:
-     * &lt;pre>
+     * <pre>
      * where T : default
      *           ^^^^^^^
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -4039,18 +4039,18 @@ public interface Cs extends J {
     /**
      * A declaration expression node represents a local variable declaration in an expression context.
      * This is used in two primary scenarios in C#:
-     * &lt;ul>
+     * <ul>
      *     <li>Out variable declarations: {@code Method(out int x)}</li>
      *     <li>Deconstruction declarations: {@code int (x, y) = GetPoint()}</li>
-     * &lt;/ul>
+     * </ul>
      * Example 1: Out variable declaration:
-     * &lt;pre>
+     * <pre>
      * if(int.TryParse(s, out int result)) {
      *     // use result
      * }
-     * &lt;/pre>
+     * </pre>
      * Example 2: Deconstruction declaration:
-     * &lt;pre>
+     * <pre>
      * int (x, y) = point;
      * ^^^^^^^^^^
      * (int count, var (name, age)) = GetPersonDetails();
@@ -4058,7 +4058,7 @@ public interface Cs extends J {
      *                 ^^^^^^^^^^^ ParenthesizedVariableDesignation
      *  ^^^^^^^^^ DeclarationExpression
      *      ^^^^^ SingleVariableDesignation
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -4127,13 +4127,13 @@ public interface Cs extends J {
      * Represents a single variable declaration within a declaration expression.
      * Used both for simple out variable declarations and as elements within deconstruction declarations.
      * Example in out variable:
-     * &lt;pre>
+     * <pre>
      * int.TryParse(s, out int x)  // 'int x' is the SingleVariable
-     * &lt;/pre>
+     * </pre>
      * Example in deconstruction:
-     * &lt;pre>
+     * <pre>
      * (int x, string y) = point;  // both 'int x' and 'string y' are SingleVariables
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -4185,15 +4185,15 @@ public interface Cs extends J {
     /**
      * Represents a parenthesized list of variable declarations used in deconstruction patterns.
      * Example of simple deconstruction:
-     * &lt;pre>
+     * <pre>
      * int (x, y) = point;
-     * &lt;/pre>
+     * </pre>
      * Example of nested deconstruction:
-     * &lt;pre>
+     * <pre>
      * (int count, var (string name, int age)) = GetPersonDetails();
      *             ^^^^^^^^^^^^^^^^^^^^^^^^^^ nested ParenthesizedVariable
      *  ^^^^^^^^^ SingleVariableDesignation
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -4275,7 +4275,7 @@ public interface Cs extends J {
     /**
      * Represents a discard designation in pattern matching expressions, indicated by an underscore (_).
      * For example in pattern matching:
-     * &lt;pre>
+     * <pre>
      *
      * if (obj is _) // discard pattern
      *
@@ -4283,7 +4283,7 @@ public interface Cs extends J {
      *
      * var (x, _, z) = tuple; // discards second element
      *
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -4333,7 +4333,7 @@ public interface Cs extends J {
      * Represents a tuple expression in C#.
      * Can be used in tuple construction, deconstruction and tuple literals.
      * Examples:
-     * &lt;pre>
+     * <pre>
      * // Tuple construction
      * var point = (1, 2);
      * // Named tuple elements
@@ -4342,7 +4342,7 @@ public interface Cs extends J {
      * var nested = (1, (2, 3));
      * // Tuple type with multiple elements
      * (string name, int age) person = ("John", 25);
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -4428,9 +4428,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# constructor declaration which may include an optional constructor initializer.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *   // Constructor with no initializer
      *   public MyClass() {
      *   }
@@ -4442,7 +4442,7 @@ public interface Cs extends J {
      *   // Constructor with this initializer
      *   public MyClass(string s) : this(int.Parse(s)) {
      *   }
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -4486,9 +4486,9 @@ public interface Cs extends J {
      * Represents a C# destructor which is a method called before an object is destroyed by the garbage collector.
      * A destructor must be named the same as the class prefixed with a tilde (~), cannot be explicitly called,
      * cannot have parameters or access modifiers, and cannot be overloaded or inherited.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Basic destructor
      *     ~MyClass()
      *     {
@@ -4517,8 +4517,8 @@ public interface Cs extends J {
      *             // Cleanup
      *         }
      *     }
-     * &lt;/pre>
-     * &lt;p>
+     * </pre>
+     * <p>
      * Note: In modern C#, it's recommended to implement IDisposable pattern instead of relying on destructors
      * for deterministic cleanup of resources, as destructors are non-deterministic and can impact performance.
      */
@@ -4628,7 +4628,7 @@ public interface Cs extends J {
              */
             PointerType,
             /**
-             * Represent &amp;a to get pointer access for a variable
+             * Represent &a to get pointer access for a variable
              */
             AddressOf,
 
@@ -4688,14 +4688,14 @@ public interface Cs extends J {
      * Represents a constructor initializer which is a call to another constructor, either in the same class (this)
      * or in the base class (base).
      * Examples:
-     * &lt;pre>
+     * <pre>
      * class Person {
      * // Constructor with 'this' initializer
      * public Person(string name) : this(name, 0) { }
      * // Constructor with 'base' initializer
      * public Person(string name, int age) : base(name) { }
      * }
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -4770,9 +4770,9 @@ public interface Cs extends J {
     /**
      * Represents a C# tuple type specification, which allows grouping multiple types into a single type.
      * Can be used in method returns, variable declarations, etc.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *   // Simple tuple type
      *   (int, string) coordinates;
      *
@@ -4787,7 +4787,7 @@ public interface Cs extends J {
      *
      *   // As parameter type
      *   public void ProcessData((int id, string value) data) { }
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -4907,9 +4907,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# new class instantiation expression, which can optionally include an object/collection initializer.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      * // Simple new class without initializer
      * new Person("John", 25)
      *
@@ -4921,7 +4921,7 @@ public interface Cs extends J {
      *
      * // New class with constructor and initializer
      * new Person("John") { Age = 25 }
-     * &lt;/pre>
+     * </pre>
      * The newClassCore field contains the basic class instantiation including constructor call,
      * while the initializer field contains the optional object/collection initializer expressions
      * wrapped in a JContainer to preserve whitespace around curly braces and between initializer expressions.
@@ -4977,14 +4977,14 @@ public interface Cs extends J {
     /**
      * Represents an initializer expression that consists of a list of expressions, typically used in array
      * or collection initialization contexts. The expressions are contained within delimiters like curly braces.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      * new int[] { 1, 2, 3 }
      *            ^^^^^^^^^
      * new List<string> { "a", "b", "c" }
      *                   ^^^^^^^^^^^^^^^
-     * &lt;/pre>
+     * </pre>
      * The JContainer wrapper captures whitespace before the opening brace, while also preserving whitespace
      * after each expression (before commas) through its internal JRightPadded elements.
      */
@@ -5072,9 +5072,9 @@ public interface Cs extends J {
     /**
      * Represents implicit element access in C# which allows accessing elements without specifying the element accessor target.
      * This is commonly used in object initializers, collection initializers and anonymous object initializers.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      * // Collection initializer
      * new List<Point> {
      *     { 10, 20 }, // ImplicitElementAccess with two arguments
@@ -5082,11 +5082,11 @@ public interface Cs extends J {
      * }
      *
      * // Object initializer
-     * new Dictionary&lt;string, string> {
+     * new Dictionary<string, string> {
      *     { "key1", "value1" }, // ImplicitElementAccess wrapping key-value pair arguments
      *     { "key2", "value2" }
      * }
-     * &lt;/pre>
+     * </pre>
      * The argumentList field contains the list of arguments wrapped in braces, with whitespace preserved
      * before the opening brace and between arguments.
      */
@@ -5173,12 +5173,12 @@ public interface Cs extends J {
 
     /**
      * Represents a C# yield statement which can either return a value or break from an iterator.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *   yield return value;   // Returns next value in iterator
      *   yield break;          // Signals end of iteration
-     * &lt;/pre>
+     * </pre>
      */
     @Getter
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
@@ -5216,15 +5216,15 @@ public interface Cs extends J {
 
     /**
      * An expression that yields the default value of a type.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *   default(int)         // Returns 0
      *   default(string)      // Returns null
      *   default(bool)        // Returns false
      *   default(MyClass)     // Returns null
      *   var x = default;     // Type inferred from context (C# 7.1+)
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -5318,9 +5318,9 @@ public interface Cs extends J {
     /**
      * Represents a C# is pattern expression that performs pattern matching.
      * The expression consists of a value to test, followed by the 'is' keyword and a pattern.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Type pattern
      *     if (obj is string)
      *
@@ -5341,7 +5341,7 @@ public interface Cs extends J {
      *
      *     // List pattern
      *     if (list is [1, 2, 3])
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -5441,9 +5441,9 @@ public interface Cs extends J {
 
     /**
      * Represents a unary pattern in C#, which negates another pattern using the "not" keyword.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Using "not" pattern to negate a type pattern
      *     if (obj is not string) { }
      *
@@ -5457,7 +5457,7 @@ public interface Cs extends J {
      *         case not int: // Negates type pattern
      *             break;
      *     }
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -5477,10 +5477,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * a is not b
          *      ^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -5514,9 +5514,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# type pattern, which matches a value against a type and optionally assigns it to a new variable.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple type pattern
      *     if (obj is string)
      *
@@ -5538,7 +5538,7 @@ public interface Cs extends J {
      *         int n => n * 2,
      *         _ => 0
      *     };
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -5593,9 +5593,9 @@ public interface Cs extends J {
     /**
      * Represents a C# binary pattern that combines two patterns with a logical operator.
      * The binary pattern is used in pattern matching to create compound pattern tests.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Using 'and' to combine patterns
      *     if (obj is string { Length: &gt; 0 } and not null)
      *
@@ -5617,7 +5617,7 @@ public interface Cs extends J {
      *         &gt;= 0 and &lt;= 50 =&gt; "Small",
      *         _ =&gt; "Large"
      *     };
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -5716,9 +5716,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# constant pattern that matches against literal values or constant expressions.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Literal constant patterns
      *     if (obj is null)
      *     if (number is 42)
@@ -5743,7 +5743,7 @@ public interface Cs extends J {
      *
      *     // Enum constant patterns
      *     if (day is DayOfWeek.Sunday)
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -5763,10 +5763,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * if (obj is 42)
          *            ^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -5796,9 +5796,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# discard pattern (_), which matches any value and discards it.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple discard pattern in is expression
      *     if (obj is _)
      *
@@ -5814,7 +5814,7 @@ public interface Cs extends J {
      *
      *     // In property patterns
      *     if (obj is { Id: _, Name: "test" })
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -5852,9 +5852,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# list pattern that matches elements in a list or array against a sequence of patterns.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple list patterns
      *     if (array is [1, 2, 3] lst)
      *     if (list is [1, _, 3])
@@ -5881,8 +5881,8 @@ public interface Cs extends J {
      *     };
      *
      *     // With length patterns
-     *     if (array is [> 0, &lt;= 10] valid)
-     * &lt;/pre>
+     *     if (array is [> 0, <= 10] valid)
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -5907,18 +5907,18 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * if (array is [1, 2, 3] lst)
          *              ^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JContainer<Pattern> patterns;
 
         /**
-         * &lt;pre>
+         * <pre>
          * if (array is [1, 2, 3] lst)
          *                        ^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -5987,9 +5987,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# parenthesized pattern expression that groups a nested pattern.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple parenthesized pattern
      *     if (obj is (string or int))
      *
@@ -6001,11 +6001,11 @@ public interface Cs extends J {
      *
      *     // In switch expressions
      *     return value switch {
-     *         (> 0 and &lt; 10) => "single digit",
+     *         (> 0 and < 10) => "single digit",
      *         (string or int) => "basic type",
      *         _ => "other"
      *     };
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -6030,10 +6030,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * if (obj is (string or int))
          *            ^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JContainer<Pattern> pattern;
 
@@ -6097,9 +6097,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# recursive pattern that can match nested object structures, including property patterns and positional patterns.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple property pattern
      *     if (obj is { Name: "test", Age: > 18 })
      *
@@ -6121,7 +6121,7 @@ public interface Cs extends J {
      *         Rectangle { Width: var w, Height: var h } => w * h,
      *         _ => 0
      *     };
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -6141,10 +6141,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * if (obj is Person { Name: "test" })
          *            ^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -6152,10 +6152,10 @@ public interface Cs extends J {
         TypeTree typeQualifier;
 
         /**
-         * &lt;pre>
+         * <pre>
          * if (point is (int x, int y))
          *              ^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -6163,10 +6163,10 @@ public interface Cs extends J {
         PositionalPatternClause positionalPattern;
 
         /**
-         * &lt;pre>
+         * <pre>
          * if (obj is { Name: "test", Age: 18 })
          *            ^^^^^^^^^^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -6174,10 +6174,10 @@ public interface Cs extends J {
         PropertyPatternClause propertyPattern;
 
         /**
-         * &lt;pre>
+         * <pre>
          * if (obj is Person { Name: "test" } p)
          *                                    ^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -6208,10 +6208,10 @@ public interface Cs extends J {
 
     /**
      * Represents a var pattern that is used in switch statement pattern matching.
-     * &lt;pre>
+     * <pre>
      * case var (x, y):
      *      ^^^
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -6232,10 +6232,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * case var (x, y):
          *          ^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -6264,9 +6264,9 @@ public interface Cs extends J {
 
     /**
      * Represents a positional pattern clause in C# pattern matching, which matches the deconstructed parts of an object.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple positional pattern
      *     if (point is (0, 0))
      *
@@ -6274,7 +6274,7 @@ public interface Cs extends J {
      *     if (point is (int x, int y))
      *
      *     // With nested patterns
-     *     if (point is (> 0, &lt; 100))
+     *     if (point is (> 0, < 100))
      *
      *     // In switch expressions
      *     return point switch {
@@ -6282,7 +6282,7 @@ public interface Cs extends J {
      *         (var x, var y) when x == y => "on diagonal",
      *         _ => "other"
      *     };
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -6307,10 +6307,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * if (point is (0, 0))
          *              ^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JContainer<Subpattern> subpatterns;
 
@@ -6358,26 +6358,26 @@ public interface Cs extends J {
 
     /**
      * Represents a C# relational pattern that matches values using comparison operators.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple relational patterns
      *     if (number is > 0)
-     *     if (value is &lt;= 100)
+     *     if (value is <= 100)
      *
      *     // In switch expressions
      *     return size switch {
      *         > 100 => "Large",
-     *         &lt; 0 => "Invalid",
+     *         < 0 => "Invalid",
      *         _ => "Normal"
      *     };
      *
      *     // Combined with other patterns
-     *     if (x is > 0 and &lt; 100)
+     *     if (x is > 0 and < 100)
      *
      *     // With properties
      *     if (person is { Age: >= 18 })
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -6402,18 +6402,18 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * if (number is > 100)
          *               ^
-         * &lt;/pre>
+         * </pre>
          */
         JLeftPadded<OperatorType> operator;
 
         /**
-         * &lt;pre>
+         * <pre>
          * if (number is > 100)
          *                 ^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -6486,9 +6486,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# slice pattern that matches sequences with arbitrary elements between fixed elements.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple slice pattern
      *     if (array is [1, .., 5])
      *
@@ -6507,7 +6507,7 @@ public interface Cs extends J {
      *         [var single] => single.ToString(),
      *         [] => "empty"
      *     };
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -6552,9 +6552,9 @@ public interface Cs extends J {
 
     /**
      * Represents a property pattern clause in C# pattern matching, which matches against object properties.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple property pattern
      *     if (obj is { Name: "test" })
      *
@@ -6573,7 +6573,7 @@ public interface Cs extends J {
      *         { Type: "square", Side: var s } => s * s,
      *         _ => 0
      *     };
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -6598,10 +6598,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * if (obj is { Name: "test", Age: 18 })
          *            ^^^^^^^^^^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JContainer<Expression> subpatterns;
 
@@ -6651,9 +6651,9 @@ public interface Cs extends J {
     /**
      * Represents a subpattern in C# pattern matching, which can appear in property patterns or positional patterns.
      * Each subpattern consists of an optional name with a corresponding pattern.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // In property patterns
      *     if (obj is { Name: "test", Age: > 18 })
      *                  ^^^^^^^^^^^^  ^^^^^^^^^
@@ -6678,7 +6678,7 @@ public interface Cs extends J {
      *           ^^^^^^^^^^^^  ^^^^^^^^^^^^^
      *         _ => 0
      *     };
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -6703,12 +6703,12 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * if (obj is { Name: "test" })
          *               ^^^^
          * if (point is (x: > 0))
          *               ^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -6716,12 +6716,12 @@ public interface Cs extends J {
         Expression name;
 
         /**
-         * &lt;pre>
+         * <pre>
          * if (obj is { Name: "test" })
          *                    ^^^^^
          * if (point is (x: > 0))
          *                  ^^
-         * &lt;/pre>
+         * </pre>
          */
         JLeftPadded<Pattern> pattern;
 
@@ -6786,21 +6786,21 @@ public interface Cs extends J {
 
     /**
      * Represents a C# switch expression which provides a concise way to handle multiple patterns with corresponding expressions.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      * var description = size switch {
-     *     &lt; 0 => "negative",
+     *     < 0 => "negative",
      *     0 => "zero",
      *     > 0 => "positive"
      * };
      *
      * var color = (r, g, b) switch {
-     *     var (r, g, b) when r == g &amp;&amp; g == b => "grayscale",
+     *     var (r, g, b) when r == g && g == b => "grayscale",
      *     ( > 128, _, _) => "bright red",
      *     _ => "other"
      * };
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -6825,10 +6825,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * size switch { ... }
          * ^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JRightPadded<Expression> expression;
 
@@ -6841,10 +6841,10 @@ public interface Cs extends J {
         }
 
         /**
-         * &lt;pre>
+         * <pre>
          * size switch { ... }
          *             ^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JContainer<SwitchExpressionArm> arms;
 
@@ -6915,11 +6915,11 @@ public interface Cs extends J {
 
     /**
      * Represents a single case arm in a switch expression, consisting of a pattern, optional when clause, and result expression.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
-     * case &lt; 0 when IsValid() => "negative",
-     * &gt; 0 => "positive",
+     * <pre>
+     * case < 0 when IsValid() => "negative",
+     * > 0 => "positive",
      * _ => "zero"
      *
      * // With complex patterns and conditions
@@ -6928,7 +6928,7 @@ public interface Cs extends J {
      *     ( > 18, _) => "basic access",
      *     _ => "no access"
      * }
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -6954,20 +6954,20 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
-         * &lt; 0 when IsValid() => "negative"
+         * <pre>
+         * < 0 when IsValid() => "negative"
          * ^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
         Pattern pattern;
 
         /**
-         * &lt;pre>
-         * &lt; 0 when IsValid() => "negative"
+         * <pre>
+         * < 0 when IsValid() => "negative"
          *     ^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Nullable
         JLeftPadded<Expression> whenExpression;
@@ -6981,10 +6981,10 @@ public interface Cs extends J {
         }
 
         /**
-         * &lt;pre>
-         * &lt; 0 when IsValid() => "negative"
+         * <pre>
+         * < 0 when IsValid() => "negative"
          *                       ^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JLeftPadded<Expression> expression;
 
@@ -7040,9 +7040,9 @@ public interface Cs extends J {
 
     /**
      * Represents a switch statement section containing one or more case labels followed by a list of statements.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      * switch(value) {
      *     case 1:                    // single case label
      *     case 2:                    // multiple case labels
@@ -7061,7 +7061,7 @@ public interface Cs extends J {
      *         Console.WriteLine("default");
      *         break;
      * }
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -7086,23 +7086,23 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * case 1:
          * case 2:
          * ^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Getter
         @With
         List<SwitchLabel> labels;
 
         /**
-         * &lt;pre>
+         * <pre>
          * case 1:
          *     Console.WriteLine("1");
          *     break;
          *     ^^^^^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         List<JRightPadded<Statement>> statements;
 
@@ -7159,9 +7159,9 @@ public interface Cs extends J {
 
     /**
      * Represents a default case label in a switch statement.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      * switch(value) {
      *     case 1:
      *         break;
@@ -7175,7 +7175,7 @@ public interface Cs extends J {
      *     1 => "one",
      *     default => "other"
      * };
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -7195,10 +7195,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * default:
          *        ^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -7227,9 +7227,9 @@ public interface Cs extends J {
 
     /**
      * Represents a pattern-based case label in a switch statement, optionally including a when clause.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      * switch(obj) {
      *     case int n when n > 0:
      *     case string s when s.Length > 0:
@@ -7238,7 +7238,7 @@ public interface Cs extends J {
      *     case not null:
      *     case > 100:
      * }
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -7263,10 +7263,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * case int n when n > 0:
          *      ^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -7274,10 +7274,10 @@ public interface Cs extends J {
 
 
         /**
-         * &lt;pre>
+         * <pre>
          * case int n when n > 0:
          *            ^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Nullable
         JLeftPadded<Expression> whenClause;
@@ -7291,10 +7291,10 @@ public interface Cs extends J {
         }
 
         /**
-         * &lt;pre>
+         * <pre>
          * case int n when n > 0 :
          *                      ^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -7351,9 +7351,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# switch statement for control flow based on pattern matching and case labels.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      * switch(value) {
      *     case 1:
      *         Console.WriteLine("one");
@@ -7375,7 +7375,7 @@ public interface Cs extends J {
      *         Console.WriteLine("default");
      *         break;
      * }
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -7400,10 +7400,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * switch(value) {
          *       ^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JContainer<Expression> expression;
 
@@ -7416,7 +7416,7 @@ public interface Cs extends J {
         }
 
         /**
-         * &lt;pre>
+         * <pre>
          * switch(value) {
          *     case 1:
          *         Console.WriteLine("one");
@@ -7426,7 +7426,7 @@ public interface Cs extends J {
          *         break;
          * }
          * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JContainer<SwitchSection> sections;
 
@@ -7487,9 +7487,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# lock statement which provides thread synchronization.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple lock statement
      *     lock (syncObject) {
      *         // protected code
@@ -7504,7 +7504,7 @@ public interface Cs extends J {
      *     lock (SyncRoot) {
      *         // thread-safe operations
      *     }
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -7530,20 +7530,20 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * lock (syncObject) { }
          *      ^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
         J.ControlParentheses<Expression> expression;
 
         /**
-         * &lt;pre>
+         * <pre>
          * lock (syncObject) { }
          *                  ^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JRightPadded<Statement> statement;
 
@@ -7599,9 +7599,9 @@ public interface Cs extends J {
      * Represents a C# fixed statement which pins a moveable variable at a memory location.
      * The fixed statement prevents the garbage collector from relocating a movable variable
      * and declares a pointer to that variable.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Fixed statement with array
      *     fixed (int* p = array) {
      *         // use p
@@ -7613,15 +7613,15 @@ public interface Cs extends J {
      *     }
      *
      *     // Multiple pointers in one fixed statement
-     *     fixed (byte* p1 = &amp;b1, p2 = &amp;b2) {
+     *     fixed (byte* p1 = &b1, p2 = &b2) {
      *         // use p1 and p2
      *     }
      *
      *     // Fixed statement with custom type
-     *     fixed (CustomStruct* ptr = &amp;struct) {
+     *     fixed (CustomStruct* ptr = &struct) {
      *         // use ptr
      *     }
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -7641,17 +7641,17 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * fixed (int* p = array) { }
          *       ^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Getter
         @With
         ControlParentheses<J.VariableDeclarations> declarations;
 
         /**
-         * &lt;pre>
+         * <pre>
          * fixed (int* p = array) { }
          *                       ^^^^^
          *
@@ -7660,7 +7660,7 @@ public interface Cs extends J {
          * fixed (int* p = array)
          *  return p;
          *  ^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -7679,16 +7679,16 @@ public interface Cs extends J {
     }
     /**
      * Represents a C# checked or unchecked expression which controls overflow checking behavior.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Checked expression
      *     int result = checked(x + y);
      *
      *     // Unchecked expression
      *     int value = unchecked(a * b);
      *
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -7709,20 +7709,20 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * checked(x + y)
          * ^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
         Keyword checkedOrUncheckedKeyword;
 
         /**
-         * &lt;pre>
+         * <pre>
          * checked(x + y)
          *       ^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -7752,9 +7752,9 @@ public interface Cs extends J {
      * Represents a C# checked statement which enforces overflow checking for arithmetic operations
      * and conversions. Operations within a checked block will throw OverflowException if arithmetic
      * overflow occurs.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Basic checked block
      *     checked {
      *         int result = int.MaxValue + 1; // throws OverflowException
@@ -7771,7 +7771,7 @@ public interface Cs extends J {
      *     checked {
      *         int result = Math.Abs(int.MinValue); // throws OverflowException
      *     }
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -7795,12 +7795,12 @@ public interface Cs extends J {
         Keyword keyword;
 
         /**
-         * &lt;pre>
+         * <pre>
          * checked {
          *         ^^^^^^^^^
          * }
          * ^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -7822,9 +7822,9 @@ public interface Cs extends J {
      * Represents a C# unsafe statement block which allows direct memory manipulation and pointer operations.
      * Code within an unsafe block can perform operations like pointer arithmetic, fixed-size buffers,
      * and direct memory access.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Basic unsafe block
      *     unsafe {
      *         int* ptr = &value;
@@ -7849,7 +7849,7 @@ public interface Cs extends J {
      *         int size = sizeof(CustomStruct);
      *         byte* buffer = stackalloc byte[size];
      *     }
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -7870,12 +7870,12 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * unsafe {
          *        ^^^^^^^^^
          * }
          * ^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -7897,9 +7897,9 @@ public interface Cs extends J {
      * Represents a C# range expression which creates a Range value representing a sequence of indices.
      * Range expressions use the '..' operator to specify start and end bounds, and can use '^' to specify
      * indices from the end.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Full range
      *     arr[..]
      *
@@ -7920,7 +7920,7 @@ public interface Cs extends J {
      *     // Standalone range expressions
      *     Range r1 = 1..4;
      *     Range r2 = ..^1;
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -7946,19 +7946,19 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * 2  ..5
          * ^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Nullable
         JRightPadded<Expression> start;
 
         /**
-         * &lt;pre>
+         * <pre>
          * 2..5
          *   ^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -8026,9 +8026,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# LINQ query expression that provides SQL-like syntax for working with collections.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple query
      *     from user in users
      *     where user.Age > 18
@@ -8046,7 +8046,7 @@ public interface Cs extends J {
      *     from o in c.Orders
      *     where o.Total > 1000
      *     select new { c.Name, o.Total }
-     * &lt;/pre>
+     * </pre>
      */
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
     @AllArgsConstructor(access = AccessLevel.PUBLIC)
@@ -8065,22 +8065,22 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * from user in users
          * ^^^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
         FromClause fromClause;
 
         /**
-         * &lt;pre>
+         * <pre>
          * from user in users
          * where user.Age > 18
          * select user.Name
          * ^^^^^^^^^^^^^^^^^ excluding the from clause
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -8116,9 +8116,9 @@ public interface Cs extends J {
 
     /**
      * Represents the body of a LINQ query expression, consisting of the query clauses and a final select or group clause.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Body of query includes everything after initial 'from':
      *     from c in customers
      *     where c.Age > 18       // Clauses part
@@ -8133,7 +8133,7 @@ public interface Cs extends J {
      *         on o.CustomerId equals c.Id
      *     where o.Total > 1000   // Clauses part
      *     select new { o, c }    // SelectOrGroup part
-     * &lt;/pre>
+     * </pre>
      */
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
     @AllArgsConstructor(access = AccessLevel.PUBLIC)
@@ -8152,26 +8152,26 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * from c in customers
          * where c.Age > 18
          * ^^^^^^^^^^^^^^^^
          * orderby c.LastName
          * ^^^^^^^^^^^^^^^^^^
          * select c.Name
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
         List<QueryClause> clauses;
 
         /**
-         * &lt;pre>
+         * <pre>
          * from c in customers
          * where c.Age > 18
          * select c.Name
          * ^^^^^^^^^^^^^ the final select or group clause
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -8179,13 +8179,13 @@ public interface Cs extends J {
         SelectOrGroupClause selectOrGroup;
 
         /**
-         * &lt;pre>
+         * <pre>
          * from c in customers
          * select c
          * into temp            // Continuation starts here
          * where temp.Age > 18
          * select temp.Name
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -8205,9 +8205,9 @@ public interface Cs extends J {
     /**
      * Represents a LINQ from clause that introduces a range variable and its source collection.
      * This is typically the initial clause of a LINQ query.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple from clause
      *     from user in users
      *
@@ -8219,7 +8219,7 @@ public interface Cs extends J {
      *
      *     // With type and pattern
      *     from (int x, int y) in coordinates
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -8244,10 +8244,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * from Customer c in customers
          *     ^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -8255,18 +8255,18 @@ public interface Cs extends J {
         TypeTree typeIdentifier;
 
         /**
-         * &lt;pre>
+         * <pre>
          * from Customer c in customers
          *              ^^
-         * &lt;/pre>
+         * </pre>
          */
         JRightPadded<Identifier> identifier;
 
         /**
-         * &lt;pre>
+         * <pre>
          * from user in users
          *             ^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -8331,9 +8331,9 @@ public interface Cs extends J {
     /**
      * Represents a let clause in a C# LINQ query expression that introduces
      * a new range variable based on a computation.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple let clause
      *     from n in numbers
      *     let square = n * n
@@ -8350,7 +8350,7 @@ public interface Cs extends J {
      *     let fullName = p.FirstName + " " + p.LastName
      *     let age = DateTime.Now.Year - p.BirthYear
      *     select new { fullName, age }
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -8375,18 +8375,18 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * let square = n * n
          *    ^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JRightPadded<J.Identifier> identifier;
 
         /**
-         * &lt;pre>
+         * <pre>
          * let square = n * n
          *             ^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -8438,9 +8438,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# join clause in a LINQ query expression.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      * // Simple join
      * join customer in customers on order.CustomerId equals customer.Id
      *
@@ -8455,7 +8455,7 @@ public interface Cs extends J {
      *   on order.CustomerId equals customer.Id
      * join employee in employees
      *   on order.EmployeeId equals employee.Id
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -8480,44 +8480,44 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * join customer in customers
          *     ^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JRightPadded<Identifier> identifier;
 
         /**
-         * &lt;pre>
+         * <pre>
          * join customer in customers on order.CustomerId equals customer.Id
          *                 ^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JRightPadded<Expression> inExpression;
 
         /**
-         * &lt;pre>
+         * <pre>
          * join customer in customers on order.CustomerId equals customer.Id
          *                              ^^^^^^^^^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JRightPadded<Expression> leftExpression;
 
         /**
-         * &lt;pre>
+         * <pre>
          * join customer in customers on order.CustomerId equals customer.Id
          *                                                      ^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
         Expression rightExpression;
 
         /**
-         * &lt;pre>
+         * <pre>
          * join category in categories on product.CategoryId equals category.Id into productCategories
          *                                                                     ^^^^^^^^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Nullable
         JLeftPadded<JoinIntoClause> into;
@@ -8624,9 +8624,9 @@ public interface Cs extends J {
     /**
      * Represents the 'into' portion of a group join clause in C# LINQ syntax.
      * Used to specify the identifier that will hold the grouped results.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      * // Group join using into clause
      * join category in categories
      *    on product.CategoryId equals category.Id
@@ -8639,7 +8639,7 @@ public interface Cs extends J {
      * join returns in db.Returns
      *    on customer.Id equals returns.CustomerId
      *    into customerReturns
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -8659,10 +8659,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * into productCategories
          *     ^^^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -8676,9 +8676,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# LINQ where clause that filters elements in a query based on a condition.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple where clause
      *     from p in people
      *     where p.Age >= 18
@@ -8692,9 +8692,9 @@ public interface Cs extends J {
      *
      *     // Where with complex condition
      *     from o in orders
-     *     where o.Total > 1000 &amp;&amp; o.Status == "Pending"
+     *     where o.Total > 1000 && o.Status == "Pending"
      *     select o
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -8715,10 +8715,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * where p.Age >= 18
          *      ^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -8732,9 +8732,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# LINQ orderby clause that specifies the ordering of results in a query.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple orderby with single key
      *     from p in people
      *     orderby p.LastName
@@ -8749,7 +8749,7 @@ public interface Cs extends J {
      *     from o in orders
      *     orderby o.Customer.Name, o.Total * 1.08
      *     select o
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -8774,10 +8774,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * orderby p.LastName ascending, p.FirstName descending
          *         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         List<JRightPadded<Ordering>> orderings;
 
@@ -8826,9 +8826,9 @@ public interface Cs extends J {
     /**
      * Represents a LINQ query continuation using the 'into' keyword, which allows query results to be
      * further processed in subsequent query clauses.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Query continuation with grouping
      *     from c in customers
      *     group c by c.Country into g
@@ -8840,7 +8840,7 @@ public interface Cs extends J {
      *     select new { Modulo = g.Key, Items = g } into r
      *     where r.Items.Count() > 2
      *     select r
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -8860,21 +8860,21 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * group c by c.Country into g
          *                         ^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
         J.Identifier identifier;
 
         /**
-         * &lt;pre>
+         * <pre>
          * group c by c.Country into g
          * select new { Country = g.Key }
          * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -8889,10 +8889,10 @@ public interface Cs extends J {
 
     /**
      * Represents a single ordering clause within C# orderby expression.
-     * &lt;pre>
+     * <pre>
      * orderby name ascending
      * orderby age descending, name ascending
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -8917,10 +8917,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * orderby name ascending
          *        ^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JRightPadded<Expression> expression;
 
@@ -8933,10 +8933,10 @@ public interface Cs extends J {
         }
 
         /**
-         * &lt;pre>
+         * <pre>
          * orderby name ascending
          *             ^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -8984,13 +8984,13 @@ public interface Cs extends J {
 
     /**
      * Represents a select clause in a LINQ expression in C#.
-     * &lt;pre>
+     * <pre>
      * // Simple select
      * select item
      *
      * // Select with projection
      * select new { Name = p.Name, Age = p.Age }
-     * &lt;/pre>
+     * </pre>
      */
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
     @AllArgsConstructor(access = AccessLevel.PUBLIC)
@@ -9010,10 +9010,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * select item
          *        ^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -9027,13 +9027,13 @@ public interface Cs extends J {
 
     /**
      * Represents a group clause in a LINQ query.
-     * &lt;pre>
+     * <pre>
      * // Simple group by
      * group item by key
      *
      * // Group by with complex key
      * group customer by new { customer.State, customer.City }
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -9058,10 +9058,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * group item by key
          *       ^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JRightPadded<Expression> groupExpression;
 
@@ -9074,10 +9074,10 @@ public interface Cs extends J {
         }
 
         /**
-         * &lt;pre>
+         * <pre>
          * group item by key
          *              ^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -9118,7 +9118,7 @@ public interface Cs extends J {
     }
     /**
      * Represents a C# indexer declaration which allows objects to be indexed like arrays.
-     * &lt;pre>
+     * <pre>
      * // Simple indexer
      * public int this[int index] { get { } set { } }
      *
@@ -9133,7 +9133,7 @@ public interface Cs extends J {
      *
      * // Protected indexer with expression body
      * protected internal int this[int i] =&gt; array[i];
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -9163,29 +9163,29 @@ public interface Cs extends J {
         List<Modifier> modifiers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public int this[int index]
          *        ^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
         TypeTree typeExpression;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public int IFoo.this[int index]
          *          ^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Nullable
         JRightPadded<TypeTree> explicitInterfaceSpecifier;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public TypeName ISomeType.this[int index]
          *                          ^^^^
-         * &lt;/pre>
+         * </pre>
          * Either FieldAccess (when interface qualified) or Identifier ("this")
          */
         @Getter
@@ -9193,27 +9193,27 @@ public interface Cs extends J {
         Expression indexer;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public int this[int index] { get; set; }
          *               ^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JContainer<Expression> parameters;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public int this[int index] => array[index];
          *                            ^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Nullable
         JLeftPadded<Expression> expressionBody;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public int this[int index] { get; set; }
          *                           ^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Nullable
         @With
@@ -9319,9 +9319,9 @@ public interface Cs extends J {
     /**
      * Represents a C# delegate declaration which defines a type that can reference methods.
      * Delegates act as type-safe function pointers and provide the foundation for events in C#.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      * // Simple non-generic delegate with single parameter
      * public delegate void Logger(string message);
      *
@@ -9329,7 +9329,7 @@ public interface Cs extends J {
      * public delegate T Factory<T>() where T : class, new();
      *
      * // Delegate with multiple parameters and constraint
-     * public delegate TResult Convert&lt;T, TResult>(T input)
+     * public delegate TResult Convert<T, TResult>(T input)
      *     where T : struct
      *     where TResult : class;
      *
@@ -9338,7 +9338,7 @@ public interface Cs extends J {
      *
      * // Protected access
      * protected delegate bool Validator<T>(T item);
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -9368,20 +9368,20 @@ public interface Cs extends J {
         List<AttributeList> attributes;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public delegate void MyDelegate(string message);
          * ^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
         List<Modifier> modifiers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public delegate void MyDelegate(string message);
          *               ^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JLeftPadded<TypeTree> returnType;
 
@@ -9394,37 +9394,37 @@ public interface Cs extends J {
         }
 
         /**
-         * &lt;pre>
+         * <pre>
          * public delegate void MyDelegate(string message);
          *                     ^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
         Identifier identifier;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public delegate T GenericDelegate<T>(T item);
          *                                  ^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Nullable
         JContainer<Cs.TypeParameter> typeParameters;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public delegate void MyDelegate(string message);
          *                                ^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JContainer<Statement> parameters;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public delegate T Factory<T>() where T : class;
          *                               ^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Nullable
         JContainer<TypeParameterConstraintClause> typeParameterConstraintClauses;
@@ -9526,7 +9526,7 @@ public interface Cs extends J {
 
     /**
      * Represents a C# operator conversion declaration that defines custom type conversion behavior.
-     * &lt;pre>
+     * <pre>
      * // Implicit conversion
      * public static implicit operator string(MyType t) =&gt; t.ToString();
      *
@@ -9565,20 +9565,20 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public static implicit operator string(MyType t)
          * ^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
         List<Modifier> modifiers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public static implicit operator string(MyType t)
          *               ^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JLeftPadded<ExplicitImplicit> kind;
 
@@ -9591,10 +9591,10 @@ public interface Cs extends J {
         }
 
         /**
-         * &lt;pre>
+         * <pre>
          * public static implicit operator string(MyType t)
          *                                ^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JLeftPadded<TypeTree> returnType;
 
@@ -9607,27 +9607,27 @@ public interface Cs extends J {
         }
 
         /**
-         * &lt;pre>
+         * <pre>
          * public static implicit operator string(MyType t)
          *                                      ^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JContainer<Statement> parameters;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public static implicit operator string(MyType t) => t.ToString();
          *                                                 ^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Nullable
         JLeftPadded<Expression> expressionBody;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public static implicit operator string(MyType t) { return t.ToString(); }
          *                                                 ^^^^^^^^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -9728,9 +9728,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# type parameter in generic type declarations, including optional variance and constraints.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple type parameter
      *     class Container&lt;T&gt;
      *
@@ -9742,7 +9742,7 @@ public interface Cs extends J {
      *
      *     // Type parameter with variance and attributes
      *     interface IComparer&lt;[NotNull] in T&gt;
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -9771,19 +9771,19 @@ public interface Cs extends J {
         List<AttributeList> attributeLists;
 
         /**
-         * &lt;pre>
+         * <pre>
          * interface IEnumerable<out T>
          *                      ^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Nullable
         JLeftPadded<VarianceKind> variance;
 
         /**
-         * &lt;pre>
+         * <pre>
          * class Container<T>
          *                 ^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -9838,9 +9838,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# enum declaration, including optional modifiers, attributes, and enum members.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple enum
      *     public enum Colors { Red, Green, Blue }
      *
@@ -9855,7 +9855,7 @@ public interface Cs extends J {
      *         Write = 2,
      *         ReadWrite = Read | Write
      *     }
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -9889,10 +9889,10 @@ public interface Cs extends J {
         List<Modifier> modifiers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * public enum Colors { Red, Green }
          *            ^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JLeftPadded<Identifier> name;
 
@@ -9905,19 +9905,19 @@ public interface Cs extends J {
         }
 
         /**
-         * &lt;pre>
+         * <pre>
          * enum Flags : byte { None }
          *           ^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Nullable
         JLeftPadded<TypeTree> baseType;
 
         /**
-         * &lt;pre>
+         * <pre>
          * enum Colors { Red, Green, Blue }
          *             ^^^^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Nullable
         JContainer<Expression> members;
@@ -9987,9 +9987,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# enum member declaration, including optional attributes and initializer.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple enum member
      *     Red,
      *
@@ -9999,7 +9999,7 @@ public interface Cs extends J {
      *     // Member with attributes and expression initializer
      *     [Obsolete]
      *     Blue = Red | Green,
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -10028,20 +10028,20 @@ public interface Cs extends J {
         List<AttributeList> attributeLists;
 
         /**
-         * &lt;pre>
+         * <pre>
          * Red = 1
          * ^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
         Identifier name;
 
         /**
-         * &lt;pre>
+         * <pre>
          * Red = 1
          *     ^^^
-         * &lt;/pre>
+         * </pre>
          */
         @Nullable
         JLeftPadded<Expression> initializer;
@@ -10105,15 +10105,15 @@ public interface Cs extends J {
 
     /**
      * Represents a C# alias qualified name, which uses an extern alias to qualify a name.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Using LibA to qualify TypeName
      *     LibA::TypeName
      *
      *     // Using LibB to qualify namespace
      *     LibB::System.Collections
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -10138,18 +10138,18 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * LibA::TypeName
          * ^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JRightPadded<Identifier> alias;
 
         /**
-         * &lt;pre>
+         * <pre>
          * LibA::TypeName
          *      ^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          * In case of method invocation, whole expression gets placed here
          */
         @With
@@ -10317,9 +10317,9 @@ public interface Cs extends J {
 
         /**
          * Represents a C# catch clause in a try/catch statement, which optionally includes a filter expression.
-         * &lt;p>
+         * <p>
          * For example:
-         * &lt;pre>
+         * <pre>
          *     // Simple catch clause
          *     catch (Exception e) { }
          *
@@ -10332,7 +10332,7 @@ public interface Cs extends J {
          *     }
          *     catch (ArgumentException e) when (e.ParamName == "id") { }
          *     catch (Exception e) when (e.InnerException != null) { }
-         * &lt;/pre>
+         * </pre>
          */
         @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
         @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -10357,29 +10357,29 @@ public interface Cs extends J {
             Markers markers;
 
             /**
-             * &lt;pre>
+             * <pre>
              * catch (Exception e) when (e.Code == 404) { }
              *      ^^^^^^^^^^^^^^
-             * &lt;/pre>
+             * </pre>
              */
             @With
             @Getter
             ControlParentheses<VariableDeclarations> parameter;
 
             /**
-             * &lt;pre>
+             * <pre>
              * catch (Exception e) when (e.Code == 404) { }
              *                    ^^^^^^^^^^^^^^^^^^^^^
-             * &lt;/pre>
+             * </pre>
              */
             @Nullable
             JLeftPadded<ControlParentheses<Expression>> filterExpression;
 
             /**
-             * &lt;pre>
+             * <pre>
              * catch (Exception e) when (e.Code == 404) { }
              *                                         ^^^^
-             * &lt;/pre>
+             * </pre>
              */
             @With
             @Getter
@@ -10458,9 +10458,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# arrow expression clause (=>).
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // In property accessors
      *     public string Name {
      *         get => _name;
@@ -10474,7 +10474,7 @@ public interface Cs extends J {
      *
      *     // In operators
      *     public static implicit operator string(Person p) => p.Name;
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -10499,10 +10499,10 @@ public interface Cs extends J {
         Markers markers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * get => value;
          *     ^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         JRightPadded<Expression> expression;
 
@@ -10556,9 +10556,9 @@ public interface Cs extends J {
 
     /**
      * Represents a C# accessor declaration (get/set/init) within a property or indexer.
-     * &lt;p>
+     * <p>
      * For example:
-     * &lt;pre>
+     * <pre>
      *     // Simple get/set accessors
      *     public int Value {
      *         get { return _value; }
@@ -10581,7 +10581,7 @@ public interface Cs extends J {
      *         get { return _age; }
      *         private set { _age = value; }
      *     }
-     * &lt;/pre>
+     * </pre>
      */
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
@@ -10614,18 +10614,18 @@ public interface Cs extends J {
         List<Modifier> modifiers;
 
         /**
-         * &lt;pre>
+         * <pre>
          * get { return value; }
          * ^^^
-         * &lt;/pre>
+         * </pre>
          */
         JLeftPadded<AccessorKinds> kind;
 
         /**
-         * &lt;pre>
+         * <pre>
          * get => value;
          *     ^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter
@@ -10633,10 +10633,10 @@ public interface Cs extends J {
         ArrowExpressionClause expressionBody;
 
         /**
-         * &lt;pre>
+         * <pre>
          * get { return value; }
          *     ^^^^^^^^^^^^^^^
-         * &lt;/pre>
+         * </pre>
          */
         @With
         @Getter

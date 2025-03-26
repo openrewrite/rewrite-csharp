@@ -11,9 +11,5 @@ public partial interface J : Rewrite.Core.Tree
         {
             return WithType(newType as JavaType.FullyQualified);
         }
-        public partial class Kind
-        {
-            public override string? ToString() => Core.Tree.ToString(this) ?? base.ToString();
-        }
     }
 }

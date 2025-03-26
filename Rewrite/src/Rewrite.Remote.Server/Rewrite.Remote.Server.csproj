@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <PackageIcon>moderne.png</PackageIcon>
         <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+    <PropertyGroup>
+        <PackageIcon>moderne.png</PackageIcon>
         <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
     </PropertyGroup>
 
@@ -13,7 +14,6 @@
         <ProjectReference Include="..\Rewrite.Remote\Rewrite.Remote.csproj" />
         <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
         <ProjectReference Include="..\Rewrite.CSharp\Rewrite.CSharp.csproj" />
-        <ProjectReference Include="..\Rewrite.Java\Rewrite.Java.csproj" />
         <ProjectReference Include="..\Rewrite.Json\Rewrite.Json.csproj" />
         <ProjectReference Include="..\Rewrite.Properties\Rewrite.Properties.csproj" />
         <ProjectReference Include="..\Rewrite.Xml\Rewrite.Xml.csproj" />

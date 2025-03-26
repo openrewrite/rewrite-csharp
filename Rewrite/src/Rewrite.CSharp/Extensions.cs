@@ -30,15 +30,7 @@ public static class Extensions
 
     private class ReplaceContainerVisitor(J oldNode, J newNode) : CSharpVisitor<object?>
     {
-        public override JContainer<T>? VisitContainer<T>(JContainer<T>? container, JContainer.Location loc, object? p)
-        {
-            return base.VisitContainer(container, loc, p);
-        }
 
-        protected override JContainer<J2>? VisitContainer<J2>(JContainer<J2>? container, CsContainer.Location loc, object? p)
-        {
-            return base.VisitContainer(container, loc, p);
-        }
 
         public override J? PreVisit(Core.Tree? tree, object? p)
         {

@@ -29,17 +29,17 @@ public class CSharpVisitor<P> : JavaVisitor<P>
     {
         compilationUnit = compilationUnit.WithPrefix(VisitSpace(compilationUnit.Prefix, Space.Location.COMPILATION_UNIT_PREFIX, p)!);
         compilationUnit = compilationUnit.WithMarkers(VisitMarkers(compilationUnit.Markers, p));
-        compilationUnit = compilationUnit.Padding.WithExterns(compilationUnit.Padding.Externs.Map(el => VisitRightPadded(el, CsRightPadded.Location.COMPILATION_UNIT_EXTERNS, p)));
-        compilationUnit = compilationUnit.Padding.WithUsings(compilationUnit.Padding.Usings.Map(el => VisitRightPadded(el, CsRightPadded.Location.COMPILATION_UNIT_USINGS, p)));
+        compilationUnit = compilationUnit.Padding.WithExterns(compilationUnit.Padding.Externs.Map(el => VisitRightPadded(el, JRightPadded.Location.COMPILATION_UNIT_EXTERNS, p)));
+        compilationUnit = compilationUnit.Padding.WithUsings(compilationUnit.Padding.Usings.Map(el => VisitRightPadded(el, JRightPadded.Location.COMPILATION_UNIT_USINGS, p)));
         compilationUnit = compilationUnit.WithAttributeLists(compilationUnit.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
-        compilationUnit = compilationUnit.Padding.WithMembers(compilationUnit.Padding.Members.Map(el => VisitRightPadded(el, CsRightPadded.Location.COMPILATION_UNIT_MEMBERS, p)));
+        compilationUnit = compilationUnit.Padding.WithMembers(compilationUnit.Padding.Members.Map(el => VisitRightPadded(el, JRightPadded.Location.COMPILATION_UNIT_MEMBERS, p)));
         compilationUnit = compilationUnit.WithEof(VisitSpace(compilationUnit.Eof, Space.Location.COMPILATION_UNIT_EOF, p)!);
         return compilationUnit;
     }
 
     public virtual J? VisitOperatorDeclaration(Cs.OperatorDeclaration operatorDeclaration, P p)
     {
-        operatorDeclaration = operatorDeclaration.WithPrefix(VisitSpace(operatorDeclaration.Prefix, CsSpace.Location.OPERATOR_DECLARATION_PREFIX, p)!);
+        operatorDeclaration = operatorDeclaration.WithPrefix(VisitSpace(operatorDeclaration.Prefix, Space.Location.OPERATOR_DECLARATION_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(operatorDeclaration, p);
         if (tempStatement is not Cs.OperatorDeclaration)
         {
@@ -49,19 +49,19 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         operatorDeclaration = operatorDeclaration.WithMarkers(VisitMarkers(operatorDeclaration.Markers, p));
         operatorDeclaration = operatorDeclaration.WithAttributeLists(operatorDeclaration.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
         operatorDeclaration = operatorDeclaration.WithModifiers(operatorDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        operatorDeclaration = operatorDeclaration.Padding.WithExplicitInterfaceSpecifier(operatorDeclaration.Padding.ExplicitInterfaceSpecifier == null ? null : VisitRightPadded(operatorDeclaration.Padding.ExplicitInterfaceSpecifier, CsRightPadded.Location.OPERATOR_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, p));
+        operatorDeclaration = operatorDeclaration.Padding.WithExplicitInterfaceSpecifier(operatorDeclaration.Padding.ExplicitInterfaceSpecifier == null ? null : VisitRightPadded(operatorDeclaration.Padding.ExplicitInterfaceSpecifier, JRightPadded.Location.OPERATOR_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, p));
         operatorDeclaration = operatorDeclaration.WithOperatorKeyword(VisitAndCast<Cs.Keyword>(operatorDeclaration.OperatorKeyword, p)!);
         operatorDeclaration = operatorDeclaration.WithCheckedKeyword(VisitAndCast<Cs.Keyword>(operatorDeclaration.CheckedKeyword, p));
-        operatorDeclaration = operatorDeclaration.Padding.WithOperatorToken(VisitLeftPadded(operatorDeclaration.Padding.OperatorToken, CsLeftPadded.Location.OPERATOR_DECLARATION_OPERATOR_TOKEN, p)!);
+        operatorDeclaration = operatorDeclaration.Padding.WithOperatorToken(VisitLeftPadded(operatorDeclaration.Padding.OperatorToken, JLeftPadded.Location.OPERATOR_DECLARATION_OPERATOR_TOKEN, p)!);
         operatorDeclaration = operatorDeclaration.WithReturnType(VisitAndCast<TypeTree>(operatorDeclaration.ReturnType, p)!);
-        operatorDeclaration = operatorDeclaration.Padding.WithParameters(VisitContainer(operatorDeclaration.Padding.Parameters, CsContainer.Location.OPERATOR_DECLARATION_PARAMETERS, p)!);
+        operatorDeclaration = operatorDeclaration.Padding.WithParameters(VisitContainer(operatorDeclaration.Padding.Parameters, JContainer.Location.OPERATOR_DECLARATION_PARAMETERS, p)!);
         operatorDeclaration = operatorDeclaration.WithBody(VisitAndCast<J.Block>(operatorDeclaration.Body, p)!);
         return operatorDeclaration;
     }
 
     public virtual J? VisitRefExpression(Cs.RefExpression refExpression, P p)
     {
-        refExpression = refExpression.WithPrefix(VisitSpace(refExpression.Prefix, CsSpace.Location.REF_EXPRESSION_PREFIX, p)!);
+        refExpression = refExpression.WithPrefix(VisitSpace(refExpression.Prefix, Space.Location.REF_EXPRESSION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(refExpression, p);
         if (tempExpression is not Cs.RefExpression)
         {
@@ -75,7 +75,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitPointerType(Cs.PointerType pointerType, P p)
     {
-        pointerType = pointerType.WithPrefix(VisitSpace(pointerType.Prefix, CsSpace.Location.POINTER_TYPE_PREFIX, p)!);
+        pointerType = pointerType.WithPrefix(VisitSpace(pointerType.Prefix, Space.Location.POINTER_TYPE_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(pointerType, p);
         if (tempExpression is not Cs.PointerType)
         {
@@ -83,13 +83,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         pointerType = (Cs.PointerType) tempExpression;
         pointerType = pointerType.WithMarkers(VisitMarkers(pointerType.Markers, p));
-        pointerType = pointerType.Padding.WithElementType(VisitRightPadded(pointerType.Padding.ElementType, CsRightPadded.Location.POINTER_TYPE_ELEMENT_TYPE, p)!);
+        pointerType = pointerType.Padding.WithElementType(VisitRightPadded(pointerType.Padding.ElementType, JRightPadded.Location.POINTER_TYPE_ELEMENT_TYPE, p)!);
         return pointerType;
     }
 
     public virtual J? VisitRefType(Cs.RefType refType, P p)
     {
-        refType = refType.WithPrefix(VisitSpace(refType.Prefix, CsSpace.Location.REF_TYPE_PREFIX, p)!);
+        refType = refType.WithPrefix(VisitSpace(refType.Prefix, Space.Location.REF_TYPE_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(refType, p);
         if (tempExpression is not Cs.RefType)
         {
@@ -104,7 +104,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitForEachVariableLoop(Cs.ForEachVariableLoop forEachVariableLoop, P p)
     {
-        forEachVariableLoop = forEachVariableLoop.WithPrefix(VisitSpace(forEachVariableLoop.Prefix, CsSpace.Location.FOR_EACH_VARIABLE_LOOP_PREFIX, p)!);
+        forEachVariableLoop = forEachVariableLoop.WithPrefix(VisitSpace(forEachVariableLoop.Prefix, Space.Location.FOR_EACH_VARIABLE_LOOP_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(forEachVariableLoop, p);
         if (tempStatement is not Cs.ForEachVariableLoop)
         {
@@ -113,30 +113,30 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         forEachVariableLoop = (Cs.ForEachVariableLoop) tempStatement;
         forEachVariableLoop = forEachVariableLoop.WithMarkers(VisitMarkers(forEachVariableLoop.Markers, p));
         forEachVariableLoop = forEachVariableLoop.WithControlElement(VisitAndCast<Cs.ForEachVariableLoop.Control>(forEachVariableLoop.ControlElement, p)!);
-        forEachVariableLoop = forEachVariableLoop.Padding.WithBody(VisitRightPadded(forEachVariableLoop.Padding.Body, CsRightPadded.Location.FOR_EACH_VARIABLE_LOOP_BODY, p)!);
+        forEachVariableLoop = forEachVariableLoop.Padding.WithBody(VisitRightPadded(forEachVariableLoop.Padding.Body, JRightPadded.Location.FOR_EACH_VARIABLE_LOOP_BODY, p)!);
         return forEachVariableLoop;
     }
 
     public virtual J? VisitForEachVariableLoopControl(Cs.ForEachVariableLoop.Control control, P p)
     {
-        control = control.WithPrefix(VisitSpace(control.Prefix, CsSpace.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_PREFIX, p)!);
+        control = control.WithPrefix(VisitSpace(control.Prefix, Space.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_PREFIX, p)!);
         control = control.WithMarkers(VisitMarkers(control.Markers, p));
-        control = control.Padding.WithVariable(VisitRightPadded(control.Padding.Variable, CsRightPadded.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_VARIABLE, p)!);
-        control = control.Padding.WithIterable(VisitRightPadded(control.Padding.Iterable, CsRightPadded.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_ITERABLE, p)!);
+        control = control.Padding.WithVariable(VisitRightPadded(control.Padding.Variable, JRightPadded.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_VARIABLE, p)!);
+        control = control.Padding.WithIterable(VisitRightPadded(control.Padding.Iterable, JRightPadded.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_ITERABLE, p)!);
         return control;
     }
 
     public virtual J? VisitNameColon(Cs.NameColon nameColon, P p)
     {
-        nameColon = nameColon.WithPrefix(VisitSpace(nameColon.Prefix, CsSpace.Location.NAME_COLON_PREFIX, p)!);
+        nameColon = nameColon.WithPrefix(VisitSpace(nameColon.Prefix, Space.Location.NAME_COLON_PREFIX, p)!);
         nameColon = nameColon.WithMarkers(VisitMarkers(nameColon.Markers, p));
-        nameColon = nameColon.Padding.WithName(VisitRightPadded(nameColon.Padding.Name, CsRightPadded.Location.NAME_COLON_NAME, p)!);
+        nameColon = nameColon.Padding.WithName(VisitRightPadded(nameColon.Padding.Name, JRightPadded.Location.NAME_COLON_NAME, p)!);
         return nameColon;
     }
 
     public virtual J? VisitArgument(Cs.Argument argument, P p)
     {
-        argument = argument.WithPrefix(VisitSpace(argument.Prefix, CsSpace.Location.ARGUMENT_PREFIX, p)!);
+        argument = argument.WithPrefix(VisitSpace(argument.Prefix, Space.Location.ARGUMENT_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(argument, p);
         if (tempExpression is not Cs.Argument)
         {
@@ -144,7 +144,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         argument = (Cs.Argument) tempExpression;
         argument = argument.WithMarkers(VisitMarkers(argument.Markers, p));
-        argument = argument.Padding.WithNameColumn(argument.Padding.NameColumn == null ? null : VisitRightPadded(argument.Padding.NameColumn, CsRightPadded.Location.ARGUMENT_NAME_COLUMN, p));
+        argument = argument.Padding.WithNameColumn(argument.Padding.NameColumn == null ? null : VisitRightPadded(argument.Padding.NameColumn, JRightPadded.Location.ARGUMENT_NAME_COLUMN, p));
         argument = argument.WithRefKindKeyword(VisitAndCast<Cs.Keyword>(argument.RefKindKeyword, p));
         argument = argument.WithExpression(VisitAndCast<Expression>(argument.Expression, p)!);
         return argument;
@@ -152,7 +152,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitAnnotatedStatement(Cs.AnnotatedStatement annotatedStatement, P p)
     {
-        annotatedStatement = annotatedStatement.WithPrefix(VisitSpace(annotatedStatement.Prefix, CsSpace.Location.ANNOTATED_STATEMENT_PREFIX, p)!);
+        annotatedStatement = annotatedStatement.WithPrefix(VisitSpace(annotatedStatement.Prefix, Space.Location.ANNOTATED_STATEMENT_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(annotatedStatement, p);
         if (tempStatement is not Cs.AnnotatedStatement)
         {
@@ -167,7 +167,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitArrayRankSpecifier(Cs.ArrayRankSpecifier arrayRankSpecifier, P p)
     {
-        arrayRankSpecifier = arrayRankSpecifier.WithPrefix(VisitSpace(arrayRankSpecifier.Prefix, CsSpace.Location.ARRAY_RANK_SPECIFIER_PREFIX, p)!);
+        arrayRankSpecifier = arrayRankSpecifier.WithPrefix(VisitSpace(arrayRankSpecifier.Prefix, Space.Location.ARRAY_RANK_SPECIFIER_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(arrayRankSpecifier, p);
         if (tempExpression is not Cs.ArrayRankSpecifier)
         {
@@ -175,13 +175,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         arrayRankSpecifier = (Cs.ArrayRankSpecifier) tempExpression;
         arrayRankSpecifier = arrayRankSpecifier.WithMarkers(VisitMarkers(arrayRankSpecifier.Markers, p));
-        arrayRankSpecifier = arrayRankSpecifier.Padding.WithSizes(VisitContainer(arrayRankSpecifier.Padding.Sizes, CsContainer.Location.ARRAY_RANK_SPECIFIER_SIZES, p)!);
+        arrayRankSpecifier = arrayRankSpecifier.Padding.WithSizes(VisitContainer(arrayRankSpecifier.Padding.Sizes, JContainer.Location.ARRAY_RANK_SPECIFIER_SIZES, p)!);
         return arrayRankSpecifier;
     }
 
     public virtual J? VisitAssignmentOperation(Cs.AssignmentOperation assignmentOperation, P p)
     {
-        assignmentOperation = assignmentOperation.WithPrefix(VisitSpace(assignmentOperation.Prefix, CsSpace.Location.ASSIGNMENT_OPERATION_PREFIX, p)!);
+        assignmentOperation = assignmentOperation.WithPrefix(VisitSpace(assignmentOperation.Prefix, Space.Location.ASSIGNMENT_OPERATION_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(assignmentOperation, p);
         if (tempStatement is not Cs.AssignmentOperation)
         {
@@ -196,23 +196,23 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         assignmentOperation = (Cs.AssignmentOperation) tempExpression;
         assignmentOperation = assignmentOperation.WithMarkers(VisitMarkers(assignmentOperation.Markers, p));
         assignmentOperation = assignmentOperation.WithVariable(VisitAndCast<Expression>(assignmentOperation.Variable, p)!);
-        assignmentOperation = assignmentOperation.Padding.WithOperator(VisitLeftPadded(assignmentOperation.Padding.Operator, CsLeftPadded.Location.ASSIGNMENT_OPERATION_OPERATOR, p)!);
+        assignmentOperation = assignmentOperation.Padding.WithOperator(VisitLeftPadded(assignmentOperation.Padding.Operator, JLeftPadded.Location.ASSIGNMENT_OPERATION_OPERATOR, p)!);
         assignmentOperation = assignmentOperation.WithAssignment(VisitAndCast<Expression>(assignmentOperation.Assignment, p)!);
         return assignmentOperation;
     }
 
     public virtual J? VisitAttributeList(Cs.AttributeList attributeList, P p)
     {
-        attributeList = attributeList.WithPrefix(VisitSpace(attributeList.Prefix, CsSpace.Location.ATTRIBUTE_LIST_PREFIX, p)!);
+        attributeList = attributeList.WithPrefix(VisitSpace(attributeList.Prefix, Space.Location.ATTRIBUTE_LIST_PREFIX, p)!);
         attributeList = attributeList.WithMarkers(VisitMarkers(attributeList.Markers, p));
-        attributeList = attributeList.Padding.WithTarget(attributeList.Padding.Target == null ? null : VisitRightPadded(attributeList.Padding.Target, CsRightPadded.Location.ATTRIBUTE_LIST_TARGET, p));
-        attributeList = attributeList.Padding.WithAttributes(attributeList.Padding.Attributes.Map(el => VisitRightPadded(el, CsRightPadded.Location.ATTRIBUTE_LIST_ATTRIBUTES, p)));
+        attributeList = attributeList.Padding.WithTarget(attributeList.Padding.Target == null ? null : VisitRightPadded(attributeList.Padding.Target, JRightPadded.Location.ATTRIBUTE_LIST_TARGET, p));
+        attributeList = attributeList.Padding.WithAttributes(attributeList.Padding.Attributes.Map(el => VisitRightPadded(el, JRightPadded.Location.ATTRIBUTE_LIST_ATTRIBUTES, p)));
         return attributeList;
     }
 
     public virtual J? VisitAwaitExpression(Cs.AwaitExpression awaitExpression, P p)
     {
-        awaitExpression = awaitExpression.WithPrefix(VisitSpace(awaitExpression.Prefix, CsSpace.Location.AWAIT_EXPRESSION_PREFIX, p)!);
+        awaitExpression = awaitExpression.WithPrefix(VisitSpace(awaitExpression.Prefix, Space.Location.AWAIT_EXPRESSION_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(awaitExpression, p);
         if (tempStatement is not Cs.AwaitExpression)
         {
@@ -232,7 +232,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitStackAllocExpression(Cs.StackAllocExpression stackAllocExpression, P p)
     {
-        stackAllocExpression = stackAllocExpression.WithPrefix(VisitSpace(stackAllocExpression.Prefix, CsSpace.Location.STACK_ALLOC_EXPRESSION_PREFIX, p)!);
+        stackAllocExpression = stackAllocExpression.WithPrefix(VisitSpace(stackAllocExpression.Prefix, Space.Location.STACK_ALLOC_EXPRESSION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(stackAllocExpression, p);
         if (tempExpression is not Cs.StackAllocExpression)
         {
@@ -246,7 +246,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitGotoStatement(Cs.GotoStatement gotoStatement, P p)
     {
-        gotoStatement = gotoStatement.WithPrefix(VisitSpace(gotoStatement.Prefix, CsSpace.Location.GOTO_STATEMENT_PREFIX, p)!);
+        gotoStatement = gotoStatement.WithPrefix(VisitSpace(gotoStatement.Prefix, Space.Location.GOTO_STATEMENT_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(gotoStatement, p);
         if (tempStatement is not Cs.GotoStatement)
         {
@@ -261,7 +261,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitEventDeclaration(Cs.EventDeclaration eventDeclaration, P p)
     {
-        eventDeclaration = eventDeclaration.WithPrefix(VisitSpace(eventDeclaration.Prefix, CsSpace.Location.EVENT_DECLARATION_PREFIX, p)!);
+        eventDeclaration = eventDeclaration.WithPrefix(VisitSpace(eventDeclaration.Prefix, Space.Location.EVENT_DECLARATION_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(eventDeclaration, p);
         if (tempStatement is not Cs.EventDeclaration)
         {
@@ -271,16 +271,16 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         eventDeclaration = eventDeclaration.WithMarkers(VisitMarkers(eventDeclaration.Markers, p));
         eventDeclaration = eventDeclaration.WithAttributeLists(eventDeclaration.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
         eventDeclaration = eventDeclaration.WithModifiers(eventDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        eventDeclaration = eventDeclaration.Padding.WithTypeExpression(VisitLeftPadded(eventDeclaration.Padding.TypeExpression, CsLeftPadded.Location.EVENT_DECLARATION_TYPE_EXPRESSION, p)!);
-        eventDeclaration = eventDeclaration.Padding.WithInterfaceSpecifier(eventDeclaration.Padding.InterfaceSpecifier == null ? null : VisitRightPadded(eventDeclaration.Padding.InterfaceSpecifier, CsRightPadded.Location.EVENT_DECLARATION_INTERFACE_SPECIFIER, p));
+        eventDeclaration = eventDeclaration.Padding.WithTypeExpression(VisitLeftPadded(eventDeclaration.Padding.TypeExpression, JLeftPadded.Location.EVENT_DECLARATION_TYPE_EXPRESSION, p)!);
+        eventDeclaration = eventDeclaration.Padding.WithInterfaceSpecifier(eventDeclaration.Padding.InterfaceSpecifier == null ? null : VisitRightPadded(eventDeclaration.Padding.InterfaceSpecifier, JRightPadded.Location.EVENT_DECLARATION_INTERFACE_SPECIFIER, p));
         eventDeclaration = eventDeclaration.WithName(VisitAndCast<J.Identifier>(eventDeclaration.Name, p)!);
-        eventDeclaration = eventDeclaration.Padding.WithAccessors(eventDeclaration.Padding.Accessors == null ? null : VisitContainer(eventDeclaration.Padding.Accessors, CsContainer.Location.EVENT_DECLARATION_ACCESSORS, p));
+        eventDeclaration = eventDeclaration.Padding.WithAccessors(eventDeclaration.Padding.Accessors == null ? null : VisitContainer(eventDeclaration.Padding.Accessors, JContainer.Location.EVENT_DECLARATION_ACCESSORS, p));
         return eventDeclaration;
     }
 
     public virtual J? VisitBinary(Cs.Binary binary, P p)
     {
-        binary = binary.WithPrefix(VisitSpace(binary.Prefix, CsSpace.Location.BINARY_PREFIX, p)!);
+        binary = binary.WithPrefix(VisitSpace(binary.Prefix, Space.Location.BINARY_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(binary, p);
         if (tempExpression is not Cs.Binary)
         {
@@ -289,14 +289,14 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         binary = (Cs.Binary) tempExpression;
         binary = binary.WithMarkers(VisitMarkers(binary.Markers, p));
         binary = binary.WithLeft(VisitAndCast<Expression>(binary.Left, p)!);
-        binary = binary.Padding.WithOperator(VisitLeftPadded(binary.Padding.Operator, CsLeftPadded.Location.BINARY_OPERATOR, p)!);
+        binary = binary.Padding.WithOperator(VisitLeftPadded(binary.Padding.Operator, JLeftPadded.Location.BINARY_OPERATOR, p)!);
         binary = binary.WithRight(VisitAndCast<Expression>(binary.Right, p)!);
         return binary;
     }
 
     public virtual J? VisitBlockScopeNamespaceDeclaration(Cs.BlockScopeNamespaceDeclaration blockScopeNamespaceDeclaration, P p)
     {
-        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.WithPrefix(VisitSpace(blockScopeNamespaceDeclaration.Prefix, CsSpace.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_PREFIX, p)!);
+        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.WithPrefix(VisitSpace(blockScopeNamespaceDeclaration.Prefix, Space.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(blockScopeNamespaceDeclaration, p);
         if (tempStatement is not Cs.BlockScopeNamespaceDeclaration)
         {
@@ -304,17 +304,17 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         blockScopeNamespaceDeclaration = (Cs.BlockScopeNamespaceDeclaration) tempStatement;
         blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.WithMarkers(VisitMarkers(blockScopeNamespaceDeclaration.Markers, p));
-        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithName(VisitRightPadded(blockScopeNamespaceDeclaration.Padding.Name, CsRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_NAME, p)!);
-        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithExterns(blockScopeNamespaceDeclaration.Padding.Externs.Map(el => VisitRightPadded(el, CsRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_EXTERNS, p)));
-        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithUsings(blockScopeNamespaceDeclaration.Padding.Usings.Map(el => VisitRightPadded(el, CsRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_USINGS, p)));
-        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithMembers(blockScopeNamespaceDeclaration.Padding.Members.Map(el => VisitRightPadded(el, CsRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_MEMBERS, p)));
-        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.WithEnd(VisitSpace(blockScopeNamespaceDeclaration.End, CsSpace.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_END, p)!);
+        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithName(VisitRightPadded(blockScopeNamespaceDeclaration.Padding.Name, JRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_NAME, p)!);
+        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithExterns(blockScopeNamespaceDeclaration.Padding.Externs.Map(el => VisitRightPadded(el, JRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_EXTERNS, p)));
+        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithUsings(blockScopeNamespaceDeclaration.Padding.Usings.Map(el => VisitRightPadded(el, JRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_USINGS, p)));
+        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithMembers(blockScopeNamespaceDeclaration.Padding.Members.Map(el => VisitRightPadded(el, JRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_MEMBERS, p)));
+        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.WithEnd(VisitSpace(blockScopeNamespaceDeclaration.End, Space.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_END, p)!);
         return blockScopeNamespaceDeclaration;
     }
 
     public virtual J? VisitCollectionExpression(Cs.CollectionExpression collectionExpression, P p)
     {
-        collectionExpression = collectionExpression.WithPrefix(VisitSpace(collectionExpression.Prefix, CsSpace.Location.COLLECTION_EXPRESSION_PREFIX, p)!);
+        collectionExpression = collectionExpression.WithPrefix(VisitSpace(collectionExpression.Prefix, Space.Location.COLLECTION_EXPRESSION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(collectionExpression, p);
         if (tempExpression is not Cs.CollectionExpression)
         {
@@ -322,13 +322,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         collectionExpression = (Cs.CollectionExpression) tempExpression;
         collectionExpression = collectionExpression.WithMarkers(VisitMarkers(collectionExpression.Markers, p));
-        collectionExpression = collectionExpression.Padding.WithElements(collectionExpression.Padding.Elements.Map(el => VisitRightPadded(el, CsRightPadded.Location.COLLECTION_EXPRESSION_ELEMENTS, p)));
+        collectionExpression = collectionExpression.Padding.WithElements(collectionExpression.Padding.Elements.Map(el => VisitRightPadded(el, JRightPadded.Location.COLLECTION_EXPRESSION_ELEMENTS, p)));
         return collectionExpression;
     }
 
     public virtual J? VisitExpressionStatement(Cs.ExpressionStatement expressionStatement, P p)
     {
-        expressionStatement = expressionStatement.WithPrefix(VisitSpace(expressionStatement.Prefix, CsSpace.Location.EXPRESSION_STATEMENT_PREFIX, p)!);
+        expressionStatement = expressionStatement.WithPrefix(VisitSpace(expressionStatement.Prefix, Space.Location.EXPRESSION_STATEMENT_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(expressionStatement, p);
         if (tempStatement is not Cs.ExpressionStatement)
         {
@@ -336,13 +336,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         expressionStatement = (Cs.ExpressionStatement) tempStatement;
         expressionStatement = expressionStatement.WithMarkers(VisitMarkers(expressionStatement.Markers, p));
-        expressionStatement = expressionStatement.Padding.WithExpression(VisitRightPadded(expressionStatement.Padding.Expression, CsRightPadded.Location.EXPRESSION_STATEMENT_EXPRESSION, p)!);
+        expressionStatement = expressionStatement.Padding.WithExpression(VisitRightPadded(expressionStatement.Padding.Expression, JRightPadded.Location.EXPRESSION_STATEMENT_EXPRESSION, p)!);
         return expressionStatement;
     }
 
     public virtual J? VisitExternAlias(Cs.ExternAlias externAlias, P p)
     {
-        externAlias = externAlias.WithPrefix(VisitSpace(externAlias.Prefix, CsSpace.Location.EXTERN_ALIAS_PREFIX, p)!);
+        externAlias = externAlias.WithPrefix(VisitSpace(externAlias.Prefix, Space.Location.EXTERN_ALIAS_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(externAlias, p);
         if (tempStatement is not Cs.ExternAlias)
         {
@@ -350,13 +350,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         externAlias = (Cs.ExternAlias) tempStatement;
         externAlias = externAlias.WithMarkers(VisitMarkers(externAlias.Markers, p));
-        externAlias = externAlias.Padding.WithIdentifier(VisitLeftPadded(externAlias.Padding.Identifier, CsLeftPadded.Location.EXTERN_ALIAS_IDENTIFIER, p)!);
+        externAlias = externAlias.Padding.WithIdentifier(VisitLeftPadded(externAlias.Padding.Identifier, JLeftPadded.Location.EXTERN_ALIAS_IDENTIFIER, p)!);
         return externAlias;
     }
 
     public virtual J? VisitFileScopeNamespaceDeclaration(Cs.FileScopeNamespaceDeclaration fileScopeNamespaceDeclaration, P p)
     {
-        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.WithPrefix(VisitSpace(fileScopeNamespaceDeclaration.Prefix, CsSpace.Location.FILE_SCOPE_NAMESPACE_DECLARATION_PREFIX, p)!);
+        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.WithPrefix(VisitSpace(fileScopeNamespaceDeclaration.Prefix, Space.Location.FILE_SCOPE_NAMESPACE_DECLARATION_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(fileScopeNamespaceDeclaration, p);
         if (tempStatement is not Cs.FileScopeNamespaceDeclaration)
         {
@@ -364,16 +364,16 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         fileScopeNamespaceDeclaration = (Cs.FileScopeNamespaceDeclaration) tempStatement;
         fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.WithMarkers(VisitMarkers(fileScopeNamespaceDeclaration.Markers, p));
-        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithName(VisitRightPadded(fileScopeNamespaceDeclaration.Padding.Name, CsRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_NAME, p)!);
-        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithExterns(fileScopeNamespaceDeclaration.Padding.Externs.Map(el => VisitRightPadded(el, CsRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_EXTERNS, p)));
-        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithUsings(fileScopeNamespaceDeclaration.Padding.Usings.Map(el => VisitRightPadded(el, CsRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_USINGS, p)));
-        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithMembers(fileScopeNamespaceDeclaration.Padding.Members.Map(el => VisitRightPadded(el, CsRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_MEMBERS, p)));
+        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithName(VisitRightPadded(fileScopeNamespaceDeclaration.Padding.Name, JRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_NAME, p)!);
+        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithExterns(fileScopeNamespaceDeclaration.Padding.Externs.Map(el => VisitRightPadded(el, JRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_EXTERNS, p)));
+        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithUsings(fileScopeNamespaceDeclaration.Padding.Usings.Map(el => VisitRightPadded(el, JRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_USINGS, p)));
+        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithMembers(fileScopeNamespaceDeclaration.Padding.Members.Map(el => VisitRightPadded(el, JRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_MEMBERS, p)));
         return fileScopeNamespaceDeclaration;
     }
 
     public virtual J? VisitInterpolatedString(Cs.InterpolatedString interpolatedString, P p)
     {
-        interpolatedString = interpolatedString.WithPrefix(VisitSpace(interpolatedString.Prefix, CsSpace.Location.INTERPOLATED_STRING_PREFIX, p)!);
+        interpolatedString = interpolatedString.WithPrefix(VisitSpace(interpolatedString.Prefix, Space.Location.INTERPOLATED_STRING_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(interpolatedString, p);
         if (tempExpression is not Cs.InterpolatedString)
         {
@@ -381,13 +381,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         interpolatedString = (Cs.InterpolatedString) tempExpression;
         interpolatedString = interpolatedString.WithMarkers(VisitMarkers(interpolatedString.Markers, p));
-        interpolatedString = interpolatedString.Padding.WithParts(interpolatedString.Padding.Parts.Map(el => VisitRightPadded(el, CsRightPadded.Location.INTERPOLATED_STRING_PARTS, p)));
+        interpolatedString = interpolatedString.Padding.WithParts(interpolatedString.Padding.Parts.Map(el => VisitRightPadded(el, JRightPadded.Location.INTERPOLATED_STRING_PARTS, p)));
         return interpolatedString;
     }
 
     public virtual J? VisitInterpolation(Cs.Interpolation interpolation, P p)
     {
-        interpolation = interpolation.WithPrefix(VisitSpace(interpolation.Prefix, CsSpace.Location.INTERPOLATION_PREFIX, p)!);
+        interpolation = interpolation.WithPrefix(VisitSpace(interpolation.Prefix, Space.Location.INTERPOLATION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(interpolation, p);
         if (tempExpression is not Cs.Interpolation)
         {
@@ -395,15 +395,15 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         interpolation = (Cs.Interpolation) tempExpression;
         interpolation = interpolation.WithMarkers(VisitMarkers(interpolation.Markers, p));
-        interpolation = interpolation.Padding.WithExpression(VisitRightPadded(interpolation.Padding.Expression, CsRightPadded.Location.INTERPOLATION_EXPRESSION, p)!);
-        interpolation = interpolation.Padding.WithAlignment(interpolation.Padding.Alignment == null ? null : VisitRightPadded(interpolation.Padding.Alignment, CsRightPadded.Location.INTERPOLATION_ALIGNMENT, p));
-        interpolation = interpolation.Padding.WithFormat(interpolation.Padding.Format == null ? null : VisitRightPadded(interpolation.Padding.Format, CsRightPadded.Location.INTERPOLATION_FORMAT, p));
+        interpolation = interpolation.Padding.WithExpression(VisitRightPadded(interpolation.Padding.Expression, JRightPadded.Location.INTERPOLATION_EXPRESSION, p)!);
+        interpolation = interpolation.Padding.WithAlignment(interpolation.Padding.Alignment == null ? null : VisitRightPadded(interpolation.Padding.Alignment, JRightPadded.Location.INTERPOLATION_ALIGNMENT, p));
+        interpolation = interpolation.Padding.WithFormat(interpolation.Padding.Format == null ? null : VisitRightPadded(interpolation.Padding.Format, JRightPadded.Location.INTERPOLATION_FORMAT, p));
         return interpolation;
     }
 
     public virtual J? VisitNullSafeExpression(Cs.NullSafeExpression nullSafeExpression, P p)
     {
-        nullSafeExpression = nullSafeExpression.WithPrefix(VisitSpace(nullSafeExpression.Prefix, CsSpace.Location.NULL_SAFE_EXPRESSION_PREFIX, p)!);
+        nullSafeExpression = nullSafeExpression.WithPrefix(VisitSpace(nullSafeExpression.Prefix, Space.Location.NULL_SAFE_EXPRESSION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(nullSafeExpression, p);
         if (tempExpression is not Cs.NullSafeExpression)
         {
@@ -411,13 +411,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         nullSafeExpression = (Cs.NullSafeExpression) tempExpression;
         nullSafeExpression = nullSafeExpression.WithMarkers(VisitMarkers(nullSafeExpression.Markers, p));
-        nullSafeExpression = nullSafeExpression.Padding.WithExpression(VisitRightPadded(nullSafeExpression.Padding.Expression, CsRightPadded.Location.NULL_SAFE_EXPRESSION_EXPRESSION, p)!);
+        nullSafeExpression = nullSafeExpression.Padding.WithExpression(VisitRightPadded(nullSafeExpression.Padding.Expression, JRightPadded.Location.NULL_SAFE_EXPRESSION_EXPRESSION, p)!);
         return nullSafeExpression;
     }
 
     public virtual J? VisitStatementExpression(Cs.StatementExpression statementExpression, P p)
     {
-        statementExpression = statementExpression.WithPrefix(VisitSpace(statementExpression.Prefix, CsSpace.Location.STATEMENT_EXPRESSION_PREFIX, p)!);
+        statementExpression = statementExpression.WithPrefix(VisitSpace(statementExpression.Prefix, Space.Location.STATEMENT_EXPRESSION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(statementExpression, p);
         if (tempExpression is not Cs.StatementExpression)
         {
@@ -431,7 +431,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitUsingDirective(Cs.UsingDirective usingDirective, P p)
     {
-        usingDirective = usingDirective.WithPrefix(VisitSpace(usingDirective.Prefix, CsSpace.Location.USING_DIRECTIVE_PREFIX, p)!);
+        usingDirective = usingDirective.WithPrefix(VisitSpace(usingDirective.Prefix, Space.Location.USING_DIRECTIVE_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(usingDirective, p);
         if (tempStatement is not Cs.UsingDirective)
         {
@@ -439,17 +439,17 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         usingDirective = (Cs.UsingDirective) tempStatement;
         usingDirective = usingDirective.WithMarkers(VisitMarkers(usingDirective.Markers, p));
-        usingDirective = usingDirective.Padding.WithGlobal(VisitRightPadded(usingDirective.Padding.Global, CsRightPadded.Location.USING_DIRECTIVE_GLOBAL, p)!);
-        usingDirective = usingDirective.Padding.WithStatic(VisitLeftPadded(usingDirective.Padding.Static, CsLeftPadded.Location.USING_DIRECTIVE_STATIC, p)!);
-        usingDirective = usingDirective.Padding.WithUnsafe(VisitLeftPadded(usingDirective.Padding.Unsafe, CsLeftPadded.Location.USING_DIRECTIVE_UNSAFE, p)!);
-        usingDirective = usingDirective.Padding.WithAlias(usingDirective.Padding.Alias == null ? null : VisitRightPadded(usingDirective.Padding.Alias, CsRightPadded.Location.USING_DIRECTIVE_ALIAS, p));
+        usingDirective = usingDirective.Padding.WithGlobal(VisitRightPadded(usingDirective.Padding.Global, JRightPadded.Location.USING_DIRECTIVE_GLOBAL, p)!);
+        usingDirective = usingDirective.Padding.WithStatic(VisitLeftPadded(usingDirective.Padding.Static, JLeftPadded.Location.USING_DIRECTIVE_STATIC, p)!);
+        usingDirective = usingDirective.Padding.WithUnsafe(VisitLeftPadded(usingDirective.Padding.Unsafe, JLeftPadded.Location.USING_DIRECTIVE_UNSAFE, p)!);
+        usingDirective = usingDirective.Padding.WithAlias(usingDirective.Padding.Alias == null ? null : VisitRightPadded(usingDirective.Padding.Alias, JRightPadded.Location.USING_DIRECTIVE_ALIAS, p));
         usingDirective = usingDirective.WithNamespaceOrType(VisitAndCast<TypeTree>(usingDirective.NamespaceOrType, p)!);
         return usingDirective;
     }
 
     public virtual J? VisitPropertyDeclaration(Cs.PropertyDeclaration propertyDeclaration, P p)
     {
-        propertyDeclaration = propertyDeclaration.WithPrefix(VisitSpace(propertyDeclaration.Prefix, CsSpace.Location.PROPERTY_DECLARATION_PREFIX, p)!);
+        propertyDeclaration = propertyDeclaration.WithPrefix(VisitSpace(propertyDeclaration.Prefix, Space.Location.PROPERTY_DECLARATION_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(propertyDeclaration, p);
         if (tempStatement is not Cs.PropertyDeclaration)
         {
@@ -460,24 +460,24 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         propertyDeclaration = propertyDeclaration.WithAttributeLists(propertyDeclaration.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
         propertyDeclaration = propertyDeclaration.WithModifiers(propertyDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
         propertyDeclaration = propertyDeclaration.WithTypeExpression(VisitAndCast<TypeTree>(propertyDeclaration.TypeExpression, p)!);
-        propertyDeclaration = propertyDeclaration.Padding.WithInterfaceSpecifier(propertyDeclaration.Padding.InterfaceSpecifier == null ? null : VisitRightPadded(propertyDeclaration.Padding.InterfaceSpecifier, CsRightPadded.Location.PROPERTY_DECLARATION_INTERFACE_SPECIFIER, p));
+        propertyDeclaration = propertyDeclaration.Padding.WithInterfaceSpecifier(propertyDeclaration.Padding.InterfaceSpecifier == null ? null : VisitRightPadded(propertyDeclaration.Padding.InterfaceSpecifier, JRightPadded.Location.PROPERTY_DECLARATION_INTERFACE_SPECIFIER, p));
         propertyDeclaration = propertyDeclaration.WithName(VisitAndCast<J.Identifier>(propertyDeclaration.Name, p)!);
         propertyDeclaration = propertyDeclaration.WithAccessors(VisitAndCast<J.Block>(propertyDeclaration.Accessors, p));
         propertyDeclaration = propertyDeclaration.WithExpressionBody(VisitAndCast<Cs.ArrowExpressionClause>(propertyDeclaration.ExpressionBody, p));
-        propertyDeclaration = propertyDeclaration.Padding.WithInitializer(propertyDeclaration.Padding.Initializer == null ? null : VisitLeftPadded(propertyDeclaration.Padding.Initializer, CsLeftPadded.Location.PROPERTY_DECLARATION_INITIALIZER, p));
+        propertyDeclaration = propertyDeclaration.Padding.WithInitializer(propertyDeclaration.Padding.Initializer == null ? null : VisitLeftPadded(propertyDeclaration.Padding.Initializer, JLeftPadded.Location.PROPERTY_DECLARATION_INITIALIZER, p));
         return propertyDeclaration;
     }
 
     public virtual J? VisitKeyword(Cs.Keyword keyword, P p)
     {
-        keyword = keyword.WithPrefix(VisitSpace(keyword.Prefix, CsSpace.Location.KEYWORD_PREFIX, p)!);
+        keyword = keyword.WithPrefix(VisitSpace(keyword.Prefix, Space.Location.KEYWORD_PREFIX, p)!);
         keyword = keyword.WithMarkers(VisitMarkers(keyword.Markers, p));
         return keyword;
     }
 
     public virtual J? VisitLambda(Cs.Lambda lambda, P p)
     {
-        lambda = lambda.WithPrefix(VisitSpace(lambda.Prefix, CsSpace.Location.LAMBDA_PREFIX, p)!);
+        lambda = lambda.WithPrefix(VisitSpace(lambda.Prefix, Space.Location.LAMBDA_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(lambda, p);
         if (tempStatement is not Cs.Lambda)
         {
@@ -499,7 +499,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitClassDeclaration(Cs.ClassDeclaration classDeclaration, P p)
     {
-        classDeclaration = classDeclaration.WithPrefix(VisitSpace(classDeclaration.Prefix, CsSpace.Location.CLASS_DECLARATION_PREFIX, p)!);
+        classDeclaration = classDeclaration.WithPrefix(VisitSpace(classDeclaration.Prefix, Space.Location.CLASS_DECLARATION_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(classDeclaration, p);
         if (tempStatement is not Cs.ClassDeclaration)
         {
@@ -511,18 +511,18 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         classDeclaration = classDeclaration.WithModifiers(classDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
         classDeclaration = classDeclaration.Padding.WithKind(VisitAndCast<J.ClassDeclaration.Kind>(classDeclaration.Padding.Kind, p)!);
         classDeclaration = classDeclaration.WithName(VisitAndCast<J.Identifier>(classDeclaration.Name, p)!);
-        classDeclaration = classDeclaration.Padding.WithTypeParameters(classDeclaration.Padding.TypeParameters == null ? null : VisitContainer(classDeclaration.Padding.TypeParameters, CsContainer.Location.CLASS_DECLARATION_TYPE_PARAMETERS, p));
-        classDeclaration = classDeclaration.Padding.WithPrimaryConstructor(classDeclaration.Padding.PrimaryConstructor == null ? null : VisitContainer(classDeclaration.Padding.PrimaryConstructor, CsContainer.Location.CLASS_DECLARATION_PRIMARY_CONSTRUCTOR, p));
-        classDeclaration = classDeclaration.Padding.WithExtendings(classDeclaration.Padding.Extendings == null ? null : VisitLeftPadded(classDeclaration.Padding.Extendings, CsLeftPadded.Location.CLASS_DECLARATION_EXTENDINGS, p));
-        classDeclaration = classDeclaration.Padding.WithImplementings(classDeclaration.Padding.Implementings == null ? null : VisitContainer(classDeclaration.Padding.Implementings, CsContainer.Location.CLASS_DECLARATION_IMPLEMENTINGS, p));
+        classDeclaration = classDeclaration.Padding.WithTypeParameters(classDeclaration.Padding.TypeParameters == null ? null : VisitContainer(classDeclaration.Padding.TypeParameters, JContainer.Location.CLASS_DECLARATION_TYPE_PARAMETERS, p));
+        classDeclaration = classDeclaration.Padding.WithPrimaryConstructor(classDeclaration.Padding.PrimaryConstructor == null ? null : VisitContainer(classDeclaration.Padding.PrimaryConstructor, JContainer.Location.CLASS_DECLARATION_PRIMARY_CONSTRUCTOR, p));
+        classDeclaration = classDeclaration.Padding.WithExtendings(classDeclaration.Padding.Extendings == null ? null : VisitLeftPadded(classDeclaration.Padding.Extendings, JLeftPadded.Location.CLASS_DECLARATION_EXTENDINGS, p));
+        classDeclaration = classDeclaration.Padding.WithImplementings(classDeclaration.Padding.Implementings == null ? null : VisitContainer(classDeclaration.Padding.Implementings, JContainer.Location.CLASS_DECLARATION_IMPLEMENTINGS, p));
         classDeclaration = classDeclaration.WithBody(VisitAndCast<J.Block>(classDeclaration.Body, p));
-        classDeclaration = classDeclaration.Padding.WithTypeParameterConstraintClauses(classDeclaration.Padding.TypeParameterConstraintClauses == null ? null : VisitContainer(classDeclaration.Padding.TypeParameterConstraintClauses, CsContainer.Location.CLASS_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, p));
+        classDeclaration = classDeclaration.Padding.WithTypeParameterConstraintClauses(classDeclaration.Padding.TypeParameterConstraintClauses == null ? null : VisitContainer(classDeclaration.Padding.TypeParameterConstraintClauses, JContainer.Location.CLASS_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, p));
         return classDeclaration;
     }
 
     public virtual J? VisitMethodDeclaration(Cs.MethodDeclaration methodDeclaration, P p)
     {
-        methodDeclaration = methodDeclaration.WithPrefix(VisitSpace(methodDeclaration.Prefix, CsSpace.Location.METHOD_DECLARATION_PREFIX, p)!);
+        methodDeclaration = methodDeclaration.WithPrefix(VisitSpace(methodDeclaration.Prefix, Space.Location.METHOD_DECLARATION_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(methodDeclaration, p);
         if (tempStatement is not Cs.MethodDeclaration)
         {
@@ -532,19 +532,19 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         methodDeclaration = methodDeclaration.WithMarkers(VisitMarkers(methodDeclaration.Markers, p));
         methodDeclaration = methodDeclaration.WithAttributes(methodDeclaration.Attributes.Map(el => (Cs.AttributeList?)Visit(el, p)));
         methodDeclaration = methodDeclaration.WithModifiers(methodDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        methodDeclaration = methodDeclaration.Padding.WithTypeParameters(methodDeclaration.Padding.TypeParameters == null ? null : VisitContainer(methodDeclaration.Padding.TypeParameters, CsContainer.Location.METHOD_DECLARATION_TYPE_PARAMETERS, p));
+        methodDeclaration = methodDeclaration.Padding.WithTypeParameters(methodDeclaration.Padding.TypeParameters == null ? null : VisitContainer(methodDeclaration.Padding.TypeParameters, JContainer.Location.METHOD_DECLARATION_TYPE_PARAMETERS, p));
         methodDeclaration = methodDeclaration.WithReturnTypeExpression(VisitAndCast<TypeTree>(methodDeclaration.ReturnTypeExpression, p)!);
-        methodDeclaration = methodDeclaration.Padding.WithExplicitInterfaceSpecifier(methodDeclaration.Padding.ExplicitInterfaceSpecifier == null ? null : VisitRightPadded(methodDeclaration.Padding.ExplicitInterfaceSpecifier, CsRightPadded.Location.METHOD_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, p));
+        methodDeclaration = methodDeclaration.Padding.WithExplicitInterfaceSpecifier(methodDeclaration.Padding.ExplicitInterfaceSpecifier == null ? null : VisitRightPadded(methodDeclaration.Padding.ExplicitInterfaceSpecifier, JRightPadded.Location.METHOD_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, p));
         methodDeclaration = methodDeclaration.WithName(VisitAndCast<J.Identifier>(methodDeclaration.Name, p)!);
-        methodDeclaration = methodDeclaration.Padding.WithParameters(VisitContainer(methodDeclaration.Padding.Parameters, CsContainer.Location.METHOD_DECLARATION_PARAMETERS, p)!);
+        methodDeclaration = methodDeclaration.Padding.WithParameters(VisitContainer(methodDeclaration.Padding.Parameters, JContainer.Location.METHOD_DECLARATION_PARAMETERS, p)!);
         methodDeclaration = methodDeclaration.WithBody(VisitAndCast<Statement>(methodDeclaration.Body, p));
-        methodDeclaration = methodDeclaration.Padding.WithTypeParameterConstraintClauses(VisitContainer(methodDeclaration.Padding.TypeParameterConstraintClauses, CsContainer.Location.METHOD_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, p)!);
+        methodDeclaration = methodDeclaration.Padding.WithTypeParameterConstraintClauses(VisitContainer(methodDeclaration.Padding.TypeParameterConstraintClauses, JContainer.Location.METHOD_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, p)!);
         return methodDeclaration;
     }
 
     public virtual J? VisitUsingStatement(Cs.UsingStatement usingStatement, P p)
     {
-        usingStatement = usingStatement.WithPrefix(VisitSpace(usingStatement.Prefix, CsSpace.Location.USING_STATEMENT_PREFIX, p)!);
+        usingStatement = usingStatement.WithPrefix(VisitSpace(usingStatement.Prefix, Space.Location.USING_STATEMENT_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(usingStatement, p);
         if (tempStatement is not Cs.UsingStatement)
         {
@@ -553,23 +553,23 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         usingStatement = (Cs.UsingStatement) tempStatement;
         usingStatement = usingStatement.WithMarkers(VisitMarkers(usingStatement.Markers, p));
         usingStatement = usingStatement.WithAwaitKeyword(VisitAndCast<Cs.Keyword>(usingStatement.AwaitKeyword, p));
-        usingStatement = usingStatement.Padding.WithExpression(VisitLeftPadded(usingStatement.Padding.Expression, CsLeftPadded.Location.USING_STATEMENT_EXPRESSION, p)!);
+        usingStatement = usingStatement.Padding.WithExpression(VisitLeftPadded(usingStatement.Padding.Expression, JLeftPadded.Location.USING_STATEMENT_EXPRESSION, p)!);
         usingStatement = usingStatement.WithStatement(VisitAndCast<Statement>(usingStatement.Statement, p)!);
         return usingStatement;
     }
 
     public virtual J? VisitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, P p)
     {
-        typeParameterConstraintClause = typeParameterConstraintClause.WithPrefix(VisitSpace(typeParameterConstraintClause.Prefix, CsSpace.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_PREFIX, p)!);
+        typeParameterConstraintClause = typeParameterConstraintClause.WithPrefix(VisitSpace(typeParameterConstraintClause.Prefix, Space.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_PREFIX, p)!);
         typeParameterConstraintClause = typeParameterConstraintClause.WithMarkers(VisitMarkers(typeParameterConstraintClause.Markers, p));
-        typeParameterConstraintClause = typeParameterConstraintClause.Padding.WithTypeParameter(VisitRightPadded(typeParameterConstraintClause.Padding.TypeParameter, CsRightPadded.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER, p)!);
-        typeParameterConstraintClause = typeParameterConstraintClause.Padding.WithTypeParameterConstraints(VisitContainer(typeParameterConstraintClause.Padding.TypeParameterConstraints, CsContainer.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER_CONSTRAINTS, p)!);
+        typeParameterConstraintClause = typeParameterConstraintClause.Padding.WithTypeParameter(VisitRightPadded(typeParameterConstraintClause.Padding.TypeParameter, JRightPadded.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER, p)!);
+        typeParameterConstraintClause = typeParameterConstraintClause.Padding.WithTypeParameterConstraints(VisitContainer(typeParameterConstraintClause.Padding.TypeParameterConstraints, JContainer.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER_CONSTRAINTS, p)!);
         return typeParameterConstraintClause;
     }
 
     public virtual J? VisitTypeConstraint(Cs.TypeConstraint typeConstraint, P p)
     {
-        typeConstraint = typeConstraint.WithPrefix(VisitSpace(typeConstraint.Prefix, CsSpace.Location.TYPE_CONSTRAINT_PREFIX, p)!);
+        typeConstraint = typeConstraint.WithPrefix(VisitSpace(typeConstraint.Prefix, Space.Location.TYPE_CONSTRAINT_PREFIX, p)!);
         typeConstraint = typeConstraint.WithMarkers(VisitMarkers(typeConstraint.Markers, p));
         typeConstraint = typeConstraint.WithTypeExpression(VisitAndCast<TypeTree>(typeConstraint.TypeExpression, p)!);
         return typeConstraint;
@@ -577,43 +577,43 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitAllowsConstraintClause(Cs.AllowsConstraintClause allowsConstraintClause, P p)
     {
-        allowsConstraintClause = allowsConstraintClause.WithPrefix(VisitSpace(allowsConstraintClause.Prefix, CsSpace.Location.ALLOWS_CONSTRAINT_CLAUSE_PREFIX, p)!);
+        allowsConstraintClause = allowsConstraintClause.WithPrefix(VisitSpace(allowsConstraintClause.Prefix, Space.Location.ALLOWS_CONSTRAINT_CLAUSE_PREFIX, p)!);
         allowsConstraintClause = allowsConstraintClause.WithMarkers(VisitMarkers(allowsConstraintClause.Markers, p));
-        allowsConstraintClause = allowsConstraintClause.Padding.WithExpressions(VisitContainer(allowsConstraintClause.Padding.Expressions, CsContainer.Location.ALLOWS_CONSTRAINT_CLAUSE_EXPRESSIONS, p)!);
+        allowsConstraintClause = allowsConstraintClause.Padding.WithExpressions(VisitContainer(allowsConstraintClause.Padding.Expressions, JContainer.Location.ALLOWS_CONSTRAINT_CLAUSE_EXPRESSIONS, p)!);
         return allowsConstraintClause;
     }
 
     public virtual J? VisitRefStructConstraint(Cs.RefStructConstraint refStructConstraint, P p)
     {
-        refStructConstraint = refStructConstraint.WithPrefix(VisitSpace(refStructConstraint.Prefix, CsSpace.Location.REF_STRUCT_CONSTRAINT_PREFIX, p)!);
+        refStructConstraint = refStructConstraint.WithPrefix(VisitSpace(refStructConstraint.Prefix, Space.Location.REF_STRUCT_CONSTRAINT_PREFIX, p)!);
         refStructConstraint = refStructConstraint.WithMarkers(VisitMarkers(refStructConstraint.Markers, p));
         return refStructConstraint;
     }
 
     public virtual J? VisitClassOrStructConstraint(Cs.ClassOrStructConstraint classOrStructConstraint, P p)
     {
-        classOrStructConstraint = classOrStructConstraint.WithPrefix(VisitSpace(classOrStructConstraint.Prefix, CsSpace.Location.CLASS_OR_STRUCT_CONSTRAINT_PREFIX, p)!);
+        classOrStructConstraint = classOrStructConstraint.WithPrefix(VisitSpace(classOrStructConstraint.Prefix, Space.Location.CLASS_OR_STRUCT_CONSTRAINT_PREFIX, p)!);
         classOrStructConstraint = classOrStructConstraint.WithMarkers(VisitMarkers(classOrStructConstraint.Markers, p));
         return classOrStructConstraint;
     }
 
     public virtual J? VisitConstructorConstraint(Cs.ConstructorConstraint constructorConstraint, P p)
     {
-        constructorConstraint = constructorConstraint.WithPrefix(VisitSpace(constructorConstraint.Prefix, CsSpace.Location.CONSTRUCTOR_CONSTRAINT_PREFIX, p)!);
+        constructorConstraint = constructorConstraint.WithPrefix(VisitSpace(constructorConstraint.Prefix, Space.Location.CONSTRUCTOR_CONSTRAINT_PREFIX, p)!);
         constructorConstraint = constructorConstraint.WithMarkers(VisitMarkers(constructorConstraint.Markers, p));
         return constructorConstraint;
     }
 
     public virtual J? VisitDefaultConstraint(Cs.DefaultConstraint defaultConstraint, P p)
     {
-        defaultConstraint = defaultConstraint.WithPrefix(VisitSpace(defaultConstraint.Prefix, CsSpace.Location.DEFAULT_CONSTRAINT_PREFIX, p)!);
+        defaultConstraint = defaultConstraint.WithPrefix(VisitSpace(defaultConstraint.Prefix, Space.Location.DEFAULT_CONSTRAINT_PREFIX, p)!);
         defaultConstraint = defaultConstraint.WithMarkers(VisitMarkers(defaultConstraint.Markers, p));
         return defaultConstraint;
     }
 
     public virtual J? VisitDeclarationExpression(Cs.DeclarationExpression declarationExpression, P p)
     {
-        declarationExpression = declarationExpression.WithPrefix(VisitSpace(declarationExpression.Prefix, CsSpace.Location.DECLARATION_EXPRESSION_PREFIX, p)!);
+        declarationExpression = declarationExpression.WithPrefix(VisitSpace(declarationExpression.Prefix, Space.Location.DECLARATION_EXPRESSION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(declarationExpression, p);
         if (tempExpression is not Cs.DeclarationExpression)
         {
@@ -628,7 +628,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitSingleVariableDesignation(Cs.SingleVariableDesignation singleVariableDesignation, P p)
     {
-        singleVariableDesignation = singleVariableDesignation.WithPrefix(VisitSpace(singleVariableDesignation.Prefix, CsSpace.Location.SINGLE_VARIABLE_DESIGNATION_PREFIX, p)!);
+        singleVariableDesignation = singleVariableDesignation.WithPrefix(VisitSpace(singleVariableDesignation.Prefix, Space.Location.SINGLE_VARIABLE_DESIGNATION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(singleVariableDesignation, p);
         if (tempExpression is not Cs.SingleVariableDesignation)
         {
@@ -642,7 +642,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitParenthesizedVariableDesignation(Cs.ParenthesizedVariableDesignation parenthesizedVariableDesignation, P p)
     {
-        parenthesizedVariableDesignation = parenthesizedVariableDesignation.WithPrefix(VisitSpace(parenthesizedVariableDesignation.Prefix, CsSpace.Location.PARENTHESIZED_VARIABLE_DESIGNATION_PREFIX, p)!);
+        parenthesizedVariableDesignation = parenthesizedVariableDesignation.WithPrefix(VisitSpace(parenthesizedVariableDesignation.Prefix, Space.Location.PARENTHESIZED_VARIABLE_DESIGNATION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(parenthesizedVariableDesignation, p);
         if (tempExpression is not Cs.ParenthesizedVariableDesignation)
         {
@@ -650,13 +650,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         parenthesizedVariableDesignation = (Cs.ParenthesizedVariableDesignation) tempExpression;
         parenthesizedVariableDesignation = parenthesizedVariableDesignation.WithMarkers(VisitMarkers(parenthesizedVariableDesignation.Markers, p));
-        parenthesizedVariableDesignation = parenthesizedVariableDesignation.Padding.WithVariables(VisitContainer(parenthesizedVariableDesignation.Padding.Variables, CsContainer.Location.PARENTHESIZED_VARIABLE_DESIGNATION_VARIABLES, p)!);
+        parenthesizedVariableDesignation = parenthesizedVariableDesignation.Padding.WithVariables(VisitContainer(parenthesizedVariableDesignation.Padding.Variables, JContainer.Location.PARENTHESIZED_VARIABLE_DESIGNATION_VARIABLES, p)!);
         return parenthesizedVariableDesignation;
     }
 
     public virtual J? VisitDiscardVariableDesignation(Cs.DiscardVariableDesignation discardVariableDesignation, P p)
     {
-        discardVariableDesignation = discardVariableDesignation.WithPrefix(VisitSpace(discardVariableDesignation.Prefix, CsSpace.Location.DISCARD_VARIABLE_DESIGNATION_PREFIX, p)!);
+        discardVariableDesignation = discardVariableDesignation.WithPrefix(VisitSpace(discardVariableDesignation.Prefix, Space.Location.DISCARD_VARIABLE_DESIGNATION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(discardVariableDesignation, p);
         if (tempExpression is not Cs.DiscardVariableDesignation)
         {
@@ -670,7 +670,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitTupleExpression(Cs.TupleExpression tupleExpression, P p)
     {
-        tupleExpression = tupleExpression.WithPrefix(VisitSpace(tupleExpression.Prefix, CsSpace.Location.TUPLE_EXPRESSION_PREFIX, p)!);
+        tupleExpression = tupleExpression.WithPrefix(VisitSpace(tupleExpression.Prefix, Space.Location.TUPLE_EXPRESSION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(tupleExpression, p);
         if (tempExpression is not Cs.TupleExpression)
         {
@@ -678,13 +678,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         tupleExpression = (Cs.TupleExpression) tempExpression;
         tupleExpression = tupleExpression.WithMarkers(VisitMarkers(tupleExpression.Markers, p));
-        tupleExpression = tupleExpression.Padding.WithArguments(VisitContainer(tupleExpression.Padding.Arguments, CsContainer.Location.TUPLE_EXPRESSION_ARGUMENTS, p)!);
+        tupleExpression = tupleExpression.Padding.WithArguments(VisitContainer(tupleExpression.Padding.Arguments, JContainer.Location.TUPLE_EXPRESSION_ARGUMENTS, p)!);
         return tupleExpression;
     }
 
     public virtual J? VisitConstructor(Cs.Constructor constructor, P p)
     {
-        constructor = constructor.WithPrefix(VisitSpace(constructor.Prefix, CsSpace.Location.CONSTRUCTOR_PREFIX, p)!);
+        constructor = constructor.WithPrefix(VisitSpace(constructor.Prefix, Space.Location.CONSTRUCTOR_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(constructor, p);
         if (tempStatement is not Cs.Constructor)
         {
@@ -699,7 +699,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitDestructorDeclaration(Cs.DestructorDeclaration destructorDeclaration, P p)
     {
-        destructorDeclaration = destructorDeclaration.WithPrefix(VisitSpace(destructorDeclaration.Prefix, CsSpace.Location.DESTRUCTOR_DECLARATION_PREFIX, p)!);
+        destructorDeclaration = destructorDeclaration.WithPrefix(VisitSpace(destructorDeclaration.Prefix, Space.Location.DESTRUCTOR_DECLARATION_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(destructorDeclaration, p);
         if (tempStatement is not Cs.DestructorDeclaration)
         {
@@ -713,7 +713,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitUnary(Cs.Unary unary, P p)
     {
-        unary = unary.WithPrefix(VisitSpace(unary.Prefix, CsSpace.Location.UNARY_PREFIX, p)!);
+        unary = unary.WithPrefix(VisitSpace(unary.Prefix, Space.Location.UNARY_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(unary, p);
         if (tempStatement is not Cs.Unary)
         {
@@ -727,23 +727,23 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         unary = (Cs.Unary) tempExpression;
         unary = unary.WithMarkers(VisitMarkers(unary.Markers, p));
-        unary = unary.Padding.WithOperator(VisitLeftPadded(unary.Padding.Operator, CsLeftPadded.Location.UNARY_OPERATOR, p)!);
+        unary = unary.Padding.WithOperator(VisitLeftPadded(unary.Padding.Operator, JLeftPadded.Location.UNARY_OPERATOR, p)!);
         unary = unary.WithExpression(VisitAndCast<Expression>(unary.Expression, p)!);
         return unary;
     }
 
     public virtual J? VisitConstructorInitializer(Cs.ConstructorInitializer constructorInitializer, P p)
     {
-        constructorInitializer = constructorInitializer.WithPrefix(VisitSpace(constructorInitializer.Prefix, CsSpace.Location.CONSTRUCTOR_INITIALIZER_PREFIX, p)!);
+        constructorInitializer = constructorInitializer.WithPrefix(VisitSpace(constructorInitializer.Prefix, Space.Location.CONSTRUCTOR_INITIALIZER_PREFIX, p)!);
         constructorInitializer = constructorInitializer.WithMarkers(VisitMarkers(constructorInitializer.Markers, p));
         constructorInitializer = constructorInitializer.WithKeyword(VisitAndCast<Cs.Keyword>(constructorInitializer.Keyword, p)!);
-        constructorInitializer = constructorInitializer.Padding.WithArguments(VisitContainer(constructorInitializer.Padding.Arguments, CsContainer.Location.CONSTRUCTOR_INITIALIZER_ARGUMENTS, p)!);
+        constructorInitializer = constructorInitializer.Padding.WithArguments(VisitContainer(constructorInitializer.Padding.Arguments, JContainer.Location.CONSTRUCTOR_INITIALIZER_ARGUMENTS, p)!);
         return constructorInitializer;
     }
 
     public virtual J? VisitTupleType(Cs.TupleType tupleType, P p)
     {
-        tupleType = tupleType.WithPrefix(VisitSpace(tupleType.Prefix, CsSpace.Location.TUPLE_TYPE_PREFIX, p)!);
+        tupleType = tupleType.WithPrefix(VisitSpace(tupleType.Prefix, Space.Location.TUPLE_TYPE_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(tupleType, p);
         if (tempExpression is not Cs.TupleType)
         {
@@ -751,13 +751,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         tupleType = (Cs.TupleType) tempExpression;
         tupleType = tupleType.WithMarkers(VisitMarkers(tupleType.Markers, p));
-        tupleType = tupleType.Padding.WithElements(VisitContainer(tupleType.Padding.Elements, CsContainer.Location.TUPLE_TYPE_ELEMENTS, p)!);
+        tupleType = tupleType.Padding.WithElements(VisitContainer(tupleType.Padding.Elements, JContainer.Location.TUPLE_TYPE_ELEMENTS, p)!);
         return tupleType;
     }
 
     public virtual J? VisitTupleElement(Cs.TupleElement tupleElement, P p)
     {
-        tupleElement = tupleElement.WithPrefix(VisitSpace(tupleElement.Prefix, CsSpace.Location.TUPLE_ELEMENT_PREFIX, p)!);
+        tupleElement = tupleElement.WithPrefix(VisitSpace(tupleElement.Prefix, Space.Location.TUPLE_ELEMENT_PREFIX, p)!);
         tupleElement = tupleElement.WithMarkers(VisitMarkers(tupleElement.Markers, p));
         tupleElement = tupleElement.WithType(VisitAndCast<TypeTree>(tupleElement.Type, p)!);
         tupleElement = tupleElement.WithName(VisitAndCast<J.Identifier>(tupleElement.Name, p));
@@ -766,7 +766,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitNewClass(Cs.NewClass newClass, P p)
     {
-        newClass = newClass.WithPrefix(VisitSpace(newClass.Prefix, CsSpace.Location.NEW_CLASS_PREFIX, p)!);
+        newClass = newClass.WithPrefix(VisitSpace(newClass.Prefix, Space.Location.NEW_CLASS_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(newClass, p);
         if (tempStatement is not Cs.NewClass)
         {
@@ -787,7 +787,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitInitializerExpression(Cs.InitializerExpression initializerExpression, P p)
     {
-        initializerExpression = initializerExpression.WithPrefix(VisitSpace(initializerExpression.Prefix, CsSpace.Location.INITIALIZER_EXPRESSION_PREFIX, p)!);
+        initializerExpression = initializerExpression.WithPrefix(VisitSpace(initializerExpression.Prefix, Space.Location.INITIALIZER_EXPRESSION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(initializerExpression, p);
         if (tempExpression is not Cs.InitializerExpression)
         {
@@ -795,13 +795,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         initializerExpression = (Cs.InitializerExpression) tempExpression;
         initializerExpression = initializerExpression.WithMarkers(VisitMarkers(initializerExpression.Markers, p));
-        initializerExpression = initializerExpression.Padding.WithExpressions(VisitContainer(initializerExpression.Padding.Expressions, CsContainer.Location.INITIALIZER_EXPRESSION_EXPRESSIONS, p)!);
+        initializerExpression = initializerExpression.Padding.WithExpressions(VisitContainer(initializerExpression.Padding.Expressions, JContainer.Location.INITIALIZER_EXPRESSION_EXPRESSIONS, p)!);
         return initializerExpression;
     }
 
     public virtual J? VisitImplicitElementAccess(Cs.ImplicitElementAccess implicitElementAccess, P p)
     {
-        implicitElementAccess = implicitElementAccess.WithPrefix(VisitSpace(implicitElementAccess.Prefix, CsSpace.Location.IMPLICIT_ELEMENT_ACCESS_PREFIX, p)!);
+        implicitElementAccess = implicitElementAccess.WithPrefix(VisitSpace(implicitElementAccess.Prefix, Space.Location.IMPLICIT_ELEMENT_ACCESS_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(implicitElementAccess, p);
         if (tempExpression is not Cs.ImplicitElementAccess)
         {
@@ -809,13 +809,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         implicitElementAccess = (Cs.ImplicitElementAccess) tempExpression;
         implicitElementAccess = implicitElementAccess.WithMarkers(VisitMarkers(implicitElementAccess.Markers, p));
-        implicitElementAccess = implicitElementAccess.Padding.WithArgumentList(VisitContainer(implicitElementAccess.Padding.ArgumentList, CsContainer.Location.IMPLICIT_ELEMENT_ACCESS_ARGUMENT_LIST, p)!);
+        implicitElementAccess = implicitElementAccess.Padding.WithArgumentList(VisitContainer(implicitElementAccess.Padding.ArgumentList, JContainer.Location.IMPLICIT_ELEMENT_ACCESS_ARGUMENT_LIST, p)!);
         return implicitElementAccess;
     }
 
     public virtual J? VisitYield(Cs.Yield yield, P p)
     {
-        yield = yield.WithPrefix(VisitSpace(yield.Prefix, CsSpace.Location.YIELD_PREFIX, p)!);
+        yield = yield.WithPrefix(VisitSpace(yield.Prefix, Space.Location.YIELD_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(yield, p);
         if (tempStatement is not Cs.Yield)
         {
@@ -830,7 +830,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitDefaultExpression(Cs.DefaultExpression defaultExpression, P p)
     {
-        defaultExpression = defaultExpression.WithPrefix(VisitSpace(defaultExpression.Prefix, CsSpace.Location.DEFAULT_EXPRESSION_PREFIX, p)!);
+        defaultExpression = defaultExpression.WithPrefix(VisitSpace(defaultExpression.Prefix, Space.Location.DEFAULT_EXPRESSION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(defaultExpression, p);
         if (tempExpression is not Cs.DefaultExpression)
         {
@@ -838,13 +838,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         defaultExpression = (Cs.DefaultExpression) tempExpression;
         defaultExpression = defaultExpression.WithMarkers(VisitMarkers(defaultExpression.Markers, p));
-        defaultExpression = defaultExpression.Padding.WithTypeOperator(defaultExpression.Padding.TypeOperator == null ? null : VisitContainer(defaultExpression.Padding.TypeOperator, CsContainer.Location.DEFAULT_EXPRESSION_TYPE_OPERATOR, p));
+        defaultExpression = defaultExpression.Padding.WithTypeOperator(defaultExpression.Padding.TypeOperator == null ? null : VisitContainer(defaultExpression.Padding.TypeOperator, JContainer.Location.DEFAULT_EXPRESSION_TYPE_OPERATOR, p));
         return defaultExpression;
     }
 
     public virtual J? VisitIsPattern(Cs.IsPattern isPattern, P p)
     {
-        isPattern = isPattern.WithPrefix(VisitSpace(isPattern.Prefix, CsSpace.Location.IS_PATTERN_PREFIX, p)!);
+        isPattern = isPattern.WithPrefix(VisitSpace(isPattern.Prefix, Space.Location.IS_PATTERN_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(isPattern, p);
         if (tempExpression is not Cs.IsPattern)
         {
@@ -853,13 +853,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         isPattern = (Cs.IsPattern) tempExpression;
         isPattern = isPattern.WithMarkers(VisitMarkers(isPattern.Markers, p));
         isPattern = isPattern.WithExpression(VisitAndCast<Expression>(isPattern.Expression, p)!);
-        isPattern = isPattern.Padding.WithPattern(VisitLeftPadded(isPattern.Padding.Pattern, CsLeftPadded.Location.IS_PATTERN_PATTERN, p)!);
+        isPattern = isPattern.Padding.WithPattern(VisitLeftPadded(isPattern.Padding.Pattern, JLeftPadded.Location.IS_PATTERN_PATTERN, p)!);
         return isPattern;
     }
 
     public virtual J? VisitUnaryPattern(Cs.UnaryPattern unaryPattern, P p)
     {
-        unaryPattern = unaryPattern.WithPrefix(VisitSpace(unaryPattern.Prefix, CsSpace.Location.UNARY_PATTERN_PREFIX, p)!);
+        unaryPattern = unaryPattern.WithPrefix(VisitSpace(unaryPattern.Prefix, Space.Location.UNARY_PATTERN_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(unaryPattern, p);
         if (tempExpression is not Cs.UnaryPattern)
         {
@@ -874,7 +874,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitTypePattern(Cs.TypePattern typePattern, P p)
     {
-        typePattern = typePattern.WithPrefix(VisitSpace(typePattern.Prefix, CsSpace.Location.TYPE_PATTERN_PREFIX, p)!);
+        typePattern = typePattern.WithPrefix(VisitSpace(typePattern.Prefix, Space.Location.TYPE_PATTERN_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(typePattern, p);
         if (tempExpression is not Cs.TypePattern)
         {
@@ -889,7 +889,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitBinaryPattern(Cs.BinaryPattern binaryPattern, P p)
     {
-        binaryPattern = binaryPattern.WithPrefix(VisitSpace(binaryPattern.Prefix, CsSpace.Location.BINARY_PATTERN_PREFIX, p)!);
+        binaryPattern = binaryPattern.WithPrefix(VisitSpace(binaryPattern.Prefix, Space.Location.BINARY_PATTERN_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(binaryPattern, p);
         if (tempExpression is not Cs.BinaryPattern)
         {
@@ -898,14 +898,14 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         binaryPattern = (Cs.BinaryPattern) tempExpression;
         binaryPattern = binaryPattern.WithMarkers(VisitMarkers(binaryPattern.Markers, p));
         binaryPattern = binaryPattern.WithLeft(VisitAndCast<Cs.Pattern>(binaryPattern.Left, p)!);
-        binaryPattern = binaryPattern.Padding.WithOperator(VisitLeftPadded(binaryPattern.Padding.Operator, CsLeftPadded.Location.BINARY_PATTERN_OPERATOR, p)!);
+        binaryPattern = binaryPattern.Padding.WithOperator(VisitLeftPadded(binaryPattern.Padding.Operator, JLeftPadded.Location.BINARY_PATTERN_OPERATOR, p)!);
         binaryPattern = binaryPattern.WithRight(VisitAndCast<Cs.Pattern>(binaryPattern.Right, p)!);
         return binaryPattern;
     }
 
     public virtual J? VisitConstantPattern(Cs.ConstantPattern constantPattern, P p)
     {
-        constantPattern = constantPattern.WithPrefix(VisitSpace(constantPattern.Prefix, CsSpace.Location.CONSTANT_PATTERN_PREFIX, p)!);
+        constantPattern = constantPattern.WithPrefix(VisitSpace(constantPattern.Prefix, Space.Location.CONSTANT_PATTERN_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(constantPattern, p);
         if (tempExpression is not Cs.ConstantPattern)
         {
@@ -919,7 +919,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitDiscardPattern(Cs.DiscardPattern discardPattern, P p)
     {
-        discardPattern = discardPattern.WithPrefix(VisitSpace(discardPattern.Prefix, CsSpace.Location.DISCARD_PATTERN_PREFIX, p)!);
+        discardPattern = discardPattern.WithPrefix(VisitSpace(discardPattern.Prefix, Space.Location.DISCARD_PATTERN_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(discardPattern, p);
         if (tempExpression is not Cs.DiscardPattern)
         {
@@ -932,7 +932,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitListPattern(Cs.ListPattern listPattern, P p)
     {
-        listPattern = listPattern.WithPrefix(VisitSpace(listPattern.Prefix, CsSpace.Location.LIST_PATTERN_PREFIX, p)!);
+        listPattern = listPattern.WithPrefix(VisitSpace(listPattern.Prefix, Space.Location.LIST_PATTERN_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(listPattern, p);
         if (tempExpression is not Cs.ListPattern)
         {
@@ -940,14 +940,14 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         listPattern = (Cs.ListPattern) tempExpression;
         listPattern = listPattern.WithMarkers(VisitMarkers(listPattern.Markers, p));
-        listPattern = listPattern.Padding.WithPatterns(VisitContainer(listPattern.Padding.Patterns, CsContainer.Location.LIST_PATTERN_PATTERNS, p)!);
+        listPattern = listPattern.Padding.WithPatterns(VisitContainer(listPattern.Padding.Patterns, JContainer.Location.LIST_PATTERN_PATTERNS, p)!);
         listPattern = listPattern.WithDesignation(VisitAndCast<Cs.VariableDesignation>(listPattern.Designation, p));
         return listPattern;
     }
 
     public virtual J? VisitParenthesizedPattern(Cs.ParenthesizedPattern parenthesizedPattern, P p)
     {
-        parenthesizedPattern = parenthesizedPattern.WithPrefix(VisitSpace(parenthesizedPattern.Prefix, CsSpace.Location.PARENTHESIZED_PATTERN_PREFIX, p)!);
+        parenthesizedPattern = parenthesizedPattern.WithPrefix(VisitSpace(parenthesizedPattern.Prefix, Space.Location.PARENTHESIZED_PATTERN_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(parenthesizedPattern, p);
         if (tempExpression is not Cs.ParenthesizedPattern)
         {
@@ -955,13 +955,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         parenthesizedPattern = (Cs.ParenthesizedPattern) tempExpression;
         parenthesizedPattern = parenthesizedPattern.WithMarkers(VisitMarkers(parenthesizedPattern.Markers, p));
-        parenthesizedPattern = parenthesizedPattern.Padding.WithPattern(VisitContainer(parenthesizedPattern.Padding.Pattern, CsContainer.Location.PARENTHESIZED_PATTERN_PATTERN, p)!);
+        parenthesizedPattern = parenthesizedPattern.Padding.WithPattern(VisitContainer(parenthesizedPattern.Padding.Pattern, JContainer.Location.PARENTHESIZED_PATTERN_PATTERN, p)!);
         return parenthesizedPattern;
     }
 
     public virtual J? VisitRecursivePattern(Cs.RecursivePattern recursivePattern, P p)
     {
-        recursivePattern = recursivePattern.WithPrefix(VisitSpace(recursivePattern.Prefix, CsSpace.Location.RECURSIVE_PATTERN_PREFIX, p)!);
+        recursivePattern = recursivePattern.WithPrefix(VisitSpace(recursivePattern.Prefix, Space.Location.RECURSIVE_PATTERN_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(recursivePattern, p);
         if (tempExpression is not Cs.RecursivePattern)
         {
@@ -978,7 +978,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitVarPattern(Cs.VarPattern varPattern, P p)
     {
-        varPattern = varPattern.WithPrefix(VisitSpace(varPattern.Prefix, CsSpace.Location.VAR_PATTERN_PREFIX, p)!);
+        varPattern = varPattern.WithPrefix(VisitSpace(varPattern.Prefix, Space.Location.VAR_PATTERN_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(varPattern, p);
         if (tempExpression is not Cs.VarPattern)
         {
@@ -992,15 +992,15 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitPositionalPatternClause(Cs.PositionalPatternClause positionalPatternClause, P p)
     {
-        positionalPatternClause = positionalPatternClause.WithPrefix(VisitSpace(positionalPatternClause.Prefix, CsSpace.Location.POSITIONAL_PATTERN_CLAUSE_PREFIX, p)!);
+        positionalPatternClause = positionalPatternClause.WithPrefix(VisitSpace(positionalPatternClause.Prefix, Space.Location.POSITIONAL_PATTERN_CLAUSE_PREFIX, p)!);
         positionalPatternClause = positionalPatternClause.WithMarkers(VisitMarkers(positionalPatternClause.Markers, p));
-        positionalPatternClause = positionalPatternClause.Padding.WithSubpatterns(VisitContainer(positionalPatternClause.Padding.Subpatterns, CsContainer.Location.POSITIONAL_PATTERN_CLAUSE_SUBPATTERNS, p)!);
+        positionalPatternClause = positionalPatternClause.Padding.WithSubpatterns(VisitContainer(positionalPatternClause.Padding.Subpatterns, JContainer.Location.POSITIONAL_PATTERN_CLAUSE_SUBPATTERNS, p)!);
         return positionalPatternClause;
     }
 
     public virtual J? VisitRelationalPattern(Cs.RelationalPattern relationalPattern, P p)
     {
-        relationalPattern = relationalPattern.WithPrefix(VisitSpace(relationalPattern.Prefix, CsSpace.Location.RELATIONAL_PATTERN_PREFIX, p)!);
+        relationalPattern = relationalPattern.WithPrefix(VisitSpace(relationalPattern.Prefix, Space.Location.RELATIONAL_PATTERN_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(relationalPattern, p);
         if (tempExpression is not Cs.RelationalPattern)
         {
@@ -1008,14 +1008,14 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         relationalPattern = (Cs.RelationalPattern) tempExpression;
         relationalPattern = relationalPattern.WithMarkers(VisitMarkers(relationalPattern.Markers, p));
-        relationalPattern = relationalPattern.Padding.WithOperator(VisitLeftPadded(relationalPattern.Padding.Operator, CsLeftPadded.Location.RELATIONAL_PATTERN_OPERATOR, p)!);
+        relationalPattern = relationalPattern.Padding.WithOperator(VisitLeftPadded(relationalPattern.Padding.Operator, JLeftPadded.Location.RELATIONAL_PATTERN_OPERATOR, p)!);
         relationalPattern = relationalPattern.WithValue(VisitAndCast<Expression>(relationalPattern.Value, p)!);
         return relationalPattern;
     }
 
     public virtual J? VisitSlicePattern(Cs.SlicePattern slicePattern, P p)
     {
-        slicePattern = slicePattern.WithPrefix(VisitSpace(slicePattern.Prefix, CsSpace.Location.SLICE_PATTERN_PREFIX, p)!);
+        slicePattern = slicePattern.WithPrefix(VisitSpace(slicePattern.Prefix, Space.Location.SLICE_PATTERN_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(slicePattern, p);
         if (tempExpression is not Cs.SlicePattern)
         {
@@ -1028,15 +1028,15 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitPropertyPatternClause(Cs.PropertyPatternClause propertyPatternClause, P p)
     {
-        propertyPatternClause = propertyPatternClause.WithPrefix(VisitSpace(propertyPatternClause.Prefix, CsSpace.Location.PROPERTY_PATTERN_CLAUSE_PREFIX, p)!);
+        propertyPatternClause = propertyPatternClause.WithPrefix(VisitSpace(propertyPatternClause.Prefix, Space.Location.PROPERTY_PATTERN_CLAUSE_PREFIX, p)!);
         propertyPatternClause = propertyPatternClause.WithMarkers(VisitMarkers(propertyPatternClause.Markers, p));
-        propertyPatternClause = propertyPatternClause.Padding.WithSubpatterns(VisitContainer(propertyPatternClause.Padding.Subpatterns, CsContainer.Location.PROPERTY_PATTERN_CLAUSE_SUBPATTERNS, p)!);
+        propertyPatternClause = propertyPatternClause.Padding.WithSubpatterns(VisitContainer(propertyPatternClause.Padding.Subpatterns, JContainer.Location.PROPERTY_PATTERN_CLAUSE_SUBPATTERNS, p)!);
         return propertyPatternClause;
     }
 
     public virtual J? VisitSubpattern(Cs.Subpattern subpattern, P p)
     {
-        subpattern = subpattern.WithPrefix(VisitSpace(subpattern.Prefix, CsSpace.Location.SUBPATTERN_PREFIX, p)!);
+        subpattern = subpattern.WithPrefix(VisitSpace(subpattern.Prefix, Space.Location.SUBPATTERN_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(subpattern, p);
         if (tempExpression is not Cs.Subpattern)
         {
@@ -1045,13 +1045,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         subpattern = (Cs.Subpattern) tempExpression;
         subpattern = subpattern.WithMarkers(VisitMarkers(subpattern.Markers, p));
         subpattern = subpattern.WithName(VisitAndCast<Expression>(subpattern.Name, p));
-        subpattern = subpattern.Padding.WithPattern(VisitLeftPadded(subpattern.Padding.Pattern, CsLeftPadded.Location.SUBPATTERN_PATTERN, p)!);
+        subpattern = subpattern.Padding.WithPattern(VisitLeftPadded(subpattern.Padding.Pattern, JLeftPadded.Location.SUBPATTERN_PATTERN, p)!);
         return subpattern;
     }
 
     public virtual J? VisitSwitchExpression(Cs.SwitchExpression switchExpression, P p)
     {
-        switchExpression = switchExpression.WithPrefix(VisitSpace(switchExpression.Prefix, CsSpace.Location.SWITCH_EXPRESSION_PREFIX, p)!);
+        switchExpression = switchExpression.WithPrefix(VisitSpace(switchExpression.Prefix, Space.Location.SWITCH_EXPRESSION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(switchExpression, p);
         if (tempExpression is not Cs.SwitchExpression)
         {
@@ -1059,24 +1059,24 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         switchExpression = (Cs.SwitchExpression) tempExpression;
         switchExpression = switchExpression.WithMarkers(VisitMarkers(switchExpression.Markers, p));
-        switchExpression = switchExpression.Padding.WithExpression(VisitRightPadded(switchExpression.Padding.Expression, CsRightPadded.Location.SWITCH_EXPRESSION_EXPRESSION, p)!);
-        switchExpression = switchExpression.Padding.WithArms(VisitContainer(switchExpression.Padding.Arms, CsContainer.Location.SWITCH_EXPRESSION_ARMS, p)!);
+        switchExpression = switchExpression.Padding.WithExpression(VisitRightPadded(switchExpression.Padding.Expression, JRightPadded.Location.SWITCH_EXPRESSION_EXPRESSION, p)!);
+        switchExpression = switchExpression.Padding.WithArms(VisitContainer(switchExpression.Padding.Arms, JContainer.Location.SWITCH_EXPRESSION_ARMS, p)!);
         return switchExpression;
     }
 
     public virtual J? VisitSwitchExpressionArm(Cs.SwitchExpressionArm switchExpressionArm, P p)
     {
-        switchExpressionArm = switchExpressionArm.WithPrefix(VisitSpace(switchExpressionArm.Prefix, CsSpace.Location.SWITCH_EXPRESSION_ARM_PREFIX, p)!);
+        switchExpressionArm = switchExpressionArm.WithPrefix(VisitSpace(switchExpressionArm.Prefix, Space.Location.SWITCH_EXPRESSION_ARM_PREFIX, p)!);
         switchExpressionArm = switchExpressionArm.WithMarkers(VisitMarkers(switchExpressionArm.Markers, p));
         switchExpressionArm = switchExpressionArm.WithPattern(VisitAndCast<Cs.Pattern>(switchExpressionArm.Pattern, p)!);
-        switchExpressionArm = switchExpressionArm.Padding.WithWhenExpression(switchExpressionArm.Padding.WhenExpression == null ? null : VisitLeftPadded(switchExpressionArm.Padding.WhenExpression, CsLeftPadded.Location.SWITCH_EXPRESSION_ARM_WHEN_EXPRESSION, p));
-        switchExpressionArm = switchExpressionArm.Padding.WithExpression(VisitLeftPadded(switchExpressionArm.Padding.Expression, CsLeftPadded.Location.SWITCH_EXPRESSION_ARM_EXPRESSION, p)!);
+        switchExpressionArm = switchExpressionArm.Padding.WithWhenExpression(switchExpressionArm.Padding.WhenExpression == null ? null : VisitLeftPadded(switchExpressionArm.Padding.WhenExpression, JLeftPadded.Location.SWITCH_EXPRESSION_ARM_WHEN_EXPRESSION, p));
+        switchExpressionArm = switchExpressionArm.Padding.WithExpression(VisitLeftPadded(switchExpressionArm.Padding.Expression, JLeftPadded.Location.SWITCH_EXPRESSION_ARM_EXPRESSION, p)!);
         return switchExpressionArm;
     }
 
     public virtual J? VisitSwitchSection(Cs.SwitchSection switchSection, P p)
     {
-        switchSection = switchSection.WithPrefix(VisitSpace(switchSection.Prefix, CsSpace.Location.SWITCH_SECTION_PREFIX, p)!);
+        switchSection = switchSection.WithPrefix(VisitSpace(switchSection.Prefix, Space.Location.SWITCH_SECTION_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(switchSection, p);
         if (tempStatement is not Cs.SwitchSection)
         {
@@ -1085,13 +1085,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         switchSection = (Cs.SwitchSection) tempStatement;
         switchSection = switchSection.WithMarkers(VisitMarkers(switchSection.Markers, p));
         switchSection = switchSection.WithLabels(switchSection.Labels.Map(el => (Cs.SwitchLabel?)Visit(el, p)));
-        switchSection = switchSection.Padding.WithStatements(switchSection.Padding.Statements.Map(el => VisitRightPadded(el, CsRightPadded.Location.SWITCH_SECTION_STATEMENTS, p)));
+        switchSection = switchSection.Padding.WithStatements(switchSection.Padding.Statements.Map(el => VisitRightPadded(el, JRightPadded.Location.SWITCH_SECTION_STATEMENTS, p)));
         return switchSection;
     }
 
     public virtual J? VisitDefaultSwitchLabel(Cs.DefaultSwitchLabel defaultSwitchLabel, P p)
     {
-        defaultSwitchLabel = defaultSwitchLabel.WithPrefix(VisitSpace(defaultSwitchLabel.Prefix, CsSpace.Location.DEFAULT_SWITCH_LABEL_PREFIX, p)!);
+        defaultSwitchLabel = defaultSwitchLabel.WithPrefix(VisitSpace(defaultSwitchLabel.Prefix, Space.Location.DEFAULT_SWITCH_LABEL_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(defaultSwitchLabel, p);
         if (tempExpression is not Cs.DefaultSwitchLabel)
         {
@@ -1099,13 +1099,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         defaultSwitchLabel = (Cs.DefaultSwitchLabel) tempExpression;
         defaultSwitchLabel = defaultSwitchLabel.WithMarkers(VisitMarkers(defaultSwitchLabel.Markers, p));
-        defaultSwitchLabel = defaultSwitchLabel.WithColonToken(VisitSpace(defaultSwitchLabel.ColonToken, CsSpace.Location.DEFAULT_SWITCH_LABEL_COLON_TOKEN, p)!);
+        defaultSwitchLabel = defaultSwitchLabel.WithColonToken(VisitSpace(defaultSwitchLabel.ColonToken, Space.Location.DEFAULT_SWITCH_LABEL_COLON_TOKEN, p)!);
         return defaultSwitchLabel;
     }
 
     public virtual J? VisitCasePatternSwitchLabel(Cs.CasePatternSwitchLabel casePatternSwitchLabel, P p)
     {
-        casePatternSwitchLabel = casePatternSwitchLabel.WithPrefix(VisitSpace(casePatternSwitchLabel.Prefix, CsSpace.Location.CASE_PATTERN_SWITCH_LABEL_PREFIX, p)!);
+        casePatternSwitchLabel = casePatternSwitchLabel.WithPrefix(VisitSpace(casePatternSwitchLabel.Prefix, Space.Location.CASE_PATTERN_SWITCH_LABEL_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(casePatternSwitchLabel, p);
         if (tempExpression is not Cs.CasePatternSwitchLabel)
         {
@@ -1114,14 +1114,14 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         casePatternSwitchLabel = (Cs.CasePatternSwitchLabel) tempExpression;
         casePatternSwitchLabel = casePatternSwitchLabel.WithMarkers(VisitMarkers(casePatternSwitchLabel.Markers, p));
         casePatternSwitchLabel = casePatternSwitchLabel.WithPattern(VisitAndCast<Cs.Pattern>(casePatternSwitchLabel.Pattern, p)!);
-        casePatternSwitchLabel = casePatternSwitchLabel.Padding.WithWhenClause(casePatternSwitchLabel.Padding.WhenClause == null ? null : VisitLeftPadded(casePatternSwitchLabel.Padding.WhenClause, CsLeftPadded.Location.CASE_PATTERN_SWITCH_LABEL_WHEN_CLAUSE, p));
-        casePatternSwitchLabel = casePatternSwitchLabel.WithColonToken(VisitSpace(casePatternSwitchLabel.ColonToken, CsSpace.Location.CASE_PATTERN_SWITCH_LABEL_COLON_TOKEN, p)!);
+        casePatternSwitchLabel = casePatternSwitchLabel.Padding.WithWhenClause(casePatternSwitchLabel.Padding.WhenClause == null ? null : VisitLeftPadded(casePatternSwitchLabel.Padding.WhenClause, JLeftPadded.Location.CASE_PATTERN_SWITCH_LABEL_WHEN_CLAUSE, p));
+        casePatternSwitchLabel = casePatternSwitchLabel.WithColonToken(VisitSpace(casePatternSwitchLabel.ColonToken, Space.Location.CASE_PATTERN_SWITCH_LABEL_COLON_TOKEN, p)!);
         return casePatternSwitchLabel;
     }
 
     public virtual J? VisitSwitchStatement(Cs.SwitchStatement switchStatement, P p)
     {
-        switchStatement = switchStatement.WithPrefix(VisitSpace(switchStatement.Prefix, CsSpace.Location.SWITCH_STATEMENT_PREFIX, p)!);
+        switchStatement = switchStatement.WithPrefix(VisitSpace(switchStatement.Prefix, Space.Location.SWITCH_STATEMENT_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(switchStatement, p);
         if (tempStatement is not Cs.SwitchStatement)
         {
@@ -1129,14 +1129,14 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         switchStatement = (Cs.SwitchStatement) tempStatement;
         switchStatement = switchStatement.WithMarkers(VisitMarkers(switchStatement.Markers, p));
-        switchStatement = switchStatement.Padding.WithExpression(VisitContainer(switchStatement.Padding.Expression, CsContainer.Location.SWITCH_STATEMENT_EXPRESSION, p)!);
-        switchStatement = switchStatement.Padding.WithSections(VisitContainer(switchStatement.Padding.Sections, CsContainer.Location.SWITCH_STATEMENT_SECTIONS, p)!);
+        switchStatement = switchStatement.Padding.WithExpression(VisitContainer(switchStatement.Padding.Expression, JContainer.Location.SWITCH_STATEMENT_EXPRESSION, p)!);
+        switchStatement = switchStatement.Padding.WithSections(VisitContainer(switchStatement.Padding.Sections, JContainer.Location.SWITCH_STATEMENT_SECTIONS, p)!);
         return switchStatement;
     }
 
     public virtual J? VisitLockStatement(Cs.LockStatement lockStatement, P p)
     {
-        lockStatement = lockStatement.WithPrefix(VisitSpace(lockStatement.Prefix, CsSpace.Location.LOCK_STATEMENT_PREFIX, p)!);
+        lockStatement = lockStatement.WithPrefix(VisitSpace(lockStatement.Prefix, Space.Location.LOCK_STATEMENT_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(lockStatement, p);
         if (tempStatement is not Cs.LockStatement)
         {
@@ -1145,13 +1145,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         lockStatement = (Cs.LockStatement) tempStatement;
         lockStatement = lockStatement.WithMarkers(VisitMarkers(lockStatement.Markers, p));
         lockStatement = lockStatement.WithExpression(VisitAndCast<J.ControlParentheses<Expression>>(lockStatement.Expression, p)!);
-        lockStatement = lockStatement.Padding.WithStatement(VisitRightPadded(lockStatement.Padding.Statement, CsRightPadded.Location.LOCK_STATEMENT_STATEMENT, p)!);
+        lockStatement = lockStatement.Padding.WithStatement(VisitRightPadded(lockStatement.Padding.Statement, JRightPadded.Location.LOCK_STATEMENT_STATEMENT, p)!);
         return lockStatement;
     }
 
     public virtual J? VisitFixedStatement(Cs.FixedStatement fixedStatement, P p)
     {
-        fixedStatement = fixedStatement.WithPrefix(VisitSpace(fixedStatement.Prefix, CsSpace.Location.FIXED_STATEMENT_PREFIX, p)!);
+        fixedStatement = fixedStatement.WithPrefix(VisitSpace(fixedStatement.Prefix, Space.Location.FIXED_STATEMENT_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(fixedStatement, p);
         if (tempStatement is not Cs.FixedStatement)
         {
@@ -1166,7 +1166,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitCheckedExpression(Cs.CheckedExpression checkedExpression, P p)
     {
-        checkedExpression = checkedExpression.WithPrefix(VisitSpace(checkedExpression.Prefix, CsSpace.Location.CHECKED_EXPRESSION_PREFIX, p)!);
+        checkedExpression = checkedExpression.WithPrefix(VisitSpace(checkedExpression.Prefix, Space.Location.CHECKED_EXPRESSION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(checkedExpression, p);
         if (tempExpression is not Cs.CheckedExpression)
         {
@@ -1181,7 +1181,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitCheckedStatement(Cs.CheckedStatement checkedStatement, P p)
     {
-        checkedStatement = checkedStatement.WithPrefix(VisitSpace(checkedStatement.Prefix, CsSpace.Location.CHECKED_STATEMENT_PREFIX, p)!);
+        checkedStatement = checkedStatement.WithPrefix(VisitSpace(checkedStatement.Prefix, Space.Location.CHECKED_STATEMENT_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(checkedStatement, p);
         if (tempStatement is not Cs.CheckedStatement)
         {
@@ -1196,7 +1196,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitUnsafeStatement(Cs.UnsafeStatement unsafeStatement, P p)
     {
-        unsafeStatement = unsafeStatement.WithPrefix(VisitSpace(unsafeStatement.Prefix, CsSpace.Location.UNSAFE_STATEMENT_PREFIX, p)!);
+        unsafeStatement = unsafeStatement.WithPrefix(VisitSpace(unsafeStatement.Prefix, Space.Location.UNSAFE_STATEMENT_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(unsafeStatement, p);
         if (tempStatement is not Cs.UnsafeStatement)
         {
@@ -1210,7 +1210,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitRangeExpression(Cs.RangeExpression rangeExpression, P p)
     {
-        rangeExpression = rangeExpression.WithPrefix(VisitSpace(rangeExpression.Prefix, CsSpace.Location.RANGE_EXPRESSION_PREFIX, p)!);
+        rangeExpression = rangeExpression.WithPrefix(VisitSpace(rangeExpression.Prefix, Space.Location.RANGE_EXPRESSION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(rangeExpression, p);
         if (tempExpression is not Cs.RangeExpression)
         {
@@ -1218,14 +1218,14 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         rangeExpression = (Cs.RangeExpression) tempExpression;
         rangeExpression = rangeExpression.WithMarkers(VisitMarkers(rangeExpression.Markers, p));
-        rangeExpression = rangeExpression.Padding.WithStart(rangeExpression.Padding.Start == null ? null : VisitRightPadded(rangeExpression.Padding.Start, CsRightPadded.Location.RANGE_EXPRESSION_START, p));
+        rangeExpression = rangeExpression.Padding.WithStart(rangeExpression.Padding.Start == null ? null : VisitRightPadded(rangeExpression.Padding.Start, JRightPadded.Location.RANGE_EXPRESSION_START, p));
         rangeExpression = rangeExpression.WithEnd(VisitAndCast<Expression>(rangeExpression.End, p));
         return rangeExpression;
     }
 
     public virtual J? VisitQueryExpression(Cs.QueryExpression queryExpression, P p)
     {
-        queryExpression = queryExpression.WithPrefix(VisitSpace(queryExpression.Prefix, CsSpace.Location.QUERY_EXPRESSION_PREFIX, p)!);
+        queryExpression = queryExpression.WithPrefix(VisitSpace(queryExpression.Prefix, Space.Location.QUERY_EXPRESSION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(queryExpression, p);
         if (tempExpression is not Cs.QueryExpression)
         {
@@ -1240,7 +1240,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitQueryBody(Cs.QueryBody queryBody, P p)
     {
-        queryBody = queryBody.WithPrefix(VisitSpace(queryBody.Prefix, CsSpace.Location.QUERY_BODY_PREFIX, p)!);
+        queryBody = queryBody.WithPrefix(VisitSpace(queryBody.Prefix, Space.Location.QUERY_BODY_PREFIX, p)!);
         queryBody = queryBody.WithMarkers(VisitMarkers(queryBody.Markers, p));
         queryBody = queryBody.WithClauses(queryBody.Clauses.Map(el => (Cs.QueryClause?)Visit(el, p)));
         queryBody = queryBody.WithSelectOrGroup(VisitAndCast<Cs.SelectOrGroupClause>(queryBody.SelectOrGroup, p));
@@ -1250,7 +1250,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitFromClause(Cs.FromClause fromClause, P p)
     {
-        fromClause = fromClause.WithPrefix(VisitSpace(fromClause.Prefix, CsSpace.Location.FROM_CLAUSE_PREFIX, p)!);
+        fromClause = fromClause.WithPrefix(VisitSpace(fromClause.Prefix, Space.Location.FROM_CLAUSE_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(fromClause, p);
         if (tempExpression is not Cs.FromClause)
         {
@@ -1259,35 +1259,35 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         fromClause = (Cs.FromClause) tempExpression;
         fromClause = fromClause.WithMarkers(VisitMarkers(fromClause.Markers, p));
         fromClause = fromClause.WithTypeIdentifier(VisitAndCast<TypeTree>(fromClause.TypeIdentifier, p));
-        fromClause = fromClause.Padding.WithIdentifier(VisitRightPadded(fromClause.Padding.Identifier, CsRightPadded.Location.FROM_CLAUSE_IDENTIFIER, p)!);
+        fromClause = fromClause.Padding.WithIdentifier(VisitRightPadded(fromClause.Padding.Identifier, JRightPadded.Location.FROM_CLAUSE_IDENTIFIER, p)!);
         fromClause = fromClause.WithExpression(VisitAndCast<Expression>(fromClause.Expression, p)!);
         return fromClause;
     }
 
     public virtual J? VisitLetClause(Cs.LetClause letClause, P p)
     {
-        letClause = letClause.WithPrefix(VisitSpace(letClause.Prefix, CsSpace.Location.LET_CLAUSE_PREFIX, p)!);
+        letClause = letClause.WithPrefix(VisitSpace(letClause.Prefix, Space.Location.LET_CLAUSE_PREFIX, p)!);
         letClause = letClause.WithMarkers(VisitMarkers(letClause.Markers, p));
-        letClause = letClause.Padding.WithIdentifier(VisitRightPadded(letClause.Padding.Identifier, CsRightPadded.Location.LET_CLAUSE_IDENTIFIER, p)!);
+        letClause = letClause.Padding.WithIdentifier(VisitRightPadded(letClause.Padding.Identifier, JRightPadded.Location.LET_CLAUSE_IDENTIFIER, p)!);
         letClause = letClause.WithExpression(VisitAndCast<Expression>(letClause.Expression, p)!);
         return letClause;
     }
 
     public virtual J? VisitJoinClause(Cs.JoinClause joinClause, P p)
     {
-        joinClause = joinClause.WithPrefix(VisitSpace(joinClause.Prefix, CsSpace.Location.JOIN_CLAUSE_PREFIX, p)!);
+        joinClause = joinClause.WithPrefix(VisitSpace(joinClause.Prefix, Space.Location.JOIN_CLAUSE_PREFIX, p)!);
         joinClause = joinClause.WithMarkers(VisitMarkers(joinClause.Markers, p));
-        joinClause = joinClause.Padding.WithIdentifier(VisitRightPadded(joinClause.Padding.Identifier, CsRightPadded.Location.JOIN_CLAUSE_IDENTIFIER, p)!);
-        joinClause = joinClause.Padding.WithInExpression(VisitRightPadded(joinClause.Padding.InExpression, CsRightPadded.Location.JOIN_CLAUSE_IN_EXPRESSION, p)!);
-        joinClause = joinClause.Padding.WithLeftExpression(VisitRightPadded(joinClause.Padding.LeftExpression, CsRightPadded.Location.JOIN_CLAUSE_LEFT_EXPRESSION, p)!);
+        joinClause = joinClause.Padding.WithIdentifier(VisitRightPadded(joinClause.Padding.Identifier, JRightPadded.Location.JOIN_CLAUSE_IDENTIFIER, p)!);
+        joinClause = joinClause.Padding.WithInExpression(VisitRightPadded(joinClause.Padding.InExpression, JRightPadded.Location.JOIN_CLAUSE_IN_EXPRESSION, p)!);
+        joinClause = joinClause.Padding.WithLeftExpression(VisitRightPadded(joinClause.Padding.LeftExpression, JRightPadded.Location.JOIN_CLAUSE_LEFT_EXPRESSION, p)!);
         joinClause = joinClause.WithRightExpression(VisitAndCast<Expression>(joinClause.RightExpression, p)!);
-        joinClause = joinClause.Padding.WithInto(joinClause.Padding.Into == null ? null : VisitLeftPadded(joinClause.Padding.Into, CsLeftPadded.Location.JOIN_CLAUSE_INTO, p));
+        joinClause = joinClause.Padding.WithInto(joinClause.Padding.Into == null ? null : VisitLeftPadded(joinClause.Padding.Into, JLeftPadded.Location.JOIN_CLAUSE_INTO, p));
         return joinClause;
     }
 
     public virtual J? VisitJoinIntoClause(Cs.JoinIntoClause joinIntoClause, P p)
     {
-        joinIntoClause = joinIntoClause.WithPrefix(VisitSpace(joinIntoClause.Prefix, CsSpace.Location.JOIN_INTO_CLAUSE_PREFIX, p)!);
+        joinIntoClause = joinIntoClause.WithPrefix(VisitSpace(joinIntoClause.Prefix, Space.Location.JOIN_INTO_CLAUSE_PREFIX, p)!);
         joinIntoClause = joinIntoClause.WithMarkers(VisitMarkers(joinIntoClause.Markers, p));
         joinIntoClause = joinIntoClause.WithIdentifier(VisitAndCast<J.Identifier>(joinIntoClause.Identifier, p)!);
         return joinIntoClause;
@@ -1295,7 +1295,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitWhereClause(Cs.WhereClause whereClause, P p)
     {
-        whereClause = whereClause.WithPrefix(VisitSpace(whereClause.Prefix, CsSpace.Location.WHERE_CLAUSE_PREFIX, p)!);
+        whereClause = whereClause.WithPrefix(VisitSpace(whereClause.Prefix, Space.Location.WHERE_CLAUSE_PREFIX, p)!);
         whereClause = whereClause.WithMarkers(VisitMarkers(whereClause.Markers, p));
         whereClause = whereClause.WithCondition(VisitAndCast<Expression>(whereClause.Condition, p)!);
         return whereClause;
@@ -1303,15 +1303,15 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitOrderByClause(Cs.OrderByClause orderByClause, P p)
     {
-        orderByClause = orderByClause.WithPrefix(VisitSpace(orderByClause.Prefix, CsSpace.Location.ORDER_BY_CLAUSE_PREFIX, p)!);
+        orderByClause = orderByClause.WithPrefix(VisitSpace(orderByClause.Prefix, Space.Location.ORDER_BY_CLAUSE_PREFIX, p)!);
         orderByClause = orderByClause.WithMarkers(VisitMarkers(orderByClause.Markers, p));
-        orderByClause = orderByClause.Padding.WithOrderings(orderByClause.Padding.Orderings.Map(el => VisitRightPadded(el, CsRightPadded.Location.ORDER_BY_CLAUSE_ORDERINGS, p)));
+        orderByClause = orderByClause.Padding.WithOrderings(orderByClause.Padding.Orderings.Map(el => VisitRightPadded(el, JRightPadded.Location.ORDER_BY_CLAUSE_ORDERINGS, p)));
         return orderByClause;
     }
 
     public virtual J? VisitQueryContinuation(Cs.QueryContinuation queryContinuation, P p)
     {
-        queryContinuation = queryContinuation.WithPrefix(VisitSpace(queryContinuation.Prefix, CsSpace.Location.QUERY_CONTINUATION_PREFIX, p)!);
+        queryContinuation = queryContinuation.WithPrefix(VisitSpace(queryContinuation.Prefix, Space.Location.QUERY_CONTINUATION_PREFIX, p)!);
         queryContinuation = queryContinuation.WithMarkers(VisitMarkers(queryContinuation.Markers, p));
         queryContinuation = queryContinuation.WithIdentifier(VisitAndCast<J.Identifier>(queryContinuation.Identifier, p)!);
         queryContinuation = queryContinuation.WithBody(VisitAndCast<Cs.QueryBody>(queryContinuation.Body, p)!);
@@ -1320,15 +1320,15 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitOrdering(Cs.Ordering ordering, P p)
     {
-        ordering = ordering.WithPrefix(VisitSpace(ordering.Prefix, CsSpace.Location.ORDERING_PREFIX, p)!);
+        ordering = ordering.WithPrefix(VisitSpace(ordering.Prefix, Space.Location.ORDERING_PREFIX, p)!);
         ordering = ordering.WithMarkers(VisitMarkers(ordering.Markers, p));
-        ordering = ordering.Padding.WithExpression(VisitRightPadded(ordering.Padding.Expression, CsRightPadded.Location.ORDERING_EXPRESSION, p)!);
+        ordering = ordering.Padding.WithExpression(VisitRightPadded(ordering.Padding.Expression, JRightPadded.Location.ORDERING_EXPRESSION, p)!);
         return ordering;
     }
 
     public virtual J? VisitSelectClause(Cs.SelectClause selectClause, P p)
     {
-        selectClause = selectClause.WithPrefix(VisitSpace(selectClause.Prefix, CsSpace.Location.SELECT_CLAUSE_PREFIX, p)!);
+        selectClause = selectClause.WithPrefix(VisitSpace(selectClause.Prefix, Space.Location.SELECT_CLAUSE_PREFIX, p)!);
         selectClause = selectClause.WithMarkers(VisitMarkers(selectClause.Markers, p));
         selectClause = selectClause.WithExpression(VisitAndCast<Expression>(selectClause.Expression, p)!);
         return selectClause;
@@ -1336,16 +1336,16 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitGroupClause(Cs.GroupClause groupClause, P p)
     {
-        groupClause = groupClause.WithPrefix(VisitSpace(groupClause.Prefix, CsSpace.Location.GROUP_CLAUSE_PREFIX, p)!);
+        groupClause = groupClause.WithPrefix(VisitSpace(groupClause.Prefix, Space.Location.GROUP_CLAUSE_PREFIX, p)!);
         groupClause = groupClause.WithMarkers(VisitMarkers(groupClause.Markers, p));
-        groupClause = groupClause.Padding.WithGroupExpression(VisitRightPadded(groupClause.Padding.GroupExpression, CsRightPadded.Location.GROUP_CLAUSE_GROUP_EXPRESSION, p)!);
+        groupClause = groupClause.Padding.WithGroupExpression(VisitRightPadded(groupClause.Padding.GroupExpression, JRightPadded.Location.GROUP_CLAUSE_GROUP_EXPRESSION, p)!);
         groupClause = groupClause.WithKey(VisitAndCast<Expression>(groupClause.Key, p)!);
         return groupClause;
     }
 
     public virtual J? VisitIndexerDeclaration(Cs.IndexerDeclaration indexerDeclaration, P p)
     {
-        indexerDeclaration = indexerDeclaration.WithPrefix(VisitSpace(indexerDeclaration.Prefix, CsSpace.Location.INDEXER_DECLARATION_PREFIX, p)!);
+        indexerDeclaration = indexerDeclaration.WithPrefix(VisitSpace(indexerDeclaration.Prefix, Space.Location.INDEXER_DECLARATION_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(indexerDeclaration, p);
         if (tempStatement is not Cs.IndexerDeclaration)
         {
@@ -1355,17 +1355,17 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         indexerDeclaration = indexerDeclaration.WithMarkers(VisitMarkers(indexerDeclaration.Markers, p));
         indexerDeclaration = indexerDeclaration.WithModifiers(indexerDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
         indexerDeclaration = indexerDeclaration.WithTypeExpression(VisitAndCast<TypeTree>(indexerDeclaration.TypeExpression, p)!);
-        indexerDeclaration = indexerDeclaration.Padding.WithExplicitInterfaceSpecifier(indexerDeclaration.Padding.ExplicitInterfaceSpecifier == null ? null : VisitRightPadded(indexerDeclaration.Padding.ExplicitInterfaceSpecifier, CsRightPadded.Location.INDEXER_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, p));
+        indexerDeclaration = indexerDeclaration.Padding.WithExplicitInterfaceSpecifier(indexerDeclaration.Padding.ExplicitInterfaceSpecifier == null ? null : VisitRightPadded(indexerDeclaration.Padding.ExplicitInterfaceSpecifier, JRightPadded.Location.INDEXER_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, p));
         indexerDeclaration = indexerDeclaration.WithIndexer(VisitAndCast<Expression>(indexerDeclaration.Indexer, p)!);
-        indexerDeclaration = indexerDeclaration.Padding.WithParameters(VisitContainer(indexerDeclaration.Padding.Parameters, CsContainer.Location.INDEXER_DECLARATION_PARAMETERS, p)!);
-        indexerDeclaration = indexerDeclaration.Padding.WithExpressionBody(indexerDeclaration.Padding.ExpressionBody == null ? null : VisitLeftPadded(indexerDeclaration.Padding.ExpressionBody, CsLeftPadded.Location.INDEXER_DECLARATION_EXPRESSION_BODY, p));
+        indexerDeclaration = indexerDeclaration.Padding.WithParameters(VisitContainer(indexerDeclaration.Padding.Parameters, JContainer.Location.INDEXER_DECLARATION_PARAMETERS, p)!);
+        indexerDeclaration = indexerDeclaration.Padding.WithExpressionBody(indexerDeclaration.Padding.ExpressionBody == null ? null : VisitLeftPadded(indexerDeclaration.Padding.ExpressionBody, JLeftPadded.Location.INDEXER_DECLARATION_EXPRESSION_BODY, p));
         indexerDeclaration = indexerDeclaration.WithAccessors(VisitAndCast<J.Block>(indexerDeclaration.Accessors, p));
         return indexerDeclaration;
     }
 
     public virtual J? VisitDelegateDeclaration(Cs.DelegateDeclaration delegateDeclaration, P p)
     {
-        delegateDeclaration = delegateDeclaration.WithPrefix(VisitSpace(delegateDeclaration.Prefix, CsSpace.Location.DELEGATE_DECLARATION_PREFIX, p)!);
+        delegateDeclaration = delegateDeclaration.WithPrefix(VisitSpace(delegateDeclaration.Prefix, Space.Location.DELEGATE_DECLARATION_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(delegateDeclaration, p);
         if (tempStatement is not Cs.DelegateDeclaration)
         {
@@ -1375,17 +1375,17 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         delegateDeclaration = delegateDeclaration.WithMarkers(VisitMarkers(delegateDeclaration.Markers, p));
         delegateDeclaration = delegateDeclaration.WithAttributes(delegateDeclaration.Attributes.Map(el => (Cs.AttributeList?)Visit(el, p)));
         delegateDeclaration = delegateDeclaration.WithModifiers(delegateDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        delegateDeclaration = delegateDeclaration.Padding.WithReturnType(VisitLeftPadded(delegateDeclaration.Padding.ReturnType, CsLeftPadded.Location.DELEGATE_DECLARATION_RETURN_TYPE, p)!);
+        delegateDeclaration = delegateDeclaration.Padding.WithReturnType(VisitLeftPadded(delegateDeclaration.Padding.ReturnType, JLeftPadded.Location.DELEGATE_DECLARATION_RETURN_TYPE, p)!);
         delegateDeclaration = delegateDeclaration.WithIdentifier(VisitAndCast<J.Identifier>(delegateDeclaration.Identifier, p)!);
-        delegateDeclaration = delegateDeclaration.Padding.WithTypeParameters(delegateDeclaration.Padding.TypeParameters == null ? null : VisitContainer(delegateDeclaration.Padding.TypeParameters, CsContainer.Location.DELEGATE_DECLARATION_TYPE_PARAMETERS, p));
-        delegateDeclaration = delegateDeclaration.Padding.WithParameters(VisitContainer(delegateDeclaration.Padding.Parameters, CsContainer.Location.DELEGATE_DECLARATION_PARAMETERS, p)!);
-        delegateDeclaration = delegateDeclaration.Padding.WithTypeParameterConstraintClauses(delegateDeclaration.Padding.TypeParameterConstraintClauses == null ? null : VisitContainer(delegateDeclaration.Padding.TypeParameterConstraintClauses, CsContainer.Location.DELEGATE_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, p));
+        delegateDeclaration = delegateDeclaration.Padding.WithTypeParameters(delegateDeclaration.Padding.TypeParameters == null ? null : VisitContainer(delegateDeclaration.Padding.TypeParameters, JContainer.Location.DELEGATE_DECLARATION_TYPE_PARAMETERS, p));
+        delegateDeclaration = delegateDeclaration.Padding.WithParameters(VisitContainer(delegateDeclaration.Padding.Parameters, JContainer.Location.DELEGATE_DECLARATION_PARAMETERS, p)!);
+        delegateDeclaration = delegateDeclaration.Padding.WithTypeParameterConstraintClauses(delegateDeclaration.Padding.TypeParameterConstraintClauses == null ? null : VisitContainer(delegateDeclaration.Padding.TypeParameterConstraintClauses, JContainer.Location.DELEGATE_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, p));
         return delegateDeclaration;
     }
 
     public virtual J? VisitConversionOperatorDeclaration(Cs.ConversionOperatorDeclaration conversionOperatorDeclaration, P p)
     {
-        conversionOperatorDeclaration = conversionOperatorDeclaration.WithPrefix(VisitSpace(conversionOperatorDeclaration.Prefix, CsSpace.Location.CONVERSION_OPERATOR_DECLARATION_PREFIX, p)!);
+        conversionOperatorDeclaration = conversionOperatorDeclaration.WithPrefix(VisitSpace(conversionOperatorDeclaration.Prefix, Space.Location.CONVERSION_OPERATOR_DECLARATION_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(conversionOperatorDeclaration, p);
         if (tempStatement is not Cs.ConversionOperatorDeclaration)
         {
@@ -1394,27 +1394,27 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         conversionOperatorDeclaration = (Cs.ConversionOperatorDeclaration) tempStatement;
         conversionOperatorDeclaration = conversionOperatorDeclaration.WithMarkers(VisitMarkers(conversionOperatorDeclaration.Markers, p));
         conversionOperatorDeclaration = conversionOperatorDeclaration.WithModifiers(conversionOperatorDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        conversionOperatorDeclaration = conversionOperatorDeclaration.Padding.WithKind(VisitLeftPadded(conversionOperatorDeclaration.Padding.Kind, CsLeftPadded.Location.CONVERSION_OPERATOR_DECLARATION_KIND, p)!);
-        conversionOperatorDeclaration = conversionOperatorDeclaration.Padding.WithReturnType(VisitLeftPadded(conversionOperatorDeclaration.Padding.ReturnType, CsLeftPadded.Location.CONVERSION_OPERATOR_DECLARATION_RETURN_TYPE, p)!);
-        conversionOperatorDeclaration = conversionOperatorDeclaration.Padding.WithParameters(VisitContainer(conversionOperatorDeclaration.Padding.Parameters, CsContainer.Location.CONVERSION_OPERATOR_DECLARATION_PARAMETERS, p)!);
-        conversionOperatorDeclaration = conversionOperatorDeclaration.Padding.WithExpressionBody(conversionOperatorDeclaration.Padding.ExpressionBody == null ? null : VisitLeftPadded(conversionOperatorDeclaration.Padding.ExpressionBody, CsLeftPadded.Location.CONVERSION_OPERATOR_DECLARATION_EXPRESSION_BODY, p));
+        conversionOperatorDeclaration = conversionOperatorDeclaration.Padding.WithKind(VisitLeftPadded(conversionOperatorDeclaration.Padding.Kind, JLeftPadded.Location.CONVERSION_OPERATOR_DECLARATION_KIND, p)!);
+        conversionOperatorDeclaration = conversionOperatorDeclaration.Padding.WithReturnType(VisitLeftPadded(conversionOperatorDeclaration.Padding.ReturnType, JLeftPadded.Location.CONVERSION_OPERATOR_DECLARATION_RETURN_TYPE, p)!);
+        conversionOperatorDeclaration = conversionOperatorDeclaration.Padding.WithParameters(VisitContainer(conversionOperatorDeclaration.Padding.Parameters, JContainer.Location.CONVERSION_OPERATOR_DECLARATION_PARAMETERS, p)!);
+        conversionOperatorDeclaration = conversionOperatorDeclaration.Padding.WithExpressionBody(conversionOperatorDeclaration.Padding.ExpressionBody == null ? null : VisitLeftPadded(conversionOperatorDeclaration.Padding.ExpressionBody, JLeftPadded.Location.CONVERSION_OPERATOR_DECLARATION_EXPRESSION_BODY, p));
         conversionOperatorDeclaration = conversionOperatorDeclaration.WithBody(VisitAndCast<J.Block>(conversionOperatorDeclaration.Body, p));
         return conversionOperatorDeclaration;
     }
 
     public virtual J? VisitTypeParameter(Cs.TypeParameter typeParameter, P p)
     {
-        typeParameter = typeParameter.WithPrefix(VisitSpace(typeParameter.Prefix, CsSpace.Location.TYPE_PARAMETER_PREFIX, p)!);
+        typeParameter = typeParameter.WithPrefix(VisitSpace(typeParameter.Prefix, Space.Location.TYPE_PARAMETER_PREFIX, p)!);
         typeParameter = typeParameter.WithMarkers(VisitMarkers(typeParameter.Markers, p));
         typeParameter = typeParameter.WithAttributeLists(typeParameter.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
-        typeParameter = typeParameter.Padding.WithVariance(typeParameter.Padding.Variance == null ? null : VisitLeftPadded(typeParameter.Padding.Variance, CsLeftPadded.Location.TYPE_PARAMETER_VARIANCE, p));
+        typeParameter = typeParameter.Padding.WithVariance(typeParameter.Padding.Variance == null ? null : VisitLeftPadded(typeParameter.Padding.Variance, JLeftPadded.Location.TYPE_PARAMETER_VARIANCE, p));
         typeParameter = typeParameter.WithName(VisitAndCast<J.Identifier>(typeParameter.Name, p)!);
         return typeParameter;
     }
 
     public virtual J? VisitEnumDeclaration(Cs.EnumDeclaration enumDeclaration, P p)
     {
-        enumDeclaration = enumDeclaration.WithPrefix(VisitSpace(enumDeclaration.Prefix, CsSpace.Location.ENUM_DECLARATION_PREFIX, p)!);
+        enumDeclaration = enumDeclaration.WithPrefix(VisitSpace(enumDeclaration.Prefix, Space.Location.ENUM_DECLARATION_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(enumDeclaration, p);
         if (tempStatement is not Cs.EnumDeclaration)
         {
@@ -1424,15 +1424,15 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         enumDeclaration = enumDeclaration.WithMarkers(VisitMarkers(enumDeclaration.Markers, p));
         enumDeclaration = enumDeclaration.WithAttributeLists(enumDeclaration.AttributeLists?.Map(el => (Cs.AttributeList?)Visit(el, p)));
         enumDeclaration = enumDeclaration.WithModifiers(enumDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        enumDeclaration = enumDeclaration.Padding.WithName(VisitLeftPadded(enumDeclaration.Padding.Name, CsLeftPadded.Location.ENUM_DECLARATION_NAME, p)!);
-        enumDeclaration = enumDeclaration.Padding.WithBaseType(enumDeclaration.Padding.BaseType == null ? null : VisitLeftPadded(enumDeclaration.Padding.BaseType, CsLeftPadded.Location.ENUM_DECLARATION_BASE_TYPE, p));
-        enumDeclaration = enumDeclaration.Padding.WithMembers(enumDeclaration.Padding.Members == null ? null : VisitContainer(enumDeclaration.Padding.Members, CsContainer.Location.ENUM_DECLARATION_MEMBERS, p));
+        enumDeclaration = enumDeclaration.Padding.WithName(VisitLeftPadded(enumDeclaration.Padding.Name, JLeftPadded.Location.ENUM_DECLARATION_NAME, p)!);
+        enumDeclaration = enumDeclaration.Padding.WithBaseType(enumDeclaration.Padding.BaseType == null ? null : VisitLeftPadded(enumDeclaration.Padding.BaseType, JLeftPadded.Location.ENUM_DECLARATION_BASE_TYPE, p));
+        enumDeclaration = enumDeclaration.Padding.WithMembers(enumDeclaration.Padding.Members == null ? null : VisitContainer(enumDeclaration.Padding.Members, JContainer.Location.ENUM_DECLARATION_MEMBERS, p));
         return enumDeclaration;
     }
 
     public virtual J? VisitEnumMemberDeclaration(Cs.EnumMemberDeclaration enumMemberDeclaration, P p)
     {
-        enumMemberDeclaration = enumMemberDeclaration.WithPrefix(VisitSpace(enumMemberDeclaration.Prefix, CsSpace.Location.ENUM_MEMBER_DECLARATION_PREFIX, p)!);
+        enumMemberDeclaration = enumMemberDeclaration.WithPrefix(VisitSpace(enumMemberDeclaration.Prefix, Space.Location.ENUM_MEMBER_DECLARATION_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(enumMemberDeclaration, p);
         if (tempExpression is not Cs.EnumMemberDeclaration)
         {
@@ -1442,13 +1442,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         enumMemberDeclaration = enumMemberDeclaration.WithMarkers(VisitMarkers(enumMemberDeclaration.Markers, p));
         enumMemberDeclaration = enumMemberDeclaration.WithAttributeLists(enumMemberDeclaration.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
         enumMemberDeclaration = enumMemberDeclaration.WithName(VisitAndCast<J.Identifier>(enumMemberDeclaration.Name, p)!);
-        enumMemberDeclaration = enumMemberDeclaration.Padding.WithInitializer(enumMemberDeclaration.Padding.Initializer == null ? null : VisitLeftPadded(enumMemberDeclaration.Padding.Initializer, CsLeftPadded.Location.ENUM_MEMBER_DECLARATION_INITIALIZER, p));
+        enumMemberDeclaration = enumMemberDeclaration.Padding.WithInitializer(enumMemberDeclaration.Padding.Initializer == null ? null : VisitLeftPadded(enumMemberDeclaration.Padding.Initializer, JLeftPadded.Location.ENUM_MEMBER_DECLARATION_INITIALIZER, p));
         return enumMemberDeclaration;
     }
 
     public virtual J? VisitAliasQualifiedName(Cs.AliasQualifiedName aliasQualifiedName, P p)
     {
-        aliasQualifiedName = aliasQualifiedName.WithPrefix(VisitSpace(aliasQualifiedName.Prefix, CsSpace.Location.ALIAS_QUALIFIED_NAME_PREFIX, p)!);
+        aliasQualifiedName = aliasQualifiedName.WithPrefix(VisitSpace(aliasQualifiedName.Prefix, Space.Location.ALIAS_QUALIFIED_NAME_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(aliasQualifiedName, p);
         if (tempExpression is not Cs.AliasQualifiedName)
         {
@@ -1456,14 +1456,14 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         aliasQualifiedName = (Cs.AliasQualifiedName) tempExpression;
         aliasQualifiedName = aliasQualifiedName.WithMarkers(VisitMarkers(aliasQualifiedName.Markers, p));
-        aliasQualifiedName = aliasQualifiedName.Padding.WithAlias(VisitRightPadded(aliasQualifiedName.Padding.Alias, CsRightPadded.Location.ALIAS_QUALIFIED_NAME_ALIAS, p)!);
+        aliasQualifiedName = aliasQualifiedName.Padding.WithAlias(VisitRightPadded(aliasQualifiedName.Padding.Alias, JRightPadded.Location.ALIAS_QUALIFIED_NAME_ALIAS, p)!);
         aliasQualifiedName = aliasQualifiedName.WithName(VisitAndCast<Expression>(aliasQualifiedName.Name, p)!);
         return aliasQualifiedName;
     }
 
     public virtual J? VisitArrayType(Cs.ArrayType arrayType, P p)
     {
-        arrayType = arrayType.WithPrefix(VisitSpace(arrayType.Prefix, CsSpace.Location.ARRAY_TYPE_PREFIX, p)!);
+        arrayType = arrayType.WithPrefix(VisitSpace(arrayType.Prefix, Space.Location.ARRAY_TYPE_PREFIX, p)!);
         var tempExpression = (Expression) VisitExpression(arrayType, p);
         if (tempExpression is not Cs.ArrayType)
         {
@@ -1478,7 +1478,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitTry(Cs.Try @try, P p)
     {
-        @try = @try.WithPrefix(VisitSpace(@try.Prefix, CsSpace.Location.TRY_PREFIX, p)!);
+        @try = @try.WithPrefix(VisitSpace(@try.Prefix, Space.Location.TRY_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(@try, p);
         if (tempStatement is not Cs.Try)
         {
@@ -1488,23 +1488,23 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         @try = @try.WithMarkers(VisitMarkers(@try.Markers, p));
         @try = @try.WithBody(VisitAndCast<J.Block>(@try.Body, p)!);
         @try = @try.WithCatches(@try.Catches.Map(el => (Cs.Try.Catch?)Visit(el, p)));
-        @try = @try.Padding.WithFinally(@try.Padding.Finally == null ? null : VisitLeftPadded(@try.Padding.Finally, CsLeftPadded.Location.TRY_FINALLIE, p));
+        @try = @try.Padding.WithFinally(@try.Padding.Finally == null ? null : VisitLeftPadded(@try.Padding.Finally, JLeftPadded.Location.TRY_FINALLIE, p));
         return @try;
     }
 
     public virtual J? VisitTryCatch(Cs.Try.Catch @catch, P p)
     {
-        @catch = @catch.WithPrefix(VisitSpace(@catch.Prefix, CsSpace.Location.TRY_CATCH_PREFIX, p)!);
+        @catch = @catch.WithPrefix(VisitSpace(@catch.Prefix, Space.Location.TRY_CATCH_PREFIX, p)!);
         @catch = @catch.WithMarkers(VisitMarkers(@catch.Markers, p));
         @catch = @catch.WithParameter(VisitAndCast<J.ControlParentheses<J.VariableDeclarations>>(@catch.Parameter, p)!);
-        @catch = @catch.Padding.WithFilterExpression(@catch.Padding.FilterExpression == null ? null : VisitLeftPadded(@catch.Padding.FilterExpression, CsLeftPadded.Location.TRY_CATCH_FILTER_EXPRESSION, p));
+        @catch = @catch.Padding.WithFilterExpression(@catch.Padding.FilterExpression == null ? null : VisitLeftPadded(@catch.Padding.FilterExpression, JLeftPadded.Location.TRY_CATCH_FILTER_EXPRESSION, p));
         @catch = @catch.WithBody(VisitAndCast<J.Block>(@catch.Body, p)!);
         return @catch;
     }
 
     public virtual J? VisitArrowExpressionClause(Cs.ArrowExpressionClause arrowExpressionClause, P p)
     {
-        arrowExpressionClause = arrowExpressionClause.WithPrefix(VisitSpace(arrowExpressionClause.Prefix, CsSpace.Location.ARROW_EXPRESSION_CLAUSE_PREFIX, p)!);
+        arrowExpressionClause = arrowExpressionClause.WithPrefix(VisitSpace(arrowExpressionClause.Prefix, Space.Location.ARROW_EXPRESSION_CLAUSE_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(arrowExpressionClause, p);
         if (tempStatement is not Cs.ArrowExpressionClause)
         {
@@ -1512,13 +1512,13 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         }
         arrowExpressionClause = (Cs.ArrowExpressionClause) tempStatement;
         arrowExpressionClause = arrowExpressionClause.WithMarkers(VisitMarkers(arrowExpressionClause.Markers, p));
-        arrowExpressionClause = arrowExpressionClause.Padding.WithExpression(VisitRightPadded(arrowExpressionClause.Padding.Expression, CsRightPadded.Location.ARROW_EXPRESSION_CLAUSE_EXPRESSION, p)!);
+        arrowExpressionClause = arrowExpressionClause.Padding.WithExpression(VisitRightPadded(arrowExpressionClause.Padding.Expression, JRightPadded.Location.ARROW_EXPRESSION_CLAUSE_EXPRESSION, p)!);
         return arrowExpressionClause;
     }
 
     public virtual J? VisitAccessorDeclaration(Cs.AccessorDeclaration accessorDeclaration, P p)
     {
-        accessorDeclaration = accessorDeclaration.WithPrefix(VisitSpace(accessorDeclaration.Prefix, CsSpace.Location.ACCESSOR_DECLARATION_PREFIX, p)!);
+        accessorDeclaration = accessorDeclaration.WithPrefix(VisitSpace(accessorDeclaration.Prefix, Space.Location.ACCESSOR_DECLARATION_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(accessorDeclaration, p);
         if (tempStatement is not Cs.AccessorDeclaration)
         {
@@ -1528,7 +1528,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         accessorDeclaration = accessorDeclaration.WithMarkers(VisitMarkers(accessorDeclaration.Markers, p));
         accessorDeclaration = accessorDeclaration.WithAttributes(accessorDeclaration.Attributes.Map(el => (Cs.AttributeList?)Visit(el, p)));
         accessorDeclaration = accessorDeclaration.WithModifiers(accessorDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        accessorDeclaration = accessorDeclaration.Padding.WithKind(VisitLeftPadded(accessorDeclaration.Padding.Kind, CsLeftPadded.Location.ACCESSOR_DECLARATION_KIND, p)!);
+        accessorDeclaration = accessorDeclaration.Padding.WithKind(VisitLeftPadded(accessorDeclaration.Padding.Kind, JLeftPadded.Location.ACCESSOR_DECLARATION_KIND, p)!);
         accessorDeclaration = accessorDeclaration.WithExpressionBody(VisitAndCast<Cs.ArrowExpressionClause>(accessorDeclaration.ExpressionBody, p));
         accessorDeclaration = accessorDeclaration.WithBody(VisitAndCast<J.Block>(accessorDeclaration.Body, p));
         return accessorDeclaration;
@@ -1536,7 +1536,7 @@ public class CSharpVisitor<P> : JavaVisitor<P>
 
     public virtual J? VisitPointerFieldAccess(Cs.PointerFieldAccess pointerFieldAccess, P p)
     {
-        pointerFieldAccess = pointerFieldAccess.WithPrefix(VisitSpace(pointerFieldAccess.Prefix, CsSpace.Location.POINTER_FIELD_ACCESS_PREFIX, p)!);
+        pointerFieldAccess = pointerFieldAccess.WithPrefix(VisitSpace(pointerFieldAccess.Prefix, Space.Location.POINTER_FIELD_ACCESS_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(pointerFieldAccess, p);
         if (tempStatement is not Cs.PointerFieldAccess)
         {
@@ -1551,81 +1551,8 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         pointerFieldAccess = (Cs.PointerFieldAccess) tempExpression;
         pointerFieldAccess = pointerFieldAccess.WithMarkers(VisitMarkers(pointerFieldAccess.Markers, p));
         pointerFieldAccess = pointerFieldAccess.WithTarget(VisitAndCast<Expression>(pointerFieldAccess.Target, p)!);
-        pointerFieldAccess = pointerFieldAccess.Padding.WithName(VisitLeftPadded(pointerFieldAccess.Padding.Name, CsLeftPadded.Location.POINTER_FIELD_ACCESS_NAME, p)!);
+        pointerFieldAccess = pointerFieldAccess.Padding.WithName(VisitLeftPadded(pointerFieldAccess.Padding.Name, JLeftPadded.Location.POINTER_FIELD_ACCESS_NAME, p)!);
         return pointerFieldAccess;
     }
 
-    protected virtual JContainer<J2>? VisitContainer<J2>(JContainer<J2>? container, CsContainer.Location loc, P p) where J2 : J
-    {
-        if (container == null) {
-            return null;
-        }
-
-        Cursor = new Cursor(Cursor, container);
-
-        var before = VisitSpace(container.Before, loc.BeforeLocation, p);
-        var js = ListUtils.Map(container.Padding.Elements, t => VisitRightPadded(t, loc.ElementLocation, p));
-
-        Cursor = Cursor.Parent!;
-
-        return js == container.Padding.Elements && before == container.Before ?
-            container :
-            JContainer<J2>.Build(before!, js, container.Markers);
-    }
-
-    protected virtual JLeftPadded<J2>? VisitLeftPadded<J2>(JLeftPadded<J2>? left, CsLeftPadded.Location loc, P p)
-    {
-        if (left == null)
-        {
-            return null;
-        }
-
-        Cursor = new Cursor(Cursor, left);
-
-        var before = VisitSpace(left.Before, loc.BeforeLocation, p)!;
-        var t = left.Element;
-        if (t is Core.Tree)
-        {
-            t = (J2?)Visit((Core.Tree)t, p);
-        }
-        Cursor = Cursor.Parent!;
-
-        // If nothing changed leave AST node the same
-        if (ReferenceEquals(left.Element, t) && before == left.Before) {
-            return left;
-        }
-
-        return t == null ? null : new JLeftPadded<J2>(before, t, left.Markers);
-    }
-
-    protected virtual JRightPadded<J2>? VisitRightPadded<J2>(JRightPadded<J2>? right, CsRightPadded.Location loc, P p)
-    {
-        if (right == null)
-        {
-            return null;
-        }
-
-        var t = right.Element;
-        if (t is J)
-        {
-            Cursor = new Cursor(Cursor, right);
-            t = (J2?)Visit((J)t, p);
-            Cursor = Cursor.Parent!;
-        }
-
-        if (t == null)
-        {
-            return null;
-        }
-
-        right = right.WithElement(t);
-        right = right.WithAfter(VisitSpace(right.After, loc.AfterLocation, p));
-        right = right.WithMarkers(VisitMarkers(right.Markers, p));
-        return right;
-    }
-
-    protected virtual Space VisitSpace(Space space, CsSpace.Location loc, P p)
-    {
-        return VisitSpace(space, Space.Location.LANGUAGE_EXTENSION, p);
-    }
 }

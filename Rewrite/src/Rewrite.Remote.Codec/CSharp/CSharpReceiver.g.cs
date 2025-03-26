@@ -267,7 +267,7 @@ public record CSharpReceiver : Receiver
             collectionExpression = collectionExpression.WithPrefix(ctx.ReceiveNode(collectionExpression.Prefix, ReceiveSpace)!);
             collectionExpression = collectionExpression.WithMarkers(ctx.ReceiveNode(collectionExpression.Markers, ctx.ReceiveMarkers)!);
             collectionExpression = collectionExpression.Padding.WithElements(ctx.ReceiveNodes(collectionExpression.Padding.Elements, ReceiveRightPadded)!);
-            collectionExpression = collectionExpression.WithType(ctx.ReceiveValue(collectionExpression.Type)!);
+            collectionExpression = collectionExpression.WithType(ctx.ReceiveValue(collectionExpression.Type));
             return collectionExpression;
         }
 
@@ -708,7 +708,7 @@ public record CSharpReceiver : Receiver
             discardPattern = discardPattern.WithId(ctx.ReceiveValue(discardPattern.Id)!);
             discardPattern = discardPattern.WithPrefix(ctx.ReceiveNode(discardPattern.Prefix, ReceiveSpace)!);
             discardPattern = discardPattern.WithMarkers(ctx.ReceiveNode(discardPattern.Markers, ctx.ReceiveMarkers)!);
-            discardPattern = discardPattern.WithType(ctx.ReceiveValue(discardPattern.Type)!);
+            discardPattern = discardPattern.WithType(ctx.ReceiveValue(discardPattern.Type));
             return discardPattern;
         }
 
@@ -2187,7 +2187,7 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNodes(default(IList<JRightPadded<Expression>>), ReceiveRightPadded)!,
-                    ctx.ReceiveValue(default(JavaType))!
+                    ctx.ReceiveValue(default(JavaType?))!
                 );
             }
 
@@ -2671,7 +2671,7 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveValue(default(JavaType))!
+                    ctx.ReceiveValue(default(JavaType?))!
                 );
             }
 

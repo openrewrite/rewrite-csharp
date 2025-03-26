@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+    <PropertyGroup>
         <!-- explicitly set to false as project contains `xUnit` dependency -->
         <IsTestProject>false</IsTestProject>
         <Description>Test harness for the automated code refactoring framework OpenRewrite.</Description>

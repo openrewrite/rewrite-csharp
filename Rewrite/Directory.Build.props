@@ -1,28 +1,37 @@
 <Project>
     <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-      <WarningsNotAsErrors>CS0618</WarningsNotAsErrors>
-        <LangVersion>latest</LangVersion>
     </PropertyGroup>
     <PropertyGroup>
         <Company>Moderne Inc.</Company>
         <PackageIcon>openrewrite.png</PackageIcon>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <VersionPrefix>0.23.0</VersionPrefix>
-        <RemotePrinter>False</RemotePrinter>
-        <DebugVisitor>False</DebugVisitor>
-        <SanitizeStackTrace>True</SanitizeStackTrace>
-        <EmbeddedServer>true</EmbeddedServer>
+    </PropertyGroup>
+    <PropertyGroup>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <WarningsNotAsErrors>CS0618</WarningsNotAsErrors>
+        <LangVersion>latest</LangVersion>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <PropertyGroup>
-        <MicrosoftCodeAnalysisVersion>4.12.0</MicrosoftCodeAnalysisVersion>
+        <VersionPrefix>0.23.0</VersionPrefix>
+        <MicrosoftCodeAnalysisVersion>4.13.0</MicrosoftCodeAnalysisVersion>
+        <RemotePrinter>False</RemotePrinter>
+        <DebugVisitor>False</DebugVisitor>
+        <SanitizeStackTrace>True</SanitizeStackTrace>
+        <EmbeddedServer>true</EmbeddedServer>
+
     </PropertyGroup>
 
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>$(MSBuildProjectName).Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
 
     <Import Project="Directory.Build.props.user" Condition="Exists('Directory.Build.props.user')"/>
 

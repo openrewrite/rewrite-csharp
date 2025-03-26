@@ -23,14 +23,14 @@ public class EnumGenerator : ISourceGenerator
         scanner.CsSpaceEnumValues.UnionWith(scanner.CsLeftPaddedEnumValues);
         // scanner.CsLeftPaddedEnumValues.UnionWith(scanner.CsContainerEnumValues);
         var csContainerSrc = $$"""
-              namespace Rewrite.RewriteCSharp.Tree;
+              namespace Rewrite.RewriteJava.Tree;
 
-              public partial interface CsContainer
+              public partial class JContainer
               {
-                  public partial record Location(CsSpace.Location BeforeLocation, CsRightPadded.Location ElementLocation)
+                  public partial record Location
                   {
                       {{ scanner.CsContainerEnumValues.Render(enumValue => $$"""
-                      public static readonly Location {{enumValue}} = new(CsSpace.Location.{{enumValue}}, CsRightPadded.Location.{{enumValue}});
+                      public static readonly Location {{enumValue}} = new(Space.Location.{{enumValue}}, JRightPadded.Location.{{enumValue}});
                       """, "\n").Ident(2) }}
                   }
               }
@@ -38,40 +38,55 @@ public class EnumGenerator : ISourceGenerator
         var csSpaceSrc = $$"""
                namespace Rewrite.RewriteCSharp.Tree;
 
-               public partial interface CsSpace
+               public partial class CsSpace
                {
-                   public partial record Location
+                   public enum Location
                    {
                        {{ scanner.CsSpaceEnumValues.Render(enumValue => $$"""
-                      public static readonly Location {{enumValue}} = new();
-                      """, "\n").Ident(2) }}
+                      {{enumValue}}
+                      """, ",\n").Ident(2) }}
+                   }
+               }
+               """;
+
+        var allSpaceValues = scanner.CsSpaceEnumValues.Union(scanner.JSpaceEnumValues).OrderBy(x => x).ToList();
+        var spaceSrc = $$"""
+               namespace Rewrite.RewriteJava.Tree;
+
+               public partial class Space
+               {
+                   public enum Location
+                   {
+                       {{ allSpaceValues.Render(enumValue => $$"""
+                      {{enumValue}}
+                      """, ",\n").Ident(2) }}
                    }
                }
                """;
 
         var csRightPaddedSrc = $$"""
-               namespace Rewrite.RewriteCSharp.Tree;
+               namespace Rewrite.RewriteJava.Tree;
 
-               public partial interface CsRightPadded
+               public partial class JRightPadded
                {
-                   public partial record Location(CsSpace.Location AfterLocation)
+                   public partial record Location
                    {
                        {{ scanner.CsRightPaddedEnumValues.Render(enumValue => $$"""
-                      public static readonly Location {{enumValue}} = new (CsSpace.Location.{{enumValue}});
+                      public static readonly Location {{enumValue}} = new (Space.Location.{{enumValue}});
                       """, "\n").Ident(2) }}
                    }
                }
                """;
 
         var csLeftPaddedSrc = $$"""
-               namespace Rewrite.RewriteCSharp.Tree;
+               namespace Rewrite.RewriteJava.Tree;
 
-               public partial interface CsLeftPadded
+               public partial class JLeftPadded
                {
-                   public record Location(CsSpace.Location BeforeLocation)
+                   public partial record Location
                    {
                        {{ scanner.CsLeftPaddedEnumValues.Render(enumValue => $$"""
-                      public static readonly Location {{enumValue}} = new (CsSpace.Location.{{enumValue}});
+                      public static readonly Location {{enumValue}} = new (Space.Location.{{enumValue}});
                       """, "\n").Ident(2) }}
                    }
                }
@@ -84,6 +99,8 @@ public class EnumGenerator : ISourceGenerator
             context.AddSource("CsLeftPadded.gs", SourceText.From(csLeftPaddedSrc, Encoding.UTF8));
         if(scanner.CsSpaceEnumValues.Count > 0)
             context.AddSource("CsSpace.gs", SourceText.From(csSpaceSrc, Encoding.UTF8));
+        if(allSpaceValues.Count > 0)
+            context.AddSource("Space.gs", SourceText.From(spaceSrc, Encoding.UTF8));
     }
     public class SyntaxScanner : ISyntaxReceiver
     {
@@ -91,6 +108,7 @@ public class EnumGenerator : ISourceGenerator
         public HashSet<string> CsRightPaddedEnumValues { get; } = new();
         public HashSet<string> CsLeftPaddedEnumValues { get; } = new();
         public HashSet<string> CsSpaceEnumValues { get; } = new();
+        public HashSet<string> JSpaceEnumValues { get; } = new();
         public string? AssemblyFileVersion { get; set; }
 
         public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
@@ -99,7 +117,7 @@ public class EnumGenerator : ISourceGenerator
                 {
                     Expression: MemberAccessExpressionSyntax
                     {
-                        Expression: IdentifierNameSyntax { Identifier.Text: "CsContainer" },
+                        Expression: IdentifierNameSyntax { Identifier.Text: "JContainer" },
                         Name: IdentifierNameSyntax { Identifier.Text: "Location" },
                     }
                 } csContainerLocation)
@@ -112,7 +130,7 @@ public class EnumGenerator : ISourceGenerator
             {
                 Expression: MemberAccessExpressionSyntax
                 {
-                    Expression: IdentifierNameSyntax { Identifier.Text: "CsRightPadded" },
+                    Expression: IdentifierNameSyntax { Identifier.Text: "JRightPadded" },
                     Name: IdentifierNameSyntax { Identifier.Text: "Location" },
                 }
             } csRightPaddedLocation)
@@ -124,7 +142,7 @@ public class EnumGenerator : ISourceGenerator
                 {
                     Expression: MemberAccessExpressionSyntax
                     {
-                        Expression: IdentifierNameSyntax { Identifier.Text: "CsLeftPadded" },
+                        Expression: IdentifierNameSyntax { Identifier.Text: "JLeftPadded" },
                         Name: IdentifierNameSyntax { Identifier.Text: "Location" },
                     }
                 } csLeftPaddedLocation)
@@ -136,7 +154,7 @@ public class EnumGenerator : ISourceGenerator
                 {
                     Expression: MemberAccessExpressionSyntax
                     {
-                        Expression: IdentifierNameSyntax { Identifier.Text: "CsSpace" },
+                        Expression: IdentifierNameSyntax { Identifier.Text: "Space" },
                         Name: IdentifierNameSyntax { Identifier.Text: "Location" },
                     }
                 } csSpaceLocation)
@@ -145,6 +163,14 @@ public class EnumGenerator : ISourceGenerator
                 CsSpaceEnumValues.Add(csSpaceLocation.Name.Identifier.Text);
             }
 
+            if (syntaxNode is EnumDeclarationSyntax { Identifier: { Text: "JSpaceLocation" } } jSpaceLocation)
+            {
+                foreach (var val in jSpaceLocation.Members.Select(x => x.Identifier.Text))
+                {
+                    JSpaceEnumValues.Add(val);
+
+                }
+            }
         }
     }
 }

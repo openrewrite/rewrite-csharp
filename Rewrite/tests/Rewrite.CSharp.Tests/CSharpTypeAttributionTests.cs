@@ -40,7 +40,7 @@ public class CSharpTypeAttributionTests(ITestOutputHelper output) : RewriteTest(
                     var m = md.Descendents().OfType<J.MethodInvocation>().First();
                     // m.Arguments.Should().
                     Assert.Equal((decimal)3, m.Arguments.Count, 1);
-                    var thirdArgument = m.Arguments[2] as Cs.Argument;
+                    var thirdArgument = (Cs.Argument)m.Arguments[2];
                     thirdArgument.Should().BeOfType<Cs.Argument>();
 
                     var it = thirdArgument.Expression!;

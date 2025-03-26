@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>Rewrite.Remote.Codec</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+    <PropertyGroup>
         <Description>C# language support for the automated code refactoring framework OpenRewrite.</Description>
     </PropertyGroup>
 
@@ -13,19 +13,12 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
-        <ProjectReference Include="..\Rewrite.Java\Rewrite.Java.csproj" />
         <ProjectReference Include="..\Rewrite.Json\Rewrite.Json.csproj" />
         <ProjectReference Include="..\Rewrite.Properties\Rewrite.Properties.csproj" />
         <ProjectReference Include="..\Rewrite.Xml\Rewrite.Xml.csproj" />
         <ProjectReference Include="..\Rewrite.Yaml\Rewrite.Yaml.csproj" />
         <ProjectReference Include="..\Rewrite.CSharp\Rewrite.CSharp.csproj" />
         <ProjectReference Include="..\Rewrite.Remote\Rewrite.Remote.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>$(MSBuildProjectName).Tests</_Parameter1>
-        </AssemblyAttribute>
     </ItemGroup>
 
 </Project>

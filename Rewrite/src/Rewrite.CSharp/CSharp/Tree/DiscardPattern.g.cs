@@ -50,7 +50,7 @@ public partial interface Cs : J
     Guid id,
     Space prefix,
     Markers markers,
-    JavaType type
+    JavaType? type
     ) : Cs.Pattern, Expression<DiscardPattern>, J<DiscardPattern>, MutableTree<DiscardPattern>
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
@@ -76,9 +76,9 @@ public partial interface Cs : J
         {
             return ReferenceEquals(newMarkers, Markers) ? this : new DiscardPattern(Id, Prefix, newMarkers, Type);
         }
-        public JavaType Type { get;  set; } = type;
+        public JavaType? Type { get;  set; } = type;
 
-        public DiscardPattern WithType(JavaType newType)
+        public DiscardPattern WithType(JavaType? newType)
         {
             return newType == Type ? this : new DiscardPattern(Id, Prefix, Markers, newType);
         }

@@ -10,8 +10,6 @@ partial interface J
 
         partial class NamedVariable
         {
-            public override string? ToString() => Core.Tree.ToString(this) ?? base.ToString();
-
             public JavaType? Type => VariableType?.Type;
 
             public NamedVariable WithType(JavaType? newType) => VariableType == null ? this : WithVariableType(VariableType.WithType(newType));

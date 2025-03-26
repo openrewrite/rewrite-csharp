@@ -5,36 +5,45 @@ namespace Rewrite.Analyzers;
 
 public class LstLocator : ISyntaxReceiver
 {
-    public Dictionary<string, LstInfo> LstClasses { get; } = new();
+    public Dictionary<FullyQualifiedName, TypeDeclarationSyntax> LstClasses { get; } = new();
     public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
     {
-        if (syntaxNode is ClassDeclarationSyntax c && c.Identifier.Text == "Kind")
+        if (syntaxNode is ClassDeclarationSyntax { Identifier.Text: "Kind" })
         {
             Console.WriteLine("");
         }
-        if(syntaxNode is ClassDeclarationSyntax {Parent: TypeDeclarationSyntax parent} classDeclaration
+        if(syntaxNode is ClassDeclarationSyntax {Parent: TypeDeclarationSyntax} classDeclaration
            && (classDeclaration.BaseList?.Types.OfType<SimpleBaseTypeSyntax>().Any(x => x.ToString() is "Cs" or "J" or "Expression" or "Tree" or "Statement") ?? false)
            && classDeclaration.SyntaxTree.FilePath.EndsWith(".g.cs"))
-        // if (syntaxNode is ClassDeclarationSyntax
-        //     {
-        //         BaseList.Types: [SimpleBaseTypeSyntax
-        //         {
-        //             Type: IdentifierNameSyntax
-        //             {
-        //                 Identifier.Text: "Cs" or "J" or "Expression" or "Tree" or "Statement"
-        //             }
-        //         }],
-        //         Parent: TypeDeclarationSyntax parent
-        //         // ,
-        //         // Parent: InterfaceDeclarationSyntax
-        //         // {
-        //         //     Identifier.Text: "Cs" or "J" ,
-        //         // } parent,
-        //     } classDeclaration && classDeclaration.SyntaxTree.FilePath.EndsWith(".g.cs"))
         {
-            LstClasses.Add($"{parent.Identifier.Text}.{classDeclaration.Identifier.Text}", new LstInfo(classDeclaration));
+
+            LstClasses.Add(GetFullyQualifiedName(classDeclaration), classDeclaration);
 
         }
+    }
+
+    FullyQualifiedName GetFullyQualifiedName(ClassDeclarationSyntax classDeclarationSyntax)
+    {
+        var fqn = new FullyQualifiedName();
+        fqn.Name = classDeclarationSyntax.Identifier.Text;
+        var parent = classDeclarationSyntax.Parent;
+        var parents = new Stack<TypeDeclarationSyntax>();
+        while (parent != null)
+        {
+            if (parent is TypeDeclarationSyntax typeDeclarationSyntax)
+            {
+                parents.Push(typeDeclarationSyntax);
+            }
+            else if (parent is BaseNamespaceDeclarationSyntax namespaceDeclaration)
+            {
+                fqn.Namespace = namespaceDeclaration.Name.ToString();
+                break;
+            }
+            parent = parent.Parent;
+        }
+
+        fqn.ParentTypes = parents.ToList();
+        return fqn;
     }
 }
 

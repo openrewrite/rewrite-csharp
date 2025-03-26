@@ -42,7 +42,7 @@ public class FindClassTests(ITestOutputHelper output) : RewriteTest(output)
             ],
             Space.EMPTY
         );
-        var after = new FindClass().GetVisitor().Visit(source, new InMemoryExecutionContext()) as J.CompilationUnit;
+        var after = (J.CompilationUnit)new FindClass().GetVisitor().Visit(source, new InMemoryExecutionContext())!;
         after.Should().NotBeSameAs(source);
         after.Classes[0].Markers.MarkerList.Should().Contain(e => e is SearchResult);
     }

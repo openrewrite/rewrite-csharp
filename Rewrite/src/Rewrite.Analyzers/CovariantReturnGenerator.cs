@@ -230,10 +230,6 @@ namespace Rewrite.Analyzers
             builder.AppendLine($"public partial interface {typeSymbol.Name}");
             builder.AppendLine("{");
 
-            if (typeSymbol.Name == "Pattern")
-            {
-                Debugger.Break();
-            }
             // Add default implementations for methods inherited from parent interfaces
             var distinctMethods  = new HashSet<string>();
             foreach (var baseInterface in typeSymbol.AllInterfaces)

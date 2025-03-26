@@ -10,15 +10,6 @@ internal class UniqueSpaceVisitor : CSharpIsoVisitor<int>
     /// <summary>Space objects seen so far, compared by reference equality</summary>
     private readonly HashSet<Space> _spaces = new(ReferenceEqualityComparer.Instance);
 
-    /// <summary>Visit space with location</summary>
-    /// <param name="space">Space to visit</param>
-    /// <param name="loc">Location in source</param>
-    /// <param name="p">Parameter passed through visitor</param>
-    /// <returns>Unique space instance</returns>
-    protected override Space VisitSpace(Space space, CsSpace.Location loc, int p)
-    {
-        return VisitSpace(space, p);
-    }
 
     /// <summary>Visit space with optional location</summary>
     /// <param name="space">Space to visit</param>

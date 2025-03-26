@@ -180,11 +180,6 @@ public class AutoFormatVisitor<TState> : CSharpIsoVisitor<TState>
         private readonly HashSet<TextChange> _changes = new(changes);
         public Dictionary<Space, List<Func<Space, Space>>> PendingSpaceChanges { get; } = new();
 
-        protected override Space VisitSpace(Space space, CsSpace.Location loc, PrintOutputCapture<int> p)
-        {
-            return VisitSpace(space, () => base.VisitSpace(space, loc, p), p);
-        }
-
         public override Space VisitSpace(Space space, Space.Location? loc, PrintOutputCapture<int> p)
         {
             return VisitSpace(space, () => base.VisitSpace(space, loc, p), p);
@@ -257,12 +252,6 @@ public class AutoFormatVisitor<TState> : CSharpIsoVisitor<TState>
     /// </summary>
     private class SpaceChangeApplierVisitor : CSharpIsoVisitor<Dictionary<Space, List<Func<Space, Space>>>>
     {
-        protected override Space VisitSpace(Space space, CsSpace.Location loc, Dictionary<Space, List<Func<Space, Space>>> p)
-        {
-            var newSpace = ApplyChange(space, p);
-            return newSpace;
-            //return base.VisitSpace(space, loc, p);
-        }
 
         public override Space VisitSpace(Space space, Space.Location? loc, Dictionary<Space, List<Func<Space, Space>>> p)
         {

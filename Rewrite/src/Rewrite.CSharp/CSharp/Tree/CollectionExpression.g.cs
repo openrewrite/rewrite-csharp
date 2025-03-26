@@ -32,7 +32,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     IList<JRightPadded<Expression>> elements,
-    JavaType type
+    JavaType? type
     ) : Cs, Expression, TypedTree, Expression<CollectionExpression>, TypedTree<CollectionExpression>, J<CollectionExpression>, MutableTree<CollectionExpression>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
@@ -90,9 +90,9 @@ public partial interface Cs : J
         {
             return Padding.WithElements(_elements.WithElements(newElements));
         }
-        public JavaType Type { get;  set; } = type;
+        public JavaType? Type { get;  set; } = type;
 
-        public CollectionExpression WithType(JavaType newType)
+        public CollectionExpression WithType(JavaType? newType)
         {
             return newType == Type ? this : new CollectionExpression(Id, Prefix, Markers, _elements, newType);
         }

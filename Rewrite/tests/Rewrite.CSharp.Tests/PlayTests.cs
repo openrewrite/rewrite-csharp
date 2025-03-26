@@ -91,7 +91,7 @@ public class    PlayTests(ITestOutputHelper output) : RewriteTest(output)
     }
     class TestVisitor : CSharpIsoVisitor<int>
     {
-        protected override JRightPadded<J2>? VisitRightPadded<J2>(JRightPadded<J2>? right, CsRightPadded.Location loc, int p)
+        public override JRightPadded<J2>? VisitRightPadded<J2>(JRightPadded<J2>? right, JRightPadded.Location loc, int p)
         {
             return base.VisitRightPadded(right, loc, p);
         }
