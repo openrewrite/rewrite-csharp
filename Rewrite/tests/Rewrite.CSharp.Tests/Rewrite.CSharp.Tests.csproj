@@ -16,7 +16,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="TUnit" Version="0.19.6" />
+        <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.6.3" />
+        <PackageReference Include="TUnit" Version="0.19.14" />
         <PackageReference Include="coverlet.collector" Version="6.0.2">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

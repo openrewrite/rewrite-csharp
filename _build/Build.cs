@@ -99,18 +99,15 @@ class Build : NukeBuild
         .DependsOn(Restore)
         .Executes(() =>
         {
-            var categoriesToExclude = new []
-            {
-                "KnownBug",
-                "Exploratory",
-                "Roslyn"
-            };
-            var filter = string.Join('&', categoriesToExclude.Select(x => $"Category!={x}"));
+
+            var resultsDir = ArtifactsDirectory / "test-results";
             DotNetTest(x => x
                 .SetProjectFile(Solution.tests.Rewrite_CSharp_Tests)
-                .SetFilter(filter)
                 .SetResultsDirectory(ArtifactsDirectory / "test-results")
-                .SetLoggers("trx")
+                .AddProcessAdditionalArguments("--",
+                    "--test-parameter RenderLST=false",
+                    "--report-trx",
+                    "--results-directory", resultsDir)
             );
         });
 
