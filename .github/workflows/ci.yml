@@ -64,7 +64,7 @@ jobs:
 
       - name: Report .NET Test Results
         if: always()
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v2
         with:
           name: Unit Tests
           path: artifacts/test-results/*.trx
@@ -83,7 +83,7 @@ jobs:
 
       - name: Report Java Test Results
         if: always()
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v2
         with:
           name: Unit Tests
           path: rewrite-csharp-remote-server/build/test-results/test/*.xml
