@@ -1,10 +1,21 @@
-﻿namespace Rewrite.CSharp.Tests;
+﻿using Rewrite.Core;
+using Rewrite.Test;
+using Rewrite.Tests;
+using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
+
+namespace Rewrite.CSharp.Tests;
 
 public static class TestSetup
 {
-    [Before(HookType.Assembly)]
+    [Before(HookType.TestDiscovery)]
     public static void BeforeAssembly()
     {
+        var loggerConfig = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .Destructure.With<PrettyJsonDestructuringPolicy>()
+            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}", applyThemeToRedirectedOutput: true, theme: AnsiConsoleTheme.Literate);
+        Log.Logger = loggerConfig.CreateLogger();
         ITestExecutionContext.SetCurrent(new LocalTestExecutionContext());
         var localPrinter = new LocalPrinterFactory();
         IPrinterFactory.Set(new LocalPrinterFactory());
@@ -26,4 +37,6 @@ public static class TestSetup
         // SenderContext.Register(typeof(Properties), () => new PropertiesSender());
         // ReceiverContext.Register(typeof(Properties), () => new PropertiesReceiver());
     }
+
+
 }

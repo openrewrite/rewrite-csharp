@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Nuke.Common;
@@ -16,7 +17,9 @@ using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.PathConstruction;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using LibGit2Sharp;
+using NuGet.Configuration;
 using Nuke.Common.CI.GitHubActions;
+using Nuke.Common.Tools.PowerShell;
 
 // ReSharper disable UnusedMember.Local
 class Build : NukeBuild
@@ -47,21 +50,56 @@ class Build : NukeBuild
     bool IsCurrentBranchCommitted() => !GitRepository.RetrieveStatus().IsDirty;
 
     Target Clean => _ => _
+        .Description("Clean out artifacts and all the bin/obj directories")
+        .DependsOn(StopServer, CleanNugetCache)
         .Before(Restore)
         .Executes(() =>
         {
+            IEnumerable<AbsolutePath> GetSubDirectories(params string[] patterns)
+            {
+                var options = new EnumerationOptions() { RecurseSubdirectories = true };
+                return patterns
+                    .SelectMany(pattern => Directory.EnumerateDirectories(Solution.Directory!, pattern, options))
+                    .Select(AbsolutePath.Create);
+            }
+            ArtifactsDirectory.CreateOrCleanDirectory();
+            var objBin = GetSubDirectories("obj", "bin");
+            foreach (var subDirectory in objBin)
+            {
+                subDirectory.DeleteDirectory();
+            }
+
+
+        });
+
+    Target CleanNugetCache => _ => _
+        .Description("Clean out artifacts and all the bin/obj directories")
+        .DependsOn(StopServer)
+        .Before(Restore)
+        .Executes(() =>
+        {
+            // clean out rewrite nuget packages from global cache to ensure recent builds are properly used from artifacts folder
+            var globalPackagesFolder = (AbsolutePath)SettingsUtility.GetGlobalPackagesFolder(Settings.LoadDefaultSettings(null));
+            var rewritePackageNames = Solution.AllProjects.Where(x => x.Name.StartsWith("Rewrite")).Select(x => x.Name.ToLower());
+            foreach (var rewritePackageName in rewritePackageNames)
+            {
+                var packagePath = globalPackagesFolder / rewritePackageName;
+                packagePath.DeleteDirectory();
+            }
         });
 
     Target Restore => _ => _
+        .Description("Restores nuget packages")
         .Executes(() =>
         {
+
             DotNetRestore(c => c
                 .SetProjectFile(Solution.Path)
                 .SetVersion(Version.NuGetPackageVersion));
         });
 
     Target Compile => _ => _
-        .Description("Compiles .net projects")
+        .Description("Compiles .Net projects")
         .DependsOn(Restore)
         .Executes(() =>
         {
@@ -72,16 +110,23 @@ class Build : NukeBuild
 
     Target Pack => _ => _
         .Description("Creates nuget packages inside artifacts directory")
-        .DependsOn(Restore, Compile)
+        .DependsOn(Restore)
         .Executes(() =>
         {
             DotNetPack(x => x
-                .EnableNoBuild()
                 .EnableNoRestore()
                 .SetProject(Solution.Path)
                 .SetVersion(Version.NuGetPackageVersion)
+                .SetAssemblyVersion(Version.AssemblyVersion)
                 .SetOutputDirectory(ArtifactsDirectory));
 
+            // publish recipes with a static version number so it can be referenced in tests
+            DotNetPack(x => x
+                .EnableNoRestore()
+                .SetProject(Solution.src.Rewrite_Recipes)
+                .SetVersion("0.0.1")
+                .SetAssemblyVersion(Version.AssemblyVersion)
+                .SetOutputDirectory(ArtifactsDirectory / "test"));
         });
 
     Target PublishServer => _ => _
@@ -92,6 +137,36 @@ class Build : NukeBuild
             DotNetPublish(c => c
                 .SetProject(Solution.src.Rewrite_Server)
                 .SetVersion(Version.NuGetPackageVersion));
+        });
+
+    Target StopServer => _ => _
+        .Description("Stops any instances of Rewrite.Server that may have not shutdown (such as when they were launched by gradle)")
+        .Executes(() =>
+        {
+            var projectName = Solution.src.Rewrite_Server.Name;
+            if (IsWin)
+            {
+                PowerShellTasks.PowerShell(c => c.SetCommand(
+                    $$"""
+                      Get-CimInstance Win32_Process |
+                      Where-Object {
+                        $_.CommandLine -like "*{{projectName}}.dll*" -and
+                        $_.CommandLine -notlike "*Get-CimInstance*"
+                      } |
+                      ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
+                      """).DisableProcessInvocationLogging());
+            }
+            else
+            {
+                ProcessTasks.StartProcess("/bin/bash", "-c",
+                    $$"""
+                    ps -eo pid,cmd |
+                    grep dotnet |
+                    grep {{projectName}}.dll |
+                    awk '{print $1}' |
+                    xargs -r kill -9
+                    """);
+            }
         });
 
     Target Test => _ => _
@@ -108,6 +183,8 @@ class Build : NukeBuild
                     "--test-parameter RenderLST=false",
                     "--report-trx",
                     "--results-directory", resultsDir)
+                .CombineWith([Solution.tests.Rewrite_Recipes_Tests, Solution.tests.Rewrite_CSharp_Tests, Solution.tests.Rewrite_MSBuild_Tests], (c,v) => c
+                    .SetProjectFile(v))
             );
         });
 

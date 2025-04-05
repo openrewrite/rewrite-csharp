@@ -2,105 +2,47 @@
 using System.Net;
 using System.Net.Sockets;
 using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NuGet.Configuration;
+using NuGet.LibraryModel;
+using NuGet.Versioning;
 using PeterO.Cbor;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
 using Rewrite.MSBuild;
-using Rewrite.Remote.Codec.CSharp;
-using Rewrite.Remote.Codec.Java;
-using Rewrite.Remote.Codec.Properties;
-using Rewrite.Remote.Codec.Xml;
-using Rewrite.Remote.Codec.Yaml;
-using Rewrite.RewriteCSharp.Tree;
-using Rewrite.RewriteJson.Tree;
-using Rewrite.RewriteProperties.Tree;
-using Rewrite.RewriteXml.Tree;
-using Rewrite.RewriteYaml.Tree;
-using Serilog;
+
 
 namespace Rewrite.Remote.Server;
 
-public class Server
+public class Server : BackgroundService
 {
     private const int Ok = 0;
     private const int Error = 1;
     private RemotingMessenger? _messenger;
+    private readonly ILogger<Server> _log;
     private readonly Options _options;
 
     private RemotingContext? _remotingContext;
     private Solution? _solution;
-    private readonly ILogger _log;
 
-    static Server()
+
+    private readonly RecipeManager _recipeManager;
+    public Server(ILogger<Server> log, Options options, RecipeManager recipeManager)
     {
-        Initialization.Initialize();
-
-        SenderContext.Register(typeof(Cs), () => new CSharpSender());
-        SenderContext.Register(typeof(Json), () => new Codec.Json.JsonSender());
-        SenderContext.Register(typeof(Yaml), () => new YamlSender());
-        SenderContext.Register(typeof(Xml), () => new XmlSender());
-        SenderContext.Register(typeof(Properties), () => new PropertiesSender());
-        SenderContext.Register(typeof(ParseError), () => new ParseErrorSender());
-
-        ReceiverContext.Register(typeof(Cs), () => new CSharpReceiver());
-        ReceiverContext.Register(typeof(Json), () => new Codec.Json.JsonReceiver());
-        ReceiverContext.Register(typeof(Yaml), () => new YamlReceiver());
-        ReceiverContext.Register(typeof(Xml), () => new XmlReceiver());
-        ReceiverContext.Register(typeof(Properties), () => new PropertiesReceiver());
-        ReceiverContext.Register(typeof(ParseError), () => new ParseErrorReceiver());
-
-        IRemotingContext.RegisterRecipeFactory(Recipe.Noop().GetType().FullName!, _ => Recipe.Noop());
-
-        RemotingContext.RegisterValueDeserializer<Properties.Value>((type, reader, context) =>
-        {
-            Guid id = default;
-            string? prefix = null;
-            Markers? markers = null;
-            string? text = null;
-            while (reader.PeekState() != CborReaderState.EndMap)
-                switch (reader.ReadTextString())
-                {
-                    case "id":
-                        id = (Guid)context.Deserialize(typeof(Guid), reader)!;
-                        break;
-                    case "prefix":
-                        prefix = (string?)context.Deserialize(typeof(string), reader);
-                        break;
-                    case "markers":
-                        markers = (Markers?)context.Deserialize(typeof(Markers), reader);
-                        break;
-                    case "text":
-                        text = (string?)context.Deserialize(typeof(string), reader);
-                        break;
-                }
-
-            reader.ReadEndMap();
-            return new Properties.Value(id, prefix!, markers!, text!);
-        });
-    }
-
-    public Server(Options options)
-    {
+        _log = log;
         _options = options;
-        var loggerConfig = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .WriteTo.Console();
-        if (options.LogFilePath != null) loggerConfig = loggerConfig.WriteTo.File(options.LogFilePath);
-
-        Log.Logger = loggerConfig.CreateLogger();
-        _log = Log.ForContext<Server>();
-        ProjectParser.Init();
+        _recipeManager = recipeManager;
     }
 
-    public async Task Listen()
+
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         var port = _options.Port;
         var timeout = _options.Timeout;
         _remotingContext = new RemotingContext();
 
-        _messenger = new RemotingMessenger(_remotingContext,
-            new Dictionary<string, Func<NetworkStream, RemotingContext, CancellationToken, Task>>
+        _messenger = new RemotingMessenger(_remotingContext, new Dictionary<string, Func<NetworkStream, RemotingContext, CancellationToken, Task>>
             {
                 { "parse-project-sources", ParseProjectSources },
                 { "list-projects", ListProjects },
@@ -113,42 +55,46 @@ public class Server
         {
             var ipAddress = IPAddress.Loopback;
             var endPoint = new IPEndPoint(ipAddress, port);
-            _log.Debug($"Starting server on port ({port}) ...");
+            _log.LogDebug("Starting server on port ({Port}) ...", port);
             server.Bind(endPoint);
             server.Listen(5);
-            _log.Debug($"Server started ({port}) ...");
+            _log.LogInformation("Server started ({Port}) ...", port);
 
-            while (server.Poll((int)double.Min(timeout.TotalMicroseconds, int.MaxValue), SelectMode.SelectRead))
+            // while (server.Poll((int)double.Min(timeout.TotalMicroseconds, int.MaxValue), SelectMode.SelectRead))
+            // {
+            while (!stoppingToken.IsCancellationRequested)
+            {
                 try
                 {
-                    using var client = await server.AcceptAsync();
-                    await HandleClient(client);
+                    using var client = await server.AcceptAsync(stoppingToken);
+                    await HandleClient(client, stoppingToken);
+                }
+                catch (OperationCanceledException)
+                {
+                    break;
                 }
                 catch (Exception e)
                 {
-                    _log.Error($"Failure while serving client: {e}");
+                    _log.LogError(e, "Failure while serving client");
                 }
+            }
+            // }
+        }
+        catch (OperationCanceledException)
+        {
+            return;
         }
         catch (SocketException e)
         {
-            _log.Error($"Failed to start on port {port}\n{e}");
-            throw;
+            _log.LogError(e, "Failed to start on port {Port}", port);
         }
         catch (Exception e)
         {
-            _log.Error(e, "An exception occurred while running the application");
-            throw;
-        }
-        finally
-        {
-            _log.Error("Closing server");
-
-            server.Close();
+            _log.LogError(e, "An exception occurred while running the application");
         }
     }
 
-    private async Task InstallRecipe(NetworkStream stream, RemotingContext context,
-        CancellationToken cancellationToken)
+    private async Task InstallRecipe(NetworkStream stream, RemotingContext context, CancellationToken cancellationToken)
     {
         var packageId = CBORObject.Read(stream).AsString();
         var packageVersion = CBORObject.Read(stream).AsString();
@@ -169,10 +115,8 @@ public class Server
 
             return packageSource;
         }).ToList();
-
-        var commandEnd = CBORObject.Read(stream);
-
-        _log.Information($$"""
+        
+        _log.LogInformation($$"""
                           Handling InstallRecipe Request: {
                               packageId: {{packageId}},
                               packageVersion: {{packageVersion}},
@@ -183,12 +127,25 @@ public class Server
 
         if (sources.Count == 0 && !includeDefaultSource) throw new ArgumentException("No sources provided");
 
-        var installableRecipes = await
-            NugetManager.InstallRecipeAsync(packageId, packageVersion, includeDefaultSource ? sources.Concat([new PackageSource("https://api.nuget.org/v3/index.json")]).ToList() : sources, _options.NugetPackagesFolder,
-                cancellationToken);
+        VersionRange versionRange = packageVersion.ToUpper() switch
+        {
+            "LATEST" => VersionRange.All,
+            "RELEASE" => VersionRange.AllStable,
+            _ => VersionRange.Parse(packageVersion)
+        };
+        var includePreRelease = packageVersion.ToUpper() == "LATEST";
+        var libraryRange = new LibraryRange(packageId, versionRange, LibraryDependencyTarget.Package);
+        if (includeDefaultSource)
+        {
+            sources.Add(new PackageSource("https://api.nuget.org/v3/index.json"));
+        }
 
-        _log.Debug($"Found {installableRecipes.Recipes.Count} recipes for package {packageId}");
-
+        var installableRecipes = await _recipeManager.InstallRecipePackage(
+            libraryRange, 
+            includePreRelease,
+            sources,
+            cancellationToken: cancellationToken);
+        var selectedRecipeSource = ""; // recipe source makes no sense, as it can exist in multiple configured source repos, or even restored from global cache
 
         CBORObject.Write((int)RemotingMessageType.Response, stream);
         CBORObject.Write(Ok, stream);
@@ -199,8 +156,8 @@ public class Server
                     "recipes",
                     installableRecipes.Recipes.Select(d => new Dictionary<string, object>
                     {
-                        { "name", d.Name },
-                        { "source", d.Source.ToString() },
+                        { "name", d.TypeName },
+                        { "source", selectedRecipeSource },
                         {
                             "options", d.Options.Select(od => new Dictionary<string, object>
                             {
@@ -211,15 +168,14 @@ public class Server
                         }
                     }).ToList()
                 },
-                { "repository", installableRecipes.Repository },
-                { "version", installableRecipes.Version }
+                { "repository", selectedRecipeSource },
+                { "version", installableRecipes.Package.Version }
             },
             stream
         );
     }
 
-    private async Task LoadRecipeAssemblyAndRunVisitor(NetworkStream stream, RemotingContext context,
-        CancellationToken cancellationToken)
+    private Task LoadRecipeAssemblyAndRunVisitor(NetworkStream stream, RemotingContext context, CancellationToken cancellationToken)
     {
         var recipeName = CBORObject.Read(stream).AsString();
         var packageSource = new Uri(CBORObject.Read(stream).AsString());
@@ -238,24 +194,35 @@ public class Server
         var ctx = new InMemoryExecutionContext();
         RemotingExecutionContextView.View(ctx).RemotingContext = context;
 
-        _log.Information($$"""
-                          Handling LoadRecipeAssemblyAndRunVisitor Request: {
-                              recipeName: {{recipeName}},
-                              packageId: {{packageId}},
-                              packageVersion: {{packageVersion}},
-                              options: {{options}},
-                              sourceFilePath: {{((SourceFile)received).SourcePath}}
-                          }
-                          """);
+        _log.LogInformation($$"""
+                              Handling LoadRecipeAssemblyAndRunVisitor Request: {
+                                  recipeName: {{recipeName}},
+                                  packageId: {{packageId}},
+                                  packageVersion: {{packageVersion}},
+                                  options: {{options}},
+                                  sourceFilePath: {{((SourceFile)received).SourcePath}}
+                              }
+                              """);
 
-        _log.Debug("Trying to load recipe assembly");
+        _log.LogDebug("Trying to load recipe assembly");
+        var recipeId = new RecipeIdentity(recipeName, packageId, packageVersion);
 
-        var loadedRecipe = await
-            NugetManager.LoadRecipeAssemblyAsync(recipeName, packageId, packageVersion, _options.NugetPackagesFolder,
-                options,
-                cancellationToken);
+        var descriptor = _recipeManager.FindRecipeDescriptor(recipeId);
+        var startInfo = descriptor.CreateRecipeStartInfo();
+        foreach (var item in options)
+        {
+            var prop = startInfo.Arguments[item.Key];
+            var type = Type.GetType(prop.Type) ?? throw new InvalidOperationException($"Unable to determine type {prop.Type}");
+            var propValue = item.Value(type);
+            startInfo.WithOption(item.Key, propValue);
+        }
+        var loadedRecipe =_recipeManager.CreateRecipe(recipeId, startInfo);
+        // var loadedRecipe = await
+        //     RecipeManager.LoadRecipeAssemblyAsync(recipeName, packageId, packageVersion, _options.NugetPackagesFolder,
+        //         options,
+        //         cancellationToken);
 
-        _log.Debug($"Recipe {loadedRecipe.Descriptor.Name} was successfully loaded into the assembly. \nTrying to run it on the SourceFile");
+        _log.LogDebug($"Recipe {loadedRecipe.GetType().FullName} was successfully loaded into the assembly. \nTrying to run it on the SourceFile");
 
         var treeVisitor = loadedRecipe.GetVisitor();
 
@@ -265,7 +232,7 @@ public class Server
         }
         else
         {
-            _log.Warning($"SourceFile of type [{received.GetType()}] is not acceptable");
+            _log.LogWarning($"SourceFile of type [{received.GetType()}] is not acceptable");
             RemotingMessenger._state = received;
         }
 
@@ -274,6 +241,7 @@ public class Server
         CBORObject.Write((int)RemotingMessageType.Response, stream);
         CBORObject.Write(Ok, stream);
         RemotingMessenger.SendTree(context, stream, RemotingMessenger._state, received);
+        return Task.CompletedTask;
     }
 
     private Task ParseProjectSources(NetworkStream stream, RemotingContext context,
@@ -284,13 +252,13 @@ public class Server
         var rootDir = CBORObject.Read(stream).AsString();
         var commandEnd = CBORObject.Read(stream);
 
-        _log.Information($$"""
-                          Handling ParseProjectSources Request: {
-                              projectFile: {{projectFile}},
-                              solutionFile: {{solutionFile}},
-                              rootDir: {{rootDir}},
-                          }
-                          """);
+        _log.LogInformation($$"""
+                              Handling ParseProjectSources Request: {
+                                  projectFile: {{projectFile}},
+                                  solutionFile: {{solutionFile}},
+                                  rootDir: {{rootDir}},
+                              }
+                              """);
 
         if (_solution is null || _solution.FilePath != solutionFile)
         {
@@ -298,12 +266,12 @@ public class Server
             CBORObject.Write(Error, stream);
             if (_solution is null)
             {
-                _log.Error($"Failed to handle request. Solution {solutionFile} was not loaded using `list-projects`");
+                _log.LogError($"Failed to handle request. Solution {solutionFile} was not loaded using `list-projects`");
                 CBORObject.Write($"Solution {solutionFile} was not loaded using `list-projects`", stream);
             }
             else
             {
-                _log.Error(
+                _log.LogError(
                     $"Failed to handle request. Solution {solutionFile} does not match loaded solution {_solution.FilePath}");
                 CBORObject.Write($"Solution {solutionFile} does not match loaded solution {_solution.FilePath}",
                     stream);
@@ -312,13 +280,13 @@ public class Server
             return Task.CompletedTask;
         }
 
-        _log.Debug($"Requesting all sources for project {projectFile}");
+        _log.LogDebug($"Requesting all sources for project {projectFile}");
 
         var sourceFiles =
             new SolutionParser().ParseProjectSources(_solution, projectFile, rootDir, new InMemoryExecutionContext())
                 .ToList();
 
-        _log.Debug($"Sending back the following sources: [{sourceFiles}]");
+        _log.LogDebug($"Sending back the following sources: [{sourceFiles}]");
 
         CBORObject.Write((int)RemotingMessageType.Response, stream);
         CBORObject.Write(Ok, stream);
@@ -335,11 +303,11 @@ public class Server
         var commandEnd = CBORObject.Read(stream);
 
 
-        _log.Information($$"""
-                          Handling ListProjects Request: {
-                              solutionFile: {{solutionFile}},
-                          }
-                          """);
+        _log.LogInformation($$"""
+                              Handling ListProjects Request: {
+                                  solutionFile: {{solutionFile}},
+                              }
+                              """);
         _solution = await new SolutionParser().LoadSolutionAsync(solutionFile, cancellationToken);
 
         CBORObject.Write((int)RemotingMessageType.Response, stream);
@@ -351,15 +319,15 @@ public class Server
             // apply `Distinct()` as there may be multiple target frameworks
             .Distinct().ToList();
 
-        _log.Debug($"Found the following projects [{projects}]");
+        _log.LogDebug($"Found the following projects [{projects}]");
 
         CBORObject.Write(projects, stream);
     }
 
 
-    private async Task HandleClient(Socket socket)
+    private async Task HandleClient(Socket socket, CancellationToken stoppingToken)
     {
-        _log.Information($"Received a new client connection {socket.RemoteEndPoint}");
+        _log.LogInformation($"Received a new client connection {socket.RemoteEndPoint}");
         _remotingContext?.Connect(socket);
         await using var stream = new NetworkStream(socket);
         do
@@ -371,10 +339,9 @@ public class Server
                 if (messageType != RemotingMessageType.Request) throw new ArgumentException($"Unexpected message type {messageType}");
 
 
-                var cancellationTokenSource = new CancellationTokenSource(_options.Timeout);
-                var requestHandlingTask = _messenger!.ProcessRequest(stream, cancellationTokenSource.Token);
-                if (await Task.WhenAny(requestHandlingTask, Task.Delay(_options.Timeout, CancellationToken.None)) ==
-                    requestHandlingTask)
+                var cancellationToken = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken, new CancellationTokenSource(_options.Timeout).Token).Token;
+                var requestHandlingTask = _messenger!.ProcessRequest(stream, cancellationToken);
+                if (await Task.WhenAny(requestHandlingTask, Task.Delay(_options.Timeout, cancellationToken)) == requestHandlingTask)
                     dataWritten = await requestHandlingTask;
                 else
                     throw new TimeoutException($"Request was not fulfilled withing given {_options.Timeout} timeout");
@@ -382,26 +349,26 @@ public class Server
                 if (!dataWritten && stream.CanWrite)
                     try
                     {
-                        _log.Error("Response was not completed after processing");
+                        _log.LogError("Response was not completed after processing");
                         CBORObject.Write((int)RemotingMessageType.Response, stream);
                         CBORObject.Write(Error, stream);
                         CBORObject.Write("Response was not completed", stream);
                     }
                     catch (IOException exception)
                     {
-                        _log.Error("Failed to write response", exception);
+                        _log.LogError(exception, "Failed to write response");
                         // the socket was closed
                         // Console.Error.WriteLine(ignore);
                         break;
                     }
                     catch (Exception exception)
                     {
-                        _log.Error("Unexpected response sending exception", exception);
+                        _log.LogError(exception, "Unexpected response sending exception");
                     }
             }
             catch (Exception e)
             {
-                _log.Error("Response handling exception", e);
+                _log.LogError(e, "Response handling exception");
                 if (!dataWritten && stream.CanWrite)
                     try
                     {
@@ -411,23 +378,23 @@ public class Server
                     }
                     catch (IOException exception)
                     {
-                        _log.Error("Failed to write response", exception);
+                        _log.LogError(exception, "Failed to write response");
                         break;
                     }
                     catch (Exception exception)
                     {
-                        _log.Error("Unexpected response sending exception", exception);
+                        _log.LogError(exception, "Unexpected response sending exception");
                     }
             }
             finally
             {
                 RemotingMessenger.SendEndMessage(stream);
-                stream.Flush();
+                await stream.FlushAsync(stoppingToken);
             }
-        } while (socket.Connected && socket.Poll(TimeSpan.FromSeconds(5), SelectMode.SelectRead) &&
-                 socket.Available > 0);
+        } while (socket.Connected && socket.Poll(TimeSpan.FromSeconds(5), SelectMode.SelectRead) && socket.Available > 0);
 
 
-        _log.Information($"Client socket disconnected {socket.RemoteEndPoint}");
+        _log.LogInformation($"Client socket disconnected {socket.RemoteEndPoint}");
     }
+
 }

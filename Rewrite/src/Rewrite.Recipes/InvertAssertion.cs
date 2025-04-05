@@ -1,18 +1,19 @@
+using System.ComponentModel;
 using System.Text;
 using Rewrite.Core;
+using Rewrite.RewriteCSharp.Tree;
 using Rewrite.RewriteJava;
 using Rewrite.RewriteJava.Tree;
 using ExecutionContext = Rewrite.Core.ExecutionContext;
 
 namespace Rewrite.Recipes;
 
+[DisplayName("Invert Assertion")]
+[Description("Find for all the `Assert.True(!someBool)` and transform it into `Assert.False(someBool)`.")]
 public class InvertAssertion : Recipe
 {
     private const string ASSERT_TRUE = "Xunit.Assert.True";
     
-    public override string DisplayName => "Invert Assertion";
-    public override string Description => "Find for all the `Assert.True(!someBool)` and transform it into `Assert.False(someBool)`.";
-
     public override ITreeVisitor<Tree, ExecutionContext> GetVisitor()
     {
         return new InvertAssertionVisitor();
@@ -27,7 +28,8 @@ public class InvertAssertion : Recipe
 
             if (!ASSERT_TRUE.EndsWith(ExtractName(mi)) || !IsUnaryOperatorNot(mi)) return mi;
 
-            var unary = (J.Unary)mi.Arguments[0];
+            var arguments = (Cs.Argument)mi.Arguments[0];
+            var unary = (J.Unary)arguments.Expression;
 
             return mi.WithArguments([unary.Expression]).WithName(mi.Name.WithSimpleName("False"));
         }
@@ -39,7 +41,7 @@ public class InvertAssertion : Recipe
 
         private static bool IsUnaryOperatorNot(J.MethodInvocation method)
         {
-            return method.Arguments is [J.Unary { Operator: J.Unary.Types.Not }];
+            return method.Arguments is [ Cs.Argument { Expression : J.Unary { Operator: J.Unary.Types.Not }}];
         }
     };
 }

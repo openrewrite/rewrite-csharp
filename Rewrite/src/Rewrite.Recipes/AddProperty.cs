@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Linq;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
@@ -8,16 +9,21 @@ namespace Rewrite.Recipes.Properties;
 
 using ExecutionContext = ExecutionContext;
 
-public class AddProperty(
-    [Option("Property Name", "A name of the property to add", "test")] string property,
-    [Option("Value", "Value to specify for the given property name", "some-value")] string value) : Recipe
-{
-    public override string DisplayName => "Add Property";
-    public override string Description => "Add specified property to a property file";
 
+[DisplayName("Add Property Recipe")]
+[Description("Full description")]
+public class AddProperty : Recipe
+{
+    [DisplayName("Property Name")]
+    [Description("A name of the property to add")]
+    public required string PropertyName { get; init; } = "blah";
+    
+    [DisplayName("Value")]
+    [Description("Value to specify for the given property name")]
+    public string PropertyValue { get; } = "blah";
     public override ITreeVisitor<Tree, ExecutionContext> GetVisitor()
     {
-        return new AddPropertyVisitor(property, value);
+        return new AddPropertyVisitor(PropertyName, PropertyValue);
     }
 
     private class AddPropertyVisitor(string property, string value) : PropertiesVisitor<ExecutionContext>

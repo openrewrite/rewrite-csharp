@@ -1,28 +1,43 @@
-﻿using Rewrite.Core;
+﻿using System.ComponentModel;
+using Rewrite.Core;
 using Rewrite.Core.Marker;
+using Rewrite.RewriteCSharp;
+using Rewrite.RewriteCSharp.Tree;
 using Rewrite.RewriteJava;
 using Rewrite.RewriteJava.Tree;
 using ExecutionContext = Rewrite.Core.ExecutionContext;
 
 namespace Rewrite.Recipes;
 
-public class FindClass([Option(displayName: "Description", description: "A special sign to specifically highlight the class found by the recipe", example: "~~>")] string? description = null): Recipe
+[DisplayName("Find Class")]
+[Description("Search for all the classes in the given source")]
+public class FindClass: Recipe
 {
-    public override string DisplayName => "Find Class";
-
-    public override string Description => "Search for all the classes in the given source";
-
+    [DisplayName("Description")]
+    [Description("A special sign to specifically highlight the class found by the recipe")]
+    [Example("~~>")]
+    public string? Description { get; set; }
     public override ITreeVisitor<Tree, ExecutionContext> GetVisitor()
     {
-        return new FindClassVisitor(description);
+        return new FindClassVisitor(Description);
     }
 
-    private class FindClassVisitor(string? description = null) : JavaVisitor<ExecutionContext>
+    private class FindClassVisitor(string? description = null) : CSharpVisitor<ExecutionContext>
     {
-        public override J VisitClassDeclaration(J.ClassDeclaration classDeclaration, ExecutionContext ctx)
+        public override J? VisitClassDeclaration(J.ClassDeclaration classDeclaration, ExecutionContext ctx)
         {
-            var tree = (MutableTree<J.ClassDeclaration>)base.VisitClassDeclaration(classDeclaration, ctx)!;
-            return tree.WithMarkers(tree.Markers.AddIfAbsent<SearchResult>(new SearchResult(Tree.RandomId(), description)));
+            return ApplyMarker(base.VisitClassDeclaration(classDeclaration, ctx));
+
+        }
+
+        public override J? VisitClassDeclaration(Cs.ClassDeclaration classDeclaration, ExecutionContext p)
+        {
+            return ApplyMarker(base.VisitClassDeclaration(classDeclaration, p));
+        }
+
+        private J? ApplyMarker(J? tree)
+        {
+            return tree?.WithMarkers(tree.Markers.AddIfAbsent(new SearchResult(Tree.RandomId(), description)));
         }
     }
 }

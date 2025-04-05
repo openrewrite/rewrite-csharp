@@ -59,7 +59,7 @@ public class DotNetRemotingServerEngine extends AbstractRemotingServerEngine {
         return new DotNetRemotingServerEngine(config);
     }
 
-    private DotNetRemotingServerEngine(Config config) {
+    protected DotNetRemotingServerEngine(Config config) {
         super(new InetSocketAddress(InetAddress.getLoopbackAddress(), config.port), Duration.ofMillis(config.timeoutInMilliseconds));
         this.config = config;
     }
@@ -82,7 +82,7 @@ public class DotNetRemotingServerEngine extends AbstractRemotingServerEngine {
     }
 
     @SneakyThrows
-    private static void installExecutable(URL executable, File destDir) {
+    public static void installExecutable(URL executable, File destDir) {
 //        Files.copy(, destinationDir.resolve("extracted.zip"), StandardCopyOption.REPLACE_EXISTING);
         byte[] buffer = new byte[1024];
         try (ZipInputStream zis = new ZipInputStream(executable.openStream())) {

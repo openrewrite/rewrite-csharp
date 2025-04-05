@@ -13,6 +13,11 @@
       <ProjectReference Include="..\Rewrite.CSharp\Rewrite.CSharp.csproj" />
       <ProjectReference Include="..\Rewrite.Json\Rewrite.Json.csproj" />
       <ProjectReference Include="..\Rewrite.Properties\Rewrite.Properties.csproj" />
+        <ProjectReference Include="..\Rewrite.Analyzers\Rewrite.Analyzers.csproj"
+                          OutputItemType="Analyzer">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </ProjectReference>
     </ItemGroup>
 
 </Project>

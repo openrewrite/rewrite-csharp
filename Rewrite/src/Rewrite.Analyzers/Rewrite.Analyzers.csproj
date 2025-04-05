@@ -4,21 +4,33 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <LangVersion>latest</LangVersion>
+        <DefineConstants>$(DefineConstants);Analyzer</DefineConstants>
     </PropertyGroup>
     <PropertyGroup>
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
         <IncludeBuildOutput>false</IncludeBuildOutput> <!-- disable convention based nuget creation - we're controlling it fully manually -->
-        <NoWarn>NU5128</NoWarn>
+        <NoWarn>NU5128;RS2000;RS2008</NoWarn>
+        
         <BuildOutputTargetFolder>analyzers</BuildOutputTargetFolder>
         <IncludeSymbols>false</IncludeSymbols>
     </PropertyGroup>
-
+    <ItemGroup>
+        <Compile Include="..\Rewrite.Core\Config\*.cs">
+            <Link>Linked\%(Filename)%(Extension)</Link>
+        </Compile>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="..\Rewrite.Core\Extensions.cs">
+            <Link>Linked\Core.Extensions.cs</Link>
+        </Compile>
+    </ItemGroup>
     <ItemGroup>
       <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" >
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0"  PrivateAssets="all"/>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" GeneratePathProperty="true" PrivateAssets="all" />
       <PackageReference Include="YamlDotNet" Version="16.0.0" GeneratePathProperty="true" PrivateAssets="all" />
 
     </ItemGroup>
@@ -28,11 +40,13 @@
     <Target Name="GetDependencyTargetPaths">
         <ItemGroup Label="List of DLLs from nuget packages to be resolved when analyzer is used as project reference">
 <!--            <TargetPathWithTargetPlatformMoniker Include="$(PKGYamlDotNet)\lib\netstandard2.0\YamlDotNet.dll" IncludeRuntimeDependency="false" />-->
+            <TargetPathWithTargetPlatformMoniker Include="$(PKGNewtonsoft_Json)\lib\netstandard2.0\Newtonsoft.Json.dll" IncludeRuntimeDependency="false" />
         </ItemGroup>
     </Target>
     <ItemGroup Label="List of DLLs to package into nuget when analyzer is used as nuget package">
         <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 <!--        <None Include="$(PKGYamlDotNet)\lib\netstandard2.0\YamlDotNet.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />-->
+        <None Include="$(PKGNewtonsoft_Json)\lib\netstandard2.0\Newtonsoft.Json.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
     </ItemGroup>
 
 </Project>

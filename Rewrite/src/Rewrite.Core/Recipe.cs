@@ -1,64 +1,64 @@
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Rewrite.Core.Config;
 
 namespace Rewrite.Core;
-
 public abstract class Recipe
 {
-    private RecipeDescriptor? _descriptor;
+    
+    
+    // private RecipeDescriptor? _descriptor;
+    //
+    // public RecipeDescriptor Descriptor
+    // {
+    //     get
+    //     {
+    //         return _descriptor ??= new RecipeDescriptor(
+    //             Name,
+    //             DisplayName,
+    //             InstanceName,
+    //             Description,
+    //             Tags,
+    //             EstimatedEffortPerOccurrence,
+    //             GetType().GetConstructors()[0].GetParameters().Select(parameterInfo =>
+    //             {
+    //                 var option = ((OptionAttribute[])parameterInfo.GetCustomAttributes(typeof(OptionAttribute), false)).FirstOrDefault();
+    //                 return new OptionDescriptor(parameterInfo.Name!, parameterInfo.ParameterType.FullName!, option?.DisplayName ?? parameterInfo.Name, option?.Description ?? null,
+    //                     option?.Example,
+    //                     null,
+    //                     !(parameterInfo.IsOptional || parameterInfo.HasDefaultValue ||
+    //                       parameterInfo.ParameterType.CustomAttributes.FirstOrDefault(data =>
+    //                           data.AttributeType == typeof(NullableAttribute)) != null),
+    //                     parameterInfo.DefaultValue
+    //                 );
+    //             }).ToList(),
+    //             [],
+    //             new Uri($"recipe://{GetType().Name}")
+    //         );
+    //     }
+    //
+    //     set => _descriptor = value;
+    // }
 
-    public RecipeDescriptor Descriptor
-    {
-        get
-        {
-            return _descriptor ??= new RecipeDescriptor(
-                Name,
-                DisplayName,
-                InstanceName,
-                Description,
-                Tags,
-                EstimatedEffortPerOccurrence,
-                GetType().GetConstructors()[0].GetParameters().Select(parameterInfo =>
-                {
-                    var option = ((OptionAttribute[])parameterInfo.GetCustomAttributes(typeof(OptionAttribute), false)).FirstOrDefault();
-                    return new OptionDescriptor(parameterInfo.Name!, parameterInfo.ParameterType.FullName!, option?.DisplayName ?? parameterInfo.Name, option?.Description ?? null,
-                        option?.Example,
-                        null,
-                        !(parameterInfo.IsOptional || parameterInfo.HasDefaultValue ||
-                          parameterInfo.ParameterType.CustomAttributes.FirstOrDefault(data =>
-                              data.AttributeType == typeof(NullableAttribute)) != null),
-                        parameterInfo.DefaultValue
-                    );
-                }).ToList(),
-                [],
-                new Uri($"recipe://{GetType().Name}")
-            );
-        }
-
-        set => _descriptor = value;
-    }
-
-    public string Name => GetType().FullName!;
-
-    public string InstanceName => GetType().FullName!;
-
-    public abstract string DisplayName { get; }
-
-    public abstract string Description { get; }
-
-    public ISet<string> Tags => new HashSet<string>();
-
-    public TimeSpan? EstimatedEffortPerOccurrence => TimeSpan.FromMinutes(5);
+    // public string Name => GetType().FullName!;
+    //
+    // public string InstanceName => GetType().FullName!;
+    //
+    // public abstract string DisplayName { get; }
+    //
+    // public abstract string Description { get; }
+    //
+    // public ISet<string> Tags => new HashSet<string>();
+    //
+    // public TimeSpan? EstimatedEffortPerOccurrence => TimeSpan.FromMinutes(5);
 
     private static Recipe _noop = new NoopRecipe();
 
     public static Recipe Noop() => _noop;
+    [DisplayName("NoOp")]
+    [Description("Does nothing")]
     private class NoopRecipe : Recipe
     {
-        public override string DisplayName => "NoopRecipe";
-
-        public override string Description => "NoopRecipe";
-
         public override ITreeVisitor<Tree, ExecutionContext> GetVisitor()
         {
             return ITreeVisitor<Tree, ExecutionContext>.Noop();

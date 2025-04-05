@@ -5,9 +5,13 @@
       "commandName": "DebugRoslynComponent",
       "targetProject": "../Rewrite.CSharp/Rewrite.CSharp.csproj"
     },
-    "Generators - Java": {
+    "Generators - Recipes": {
       "commandName": "DebugRoslynComponent",
-      "targetProject": "../Rewrite.Java/Rewrite.Java.csproj"
+      "targetProject": "../Rewrite.Recipes/Rewrite.Recipes.csproj"
+    },
+    "Generators - Core": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "../Rewrite.Core/Rewrite.Core.csproj"
     }
   }
 }

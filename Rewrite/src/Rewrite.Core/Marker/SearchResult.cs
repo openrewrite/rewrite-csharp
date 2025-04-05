@@ -8,7 +8,7 @@ public record SearchResult(Guid Id, string? Description = null) : Marker
     }
 
     public static T Found<T>(MutableTree<T> tree, string? Description = null)
-    where T : class
+    where T : class, MutableTree
     {
         return tree.WithMarkers(tree.Markers.AddIfAbsent(new SearchResult(Tree.RandomId(), Description)));
     }

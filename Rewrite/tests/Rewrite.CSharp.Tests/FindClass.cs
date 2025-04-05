@@ -1,17 +1,18 @@
+using System.ComponentModel;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
 using Rewrite.RewriteJava;
 using Rewrite.RewriteJava.Tree;
 using static Rewrite.Core.Tree;
 using ExecutionContext = Rewrite.Core.ExecutionContext;
+using DisplayNameAttribute = System.ComponentModel.DisplayNameAttribute;
 
 namespace Rewrite.CSharp.Tests;
 
+[DisplayName("Find Class")]
+[Description("Search for all the classes in the given source")]
 public class FindClass([Option(displayName: "Description", description: "A special sign to specifically highlight the class found by the recipe", example: "~~>")] string? description = null): Recipe
 {
-    public override string DisplayName => "Find Class";
-
-    public override string Description => "Search for all the classes in the given source";
 
     public override ITreeVisitor<Core.Tree, ExecutionContext> GetVisitor()
     {

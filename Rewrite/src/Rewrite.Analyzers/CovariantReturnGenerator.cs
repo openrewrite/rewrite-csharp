@@ -29,7 +29,10 @@ namespace Rewrite.Analyzers
                 return;
 
             var compilation = context.Compilation;
-            var model = compilation.GetSemanticModel(receiver.Classes.FirstOrDefault()?.SyntaxTree ?? receiver.Interfaces.FirstOrDefault()?.SyntaxTree!);
+            var target = receiver.Classes.FirstOrDefault()?.SyntaxTree ?? receiver.Interfaces.FirstOrDefault()?.SyntaxTree;
+            if (target == null)
+                return;
+            var model = compilation.GetSemanticModel(target);
             var allInterfaces1 = model.LookupNamespacesAndTypes(0)
                 .OfType<INamedTypeSymbol>()
                 .Where(x => x.TypeKind == TypeKind.Interface)
@@ -84,7 +87,7 @@ namespace Rewrite.Analyzers
 
                 var source = GenerateCovariantInterface(interfaceSymbol);
                 source = CSharpSyntaxTree.ParseText(source).GetRoot().NormalizeWhitespace().ToFullString();
-                context.AddSource($"{ConvertToMetadataName(interfaceSymbol.ToString())}.covariant.g.cs", SourceText.From(source, Encoding.UTF8));
+                context.AddSource($"{ConvertToMetadataName(interfaceSymbol.ToString()!)}.covariant.g.cs", SourceText.From(source, Encoding.UTF8));
             }
             context.AddSource($"_test.cs", $"//{allInterfacesWithGenericVersion.Count}");
 
@@ -99,7 +102,7 @@ namespace Rewrite.Analyzers
             {
                 var source = GenerateClassGenericInterfaceImplementation(classSymbol);
                 source = CSharpSyntaxTree.ParseText(source).GetRoot().NormalizeWhitespace().ToFullString();
-                context.AddSource($"{ConvertToMetadataName(classSymbol.ToString())}.covariant.g.cs", SourceText.From(source, Encoding.UTF8));
+                context.AddSource($"{ConvertToMetadataName(classSymbol.ToString()!)}.covariant.g.cs", SourceText.From(source, Encoding.UTF8));
             }
         }
 
@@ -265,7 +268,7 @@ namespace Rewrite.Analyzers
         }
         private string GetParameterList(IMethodSymbol method)
         {
-            return string.Join(", ", method.Parameters.Select(p => $"{p.Type.ToString().Replace("?","")} {p.Name}"));
+            return string.Join(", ", method.Parameters.Select(p => $"{p.Type.ToString()!.Replace("?","")} {p.Name}"));
         }
 
         private string GetArgumentList(IMethodSymbol method)

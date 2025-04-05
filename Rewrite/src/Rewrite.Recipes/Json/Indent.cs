@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 using Rewrite.Core;
 using Rewrite.RewriteJson;
@@ -8,11 +9,10 @@ namespace Rewrite.Recipes.Json;
 
 using ExecutionContext = ExecutionContext;
 
-public class Indent : Recipe
+[DisplayName("Indent")]
+[Description("Fix JSON indentation")]
+public class IndentRecipe : Recipe
 {
-    public override string DisplayName => "Indent";
-    
-    public override string Description => "Fix JSON indentation"; 
     
     public override ITreeVisitor<Tree, ExecutionContext> GetVisitor()
     {

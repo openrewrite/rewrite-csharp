@@ -6,14 +6,24 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Rewrite.Analyzers\Rewrite.Analyzers.csproj"
-                          OutputItemType="Analyzer" />
+                          OutputItemType="Analyzer">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="Castle.Core" Version="5.0.0" />
+        <PackageReference Include="Castle.Core" Version="5.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.3"/>
+        <PackageReference Include="Nerdbank.GitVersioning" Version="3.7.115">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
     <ItemGroup>
-      <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute" >
-        <_Parameter1>Rewrite.CSharp</_Parameter1>
-      </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>Rewrite.CSharp</_Parameter1>
+        </AssemblyAttribute>
     </ItemGroup>
+
+
 </Project>

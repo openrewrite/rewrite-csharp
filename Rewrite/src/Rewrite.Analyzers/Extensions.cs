@@ -28,7 +28,7 @@ public static class Extensions
     }
     public static string Ident(this object source, int identLevels)
     {
-        var lines = source.ToString().TrimStart(' ').Split('\n');
+        var lines = source.ToString()?.TrimStart(' ').Split('\n') ?? [];
         var ident = new string(' ', identLevels * 4);
         return string.Join("\n", lines.Select((x, i) => $"""{ (i > 0 ? ident : "") }{x}"""));
     }

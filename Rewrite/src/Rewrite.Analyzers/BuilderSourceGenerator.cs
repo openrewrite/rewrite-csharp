@@ -164,7 +164,7 @@ public class BuilderSourceGenerator : ISourceGenerator
         public BuilderPropertyInfo(PropertyDeclarationSyntax property, SemanticModel model) : this()
         {
             IsRequired = property.Modifiers.Any(x => x.ToString() == "required");
-            Type = model.GetDeclaredSymbol(property)!.Type.ToString();
+            Type = model.GetDeclaredSymbol(property)!.Type.ToString()!;
             Name = property.Identifier.ToString();
             ParameterName = Name.ToCamelCase().EnsureSafeIdentifier();
             BackingFieldName = $"_{ParameterName}";

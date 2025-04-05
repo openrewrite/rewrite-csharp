@@ -50,16 +50,17 @@ public class RemotingRecipeRunTest {
         File nuPkgLocation = new File("./build/nupkgs");
         nuPkgLocation.mkdir();
         int port = TcpUtils.findAvailableTcpPortInternal();
+        port = 54321;
         Path extractedDotnetBinaryDir = Paths.get("./build/dotnet-servet-archive");
         extractedDotnetBinaryDir.toFile().mkdirs();
-        DotNetRemotingServerEngine server = DotNetRemotingServerEngine.create(
-          DotNetRemotingServerEngine.Config.builder()
-            .extractedDotnetBinaryDir(extractedDotnetBinaryDir)
-            .logFilePath(Paths.get("./build/test.log").toAbsolutePath().toString())
-            .nugetPackagesFolder(nuPkgLocation.toPath().toAbsolutePath().normalize().toString())
-            .port(port)
-            .build()
-        );
+        var serverConfig = DotNetRemotingServerEngine.Config.builder()
+                .extractedDotnetBinaryDir(extractedDotnetBinaryDir)
+                .logFilePath(Paths.get("./build/test.log").toAbsolutePath().toString())
+                .nugetPackagesFolder(nuPkgLocation.toPath().toAbsolutePath().normalize().toString())
+                .port(port)
+                .build();
+//        DotNetRemotingServerEngine server = DotNetRemotingServerEngine.create(serverConfig);
+        DotNetRemotingServerEngine server = ExternalDotNetRemotingServerEngine.create(serverConfig);
         try {
             server.start();
 
@@ -69,11 +70,14 @@ public class RemotingRecipeRunTest {
             view.setRemotingContext(new RemotingContext(this.getClass().getClassLoader(), false));
 
             RemotingRecipeManager manager = new RemotingRecipeManager(server, () -> server);
+
+            Path artifactsFolder = GitRootFinder.getGitRoot().resolve("artifacts").resolve("test");
+
             InstallableRemotingRecipe recipes = manager.install(
               "Rewrite.Recipes",
-              "0.3.3",
+              "1.0.0-test",
               Arrays.asList(
-                new PackageSource(Paths.get("~/.nuget/packages/").toAbsolutePath().toFile().toURI().toURL(), null, null, true)
+                new PackageSource(artifactsFolder.toAbsolutePath().toFile().toURI().toURL(), null, null, true)
               ),
               true,
               ctx

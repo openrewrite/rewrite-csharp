@@ -1,7 +1,12 @@
 namespace Rewrite.Core;
 
 [AttributeUsage(AttributeTargets.Parameter)]
-public sealed class OptionAttribute([LanguageInjection("markdown")] string displayName = "", [LanguageInjection("markdown")] string description = "", string example = "", params string[] valid) : Attribute
+#if Analyzer
+internal
+#else
+public 
+#endif 
+sealed class OptionAttribute([LanguageInjection("markdown")] string displayName = "", [LanguageInjection("markdown")] string description = "", string example = "", params string[] valid) : Attribute
 {
     public string DisplayName => displayName;
 

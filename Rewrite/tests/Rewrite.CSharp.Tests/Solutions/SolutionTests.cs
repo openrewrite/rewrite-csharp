@@ -199,6 +199,3 @@ public class SolutionTests : RewriteTest
     }
 }
 
-internal class NukeHelper : NukeBuild
-{}
-

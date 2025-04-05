@@ -16,6 +16,28 @@ internal static class TypeUtils
     private static readonly Regex JavaTypeNameRegex =
         new Regex(@"org\.openrewrite\.(?<module>[^.]+?)\.tree\.(?<interface>[^$]+)(?:\$(?<class>.+))*");
 
+    private static string GetAssemblyName(string javaModule)
+    {
+        var shortName = javaModule switch
+        {
+            "csharp" => "CSharp",
+            "java" => "CSharp",
+            _ => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(javaModule)
+        };
+        var fullName = $"Rewrite.{shortName}";
+        return fullName;
+    }
+
+    private static string GetPrimaryNamespaceSegment(string javaModule)
+    {
+
+        var shortName = javaModule switch
+        {
+            "csharp" => "CSharp",
+            _ => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(javaModule)
+        };
+        return shortName;
+    }
     internal static Type GetType(string typeName)
     {
         if (TypeCache.TryGetValue(typeName, out var type)) return type;
@@ -23,14 +45,19 @@ internal static class TypeUtils
         Match match;
         if ((match = JavaTypeNameRegex.Match(typeName)).Success)
         {
-            var module = ModuleFromJavaPackage(match.Groups["module"].Value);
-            var result = "Rewrite.Rewrite" + module + ".Tree." + match.Groups["interface"].Value +
+            var module = match.Groups["module"].Value;
+            var primaryNamespaceSegment = GetPrimaryNamespaceSegment(module);
+            var assemblyName = GetAssemblyName(module);
+
+            var result = "Rewrite.Rewrite" + primaryNamespaceSegment + ".Tree." + match.Groups["interface"].Value +
                          (match.Groups["class"].Success ? "+" + match.Groups["class"].Value.Replace('$', '+') : "");
-            type = Assembly.Load("Rewrite." + module).GetType(result);
+            type = Assembly.Load(assemblyName).GetType(result);
         }
         else if ((match = DotNetTypeNameRegex.Match(typeName)).Success)
         {
             var module = match.Groups["module"].Value;
+            if(module == "Java")
+                module = "CSharp";
             type = Assembly.Load("Rewrite." + module).GetType(typeName);
         }
         else if (typeName == "org.openrewrite.tree.ParseError")

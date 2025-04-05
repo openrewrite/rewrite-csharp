@@ -12,9 +12,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NuGet.Configuration" Version="6.13.2" />
     <PackageReference Include="Nuke.Common" Version="9.0.4" />
     <PackageReference Include="LibGit2Sharp" Version="0.31.0" />
-
+  </ItemGroup>
+  <ItemGroup>
+    <NukeSpecificationFiles Include="AzureSignTool.json" />
   </ItemGroup>
 
   <ItemGroup>

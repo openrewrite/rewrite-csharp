@@ -18,7 +18,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <VersionPrefix>0.23.0</VersionPrefix>
+<!--        <VersionPrefix>0.23.0</VersionPrefix>-->
         <MicrosoftCodeAnalysisVersion>4.13.0</MicrosoftCodeAnalysisVersion>
         <RemotePrinter>False</RemotePrinter>
         <DebugVisitor>False</DebugVisitor>
