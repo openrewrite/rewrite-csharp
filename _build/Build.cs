@@ -41,6 +41,7 @@ class Build : NukeBuild
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
+    AbsolutePath TestResultsDirectory => ArtifactsDirectory /  "test-results";
     [Solution(GenerateProjects = true)] Solution Solution;
     [NerdbankGitVersioning] NerdbankGitVersioning Version;
     [GitRepositoryExt] LibGit2Sharp.Repository GitRepository;
@@ -70,6 +71,13 @@ class Build : NukeBuild
             }
 
 
+        });
+
+    Target CleanTestResults => _ => _
+        .Description("Clean out artifacts and all the bin/obj directories")
+        .Executes(() =>
+        {
+            TestResultsDirectory.CreateOrCleanDirectory();
         });
 
     Target CleanNugetCache => _ => _
@@ -176,9 +184,8 @@ class Build : NukeBuild
         .Executes(() =>
         {
 
-            var resultsDir = ArtifactsDirectory / "test-results";
             DotNetTest(x => x
-                .SetResultsDirectory(ArtifactsDirectory / "test-results")
+                .SetResultsDirectory(TestResultsDirectory)
                 .CombineWith([Solution.tests.Rewrite_Recipes_Tests, Solution.tests.Rewrite_CSharp_Tests, Solution.tests.Rewrite_MSBuild_Tests], (c,v) => c
                     .SetProjectFile(v)
                     .AddProcessAdditionalArguments("--",
@@ -188,9 +195,35 @@ class Build : NukeBuild
                         "--no-ansi",
                         "--disable-logo",
                         "--report-trx",
-                        "--output Detailed",
+                        "--hide-test-output",
                         $"--report-trx-filename {v.Name}.trx",
-                        "--results-directory", resultsDir
+                        "--results-directory", TestResultsDirectory
+                    )
+                )
+            );
+        });
+
+    Target Test2 => _ => _
+        .Description("Runs .NET tests")
+        .DependsOn(CleanTestResults)
+        .Executes(() =>
+        {
+
+            DotNetTest(x => x
+                .SetResultsDirectory(TestResultsDirectory)
+                .CombineWith([Solution.tests.Rewrite_MSBuild_Tests], (c,v) => c
+                    .SetProjectFile(v)
+                    .AddProcessAdditionalArguments("--",
+                        "--test-parameter RenderLST=false",
+                        "--test-parameter NoAnsi=true",
+                        "--no-progress",
+                        "--no-ansi",
+                        "--disable-logo",
+                        "--report-trx",
+                        "--output Detailed",
+                        "--hide-test-output",
+                        $"--report-trx-filename {v.Name}.trx",
+                        "--results-directory", TestResultsDirectory
                     )
                 )
             );

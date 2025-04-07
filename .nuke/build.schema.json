@@ -28,6 +28,7 @@
         "CIRelease",
         "Clean",
         "CleanNugetCache",
+        "CleanTestResults",
         "Compile",
         "DownloadTestFixtures",
         "GradleAssemble",
@@ -36,7 +37,8 @@
         "PublishServer",
         "Restore",
         "StopServer",
-        "Test"
+        "Test",
+        "Test2"
       ]
     },
     "Verbosity": {
