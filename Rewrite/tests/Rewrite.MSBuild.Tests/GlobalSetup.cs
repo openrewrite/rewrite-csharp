@@ -13,9 +13,9 @@ namespace Rewrite.MSBuild.Tests;
 public class GlobalHooks
 {
     [Before(TestSession)]
-    public static void Initialize()
+    public static void BeforeTestSession()
     {
-        CommonTestHooks.Initialize();
+        CommonTestHooks.BeforeTestSession();
     }
     [Before(TestDiscovery)]
     public static void CleanNugetDirectory()

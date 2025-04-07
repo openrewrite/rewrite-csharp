@@ -20,12 +20,9 @@ namespace Rewrite.MSBuild.Tests;
 
 public class RecipeManagerTests : BaseTests
 {
-    public static int BeforeHookCallsCount = 0;
     [Before(HookType.Test)]
     public void Before()
     {
-        BeforeHookCallsCount++;
-        Console.WriteLine($"Hook call count: {BeforeHookCallsCount}");
         // var loggerConfig = new LoggerConfiguration()
         //     .MinimumLevel.Debug()
         //     .Destructure.With<PrettyJsonDestructuringPolicy>()

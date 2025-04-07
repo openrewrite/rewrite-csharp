@@ -183,7 +183,6 @@ class Build : NukeBuild
         .DependsOn(Restore)
         .Executes(() =>
         {
-
             DotNetTest(x => x
                 .SetResultsDirectory(TestResultsDirectory)
                 .CombineWith([Solution.tests.Rewrite_Recipes_Tests, Solution.tests.Rewrite_CSharp_Tests, Solution.tests.Rewrite_MSBuild_Tests], (c,v) => c
@@ -196,7 +195,7 @@ class Build : NukeBuild
                         "--disable-logo",
                         "--report-trx",
                         "--output Detailed",
-                        // "--hide-test-output",
+                        "--hide-test-output",
                         $"--report-trx-filename {v.Name}.trx",
                         "--results-directory", TestResultsDirectory
                     )

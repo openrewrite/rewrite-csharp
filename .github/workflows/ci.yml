@@ -95,7 +95,7 @@ jobs:
           name: Test Logs
           path: |
             artifacts/test-results/*.log
-            rewrite-csharp-remote-server/build/reports/tests/test/*.html
+            rewrite-csharp-remote-server/build/reports/tests/**
 
       - name: publish-java-snapshots
         if: github.event_name != 'pull_request'

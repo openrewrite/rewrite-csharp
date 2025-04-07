@@ -8,13 +8,8 @@ namespace Rewrite.CSharp.Tests;
 
 public static class CommonTestHooks
 {
-    public static void Initialize()
-    {
-        // marker method to load assembly
-    }
-
     [Before(HookType.TestSession)]
-    public static void BeforeAssembly()
+    public static void BeforeTestSession()
     {
         var applyTheme = true;
         ConsoleTheme? theme = AnsiConsoleTheme.Literate;
