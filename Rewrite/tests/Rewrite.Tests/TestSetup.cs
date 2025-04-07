@@ -16,10 +16,19 @@ public static class TestSetup
     [Before(HookType.TestSession)]
     public static void BeforeAssembly()
     {
+        var applyTheme = true;
+        ConsoleTheme? theme = AnsiConsoleTheme.Literate;
+        var customProperties = TestContext.Parameters.ToDictionary(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase) ?? new Dictionary<string, string>();
+        if (customProperties.TryGetValue("NoAnsi", out var noAnsiStr) && bool.TryParse(noAnsiStr, out var noAnsi))
+        {
+            // applyTheme = !noAnsi;
+            theme = ConsoleTheme.None;
+        }
+        
         var loggerConfig = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .Destructure.With<PrettyJsonDestructuringPolicy>()
-            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}", applyThemeToRedirectedOutput: true, theme: AnsiConsoleTheme.Literate);
+            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}", applyThemeToRedirectedOutput: applyTheme, theme: theme);
         Log.Logger = loggerConfig.CreateLogger();
         ITestExecutionContext.SetCurrent(new LocalTestExecutionContext());
         var localPrinter = new LocalPrinterFactory();

@@ -132,6 +132,7 @@ class Build : NukeBuild
     Target PublishServer => _ => _
         .Description("Publishes server")
         .DependsOn(Restore)
+        .Before(Test)
         .Executes(() =>
         {
             DotNetPublish(c => c
@@ -177,14 +178,21 @@ class Build : NukeBuild
 
             var resultsDir = ArtifactsDirectory / "test-results";
             DotNetTest(x => x
-                .SetProjectFile(Solution.tests.Rewrite_CSharp_Tests)
                 .SetResultsDirectory(ArtifactsDirectory / "test-results")
-                .AddProcessAdditionalArguments("--",
-                    "--test-parameter RenderLST=false",
-                    "--report-trx",
-                    "--results-directory", resultsDir)
                 .CombineWith([Solution.tests.Rewrite_Recipes_Tests, Solution.tests.Rewrite_CSharp_Tests, Solution.tests.Rewrite_MSBuild_Tests], (c,v) => c
-                    .SetProjectFile(v))
+                    .SetProjectFile(v)
+                    .AddProcessAdditionalArguments("--",
+                        "--test-parameter RenderLST=false",
+                        "--test-parameter NoAnsi=true",
+                        "--no-progress",
+                        "--no-ansi",
+                        "--disable-logo",
+                        "--report-trx",
+                        "--output Detailed",
+                        $"--report-trx-filename {v.Name}.trx",
+                        "--results-directory", resultsDir
+                    )
+                )
             );
         });
 
@@ -213,7 +221,7 @@ class Build : NukeBuild
         });
 
     Target CIBuild => _ => _
-        .DependsOn(PublishServer, Test);
+        .DependsOn(Pack, PublishServer, Test);
 
     Target CIRelease => _ => _
         .DependsOn(Pack, NugetPush);

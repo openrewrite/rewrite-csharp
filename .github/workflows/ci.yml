@@ -64,14 +64,19 @@ jobs:
 
       - name: Report .NET Test Results
         if: always()
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v2
         with:
-          name: Unit Tests
+          name: .NET Tests Results
           path: artifacts/test-results/*.trx
           reporter: dotnet-trx
 
 
-
+      - name: Upload .NET test logs
+        if: always()  # ensures logs are uploaded even if tests fail
+        uses: actions/upload-artifact@v4
+        with:
+          name: .NET Test Logs
+          path: artifacts/test-results/*.log
 
       - name: java-build
         run: |
@@ -83,9 +88,9 @@ jobs:
 
       - name: Report Java Test Results
         if: always()
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v2
         with:
-          name: Unit Tests
+          name: Java Tests Results
           path: rewrite-csharp-remote-server/build/test-results/test/*.xml
           reporter: java-junit
 
