@@ -91,7 +91,7 @@ public class RecipeManagerTests : BaseTests
         visitor.IsAcceptable(lst, executionContext).Should().BeTrue();
 
         var afterLst = visitor.Visit(lst, executionContext);
-        afterLst!.ToString().ShouldBeSameAs(lst.ToString());
+        afterLst!.ToString().ShouldBeSameAs($"/*~~(!!--->)~~>*/{lst}");
     }
 
 }
