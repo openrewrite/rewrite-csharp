@@ -5,7 +5,7 @@ namespace Rewrite.Recipes;
 
 using static Assertions;
 
-public class Tests : RewriteTest
+public class RecipesTests : RewriteTest
 {
     protected override void Defaults(RecipeSpec spec)
     {
