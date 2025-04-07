@@ -9,10 +9,6 @@ public class BaseTests
 
     public BaseTests()
     {
-        // var loggerConfig = new LoggerConfiguration()
-        //     .MinimumLevel.Debug()
-        //     .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}");
-        // Log.Logger = loggerConfig.CreateLogger();
         var services = new ServiceCollection();
         services.AddLogging(c => c
             .AddSerilog());

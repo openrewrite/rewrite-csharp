@@ -88,7 +88,7 @@ jobs:
             rewrite-csharp-remote-server/build/test-results/test/*.xml
           reporter: java-junit
 
-      - name: Upload .NET test logs
+      - name: Upload Test logs
         if: always()  # ensures logs are uploaded even if tests fail
         uses: actions/upload-artifact@v4
         with:

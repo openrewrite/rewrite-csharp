@@ -42,10 +42,10 @@
         <Using Include="Rewrite.Test.CSharp"/>
 
     </ItemGroup>
-    <ItemGroup>
-        <Compile Include="..\Rewrite.Tests\TestSetup.cs">
-            <Link>TestSetup.cs</Link>
-        </Compile>
-    </ItemGroup>
+<!--    <ItemGroup>-->
+<!--        <Compile Include="..\Rewrite.Tests\CommonTestHooks.cs">-->
+<!--            <Link>CommonTestHooks.cs</Link>-->
+<!--        </Compile>-->
+<!--    </ItemGroup>-->
 
 </Project>

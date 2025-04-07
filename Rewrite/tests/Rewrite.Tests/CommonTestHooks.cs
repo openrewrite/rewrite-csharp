@@ -6,7 +6,7 @@ using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Rewrite.CSharp.Tests;
 
-public static class TestSetup
+public static class CommonTestHooks
 {
     public static void Initialize()
     {

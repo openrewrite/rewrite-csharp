@@ -2,12 +2,12 @@
 
 namespace Rewrite.Recipes.Tests;
 
-public class GlobalHooks
+public class GlobalSetup
 {
     
     [Before(TestDiscovery)]
-    public static void BeforeTestDiscovery()
+    public static void Initialize()
     {
-        TestSetup.Initialize();
+        CommonTestHooks.Initialize();
     }
 }

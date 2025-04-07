@@ -202,6 +202,7 @@ class Build : NukeBuild
                     )
                 )
             );
+            InjectLogsIntoTrx();
         });
 
     Target Test2 => _ => _
@@ -212,7 +213,7 @@ class Build : NukeBuild
 
             DotNetTest(x => x
                 .SetResultsDirectory(TestResultsDirectory)
-                .CombineWith([Solution.tests.Rewrite_MSBuild_Tests], (c,v) => c
+                .CombineWith([Solution.tests.Rewrite_CSharp_Tests], (c,v) => c
                     .SetProjectFile(v)
                     .AddProcessAdditionalArguments("--",
                         "--test-parameter RenderLST=false",
@@ -228,8 +229,21 @@ class Build : NukeBuild
                     )
                 )
             );
+
+            InjectLogsIntoTrx();
         });
 
+    void InjectLogsIntoTrx()
+    {
+        var trxFiles = TestResultsDirectory.GlobFiles("*.trx");
+        foreach (var trxFile in trxFiles)
+        {
+            var logFile = TestResultsDirectory.GlobFiles($"{trxFile.NameWithoutExtension}*.log").FirstOrDefault();
+            if (logFile == null)
+                continue;
+            TrxLogsInjector.InjectLogs(trxFile, logFile);
+        }
+    }
 
     Target NugetPush => _ => _
         .Description("Publishes NuGet packages to Nuget.org")
