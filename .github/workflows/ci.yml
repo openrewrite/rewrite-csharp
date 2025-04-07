@@ -71,13 +71,6 @@ jobs:
           reporter: dotnet-trx
 
 
-      - name: Upload .NET test logs
-        if: always()  # ensures logs are uploaded even if tests fail
-        uses: actions/upload-artifact@v4
-        with:
-          name: .NET Test Logs
-          path: artifacts/test-results/*.log
-
       - name: java-build
         run: |
           ./gradlew ${{ env.GRADLE_SWITCHES }} assemble
@@ -91,9 +84,18 @@ jobs:
         uses: dorny/test-reporter@v2
         with:
           name: Java Tests Results
-          path: rewrite-csharp-remote-server/build/test-results/test/*.xml
+          path: |
+            rewrite-csharp-remote-server/build/test-results/test/*.xml
           reporter: java-junit
 
+      - name: Upload .NET test logs
+        if: always()  # ensures logs are uploaded even if tests fail
+        uses: actions/upload-artifact@v4
+        with:
+          name: Test Logs
+          path: |
+            artifacts/test-results/*.log
+            rewrite-csharp-remote-server/build/reports/tests/test/*.html
 
       - name: publish-java-snapshots
         if: github.event_name != 'pull_request'

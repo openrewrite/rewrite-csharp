@@ -195,6 +195,7 @@ class Build : NukeBuild
                         "--no-ansi",
                         "--disable-logo",
                         "--report-trx",
+                        "--output Detailed",
                         "--hide-test-output",
                         $"--report-trx-filename {v.Name}.trx",
                         "--results-directory", TestResultsDirectory
