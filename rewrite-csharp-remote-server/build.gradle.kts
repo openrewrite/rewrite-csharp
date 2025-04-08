@@ -36,17 +36,18 @@ dependencies {
 }
 
 
-tasks.register<Zip>("zipDotnetServer") {
-    archiveFileName.set("DotnetServer.zip")
-    destinationDirectory.set(layout.buildDirectory.dir("tmp"))
-    from(rootProject.file("Rewrite/src/Rewrite.Server/bin/Release/net8.0/publish"))
-    include("*")
-    include("*/*") //to include contents of a folder present inside Reports directory
-}
+//tasks.register<Zip>("zipDotnetServer") {
+//    archiveFileName.set("DotnetServer.zip")
+//    destinationDirectory.set(layout.buildDirectory.dir("tmp"))
+//    from(rootProject.file("Rewrite/src/Rewrite.Server/bin/Release/net8.0/publish"))
+//    include("*")
+//    include("*/*") //to include contents of a folder present inside Reports directory
+//}
 
 tasks.processResources {
-    dependsOn("zipDotnetServer")
-    from(layout.buildDirectory.file("tmp/DotnetServer.zip"))
+//    dependsOn("zipDotnetServer")
+//    from(layout.buildDirectory.file("tmp/DotnetServer.zip"))
+    from(layout.buildDirectory.file(rootProject.file("artifacts/DotnetServer.zip").absolutePath))
 }
 
 tasks.compileJava {

@@ -36,6 +36,7 @@ import org.openrewrite.remote.TcpUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -58,9 +59,13 @@ public class RemotingRecipeRunTest {
         port = 54321;
         Path extractedDotnetBinaryDir = Paths.get("./build/dotnet-servet-archive");
         extractedDotnetBinaryDir.toFile().mkdirs();
+        Path artifactsFolder = GitRootFinder.getGitRoot().resolve("artifacts").toAbsolutePath();
+        URL test = Thread.currentThread()
+                .getContextClassLoader()
+                .getResource("DotnetServer.zip");
         var serverConfig = DotNetRemotingServerEngine.Config.builder()
                 .extractedDotnetBinaryDir(extractedDotnetBinaryDir)
-                .logFilePath(Paths.get("./build/test.log").toAbsolutePath().toString())
+                .logFilePath(artifactsFolder.resolve( "test-results").resolve("csharp-server.log").toAbsolutePath().toString())
                 .nugetPackagesFolder(nuPkgLocation.toPath().toAbsolutePath().normalize().toString())
                 .port(port)
                 .build();
@@ -76,7 +81,6 @@ public class RemotingRecipeRunTest {
 
             RemotingRecipeManager manager = new RemotingRecipeManager(server, () -> server);
 
-            Path artifactsFolder = GitRootFinder.getGitRoot().resolve("artifacts");
 
             InstallableRemotingRecipe recipes = manager.install(
               "Rewrite.Recipes",

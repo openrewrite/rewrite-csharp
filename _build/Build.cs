@@ -118,7 +118,7 @@ class Build : NukeBuild
 
     Target Pack => _ => _
         .Description("Creates nuget packages inside artifacts directory")
-        .DependsOn(Restore)
+        .DependsOn(Restore, PublishServer)
         .Executes(() =>
         {
             DotNetPack(x => x
@@ -135,6 +135,8 @@ class Build : NukeBuild
                 .SetVersion("0.0.1")
                 .SetAssemblyVersion(Version.AssemblyVersion)
                 .SetOutputDirectory(ArtifactsDirectory / "test"));
+
+
         });
 
     Target PublishServer => _ => _
@@ -146,6 +148,9 @@ class Build : NukeBuild
             DotNetPublish(c => c
                 .SetProject(Solution.src.Rewrite_Server)
                 .SetVersion(Version.NuGetPackageVersion));
+
+            var publishDir = Solution.src.Rewrite_Server.Directory / "bin" / "Release" / "net8.0" / "publish";
+            publishDir.ZipTo(ArtifactsDirectory / "DotnetServer.zip");
         });
 
     Target StopServer => _ => _
