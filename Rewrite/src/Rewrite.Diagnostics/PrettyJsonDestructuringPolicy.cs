@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace Rewrite.Tests;
+namespace Rewrite.Diagnostics;
 
 /// <summary>
 /// Makes complex objects be written by serilog as a formatted json block on a new line

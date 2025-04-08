@@ -39,5 +39,18 @@ public record RecipeIdentity
     {
         return $"{Type.FullName}, {NugetPackageName}.{NugetPackageVersion}";
     }
+    
+    public string ToUri() => $"recipe://{NugetPackageName}/{NugetPackageVersion}/{Type.AssemblyName}/{Type.FullName}";
+
+    public static RecipeIdentity ParseUri(Uri uri)
+    {
+        var segments = uri.PathAndQuery.Trim('/').Split("/");
+        var packageName = uri.Host;
+        var version = segments[0];
+        var assemblyName = segments[1];
+        var recipeName = segments[2];
+        var typeName = new TypeName(recipeName, assemblyName);
+        return new RecipeIdentity(typeName, packageName, version);
+    }
 }
 

@@ -1,6 +1,7 @@
 ﻿using System.Formats.Cbor;
 using System.Net;
 using System.Net.Sockets;
+using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -101,7 +102,8 @@ public class Server : BackgroundService
         var includeDefaultSource = CBORObject.Read(stream).AsBoolean();
         var sources = CBORObject.Read(stream).Values.Select(rawSource =>
         {
-            var source = rawSource["source"].AsString();
+            
+            var source = Regex.Replace(rawSource["source"].AsString(), @"file:\/+", "");
             var packageSource = new PackageSource(source);
 
             var rawCredential = rawSource["credential"];
@@ -115,15 +117,16 @@ public class Server : BackgroundService
 
             return packageSource;
         }).ToList();
+
+        var requestDetails = new
+        {
+            PackageId = packageId,
+            PackageVersion = packageVersion,
+            Sources = sources.Select(x => x.Source).ToList(),
+            IncludeDefaultSource = includeDefaultSource
+        };
         
-        _log.LogInformation($$"""
-                          Handling InstallRecipe Request: {
-                              packageId: {{packageId}},
-                              packageVersion: {{packageVersion}},
-                              packageSources: [{{sources}}],
-                              includeDefaultSource: [{{includeDefaultSource}}],
-                          }
-                          """);
+        _log.LogInformation("Handling InstallRecipe Request: {@Request}", requestDetails);
 
         if (sources.Count == 0 && !includeDefaultSource) throw new ArgumentException("No sources provided");
 
@@ -131,7 +134,7 @@ public class Server : BackgroundService
         {
             "LATEST" => VersionRange.All,
             "RELEASE" => VersionRange.AllStable,
-            _ => VersionRange.Parse(packageVersion)
+            _ => VersionRange.Parse($"[{packageVersion}]")
         };
         var includePreRelease = packageVersion.ToUpper() == "LATEST";
         var libraryRange = new LibraryRange(packageId, versionRange, LibraryDependencyTarget.Package);
@@ -140,24 +143,30 @@ public class Server : BackgroundService
             sources.Add(new PackageSource("https://api.nuget.org/v3/index.json"));
         }
 
+        // foreach (var source in sources)
+        // {
+        //     source.Source = Regex.Replace(source.Source, @"file:\/+", ""); //remove file:/ prefix for local sources
+        // }
+        
+
         var installableRecipes = await _recipeManager.InstallRecipePackage(
             libraryRange, 
             includePreRelease,
             sources,
             cancellationToken: cancellationToken);
-        var selectedRecipeSource = ""; // recipe source makes no sense, as it can exist in multiple configured source repos, or even restored from global cache
+        var selectedRecipeSource = "https://api.nuget.org/v3/index.json"; // recipe source makes no sense, as it can exist in multiple configured source repos, or even restored from global cache
 
         CBORObject.Write((int)RemotingMessageType.Response, stream);
         CBORObject.Write(Ok, stream);
-
+        
         CBORObject.Write(new Dictionary<string, object>
             {
                 {
                     "recipes",
                     installableRecipes.Recipes.Select(d => new Dictionary<string, object>
                     {
-                        { "name", d.TypeName },
-                        { "source", selectedRecipeSource },
+                        { "name", d.TypeName.FullName },
+                        { "source", new RecipeIdentity(d.TypeName, installableRecipes.Package.Id, installableRecipes.Package.Version.ToNormalizedString()).ToUri() },
                         {
                             "options", d.Options.Select(od => new Dictionary<string, object>
                             {
@@ -169,7 +178,7 @@ public class Server : BackgroundService
                     }).ToList()
                 },
                 { "repository", selectedRecipeSource },
-                { "version", installableRecipes.Package.Version }
+                { "version", installableRecipes.Package.Version.ToNormalizedString() }
             },
             stream
         );
@@ -178,9 +187,8 @@ public class Server : BackgroundService
     private Task LoadRecipeAssemblyAndRunVisitor(NetworkStream stream, RemotingContext context, CancellationToken cancellationToken)
     {
         var recipeName = CBORObject.Read(stream).AsString();
-        var packageSource = new Uri(CBORObject.Read(stream).AsString());
-        var packageId = packageSource.Host;
-        var packageVersion = packageSource.AbsolutePath.Replace("/", "");
+        var source = CBORObject.Read(stream).AsString();
+        var recipeId = RecipeIdentity.ParseUri(new Uri(source));
 
         var options = new Dictionary<string, Func<Type, object>>();
 
@@ -194,25 +202,21 @@ public class Server : BackgroundService
         var ctx = new InMemoryExecutionContext();
         RemotingExecutionContextView.View(ctx).RemotingContext = context;
 
-        _log.LogInformation($$"""
-                              Handling LoadRecipeAssemblyAndRunVisitor Request: {
-                                  recipeName: {{recipeName}},
-                                  packageId: {{packageId}},
-                                  packageVersion: {{packageVersion}},
-                                  options: {{options}},
-                                  sourceFilePath: {{((SourceFile)received).SourcePath}}
-                              }
-                              """);
+        var requestLog = new
+        {
+            RecipeIdentity = recipeId.ToString(),
+            Options = options,
+            SourceFilePath = ((SourceFile)received).SourcePath
+        };
+        _log.LogInformation("Handling LoadRecipeAssemblyAndRunVisitor Request: {@Request}", requestLog);
 
-        _log.LogDebug("Trying to load recipe assembly");
-        var recipeId = new RecipeIdentity(recipeName, packageId, packageVersion);
 
         var descriptor = _recipeManager.FindRecipeDescriptor(recipeId);
         var startInfo = descriptor.CreateRecipeStartInfo();
         foreach (var item in options)
         {
             var prop = startInfo.Arguments[item.Key];
-            var type = Type.GetType(prop.Type) ?? throw new InvalidOperationException($"Unable to determine type {prop.Type}");
+            var type = Type.GetType(Core.Config.TypeName.Parse(prop.Type)) ?? throw new InvalidOperationException($"Unable to determine type {prop.Type}");
             var propValue = item.Value(type);
             startInfo.WithOption(item.Key, propValue);
         }

@@ -75,9 +75,6 @@ public class DotNetRemotingServerEngine extends AbstractRemotingServerEngine {
         if (config.logFilePath != null && !config.logFilePath.isEmpty()) {
             command.add("-l" + config.logFilePath);
         }
-        if (config.nugetPackagesFolder != null && !config.nugetPackagesFolder.isEmpty()) {
-            command.add("-f" + config.nugetPackagesFolder);
-        }
         return processBuilder.command(command);
     }
 

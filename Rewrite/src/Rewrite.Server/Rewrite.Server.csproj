@@ -12,6 +12,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Rewrite.Diagnostics\Rewrite.Diagnostics.csproj" />
         <ProjectReference Include="..\Rewrite.MSBuild\Rewrite.MSBuild.csproj" />
         <ProjectReference Include="..\Rewrite.Remote.Codec\Rewrite.Remote.Codec.csproj" />
 

@@ -6,7 +6,6 @@ using Rewrite.RewriteCSharp.Tree;
 using Rewrite.RewriteJava.Tree;
 using Rewrite.Test;
 using Rewrite.Test.CSharp;
-using Rewrite.Tests;
 using FileAttributes = Rewrite.Core.FileAttributes;
 
 namespace Rewrite.Java.Tests;

@@ -17,12 +17,15 @@ package org.openrewrite.csharp.remote;
 
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
-import org.openrewrite.InMemoryExecutionContext;
-import org.openrewrite.RecipeRun;
-import org.openrewrite.SourceFile;
+import org.openrewrite.*;
 import org.openrewrite.config.RecipeDescriptor;
+import org.openrewrite.csharp.tree.Cs;
 import org.openrewrite.internal.InMemoryLargeSourceSet;
 import org.openrewrite.java.JavaParser;
+import org.openrewrite.java.tree.J;
+import org.openrewrite.java.tree.JRightPadded;
+import org.openrewrite.java.tree.Space;
+import org.openrewrite.marker.Markers;
 import org.openrewrite.remote.InstallableRemotingRecipe;
 import org.openrewrite.remote.PackageSource;
 import org.openrewrite.remote.RemotingContext;
@@ -35,8 +38,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,8 +64,8 @@ public class RemotingRecipeRunTest {
                 .nugetPackagesFolder(nuPkgLocation.toPath().toAbsolutePath().normalize().toString())
                 .port(port)
                 .build();
-//        DotNetRemotingServerEngine server = DotNetRemotingServerEngine.create(serverConfig);
-        DotNetRemotingServerEngine server = ExternalDotNetRemotingServerEngine.create(serverConfig);
+        DotNetRemotingServerEngine server = DotNetRemotingServerEngine.create(serverConfig);
+//        DotNetRemotingServerEngine server = ExternalDotNetRemotingServerEngine.create(serverConfig);
         try {
             server.start();
 
@@ -71,37 +76,70 @@ public class RemotingRecipeRunTest {
 
             RemotingRecipeManager manager = new RemotingRecipeManager(server, () -> server);
 
-            Path artifactsFolder = GitRootFinder.getGitRoot().resolve("artifacts").resolve("test");
+            Path artifactsFolder = GitRootFinder.getGitRoot().resolve("artifacts");
 
             InstallableRemotingRecipe recipes = manager.install(
               "Rewrite.Recipes",
-              "1.0.0-test",
+              "0.0.1",
               Arrays.asList(
-                new PackageSource(artifactsFolder.toAbsolutePath().toFile().toURI().toURL(), null, null, true)
+                new PackageSource(artifactsFolder.toAbsolutePath().toFile().toURI().toURL(), null, null, true),
+                new PackageSource(artifactsFolder.resolve("test").toAbsolutePath().toFile().toURI().toURL(), null, null, true)
               ),
               true,
               ctx
             );
 
-            RemotingRecipe remotingRecipe = new RemotingRecipe(new RecipeDescriptor(
-              recipes.getRecipes().get(0).getDescriptor().getName(),
-              recipes.getRecipes().get(0).getDescriptor().getDisplayName(),
-              recipes.getRecipes().get(0).getDescriptor().getInstanceName(),
-              recipes.getRecipes().get(0).getDescriptor().getDescription(),
-              recipes.getRecipes().get(0).getDescriptor().getTags(),
-              recipes.getRecipes().get(0).getDescriptor().getEstimatedEffortPerOccurrence(),
-              Collections.emptyList(),
-              Collections.emptyList(),
-              Collections.emptyList(),
-              Collections.emptyList(),
-              Collections.emptyList(),
-              Collections.emptyList(),
-              recipes.getRecipes().get(0).getDescriptor().getSource() // recipe://testlibnamepackageid/1.0.1
-            ), () -> server, DotNetRemotingServerEngine.class);
+            Recipe selectedRecipe = recipes.getRecipes().stream().filter(x -> x.getName().equals("Rewrite.Recipes.FindClass"))
+                    .findFirst()
+                    .orElseThrow();
 
-            SourceFile tree = JavaParser.fromJavaVersion().build().parse("class Foo {}")
-              .findFirst()
-              .orElseThrow();
+
+            RemotingRecipe remotingRecipe = new RemotingRecipe(selectedRecipe.getDescriptor(), () -> server, DotNetRemotingServerEngine.class);
+            Cs.ClassDeclaration classDeclaration = new Cs.ClassDeclaration(
+                    Tree.randomId(),
+                    Space.EMPTY,
+                    Markers.EMPTY,
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    new J.ClassDeclaration.Kind(
+                                    Tree.randomId(),
+                                    Space.EMPTY,
+                                    Markers.EMPTY,
+                                    new ArrayList<>(),
+                            J.ClassDeclaration.Kind.Type.Class),
+                    new J.Identifier(
+                            Tree.randomId(),
+                            Space.EMPTY,
+                            Markers.EMPTY,
+                            new ArrayList<>(),
+                            "myclass",
+                            null,
+                            null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                    );
+            SourceFile tree = new Cs.CompilationUnit(
+                    Tree.randomId(),
+                    Space.EMPTY,
+                    Markers.EMPTY,
+                    Path.of("foo.cs"),
+                    null,
+                    null,
+                    false,
+                    null,
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    List.of(JRightPadded.build(classDeclaration)),
+                    Space.EMPTY);
+//            SourceFile tree = JavaParser.fromJavaVersion().build().parse("class Foo {}")
+//              .findFirst()
+//              .orElseThrow();
 
             RecipeRun run = remotingRecipe.run(new InMemoryLargeSourceSet(Collections.singletonList(tree)), ctx);
             assertThat(run.getChangeset().getAllResults()).hasSize(1);
