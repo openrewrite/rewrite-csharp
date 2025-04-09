@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NMica.Utils.IO;
 using NuGet.Configuration;
 using NuGet.LibraryModel;
 using NuGet.Versioning;
@@ -103,7 +104,7 @@ public class Server : BackgroundService
         var sources = CBORObject.Read(stream).Values.Select(rawSource =>
         {
             
-            var source = Regex.Replace(rawSource["source"].AsString(), @"file:\/+", "");
+            var source = Regex.Replace(rawSource["source"].AsString(), @"^file:(/(?=[a-zA-Z]:)|(?=/))", "");
             var packageSource = new PackageSource(source);
 
             var rawCredential = rawSource["credential"];
@@ -117,6 +118,7 @@ public class Server : BackgroundService
 
             return packageSource;
         }).ToList();
+        CBORObject.Read(stream); // command end
 
         var requestDetails = new
         {
