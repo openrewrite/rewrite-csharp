@@ -10,7 +10,7 @@ partial class GradleTasks
     public GradleTasks()
     {
 
-        SetToolPath(NukeBuild.RootDirectory / "gradlew.bat");
+        SetToolPath(NukeBuild.RootDirectory / (EnvironmentInfo.IsWin ? "gradlew.bat" : "gradlew"));
     }
 }
 partial class GradleSettings
