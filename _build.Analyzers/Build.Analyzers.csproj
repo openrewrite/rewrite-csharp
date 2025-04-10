@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <LangVersion>latest</LangVersion>
         <DefineConstants>$(DefineConstants);Analyzer</DefineConstants>
+        <RootNamespace>BuildAnalyzers</RootNamespace>
     </PropertyGroup>
     <PropertyGroup>
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>

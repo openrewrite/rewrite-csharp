@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Rewrite.Analyzers;
+namespace BuildAnalyzers;
 
 public static class Extensions
 {

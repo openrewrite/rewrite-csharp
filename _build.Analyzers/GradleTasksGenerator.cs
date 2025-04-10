@@ -3,9 +3,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 using Newtonsoft.Json;
-using Rewrite.Analyzers;
 
-namespace Build.Analyzers;
+namespace BuildAnalyzers;
 
 [Generator]
 public class GradleTasksGenerator : ISourceGenerator
