@@ -34,59 +34,64 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - uses: actions/setup-dotnet@v4
+        name: Install .NET 8
         with:
           dotnet-version: '8.0.x'
 
+      - uses: actions/setup-dotnet@v4
+        name: Install .NET 9
+        with:
+            dotnet-version: '9.0.x'
+
       - name: build
-        run: |
-          (cd Rewrite && dotnet publish Rewrite.sln)
+        run: ./build.sh CIRelease
 
-      - name: publish-candidate
-        if: contains(github.ref, '-rc.')
-        run: |
-          ./gradlew \
-          ${{ env.GRADLE_SWITCHES }} \
-          -Preleasing \
-          -Prelease.disableGitChecks=true \
-          -Prelease.useLastTag=true \
-          candidate \
-          publish \
-          closeAndReleaseSonatypeStagingRepository
+#      - name: publish-candidate
+#        if: contains(github.ref, '-rc.')
+#        run: |
+#          ./gradlew \
+#          ${{ env.GRADLE_SWITCHES }} \
+#          -Preleasing \
+#          -Prelease.disableGitChecks=true \
+#          -Prelease.useLastTag=true \
+#          candidate \
+#          publish \
+#          closeAndReleaseSonatypeStagingRepository
+#
+#      - name: publish-java-release
+#        if: (!contains(github.ref, '-rc.'))
+#        run: |
+#          ./gradlew \
+#          ${{ env.GRADLE_SWITCHES }} \
+#          -Preleasing \
+#          -Prelease.disableGitChecks=true \
+#          -Prelease.useLastTag=true \
+#          final \
+#          publish \
+#          closeAndReleaseSonatypeStagingRepository --info
 
-      - name: publish-java-release
-        if: (!contains(github.ref, '-rc.'))
-        run: |
-          ./gradlew \
-          ${{ env.GRADLE_SWITCHES }} \
-          -Preleasing \
-          -Prelease.disableGitChecks=true \
-          -Prelease.useLastTag=true \
-          final \
-          publish \
-          closeAndReleaseSonatypeStagingRepository --info
-
-      - name: Update Directory.Build.props version from tag
-        working-directory: Rewrite
-        run: |
-          sed -i -E "s/<VersionPrefix>.*<\/VersionPrefix>/<VersionPrefix>${GITHUB_REF#refs/tags/v}<\/VersionPrefix>/g" Directory.Build.props
-
-      - name: publish-dotnet-release
-        if: (!contains(github.ref, '-rc.'))
-        run: |
-          cd Rewrite
-          mkdir ~/localNugetFeed
-          dotnet pack --output ~/localNuGetFeed Rewrite.sln
-          dotnet nuget push ~/localNuGetFeed/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{env.NUGET_API_KEY}}
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-  
-      - name: Commit version updates
-        working-directory: Rewrite
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add Directory.Build.props
-          git commit -m "bump version ${GITHUB_REF#refs/tags/}"
-          git push https://${GH_TOKEN}@github.com/openrewrite/rewrite-csharp.git HEAD:main
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Update Directory.Build.props version from tag
+#        working-directory: Rewrite
+#        run: |
+#          sed -i -E "s/<VersionPrefix>.*<\/VersionPrefix>/<VersionPrefix>${GITHUB_REF#refs/tags/v}<\/VersionPrefix>/g" Directory.Build.props
+#
+#      - name: publish-dotnet-release
+#        if: (!contains(github.ref, '-rc.'))
+#        run: |
+#          cd Rewrite
+#          mkdir ~/localNugetFeed
+#          dotnet pack --output ~/localNuGetFeed Rewrite.sln
+#          dotnet nuget push ~/localNuGetFeed/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{env.NUGET_API_KEY}}
+#        env:
+#          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+#
+#      - name: Commit version updates
+#        working-directory: Rewrite
+#        run: |
+#          git config --global user.name "github-actions[bot]"
+#          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+#          git add Directory.Build.props
+#          git commit -m "bump version ${GITHUB_REF#refs/tags/}"
+#          git push https://${GH_TOKEN}@github.com/openrewrite/rewrite-csharp.git HEAD:main
+#        env:
+#          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

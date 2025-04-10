@@ -1,0 +1,49 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nuke-build/nuke/master/source/Nuke.Tooling.Generator/schema.json",
+  "name": "Gradle",
+  "officialUrl": "https://gradle.org/",
+  "help": "Gradle build tool for Java",
+  "customExecutable": true,
+  "customLogger": true,
+  "tasks": [
+    {
+      "help": "Runs task(s)",
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "Tasks",
+            "type": "List<KnownGradleTasks>",
+            "format": "{value}",
+            "position": 1
+          },
+          {
+            "name": "WarningMode",
+            "type": "WarningMode",
+            "format": "-Dorg.gradle.warning.mode={value}"
+          },
+          {
+            "name": "JvmOptions",
+            "type": "string",
+            "format": "-Dorg.gradle.jvmargs={value}"
+          },
+          {
+            "name": "ProjectProperty",
+            "type": "List<string>",
+            "format": "-P{value}"
+          }
+        ]
+      }
+    }
+  ],
+  "enumerations": [
+    {
+      "name": "WarningMode",
+      "values": [
+        "All",
+        "Summary",
+        "None",
+        "Fail"
+      ]
+    }
+  ]
+}

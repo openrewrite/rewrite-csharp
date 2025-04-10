@@ -36,6 +36,7 @@ class Build : NukeBuild
     GitHubActions GitHubActions => GitHubActions.Instance;
 
     [Parameter("ApiKey for the specified source")][Secret] readonly string NugetApiKey;
+
     [Parameter] readonly string NugetFeed = "https://api.nuget.org/v3/index.json";
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
@@ -276,7 +277,7 @@ class Build : NukeBuild
         .DependsOn(Pack, PublishServer, Test);
 
     Target CIRelease => _ => _
-        .DependsOn(Pack, NugetPush);
+        .DependsOn(Pack, PublishServer, GradlePublish, NugetPush);
 
     Target DownloadTestFixtures => _ => _
         .Executes(() =>
@@ -307,7 +308,43 @@ class Build : NukeBuild
     Target GradleAssemble => _ => _
         .Executes(() =>
         {
-            ProcessTasks.StartProcess(RootDirectory / "gradlew.bat", "assemble", RootDirectory).AssertWaitForExit();
+            GradleTasks.Gradle(c => c
+                .SetJvmOptions("-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError")
+                .SetTasks(KnownGradleTasks.Clean, KnownGradleTasks.Assemble)
+                .SetWarningMode(WarningMode.None)
+                .SetProcessAdditionalArguments("--console=plain","--info","--stacktrace","--no-daemon")
+            );
+        });
+
+    Target GradlePublish => _ => _
+        .Executes(() =>
+        {
+            var isPreRelease = GitHubActions?.RefName?.Contains("-rc.") ?? true;
+
+            GradleSettings ApplyCommonGradleSettings(GradleSettings options) => options
+                .SetJvmOptions("-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError")
+                .SetWarningMode(WarningMode.None)
+                .SetProjectProperty(
+                    "releasing",
+                    "release.disableGitChecks=true",
+                    "release.useLastTag=true"
+                )
+                .SetProcessAdditionalArguments("--console=plain", "--info", "--stacktrace", "--no-daemon");
+            if (isPreRelease)
+            {
+                GradleTasks.Gradle(c => ApplyCommonGradleSettings(c)
+                    .SetTasks(KnownGradleTasks.Candidate, "publish", KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
+
+                );
+            }
+            else
+            {
+                GradleTasks.Gradle(c => ApplyCommonGradleSettings(c)
+                    .SetTasks(KnownGradleTasks.Final, "publish", KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
+                    .AddProcessAdditionalArguments("--info")
+                );
+            }
+
         });
 
 

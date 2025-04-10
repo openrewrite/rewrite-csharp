@@ -1,0 +1,307 @@
+[
+    {
+        "name": "assemble",
+        "description": "Assembles the outputs of this project.",
+        "group": "build"
+    },
+    {
+        "name": "build",
+        "description": "Assembles and tests this project.",
+        "group": "build"
+    },
+    {
+        "name": "buildDependents",
+        "description": "Assembles and tests this project and all projects that depend on it.",
+        "group": "build"
+    },
+    {
+        "name": "buildEnvironment",
+        "description": "Displays all buildscript dependencies declared in root project 'rewrite-csharp'.",
+        "group": "help"
+    },
+    {
+        "name": "buildNeeded",
+        "description": "Assembles and tests this project and all projects it depends on.",
+        "group": "build"
+    },
+    {
+        "name": "candidate",
+        "description": "",
+        "group": "Nebula Release"
+    },
+    {
+        "name": "candidateSetup",
+        "description": "",
+        "group": "Nebula Release"
+    },
+    {
+        "name": "check",
+        "description": "Runs all checks.",
+        "group": "verification"
+    },
+    {
+        "name": "classes",
+        "description": "Assembles main classes.",
+        "group": "build"
+    },
+    {
+        "name": "clean",
+        "description": "Deletes the build directory.",
+        "group": "build"
+    },
+    {
+        "name": "closeAndReleaseSonatypeStagingRepository",
+        "description": "Closes and releases open staging repository in 'sonatype' Nexus instance.",
+        "group": "publishing"
+    },
+    {
+        "name": "closeAndReleaseStagingRepositories",
+        "description": "Closes and releases open staging repositories in the following Nexus instance: 'sonatype'",
+        "group": "publishing"
+    },
+    {
+        "name": "closeSonatypeStagingRepository",
+        "description": "Closes open staging repository in 'sonatype' Nexus instance.",
+        "group": "publishing"
+    },
+    {
+        "name": "closeStagingRepositories",
+        "description": "Closes open staging repositories in the following Nexus instance: 'sonatype'",
+        "group": "publishing"
+    },
+    {
+        "name": "compileJava",
+        "description": "Compiles main Java source.",
+        "group": ""
+    },
+    {
+        "name": "compileTestJava",
+        "description": "Compiles test Java source.",
+        "group": ""
+    },
+    {
+        "name": "components",
+        "description": "Displays the components produced by root project 'rewrite-csharp'. [deprecated]",
+        "group": ""
+    },
+    {
+        "name": "dependencies",
+        "description": "Displays all dependencies declared in root project 'rewrite-csharp'.",
+        "group": "help"
+    },
+    {
+        "name": "dependencyCheckAggregate",
+        "description": "Identifies and reports known vulnerabilities (CVEs) in multi-project dependencies.",
+        "group": "OWASP dependency-check"
+    },
+    {
+        "name": "dependencyCheckAnalyze",
+        "description": "Identifies and reports known vulnerabilities (CVEs) in project dependencies.",
+        "group": "OWASP dependency-check"
+    },
+    {
+        "name": "dependencyCheckPurge",
+        "description": "Purges the local cache of the NVD.",
+        "group": "OWASP dependency-check"
+    },
+    {
+        "name": "dependencyCheckUpdate",
+        "description": "Downloads and stores updates from the NVD CVE data feeds.",
+        "group": "OWASP dependency-check"
+    },
+    {
+        "name": "dependencyInsight",
+        "description": "Displays the insight into a specific dependency in root project 'rewrite-csharp'.",
+        "group": "help"
+    },
+    {
+        "name": "dependentComponents",
+        "description": "Displays the dependent components of components in root project 'rewrite-csharp'. [deprecated]",
+        "group": ""
+    },
+    {
+        "name": "devSnapshot",
+        "description": "",
+        "group": "Nebula Release"
+    },
+    {
+        "name": "devSnapshotSetup",
+        "description": "",
+        "group": "Nebula Release"
+    },
+    {
+        "name": "final",
+        "description": "",
+        "group": "Nebula Release"
+    },
+    {
+        "name": "finalSetup",
+        "description": "",
+        "group": "Nebula Release"
+    },
+    {
+        "name": "findSonatypeStagingRepository",
+        "description": "Finds the staging repository for sonatype",
+        "group": "publishing"
+    },
+    {
+        "name": "getTasks",
+        "description": "Outputs all tasks as formatted JSON into a file",
+        "group": "custom"
+    },
+    {
+        "name": "help",
+        "description": "Displays a help message.",
+        "group": "help"
+    },
+    {
+        "name": "immutableSnapshot",
+        "description": "",
+        "group": "Nebula Release"
+    },
+    {
+        "name": "immutableSnapshotSetup",
+        "description": "",
+        "group": "Nebula Release"
+    },
+    {
+        "name": "init",
+        "description": "Initializes a new Gradle build.",
+        "group": "Build Setup"
+    },
+    {
+        "name": "initializeSonatypeStagingRepository",
+        "description": "Initializes the staging repository in 'sonatype' Nexus instance.",
+        "group": "publishing"
+    },
+    {
+        "name": "jar",
+        "description": "Assembles a jar archive containing the classes of the 'main' feature.",
+        "group": "build"
+    },
+    {
+        "name": "javaToolchains",
+        "description": "Displays the detected java toolchains.",
+        "group": "help"
+    },
+    {
+        "name": "javadoc",
+        "description": "Generates Javadoc API documentation for the 'main' feature.",
+        "group": "documentation"
+    },
+    {
+        "name": "kotlinDslAccessorsReport",
+        "description": "Prints the Kotlin code for accessing the currently available project extensions and conventions.",
+        "group": "help"
+    },
+    {
+        "name": "model",
+        "description": "Displays the configuration model of root project 'rewrite-csharp'. [deprecated]",
+        "group": ""
+    },
+    {
+        "name": "outgoingVariants",
+        "description": "Displays the outgoing variants of root project 'rewrite-csharp'.",
+        "group": "help"
+    },
+    {
+        "name": "postRelease",
+        "description": "",
+        "group": "Nebula Release"
+    },
+    {
+        "name": "prepare",
+        "description": "Verifies that the project could be released.",
+        "group": ""
+    },
+    {
+        "name": "prepareKotlinBuildScriptModel",
+        "description": "",
+        "group": ""
+    },
+    {
+        "name": "processResources",
+        "description": "Processes main resources.",
+        "group": ""
+    },
+    {
+        "name": "processTestResources",
+        "description": "Processes test resources.",
+        "group": ""
+    },
+    {
+        "name": "projects",
+        "description": "Displays the sub-projects of root project 'rewrite-csharp'.",
+        "group": "help"
+    },
+    {
+        "name": "properties",
+        "description": "Displays the properties of root project 'rewrite-csharp'.",
+        "group": "help"
+    },
+    {
+        "name": "release",
+        "description": "Releases this project.",
+        "group": ""
+    },
+    {
+        "name": "releaseCheck",
+        "description": "",
+        "group": "Nebula Release"
+    },
+    {
+        "name": "releaseSonatypeStagingRepository",
+        "description": "Releases closed staging repository in 'sonatype' Nexus instance.",
+        "group": "publishing"
+    },
+    {
+        "name": "releaseStagingRepositories",
+        "description": "Releases open staging repositories in the following Nexus instance: 'sonatype'",
+        "group": "publishing"
+    },
+    {
+        "name": "resolvableConfigurations",
+        "description": "Displays the configurations that can be resolved in root project 'rewrite-csharp'.",
+        "group": "help"
+    },
+    {
+        "name": "retrieveSonatypeStagingProfile",
+        "description": "Gets and displays a staging profile id for a given repository and package group. This is a diagnostic task to get the value and put it into the NexusRepository configuration closure as stagingProfileId.",
+        "group": "publishing"
+    },
+    {
+        "name": "snapshot",
+        "description": "",
+        "group": "Nebula Release"
+    },
+    {
+        "name": "snapshotSetup",
+        "description": "",
+        "group": "Nebula Release"
+    },
+    {
+        "name": "tasks",
+        "description": "Displays the tasks runnable from root project 'rewrite-csharp' (some of the displayed tasks may belong to subprojects).",
+        "group": "help"
+    },
+    {
+        "name": "test",
+        "description": "Runs the test suite.",
+        "group": "verification"
+    },
+    {
+        "name": "testClasses",
+        "description": "Assembles test classes.",
+        "group": "build"
+    },
+    {
+        "name": "updateDaemonJvm",
+        "description": "Generates or updates the Gradle Daemon JVM criteria.",
+        "group": "Build Setup"
+    },
+    {
+        "name": "wrapper",
+        "description": "Generates Gradle wrapper files.",
+        "group": "Build Setup"
+    }
+]
