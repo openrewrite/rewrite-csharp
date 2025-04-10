@@ -123,7 +123,6 @@
         },
         "NugetApiKey": {
           "type": "string",
-          "description": "ApiKey for the specified source",
           "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
         "NugetFeed": {

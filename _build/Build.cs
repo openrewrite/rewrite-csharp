@@ -35,7 +35,7 @@ class Build : NukeBuild
 
     GitHubActions GitHubActions => GitHubActions.Instance;
 
-    [Parameter("ApiKey for the specified source")][Secret] readonly string NugetApiKey;
+    [Parameter][Secret] readonly string NugetApiKey;
 
     [Parameter] readonly string NugetFeed = "https://api.nuget.org/v3/index.json";
 
