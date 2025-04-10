@@ -267,6 +267,7 @@ class Build : NukeBuild
             DotNetNuGetPush(s => s
                 .SetSource(NugetFeed)
                 .SetApiKey(NugetApiKey)
+                .EnableSkipDuplicate()
                 .SetTargetPath(ArtifactsDirectory / "*.nupkg"));
 
             // NuGetTasks.NuGetPush(s => s
