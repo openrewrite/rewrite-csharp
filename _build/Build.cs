@@ -263,14 +263,20 @@ class Build : NukeBuild
             {
                 Assert.Fail("No packages were found in artifacts directory.");
             }
-            NuGetTasks.NuGetPush(s => s
-                    .SetSource(NugetFeed)
-                    .SetApiKey(NugetApiKey)
-                    .CombineWith(
-                        artifacts, (cs, v) => cs
-                            .SetTargetPath(v)),
-                degreeOfParallelism: 3,
-                completeOnFailure: true);
+
+            DotNetNuGetPush(s => s
+                .SetSource(NugetFeed)
+                .SetApiKey(NugetApiKey)
+                .SetTargetPath(ArtifactsDirectory / "*.nupkg"));
+
+            // NuGetTasks.NuGetPush(s => s
+            //         .SetSource(NugetFeed)
+            //         .SetApiKey(NugetApiKey)
+            //         .CombineWith(
+            //             artifacts, (cs, v) => cs
+            //                 .SetTargetPath(v)),
+            //     degreeOfParallelism: 3,
+            //     completeOnFailure: true);
         });
 
     Target CIBuild => _ => _
@@ -317,6 +323,7 @@ class Build : NukeBuild
         });
 
     Target GradlePublish => _ => _
+        .After(Pack, NugetPush)
         .Executes(() =>
         {
             var isPreRelease = GitHubActions?.RefName?.Contains("-rc.") ?? true;

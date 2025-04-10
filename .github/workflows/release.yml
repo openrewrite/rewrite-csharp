@@ -23,6 +23,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - name: Set git config
+        run: git config --global init.defaultBranch main
+        
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0

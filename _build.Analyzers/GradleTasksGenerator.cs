@@ -46,9 +46,9 @@ public class GradleTasksGenerator : ISourceGenerator
                     [TypeConverter(typeof(TypeConverter<KnownGradleTasks>))]
                     public partial class KnownGradleTasks : Enumeration
                     {
-                        {{tasks.Render(task => $$"""
+                        {{tasks.Where(x => x.Name != null).Render(task => $$"""
                                                  /// <summary> {{task.Description}} </summary>
-                                                 public static KnownGradleTasks {{task.Name.ToPascalCase()}} = (KnownGradleTasks) "{{task.Name}}";
+                                                 public static KnownGradleTasks {{task.Name!.ToPascalCase()}} = (KnownGradleTasks) "{{task.Name}}";
                                                  """)}}
                         public static implicit operator KnownGradleTasks(string value)
                         {
