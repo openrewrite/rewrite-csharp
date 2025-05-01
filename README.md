@@ -45,6 +45,6 @@ We appreciate all types of contributions. See the [contributing guide](https://g
 * `rewrite-test-engine-remote` - Test engine used to power the OpenRewrite LST test written in C#
 * `rewrite-csharp-remote-server` - The embedded C# based tcp server zipped dlls required to run C# lang server during CLI executions (build/recipe run/ etc )
 
-### License
+### Licensing
 
-For more information about the license visit our [FAQ](https://docs.openrewrite.org/licensing/openrewrite-licensing#faq)
+For more information about licensing, please visit our [licensing page](https://docs.openrewrite.org/licensing/openrewrite-licensing).
