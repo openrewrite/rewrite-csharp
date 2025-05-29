@@ -42,7 +42,9 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
     String executable = "C:\\Projects\\openrewrite\\rewrite-csharp\\Rewrite\\src\\Rewrite.Server\\bin\\Debug\\net9.0\\Rewrite.Server.exe";
 
     public abstract String getRecipeId();
+
     public abstract String getNugetPackageName();
+
     public abstract String getNugetPackageVersion();
 
     @Override
@@ -61,18 +63,19 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
                 if (tree instanceof SourceFile && !(tree instanceof Quark) && !(tree instanceof ParseError) &&
-                        !tree.getClass().getName().equals("org.openrewrite.java.tree.J$CompilationUnit")) {
+                    !tree.getClass().getName().equals("org.openrewrite.java.tree.J$CompilationUnit")) {
                     SourceFile sourceFile = (SourceFile) tree;
                     String fileName = sourceFile.getSourcePath().getFileName().toString();
-                    if (fileName.indexOf('.') > 0) {
-                        String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
-                        if(extension.equals("sln")) {
+                    int lastDot = fileName.lastIndexOf('.');
+                    if (lastDot > 0) {
+                        String extension = fileName.substring(lastDot + 1);
+                        if ("sln".equals(extension)) {
                             acc.solutionFile = sourceFile.getSourcePath();
                         }
                         acc.extensionCounts.computeIfAbsent(extension, e -> new AtomicInteger(0)).incrementAndGet();
                     }
 
-                    // only extract initial source files for first codemod recipe
+                    // only extract initial source files for first roslyn recipe
                     if (Objects.equals(ctx.getMessage(FIRST_RECIPE), ctx.getCycleDetails().getRecipePosition())) {
                         // FIXME filter out more source types; possibly only write plain text, json, and yaml?
                         acc.writeSource(sourceFile);
@@ -152,15 +155,15 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
             throw new RuntimeException(e);
         } finally {
             if (out != null) {
-                //noinspection ResultOfMethodCallIgnored
                 String content = new String(Files.readAllBytes(out));
                 System.out.println(content);
+                //noinspection ResultOfMethodCallIgnored
                 out.toFile().delete();
             }
             if (err != null) {
-                //noinspection ResultOfMethodCallIgnored
                 String content = new String(Files.readAllBytes(err));
                 System.out.println(content);
+                //noinspection ResultOfMethodCallIgnored
                 err.toFile().delete();
             }
         }
