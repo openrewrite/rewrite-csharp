@@ -32,7 +32,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     TypeTree elementType,
     IList<Annotation>? annotations,
-    JLeftPadded<Space>? dimension,
+    JLeftPadded<Space> dimension,
     JavaType type
     ) : J, TypeTree, Expression, Expression<ArrayType>, TypedTree<ArrayType>, J<ArrayType>, TypeTree<ArrayType>, MutableTree<ArrayType>
     {
@@ -71,9 +71,9 @@ public partial interface J : Rewrite.Core.Tree
         {
             return newAnnotations == Annotations ? this : new ArrayType(Id, Prefix, Markers, ElementType, newAnnotations, Dimension, Type);
         }
-        public JLeftPadded<Space>? Dimension { get;  set; } = dimension;
+        public JLeftPadded<Space> Dimension { get;  set; } = dimension;
 
-        public ArrayType WithDimension(JLeftPadded<Space>? newDimension)
+        public ArrayType WithDimension(JLeftPadded<Space> newDimension)
         {
             return newDimension == Dimension ? this : new ArrayType(Id, Prefix, Markers, ElementType, Annotations, newDimension, Type);
         }

@@ -23,6 +23,15 @@ namespace Rewrite.RewriteJava.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface J : Rewrite.Core.Tree
 {
+    /// <summary>
+    /// Represents a Java for loop statement.
+    /// <br/>Example:
+    /// <code>{@code
+    /// for (int i = 0; i &lt; n; i++) {
+    ///     // body
+    /// }
+    /// }</code>
+    /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif

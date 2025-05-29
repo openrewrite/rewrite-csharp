@@ -1,6 +1,6 @@
 namespace Rewrite.Core;
 
-public class InMemoryExecutionContext : ExecutionContext
+public class InMemoryExecutionContext : IExecutionContext
 {
     private readonly Dictionary<string, object?> _messages = new();
     

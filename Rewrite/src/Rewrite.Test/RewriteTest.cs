@@ -7,7 +7,6 @@ using Rewrite.Core.Quark;
 using Rewrite.CSharp.Tests;
 using Rewrite.RewriteCSharp;
 using Rewrite.RewriteJava.Tree;
-using ExecutionContext = Rewrite.Core.ExecutionContext;
 
 namespace Rewrite.Test;
 
@@ -34,160 +33,72 @@ public class RewriteTest
         var testMethodSpec = RecipeSpec.Defaults();
         spec(testMethodSpec);
 
-        PrintOutputCapture<int>.IMarkerPrinter markerPrinter;
-        if (testMethodSpec.MarkerPrinter != null)
-        {
-            markerPrinter = testMethodSpec.MarkerPrinter;
-        }
-        else if (testClassSpec.MarkerPrinter != null)
-        {
-            markerPrinter = testClassSpec.MarkerPrinter;
-        }
-        else
-        {
-            markerPrinter = PrintOutputCapture<int>.IMarkerPrinter.Default;
-        }
+        var markerPrinter = testMethodSpec.MarkerPrinter ?? testClassSpec.MarkerPrinter ?? PrintOutputCapture<int>.IMarkerPrinter.Default;
 
         var recipe = testMethodSpec.Recipe ?? testClassSpec.Recipe!;
         recipe.Should().NotBeNull("A recipe must be specified");
 
-        var cycles = testMethodSpec.Cycles ?? testClassSpec.Cycles;
-        var expectedCyclesThatMakeChanges =
-            testMethodSpec.ExpectedCyclesThatMakeChanges ?? testClassSpec.ExpectedCyclesThatMakeChanges;
-
-        // FIXME implement
-        // If there are any tests that have assertions (an "after"), then set the expected cycles.
-        // for (SourceSpec<?> s : sourceSpecs) {
-        //     if (s.after != null) {
-        //         expectedCyclesThatMakeChanges = testMethodSpec.expectedCyclesThatMakeChanges == null ?
-        //             testClassSpec.getExpectedCyclesThatMakeChanges(cycles) :
-        //             testMethodSpec.getExpectedCyclesThatMakeChanges(cycles);
-        //         break;
-        //     }
-        // }
-
-        var ctx = testMethodSpec.ExecutionContext ??
-                  testClassSpec.ExecutionContext ?? DefaultExecutionContext(sourceSpecs);
-        var testExecutionContext = ITestExecutionContext.Current();
-        if (testExecutionContext != null)
-        {
-            testExecutionContext.Reset(ctx);
-            // RemotingExecutionContextView.View(ctx).RemotingContext = /**/testExecutionContext;
-        }
+        var ctx = testMethodSpec.ExecutionContext ?? testClassSpec.ExecutionContext ?? DefaultExecutionContext(sourceSpecs);
 
         foreach (var sourceSpec in sourceSpecs)
         {
             sourceSpec.CustomizeExecutionContext?.Invoke(ctx);
         }
 
-        IList<Validated<object>> validations = new List<Validated<object>>();
-        recipe!.ValidateAll(ctx, validations);
-        validations.Should().NotContain(v => v.IsInvalid(), "Recipe validation must have no failures");
-
-        var sourceSpecsByParser = new Dictionary<Parser.Builder, List<SourceSpec>>();
+        
+        
         var methodSpecParsers = testMethodSpec.Parsers;
         // Clone class-level parsers to ensure that no state leaks between tests
-        var testClassSpecParsers = new List<Parser.Builder>(testClassSpec.Parsers.Select(item => item.Clone()));
-        foreach (var sourceSpec in sourceSpecs)
-        {
-            // ----- method specific parser -------------------------
-            if (RewriteTestUtils.GroupSourceSpecsByParser(methodSpecParsers, sourceSpecsByParser, sourceSpec))
-            {
-                continue;
-            }
-
-            // ----- test default parser -------------------------
-            if (RewriteTestUtils.GroupSourceSpecsByParser(testClassSpecParsers, sourceSpecsByParser, sourceSpec))
-            {
-                continue;
-            }
-
-            // ----- default parsers for each SourceFile type -------------------------
-            var key = sourceSpec.Parser.Clone();
-            if (!sourceSpecsByParser.ContainsKey(key))
-                sourceSpecsByParser[key] = [];
-            sourceSpecsByParser[key].Add(sourceSpec);
-        }
-
+        
+        var testClassSpecParsers = new List<IParser.Builder>(testClassSpec.Parsers.Select(item => item.Clone()));
+        var allKnownParsers = methodSpecParsers
+            .Concat(testClassSpecParsers)
+            .Where(x => x.SourceFileType != null)
+            .GroupBy(x => x.SourceFileType!, x => x.Build())
+            .ToDictionary(x => x.Key, x => x.First());
+        
+        var sourceSpecsByParser = allKnownParsers
+            .Join(sourceSpecs, x => x.Key, x => x.SourceFileType, (kv, spec) => (Parser: kv.Value, Spec: spec))
+            .ToLookup(x => x.Parser, x => x.Spec);
+        
         var specBySourceFile = new Dictionary<SourceFile, SourceSpec>(sourceSpecs.Length);
 
         var capture = new PrintOutputCapture<int>(0, markerPrinter);
 
         foreach (var sourceSpecsForParser in sourceSpecsByParser)
         {
-            var inputs = new Dictionary<SourceSpec, Parser.Input>(sourceSpecsForParser.Value.Count);
-            var parser = sourceSpecsForParser.Key.Build();
+            var inputs = new Dictionary<SourceSpec, IParser.Input>(sourceSpecsForParser.Count());
+            var parser = sourceSpecsForParser.Key;
 
-            foreach (var sourceSpec in sourceSpecsForParser.Value)
+            foreach (var sourceSpec in sourceSpecsForParser.Where(x => x.Before != null))
             {
-                if (sourceSpec.Before == null)
-                {
-                    continue;
-                }
-
-                var beforeTrimmed = sourceSpec.NoTrim ? sourceSpec.Before : TrimIndentPreserveCrLf(sourceSpec.Before) ?? "";
+                var beforeTrimmed = sourceSpec.NoTrim ? sourceSpec.Before! : TrimIndentPreserveCrLf(sourceSpec.Before) ?? "";
 
                 var sourcePath = sourceSpec.SourcePath != null
                     ? Path.Combine(sourceSpec.Dir, sourceSpec.SourcePath)
                     : parser.SourcePathFromSourceText(sourceSpec.Dir, beforeTrimmed);
 
-                foreach (var consumer in testMethodSpec.AllSources)
+                foreach (var consumer in testMethodSpec.AllSources.Union(testClassSpec.AllSources))
                 {
                     consumer(sourceSpec);
                 }
 
-                foreach (var consumer in testClassSpec.AllSources)
-                {
-                    consumer(sourceSpec);
-                }
-
-                inputs[sourceSpec] = new Parser.Input(sourcePath,
-                    () => new MemoryStream(Encoding.UTF8.GetBytes(beforeTrimmed)));
+                inputs[sourceSpec] = new IParser.Input(sourcePath, () => new MemoryStream(Encoding.UTF8.GetBytes(beforeTrimmed)));
             }
 
             var relativeTo = testMethodSpec.RelativeTo ?? testClassSpec.RelativeTo;
-
             var sourceSpecIter = inputs.Keys.GetEnumerator();
-
-            var requirePrintEqualsInput = ctx.GetMessage(ExecutionContext.RequirePrintEqualsInput, true);
-            if (requirePrintEqualsInput)
-            {
-                ctx.PutMessage(ExecutionContext.RequirePrintEqualsInput, false);
-            }
 
             var sourceFiles = parser.ParseInputs(inputs.Values, relativeTo, ctx).ToList();
             sourceFiles.Should().HaveSameCount(inputs.Values);
 
-            if (requirePrintEqualsInput)
-            {
-                ctx.PutMessage(ExecutionContext.RequirePrintEqualsInput, requirePrintEqualsInput);
-            }
-
+            // iterate over parsed files
             for (var i = 0; i < sourceFiles.Count; i++)
             {
                 var sourceFile = sourceFiles[i];
-                if (sourceFile is ParseError parseError)
-                {
-                    var error = parseError.Markers.FindFirst<ParseExceptionResult>()!;
-                    throw new Exception(error.Message);
-                }
+                EnsureNoParseErrorsOrUnknowns(sourceFile);
+                RenderLstTree(sourceFile);
 
-                var unknown = sourceFile.Descendents().OfType<J.Unknown.Source>().SelectMany(x => x.Markers.OfType<ParseExceptionResult>().Select(x => x.TreeType)).ToList();
-                if(unknown.Any())
-                {
-                    throw new Exception($"LST should not contain unknown nodes: {unknown.First()}");
-                }
-
-                var customProperties = TestContext.Parameters.ToDictionary(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase) ?? new Dictionary<string, string>();
-                bool shouldRenderLst = !EnvironmentInfo.IsCI;
-                if (customProperties.TryGetValue("RenderLST", out var renderLst) && bool.TryParse(renderLst, out var renderLstValue))
-                {
-                    shouldRenderLst = renderLstValue;
-                }
-                if(shouldRenderLst)
-                {
-                    _output.WriteLine(sourceFile.RenderLstTree());
-                }
                 var markers = sourceFile.Markers;
 
                 sourceSpecIter.MoveNext().Should().BeTrue();
@@ -207,22 +118,6 @@ public class RewriteTest
                         var before = StringUtils.ReadFully(input.GetSource(ctx), Encoding.GetEncoding(parser.GetCharset(ctx)));
                         var after = sourceFile!.PrintAll(capture.Clone());
                         after.ShouldBeSameAs(before);
-
-                        // FIXME implement
-                        // try
-                        // {
-                        //     WhitespaceValidationService service = sourceFile.Service<WhitespaceValidationService>();
-                        //     SourceFile whitespaceValidated = (SourceFile)service.Visitor.Visit(sourceFile, ctx);
-                        //
-                        //     if (whitespaceValidated != null && whitespaceValidated != sourceFile)
-                        //     {
-                        //         throw new Exception("Source file was parsed...");
-                        //     }
-                        // }
-                        // catch (NotSupportedException e)
-                        // {
-                        //     // Language/parser does not provide whitespace validation and that's OK for now
-                        // }
                     }
                 }
 
@@ -231,16 +126,9 @@ public class RewriteTest
             }
         }
 
-        var recipeOptions = new Dictionary<string, object?>();
-        foreach (var property in recipe.GetType().GetTypeInfo().DeclaredProperties)
-        {
-            var propertyName = property.Name;
-            var propertyValue = property.GetValue(recipe, null);
-            recipeOptions[char.ToLower(propertyName[0]) + propertyName[1..]] = propertyValue;
-        }
-
         var beforeList = specBySourceFile.Keys.ToList();
-        var afterList = testExecutionContext!.RunRecipe(recipe, recipeOptions, beforeList);
+        
+        var afterList = RunRecipe(recipe, beforeList);
         for (var i = 0; i < beforeList.Count; i++)
         {
             var before = beforeList[i];
@@ -276,6 +164,40 @@ public class RewriteTest
         }
     }
 
+    private static void EnsureNoParseErrorsOrUnknowns(SourceFile sourceFile)
+    {
+        if (sourceFile is ParseError parseError)
+        {
+            var error = parseError.Markers.FindFirst<ParseExceptionResult>()!;
+            throw new Exception(error.Message);
+        }
+
+        var unknown = sourceFile.Descendents().OfType<J.Unknown.Source>().SelectMany(x => x.Markers.OfType<ParseExceptionResult>().Select(x => x.TreeType)).ToList();
+        if(unknown.Any())
+        {
+            throw new Exception($"LST should not contain unknown nodes: {unknown.First()}");
+        }
+    }
+
+    private void RenderLstTree(SourceFile sourceFile)
+    {
+        var customProperties = TestContext.Parameters.ToDictionary(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase);
+        bool shouldRenderLst = !EnvironmentInfo.IsCI;
+        if (customProperties.TryGetValue("RenderLST", out var renderLst) && bool.TryParse(renderLst, out var renderLstValue))
+        {
+            shouldRenderLst = renderLstValue;
+        }
+        if(shouldRenderLst)
+        {
+            _output.WriteLine(sourceFile.RenderLstTree());
+        }
+    }
+
+    private IList<SourceFile?> RunRecipe(Recipe recipe, IList<SourceFile> sourceFiles)
+    {
+        return sourceFiles.Select(x => (SourceFile?)recipe.GetVisitor().Visit(x, new InMemoryExecutionContext())).ToList();
+    }
+
     private static void AssertContentEquals(SourceFile? sourceFile, string readFully, string printAll,
         string whenParsing)
     {
@@ -293,7 +215,7 @@ public class RewriteTest
         return text;
     }
 
-    public virtual ExecutionContext DefaultExecutionContext(params SourceSpec[] sourceSpecs)
+    public virtual IExecutionContext DefaultExecutionContext(params SourceSpec[] sourceSpecs)
     {
         return new InMemoryExecutionContext(e => Assert.Fail("The recipe threw an exception: " + e));
     }

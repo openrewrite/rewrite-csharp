@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
 using Rewrite.Remote;
@@ -18,7 +19,7 @@ public record PropertiesSender : Sender
 
     private class Visitor : PropertiesVisitor<SenderContext>
     {
-        public override Properties Visit(Tree? tree, SenderContext ctx)
+        public override Properties Visit(Tree? tree, SenderContext ctx, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
             Cursor = new Cursor(Cursor, tree ?? throw new InvalidOperationException($"Parameter {nameof(tree)} should not be null"));
             ctx.SendNode(tree, x => x, ctx.SendTree);

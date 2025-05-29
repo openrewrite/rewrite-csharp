@@ -1,5 +1,4 @@
 ﻿using Rewrite.Core;
-using ExecutionContext = Rewrite.Core.ExecutionContext;
 
 namespace Rewrite.Test;
 
@@ -11,7 +10,7 @@ public class LocalTestExecutionContext : ITestExecutionContext
         return tree.Print(cursor, new PrintOutputCapture<int>(0));
     }
 
-    public void Reset(ExecutionContext ctx)
+    public void Reset(IExecutionContext ctx)
     {
         // ignore
     }

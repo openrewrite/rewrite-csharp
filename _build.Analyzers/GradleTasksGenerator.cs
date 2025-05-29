@@ -58,12 +58,51 @@ public class GradleTasksGenerator : ISourceGenerator
         src = SyntaxFactory.ParseCompilationUnit(src).NormalizeWhitespace().ToFullString();
 
         context.AddSource($"KnownGradleTasks.g.cs", SourceText.From(src, Encoding.UTF8));
+
+
+        src = $$"""
+
+                using JetBrains.Annotations;
+                using Newtonsoft.Json;
+                using Nuke.Common;
+                using Nuke.Common.Tooling;
+                using Nuke.Common.Tools;
+                using Nuke.Common.Utilities.Collections;
+                using System;
+                using System.Collections.Generic;
+                using System.Collections.ObjectModel;
+                using System.ComponentModel;
+                using System.Diagnostics.CodeAnalysis;
+                using System.IO;
+                using System.Linq;
+                using System.Text;
+                using GradleTasks = GradleTasks;
+
+                partial class Build
+                {
+                {{tasks.Render(task =>
+                $$"""
+                    [Category("Gradle (external)")]
+                    Target Gradle{{task.Name.ToPascalCase()}} => _ => _
+                        .Description("{{task.Description}}")
+                        .Executes(() =>
+                        {
+                            global::GradleTasks.Gradle(c => c
+                                .SetTasks("{{task.Name}}")
+                            );
+                        });
+
+                """)}}
+                }
+                """;
+
+        context.AddSource($"GradleTasks.g.cs", SourceText.From(src, Encoding.UTF8));
     }
 
     public class GradleTask
     {
-        public string? Name { get; set; }
-        public string? Description { get; set; }
-        public string? Group { get; set; }
+        public string Name { get; set; } = null!;
+        public string Description { get; set; } = null!;
+        public string Group { get; set; } = null!;
     }
 }

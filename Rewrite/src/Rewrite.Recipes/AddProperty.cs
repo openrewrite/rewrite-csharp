@@ -1,14 +1,11 @@
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
 using Rewrite.RewriteProperties;
-using ExecutionContext = Rewrite.Core.ExecutionContext;
 
 namespace Rewrite.Recipes.Properties;
-
-using ExecutionContext = ExecutionContext;
-
 
 [DisplayName("Add Property Recipe")]
 [Description("Full description")]
@@ -21,14 +18,14 @@ public class AddProperty : Recipe
     [DisplayName("Value")]
     [Description("Value to specify for the given property name")]
     public string PropertyValue { get; } = "blah";
-    public override ITreeVisitor<Tree, ExecutionContext> GetVisitor()
+    public override ITreeVisitor<Tree, IExecutionContext> GetVisitor()
     {
         return new AddPropertyVisitor(PropertyName, PropertyValue);
     }
 
-    private class AddPropertyVisitor(string property, string value) : PropertiesVisitor<ExecutionContext>
+    private class AddPropertyVisitor(string property, string value) : PropertiesVisitor<IExecutionContext>
     {
-        public override RewriteProperties.Tree.Properties VisitFile(RewriteProperties.Tree.Properties.File file, ExecutionContext p)
+        public override RewriteProperties.Tree.Properties VisitFile(RewriteProperties.Tree.Properties.File file, IExecutionContext p)
         {
             var first = file.Content.FirstOrDefault(e => e is RewriteProperties.Tree.Properties.Entry entry && entry.Key == property);
             if (first == null)

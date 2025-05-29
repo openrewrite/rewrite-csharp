@@ -8,7 +8,7 @@ public class JContainer<T>(
     Space before,
     IList<JRightPadded<T>> elements,
     Markers markers
-) : JContainer
+) : JContainer, IHasPrefix
 {
     [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -108,6 +108,8 @@ public class JContainer<T>(
     {
         return new JContainer<T>(Space.EMPTY, [], Markers.EMPTY);
     }
+
+    Space IHasPrefix.Prefix => Before;
 }
 public static class JContainerExtensions
 {

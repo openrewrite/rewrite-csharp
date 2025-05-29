@@ -64,7 +64,7 @@ public static class Extensions
 
     public static string Render<T>(this IEnumerable<T> source, Func<T, string> template, string separator = "", string openToken = "", string closeToken = "", bool renderEmpty = true)
     {
-        if (!renderEmpty && source.Count() == 0)
+        if (!renderEmpty && !source.Any())
             return "";
         return $"{openToken}{string.Join(separator, source.Select(template))}{closeToken}";
     }

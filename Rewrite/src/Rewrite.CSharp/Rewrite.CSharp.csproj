@@ -1,9 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
-    </PropertyGroup>
+
     <PropertyGroup>
         <RootNamespace>Rewrite</RootNamespace>
         <Description>C# language support for the automated code refactoring framework OpenRewrite.</Description>
@@ -27,6 +23,10 @@
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>Rewrite.Remote.Codec</_Parameter1>
         </AssemblyAttribute>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Utils\" />
     </ItemGroup>
 
 </Project>

@@ -23,6 +23,14 @@ namespace Rewrite.RewriteJava.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface J : Rewrite.Core.Tree
 {
+    /// <summary>
+    /// Represents a deconstruction pattern in Java.
+    /// <br/>Example:
+    /// <code>{@code
+    /// case Point(int x, int y):
+    ///     // use x and y
+    /// }</code>
+    /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif

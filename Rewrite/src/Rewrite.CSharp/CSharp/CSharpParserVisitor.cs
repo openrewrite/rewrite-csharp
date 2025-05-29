@@ -18,15 +18,35 @@ using Rewrite.RewriteJava.Marker;
 using Rewrite.RewriteJava.Tree;
 using Expression = Rewrite.RewriteJava.Tree.Expression;
 
-namespace Rewrite.RewriteCSharp.Parser;
+namespace Rewrite.RewriteCSharp;
 
 [SuppressMessage(category: "ReSharper", checkId: "RedundantOverriddenMember")]
-public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticModel) : CSharpSyntaxVisitor<J>
+public class CSharpParserVisitor : CSharpSyntaxVisitor<object>
 {
+    private readonly SemanticModel? _semanticModel;
     private readonly CSharpTypeMapping _typeMapping = new();
     private readonly List<TextSpan> _seenTriviaSpans = [];
 
-    public override Cs VisitCompilationUnit(CompilationUnitSyntax node)
+    /// <summary>
+    /// Creates a parsers that does not perform type attestation
+    /// </summary>
+    public CSharpParserVisitor()
+    {
+    }
+
+    /// <summary>
+    /// Creates a parsers that  performs type attestation
+    /// </summary>
+    public CSharpParserVisitor(SemanticModel semanticModel)
+    {
+        _semanticModel = semanticModel;
+    }
+
+    protected virtual Guid GetId()
+    {
+        return Core.Tree.RandomId();
+    }
+    public override Cs.CompilationUnit VisitCompilationUnit(CompilationUnitSyntax node)
     {
         // special case when the compilation unit is empty
         var empty = node.GetFirstToken().IsKind(SyntaxKind.None);
@@ -35,7 +55,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             id: Core.Tree.RandomId(),
             prefix: prefix,
             markers: Markers.EMPTY,
-            sourcePath: semanticModel.SyntaxTree.FilePath,
+            sourcePath: node.SyntaxTree.FilePath, //_semanticModel.SyntaxTree.FilePath,
             fileAttributes: null,
             charsetName: null,
             charsetBomMarked: false,
@@ -69,7 +89,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                 markers: new Markers(Id: Core.Tree.RandomId(),
                     MarkerList:
                     [
-                        ParseExceptionResult.Build(parser, ExceptionDispatchInfo.SetCurrentStackTrace(new InvalidOperationException($"Unsupported AST type {node.GetType()}")))
+                        ParseExceptionResult.Build(ExceptionDispatchInfo.SetCurrentStackTrace(new InvalidOperationException($"Unsupported AST type {node.GetType()}")))
                             .WithTreeType(newTreeType: node.GetType().Name)
                     ]
                 ),
@@ -78,7 +98,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override Cs VisitFileScopedNamespaceDeclaration(FileScopedNamespaceDeclarationSyntax node)
+    public override Cs.FileScopeNamespaceDeclaration VisitFileScopedNamespaceDeclaration(FileScopedNamespaceDeclarationSyntax node)
     {
         return new Cs.FileScopeNamespaceDeclaration(
             id: Core.Tree.RandomId(),
@@ -103,7 +123,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
+    public override Cs.BlockScopeNamespaceDeclaration VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
     {
         return new Cs.BlockScopeNamespaceDeclaration(
             id: Core.Tree.RandomId(),
@@ -129,13 +149,13 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitStructDeclaration(StructDeclarationSyntax node)
+    public override Cs.ClassDeclaration VisitStructDeclaration(StructDeclarationSyntax node)
     {
         return VisitTypeDeclaration(node, type: J.ClassDeclaration.Kind.Types.Value);
     }
 
 
-    public override J? VisitEnumDeclaration(EnumDeclarationSyntax node)
+    public override Cs.EnumDeclaration VisitEnumDeclaration(EnumDeclarationSyntax node)
     {
         var enumDeclaration = new Cs.EnumDeclaration(
             id: Core.Tree.RandomId(),
@@ -170,27 +190,27 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitRecordDeclaration(RecordDeclarationSyntax node)
+    public override Cs.ClassDeclaration VisitRecordDeclaration(RecordDeclarationSyntax node)
     {
         return VisitTypeDeclaration(node, type: J.ClassDeclaration.Kind.Types.Record);
     }
 
-    public override J? VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
+    public override Cs.ClassDeclaration VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
     {
         return VisitTypeDeclaration(node, type: J.ClassDeclaration.Kind.Types.Interface);
     }
 
-    public override J? VisitClassDeclaration(ClassDeclarationSyntax node)
+    public override Cs.ClassDeclaration VisitClassDeclaration(ClassDeclarationSyntax node)
     {
         return VisitTypeDeclaration(node, type: J.ClassDeclaration.Kind.Types.Class);
     }
 
-    private Statement VisitTypeDeclaration(TypeDeclarationSyntax node, J.ClassDeclaration.Kind.Types type)
+    private Cs.ClassDeclaration VisitTypeDeclaration(TypeDeclarationSyntax node, J.ClassDeclaration.Kind.Types type)
     {
         var attributeLists = MapAttributes(m: node.AttributeLists);
         var javaType = MapType( node);
         var hasBaseClass = node.BaseList is { Types.Count: > 0 } &&
-                           semanticModel.GetTypeInfo(expression: node.BaseList.Types[index: 0].Type).Type?.TypeKind == TypeKind.Class;
+                           _semanticModel.GetTypeInfo(expression: node.BaseList.Types[index: 0].Type).Type?.TypeKind == TypeKind.Class;
         var hasBaseInterfaces = node.BaseList != null && node.BaseList.Types.Count > (hasBaseClass ? 1 : 0);
 
         var isEmptyBody = node.OpenBraceToken.IsKind(SyntaxKind.None);
@@ -288,6 +308,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override Statement VisitParameter(ParameterSyntax p)
     {
+        
         var attributeLists = MapAttributes(m: p.AttributeLists);
         var javaType = MapType( p) as JavaType.Variable;
         var variableDeclarations = new J.VariableDeclarations(
@@ -341,7 +362,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             : variableDeclarations;
     }
 
-    public override J? VisitSimpleBaseType(SimpleBaseTypeSyntax node)
+    public override J.Identifier VisitSimpleBaseType(SimpleBaseTypeSyntax node)
     {
         return new J.Identifier(
             id: Core.Tree.RandomId(),
@@ -354,8 +375,9 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitPrimaryConstructorBaseType(PrimaryConstructorBaseTypeSyntax node)
+    public override J.Identifier VisitPrimaryConstructorBaseType(PrimaryConstructorBaseTypeSyntax node)
     {
+        // todo: this is just wrong as we're not capturing parameters
         return new J.Identifier(
             id: Core.Tree.RandomId(),
             prefix: Format(Leading(node.Type)),
@@ -366,7 +388,6 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             fieldType: null
         );
     }
-
     public override Cs.TypeParameter VisitTypeParameter(TypeParameterSyntax node)
     {
         return new Cs.TypeParameter(
@@ -382,6 +403,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J.TypeParameters? VisitTypeParameterList(TypeParameterListSyntax node)
     {
+        // todo: this should really be mapped to Cs.TypeParameter as J version can't capture attributes
         if (node.Parameters.Count == 0)
         {
             return null;
@@ -396,7 +418,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J VisitIdentifierName(IdentifierNameSyntax node)
+    public override J.Identifier VisitIdentifierName(IdentifierNameSyntax node)
     {
         return new J.Identifier(
             id: Core.Tree.RandomId(),
@@ -409,6 +431,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
+    /// <returns>Either <see cref="J.MethodInvocation"/> or <see cref="Cs.AliasQualifiedName"/></returns>
     public override J? VisitInvocationExpression(InvocationExpressionSyntax node)
     {
         var prefix = Format(Leading(node));
@@ -506,14 +529,15 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         for (var index = 0; index < node.ArgumentList.Arguments.Count; index++)
         {
             var arg = node.ArgumentList.Arguments[index: index];
-            var typeInfo = semanticModel.GetTypeInfo(expression: arg.Expression);
+            var typeInfo = _semanticModel.GetTypeInfo(expression: arg.Expression);
         }
 
-        return base.VisitInvocationExpression(node);
+        return (J?)base.VisitInvocationExpression(node);
     }
 
     private JContainer<Expression> MapArgumentList(ArgumentListSyntax argumentList)
     {
+        
         return new JContainer<Expression>(
             before: Format(Leading(argumentList.OpenParenToken)),
             elements: argumentList.Arguments.Select(selector: MapArgument).ToList(),
@@ -523,6 +547,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     private JRightPadded<Expression> MapArgument(ArgumentSyntax argument)
     {
+        
         return new JRightPadded<Expression>(
             element: Convert<Expression>(argument)!,
             after: Format(Trailing(argument)),
@@ -542,7 +567,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitAttributeList(AttributeListSyntax node)
+    public override Cs.AttributeList VisitAttributeList(AttributeListSyntax node)
     {
         return new Cs.AttributeList(
             id: Core.Tree.RandomId(),
@@ -614,10 +639,10 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
         return body;
     }
-    public override J? VisitMethodDeclaration(MethodDeclarationSyntax node)
+    public override Cs.MethodDeclaration VisitMethodDeclaration(MethodDeclarationSyntax node)
     {
         Statement body = MapBody(node.Body, node.ExpressionBody, node.SemicolonToken);
-        Statement returnValue = new Cs.MethodDeclaration(
+        var returnValue = new Cs.MethodDeclaration(
             id: Core.Tree.RandomId(),
             prefix: Format(Leading(node)),
             markers: Markers.EMPTY,
@@ -641,7 +666,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         return parameters != null ? ToJContainer<TypeParameterSyntax, Cs.TypeParameter>(parameters.Parameters, parameters.GreaterThanToken) : null;
     }
 
-    public override J? VisitUsingDirective(UsingDirectiveSyntax node)
+    public override Cs.UsingDirective VisitUsingDirective(UsingDirectiveSyntax node)
     {
         var global = node.GlobalKeyword.IsKind(SyntaxKind.GlobalKeyword);
         var @static = node.StaticKeyword.IsKind(SyntaxKind.StaticKeyword);
@@ -665,7 +690,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitNullableType(NullableTypeSyntax node)
+    public override J.NullableType VisitNullableType(NullableTypeSyntax node)
     {
         return new J.NullableType(
             id: Core.Tree.RandomId(),
@@ -680,7 +705,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitArgument(ArgumentSyntax node)
+    public override Cs.Argument VisitArgument(ArgumentSyntax node)
     {
         var nameColumn = node.NameColon != null
             ? new JRightPadded<J.Identifier>(
@@ -713,7 +738,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
 
 
-    public override J? VisitInterpolation(InterpolationSyntax node)
+    public override Cs.Interpolation VisitInterpolation(InterpolationSyntax node)
     {
         // This was added in C# 6.0
         return new Cs.Interpolation(
@@ -742,7 +767,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitOrdering(OrderingSyntax node)
+    public override Cs.Ordering VisitOrdering(OrderingSyntax node)
     {
         Cs.Ordering.DirectionKind? direction = null;
         if (Enum.TryParse(node.AscendingOrDescendingKeyword.ToString(), true, out Cs.Ordering.DirectionKind outVal))
@@ -757,7 +782,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             direction: direction);
     }
 
-    public override J? VisitSubpattern(SubpatternSyntax node)
+    public override Cs.Subpattern VisitSubpattern(SubpatternSyntax node)
     {
         // This was added in C# 8.0
         return new Cs.Subpattern(
@@ -769,7 +794,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitAccessorDeclaration(AccessorDeclarationSyntax node)
+    public override Cs.AccessorDeclaration VisitAccessorDeclaration(AccessorDeclarationSyntax node)
     {
         return new Cs.AccessorDeclaration(
             id: Core.Tree.RandomId(),
@@ -826,12 +851,12 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitArgumentList(ArgumentListSyntax node)
+    public override JContainer<Cs.Argument> VisitArgumentList(ArgumentListSyntax node)
     {
-        return base.VisitArgumentList(node);
+        return ToJContainer<ArgumentSyntax, Cs.Argument>(node.Arguments, node.OpenParenToken);
     }
 
-    public override J? VisitArrayType(ArrayTypeSyntax node)
+    public override Cs.ArrayType VisitArrayType(ArrayTypeSyntax node)
     {
         return new Cs.ArrayType(
             id: Core.Tree.RandomId(),
@@ -860,7 +885,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitAssignmentExpression(AssignmentExpressionSyntax node)
+    public override Statement VisitAssignmentExpression(AssignmentExpressionSyntax node)
     {
         if (node.IsKind(SyntaxKind.SimpleAssignmentExpression))
         {
@@ -928,7 +953,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         };
     }
 
-    public override J? VisitAttributeArgument(AttributeArgumentSyntax node)
+    public override Cs.Argument VisitAttributeArgument(AttributeArgumentSyntax node)
     {
         var nameColumn = node.NameColon != null
             ? new JRightPadded<J.Identifier>(
@@ -957,7 +982,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitAwaitExpression(AwaitExpressionSyntax node)
+    public override Cs.AwaitExpression VisitAwaitExpression(AwaitExpressionSyntax node)
     {
         return new Cs.AwaitExpression(
             id: Core.Tree.RandomId(),
@@ -968,17 +993,19 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitBaseExpression(BaseExpressionSyntax node)
+    public override J.Identifier VisitBaseExpression(BaseExpressionSyntax node)
     {
         return MapIdentifier(identifier: node.Token, type: null);
     }
 
+    //todo: type declaration is deeply flawed atm as it tries to differentiate between base class vs interface via semantic analysis, which would not work in recipes
+    // never called: handled in class declaration
     public override J? VisitBaseList(BaseListSyntax node)
     {
-        return base.VisitBaseList(node);
+        return (J?)base.VisitBaseList(node);
     }
 
-    public override J? VisitBinaryExpression(BinaryExpressionSyntax node)
+    public override Expression VisitBinaryExpression(BinaryExpressionSyntax node)
     {
         if (node.OperatorToken.IsKind(SyntaxKind.QuestionQuestionToken) ||
             node.OperatorToken.IsKind(SyntaxKind.AsKeyword))
@@ -1014,7 +1041,8 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                     markers: Markers.EMPTY),
                 clazz: Convert<TypeTree>(node.Right)!,
                 pattern: null,
-                type: MapType( node)
+                type: MapType( node),
+                modifier: null
             );
         }
 
@@ -1059,7 +1087,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         };
     }
 
-    public override J? VisitBinaryPattern(BinaryPatternSyntax node)
+    public override Cs.BinaryPattern VisitBinaryPattern(BinaryPatternSyntax node)
     {
         var @operator = node.OperatorToken.Kind() switch
         {
@@ -1076,7 +1104,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             right: Convert<Cs.Pattern>(node.Right)!);
     }
 
-    public override J? VisitBreakStatement(BreakStatementSyntax node)
+    public override J.Break VisitBreakStatement(BreakStatementSyntax node)
     {
         return new J.Break(
             id: Core.Tree.RandomId(),
@@ -1086,7 +1114,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitCastExpression(CastExpressionSyntax node)
+    public override J.TypeCast VisitCastExpression(CastExpressionSyntax node)
     {
         return new J.TypeCast(
             id: Core.Tree.RandomId(),
@@ -1106,7 +1134,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitCatchClause(CatchClauseSyntax node)
+    public override Cs.Try.Catch VisitCatchClause(CatchClauseSyntax node)
     {
         var result =  new Cs.Try.Catch(
             id: Core.Tree.RandomId(),
@@ -1140,7 +1168,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         return result;
     }
 
-    public override J? VisitCatchDeclaration(CatchDeclarationSyntax node)
+    public override J.VariableDeclarations VisitCatchDeclaration(CatchDeclarationSyntax node)
     {
         return new J.VariableDeclarations(
             id: Core.Tree.RandomId(),
@@ -1172,7 +1200,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitCheckedExpression(CheckedExpressionSyntax node)
+    public override Cs.CheckedExpression VisitCheckedExpression(CheckedExpressionSyntax node)
     {
         return new Cs.CheckedExpression(
             id: Core.Tree.RandomId(),
@@ -1182,7 +1210,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             expression: ToControlParentheses<Expression>(node.Expression, node.OpenParenToken));
     }
 
-    public override J? VisitQualifiedName(QualifiedNameSyntax node)
+    public override Expression VisitQualifiedName(QualifiedNameSyntax node)
     {
         if (node.Right is GenericNameSyntax genericNameSyntax)
         {
@@ -1222,7 +1250,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitGenericName(GenericNameSyntax node)
+    public override J.ParameterizedType VisitGenericName(GenericNameSyntax node)
     {
         // // return `J.MethodInvocation` as that is the only way to capture generic type arguments
         // var type = MapType(node) as JavaType.Method;
@@ -1281,12 +1309,12 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitTypeArgumentList(TypeArgumentListSyntax node)
+    public override JContainer<Expression> VisitTypeArgumentList(TypeArgumentListSyntax node)
     {
-        return base.VisitTypeArgumentList(node);
+        return ToJContainer<TypeSyntax, Expression>(node.Arguments, node.LessThanToken);
     }
 
-    public override J? VisitAliasQualifiedName(AliasQualifiedNameSyntax node)
+    public override Cs.AliasQualifiedName VisitAliasQualifiedName(AliasQualifiedNameSyntax node)
     {
         return new Cs.AliasQualifiedName(
             id: Core.Tree.RandomId(),
@@ -1297,7 +1325,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitPredefinedType(PredefinedTypeSyntax node)
+    public override TypeTree VisitPredefinedType(PredefinedTypeSyntax node)
     {
         return MapTypeTree(node);
     }
@@ -1324,7 +1352,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitArrayRankSpecifier(ArrayRankSpecifierSyntax node)
+    public override J.ArrayDimension VisitArrayRankSpecifier(ArrayRankSpecifierSyntax node)
     {
         return new J.ArrayDimension(
             id: Core.Tree.RandomId(),
@@ -1349,7 +1377,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitPointerType(PointerTypeSyntax node)
+    public override Cs.PointerType VisitPointerType(PointerTypeSyntax node)
     {
         return new Cs.PointerType(
             id: Core.Tree.RandomId(),
@@ -1365,36 +1393,36 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitFunctionPointerType(FunctionPointerTypeSyntax node)
     {
         // This was added in C# 9.0
-        return base.VisitFunctionPointerType(node);
+        return (J?)base.VisitFunctionPointerType(node);
     }
 
     public override J? VisitFunctionPointerParameterList(FunctionPointerParameterListSyntax node)
     {
         // This was added in C# 9.0
-        return base.VisitFunctionPointerParameterList(node);
+        return (J?)base.VisitFunctionPointerParameterList(node);
     }
 
     public override J? VisitFunctionPointerCallingConvention(FunctionPointerCallingConventionSyntax node)
     {
         // This was added in C# 9.0
-        return base.VisitFunctionPointerCallingConvention(node);
+        return (J?)base.VisitFunctionPointerCallingConvention(node);
     }
 
     public override J? VisitFunctionPointerUnmanagedCallingConventionList(
         FunctionPointerUnmanagedCallingConventionListSyntax node)
     {
         // This was added in C# 9.0
-        return base.VisitFunctionPointerUnmanagedCallingConventionList(node);
+        return (J?)base.VisitFunctionPointerUnmanagedCallingConventionList(node);
     }
 
     public override J? VisitFunctionPointerUnmanagedCallingConvention(
         FunctionPointerUnmanagedCallingConventionSyntax node)
     {
         // This was added in C# 9.0
-        return base.VisitFunctionPointerUnmanagedCallingConvention(node);
+        return (J?)base.VisitFunctionPointerUnmanagedCallingConvention(node);
     }
 
-    public override J? VisitTupleType(TupleTypeSyntax node)
+    public override Cs.TupleType VisitTupleType(TupleTypeSyntax node)
     {
         return new Cs.TupleType(
             id: Core.Tree.RandomId(),
@@ -1405,24 +1433,24 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             );
     }
 
-    public override Cs VisitTupleElement(TupleElementSyntax node)
+    public override Cs.TupleElement VisitTupleElement(TupleElementSyntax node)
     {
-        var type = MapType( node.Type);
         return new Cs.TupleElement(
             id: Core.Tree.RandomId(),
             prefix: Format(Leading(node)),
             markers: Markers.EMPTY,
             type: Convert<TypeTree>(node.Type)!,
-            name: MapIdentifier(identifier: node.Identifier, type: type));
+            name: MapIdentifier(identifier: node.Identifier, type: MapType( node.Type)));
 
     }
 
+    // this should never be called at it's handled at higher levels
     public override J? VisitOmittedTypeArgument(OmittedTypeArgumentSyntax node)
     {
         return null; // not special representation for generic type definition without type parameters. Ex: List<>
     }
 
-    public override J? VisitRefType(RefTypeSyntax node)
+    public override Cs.RefType VisitRefType(RefTypeSyntax node)
     {
         return new Cs.RefType(
             id: Core.Tree.RandomId(),
@@ -1435,10 +1463,10 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitScopedType(ScopedTypeSyntax node)
     {
-        return base.VisitScopedType(node);
+        return (J?)base.VisitScopedType(node);
     }
 
-    public override J? VisitParenthesizedExpression(ParenthesizedExpressionSyntax node)
+    public override J.Parentheses<Expression> VisitParenthesizedExpression(ParenthesizedExpressionSyntax node)
     {
         return new J.Parentheses<Expression>(
             id: Core.Tree.RandomId(),
@@ -1448,7 +1476,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitTupleExpression(TupleExpressionSyntax node)
+    public override Cs.TupleExpression VisitTupleExpression(TupleExpressionSyntax node)
     {
         return new Cs.TupleExpression(
             id: Core.Tree.RandomId(),
@@ -1495,7 +1523,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         catch (NotImplementedException)
         {
             // todo: temporary stopgap until all cases can be covered. known gaps are pointers (*something), and "from-end" [^3]
-            return base.VisitPrefixUnaryExpression(node);
+            return (J?)base.VisitPrefixUnaryExpression(node);
         }
 
     }
@@ -1538,7 +1566,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         };
     }
 
-    public override J? VisitPostfixUnaryExpression(PostfixUnaryExpressionSyntax node)
+    public override Expression VisitPostfixUnaryExpression(PostfixUnaryExpressionSyntax node)
     {
         var operatorEnum = MapPostfixUnaryOperator(operatorToken: node.OperatorToken);
         if (operatorEnum is J.Unary.Types jOperator)
@@ -1584,10 +1612,10 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     }
 
 
-    public override J? VisitMemberAccessExpression(MemberAccessExpressionSyntax node)
+    public override Expression VisitMemberAccessExpression(MemberAccessExpressionSyntax node)
     {
         var name = Convert<Expression>(node.Name)!;
-        J result;
+        Expression result;
         if (node.IsKind(SyntaxKind.PointerMemberAccessExpression))
         {
             result = name switch
@@ -1654,7 +1682,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         return result;
     }
 
-    public override J? VisitConditionalAccessExpression(ConditionalAccessExpressionSyntax node)
+    public override Expression VisitConditionalAccessExpression(ConditionalAccessExpressionSyntax node)
     {
         // conditional expressions appear in their "natural order"
         // meaning for an expression like this "a?.b", node a will be at the top of hierarchy
@@ -1751,7 +1779,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     /// Very similar to MemberAccessExpression, but doesn't have an expression portion - just identifier
     /// Used in ConditionalAccessExpression since they are constructed left to right, then right to left like normal field access
     /// </summary>
-    public override J? VisitMemberBindingExpression(MemberBindingExpressionSyntax node)
+    public override Expression VisitMemberBindingExpression(MemberBindingExpressionSyntax node)
     {
         var name = Convert<Expression>(node.Name)!;
 
@@ -1773,7 +1801,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     }
 
-    public override J? VisitElementBindingExpression(ElementBindingExpressionSyntax node)
+    public override Expression VisitElementBindingExpression(ElementBindingExpressionSyntax node)
     {
 
 
@@ -1802,7 +1830,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitRangeExpression(RangeExpressionSyntax node)
+    public override Cs.RangeExpression VisitRangeExpression(RangeExpressionSyntax node)
     {
         return new Cs.RangeExpression(
             id: Core.Tree.RandomId(),
@@ -1812,7 +1840,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             end: Convert<Expression>(node.RightOperand));
     }
 
-    public override J? VisitImplicitElementAccess(ImplicitElementAccessSyntax node)
+    public override Cs.ImplicitElementAccess VisitImplicitElementAccess(ImplicitElementAccessSyntax node)
     {
 
         return new Cs.ImplicitElementAccess(
@@ -1822,7 +1850,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             argumentList: ToJContainer<ArgumentSyntax, Cs.Argument>(syntaxList: node.ArgumentList.Arguments, openingToken: node.ArgumentList.OpenBracketToken));
     }
 
-    public override J? VisitConditionalExpression(ConditionalExpressionSyntax node)
+    public override J.Ternary VisitConditionalExpression(ConditionalExpressionSyntax node)
     {
         return new J.Ternary(
             id: Core.Tree.RandomId(),
@@ -1843,7 +1871,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitThisExpression(ThisExpressionSyntax node)
+    public override J.Identifier VisitThisExpression(ThisExpressionSyntax node)
     {
         return new J.Identifier(
             id: Core.Tree.RandomId(),
@@ -1856,7 +1884,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitLiteralExpression(LiteralExpressionSyntax node)
+    public override J.Literal VisitLiteralExpression(LiteralExpressionSyntax node)
     {
         return new J.Literal(
             id: Core.Tree.RandomId(),
@@ -1871,21 +1899,21 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitMakeRefExpression(MakeRefExpressionSyntax node)
     {
-        return base.VisitMakeRefExpression(node);
+        return (J?)base.VisitMakeRefExpression(node);
     }
 
     public override J? VisitRefTypeExpression(RefTypeExpressionSyntax node)
     {
-        return base.VisitRefTypeExpression(node);
+        return (J?)base.VisitRefTypeExpression(node);
     }
 
     public override J? VisitRefValueExpression(RefValueExpressionSyntax node)
     {
 
-        return base.VisitRefValueExpression(node);
+        return (J?)base.VisitRefValueExpression(node);
     }
 
-    public override J? VisitDefaultExpression(DefaultExpressionSyntax node)
+    public override Cs.DefaultExpression VisitDefaultExpression(DefaultExpressionSyntax node)
     {
         return new Cs.DefaultExpression(
             id: Core.Tree.RandomId(),
@@ -1895,7 +1923,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitTypeOfExpression(TypeOfExpressionSyntax node)
+    public override J.MethodInvocation VisitTypeOfExpression(TypeOfExpressionSyntax node)
     {
         return new J.MethodInvocation(
             id: Core.Tree.RandomId(),
@@ -1928,7 +1956,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitSizeOfExpression(SizeOfExpressionSyntax node)
+    public override J.MethodInvocation VisitSizeOfExpression(SizeOfExpressionSyntax node)
     {
         return new J.MethodInvocation(
             id: Core.Tree.RandomId(),
@@ -1961,7 +1989,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitElementAccessExpression(ElementAccessExpressionSyntax node)
+    public override J.ArrayAccess VisitElementAccessExpression(ElementAccessExpressionSyntax node)
     {
         // return MapArrayAccess(node, index: 0);
         var arguments = node.ArgumentList.Arguments.Count > 1 ? new Cs.ArrayRankSpecifier(
@@ -1987,46 +2015,25 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    private J.ArrayAccess MapArrayAccess(ElementAccessExpressionSyntax node, int index)
-    {
-        return new J.ArrayAccess(
-            id: Core.Tree.RandomId(),
-            prefix: index == 0 ? Format(Leading(node)) : Space.EMPTY,
-            markers: Markers.EMPTY,
-            indexed: index == node.ArgumentList.Arguments.Count - 1
-                ? Convert<Expression>(node.Expression)!
-                : MapArrayAccess(node, index + 1),
-            dimension: new J.ArrayDimension(
-                id: Core.Tree.RandomId(),
-                prefix: Format(Leading(node.ArgumentList.OpenBracketToken)),
-                markers: Markers.EMPTY,
-                index: new JRightPadded<Expression>(
-                    element: Convert<Expression>(node.ArgumentList.Arguments[index])!,
-                    after: Format(Trailing(node.ArgumentList.Arguments[index])),
-                    markers: Markers.EMPTY
-                )
-            ),
-            type: MapType( node) // TODO this probably needs to be specific to the current array dimension
-        );
-    }
+    
 
-    public override J? VisitBracketedArgumentList(BracketedArgumentListSyntax node)
+    public override JContainer<Cs.Argument> VisitBracketedArgumentList(BracketedArgumentListSyntax node)
     {
-        return base.VisitBracketedArgumentList(node);
+        return ToJContainer<ArgumentSyntax, Cs.Argument>(node.Arguments, node.OpenBracketToken);
     }
 
     public override J? VisitExpressionColon(ExpressionColonSyntax node)
     {
-        return base.VisitExpressionColon(node);
+        return (J?)base.VisitExpressionColon(node);
     }
 
     public override J? VisitNameColon(NameColonSyntax node)
     {
         // This was added in C# 4.0
-        return base.VisitNameColon(node);
+        return (J?)base.VisitNameColon(node);
     }
 
-    public override J? VisitDeclarationExpression(DeclarationExpressionSyntax node)
+    public override Cs.DeclarationExpression VisitDeclarationExpression(DeclarationExpressionSyntax node)
     {
         var result = new Cs.DeclarationExpression(
             id: Core.Tree.RandomId(),
@@ -2037,7 +2044,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         return result;
     }
 
-    public override J? VisitAnonymousMethodExpression(AnonymousMethodExpressionSyntax node)
+    public override J.MethodDeclaration VisitAnonymousMethodExpression(AnonymousMethodExpressionSyntax node)
     {
 
         return new J.MethodDeclaration(
@@ -2077,7 +2084,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitRefExpression(RefExpressionSyntax node)
+    public override Cs.RefExpression VisitRefExpression(RefExpressionSyntax node)
     {
         return new Cs.RefExpression(
             id: Core.Tree.RandomId(),
@@ -2086,17 +2093,17 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             expression: Convert<Expression>(node.Expression)!);
     }
 
-    public override J? VisitSimpleLambdaExpression(SimpleLambdaExpressionSyntax node)
+    public override Cs.Lambda VisitSimpleLambdaExpression(SimpleLambdaExpressionSyntax node)
     {
         return VisitLambdaExpressionSyntax(node);
     }
 
-    public override J? VisitParenthesizedLambdaExpression(ParenthesizedLambdaExpressionSyntax node)
+    public override Cs.Lambda VisitParenthesizedLambdaExpression(ParenthesizedLambdaExpressionSyntax node)
     {
         return VisitLambdaExpressionSyntax(node);
     }
 
-    private J? VisitLambdaExpressionSyntax(LambdaExpressionSyntax node)
+    private Cs.Lambda VisitLambdaExpressionSyntax(LambdaExpressionSyntax node)
     {
         var modifiers = MapModifiers(node.Modifiers);
 
@@ -2139,7 +2146,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         return csLambda;
     }
 
-    public override J? VisitInitializerExpression(InitializerExpressionSyntax node)
+    public override Cs.InitializerExpression VisitInitializerExpression(InitializerExpressionSyntax node)
     {
         var initializer = new Cs.InitializerExpression(
             id: Core.Tree.RandomId(),
@@ -2150,7 +2157,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         return initializer;
     }
 
-    public override J? VisitImplicitObjectCreationExpression(ImplicitObjectCreationExpressionSyntax node)
+    public override Cs.NewClass VisitImplicitObjectCreationExpression(ImplicitObjectCreationExpressionSyntax node)
     {
         var jNewClass =  new J.NewClass(
             id: Core.Tree.RandomId(),
@@ -2189,7 +2196,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         return csNewClass;
     }
 
-    public override J? VisitObjectCreationExpression(ObjectCreationExpressionSyntax node)
+    public override Cs.NewClass VisitObjectCreationExpression(ObjectCreationExpressionSyntax node)
     {
         var jNewClass = new J.NewClass(
             id: Core.Tree.RandomId(),
@@ -2237,10 +2244,10 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     public override J? VisitWithExpression(WithExpressionSyntax node)
     {
         // This was added in C# 9.0
-        return base.VisitWithExpression(node);
+        return (J?)base.VisitWithExpression(node);
     }
 
-    public override J? VisitAnonymousObjectMemberDeclarator(AnonymousObjectMemberDeclaratorSyntax node)
+    public override Expression? VisitAnonymousObjectMemberDeclarator(AnonymousObjectMemberDeclaratorSyntax node)
     {
         if (node.NameEquals == null)
             return Convert<Expression>(node.Expression);
@@ -2254,52 +2261,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    private JRightPadded<J.VariableDeclarations.NamedVariable> MapNamedVariableFromNameEquals(
-        NameEqualsSyntax nameEqualsSyntax, ExpressionSyntax expression)
-    {
-        return new JRightPadded<J.VariableDeclarations.NamedVariable>(
-            element: new J.VariableDeclarations.NamedVariable(
-                id: Core.Tree.RandomId(),
-                prefix: Format(Leading(nameEqualsSyntax.Name)),
-                markers: Markers.EMPTY,
-                name: Convert<J.Identifier>(nameEqualsSyntax.Name)!,
-                dimensionsAfterName: [],
-                initializer: new JLeftPadded<Expression>(
-                    before: Format(Leading(nameEqualsSyntax.EqualsToken)),
-                    element: Convert<Expression>(expression)!,
-                    markers: Markers.EMPTY
-                ),
-                variableType: MapType( expression) as JavaType.Variable
-            ),
-            after: Format(Trailing(expression)),
-            markers: Markers.EMPTY
-        );
-    }
-
-    private JRightPadded<J.VariableDeclarations.NamedVariable> MapNamedVariableFromExpression(
-        ExpressionSyntax expression)
-    {
-        var identifierOrFieldAccess = Convert<Expression>(expression)!;
-        var identifier = identifierOrFieldAccess is J.Identifier i
-            ? i
-            : (identifierOrFieldAccess as J.FieldAccess)?.Name ?? throw new InvalidOperationException(message: "Can't determine identifier");
-        return new JRightPadded<J.VariableDeclarations.NamedVariable>(
-            element: new J.VariableDeclarations.NamedVariable(
-                id: Core.Tree.RandomId(),
-                prefix: Format(Leading(expression)),
-                markers: Markers.EMPTY,
-                name: new J.Identifier(id: Core.Tree.RandomId(), prefix: identifierOrFieldAccess.Prefix, markers: identifierOrFieldAccess.Markers,
-                    annotations: identifier.Annotations, simpleName: expression.ToString(), type: identifier.Type, fieldType: identifier.FieldType),
-                dimensionsAfterName: [],
-                initializer: null,
-                variableType: identifier.Type as JavaType.Variable
-            ),
-            after: Format(Trailing(expression)),
-            markers: Markers.EMPTY
-        );
-    }
-
-    public override J? VisitAnonymousObjectCreationExpression(AnonymousObjectCreationExpressionSyntax node)
+    public override Cs.NewClass VisitAnonymousObjectCreationExpression(AnonymousObjectCreationExpressionSyntax node)
     {
         var jNewClass = new J.NewClass(
             id: Core.Tree.RandomId(),
@@ -2340,11 +2302,6 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         return csNewClass;
     }
 
-    private JRightPadded<Statement> MapAnonymousObjectMember(AnonymousObjectMemberDeclaratorSyntax aomds)
-    {
-        // This was added in C# 3.0
-        return MapAnonymousObjectMember(aomds: aomds, isLastElement: false);
-    }
 
     private JRightPadded<Statement> MapAnonymousObjectMember(AnonymousObjectMemberDeclaratorSyntax aomds,
         bool isLastElement)
@@ -2361,7 +2318,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitArrayCreationExpression(ArrayCreationExpressionSyntax node)
+    public override J.NewArray VisitArrayCreationExpression(ArrayCreationExpressionSyntax node)
     {
 
         var initializer = Convert<Cs.InitializerExpression>(node.Initializer);
@@ -2376,7 +2333,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitImplicitArrayCreationExpression(ImplicitArrayCreationExpressionSyntax node)
+    public override J.NewArray VisitImplicitArrayCreationExpression(ImplicitArrayCreationExpressionSyntax node)
     {
         var initializer = Convert<Cs.InitializerExpression>(node.Initializer);
         return new J.NewArray(
@@ -2404,7 +2361,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitStackAllocArrayCreationExpression(StackAllocArrayCreationExpressionSyntax node)
+    public override Cs.StackAllocExpression VisitStackAllocArrayCreationExpression(StackAllocArrayCreationExpressionSyntax node)
     {
         var initializer = Convert<Cs.InitializerExpression>(node.Initializer);
         var arrayType = (ArrayTypeSyntax)node.Type;
@@ -2427,7 +2384,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     }
 
 
-    public override J? VisitImplicitStackAllocArrayCreationExpression(ImplicitStackAllocArrayCreationExpressionSyntax node)
+    public override Cs.StackAllocExpression VisitImplicitStackAllocArrayCreationExpression(ImplicitStackAllocArrayCreationExpressionSyntax node)
     {
         var initializer = Convert<Cs.InitializerExpression>(node.Initializer);
 
@@ -2462,7 +2419,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitCollectionExpression(CollectionExpressionSyntax node)
+    public override Cs.CollectionExpression VisitCollectionExpression(CollectionExpressionSyntax node)
     {
         return new Cs.CollectionExpression(
             id: Core.Tree.RandomId(),
@@ -2496,12 +2453,12 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitExpressionElement(ExpressionElementSyntax node)
+    public override Expression? VisitExpressionElement(ExpressionElementSyntax node)
     {
         return Convert<Expression>(node.Expression);
     }
 
-    public override J? VisitSpreadElement(SpreadElementSyntax node)
+    public override Cs.Unary VisitSpreadElement(SpreadElementSyntax node)
     {
         return new Cs.Unary(
             id: Core.Tree.RandomId(),
@@ -2512,7 +2469,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             type: MapType(node));
     }
 
-    public override J? VisitQueryExpression(QueryExpressionSyntax node)
+    public override Cs.QueryExpression VisitQueryExpression(QueryExpressionSyntax node)
     {
         return new Cs.QueryExpression(
             id: Core.Tree.RandomId(),
@@ -2522,7 +2479,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             body: Convert<Cs.QueryBody>(node.Body)!);
     }
 
-    public override J? VisitQueryBody(QueryBodySyntax node)
+    public override Cs.QueryBody VisitQueryBody(QueryBodySyntax node)
     {
         return new Cs.QueryBody(
             id: Core.Tree.RandomId(),
@@ -2533,7 +2490,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             continuation: Convert<Cs.QueryContinuation>(node.Continuation)!);
     }
 
-    public override J? VisitFromClause(FromClauseSyntax node)
+    public override Cs.FromClause VisitFromClause(FromClauseSyntax node)
     {
         return new Cs.FromClause(
             id: Core.Tree.RandomId(),
@@ -2544,7 +2501,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             expression: Convert<Expression>(node.Expression)!);
     }
 
-    public override J? VisitLetClause(LetClauseSyntax node)
+    public override Cs.LetClause VisitLetClause(LetClauseSyntax node)
     {
         return new Cs.LetClause(
             id: Core.Tree.RandomId(),
@@ -2554,7 +2511,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             expression: Convert<Expression>(node.Expression)!);
     }
 
-    public override J? VisitJoinClause(JoinClauseSyntax node)
+    public override Cs.JoinClause VisitJoinClause(JoinClauseSyntax node)
     {
         return new Cs.JoinClause(
             id: Core.Tree.RandomId(),
@@ -2567,7 +2524,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             into: ToLeftPadded<Cs.JoinIntoClause>(node.Into));
     }
 
-    public override J? VisitJoinIntoClause(JoinIntoClauseSyntax node)
+    public override Cs.JoinIntoClause VisitJoinIntoClause(JoinIntoClauseSyntax node)
     {
         return new Cs.JoinIntoClause(
             id: Core.Tree.RandomId(),
@@ -2576,7 +2533,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             identifier: MapIdentifier(node.Identifier, MapType(node)));
     }
 
-    public override J? VisitWhereClause(WhereClauseSyntax node)
+    public override Cs.WhereClause VisitWhereClause(WhereClauseSyntax node)
     {
         return new Cs.WhereClause(
             id: Core.Tree.RandomId(),
@@ -2585,7 +2542,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             condition: Convert<Expression>(node.Condition)!);
     }
 
-    public override J? VisitOrderByClause(OrderByClauseSyntax node)
+    public override Cs.OrderByClause VisitOrderByClause(OrderByClauseSyntax node)
     {
         return new Cs.OrderByClause(
             id: Core.Tree.RandomId(),
@@ -2594,7 +2551,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             orderings: ToRightPadded<OrderingSyntax, Cs.Ordering>(node.Orderings)!);
     }
 
-    public override J? VisitSelectClause(SelectClauseSyntax node)
+    public override Cs.SelectClause VisitSelectClause(SelectClauseSyntax node)
     {
         return new Cs.SelectClause(
             id: Core.Tree.RandomId(),
@@ -2603,7 +2560,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             expression: Convert<Expression>(node.Expression)!);
     }
 
-    public override J? VisitGroupClause(GroupClauseSyntax node)
+    public override Cs.GroupClause VisitGroupClause(GroupClauseSyntax node)
     {
         return new Cs.GroupClause(
             id: Core.Tree.RandomId(),
@@ -2613,7 +2570,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             key: Convert<Expression>(node.ByExpression)!);
     }
 
-    public override J? VisitQueryContinuation(QueryContinuationSyntax node)
+    public override Cs.QueryContinuation VisitQueryContinuation(QueryContinuationSyntax node)
     {
         return new Cs.QueryContinuation(
             id: Core.Tree.RandomId(),
@@ -2623,7 +2580,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             body: Convert<Cs.QueryBody>(node.Body)!);
     }
 
-    public override J? VisitOmittedArraySizeExpression(OmittedArraySizeExpressionSyntax node)
+    public override J.Empty VisitOmittedArraySizeExpression(OmittedArraySizeExpressionSyntax node)
     {
         return new J.Empty(
             id: Core.Tree.RandomId(),
@@ -2632,7 +2589,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitInterpolatedStringExpression(InterpolatedStringExpressionSyntax node)
+    public override Cs.InterpolatedString VisitInterpolatedStringExpression(InterpolatedStringExpressionSyntax node)
     {
         // This was added in C# 6.0
         return new Cs.InterpolatedString(
@@ -2662,7 +2619,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitIsPatternExpression(IsPatternExpressionSyntax node)
+    public override Cs.IsPattern VisitIsPatternExpression(IsPatternExpressionSyntax node)
     {
         return new Cs.IsPattern(
             id: Core.Tree.RandomId(),
@@ -2728,7 +2685,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     }
 
-    public override J? VisitThrowExpression(ThrowExpressionSyntax node)
+    public override Cs.StatementExpression VisitThrowExpression(ThrowExpressionSyntax node)
     {
         return new Cs.StatementExpression(
             id: Core.Tree.RandomId(),
@@ -2743,12 +2700,12 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitWhenClause(WhenClauseSyntax node)
+    public override Expression? VisitWhenClause(WhenClauseSyntax node)
     {
         return Convert<Expression>(node.Condition);
     }
 
-    public override J? VisitDiscardPattern(DiscardPatternSyntax node)
+    public override Cs.DiscardPattern VisitDiscardPattern(DiscardPatternSyntax node)
     {
         return new Cs.DiscardPattern(
             id: Core.Tree.RandomId(),
@@ -2757,7 +2714,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             type: MapType(node));
     }
 
-    public override J? VisitDeclarationPattern(DeclarationPatternSyntax node)
+    public override Cs.TypePattern VisitDeclarationPattern(DeclarationPatternSyntax node)
     {
         return new Cs.TypePattern(
             id: Core.Tree.RandomId(),
@@ -2768,7 +2725,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitVarPattern(VarPatternSyntax node)
+    public override Cs.VarPattern VisitVarPattern(VarPatternSyntax node)
     {
         return new Cs.VarPattern(
             id: Core.Tree.RandomId(),
@@ -2778,7 +2735,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitRecursivePattern(RecursivePatternSyntax node)
+    public override Cs.RecursivePattern VisitRecursivePattern(RecursivePatternSyntax node)
     {
         return new Cs.RecursivePattern(
             id: Core.Tree.RandomId(),
@@ -2791,7 +2748,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitPositionalPatternClause(PositionalPatternClauseSyntax node)
+    public override Cs.PositionalPatternClause VisitPositionalPatternClause(PositionalPatternClauseSyntax node)
     {
         return new Cs.PositionalPatternClause(
             id: Core.Tree.RandomId(),
@@ -2800,7 +2757,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             subpatterns: ToJContainer<SubpatternSyntax, Cs.Subpattern>(node.Subpatterns, node.OpenParenToken));
     }
 
-    public override J? VisitPropertyPatternClause(PropertyPatternClauseSyntax node)
+    public override Cs.PropertyPatternClause VisitPropertyPatternClause(PropertyPatternClauseSyntax node)
     {
         return new Cs.PropertyPatternClause(
             id: Core.Tree.RandomId(),
@@ -2809,7 +2766,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             subpatterns: ToJContainer<SubpatternSyntax, Expression>(node.Subpatterns, node.OpenBraceToken));
     }
 
-    public override J? VisitConstantPattern(ConstantPatternSyntax node)
+    public override Cs.ConstantPattern VisitConstantPattern(ConstantPatternSyntax node)
     {
         return new Cs.ConstantPattern(
             id: Core.Tree.RandomId(),
@@ -2819,7 +2776,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitParenthesizedPattern(ParenthesizedPatternSyntax node)
+    public override Cs.ParenthesizedPattern VisitParenthesizedPattern(ParenthesizedPatternSyntax node)
     {
         return new Cs.ParenthesizedPattern(
             id: Core.Tree.RandomId(),
@@ -2828,7 +2785,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             pattern: ToJContainer<PatternSyntax, Cs.Pattern>([node.Pattern], node.OpenParenToken));
     }
 
-    public override J? VisitRelationalPattern(RelationalPatternSyntax node)
+    public override Cs.RelationalPattern VisitRelationalPattern(RelationalPatternSyntax node)
     {
         var operatorType = node.OperatorToken.Kind() switch
         {
@@ -2847,7 +2804,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitTypePattern(TypePatternSyntax node)
+    public override Cs.TypePattern VisitTypePattern(TypePatternSyntax node)
     {
         return new Cs.TypePattern(
             id: Core.Tree.RandomId(),
@@ -2858,7 +2815,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitUnaryPattern(UnaryPatternSyntax node)
+    public override Cs.UnaryPattern VisitUnaryPattern(UnaryPatternSyntax node)
     {
         return new Cs.UnaryPattern(
             id: Core.Tree.RandomId(),
@@ -2882,7 +2839,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             kind: keywordKind
         );
     }
-    public override J? VisitListPattern(ListPatternSyntax node)
+    public override Cs.ListPattern VisitListPattern(ListPatternSyntax node)
     {
         return new Cs.ListPattern(
             id: Core.Tree.RandomId(),
@@ -2893,7 +2850,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitSlicePattern(SlicePatternSyntax node)
+    public override Cs.SlicePattern VisitSlicePattern(SlicePatternSyntax node)
     {
         return new Cs.SlicePattern(
             id: Core.Tree.RandomId(),
@@ -2902,7 +2859,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitInterpolatedStringText(InterpolatedStringTextSyntax node)
+    public override J.Literal VisitInterpolatedStringText(InterpolatedStringTextSyntax node)
     {
         return new J.Literal(
             id: Core.Tree.RandomId(),
@@ -2915,12 +2872,12 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitInterpolationAlignmentClause(InterpolationAlignmentClauseSyntax node)
+    public override Expression? VisitInterpolationAlignmentClause(InterpolationAlignmentClauseSyntax node)
     {
         return Convert<Expression>(node.Value);
     }
 
-    public override J? VisitInterpolationFormatClause(InterpolationFormatClauseSyntax node)
+    public override J.Literal VisitInterpolationFormatClause(InterpolationFormatClauseSyntax node)
     {
         return new J.Literal(
             id: Core.Tree.RandomId(),
@@ -2933,12 +2890,12 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitGlobalStatement(GlobalStatementSyntax node)
+    public override Statement? VisitGlobalStatement(GlobalStatementSyntax node)
     {
-        return node.Statement.Accept(visitor: this);
+        return (Statement?)node.Statement.Accept(visitor: this);
     }
 
-    public override J? VisitLocalFunctionStatement(LocalFunctionStatementSyntax node)
+    public override J.MethodDeclaration? VisitLocalFunctionStatement(LocalFunctionStatementSyntax node)
     {
         return new J.MethodDeclaration(
             id: Core.Tree.RandomId(),
@@ -2968,7 +2925,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitLocalDeclarationStatement(LocalDeclarationStatementSyntax node)
+    public override Statement? VisitLocalDeclarationStatement(LocalDeclarationStatementSyntax node)
     {
         Statement result;
         var type = MapType(node);
@@ -3040,7 +2997,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitVariableDeclaration(VariableDeclarationSyntax node)
+    public override J.VariableDeclarations VisitVariableDeclaration(VariableDeclarationSyntax node)
     {
         return new J.VariableDeclarations(
             id: Core.Tree.RandomId(),
@@ -3055,9 +3012,9 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitVariableDeclarator(VariableDeclaratorSyntax node)
+    public override J.VariableDeclarations.NamedVariable VisitVariableDeclarator(VariableDeclaratorSyntax node)
     {
-        var javaType = (MapType( node) as JavaType.Variable)!;
+        var javaType = MapType( node) as JavaType.Variable;
         return new J.VariableDeclarations.NamedVariable(
             id: Core.Tree.RandomId(),
             prefix: Format(Leading(node.Identifier)),
@@ -3068,7 +3025,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
                 markers: Markers.EMPTY,
                 annotations: [],
                 simpleName: node.Identifier.Text,
-                type: javaType.Type,
+                type: javaType?.Type,
                 fieldType: javaType
             ),
             dimensionsAfterName: MapArrayDimensions(nodeArgumentList: node.ArgumentList),
@@ -3090,10 +3047,10 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitEqualsValueClause(EqualsValueClauseSyntax node)
     {
-        return base.VisitEqualsValueClause(node);
+        return (J?)base.VisitEqualsValueClause(node);
     }
 
-    public override J? VisitSingleVariableDesignation(SingleVariableDesignationSyntax node)
+    public override Cs.SingleVariableDesignation VisitSingleVariableDesignation(SingleVariableDesignationSyntax node)
     {
         return new Cs.SingleVariableDesignation(
             id: Core.Tree.RandomId(),
@@ -3102,7 +3059,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             name: MapIdentifier(identifier: node.Identifier, type: MapType( node)));
     }
 
-    public override J? VisitDiscardDesignation(DiscardDesignationSyntax node)
+    public override Cs.DiscardVariableDesignation VisitDiscardDesignation(DiscardDesignationSyntax node)
     {
         return new Cs.DiscardVariableDesignation(
             id: Core.Tree.RandomId(),
@@ -3111,7 +3068,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             discard: MapIdentifier(identifier: node.UnderscoreToken, type: MapType( node)));
     }
 
-    public override J? VisitParenthesizedVariableDesignation(ParenthesizedVariableDesignationSyntax node)
+    public override Cs.ParenthesizedVariableDesignation VisitParenthesizedVariableDesignation(ParenthesizedVariableDesignationSyntax node)
     {
         return new Cs.ParenthesizedVariableDesignation(
             id: Core.Tree.RandomId(),
@@ -3121,7 +3078,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             type: MapType( node));
     }
 
-    public override J? VisitExpressionStatement(ExpressionStatementSyntax node)
+    public override Cs.ExpressionStatement VisitExpressionStatement(ExpressionStatementSyntax node)
     {
         return new Cs.ExpressionStatement(
             id: Core.Tree.RandomId(),
@@ -3131,7 +3088,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitEmptyStatement(EmptyStatementSyntax node)
+    public override J.Empty VisitEmptyStatement(EmptyStatementSyntax node)
     {
         return new J.Empty(
             id: Core.Tree.RandomId(),
@@ -3140,7 +3097,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitLabeledStatement(LabeledStatementSyntax node)
+    public override J.Label VisitLabeledStatement(LabeledStatementSyntax node)
     {
         return new J.Label(
             id: Core.Tree.RandomId(),
@@ -3155,7 +3112,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitGotoStatement(GotoStatementSyntax node)
+    public override Cs.GotoStatement VisitGotoStatement(GotoStatementSyntax node)
     {
 
         return new Cs.GotoStatement(
@@ -3167,7 +3124,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitContinueStatement(ContinueStatementSyntax node)
+    public override J.Continue VisitContinueStatement(ContinueStatementSyntax node)
     {
         return new J.Continue(
             id: Core.Tree.RandomId(),
@@ -3177,7 +3134,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitReturnStatement(ReturnStatementSyntax node)
+    public override J.Return VisitReturnStatement(ReturnStatementSyntax node)
     {
         return new J.Return(
             id: Core.Tree.RandomId(),
@@ -3187,7 +3144,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitThrowStatement(ThrowStatementSyntax node)
+    public override J.Throw VisitThrowStatement(ThrowStatementSyntax node)
     {
         // FIXME: NODE has AttributesList
         return new J.Throw(
@@ -3204,7 +3161,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitYieldStatement(YieldStatementSyntax node)
+    public override Cs.Yield VisitYieldStatement(YieldStatementSyntax node)
     {
         return new Cs.Yield(
             id: Core.Tree.RandomId(),
@@ -3218,7 +3175,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             expression: Convert<Expression>(node.Expression)!);
     }
 
-    public override J? VisitWhileStatement(WhileStatementSyntax node)
+    public override J.WhileLoop VisitWhileStatement(WhileStatementSyntax node)
     {
         return new J.WhileLoop(
             id: Core.Tree.RandomId(),
@@ -3237,7 +3194,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitDoStatement(DoStatementSyntax node)
+    public override J.DoWhileLoop VisitDoStatement(DoStatementSyntax node)
     {
         var condition = JLeftPadded.Create(
             new J.ControlParentheses<Expression>(
@@ -3256,7 +3213,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     }
 
-    public override J? VisitForStatement(ForStatementSyntax node)
+    public override J.ForLoop VisitForStatement(ForStatementSyntax node)
     {
         return new J.ForLoop(
             id: Core.Tree.RandomId(),
@@ -3296,7 +3253,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitForEachStatement(ForEachStatementSyntax node)
+    public override Statement VisitForEachStatement(ForEachStatementSyntax node)
     {
         var javaType = (MapType( node) as JavaType.Variable)!;
         var loop = new J.ForEachLoop(
@@ -3362,7 +3319,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         return loop;
     }
 
-    public override J? VisitForEachVariableStatement(ForEachVariableStatementSyntax node)
+    public override Cs.ForEachVariableLoop VisitForEachVariableStatement(ForEachVariableStatementSyntax node)
     {
         return new Cs.ForEachVariableLoop(
             id: Core.Tree.RandomId(),
@@ -3380,7 +3337,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     }
 
-    public override J? VisitUsingStatement(UsingStatementSyntax node)
+    public override  Cs.UsingStatement VisitUsingStatement(UsingStatementSyntax node)
     {
         var statement = Convert<Statement>(node.Statement) ?? throw new InvalidOperationException(message: "Statement is empty after conversion");
         var expressionNode = (SyntaxNode?)node.Expression ?? node.Declaration!;
@@ -3416,7 +3373,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     }
 
-    public override J? VisitFixedStatement(FixedStatementSyntax node)
+    public override Cs.FixedStatement VisitFixedStatement(FixedStatementSyntax node)
     {
         return new Cs.FixedStatement(
             id: Core.Tree.RandomId(),
@@ -3438,7 +3395,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     }
 
-    public override J? VisitCheckedStatement(CheckedStatementSyntax node)
+    public override Cs.CheckedStatement VisitCheckedStatement(CheckedStatementSyntax node)
     {
         return new Cs.CheckedStatement(
             id: Core.Tree.RandomId(),
@@ -3449,7 +3406,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitUnsafeStatement(UnsafeStatementSyntax node)
+    public override Cs.UnsafeStatement VisitUnsafeStatement(UnsafeStatementSyntax node)
     {
         return new Cs.UnsafeStatement(
             id: Core.Tree.RandomId(),
@@ -3459,7 +3416,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitLockStatement(LockStatementSyntax node)
+    public override Cs.LockStatement VisitLockStatement(LockStatementSyntax node)
     {
         return new Cs.LockStatement(
             id: Core.Tree.RandomId(),
@@ -3470,7 +3427,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitIfStatement(IfStatementSyntax node)
+    public override J.If VisitIfStatement(IfStatementSyntax node)
     {
         return new J.If(
             id: Core.Tree.RandomId(),
@@ -3515,7 +3472,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             ));
     }
 
-    public override J? VisitElseClause(ElseClauseSyntax node)
+    public override J.If.Else VisitElseClause(ElseClauseSyntax node)
     {
         return new J.If.Else(
             id: Core.Tree.RandomId(),
@@ -3525,7 +3482,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitSwitchStatement(SwitchStatementSyntax node)
+    public override Statement VisitSwitchStatement(SwitchStatementSyntax node)
     {
         Statement result = new Cs.SwitchStatement(
             id: Core.Tree.RandomId(),
@@ -3550,7 +3507,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     }
 
 
-    public override J? VisitSwitchSection(SwitchSectionSyntax node)
+    public override Cs.SwitchSection VisitSwitchSection(SwitchSectionSyntax node)
     {
         return new Cs.SwitchSection(
             id: Core.Tree.RandomId(),
@@ -3573,7 +3530,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
     //     );
     // }
 
-    public override J? VisitCasePatternSwitchLabel(CasePatternSwitchLabelSyntax node)
+    public override Cs.CasePatternSwitchLabel VisitCasePatternSwitchLabel(CasePatternSwitchLabelSyntax node)
     {
         return new Cs.CasePatternSwitchLabel(
             id: Core.Tree.RandomId(),
@@ -3584,7 +3541,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             colonToken: Format(Leading(node.ColonToken)));
     }
 
-    public override J? VisitCaseSwitchLabel(CaseSwitchLabelSyntax node)
+    public override Cs.CasePatternSwitchLabel VisitCaseSwitchLabel(CaseSwitchLabelSyntax node)
     {
         Cs.Pattern pattern = node.Value switch
         {
@@ -3609,7 +3566,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             colonToken: Format(Leading(node.ColonToken)));
     }
 
-    public override J? VisitDefaultSwitchLabel(DefaultSwitchLabelSyntax node)
+    public override Cs.DefaultSwitchLabel VisitDefaultSwitchLabel(DefaultSwitchLabelSyntax node)
     {
         return new Cs.DefaultSwitchLabel(
             id: Core.Tree.RandomId(),
@@ -3618,7 +3575,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             colonToken: Format(Leading(node.ColonToken)));
     }
 
-    public override J? VisitSwitchExpression(SwitchExpressionSyntax node)
+    public override Cs.SwitchExpression VisitSwitchExpression(SwitchExpressionSyntax node)
     {
         return new Cs.SwitchExpression(
             id: Core.Tree.RandomId(),
@@ -3628,7 +3585,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             arms: ToJContainer<SwitchExpressionArmSyntax, Cs.SwitchExpressionArm>(node.Arms, node.OpenBraceToken));
     }
 
-    public override J? VisitSwitchExpressionArm(SwitchExpressionArmSyntax node)
+    public override Cs.SwitchExpressionArm VisitSwitchExpressionArm(SwitchExpressionArmSyntax node)
     {
         return new Cs.SwitchExpressionArm(
             id: Core.Tree.RandomId(),
@@ -3639,7 +3596,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             expression: ToLeftPadded<Expression>(node.Expression)!);
     }
 
-    public override J? VisitTryStatement(TryStatementSyntax node)
+    public override Cs.Try VisitTryStatement(TryStatementSyntax node)
     {
         return new Cs.Try(
             id: Core.Tree.RandomId(),
@@ -3656,7 +3613,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitCatchFilterClause(CatchFilterClauseSyntax node)
+    public override J.ControlParentheses<Expression> VisitCatchFilterClause(CatchFilterClauseSyntax node)
     {
         return new J.ControlParentheses<Expression>(
             id: Core.Tree.RandomId(),
@@ -3666,12 +3623,12 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitFinallyClause(FinallyClauseSyntax node)
+    public override J.Block? VisitFinallyClause(FinallyClauseSyntax node)
     {
         return Convert<J.Block>(node.Block);
     }
 
-    public override J? VisitExternAliasDirective(ExternAliasDirectiveSyntax node)
+    public override Cs.ExternAlias VisitExternAliasDirective(ExternAliasDirectiveSyntax node)
     {
         return new Cs.ExternAlias(
             id: Core.Tree.RandomId(),
@@ -3685,22 +3642,22 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitAttributeTargetSpecifier(AttributeTargetSpecifierSyntax node)
+    public override J.Identifier VisitAttributeTargetSpecifier(AttributeTargetSpecifierSyntax node)
     {
         return MapIdentifier(identifier: node.Identifier, type: null);
     }
 
     public override J? VisitAttributeArgumentList(AttributeArgumentListSyntax node)
     {
-        return base.VisitAttributeArgumentList(node);
+        return (J?)base.VisitAttributeArgumentList(node);
     }
 
     public override J? VisitNameEquals(NameEqualsSyntax node)
     {
-        return base.VisitNameEquals(node);
+        return (J?)base.VisitNameEquals(node);
     }
 
-    public override J? VisitDelegateDeclaration(DelegateDeclarationSyntax node)
+    public override Cs.DelegateDeclaration VisitDelegateDeclaration(DelegateDeclarationSyntax node)
     {
         return new Cs.DelegateDeclaration(
             id: Core.Tree.RandomId(),
@@ -3715,7 +3672,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             typeParameterConstraintClauses: MapTypeParameterConstraintClauses(node.ConstraintClauses));
     }
 
-    public override J? VisitEnumMemberDeclaration(EnumMemberDeclarationSyntax node)
+    public override Cs.EnumMemberDeclaration VisitEnumMemberDeclaration(EnumMemberDeclarationSyntax node)
     {
         return new Cs.EnumMemberDeclaration(
             id: Core.Tree.RandomId(),
@@ -3727,7 +3684,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     }
 
-    public override J? VisitConstructorConstraint(ConstructorConstraintSyntax node)
+    public override Cs.ConstructorConstraint VisitConstructorConstraint(ConstructorConstraintSyntax node)
     {
         return new Cs.ConstructorConstraint(
             id: Core.Tree.RandomId(),
@@ -3735,7 +3692,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             markers: Markers.EMPTY);
     }
 
-    public override J? VisitClassOrStructConstraint(ClassOrStructConstraintSyntax node)
+    public override Cs.ClassOrStructConstraint VisitClassOrStructConstraint(ClassOrStructConstraintSyntax node)
     {
         return new Cs.ClassOrStructConstraint(
             id: Core.Tree.RandomId(),
@@ -3744,7 +3701,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             kind: node.ClassOrStructKeyword.IsKind(SyntaxKind.ClassKeyword) ? Cs.ClassOrStructConstraint.TypeKind.Class : Cs.ClassOrStructConstraint.TypeKind.Struct);
     }
 
-    public override J? VisitTypeConstraint(TypeConstraintSyntax node)
+    public override Cs.TypeConstraint VisitTypeConstraint(TypeConstraintSyntax node)
     {
         return new Cs.TypeConstraint(
             id: Core.Tree.RandomId(),
@@ -3753,7 +3710,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             typeExpression: Convert<TypeTree>(node.Type)!);
     }
 
-    public override J? VisitDefaultConstraint(DefaultConstraintSyntax node)
+    public override Cs.DefaultConstraint VisitDefaultConstraint(DefaultConstraintSyntax node)
     {
         return new Cs.DefaultConstraint(
             id: Core.Tree.RandomId(),
@@ -3761,7 +3718,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             markers: Markers.EMPTY);
     }
 
-    public override J? VisitAllowsConstraintClause(AllowsConstraintClauseSyntax node)
+    public override Cs.AllowsConstraintClause VisitAllowsConstraintClause(AllowsConstraintClauseSyntax node)
     {
         return new Cs.AllowsConstraintClause(
             id: Core.Tree.RandomId(),
@@ -3772,10 +3729,10 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitRefStructConstraint(RefStructConstraintSyntax node)
     {
-        return base.VisitRefStructConstraint(node);
+        return (J?)base.VisitRefStructConstraint(node);
     }
 
-    public override J? VisitFieldDeclaration(FieldDeclarationSyntax node)
+    public override Statement VisitFieldDeclaration(FieldDeclarationSyntax node)
     {
         var attributeLists = MapAttributes(m: node.AttributeLists);
         var variableDeclarations = new J.VariableDeclarations(
@@ -3800,7 +3757,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             : variableDeclarations;
     }
 
-    public override J? VisitEventFieldDeclaration(EventFieldDeclarationSyntax node)
+    public override Cs.EventDeclaration VisitEventFieldDeclaration(EventFieldDeclarationSyntax node)
     {
         var typeTree = Convert<TypeTree>(node.Declaration.Type)!;
         return new Cs.EventDeclaration(
@@ -3817,12 +3774,12 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax node)
+    public override NameTree? VisitExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax node)
     {
         return Convert<NameTree>(node.Name);
     }
 
-    public override J? VisitOperatorDeclaration(OperatorDeclarationSyntax node)
+    public override Cs.OperatorDeclaration VisitOperatorDeclaration(OperatorDeclarationSyntax node)
     {
         var @operator = node.OperatorToken.Kind() switch
         {
@@ -3867,7 +3824,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     }
 
-    public override J? VisitConversionOperatorDeclaration(ConversionOperatorDeclarationSyntax node)
+    public override Statement VisitConversionOperatorDeclaration(ConversionOperatorDeclarationSyntax node)
     {
         var attributeLists = MapAttributes(m: node.AttributeLists);
         Statement returnValue = new Cs.ConversionOperatorDeclaration(
@@ -3894,7 +3851,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         return returnValue;
     }
 
-    public override J? VisitConstructorDeclaration(ConstructorDeclarationSyntax node)
+    public override Statement VisitConstructorDeclaration(ConstructorDeclarationSyntax node)
     {
 
 
@@ -3949,7 +3906,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             : constructor;
     }
 
-    public override J? VisitConstructorInitializer(ConstructorInitializerSyntax node)
+    public override Cs.ConstructorInitializer VisitConstructorInitializer(ConstructorInitializerSyntax node)
     {
         return new Cs.ConstructorInitializer(
             id: Core.Tree.RandomId(),
@@ -3965,11 +3922,8 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitDestructorDeclaration(DestructorDeclarationSyntax node)
+    public override Statement VisitDestructorDeclaration(DestructorDeclarationSyntax node)
     {
-
-
-
         var attributeLists = MapAttributes(m: node.AttributeLists);
         var methodDeclaration = new J.MethodDeclaration(
             id: Core.Tree.RandomId(),
@@ -4018,7 +3972,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             : null;
         return retval;
     }
-    public override J? VisitPropertyDeclaration(PropertyDeclarationSyntax node)
+    public override Cs.PropertyDeclaration VisitPropertyDeclaration(PropertyDeclarationSyntax node)
     {
         var typeTree = Convert<TypeTree>(node.Type)!;
         return new Cs.PropertyDeclaration(
@@ -4042,7 +3996,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitArrowExpressionClause(ArrowExpressionClauseSyntax node)
+    public override Cs.ArrowExpressionClause VisitArrowExpressionClause(ArrowExpressionClauseSyntax node)
     {
         return new Cs.ArrowExpressionClause(
             id: Core.Tree.RandomId(),
@@ -4052,7 +4006,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         );
     }
 
-    public override J? VisitEventDeclaration(EventDeclarationSyntax node)
+    public override Cs.EventDeclaration VisitEventDeclaration(EventDeclarationSyntax node)
     {
 
         var typeTree = Convert<TypeTree>(node.Type)!;
@@ -4071,7 +4025,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     }
 
-    public override J? VisitIndexerDeclaration(IndexerDeclarationSyntax node)
+    public override Statement VisitIndexerDeclaration(IndexerDeclarationSyntax node)
     {
         // return base.VisitIndexerDeclaration(node);
         var attributeLists = MapAttributes(m: node.AttributeLists);
@@ -4096,7 +4050,7 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
             accessors: Convert<J.Block>(node.AccessorList)
         );
 
-        if(attributeLists != null)
+        if(attributeLists.Count > 0)
         {
             returnValue = new Cs.AnnotatedStatement(
                 id: Core.Tree.RandomId(),
@@ -4112,242 +4066,242 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
 
     public override J? VisitParameterList(ParameterListSyntax node)
     {
-        return base.VisitParameterList(node);
+        return (J?)base.VisitParameterList(node);
     }
 
     public override J? VisitBracketedParameterList(BracketedParameterListSyntax node)
     {
-        return base.VisitBracketedParameterList(node);
+        return (J?)base.VisitBracketedParameterList(node);
     }
 
     public override J? VisitFunctionPointerParameter(FunctionPointerParameterSyntax node)
     {
-        return base.VisitFunctionPointerParameter(node);
+        return (J?)base.VisitFunctionPointerParameter(node);
     }
 
     public override J? VisitIncompleteMember(IncompleteMemberSyntax node)
     {
-        return base.VisitIncompleteMember(node);
+        return (J?)base.VisitIncompleteMember(node);
     }
 
     public override J? VisitSkippedTokensTrivia(SkippedTokensTriviaSyntax node)
     {
-        return base.VisitSkippedTokensTrivia(node);
+        return (J?)base.VisitSkippedTokensTrivia(node);
     }
 
     public override J? VisitDocumentationCommentTrivia(DocumentationCommentTriviaSyntax node)
     {
-        return base.VisitDocumentationCommentTrivia(node);
+        return (J?)base.VisitDocumentationCommentTrivia(node);
     }
 
     public override J? VisitTypeCref(TypeCrefSyntax node)
     {
-        return base.VisitTypeCref(node);
+        return (J?)base.VisitTypeCref(node);
     }
 
     public override J? VisitQualifiedCref(QualifiedCrefSyntax node)
     {
-        return base.VisitQualifiedCref(node);
+        return (J?)base.VisitQualifiedCref(node);
     }
 
     public override J? VisitNameMemberCref(NameMemberCrefSyntax node)
     {
-        return base.VisitNameMemberCref(node);
+        return (J?)base.VisitNameMemberCref(node);
     }
 
     public override J? VisitIndexerMemberCref(IndexerMemberCrefSyntax node)
     {
-        return base.VisitIndexerMemberCref(node);
+        return (J?)base.VisitIndexerMemberCref(node);
     }
 
     public override J? VisitOperatorMemberCref(OperatorMemberCrefSyntax node)
     {
-        return base.VisitOperatorMemberCref(node);
+        return (J?)base.VisitOperatorMemberCref(node);
     }
 
     public override J? VisitConversionOperatorMemberCref(ConversionOperatorMemberCrefSyntax node)
     {
-        return base.VisitConversionOperatorMemberCref(node);
+        return (J?)base.VisitConversionOperatorMemberCref(node);
     }
 
     public override J? VisitCrefParameterList(CrefParameterListSyntax node)
     {
-        return base.VisitCrefParameterList(node);
+        return (J?)base.VisitCrefParameterList(node);
     }
 
     public override J? VisitCrefBracketedParameterList(CrefBracketedParameterListSyntax node)
     {
-        return base.VisitCrefBracketedParameterList(node);
+        return (J?)base.VisitCrefBracketedParameterList(node);
     }
 
     public override J? VisitCrefParameter(CrefParameterSyntax node)
     {
-        return base.VisitCrefParameter(node);
+        return (J?)base.VisitCrefParameter(node);
     }
 
     public override J? VisitXmlElement(XmlElementSyntax node)
     {
-        return base.VisitXmlElement(node);
+        return (J?)base.VisitXmlElement(node);
     }
 
     public override J? VisitXmlElementStartTag(XmlElementStartTagSyntax node)
     {
-        return base.VisitXmlElementStartTag(node);
+        return (J?)base.VisitXmlElementStartTag(node);
     }
 
     public override J? VisitXmlElementEndTag(XmlElementEndTagSyntax node)
     {
-        return base.VisitXmlElementEndTag(node);
+        return (J?)base.VisitXmlElementEndTag(node);
     }
 
     public override J? VisitXmlEmptyElement(XmlEmptyElementSyntax node)
     {
-        return base.VisitXmlEmptyElement(node);
+        return (J?)base.VisitXmlEmptyElement(node);
     }
 
     public override J? VisitXmlName(XmlNameSyntax node)
     {
-        return base.VisitXmlName(node);
+        return (J?)base.VisitXmlName(node);
     }
 
     public override J? VisitXmlPrefix(XmlPrefixSyntax node)
     {
-        return base.VisitXmlPrefix(node);
+        return (J?)base.VisitXmlPrefix(node);
     }
 
     public override J? VisitXmlTextAttribute(XmlTextAttributeSyntax node)
     {
-        return base.VisitXmlTextAttribute(node);
+        return (J?)base.VisitXmlTextAttribute(node);
     }
 
     public override J? VisitXmlCrefAttribute(XmlCrefAttributeSyntax node)
     {
-        return base.VisitXmlCrefAttribute(node);
+        return (J?)base.VisitXmlCrefAttribute(node);
     }
 
     public override J? VisitXmlNameAttribute(XmlNameAttributeSyntax node)
     {
-        return base.VisitXmlNameAttribute(node);
+        return (J?)base.VisitXmlNameAttribute(node);
     }
 
     public override J? VisitXmlText(XmlTextSyntax node)
     {
-        return base.VisitXmlText(node);
+        return (J?)base.VisitXmlText(node);
     }
 
     public override J? VisitXmlCDataSection(XmlCDataSectionSyntax node)
     {
-        return base.VisitXmlCDataSection(node);
+        return (J?)base.VisitXmlCDataSection(node);
     }
 
     public override J? VisitXmlProcessingInstruction(XmlProcessingInstructionSyntax node)
     {
-        return base.VisitXmlProcessingInstruction(node);
+        return (J?)base.VisitXmlProcessingInstruction(node);
     }
 
     public override J? VisitXmlComment(XmlCommentSyntax node)
     {
-        return base.VisitXmlComment(node);
+        return (J?)base.VisitXmlComment(node);
     }
 
     public override J? VisitIfDirectiveTrivia(IfDirectiveTriviaSyntax node)
     {
-        return base.VisitIfDirectiveTrivia(node);
+        return (J?)base.VisitIfDirectiveTrivia(node);
     }
 
     public override J? VisitElifDirectiveTrivia(ElifDirectiveTriviaSyntax node)
     {
-        return base.VisitElifDirectiveTrivia(node);
+        return (J?)base.VisitElifDirectiveTrivia(node);
     }
 
     public override J? VisitElseDirectiveTrivia(ElseDirectiveTriviaSyntax node)
     {
-        return base.VisitElseDirectiveTrivia(node);
+        return (J?)base.VisitElseDirectiveTrivia(node);
     }
 
     public override J? VisitEndIfDirectiveTrivia(EndIfDirectiveTriviaSyntax node)
     {
-        return base.VisitEndIfDirectiveTrivia(node);
+        return (J?)base.VisitEndIfDirectiveTrivia(node);
     }
 
     public override J? VisitRegionDirectiveTrivia(RegionDirectiveTriviaSyntax node)
     {
-        return base.VisitRegionDirectiveTrivia(node);
+        return (J?)base.VisitRegionDirectiveTrivia(node);
     }
 
     public override J? VisitEndRegionDirectiveTrivia(EndRegionDirectiveTriviaSyntax node)
     {
-        return base.VisitEndRegionDirectiveTrivia(node);
+        return (J?)base.VisitEndRegionDirectiveTrivia(node);
     }
 
     public override J? VisitErrorDirectiveTrivia(ErrorDirectiveTriviaSyntax node)
     {
-        return base.VisitErrorDirectiveTrivia(node);
+        return (J?)base.VisitErrorDirectiveTrivia(node);
     }
 
     public override J? VisitWarningDirectiveTrivia(WarningDirectiveTriviaSyntax node)
     {
-        return base.VisitWarningDirectiveTrivia(node);
+        return (J?)base.VisitWarningDirectiveTrivia(node);
     }
 
     public override J? VisitBadDirectiveTrivia(BadDirectiveTriviaSyntax node)
     {
-        return base.VisitBadDirectiveTrivia(node);
+        return (J?)base.VisitBadDirectiveTrivia(node);
     }
 
     public override J? VisitDefineDirectiveTrivia(DefineDirectiveTriviaSyntax node)
     {
-        return base.VisitDefineDirectiveTrivia(node);
+        return (J?)base.VisitDefineDirectiveTrivia(node);
     }
 
     public override J? VisitUndefDirectiveTrivia(UndefDirectiveTriviaSyntax node)
     {
-        return base.VisitUndefDirectiveTrivia(node);
+        return (J?)base.VisitUndefDirectiveTrivia(node);
     }
 
     public override J? VisitLineDirectiveTrivia(LineDirectiveTriviaSyntax node)
     {
-        return base.VisitLineDirectiveTrivia(node);
+        return (J?)base.VisitLineDirectiveTrivia(node);
     }
 
     public override J? VisitLineDirectivePosition(LineDirectivePositionSyntax node)
     {
-        return base.VisitLineDirectivePosition(node);
+        return (J?)base.VisitLineDirectivePosition(node);
     }
 
     public override J? VisitLineSpanDirectiveTrivia(LineSpanDirectiveTriviaSyntax node)
     {
-        return base.VisitLineSpanDirectiveTrivia(node);
+        return (J?)base.VisitLineSpanDirectiveTrivia(node);
     }
 
     public override J? VisitPragmaWarningDirectiveTrivia(PragmaWarningDirectiveTriviaSyntax node)
     {
-        return base.VisitPragmaWarningDirectiveTrivia(node);
+        return (J?)base.VisitPragmaWarningDirectiveTrivia(node);
     }
 
     public override J? VisitPragmaChecksumDirectiveTrivia(PragmaChecksumDirectiveTriviaSyntax node)
     {
-        return base.VisitPragmaChecksumDirectiveTrivia(node);
+        return (J?)base.VisitPragmaChecksumDirectiveTrivia(node);
     }
 
     public override J? VisitReferenceDirectiveTrivia(ReferenceDirectiveTriviaSyntax node)
     {
-        return base.VisitReferenceDirectiveTrivia(node);
+        return (J?)base.VisitReferenceDirectiveTrivia(node);
     }
 
     public override J? VisitLoadDirectiveTrivia(LoadDirectiveTriviaSyntax node)
     {
-        return base.VisitLoadDirectiveTrivia(node);
+        return (J?)base.VisitLoadDirectiveTrivia(node);
     }
 
     public override J? VisitShebangDirectiveTrivia(ShebangDirectiveTriviaSyntax node)
     {
-        return base.VisitShebangDirectiveTrivia(node);
+        return (J?)base.VisitShebangDirectiveTrivia(node);
     }
 
     public override J? VisitNullableDirectiveTrivia(NullableDirectiveTriviaSyntax node)
     {
-        return base.VisitNullableDirectiveTrivia(node);
+        return (J?)base.VisitNullableDirectiveTrivia(node);
     }
 
 #if DEBUG_VISITOR
@@ -4494,14 +4448,14 @@ public class CSharpParserVisitor(CSharpParser parser, SemanticModel semanticMode
         {
             return new JavaType.Primitive(JavaType.Primitive.PrimitiveType.Null);
         }
-        return _typeMapping.Type(roslynSymbol: semanticModel.GetTypeInfo(expression: ins).Type);
+        return _typeMapping.Type(roslynSymbol: _semanticModel.GetTypeInfo(expression: ins).Type);
     }
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
 #endif
     private JavaType MapType(SyntaxNode ins)
     {
-        return _typeMapping.Type(roslynSymbol: semanticModel.GetDeclaredSymbol(declaration: ins) ?? semanticModel.GetTypeInfo(ins).Type);
+        return _typeMapping.Type(roslynSymbol: _semanticModel?.GetDeclaredSymbol(declaration: ins) ?? _semanticModel?.GetTypeInfo(ins).Type);
     }
 // #if DEBUG_VISITOR
 //     [DebuggerStepThrough]

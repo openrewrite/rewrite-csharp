@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -7,6 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Text;
 using Rewrite.RewriteCSharp.Tree;
+using Rewrite.RewriteJava.Tree;
 
 namespace Rewrite.RewriteCSharp.Format;
 
@@ -24,7 +26,7 @@ public class AutoFormatVisitor<TState> : CSharpIsoVisitor<TState>
         _stopAfter = stopAfter;
     }
 
-    public override J? Visit(Core.Tree? tree, TState p)
+    public override J? Visit(Core.Tree? tree, TState p, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
     {
         return Visit(tree, p, new Cursor());
     }
@@ -272,4 +274,6 @@ public class AutoFormatVisitor<TState> : CSharpIsoVisitor<TState>
             return space;
         }
     }
+
+
 }

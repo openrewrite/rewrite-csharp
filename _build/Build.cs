@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.Execution;
@@ -20,10 +22,44 @@ using LibGit2Sharp;
 using NuGet.Configuration;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Tools.PowerShell;
+using Spectre.Console;
+using static GradleTasks;
 
 // ReSharper disable UnusedMember.Local
-class Build : NukeBuild
+[HandleHelpRequestsAttribute(Priority = 20)]
+partial class Build : NukeBuild
 {
+    static Build()
+    {
+        Environment.SetEnvironmentVariable("NUKE_TELEMETRY_OPTOUT", "true");
+        Environment.SetEnvironmentVariable("NoLogo", "true");
+    }
+
+    public Build()
+    {
+        FigletFont LoadFont(string fontName)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            using var stream = assembly.GetManifestResourceStream($"FigletFonts.{fontName}.flf");
+            var font = FigletFont.Load(stream);
+            return font;
+        }
+
+        var openRewrite = new FigletText(LoadFont("ANSIShadow"), "OpenRewrite")
+        {
+            Pad = true
+        };
+
+        // var byModerne = new FigletText(LoadFont("BigChief"), "by Moderne");
+        var grid = new Grid()
+            .AddColumns(2);
+
+        grid.Expand = false;
+
+        grid.AddRow(openRewrite);
+        AnsiConsole.Write(grid);
+    }
+
     /// Support plugins are available for:
     ///   - JetBrains ReSharper        https://nuke.build/resharper
     ///   - JetBrains Rider            https://nuke.build/rider
@@ -35,18 +71,21 @@ class Build : NukeBuild
 
     GitHubActions GitHubActions => GitHubActions.Instance;
 
-    [Parameter][Secret] readonly string NugetApiKey;
+    [Parameter("Nuget.org API key required to push packages")][Secret] readonly string NugetApiKey;
 
-    [Parameter] readonly string NugetFeed = "https://api.nuget.org/v3/index.json";
+    [Parameter("Nuget feed to which packages are pushed (default: https://api.nuget.org/v3/index.json)")] readonly string NugetFeed = "https://api.nuget.org/v3/index.json";
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
     AbsolutePath TestResultsDirectory => ArtifactsDirectory /  "test-results";
+    AbsolutePath TestFixturesDirectory => RootDirectory / "Rewrite" / "tests" / "fixtures";
+    AbsolutePath TestFixturesFile => TestFixturesDirectory / "fixtures.txt";
     [Solution(GenerateProjects = true)] Solution Solution;
     [NerdbankGitVersioning] NerdbankGitVersioning Version;
     [GitRepositoryExt] LibGit2Sharp.Repository GitRepository;
 
+    const string TargetFramework = "net9.0";
 
 
     bool IsCurrentBranchCommitted() => !GitRepository.RetrieveStatus().IsDirty;
@@ -75,7 +114,7 @@ class Build : NukeBuild
         });
 
     Target CleanTestResults => _ => _
-        .Description("Clean out artifacts and all the bin/obj directories")
+        .Description("Clean out test results directory")
         .Executes(() =>
         {
             TestResultsDirectory.CreateOrCleanDirectory();
@@ -115,7 +154,9 @@ class Build : NukeBuild
             DotNetBuild(c => c
                 .SetProjectFile(Solution.Path)
                 .SetVersion(Version.NuGetPackageVersion));
+
         });
+
 
     Target Pack => _ => _
         .Description("Creates nuget packages inside artifacts directory")
@@ -141,7 +182,7 @@ class Build : NukeBuild
         });
 
     Target PublishServer => _ => _
-        .Description("Publishes server")
+        .Description("Publishes server into artifacts directory as a zip file")
         .DependsOn(Restore)
         .Before(Test)
         .Executes(() =>
@@ -150,7 +191,7 @@ class Build : NukeBuild
                 .SetProject(Solution.src.Rewrite_Server)
                 .SetVersion(Version.NuGetPackageVersion));
 
-            var publishDir = Solution.src.Rewrite_Server.Directory / "bin" / "Release" / "net8.0" / "publish";
+            var publishDir = Solution.src.Rewrite_Server.Directory / "bin" / "Release" / TargetFramework / "publish";
             publishDir.ZipTo(ArtifactsDirectory / "DotnetServer.zip");
         });
 
@@ -184,6 +225,7 @@ class Build : NukeBuild
             }
         });
 
+    [Category("Test")]
     Target Test => _ => _
         .Description("Runs .NET tests")
         .DependsOn(Restore)
@@ -207,34 +249,6 @@ class Build : NukeBuild
                     )
                 )
             );
-            InjectLogsIntoTrx();
-        });
-
-    Target Test2 => _ => _
-        .Description("Runs .NET tests")
-        .DependsOn(CleanTestResults)
-        .Executes(() =>
-        {
-
-            DotNetTest(x => x
-                .SetResultsDirectory(TestResultsDirectory)
-                .CombineWith([Solution.tests.Rewrite_CSharp_Tests], (c,v) => c
-                    .SetProjectFile(v)
-                    .AddProcessAdditionalArguments("--",
-                        "--test-parameter RenderLST=false",
-                        "--test-parameter NoAnsi=true",
-                        "--no-progress",
-                        "--no-ansi",
-                        "--disable-logo",
-                        "--report-trx",
-                        "--output Detailed",
-                        "--hide-test-output",
-                        $"--report-trx-filename {v.Name}.trx",
-                        "--results-directory", TestResultsDirectory
-                    )
-                )
-            );
-
             InjectLogsIntoTrx();
         });
 
@@ -280,18 +294,24 @@ class Build : NukeBuild
             //     completeOnFailure: true);
         });
 
+    [Category("CI")]
     Target CIBuild => _ => _
+        .Description("Builds, tests and produces test reports for regular builds on CI")
         .DependsOn(Pack, PublishServer, Test);
 
+    [Category("CI")]
     Target CIRelease => _ => _
+        .Description("Creates and publishes release artifacts to maven & nuget")
         .DependsOn(Pack, PublishServer, GradlePublish, NugetPush);
 
+
+    [Category("Test")]
     Target DownloadTestFixtures => _ => _
+        .Description($"Clones git repos defined in {RootDirectory.GetRelativePathTo(TestFixturesFile)} to use in integration tests")
         .Executes(() =>
         {
-            var fixturesDirectory = Solution.Directory / "tests" / "fixtures";
-            var fixturesFile = fixturesDirectory / "fixtures.txt";
-            var fixtures = fixturesFile.ReadAllLines()
+
+            var fixtures = TestFixturesFile.ReadAllLines()
                 .Select(url => new
                 {
                     Name = url.Split('/').Last(x => !string.IsNullOrEmpty(x)).Replace(".git",""),
@@ -300,30 +320,41 @@ class Build : NukeBuild
                 .ToList();
             foreach (var fixture in fixtures)
             {
-                var fixtureDirectory = fixturesDirectory / fixture.Name;
+                var fixtureDirectory = TestFixturesDirectory / fixture.Name;
                 if (fixtureDirectory.Exists())
                 {
                     GitTasks.Git("pull", fixtureDirectory);
                 }
                 else
                 {
-                    GitTasks.Git($"clone --depth 1 {fixture.Url}", fixturesDirectory);
+                    GitTasks.Git($"clone --depth 1 {fixture.Url}", TestFixturesDirectory);
                 }
             }
         });
 
-    Target GradleAssemble => _ => _
-        .Executes(() =>
-        {
-            GradleTasks.Gradle(c => c
-                .SetJvmOptions("-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError")
-                .SetTasks(KnownGradleTasks.Clean, KnownGradleTasks.Assemble)
-                .SetWarningMode(WarningMode.None)
-                .SetProcessAdditionalArguments("--console=plain","--info","--stacktrace","--no-daemon")
-            );
-        });
+    // Target GradleAssemble => _ => _
+    //     .Executes(() =>
+    //     {
+    //         GradleTasks.Gradle(c => c
+    //             .SetJvmOptions("-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError")
+    //             .SetTasks(KnownGradleTasks.Assemble)
+    //             .SetWarningMode(WarningMode.None)
+    //             .SetProcessAdditionalArguments("--console=plain","--info","--stacktrace","--no-daemon")
+    //         );
+    //     });
+    //
+    // Target GradleClean => _ => _
+    //     .Executes(() =>
+    //     {
+    //         GradleTasks.Gradle(c => c
+    //             .SetTasks(KnownGradleTasks.Clean, KnownGradleTasks.Assemble)
+    //             .SetWarningMode(WarningMode.None)
+    //             .SetProcessAdditionalArguments("--console=plain","--info","--stacktrace","--no-daemon")
+    //         );
+    //     });
 
     Target GradlePublish => _ => _
+        .Description("Invokes Gradle to create a Java release")
         .After(Pack, NugetPush)
         .Executes(() =>
         {
@@ -340,14 +371,14 @@ class Build : NukeBuild
                 .SetProcessAdditionalArguments("--console=plain", "--info", "--stacktrace", "--no-daemon");
             if (isPreRelease)
             {
-                GradleTasks.Gradle(c => ApplyCommonGradleSettings(c)
+                Gradle(c => ApplyCommonGradleSettings(c)
                     .SetTasks(KnownGradleTasks.Candidate, "publish", KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
 
                 );
             }
             else
             {
-                GradleTasks.Gradle(c => ApplyCommonGradleSettings(c)
+                Gradle(c => ApplyCommonGradleSettings(c)
                     .SetTasks(KnownGradleTasks.Final, "publish", KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
                     .AddProcessAdditionalArguments("--info")
                 );

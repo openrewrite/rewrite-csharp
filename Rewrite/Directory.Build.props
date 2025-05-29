@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
@@ -19,7 +19,7 @@
 
     <PropertyGroup>
 <!--        <VersionPrefix>0.23.0</VersionPrefix>-->
-        <MicrosoftCodeAnalysisVersion>4.13.0</MicrosoftCodeAnalysisVersion>
+        <MicrosoftCodeAnalysisVersion>4.14.0</MicrosoftCodeAnalysisVersion>
         <RemotePrinter>False</RemotePrinter>
         <DebugVisitor>False</DebugVisitor>
         <SanitizeStackTrace>True</SanitizeStackTrace>

@@ -1,6 +1,6 @@
 namespace Rewrite.Core;
 
-public interface ExecutionContext
+public interface IExecutionContext
 {
     const string RequirePrintEqualsInput = "org.openrewrite.requirePrintEqualsInput";
     public T? GetMessage<T>(string key, T? defaultValue = default);

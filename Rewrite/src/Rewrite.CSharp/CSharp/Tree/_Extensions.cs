@@ -54,16 +54,22 @@ public partial interface Cs
         public J.ClassDeclaration.Kind Kind => _kind;
         JavaType? TypedTree.Type => Type;
         public ClassDeclaration WithType(JavaType? type) => WithType((JavaType.FullyQualified?)type);
+        public CoordinateBuilder.ClassDeclaration Coordinates => new (this);
+        CoordinateBuilder.Statement Statement.Coordinates => Coordinates;
     }
     public new partial class MethodDeclaration : Expression<MethodDeclaration>
     {
+        public bool IsAbstract => this.Modifiers.Any(x => x.Keyword == "abstract");
         public JavaType? Type => this.MethodType;
         public MethodDeclaration WithType(JavaType? type) => WithMethodType(type as JavaType.Method);
+        public CoordinateBuilder.MethodDeclaration Coordinates => new (this);
+        CoordinateBuilder.Statement Statement.Coordinates => Coordinates;
     }
     public partial class IndexerDeclaration : Expression<IndexerDeclaration>
     {
         public JavaType? Type => this.TypeExpression.Type;
         public IndexerDeclaration WithType(JavaType? type) => WithTypeExpression(TypeExpression.WithType(type));
+
     }
     public partial class QueryExpression : Expression<QueryExpression>
     {
@@ -213,6 +219,7 @@ public partial interface Cs
     {
         public JavaType? Type => LambdaExpression.Type;
         public Lambda WithType(JavaType? type) => WithLambdaExpression(LambdaExpression.WithType(type));
+        
     }
 
     public partial class StatementExpression

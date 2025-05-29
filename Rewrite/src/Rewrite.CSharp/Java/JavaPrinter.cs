@@ -1,4 +1,5 @@
-﻿using Rewrite.Core;
+﻿using System.Runtime.CompilerServices;
+using Rewrite.Core;
 using Rewrite.Core.Marker;
 using Rewrite.RewriteJava.Marker;
 using Rewrite.RewriteJava.Tree;
@@ -29,8 +30,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
     }
 
-    protected virtual void VisitContainer<T>(string before, JContainer<T>? container, JContainer.Location location,
-        string suffixBetween, string? after, PrintOutputCapture<P> p) where T : J
+    protected virtual void VisitContainer<T>(string before, JContainer<T>? container, JContainer.Location location, string suffixBetween, string? after, PrintOutputCapture<P> p) where T : J
     {
         if (container != null)
         {
@@ -91,10 +91,10 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
     }
 
-    public override J? VisitModifier(J.Modifier mod, PrintOutputCapture<P> p)
+    public override J? VisitModifier(J.Modifier node, PrintOutputCapture<P> p)
     {
-        Visit(mod.Annotations, p);
-        var keyword = mod.ModifierType switch
+        Visit(node.Annotations, p);
+        var keyword = node.ModifierType switch
         {
             J.Modifier.Types.Default => "default",
             J.Modifier.Types.Public => "public",
@@ -113,109 +113,109 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
             J.Modifier.Types.Async => "async",
             J.Modifier.Types.Reified => "reified",
             J.Modifier.Types.Inline => "inline",
-            _ => mod.Keyword
+            _ => node.Keyword
         };
 
-        BeforeSyntax(mod, Space.Location.MODIFIER_PREFIX, p);
+        BeforeSyntax(node, Space.Location.MODIFIER_PREFIX, p);
         p.Append(keyword);
-        AfterSyntax(mod, p);
-        return mod;
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J? VisitAnnotation(J.Annotation annotation, PrintOutputCapture<P> p)
+    public override J? VisitAnnotation(J.Annotation node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(annotation, Space.Location.ANNOTATION_PREFIX, p);
+        BeforeSyntax(node, Space.Location.ANNOTATION_PREFIX, p);
         p.Append('@');
-        Visit(annotation.AnnotationType, p);
-        VisitContainer("(", annotation.Padding.Arguments, JContainer.Location.ANNOTATION_ARGUMENTS, ",", ")", p);
-        AfterSyntax(annotation, p);
-        return annotation;
+        Visit(node.AnnotationType, p);
+        VisitContainer("(", node.Padding.Arguments, JContainer.Location.ANNOTATION_ARGUMENTS, ",", ")", p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitAnnotatedType(J.AnnotatedType annotatedType, PrintOutputCapture<P> p)
+    public override J VisitAnnotatedType(J.AnnotatedType node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(annotatedType, Space.Location.ANNOTATED_TYPE_PREFIX, p);
-        Visit(annotatedType.Annotations, p);
-        Visit(annotatedType.TypeExpression, p);
-        AfterSyntax(annotatedType, p);
-        return annotatedType;
+        BeforeSyntax(node, Space.Location.ANNOTATED_TYPE_PREFIX, p);
+        Visit(node.Annotations, p);
+        Visit(node.TypeExpression, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitArrayDimension(J.ArrayDimension arrayDimension, PrintOutputCapture<P> p)
+    public override J VisitArrayDimension(J.ArrayDimension node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(arrayDimension, Space.Location.DIMENSION_PREFIX, p);
+        BeforeSyntax(node, Space.Location.DIMENSION_PREFIX, p);
         p.Append('[');
-        VisitRightPadded(arrayDimension.Padding.Index, JRightPadded.Location.ARRAY_INDEX, "]", p);
-        AfterSyntax(arrayDimension, p);
-        return arrayDimension;
+        VisitRightPadded(node.Padding.Index, JRightPadded.Location.ARRAY_INDEX, "]", p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitArrayType(J.ArrayType arrayType, PrintOutputCapture<P> p)
+    public override J VisitArrayType(J.ArrayType node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(arrayType, Space.Location.ARRAY_TYPE_PREFIX, p);
+        BeforeSyntax(node, Space.Location.ARRAY_TYPE_PREFIX, p);
 
-        TypeTree type = arrayType;
+        TypeTree type = node;
         while (type is J.ArrayType arrayTypeElement)
         {
             type = arrayTypeElement.ElementType;
         }
 
         Visit(type, p);
-        Visit(arrayType.Annotations, p);
-        if (arrayType.Dimension != null)
+        Visit(node.Annotations, p);
+        if (node.Dimension != null)
         {
-            VisitSpace(arrayType.Dimension.Before, Space.Location.DIMENSION_PREFIX, p);
+            VisitSpace(node.Dimension.Before, Space.Location.DIMENSION_PREFIX, p);
             p.Append('[');
-            VisitSpace(arrayType.Dimension.Element, Space.Location.DIMENSION, p);
+            VisitSpace(node.Dimension.Element, Space.Location.DIMENSION, p);
             p.Append(']');
-            if (arrayType.ElementType is J.ArrayType)
+            if (node.ElementType is J.ArrayType)
             {
-                PrintDimensions((J.ArrayType)arrayType.ElementType, p);
+                PrintDimensions((J.ArrayType)node.ElementType, p);
             }
         }
 
-        AfterSyntax(arrayType, p);
-        return arrayType;
+        AfterSyntax(node, p);
+        return node;
     }
 
-    private void PrintDimensions(J.ArrayType arrayType, PrintOutputCapture<P> p)
+    private void PrintDimensions(J.ArrayType node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(arrayType, Space.Location.ARRAY_TYPE_PREFIX, p);
-        Visit(arrayType.Annotations, p);
-        VisitSpace(arrayType.Dimension?.Before ?? Space.EMPTY, Space.Location.DIMENSION_PREFIX, p);
+        BeforeSyntax(node, Space.Location.ARRAY_TYPE_PREFIX, p);
+        Visit(node.Annotations, p);
+        VisitSpace(node.Dimension?.Before ?? Space.EMPTY, Space.Location.DIMENSION_PREFIX, p);
         p.Append('[');
-        VisitSpace(arrayType.Dimension?.Element ?? Space.EMPTY, Space.Location.DIMENSION, p);
+        VisitSpace(node.Dimension?.Element ?? Space.EMPTY, Space.Location.DIMENSION, p);
         p.Append(']');
-        if (arrayType.ElementType is J.ArrayType)
+        if (node.ElementType is J.ArrayType)
         {
-            PrintDimensions((J.ArrayType)arrayType.ElementType, p);
+            PrintDimensions((J.ArrayType)node.ElementType, p);
         }
 
-        AfterSyntax(arrayType, p);
+        AfterSyntax(node, p);
     }
 
-    public override J VisitAssert(J.Assert assert, PrintOutputCapture<P> p)
+    public override J VisitAssert(J.Assert node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(assert, Space.Location.ASSERT_PREFIX, p);
+        BeforeSyntax(node, Space.Location.ASSERT_PREFIX, p);
         p.Append("assert");
-        Visit(assert.Condition, p);
-        VisitLeftPadded(":", assert.Detail, JLeftPadded.Location.ASSERT_DETAIL, p);
-        AfterSyntax(assert, p);
-        return assert;
+        Visit(node.Condition, p);
+        VisitLeftPadded(":", node.Detail, JLeftPadded.Location.ASSERT_DETAIL, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitAssignment(J.Assignment assignment, PrintOutputCapture<P> p)
+    public override J VisitAssignment(J.Assignment node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(assignment, Space.Location.ASSIGNMENT_PREFIX, p);
-        Visit(assignment.Variable, p);
-        VisitLeftPadded("=", assignment.Padding.Expression, JLeftPadded.Location.ASSIGNMENT, p);
-        AfterSyntax(assignment, p);
-        return assignment;
+        BeforeSyntax(node, Space.Location.ASSIGNMENT_PREFIX, p);
+        Visit(node.Variable, p);
+        VisitLeftPadded("=", node.Padding.Expression, JLeftPadded.Location.ASSIGNMENT, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitAssignmentOperation(J.AssignmentOperation assignOp, PrintOutputCapture<P> p)
+    public override J VisitAssignmentOperation(J.AssignmentOperation node, PrintOutputCapture<P> p)
     {
-        string keyword = assignOp.Operator switch
+        string keyword = node.Operator switch
         {
             J.AssignmentOperation.Types.Addition => "+=",
             J.AssignmentOperation.Types.Subtraction => "-=",
@@ -231,18 +231,18 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
             _ => ""
         };
 
-        BeforeSyntax(assignOp, Space.Location.ASSIGNMENT_OPERATION_PREFIX, p);
-        Visit(assignOp.Variable, p);
-        VisitSpace(assignOp.Padding.Operator.Before, Space.Location.ASSIGNMENT_OPERATION_OPERATOR, p);
+        BeforeSyntax(node, Space.Location.ASSIGNMENT_OPERATION_PREFIX, p);
+        Visit(node.Variable, p);
+        VisitSpace(node.Padding.Operator.Before, Space.Location.ASSIGNMENT_OPERATION_OPERATOR, p);
         p.Append(keyword);
-        Visit(assignOp.Assignment, p);
-        AfterSyntax(assignOp, p);
-        return assignOp;
+        Visit(node.Assignment, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitBinary(J.Binary binary, PrintOutputCapture<P> p)
+    public override J VisitBinary(J.Binary node, PrintOutputCapture<P> p)
     {
-        string keyword = binary.Operator switch
+        string keyword = node.Operator switch
         {
             J.Binary.Types.Addition => "+",
             J.Binary.Types.Subtraction => "-",
@@ -266,35 +266,34 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
             _ => ""
         };
 
-        BeforeSyntax(binary, Space.Location.BINARY_PREFIX, p);
-        Visit(binary.Left, p);
-        VisitSpace(binary.Padding.Operator.Before, Space.Location.BINARY_OPERATOR, p);
+        BeforeSyntax(node, Space.Location.BINARY_PREFIX, p);
+        Visit(node.Left, p);
+        VisitSpace(node.Padding.Operator.Before, Space.Location.BINARY_OPERATOR, p);
         p.Append(keyword);
-        Visit(binary.Right, p);
-        AfterSyntax(binary, p);
-        return binary;
+        Visit(node.Right, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
 
-    public override J VisitBlock(J.Block block, PrintOutputCapture<P> p)
+    public override J VisitBlock(J.Block node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(block, Space.Location.BLOCK_PREFIX, p);
-        if (block.Static)
+        BeforeSyntax(node, Space.Location.BLOCK_PREFIX, p);
+        if (node.Static)
         {
             p.Append("static");
-            VisitRightPadded(block.Padding.Static, JRightPadded.Location.STATIC_INIT, p);
+            VisitRightPadded(node.Padding.Static, JRightPadded.Location.STATIC_INIT, p);
         }
 
         p.Append('{');
-        VisitStatements(block.Padding.Statements, JRightPadded.Location.BLOCK_STATEMENT, p);
-        VisitSpace(block.End, Space.Location.BLOCK_END, p);
+        VisitStatements(node.Padding.Statements, JRightPadded.Location.BLOCK_STATEMENT, p);
+        VisitSpace(node.End, Space.Location.BLOCK_END, p);
         p.Append('}');
-        AfterSyntax(block, p);
-        return block;
+        AfterSyntax(node, p);
+        return node;
     }
 
-    protected virtual void VisitStatements(IList<JRightPadded<Statement>> statements, JRightPadded.Location location,
-        PrintOutputCapture<P> p)
+    protected virtual void VisitStatements(IList<JRightPadded<Statement>> statements, JRightPadded.Location location, PrintOutputCapture<P> p)
     {
         foreach (var paddedStat in statements)
         {
@@ -302,14 +301,14 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
     }
 
-    protected void VisitStatement(JRightPadded<Statement>? paddedStat, JRightPadded.Location location, PrintOutputCapture<P> p)
+    protected void VisitStatement(JRightPadded<Statement>? node, JRightPadded.Location location, PrintOutputCapture<P> p)
     {
-        if (paddedStat != null)
+        if (node != null)
         {
-            Visit(paddedStat.Element, p);
-            VisitSpace(paddedStat.After, location.AfterLocation, p);
-            VisitMarkers(paddedStat.Markers, p);
-            PrintStatementTerminator(paddedStat.Element, p);
+            Visit(node.Element, p);
+            VisitSpace(node.After, location.AfterLocation, p);
+            VisitMarkers(node.Markers, p);
+            PrintStatementTerminator(node.Element, p);
         }
     }
 
@@ -356,54 +355,54 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
     }
 
-    public override J VisitBreak(J.Break breakStatement, PrintOutputCapture<P> p)
+    public override J VisitBreak(J.Break node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(breakStatement, Space.Location.BREAK_PREFIX, p);
+        BeforeSyntax(node, Space.Location.BREAK_PREFIX, p);
         p.Append("break");
-        Visit(breakStatement.Label, p);
-        AfterSyntax(breakStatement, p);
-        return breakStatement;
+        Visit(node.Label, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitCase(J.Case @case, PrintOutputCapture<P> p)
+    public override J VisitCase(J.Case node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(@case, Space.Location.CASE_PREFIX, p);
-        Expression elem = (Expression)@case.CaseLabels[0];
+        BeforeSyntax(node, Space.Location.CASE_PREFIX, p);
+        Expression elem = (Expression)node.CaseLabels[0];
         if (elem is not J.Identifier identifier || !identifier.SimpleName.Equals("default"))
         {
             p.Append("case");
         }
 
-        VisitContainer("", @case.Padding.CaseLabels, JContainer.Location.CASE_CASE_LABELS, ",", "", p);
-        VisitSpace(@case.Padding.Statements.Before, Space.Location.CASE, p);
-        p.Append(@case.CaseType == J.Case.Types.Statement ? ":" : "->");
-        VisitStatements(@case.Padding.Statements.Padding.Elements, JRightPadded.Location.CASE, p);
-        if (@case.Body is Statement)
+        VisitContainer("", node.Padding.CaseLabels, JContainer.Location.CASE_CASE_LABELS, ",", "", p);
+        VisitSpace(node.Padding.Statements.Before, Space.Location.CASE, p);
+        p.Append(node.CaseType == J.Case.Types.Statement ? ":" : "->");
+        VisitStatements(node.Padding.Statements.Padding.Elements, JRightPadded.Location.CASE, p);
+        if (node.Body is Statement)
         {
-            VisitStatement(@case.Padding.Body?.Cast<Statement>(), JRightPadded.Location.CASE_BODY, p);
+            VisitStatement(node.Padding.Body?.Cast<Statement>(), JRightPadded.Location.CASE_BODY, p);
         }
         else
         {
-            VisitRightPadded(@case.Padding.Body!, JRightPadded.Location.CASE_BODY, ";", p);
+            VisitRightPadded(node.Padding.Body!, JRightPadded.Location.CASE_BODY, ";", p);
         }
 
-        AfterSyntax(@case, p);
-        return @case;
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitCatch(J.Try.Catch catch_, PrintOutputCapture<P> p)
+    public override J VisitCatch(J.Try.Catch node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(catch_, Space.Location.CATCH_PREFIX, p);
+        BeforeSyntax(node, Space.Location.CATCH_PREFIX, p);
         p.Append("catch");
-        Visit(catch_.Parameter, p);
-        Visit(catch_.Body, p);
-        AfterSyntax(catch_, p);
-        return catch_;
+        Visit(node.Parameter, p);
+        Visit(node.Body, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitClassDeclaration(J.ClassDeclaration classDecl, PrintOutputCapture<P> p)
+    public override J VisitClassDeclaration(J.ClassDeclaration node, PrintOutputCapture<P> p)
     {
-        var kind = classDecl.DeclarationKind switch
+        var kind = node.DeclarationKind switch
         {
             J.ClassDeclaration.Kind.Types.Class => "class",
             J.ClassDeclaration.Kind.Types.Enum => "enum",
@@ -413,95 +412,95 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
             _ => ""
         };
 
-        BeforeSyntax(classDecl, Space.Location.CLASS_DECLARATION_PREFIX, p);
+        BeforeSyntax(node, Space.Location.CLASS_DECLARATION_PREFIX, p);
         VisitSpace(Space.EMPTY, Space.Location.ANNOTATIONS, p);
-        Visit(classDecl.LeadingAnnotations, p);
-        foreach (var m in classDecl.Modifiers)
+        Visit(node.LeadingAnnotations, p);
+        foreach (var m in node.Modifiers)
         {
             VisitModifier(m, p);
         }
 
-        Visit(classDecl.Padding.DeclarationKind.Annotations, p);
-        VisitSpace(classDecl.Padding.DeclarationKind.Prefix, Space.Location.CLASS_KIND, p);
+        Visit(node.Padding.DeclarationKind.Annotations, p);
+        VisitSpace(node.Padding.DeclarationKind.Prefix, Space.Location.CLASS_KIND, p);
         p.Append(kind);
-        Visit(classDecl.Name, p);
-        VisitContainer("<", classDecl.Padding.TypeParameters, JContainer.Location.TYPE_PARAMETERS, ",", ">", p);
-        VisitContainer("(", classDecl.Padding.PrimaryConstructor, JContainer.Location.RECORD_STATE_VECTOR, ",", ")", p);
-        VisitLeftPadded("extends", classDecl.Padding.Extends, JLeftPadded.Location.EXTENDS, p);
-        VisitContainer(classDecl.DeclarationKind.Equals(J.ClassDeclaration.Kind.Types.Interface) ? "extends" : "implements",
-            classDecl.Padding.Implements, JContainer.Location.IMPLEMENTS, ",", null, p);
-        VisitContainer("permits", classDecl.Padding.Permits, JContainer.Location.PERMITS, ",", null, p);
-        Visit(classDecl.Body, p);
-        AfterSyntax(classDecl, p);
-        return classDecl;
+        Visit(node.Name, p);
+        VisitContainer("<", node.Padding.TypeParameters, JContainer.Location.TYPE_PARAMETERS, ",", ">", p);
+        VisitContainer("(", node.Padding.PrimaryConstructor, JContainer.Location.RECORD_STATE_VECTOR, ",", ")", p);
+        VisitLeftPadded("extends", node.Padding.Extends, JLeftPadded.Location.EXTENDS, p);
+        VisitContainer(node.DeclarationKind.Equals(J.ClassDeclaration.Kind.Types.Interface) ? "extends" : "implements",
+            node.Padding.Implements, JContainer.Location.IMPLEMENTS, ",", null, p);
+        VisitContainer("permits", node.Padding.Permits, JContainer.Location.PERMITS, ",", null, p);
+        Visit(node.Body, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitCompilationUnit(J.CompilationUnit cu, PrintOutputCapture<P> p)
+    public override J VisitCompilationUnit(J.CompilationUnit node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(cu, Space.Location.COMPILATION_UNIT_PREFIX, p);
-        VisitRightPadded(cu.Padding.PackageDeclaration, JRightPadded.Location.PACKAGE, ";", p);
-        VisitRightPadded(cu.Padding.Imports, JRightPadded.Location.IMPORT, ";", p);
-        if (cu.Imports.Count > 0)
+        BeforeSyntax(node, Space.Location.COMPILATION_UNIT_PREFIX, p);
+        VisitRightPadded(node.Padding.PackageDeclaration, JRightPadded.Location.PACKAGE, ";", p);
+        VisitRightPadded(node.Padding.Imports, JRightPadded.Location.IMPORT, ";", p);
+        if (node.Imports.Count > 0)
         {
             p.Append(';');
         }
 
-        Visit(cu.Classes, p);
-        AfterSyntax(cu, p);
-        VisitSpace(cu.Eof, Space.Location.COMPILATION_UNIT_EOF, p);
-        return cu;
+        Visit(node.Classes, p);
+        AfterSyntax(node, p);
+        VisitSpace(node.Eof, Space.Location.COMPILATION_UNIT_EOF, p);
+        return node;
     }
 
-    public override J VisitContinue(J.Continue continueStatement, PrintOutputCapture<P> p)
+    public override J VisitContinue(J.Continue node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(continueStatement, Space.Location.CONTINUE_PREFIX, p);
+        BeforeSyntax(node, Space.Location.CONTINUE_PREFIX, p);
         p.Append("continue");
-        Visit(continueStatement.Label, p);
-        AfterSyntax(continueStatement, p);
-        return continueStatement;
+        Visit(node.Label, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitControlParentheses<T>(J.ControlParentheses<T> controlParens, PrintOutputCapture<P> p)
+    public override J VisitControlParentheses<T>(J.ControlParentheses<T> node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(controlParens, Space.Location.CONTROL_PARENTHESES_PREFIX, p);
+        BeforeSyntax(node, Space.Location.CONTROL_PARENTHESES_PREFIX, p);
         p.Append('(');
-        VisitRightPadded(controlParens.Padding.Tree, JRightPadded.Location.PARENTHESES, ")", p);
-        AfterSyntax(controlParens, p);
-        return controlParens;
+        VisitRightPadded(node.Padding.Tree, JRightPadded.Location.PARENTHESES, ")", p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitDoWhileLoop(J.DoWhileLoop doWhileLoop, PrintOutputCapture<P> p)
+    public override J VisitDoWhileLoop(J.DoWhileLoop node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(doWhileLoop, Space.Location.DO_WHILE_PREFIX, p);
+        BeforeSyntax(node, Space.Location.DO_WHILE_PREFIX, p);
         p.Append("do");
-        VisitStatement(doWhileLoop.Padding.Body, JRightPadded.Location.WHILE_BODY, p);
-        VisitLeftPadded("while", doWhileLoop.Padding.WhileCondition, JLeftPadded.Location.WHILE_CONDITION, p);
-        AfterSyntax(doWhileLoop, p);
-        return doWhileLoop;
+        VisitStatement(node.Padding.Body, JRightPadded.Location.WHILE_BODY, p);
+        VisitLeftPadded("while", node.Padding.WhileCondition, JLeftPadded.Location.WHILE_CONDITION, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitElse(J.If.Else else_, PrintOutputCapture<P> p)
+    public override J VisitElse(J.If.Else node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(else_, Space.Location.ELSE_PREFIX, p);
+        BeforeSyntax(node, Space.Location.ELSE_PREFIX, p);
         p.Append("else");
-        VisitStatement(else_.Padding.Body, JRightPadded.Location.IF_ELSE, p);
-        AfterSyntax(else_, p);
-        return else_;
+        VisitStatement(node.Padding.Body, JRightPadded.Location.IF_ELSE, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitEmpty(J.Empty empty, PrintOutputCapture<P> p)
+    public override J VisitEmpty(J.Empty node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(empty, Space.Location.EMPTY_PREFIX, p);
-        AfterSyntax(empty, p);
-        return empty;
+        BeforeSyntax(node, Space.Location.EMPTY_PREFIX, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitEnumValue(J.EnumValue enum_, PrintOutputCapture<P> p)
+    public override J VisitEnumValue(J.EnumValue node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(enum_, Space.Location.ENUM_VALUE_PREFIX, p);
-        Visit(enum_.Annotations, p);
-        Visit(enum_.Name, p);
-        var initializer = enum_.Initializer;
+        BeforeSyntax(node, Space.Location.ENUM_VALUE_PREFIX, p);
+        Visit(node.Annotations, p);
+        Visit(node.Name, p);
+        var initializer = node.Initializer;
         if (initializer != null)
         {
             VisitSpace(initializer.Prefix, Space.Location.NEW_CLASS_PREFIX, p);
@@ -515,37 +514,37 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
             Visit(initializer.Body, p);
         }
 
-        AfterSyntax(enum_, p);
-        return enum_;
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitEnumValueSet(J.EnumValueSet enums, PrintOutputCapture<P> p)
+    public override J VisitEnumValueSet(J.EnumValueSet node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(enums, Space.Location.ENUM_VALUE_SET_PREFIX, p);
-        VisitRightPadded(enums.Padding.Enums, JRightPadded.Location.ENUM_VALUE, ",", p);
-        if (enums.TerminatedWithSemicolon)
+        BeforeSyntax(node, Space.Location.ENUM_VALUE_SET_PREFIX, p);
+        VisitRightPadded(node.Padding.Enums, JRightPadded.Location.ENUM_VALUE, ",", p);
+        if (node.TerminatedWithSemicolon)
         {
             p.Append(';');
         }
 
-        AfterSyntax(enums, p);
-        return enums;
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitFieldAccess(J.FieldAccess fieldAccess, PrintOutputCapture<P> p)
+    public override J VisitFieldAccess(J.FieldAccess node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(fieldAccess, Space.Location.FIELD_ACCESS_PREFIX, p);
-        Visit(fieldAccess.Target, p);
-        VisitLeftPadded(".", fieldAccess.Padding.Name, JLeftPadded.Location.FIELD_ACCESS_NAME, p);
-        AfterSyntax(fieldAccess, p);
-        return fieldAccess;
+        BeforeSyntax(node, Space.Location.FIELD_ACCESS_PREFIX, p);
+        Visit(node.Target, p);
+        VisitLeftPadded(".", node.Padding.Name, JLeftPadded.Location.FIELD_ACCESS_NAME, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitForLoop(J.ForLoop forLoop, PrintOutputCapture<P> p)
+    public override J VisitForLoop(J.ForLoop node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(forLoop, Space.Location.FOR_PREFIX, p);
+        BeforeSyntax(node, Space.Location.FOR_PREFIX, p);
         p.Append("for");
-        var ctrl = forLoop.LoopControl;
+        var ctrl = node.LoopControl;
         VisitSpace(ctrl.Prefix, Space.Location.FOR_CONTROL_PREFIX, p);
         p.Append('(');
         VisitRightPadded(ctrl.Padding.Init, JRightPadded.Location.FOR_INIT, ",", p);
@@ -553,121 +552,121 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         VisitRightPadded(ctrl.Padding.Condition, JRightPadded.Location.FOR_CONDITION, ";", p);
         VisitRightPadded(ctrl.Padding.Update, JRightPadded.Location.FOR_UPDATE, ",", p);
         p.Append(')');
-        VisitStatement(forLoop.Padding.Body, JRightPadded.Location.FOR_BODY, p);
-        AfterSyntax(forLoop, p);
-        return forLoop;
+        VisitStatement(node.Padding.Body, JRightPadded.Location.FOR_BODY, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitForEachLoop(J.ForEachLoop forEachLoop, PrintOutputCapture<P> p)
+    public override J VisitForEachLoop(J.ForEachLoop node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(forEachLoop, Space.Location.FOR_EACH_LOOP_PREFIX, p);
+        BeforeSyntax(node, Space.Location.FOR_EACH_LOOP_PREFIX, p);
         p.Append("for");
-        var ctrl = forEachLoop.LoopControl;
+        var ctrl = node.LoopControl;
         VisitSpace(ctrl.Prefix, Space.Location.FOR_EACH_CONTROL_PREFIX, p);
         p.Append('(');
         VisitRightPadded(ctrl.Padding.Variable, JRightPadded.Location.FOREACH_VARIABLE, ":", p);
         VisitRightPadded(ctrl.Padding.Iterable, JRightPadded.Location.FOREACH_ITERABLE, "", p);
         p.Append(')');
-        VisitStatement(forEachLoop.Padding.Body, JRightPadded.Location.FOR_BODY, p);
-        AfterSyntax(forEachLoop, p);
-        return forEachLoop;
+        VisitStatement(node.Padding.Body, JRightPadded.Location.FOR_BODY, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitIdentifier(J.Identifier ident, PrintOutputCapture<P> p)
+    public override J VisitIdentifier(J.Identifier node, PrintOutputCapture<P> p)
     {
         VisitSpace(Space.EMPTY, Space.Location.ANNOTATIONS, p);
-        Visit(ident.Annotations, p);
-        BeforeSyntax(ident, Space.Location.IDENTIFIER_PREFIX, p);
-        p.Append(ident.SimpleName);
-        AfterSyntax(ident, p);
-        return ident;
+        Visit(node.Annotations, p);
+        BeforeSyntax(node, Space.Location.IDENTIFIER_PREFIX, p);
+        p.Append(node.SimpleName);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitIf(J.If iff, PrintOutputCapture<P> p)
+    public override J VisitIf(J.If node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(iff, Space.Location.IF_PREFIX, p);
+        BeforeSyntax(node, Space.Location.IF_PREFIX, p);
         p.Append("if");
-        Visit(iff.IfCondition, p);
-        VisitStatement(iff.Padding.ThenPart, JRightPadded.Location.IF_THEN, p);
-        Visit(iff.ElsePart, p);
-        AfterSyntax(iff, p);
-        return iff;
+        Visit(node.IfCondition, p);
+        VisitStatement(node.Padding.ThenPart, JRightPadded.Location.IF_THEN, p);
+        Visit(node.ElsePart, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitImport(J.Import import, PrintOutputCapture<P> p)
+    public override J VisitImport(J.Import node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(import, Space.Location.IMPORT_PREFIX, p);
+        BeforeSyntax(node, Space.Location.IMPORT_PREFIX, p);
         p.Append("import");
-        if (import.Static)
+        if (node.Static)
         {
-            VisitSpace(import.Padding.Static.Before, Space.Location.STATIC_IMPORT, p);
+            VisitSpace(node.Padding.Static.Before, Space.Location.STATIC_IMPORT, p);
             p.Append("static");
         }
 
-        Visit(import.Qualid, p);
-        AfterSyntax(import, p);
-        return import;
+        Visit(node.Qualid, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitInstanceOf(J.InstanceOf instanceOf, PrintOutputCapture<P> p)
+    public override J VisitInstanceOf(J.InstanceOf node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(instanceOf, Space.Location.INSTANCEOF_PREFIX, p);
-        VisitRightPadded(instanceOf.Padding.Expression, JRightPadded.Location.INSTANCEOF, "instanceof", p);
-        Visit(instanceOf.Clazz, p);
-        Visit(instanceOf.Pattern, p);
-        AfterSyntax(instanceOf, p);
-        return instanceOf;
+        BeforeSyntax(node, Space.Location.INSTANCEOF_PREFIX, p);
+        VisitRightPadded(node.Padding.Expression, JRightPadded.Location.INSTANCEOF, "instanceof", p);
+        Visit(node.Clazz, p);
+        Visit(node.Pattern, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitIntersectionType(J.IntersectionType intersectionType, PrintOutputCapture<P> p)
+    public override J VisitIntersectionType(J.IntersectionType node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(intersectionType, Space.Location.INTERSECTION_TYPE_PREFIX, p);
-        VisitContainer("", intersectionType.Padding.Bounds, JContainer.Location.TYPE_BOUNDS, "&", "", p);
-        AfterSyntax(intersectionType, p);
-        return intersectionType;
+        BeforeSyntax(node, Space.Location.INTERSECTION_TYPE_PREFIX, p);
+        VisitContainer("", node.Padding.Bounds, JContainer.Location.TYPE_BOUNDS, "&", "", p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitLabel(J.Label label, PrintOutputCapture<P> p)
+    public override J VisitLabel(J.Label node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(label, Space.Location.LABEL_PREFIX, p);
-        VisitRightPadded(label.Padding.Name, JRightPadded.Location.LABEL, ":", p);
-        Visit(label.Statement, p);
-        AfterSyntax(label, p);
-        return label;
+        BeforeSyntax(node, Space.Location.LABEL_PREFIX, p);
+        VisitRightPadded(node.Padding.Name, JRightPadded.Location.LABEL, ":", p);
+        Visit(node.Statement, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitLambda(J.Lambda lambda, PrintOutputCapture<P> p)
+    public override J VisitLambda(J.Lambda node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(lambda, Space.Location.LAMBDA_PREFIX, p);
-        VisitSpace(lambda.Params.Prefix, Space.Location.LAMBDA_PARAMETERS_PREFIX, p);
-        VisitMarkers(lambda.Params.Markers, p);
-        if (lambda.Params.Parenthesized)
+        BeforeSyntax(node, Space.Location.LAMBDA_PREFIX, p);
+        VisitSpace(node.Params.Prefix, Space.Location.LAMBDA_PARAMETERS_PREFIX, p);
+        VisitMarkers(node.Params.Markers, p);
+        if (node.Params.Parenthesized)
         {
             p.Append('(');
-            VisitRightPadded(lambda.Params.Padding.Elements, JRightPadded.Location.LAMBDA_PARAM, ",", p);
+            VisitRightPadded(node.Params.Padding.Elements, JRightPadded.Location.LAMBDA_PARAM, ",", p);
             p.Append(')');
         }
         else
         {
-            VisitRightPadded(lambda.Params.Padding.Elements, JRightPadded.Location.LAMBDA_PARAM, ",", p);
+            VisitRightPadded(node.Params.Padding.Elements, JRightPadded.Location.LAMBDA_PARAM, ",", p);
         }
 
-        VisitSpace(lambda.Arrow, Space.Location.LAMBDA_ARROW_PREFIX, p);
+        VisitSpace(node.Arrow, Space.Location.LAMBDA_ARROW_PREFIX, p);
         p.Append("->");
-        Visit(lambda.Body, p);
-        AfterSyntax(lambda, p);
-        return lambda;
+        Visit(node.Body, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitLiteral(J.Literal literal, PrintOutputCapture<P> p)
+    public override J VisitLiteral(J.Literal node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(literal, Space.Location.LITERAL_PREFIX, p);
-        var unicodeEscapes = literal.UnicodeEscapes;
+        BeforeSyntax(node, Space.Location.LITERAL_PREFIX, p);
+        var unicodeEscapes = node.UnicodeEscapes;
         if (unicodeEscapes == null)
         {
-            p.Append(literal.ValueSource);
+            p.Append(node.ValueSource);
         }
-        else if (literal.ValueSource != null)
+        else if (node.ValueSource != null)
         {
             var surrogateIter = unicodeEscapes.GetEnumerator();
             var surrogate = surrogateIter.MoveNext() ? surrogateIter.Current : null;
@@ -681,7 +680,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
                 }
             }
 
-            string valueSource = literal.ValueSource;
+            string valueSource = node.ValueSource;
             for (int j = 0; j < valueSource.Length; ++j)
             {
                 char c = valueSource[j];
@@ -702,33 +701,33 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
             }
         }
 
-        AfterSyntax(literal, p);
-        return literal;
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitMemberReference(J.MemberReference memberRef, PrintOutputCapture<P> p)
+    public override J VisitMemberReference(J.MemberReference node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(memberRef, Space.Location.MEMBER_REFERENCE_PREFIX, p);
-        VisitRightPadded(memberRef.Padding.Containing, JRightPadded.Location.MEMBER_REFERENCE_CONTAINING, p);
+        BeforeSyntax(node, Space.Location.MEMBER_REFERENCE_PREFIX, p);
+        VisitRightPadded(node.Padding.Containing, JRightPadded.Location.MEMBER_REFERENCE_CONTAINING, p);
         p.Append("::");
-        VisitContainer("<", memberRef.Padding.TypeParameters, JContainer.Location.TYPE_PARAMETERS, ",", ">", p);
-        VisitLeftPadded("", memberRef.Padding.Reference, JLeftPadded.Location.MEMBER_REFERENCE_NAME, p);
-        AfterSyntax(memberRef, p);
-        return memberRef;
+        VisitContainer("<", node.Padding.TypeParameters, JContainer.Location.TYPE_PARAMETERS, ",", ">", p);
+        VisitLeftPadded("", node.Padding.Reference, JLeftPadded.Location.MEMBER_REFERENCE_NAME, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitMethodDeclaration(J.MethodDeclaration method, PrintOutputCapture<P> p)
+    public override J VisitMethodDeclaration(J.MethodDeclaration node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(method, Space.Location.METHOD_DECLARATION_PREFIX, p);
+        BeforeSyntax(node, Space.Location.METHOD_DECLARATION_PREFIX, p);
         VisitSpace(Space.EMPTY, Space.Location.ANNOTATIONS, p);
-        Visit(method.LeadingAnnotations, p);
+        Visit(node.LeadingAnnotations, p);
 
-        foreach (var modifier in method.Modifiers)
+        foreach (var modifier in node.Modifiers)
         {
             VisitModifier(modifier, p);
         }
 
-        var typeParameters = method.Annotations.TypeParameters;
+        var typeParameters = node.Annotations.TypeParameters;
         if (typeParameters != null)
         {
             Visit(typeParameters.Annotations, p);
@@ -739,56 +738,56 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
             p.Append('>');
         }
 
-        Visit(method.ReturnTypeExpression, p);
-        Visit(method.Annotations.Name.Annotations, p);
-        Visit(method.Name, p);
+        Visit(node.ReturnTypeExpression, p);
+        Visit(node.Annotations.Name.Annotations, p);
+        Visit(node.Name, p);
 
-        if (!method.Markers.Any(marker => marker is CompactConstructor))
+        if (!node.Markers.Any(marker => marker is CompactConstructor))
         {
-            VisitContainer("(", method.Padding.Parameters, JContainer.Location.METHOD_DECLARATION_PARAMETERS, ",", ")", p);
+            VisitContainer("(", node.Padding.Parameters, JContainer.Location.METHOD_DECLARATION_PARAMETERS, ",", ")", p);
         }
 
-        VisitContainer("throws", method.Padding.Throws, JContainer.Location.THROWS, ",", null, p);
-        Visit(method.Body, p);
-        VisitLeftPadded("default", method.Padding.DefaultValue, JLeftPadded.Location.METHOD_DECLARATION_DEFAULT_VALUE,
+        VisitContainer("throws", node.Padding.Throws, JContainer.Location.THROWS, ",", null, p);
+        Visit(node.Body, p);
+        VisitLeftPadded("default", node.Padding.DefaultValue, JLeftPadded.Location.METHOD_DECLARATION_DEFAULT_VALUE,
             p);
-        AfterSyntax(method, p);
-        return method;
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitMethodInvocation(J.MethodInvocation method, PrintOutputCapture<P> p)
+    public override J VisitMethodInvocation(J.MethodInvocation node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(method, Space.Location.METHOD_INVOCATION_PREFIX, p);
-        VisitRightPadded(method.Padding.Select, JRightPadded.Location.METHOD_SELECT, ".", p);
-        VisitContainer("<", method.Padding.TypeParameters, JContainer.Location.TYPE_PARAMETERS, ",", ">", p);
-        Visit(method.Name, p);
-        VisitContainer("(", method.Padding.Arguments, JContainer.Location.METHOD_INVOCATION_ARGUMENTS, ",", ")", p);
-        AfterSyntax(method, p);
-        return method;
+        BeforeSyntax(node, Space.Location.METHOD_INVOCATION_PREFIX, p);
+        VisitRightPadded(node.Padding.Select, JRightPadded.Location.METHOD_SELECT, ".", p);
+        VisitContainer("<", node.Padding.TypeParameters, JContainer.Location.TYPE_PARAMETERS, ",", ">", p);
+        Visit(node.Name, p);
+        VisitContainer("(", node.Padding.Arguments, JContainer.Location.METHOD_INVOCATION_ARGUMENTS, ",", ")", p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitMultiCatch(J.MultiCatch multiCatch, PrintOutputCapture<P> p)
+    public override J VisitMultiCatch(J.MultiCatch node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(multiCatch, Space.Location.MULTI_CATCH_PREFIX, p);
-        VisitRightPadded(multiCatch.Padding.Alternatives, JRightPadded.Location.CATCH_ALTERNATIVE, "|", p);
-        AfterSyntax(multiCatch, p);
-        return multiCatch;
+        BeforeSyntax(node, Space.Location.MULTI_CATCH_PREFIX, p);
+        VisitRightPadded(node.Padding.Alternatives, JRightPadded.Location.CATCH_ALTERNATIVE, "|", p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitVariableDeclarations(J.VariableDeclarations multiVariable, PrintOutputCapture<P> p)
+    public override J VisitVariableDeclarations(J.VariableDeclarations node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(multiVariable, Space.Location.VARIABLE_DECLARATIONS_PREFIX, p);
+        BeforeSyntax(node, Space.Location.VARIABLE_DECLARATIONS_PREFIX, p);
         VisitSpace(Space.EMPTY, Space.Location.ANNOTATIONS, p);
-        Visit(multiVariable.LeadingAnnotations, p);
+        Visit(node.LeadingAnnotations, p);
 
-        foreach (var modifier in multiVariable.Modifiers)
+        foreach (var modifier in node.Modifiers)
         {
             VisitModifier(modifier, p);
         }
 
-        Visit(multiVariable.TypeExpression, p);
+        Visit(node.TypeExpression, p);
 
-        foreach (var dimension in multiVariable.DimensionsBeforeName)
+        foreach (var dimension in node.DimensionsBeforeName)
         {
             VisitSpace(dimension.Before, Space.Location.DIMENSION_PREFIX, p);
             p.Append('[');
@@ -796,86 +795,86 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
             p.Append(']');
         }
 
-        if (multiVariable.Varargs != null)
+        if (node.Varargs != null)
         {
-            VisitSpace(multiVariable.Varargs, Space.Location.VARARGS, p);
+            VisitSpace(node.Varargs, Space.Location.VARARGS, p);
             p.Append("...");
         }
 
-        VisitRightPadded(multiVariable.Padding.Variables, JRightPadded.Location.NAMED_VARIABLE, ",", p);
-        AfterSyntax(multiVariable, p);
-        return multiVariable;
+        VisitRightPadded(node.Padding.Variables, JRightPadded.Location.NAMED_VARIABLE, ",", p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitNewArray(J.NewArray newArray, PrintOutputCapture<P> p)
+    public override J VisitNewArray(J.NewArray node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(newArray, Space.Location.NEW_ARRAY_PREFIX, p);
-        if (newArray.TypeExpression != null)
+        BeforeSyntax(node, Space.Location.NEW_ARRAY_PREFIX, p);
+        if (node.TypeExpression != null)
         {
             p.Append("new");
         }
 
-        Visit(newArray.TypeExpression, p);
-        Visit(newArray.Dimensions, p);
-        VisitContainer("{", newArray.Padding.Initializer, JContainer.Location.NEW_ARRAY_INITIALIZER, ",", "}", p);
-        AfterSyntax(newArray, p);
-        return newArray;
+        Visit(node.TypeExpression, p);
+        Visit(node.Dimensions, p);
+        VisitContainer("{", node.Padding.Initializer, JContainer.Location.NEW_ARRAY_INITIALIZER, ",", "}", p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitNewClass(J.NewClass newClass, PrintOutputCapture<P> p)
+    public override J VisitNewClass(J.NewClass node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(newClass, Space.Location.NEW_CLASS_PREFIX, p);
-        VisitRightPadded(newClass.Padding.Enclosing, JRightPadded.Location.NEW_CLASS_ENCLOSING, ".", p);
-        VisitSpace(newClass.New, Space.Location.NEW_PREFIX, p);
+        BeforeSyntax(node, Space.Location.NEW_CLASS_PREFIX, p);
+        VisitRightPadded(node.Padding.Enclosing, JRightPadded.Location.NEW_CLASS_ENCLOSING, ".", p);
+        VisitSpace(node.New, Space.Location.NEW_PREFIX, p);
         p.Append("new");
-        Visit(newClass.Clazz, p);
+        Visit(node.Clazz, p);
 
-        if (!newClass.Padding.Arguments.Markers.Any(marker => marker is OmitParentheses))
+        if (!node.Padding.Arguments.Markers.Any(marker => marker is OmitParentheses))
         {
-            VisitContainer("(", newClass.Padding.Arguments, JContainer.Location.NEW_CLASS_ARGUMENTS, ",", ")", p);
+            VisitContainer("(", node.Padding.Arguments, JContainer.Location.NEW_CLASS_ARGUMENTS, ",", ")", p);
         }
 
-        Visit(newClass.Body, p);
-        AfterSyntax(newClass, p);
-        return newClass;
+        Visit(node.Body, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitNullableType(J.NullableType nt, PrintOutputCapture<P> p)
+    public override J VisitNullableType(J.NullableType node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(nt, Space.Location.NULLABLE_TYPE_PREFIX, p);
-        Visit(nt.TypeTree, p);
-        VisitSpace(nt.Padding.TypeTree.After, Space.Location.NULLABLE_TYPE_SUFFIX, p);
+        BeforeSyntax(node, Space.Location.NULLABLE_TYPE_PREFIX, p);
+        Visit(node.TypeTree, p);
+        VisitSpace(node.Padding.TypeTree.After, Space.Location.NULLABLE_TYPE_SUFFIX, p);
         p.Append("?");
-        AfterSyntax(nt, p);
-        return nt;
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitPackage(J.Package pkg, PrintOutputCapture<P> p)
+    public override J VisitPackage(J.Package node, PrintOutputCapture<P> p)
     {
-        foreach (var annotation in pkg.Annotations)
+        foreach (var annotation in node.Annotations)
         {
             VisitAnnotation(annotation, p);
         }
 
-        BeforeSyntax(pkg, Space.Location.PACKAGE_PREFIX, p);
+        BeforeSyntax(node, Space.Location.PACKAGE_PREFIX, p);
         p.Append("package");
-        Visit(pkg.Expression, p);
-        AfterSyntax(pkg, p);
-        return pkg;
+        Visit(node.Expression, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitParameterizedType(J.ParameterizedType type, PrintOutputCapture<P> p)
+    public override J VisitParameterizedType(J.ParameterizedType node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(type, Space.Location.PARAMETERIZED_TYPE_PREFIX, p);
-        Visit(type.Clazz, p);
-        VisitContainer("<", type.Padding.TypeParameters, JContainer.Location.TYPE_PARAMETERS, ",", ">", p);
-        AfterSyntax(type, p);
-        return type;
+        BeforeSyntax(node, Space.Location.PARAMETERIZED_TYPE_PREFIX, p);
+        Visit(node.Clazz, p);
+        VisitContainer("<", node.Padding.TypeParameters, JContainer.Location.TYPE_PARAMETERS, ",", ">", p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitPrimitive(J.Primitive primitive, PrintOutputCapture<P> p)
+    public override J VisitPrimitive(J.Primitive node, PrintOutputCapture<P> p)
     {
-        var keyword = primitive.Type.Kind switch
+        var keyword = node.Type.Kind switch
         {
             JavaType.Primitive.PrimitiveType.Boolean => "boolean",
             JavaType.Primitive.PrimitiveType.Byte => "byte",
@@ -890,89 +889,89 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
             _ => throw new InvalidOperationException("Unable to print unknown primitive type")
         };
 
-        BeforeSyntax(primitive, Space.Location.PRIMITIVE_PREFIX, p);
+        BeforeSyntax(node, Space.Location.PRIMITIVE_PREFIX, p);
         p.Append(keyword);
-        AfterSyntax(primitive, p);
-        return primitive;
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitParentheses<T>(J.Parentheses<T> parens, PrintOutputCapture<P> p)
+    public override J VisitParentheses<T>(J.Parentheses<T> node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(parens, Space.Location.PARENTHESES_PREFIX, p);
+        BeforeSyntax(node, Space.Location.PARENTHESES_PREFIX, p);
         p.Append('(');
-        VisitRightPadded(parens.Padding.Tree, JRightPadded.Location.PARENTHESES, ")", p);
-        AfterSyntax(parens, p);
-        return parens;
+        VisitRightPadded(node.Padding.Tree, JRightPadded.Location.PARENTHESES, ")", p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitReturn(J.Return return_, PrintOutputCapture<P> p)
+    public override J VisitReturn(J.Return node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(return_, Space.Location.RETURN_PREFIX, p);
+        BeforeSyntax(node, Space.Location.RETURN_PREFIX, p);
         p.Append("return");
-        Visit(return_.Expression, p);
-        AfterSyntax(return_, p);
-        return return_;
+        Visit(node.Expression, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitSwitch(J.Switch switch_, PrintOutputCapture<P> p)
+    public override J VisitSwitch(J.Switch node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(switch_, Space.Location.SWITCH_PREFIX, p);
+        BeforeSyntax(node, Space.Location.SWITCH_PREFIX, p);
         p.Append("switch");
-        Visit(switch_.Selector, p);
-        Visit(switch_.Cases, p);
-        AfterSyntax(switch_, p);
-        return switch_;
+        Visit(node.Selector, p);
+        Visit(node.Cases, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitSwitchExpression(J.SwitchExpression switch_, PrintOutputCapture<P> p)
+    public override J VisitSwitchExpression(J.SwitchExpression node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(switch_, Space.Location.SWITCH_EXPRESSION_PREFIX, p);
+        BeforeSyntax(node, Space.Location.SWITCH_EXPRESSION_PREFIX, p);
         p.Append("switch");
-        Visit(switch_.Selector, p);
-        Visit(switch_.Cases, p);
-        AfterSyntax(switch_, p);
-        return switch_;
+        Visit(node.Selector, p);
+        Visit(node.Cases, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitSynchronized(J.Synchronized synch, PrintOutputCapture<P> p)
+    public override J VisitSynchronized(J.Synchronized node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(synch, Space.Location.SYNCHRONIZED_PREFIX, p);
+        BeforeSyntax(node, Space.Location.SYNCHRONIZED_PREFIX, p);
         p.Append("synchronized");
-        Visit(synch.Lock, p);
-        Visit(synch.Body, p);
-        AfterSyntax(synch, p);
-        return synch;
+        Visit(node.Lock, p);
+        Visit(node.Body, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitTernary(J.Ternary ternary, PrintOutputCapture<P> p)
+    public override J VisitTernary(J.Ternary node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(ternary, Space.Location.TERNARY_PREFIX, p);
-        Visit(ternary.Condition, p);
-        VisitLeftPadded("?", ternary.Padding.TruePart, JLeftPadded.Location.TERNARY_TRUE, p);
-        VisitLeftPadded(":", ternary.Padding.FalsePart, JLeftPadded.Location.TERNARY_FALSE, p);
-        AfterSyntax(ternary, p);
-        return ternary;
+        BeforeSyntax(node, Space.Location.TERNARY_PREFIX, p);
+        Visit(node.Condition, p);
+        VisitLeftPadded("?", node.Padding.TruePart, JLeftPadded.Location.TERNARY_TRUE, p);
+        VisitLeftPadded(":", node.Padding.FalsePart, JLeftPadded.Location.TERNARY_FALSE, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitThrow(J.Throw thrown, PrintOutputCapture<P> p)
+    public override J VisitThrow(J.Throw node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(thrown, Space.Location.THROW_PREFIX, p);
+        BeforeSyntax(node, Space.Location.THROW_PREFIX, p);
         p.Append("throw");
-        Visit(thrown.Exception, p);
-        AfterSyntax(thrown, p);
-        return thrown;
+        Visit(node.Exception, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitTry(J.Try tryable, PrintOutputCapture<P> p)
+    public override J VisitTry(J.Try node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(tryable, Space.Location.TRY_PREFIX, p);
+        BeforeSyntax(node, Space.Location.TRY_PREFIX, p);
         p.Append("try");
 
-        if (tryable.Padding.Resources != null)
+        if (node.Padding.Resources != null)
         {
-            VisitSpace(tryable.Padding.Resources.Before, Space.Location.TRY_RESOURCES, p);
+            VisitSpace(node.Padding.Resources.Before, Space.Location.TRY_RESOURCES, p);
             p.Append('(');
-            var resources = tryable.Padding.Resources.Padding.Elements;
+            var resources = node.Padding.Resources.Padding.Elements;
 
             foreach (var resource in resources)
             {
@@ -990,99 +989,99 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
             p.Append(')');
         }
 
-        Visit(tryable.Body, p);
-        Visit(tryable.Catches, p);
-        VisitLeftPadded("finally", tryable.Padding.Finally, JLeftPadded.Location.TRY_FINALLY, p);
-        AfterSyntax(tryable, p);
-        return tryable;
+        Visit(node.Body, p);
+        Visit(node.Catches, p);
+        VisitLeftPadded("finally", node.Padding.Finally, JLeftPadded.Location.TRY_FINALLY, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitTypeCast(J.TypeCast typeCast, PrintOutputCapture<P> p)
+    public override J VisitTypeCast(J.TypeCast node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(typeCast, Space.Location.TYPE_CAST_PREFIX, p);
-        Visit(typeCast.Clazz, p);
-        Visit(typeCast.Expression, p);
-        AfterSyntax(typeCast, p);
-        return typeCast;
+        BeforeSyntax(node, Space.Location.TYPE_CAST_PREFIX, p);
+        Visit(node.Clazz, p);
+        Visit(node.Expression, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitTypeParameter(J.TypeParameter typeParam, PrintOutputCapture<P> p)
+    public override J VisitTypeParameter(J.TypeParameter node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(typeParam, Space.Location.TYPE_PARAMETERS_PREFIX, p);
-        Visit(typeParam.Annotations, p);
-        Visit(typeParam.Name, p);
-        VisitContainer("extends", typeParam.Padding.Bounds, JContainer.Location.TYPE_BOUNDS, "&", "", p);
-        AfterSyntax(typeParam, p);
-        return typeParam;
+        BeforeSyntax(node, Space.Location.TYPE_PARAMETERS_PREFIX, p);
+        Visit(node.Annotations, p);
+        Visit(node.Name, p);
+        VisitContainer("extends", node.Padding.Bounds, JContainer.Location.TYPE_BOUNDS, "&", "", p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitUnary(J.Unary unary, PrintOutputCapture<P> p)
+    public override J VisitUnary(J.Unary node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(unary, Space.Location.UNARY_PREFIX, p);
-        switch (unary.Operator)
+        BeforeSyntax(node, Space.Location.UNARY_PREFIX, p);
+        switch (node.Operator)
         {
             case J.Unary.Types.PreIncrement:
                 p.Append("++");
-                Visit(unary.Expression, p);
+                Visit(node.Expression, p);
                 break;
             case J.Unary.Types.PreDecrement:
                 p.Append("--");
-                Visit(unary.Expression, p);
+                Visit(node.Expression, p);
                 break;
             case J.Unary.Types.PostIncrement:
-                Visit(unary.Expression, p);
-                VisitSpace(unary.Padding.Operator.Before, Space.Location.UNARY_OPERATOR, p);
+                Visit(node.Expression, p);
+                VisitSpace(node.Padding.Operator.Before, Space.Location.UNARY_OPERATOR, p);
                 p.Append("++");
                 break;
             case J.Unary.Types.PostDecrement:
-                Visit(unary.Expression, p);
-                VisitSpace(unary.Padding.Operator.Before, Space.Location.UNARY_OPERATOR, p);
+                Visit(node.Expression, p);
+                VisitSpace(node.Padding.Operator.Before, Space.Location.UNARY_OPERATOR, p);
                 p.Append("--");
                 break;
             case J.Unary.Types.Positive:
                 p.Append('+');
-                Visit(unary.Expression, p);
+                Visit(node.Expression, p);
                 break;
             case J.Unary.Types.Negative:
                 p.Append('-');
-                Visit(unary.Expression, p);
+                Visit(node.Expression, p);
                 break;
             case J.Unary.Types.Complement:
                 p.Append('~');
-                Visit(unary.Expression, p);
+                Visit(node.Expression, p);
                 break;
             default:
                 p.Append('!');
-                Visit(unary.Expression, p);
+                Visit(node.Expression, p);
                 break;
         }
 
-        AfterSyntax(unary, p);
-        return unary;
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitUnknown(J.Unknown unknown, PrintOutputCapture<P> p)
+    public override J VisitUnknown(J.Unknown node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(unknown, Space.Location.UNKNOWN_PREFIX, p);
-        Visit(unknown.UnknownSource, p);
-        AfterSyntax(unknown, p);
-        return unknown;
+        BeforeSyntax(node, Space.Location.UNKNOWN_PREFIX, p);
+        Visit(node.UnknownSource, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitUnknownSource(J.Unknown.Source source, PrintOutputCapture<P> p)
+    public override J VisitUnknownSource(J.Unknown.Source node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(source, Space.Location.UNKNOWN_SOURCE_PREFIX, p);
-        p.Append(source.Text);
-        AfterSyntax(source, p);
-        return source;
+        BeforeSyntax(node, Space.Location.UNKNOWN_SOURCE_PREFIX, p);
+        p.Append(node.Text);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitVariable(J.VariableDeclarations.NamedVariable variable, PrintOutputCapture<P> p)
+    public override J VisitVariable(J.VariableDeclarations.NamedVariable node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(variable, Space.Location.VARIABLE_PREFIX, p);
-        Visit(variable.Name, p);
+        BeforeSyntax(node, Space.Location.VARIABLE_PREFIX, p);
+        Visit(node.Name, p);
 
-        foreach (var dimension in variable.DimensionsAfterName)
+        foreach (var dimension in node.DimensionsAfterName)
         {
             VisitSpace(dimension.Before, Space.Location.DIMENSION_PREFIX, p);
             p.Append('[');
@@ -1090,62 +1089,62 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
             p.Append(']');
         }
 
-        VisitLeftPadded("=", variable.Padding.Initializer, JLeftPadded.Location.VARIABLE_INITIALIZER, p);
-        AfterSyntax(variable, p);
-        return variable;
+        VisitLeftPadded("=", node.Padding.Initializer, JLeftPadded.Location.VARIABLE_INITIALIZER, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitWhileLoop(J.WhileLoop whileLoop, PrintOutputCapture<P> p)
+    public override J VisitWhileLoop(J.WhileLoop node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(whileLoop, Space.Location.WHILE_PREFIX, p);
+        BeforeSyntax(node, Space.Location.WHILE_PREFIX, p);
         p.Append("while");
-        Visit(whileLoop.Condition, p);
-        VisitStatement(whileLoop.Padding.Body, JRightPadded.Location.WHILE_BODY, p);
-        AfterSyntax(whileLoop, p);
-        return whileLoop;
+        Visit(node.Condition, p);
+        VisitStatement(node.Padding.Body, JRightPadded.Location.WHILE_BODY, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitWildcard(J.Wildcard wildcard, PrintOutputCapture<P> p)
+    public override J VisitWildcard(J.Wildcard node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(wildcard, Space.Location.WILDCARD_PREFIX, p);
+        BeforeSyntax(node, Space.Location.WILDCARD_PREFIX, p);
         p.Append('?');
 
-        if (wildcard.Padding.WildcardBound != null)
+        if (node.Padding.WildcardBound != null)
         {
-            switch (wildcard.WildcardBound)
+            switch (node.WildcardBound)
             {
                 case J.Wildcard.Bound.Extends:
-                    VisitSpace(wildcard.Padding.WildcardBound.Before, Space.Location.WILDCARD_BOUND, p);
+                    VisitSpace(node.Padding.WildcardBound.Before, Space.Location.WILDCARD_BOUND, p);
                     p.Append("extends");
                     break;
                 case J.Wildcard.Bound.Super:
-                    VisitSpace(wildcard.Padding.WildcardBound.Before, Space.Location.WILDCARD_BOUND, p);
+                    VisitSpace(node.Padding.WildcardBound.Before, Space.Location.WILDCARD_BOUND, p);
                     p.Append("super");
                     break;
             }
         }
 
-        Visit(wildcard.BoundedType, p);
-        AfterSyntax(wildcard, p);
-        return wildcard;
+        Visit(node.BoundedType, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    public override J VisitYield(J.Yield yield, PrintOutputCapture<P> p)
+    public override J VisitYield(J.Yield node, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(yield, Space.Location.YIELD_PREFIX, p);
-        if (!yield.Implicit)
+        BeforeSyntax(node, Space.Location.YIELD_PREFIX, p);
+        if (!node.Implicit)
         {
             p.Append("yield");
         }
 
-        Visit(yield.Value, p);
-        AfterSyntax(yield, p);
-        return yield;
+        Visit(node.Value, p);
+        AfterSyntax(node, p);
+        return node;
     }
 
-    protected void BeforeSyntax(J j, Space.Location loc, PrintOutputCapture<P> p)
+    protected void BeforeSyntax(J node, Space.Location loc, PrintOutputCapture<P> p)
     {
-        BeforeSyntax(j.Prefix, j.Markers, loc, p);
+        BeforeSyntax(node.Prefix, node.Markers, loc, p);
     }
 
     protected void BeforeSyntax(Space prefix, Markers markers, Space.Location? loc, PrintOutputCapture<P> p)

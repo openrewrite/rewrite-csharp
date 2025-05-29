@@ -14,9 +14,9 @@ public
 #endif
 record RecipeDescriptor
 {
-    // Properties with public getters and private setters to maintain immutability
-    public required TypeName TypeName { get; set; }
-
+    public required string Id { get; init; }
+    public required TypeName TypeName { get; init; }
+    public required RecipeKind Kind { get; init; }
     public required string DisplayName { get; init; }
     public required string Description { get; init; }
 
@@ -24,19 +24,44 @@ record RecipeDescriptor
     public TimeSpan? EstimatedEffortPerOccurrence { get; init; } = TimeSpan.FromMinutes(5);
     public IReadOnlyList<OptionDescriptor> Options { get; init; } = new List<OptionDescriptor>();
     public IReadOnlyList<RecipeDescriptor> RecipeList { get; init; } = new List<RecipeDescriptor>();
-
-    public override string ToString()
-    {
-        return $"[{TypeName}] {DisplayName}";
-    }
+    
+    public override string ToString() => $"[{Id}] {DisplayName}";
 
 #if !Analyzer
     public RecipeStartInfo CreateRecipeStartInfo()
     {
-        var startInfo = new RecipeStartInfo(Options);
+        var startInfo = new RecipeStartInfo()
+        {
+            Id = Id,
+            DisplayName = DisplayName,
+            Description = Description,
+            Kind = Kind,
+            TypeName = TypeName,
+            Arguments = this.Options.Select(x => new RecipeArgument
+            {
+                Name = x.Name,
+                Description = x.Description,
+                Type = x.Type,
+                DisplayName = x.DisplayName,
+                Example = x.Example,
+                Required = x.Required,
+            }).ToDictionary(x => x.Name, x => x)
+        };
         return startInfo;
     }
 #endif
 
 }
+#if Analyzer
+internal
+#else
+public 
+#endif 
+    enum RecipeKind
+{
+    OpenRewrite,
+    RoslynAnalyzer,
+    RoslynFixer
+}
+
 

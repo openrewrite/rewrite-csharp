@@ -2,7 +2,7 @@
 
 partial interface J
 {
-    partial class Parentheses<J2>
+    partial class Parentheses<J2> : IParentheses
     {
         public JavaType? Type => Tree switch
         {
@@ -18,5 +18,11 @@ partial interface J
                 NameTree nameTree => WithTree((J2)nameTree.WithType(newType)),
                 _ => this
             };
+        J IParentheses.Tree => Tree;
+    }
+
+    public partial interface IParentheses
+    {
+        J Tree { get; } 
     }
 }

@@ -3,25 +3,22 @@ using System.Text.RegularExpressions;
 using Rewrite.Core;
 using Rewrite.RewriteJson;
 using Rewrite.RewriteJson.Tree;
-using ExecutionContext = Rewrite.Core.ExecutionContext;
 
 namespace Rewrite.Recipes.Json;
-
-using ExecutionContext = ExecutionContext;
 
 [DisplayName("Indent")]
 [Description("Fix JSON indentation")]
 public class IndentRecipe : Recipe
 {
     
-    public override ITreeVisitor<Tree, ExecutionContext> GetVisitor()
+    public override ITreeVisitor<Tree, IExecutionContext> GetVisitor()
     {
         return new IndentVisitor();
     }
 
-    private class IndentVisitor : JsonVisitor<ExecutionContext>
+    private class IndentVisitor : JsonVisitor<IExecutionContext>
     {
-        public override Space VisitSpace(Space space, ExecutionContext ctx)
+        public override Space VisitSpace(Space space, IExecutionContext ctx)
         {
             if (Cursor.Value is RewriteJson.Tree.Json.Document doc)
             {

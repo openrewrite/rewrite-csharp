@@ -86,9 +86,12 @@ public class RecipeMetadataGenerator : ISourceGenerator
                 });
             }
 
+            var typeName = TypeName.Parse($"{classSymbol.ToDisplayString()}, {classSymbol.ContainingAssembly.Name}");
             descriptors.Add(new RecipeDescriptor
             {
-                TypeName = TypeName.Parse($"{classSymbol.ToDisplayString()}, {classSymbol.ContainingAssembly.Name}"),
+                Id = typeName.FullName,
+                Kind = RecipeKind.OpenRewrite,
+                TypeName = typeName,
                 DisplayName = displayName,
                 Description = description,
                 Tags = tags?.ToList() ?? [],

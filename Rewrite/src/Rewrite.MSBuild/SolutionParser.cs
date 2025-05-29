@@ -24,13 +24,13 @@ public class SolutionParser
         var allMetadataReferences = GetAllMetadataReferences(project);
         var parser = builder.References(allMetadataReferences).Build();
 
-        IList<Parser.Input> inputs = [];
+        IList<IParser.Input> inputs = [];
         foreach (var doc in project.Documents
                      .Where(d => d.SourceCodeKind == SourceCodeKind.Regular)
                      .Where(d => Path.GetFullPath(d.FilePath!).StartsWith(fullProjectPath))
                      .Where(d => !d.FilePath!.StartsWith(objPath)))
         {
-            inputs.Add(new Parser.Input(Path.GetFullPath(doc.FilePath!),
+            inputs.Add(new IParser.Input(Path.GetFullPath(doc.FilePath!),
                 () => new FileStream(doc.FilePath!, FileMode.Open)));
         }
 

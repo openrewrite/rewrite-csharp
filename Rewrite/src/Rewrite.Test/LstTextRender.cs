@@ -16,7 +16,6 @@ public static class LstTextRender
 
     public static string RenderLstTree(this Tree tree)
     {
-
         var walker = new Walker();
         var results = new Dictionary<Guid, OutputLine>();
         walker.Visit(tree, results);

@@ -1,4 +1,6 @@
-﻿namespace Rewrite.RewriteJava.Tree;
+﻿using Rewrite.RewriteCSharp.Tree;
+
+namespace Rewrite.RewriteJava.Tree;
 
 public partial interface J : Rewrite.Core.Tree
 {
@@ -11,5 +13,6 @@ public partial interface J : Rewrite.Core.Tree
         {
             return WithType(newType as JavaType.FullyQualified);
         }
+
     }
 }

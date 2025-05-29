@@ -130,7 +130,7 @@ public partial interface J : Rewrite.Core.Tree
     Guid id,
     Space prefix,
     Markers markers,
-    J.Identifier name,
+    VariableDeclarator name,
     IList<JLeftPadded<Space>> dimensionsAfterName,
     JLeftPadded<Expression>? initializer,
     JavaType.Variable? variableType
@@ -184,9 +184,8 @@ public partial interface J : Rewrite.Core.Tree
             {
                 return ReferenceEquals(newMarkers, Markers) ? this : new NamedVariable(Id, Prefix, newMarkers, Name, DimensionsAfterName, _initializer, VariableType);
             }
-            public J.Identifier Name { get;  set; } = name;
 
-            public NamedVariable WithName(J.Identifier newName)
+            public NamedVariable WithName(VariableDeclarator newName)
             {
                 return ReferenceEquals(newName, Name) ? this : new NamedVariable(Id, Prefix, Markers, newName, DimensionsAfterName, _initializer, VariableType);
             }

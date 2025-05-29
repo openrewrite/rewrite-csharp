@@ -4,8 +4,7 @@ namespace Rewrite.Test;
 
 internal static class RewriteTestUtils
 {
-    public static bool GroupSourceSpecsByParser(List<Parser.Builder> parserBuilders,
-        Dictionary<Parser.Builder, List<SourceSpec>> sourceSpecsByParser, SourceSpec sourceSpec)
+    public static bool GroupSourceSpecsByParser(List<IParser.Builder> parserBuilders, Dictionary<IParser.Builder, List<SourceSpec>> sourceSpecsByParser, SourceSpec sourceSpec)
     {
         foreach (var entry in sourceSpecsByParser)
         {

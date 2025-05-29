@@ -26,7 +26,7 @@ public record JsonReceiver : Receiver
 
     private class Visitor : JsonVisitor<ReceiverContext>
     {
-        public override Json? Visit(Tree? tree, ReceiverContext ctx)
+        public override Json? Visit(Tree? tree, ReceiverContext ctx, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
             Cursor = new Cursor(Cursor, tree!);
 

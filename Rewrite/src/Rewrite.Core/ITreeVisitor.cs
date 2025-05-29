@@ -1,11 +1,12 @@
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Rewrite.Core.Marker;
 
 namespace Rewrite.Core;
 
 public interface ITreeVisitor<out T, TState> where T : class, Tree
 {
-    public static ITreeVisitor<Tree, ExecutionContext> Noop()
+    public static ITreeVisitor<Tree, IExecutionContext> Noop()
     {
         return new NoopVisitor();
     }
@@ -24,16 +25,21 @@ public interface ITreeVisitor<out T, TState> where T : class, Tree
         return TreeVisitorAdapter.Adapt<TTargetVisitor,TNodeType,TState>(this);
     }
     T? PreVisit(Tree? tree, TState p);
-    T? Visit(Tree? tree, TState p);
+    T? Visit(Tree? tree, TState p, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "");
     T? Visit(Tree? tree, TState p, Cursor parent);
-    T? PostVisit(Tree tree, TState p);
     Markers? VisitMarkers(Marker.Markers? markers, TState p);
-    TMarker VisitMarker<TMarker>(TMarker marker, TState p) where TMarker : Marker.Marker;
+    Core.Marker.Marker VisitMarker(Core.Marker.Marker marker, TState p);
 }
-
-internal class NoopVisitor : TreeVisitor<Tree, ExecutionContext>
+internal class NoopVisitor<T> : TreeVisitor<T, IExecutionContext> where T: class, Tree
 {
-    public override Tree? Visit(Tree? tree, ExecutionContext p)
+    public override T? Visit(Tree? tree, IExecutionContext p, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
+    {
+        return tree as T;
+    }
+}
+internal class NoopVisitor : TreeVisitor<Tree, IExecutionContext>
+{
+    public override Tree? Visit(Tree? tree, IExecutionContext p, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
     {
         return tree;
     }

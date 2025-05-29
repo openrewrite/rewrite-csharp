@@ -1,28 +1,36 @@
+using System.Collections;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace Rewrite.Core;
 
 #if DEBUG_VISITOR
 [DebuggerStepThrough]
 #endif
-public class Cursor
+public class Cursor : IEnumerable<object>
 {
-    private readonly Cursor? _parent;
+    protected Cursor? _parent;
     public const string ROOT_VALUE = "root";
+    internal virtual Dictionary<string, object>? Messages { get; set; } = null;
 
-    private Dictionary<string, object>? _messages;
+    public virtual object? Value { get; init; }
+    public string VisitMethod  { get; init; }
+    public string ValueExpression  { get; init; }
 
-    public Cursor() : this(null, ROOT_VALUE)
+    public Cursor([CallerMemberName] string callingMethodName = "") : this(null, ROOT_VALUE, callingMethodName)
     {
         
     }
-    public Cursor(Cursor? parent, object? value)
+
+    public Cursor(Cursor? parent, object? value, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(value))] string callingArgumentExpression = "")
     {
         _parent = parent;
         Value = value;
+        VisitMethod = callingMethodName;
+        ValueExpression = callingArgumentExpression;
     }
 
-    public Cursor? GetParent(int levels = 1)
+    public virtual Cursor? GetParent(int levels = 1)
     {
         var cursor = this;
         for (var i = 0; i < levels && cursor != null; i++)
@@ -36,7 +44,6 @@ public class Cursor
     public bool IsRoot => Value?.ToString() == ROOT_VALUE;
 
     public Cursor? Parent => GetParent(1);
-    public object? Value { get; init; }
 
     public Cursor GetRoot()
     {
@@ -49,6 +56,11 @@ public class Cursor
         return c;
     }
 
+    public bool TryGetValue<T>(out T? value) where T : class
+    {
+        value = GetValue<T>();
+        return value != null;
+    }
     public T? GetValue<T>() where T : class
     {
         return Value as T;
@@ -83,33 +95,33 @@ public class Cursor
         return default;
     }
 
-    public Cursor DropParentUntil(Func<object?, bool> predicate)
-    {
-        var c = this;
-        while (c != null)
-        {
-            if (predicate(c.Value))
-                return c;
-            c = c.Parent;
-        }
-
-        throw new InvalidOperationException("Expected to find a matching parent for " + this);
-    }
+    // public Cursor DropParentUntil(Func<object?, bool> predicate)
+    // {
+    //     var c = this;
+    //     while (c != null)
+    //     {
+    //         if (predicate(c.Value))
+    //             return c;
+    //         c = c.Parent;
+    //     }
+    //
+    //     throw new InvalidOperationException("Expected to find a matching parent for " + this);
+    // }
 
     public void PutMessage(string key, object value)
     {
-        if (_messages == null)
+        if (Messages == null)
         {
-            _messages = new Dictionary<string, object>();
+            Messages = new Dictionary<string, object>();
         }
 
-        _messages[key] = value;
+        Messages[key] = value;
     }
 
     public T? GetMessage<T>(string key, T? defaultValue = default)
     {
-        return _messages is null ? defaultValue :
-            _messages.TryGetValue(key, out var value) ? (T?)value : defaultValue;
+        return Messages is null ? defaultValue :
+            Messages.TryGetValue(key, out var value) ? (T?)value : defaultValue;
     }
 
     public void Deconstruct(out Cursor? Parent, out object? Value)
@@ -117,8 +129,56 @@ public class Cursor
         Parent = this.Parent;
         Value = this.Value;
     }
+    /// <summary>
+    /// Drops parents until a predicate matches.
+    /// </summary>
+    /// <param name="valuePredicate">The predicate to test against parent values.</param>
+    /// <returns>The first parent cursor that matches the predicate.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when no matching parent is found.</exception>
+    public Cursor DropParentUntil(Predicate<object?> valuePredicate)
+    {
+        Cursor? cursor = Parent;
+        while (cursor != null && !valuePredicate(cursor.Value))
+        {
+            cursor = cursor.Parent;
+        }
+        if (cursor == null)
+        {
+            throw new InvalidOperationException("Expected to find a matching parent for " + this);
+        }
+        return cursor;
+    }
 
-
+    /// <summary>
+    /// Drops parents while a predicate matches.
+    /// </summary>
+    /// <param name="valuePredicate">The predicate to test against parent values.</param>
+    /// <returns>The first parent cursor that doesn't match the predicate.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when no non-matching parent is found.</exception>
+    public Cursor DropParentWhile(Predicate<object?> valuePredicate)
+    {
+        Cursor? cursor = Parent;
+        while (cursor != null && valuePredicate(cursor.Value))
+        {
+            cursor = cursor.Parent;
+        }
+        if (cursor == null)
+        {
+            throw new InvalidOperationException("Expected to find a matching parent for " + this);
+        }
+        return cursor;
+    }
+    /// <summary>
+    /// Return the first parent of the current cursor which points to an AST element, or the root cursor if the current
+    /// cursor already points to the root AST element. This skips over non-tree Padding elements.
+    /// <br/>
+    /// If you do want to access Padding elements, use Parent or ParentOrThrow properties, which do not skip over these elements.
+    /// </summary>
+    /// <returns>A cursor which either points at the first non-padding parent of the current element</returns>
+    public Cursor GetParentTreeCursor()
+    {
+        return DropParentUntil(it => it is Tree || Equals(it, ROOT_VALUE));
+    }
     /// <summary>
     /// Puts a message on the first enclosing instance of the specified type.
     /// </summary>
@@ -153,8 +213,57 @@ public class Cursor
     /// <returns>The closest message matching the provided key in the cursor stack, or <c>null</c> if none.</returns>
     public T? GetNearestMessage<T>(string key)
     {
-        T? t = this._messages == null ? default : (T)_messages[key];
+        T? t = this.Messages == null ? default : (T)Messages[key];
         return t == null && Parent != null ? Parent.GetNearestMessage<T>(key) : t;
     }
 
+    public IEnumerator<object> GetEnumerator()
+    {
+        var current = this._parent;
+        while (current != null)
+        {
+            yield return current;
+            current = this.Parent;
+        }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+    public Cursor<T> As<T>() => new (this);
+
+    public T ComputeMessageIfAbsent<T>(string key, Func<string, T> mappingFunction)
+    {
+        Messages ??= new Dictionary<string, object>();
+    
+        if (!Messages.TryGetValue(key, out object? value))
+        {
+            value = mappingFunction(key);
+            Messages[key] = value!;
+        }
+    
+        return (T)value!;
+    }
+}
+
+
+
+public class Cursor<T> : Cursor
+{
+    // private readonly Cursor _delegated;
+
+    internal Cursor(Cursor cursor)
+    {
+        if (cursor.Value is not T value) throw new InvalidOperationException($"Cannot create {GetType()} when original cursor Value is {cursor.Value?.GetType()}");
+        base.Value = cursor.Value;
+        Messages = cursor.Messages;
+        _parent = cursor.Parent;
+    }
+
+    public new T? Value => (T?)base.Value;
+    // public override Cursor? GetParent(int levels = 1) => _delegated.GetParent(levels);
+    // internal override Dictionary<string, object>? Messages
+    // {
+    //     get => _delegated.Messages;
+    //     set => _delegated.Messages = value;
+    // }
 }

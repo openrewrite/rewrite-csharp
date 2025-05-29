@@ -17,4 +17,18 @@ public static class TypeUtils
 
         return fqn1 == null && fqn2 == null;
     }
+
+    /// <summary>
+    /// Converts a JavaType to JavaType.FullyQualified if possible.
+    /// </summary>
+    /// <param name="type">The JavaType to convert.</param>
+    /// <returns>The type as JavaType.FullyQualified if it is a FullyQualified type and not an Unknown type, otherwise null.</returns>
+    public static JavaType.FullyQualified? AsFullyQualified(JavaType? type)
+    {
+        if (type is JavaType.FullyQualified && !(type is JavaType.Unknown))
+        {
+            return (JavaType.FullyQualified)type;
+        }
+        return null;
+    }
 }

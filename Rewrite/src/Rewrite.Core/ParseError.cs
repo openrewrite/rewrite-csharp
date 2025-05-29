@@ -135,17 +135,17 @@ public class ParseError(
         return IPrinterFactory.Current()!.CreatePrinter<P>();
     }
 
-    public static ParseError Build(Parser parser,
-        Parser.Input input,
+    public static ParseError Build(IParser parser,
+        IParser.Input input,
         string? relativeTo,
-        ExecutionContext ctx,
+        IExecutionContext ctx,
         Exception t)
     {
         var stream = input.GetSource(ctx);
         using var readableStream = new StreamReader(stream, Encoding.UTF8);
         return new ParseError(
             Tree.RandomId(),
-            new Markers(Tree.RandomId(), [ParseExceptionResult.Build(parser, t)]),
+            new Markers(Tree.RandomId(), [ParseExceptionResult.Build(t)]),
             input.GetRelativePath(relativeTo),
             null, // FIXME: need real file attr
             parser.GetCharset(ctx),

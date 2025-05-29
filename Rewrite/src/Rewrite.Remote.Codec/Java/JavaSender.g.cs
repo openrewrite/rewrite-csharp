@@ -27,7 +27,7 @@ public record JavaSender : Sender
 
     private class Visitor : JavaVisitor<SenderContext>
     {
-        public override J Visit(Tree? tree, SenderContext ctx)
+        public override J Visit(Tree? tree, SenderContext ctx, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
             Cursor = new Cursor(Cursor, tree ?? throw new InvalidOperationException($"Parameter {nameof(tree)} should not be null"));
             ctx.SendNode(tree, x => x, ctx.SendTree);
@@ -365,6 +365,7 @@ public record JavaSender : Sender
             ctx.SendNode(instanceOf, v => v.Clazz, ctx.SendTree);
             ctx.SendNode(instanceOf, v => v.Pattern, ctx.SendTree);
             ctx.SendTypedValue(instanceOf, v => v.Type);
+            ctx.SendNode(instanceOf, v => v.Modifier, ctx.SendTree);
             return instanceOf;
         }
 
