@@ -42,6 +42,14 @@ public class AvoidConstantArraysAsArgumentsTest implements RewriteTest {
               """,
             spec -> spec.path("Test.sln")
           ),
+          text("""
+            root = true
+
+            [*]
+            charset = utf-8
+            end_of_line = lf
+            """,
+          spec -> spec.path(".editorconfig")),
           xml(
             //language=xml
             """
