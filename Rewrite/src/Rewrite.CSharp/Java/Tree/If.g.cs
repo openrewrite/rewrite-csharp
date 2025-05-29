@@ -23,6 +23,17 @@ namespace Rewrite.RewriteJava.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface J : Rewrite.Core.Tree
 {
+    /// <summary>
+    /// Represents a Java if statement.
+    /// <br/>Example:
+    /// <code>{@code
+    /// if (condition) {
+    ///     // then
+    /// } else {
+    ///     // else
+    /// }
+    /// }</code>
+    /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif

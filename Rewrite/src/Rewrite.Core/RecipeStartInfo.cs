@@ -3,22 +3,23 @@ namespace Rewrite.Core.Config;
 
 public class RecipeStartInfo
 {
-    private readonly Dictionary<string,RecipeArgument> _arguments;
+    public required string Id { get; init; }
+    public required TypeName TypeName { get; init; }
+    public required RecipeKind Kind { get; init; }
+    public required string DisplayName { get; init; }
+    public required string Description { get; init; }
     
-    public IReadOnlyDictionary<string, RecipeArgument> Arguments { get; private set; }
-    internal RecipeStartInfo(IReadOnlyList<OptionDescriptor> options)
-    {
-        _arguments = options.Select(x => new RecipeArgument
-        {
-            Name = x.Name,
-            Description = x.Description,
-            Type = x.Type,
-            DisplayName = x.DisplayName,
-            Example = x.Example,
-            Required = x.Required,
-        }).ToDictionary(x => x.Name, x => x);
-        Arguments = _arguments.AsReadOnly();
+    private readonly Dictionary<string,RecipeArgument> _arguments = new();
 
+    public IReadOnlyDictionary<string, RecipeArgument> Arguments
+    {
+        get => _arguments;
+        internal init => _arguments = new Dictionary<string, RecipeArgument>(value);
+    }
+
+    internal RecipeStartInfo()
+    {
+       
     }
 
     public RecipeStartInfo WithOption(string propertyName, object? value)
@@ -41,4 +42,7 @@ public class RecipeStartInfo
         argument.Value = value;
         return this;
     }
+    
+    public override string ToString() => $"[{Id}] {DisplayName}";
+
 }

@@ -23,6 +23,16 @@ namespace Rewrite.RewriteJava.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface J : Rewrite.Core.Tree
 {
+    /// <summary>
+    /// Represents a set of enum values in an enum declaration.
+    /// <br/>Example:
+    /// <code>{@code
+    /// enum Color {
+    ///     RED,
+    ///     GREEN;
+    /// }
+    /// }</code>
+    /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif

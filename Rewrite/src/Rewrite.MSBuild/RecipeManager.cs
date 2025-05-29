@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Logging;
 using NMica.Utils.IO;
@@ -33,25 +34,24 @@ public class RecipeManager
         _log = log;
         _nugetLogger = nugetLogger;
     }
-    public RecipeDescriptor FindRecipeDescriptor(RecipeIdentity recipeId)
+    public RecipeDescriptor FindRecipeDescriptor(InstallableRecipe installableRecipeId)
     {
-        var context = FindContext(recipeId);
-        return context.Recipes.FirstOrDefault(x => x.TypeName == recipeId.Type) 
-               ?? throw new InvalidOperationException($"Recipe {recipeId.Type} not found in loaded package {recipeId.NugetPackageName}:{recipeId.NugetPackageVersion}");
+        var context = FindContext(installableRecipeId);
+        return context.Recipes.FirstOrDefault(x => x.Id == installableRecipeId.Id) 
+               ?? throw new InvalidOperationException($"Recipe {installableRecipeId.Id} not found in loaded package {installableRecipeId.NugetPackageName}:{installableRecipeId.NugetPackageVersion}");
     }
 
-    public Recipe CreateRecipe(RecipeIdentity recipeId, RecipeStartInfo startInfo)
+    public Recipe CreateRecipe(InstallableRecipe installableRecipeId, RecipeStartInfo startInfo)
     {
-        _log.LogInformation("Starting recipe {RecipeId} with Options: {@Options}", recipeId, startInfo.Arguments.Values.Where(x => x.Value != null).ToDictionary(x => x.Name, x => x.Value));
-        var descriptor = FindRecipeDescriptor(recipeId);
-        var context = FindContext(recipeId);
-        var recipeDescriptor = context.CreateRecipe(descriptor, startInfo);
+        _log.LogInformation("Starting recipe {@RecipeId} with Options: {@Options}", installableRecipeId, startInfo.Arguments.Values.Where(x => x.Value != null).ToDictionary(x => x.Name, x => x.Value));
+        var context = FindContext(installableRecipeId);
+        var recipeDescriptor = context.CreateRecipe(startInfo);
         return recipeDescriptor;
         
     }
 
 
-    public async Task<RecipePackageInfo> InstallRecipe(
+    public async Task<RecipePackageInfo> InstallRecipePackage(
         string packageId,
         string packageVersion,
         bool includePrerelease = false,
@@ -67,12 +67,12 @@ public class RecipeManager
             cancellationToken);
     }
 
-    public async Task<RecipePackageInfo> InstallRecipe(
-        RecipeIdentity recipeId,
+    public async Task<RecipePackageInfo> InstallRecipePackage(
+        RecipePackage installableRecipeId,
         List<PackageSource>? packageSources = null,
         CancellationToken cancellationToken = default)
     {
-        return await InstallRecipe(recipeId.NugetPackageName, recipeId.NugetPackageVersion, packageSources: packageSources, cancellationToken: cancellationToken);
+        return await InstallRecipePackage(installableRecipeId.NugetPackageName, installableRecipeId.NugetPackageVersion, packageSources: packageSources, cancellationToken: cancellationToken);
     }
 
     public async Task<RecipePackageInfo> InstallRecipePackage(
@@ -117,7 +117,7 @@ public class RecipeManager
 
     }
 
-    private RecipeExecutionContext FindContext(RecipeIdentity recipeId) => FindContext(recipeId.NugetPackageName, recipeId.NugetPackageVersion);
+    private RecipeExecutionContext FindContext(InstallableRecipe installableRecipeId) => FindContext(installableRecipeId.NugetPackageName, installableRecipeId.NugetPackageVersion);
     private RecipeExecutionContext FindContext(string packageName, string packageVersion)
     {
         var packageIdentity = new PackageIdentity(packageName, NuGetVersion.Parse(packageVersion));
@@ -273,14 +273,24 @@ public class RecipeManager
         var globalPackagesPath = SettingsUtility.GetGlobalPackagesFolder(settings);
         
         var libsToPath = lockFile.Libraries.ToDictionary(x => (x.Name, x.Version), x => x.Path);
-        var assemblies = lockFile.Targets.First()
+        var libraryDlls = lockFile.Targets.First()
             .Libraries
             .SelectMany(targetLib => targetLib.RuntimeAssemblies
                 .Select(assembly => (Folder: libsToPath[(targetLib.Name!, targetLib.Version!)], File: assembly.Path, PackageIdentity: new PackageIdentity(targetLib.Name, targetLib.Version))))
+            
+            .ToList();
+        var dllsInAnalyzerSubfolder = new Regex(@"^analyzers/dotnet/cs/[^/]+\.dll$", RegexOptions.Compiled);
+        var analyzerDlls = lockFile.Libraries.SelectMany(lib => lib.Files.Select(file => (Folder: lib.Path, File: file, PackageIdentity: new PackageIdentity(lib.Name, lib.Version)) ))
+            .Where(x => dllsInAnalyzerSubfolder.IsMatch(x.File))
+            .ToList();
+        
+        //
+        var combined = libraryDlls
+            .Union(analyzerDlls)
             .Select(x => (x.PackageIdentity, AssemblyPath: (AbsolutePath)globalPackagesPath / x.Folder / x.File))
             .Where(x => x.AssemblyPath.Name != "_._")
             .ToList();
-        return assemblies;
+        return combined;
     }
     
 }

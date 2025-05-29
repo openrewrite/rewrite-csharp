@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Rewrite.Core;
@@ -10,10 +11,37 @@ namespace Rewrite.RewriteCSharp;
 public static class Extensions
 {
     public static bool IsPresent(this SyntaxToken token) => !token.IsKind(SyntaxKind.None);
-    public static IEnumerable<Core.Tree> Descendents<TNode>(this TNode source) where TNode : Core.Tree
+
+    public static bool TryFind<TNode, TResult>(this TNode source, Predicate<Core.Tree> predicate, out Cursor<TResult>? result) where TNode : Core.Tree where TResult : Core.Tree 
+    {
+        result = source.Find(predicate)?.As<TResult>();
+        return result != null;
+    }
+
+    public static Cursor? Find(this Cs source, Predicate<J> predicate)
+    {
+        return source.Find(tree => predicate((J)tree));
+    }
+    public static Cursor<TResult>? Find<TResult>(this J source, Predicate<TResult>? predicate = null) where TResult : J
+    {
+        Predicate<Core.Tree> untypedPredicate = predicate is null ? (x => x is TResult) :  (x => x is TResult node && predicate(node));
+        return source.Find(untypedPredicate)?.As<TResult>();
+    }
+    // public static Cursor? Find(this Cs source, Predicate<Core.Tree> predicate)
+    // {
+    //     
+    //     // var result = new object();
+    //     // var searchVisitor = new SearchVisitor(predicate);
+    //     // if (!source.IsAcceptable(searchVisitor, result))
+    //     //     return null;
+    //     // searchVisitor.Visit(source, result);
+    //     // return searchVisitor.SearchResult;
+    // }
+    public static IEnumerable<Core.Tree> Descendents<TNode>(this TNode source, Predicate<Core.Tree>? shouldStop = null) where TNode : Core.Tree
     {
         var result = new List<Core.Tree>();
-        var searchVisitor = new SearchVisitor();
+        shouldStop ??= _ => false;
+        var searchVisitor = new DescendentsVisitor(shouldStop);
         if (!source.IsAcceptable(searchVisitor, result))
             return new Core.Tree[] { source };
         searchVisitor.Visit(source, result);
@@ -30,8 +58,6 @@ public static class Extensions
 
     private class ReplaceContainerVisitor(J oldNode, J newNode) : CSharpVisitor<object?>
     {
-
-
         public override J? PreVisit(Core.Tree? tree, object? p)
         {
             if (oldNode.Equals(tree))
@@ -45,23 +71,42 @@ public static class Extensions
 
     private class ReplaceNodeVisitor(J oldNode, J newNode) : CSharpVisitor<object?>
     {
+        bool _stop = false;
         public override J? PreVisit(Core.Tree? tree, object? p)
         {
             if (oldNode.Equals(tree))
             {
+                _stop = true;
                 return newNode;
             }
             return base.PreVisit(tree, p);
         }
+
+        public override J? Visit(Core.Tree? tree, object? p, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
+        {
+            if (_stop)
+                return (J?)tree;
+            return base.Visit(tree, p);
+        }
+        
     }
 
-    private class SearchVisitor : CSharpVisitor<List<Core.Tree>>
+    
+    private class DescendentsVisitor(Predicate<Core.Tree> shouldStop) : CSharpVisitor<List<Core.Tree>>
     {
-        public override J? PreVisit(Core.Tree? tree, List<Core.Tree> p)
-        {
+        // public override J? PreVisit(Core.Tree? tree, List<Core.Tree> p)
+        // {
+        //
+        //     
+        //     return base.PreVisit(tree!, p);
+        // }
 
+        public override J? Visit(Core.Tree? tree, List<Core.Tree> p, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
+        {
             p.Add(tree!);
-            return base.PreVisit(tree!, p);
+            if (tree != null && shouldStop(tree))
+                return (J)tree;
+            return base.Visit(tree, p);
         }
     }
 }

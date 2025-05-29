@@ -11,7 +11,7 @@ public sealed class JLeftPadded<T>(
     Space before,
     T element,
     Markers markers
-) : JLeftPadded
+) : JLeftPadded, IHasPrefix
 {
     public Space Before => before;
 
@@ -41,6 +41,8 @@ public sealed class JLeftPadded<T>(
     {
         return ReferenceEquals(newMarkers, markers) ? this : new JLeftPadded<T>(before, element, newMarkers);
     }
+
+    Space IHasPrefix.Prefix => Before;
 }
 
 public static class JLeftPaddedExtensions

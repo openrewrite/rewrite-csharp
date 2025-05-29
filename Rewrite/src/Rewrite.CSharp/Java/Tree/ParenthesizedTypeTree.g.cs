@@ -24,8 +24,13 @@ namespace Rewrite.RewriteJava.Tree;
 public partial interface J : Rewrite.Core.Tree
 {
     /// <summary>
-    /// Java does not allow for parenthesis around TypeTree in places like a type cast where a J.ControlParenthesis is
+    /// Represents a parenthesized type tree. Java does not allow for parentheses
+    /// around TypeTree in places like a type cast where a J.ControlParenthesis is
     /// used. But other languages, like Kotlin, do.
+    /// <br/>Example:
+    /// <code>{@code
+    /// (List<String>) obj;
+    /// }</code>
     /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]

@@ -37,7 +37,7 @@ public record CSharpReceiver : Receiver
 
     private class Visitor : CSharpVisitor<ReceiverContext>
     {
-        public override J? Visit(Tree? tree, ReceiverContext ctx)
+        public override J? Visit(Tree? tree, ReceiverContext ctx, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
             Cursor = new Cursor(Cursor, tree!);
 
@@ -1232,7 +1232,7 @@ public record CSharpReceiver : Receiver
             arrayType = arrayType.WithMarkers(ctx.ReceiveNode(arrayType.Markers, ctx.ReceiveMarkers)!);
             arrayType = arrayType.WithElementType(ctx.ReceiveNode(arrayType.ElementType, ctx.ReceiveTree)!);
             arrayType = arrayType.WithAnnotations(ctx.ReceiveNodes(arrayType.Annotations, ctx.ReceiveTree));
-            arrayType = arrayType.WithDimension(ctx.ReceiveNode(arrayType.Dimension, ReceiveLeftPadded));
+            arrayType = arrayType.WithDimension(ctx.ReceiveNode(arrayType.Dimension, ReceiveLeftPadded)!);
             arrayType = arrayType.WithType(ctx.ReceiveValue(arrayType.Type)!);
             return arrayType;
         }
@@ -1506,6 +1506,7 @@ public record CSharpReceiver : Receiver
             instanceOf = instanceOf.WithClazz(ctx.ReceiveNode(instanceOf.Clazz, ctx.ReceiveTree)!);
             instanceOf = instanceOf.WithPattern(ctx.ReceiveNode(instanceOf.Pattern, ctx.ReceiveTree));
             instanceOf = instanceOf.WithType(ctx.ReceiveValue(instanceOf.Type));
+            instanceOf = instanceOf.WithModifier(ctx.ReceiveNode(instanceOf.Modifier, ctx.ReceiveTree));
             return instanceOf;
         }
 
@@ -3245,7 +3246,7 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
                     ctx.ReceiveNode(default(TypeTree), ctx.ReceiveTree)!,
                     ctx.ReceiveNodes(default(IList<J.Annotation>?), ctx.ReceiveTree)!,
-                    ctx.ReceiveNode(default(JLeftPadded<Space>?), ReceiveLeftPadded)!,
+                    ctx.ReceiveNode(default(JLeftPadded<Space>), ReceiveLeftPadded)!,
                     ctx.ReceiveValue(default(JavaType))!
                 );
             }
@@ -3543,7 +3544,8 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveNode(default(JRightPadded<Expression>), ReceiveRightPadded)!,
                     ctx.ReceiveNode(default(J), ctx.ReceiveTree)!,
                     ctx.ReceiveNode(default(J?), ctx.ReceiveTree)!,
-                    ctx.ReceiveValue(default(JavaType?))!
+                    ctx.ReceiveValue(default(JavaType?))!,
+                    ctx.ReceiveNode(default(J.Modifier?), ctx.ReceiveTree)!
                 );
             }
 
@@ -3959,7 +3961,7 @@ public record CSharpReceiver : Receiver
                     ctx.ReceiveValue(default(Guid))!,
                     ctx.ReceiveNode(default(Space), ReceiveSpace)!,
                     ctx.ReceiveNode(default(Markers), ctx.ReceiveMarkers)!,
-                    ctx.ReceiveNode(default(J.Identifier), ctx.ReceiveTree)!,
+                    ctx.ReceiveNode(default(VariableDeclarator), ctx.ReceiveTree)!,
                     ctx.ReceiveNodes(default(IList<JLeftPadded<Space>>), ReceiveLeftPadded)!,
                     ctx.ReceiveNode(default(JLeftPadded<Expression>?), ReceiveLeftPadded)!,
                     ctx.ReceiveValue(default(JavaType.Variable?))!

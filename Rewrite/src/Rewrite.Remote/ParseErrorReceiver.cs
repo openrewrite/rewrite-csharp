@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
 using FileAttributes = Rewrite.Core.FileAttributes;
@@ -20,7 +21,7 @@ public class ParseErrorReceiver : Receiver
     private class Visitor : ParseErrorVisitor<ReceiverContext>
     {
 
-        public override ParseError? Visit(Tree? tree, ReceiverContext ctx)
+        public override ParseError? Visit(Tree? tree, ReceiverContext ctx, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
             Cursor = new Cursor(Cursor, tree!);
 

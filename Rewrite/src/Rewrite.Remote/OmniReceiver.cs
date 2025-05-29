@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Rewrite.Core;
 
 namespace Rewrite.Remote;
@@ -17,7 +18,7 @@ internal class OmniReceiver : Receiver
 
     private class Visitor : TreeVisitor<Tree, ReceiverContext>
     {
-        public override Tree Visit(Tree? tree, ReceiverContext ctx)
+        public override Tree Visit(Tree? tree, ReceiverContext ctx, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
             Cursor = new Cursor(Cursor, tree!);
 

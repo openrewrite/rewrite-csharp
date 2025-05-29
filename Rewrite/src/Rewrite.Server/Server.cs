@@ -23,14 +23,14 @@ public class Server : BackgroundService
     private const int Error = 1;
     private RemotingMessenger? _messenger;
     private readonly ILogger<Server> _log;
-    private readonly Options _options;
+    private readonly LanguageServerCommand.Settings _options;
 
     private RemotingContext? _remotingContext;
     private Solution? _solution;
 
 
     private readonly RecipeManager _recipeManager;
-    public Server(ILogger<Server> log, Options options, RecipeManager recipeManager)
+    public Server(ILogger<Server> log, LanguageServerCommand.Settings options, RecipeManager recipeManager)
     {
         _log = log;
         _options = options;
@@ -168,7 +168,7 @@ public class Server : BackgroundService
                     installableRecipes.Recipes.Select(d => new Dictionary<string, object>
                     {
                         { "name", d.TypeName.FullName },
-                        { "source", new RecipeIdentity(d.TypeName, installableRecipes.Package.Id, installableRecipes.Package.Version.ToNormalizedString()).ToUri() },
+                        { "source", new InstallableRecipe(d.TypeName, installableRecipes.Package.Id, installableRecipes.Package.Version.ToNormalizedString()).ToUri() },
                         {
                             "options", d.Options.Select(od => new Dictionary<string, object>
                             {
@@ -190,7 +190,7 @@ public class Server : BackgroundService
     {
         var recipeName = CBORObject.Read(stream).AsString();
         var source = CBORObject.Read(stream).AsString();
-        var recipeId = RecipeIdentity.ParseUri(new Uri(source));
+        var recipeId = InstallableRecipe.ParseUri(new Uri(source));
 
         var options = new Dictionary<string, Func<Type, object>>();
 

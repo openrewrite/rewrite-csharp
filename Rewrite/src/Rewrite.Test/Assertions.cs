@@ -6,13 +6,12 @@ using Rewrite.RewriteCSharp.Tree;
 using Rewrite.RewriteJava;
 using Rewrite.RewriteJava.Tree;
 using Rewrite.Test;
-using ExecutionContext = Rewrite.Core.ExecutionContext;
 
 namespace Rewrite.Test.CSharp;
 
 public static class Assertions
 {
-    private static readonly Core.Parser.Builder Parser = new CSharpParser.Builder();
+    private static readonly Core.IParser.Builder Parser = new CSharpParser.Builder();
 
     public static ValidateSource Noop()
     {
@@ -72,7 +71,7 @@ public static class Assertions
         return source;
     }
 
-    static void CustomizeExecutionContext(ExecutionContext ctx)
+    static void CustomizeExecutionContext(IExecutionContext ctx)
     {
         // if (ctx.GetMessage(JavaParser.SKIP_SOURCE_SET_TYPE_GENERATION) == null) {
         // ctx.PutMessage(JavaParser.SKIP_SOURCE_SET_TYPE_GENERATION, true);

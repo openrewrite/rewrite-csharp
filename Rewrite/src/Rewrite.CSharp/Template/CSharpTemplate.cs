@@ -1,68 +1,26 @@
-﻿// namespace Rewrite.RewriteCSharp;
+﻿// using Rewrite.Core.Config;
+//
+// namespace Rewrite.RewriteCSharp;
 //
 // public class CSharpTemplate : SourceTemplate<J, CSharpCoordinates>
 // {
 //     private static Path TEMPLATE_CLASSPATH_DIR;
 //
-//     protected static Path GetTemplateClasspathDir()
-//     {
-//         if (TEMPLATE_CLASSPATH_DIR == null)
-//         {
-//             try
-//             {
-//                 TEMPLATE_CLASSPATH_DIR = Files.CreateTempDirectory("csharp-template");
-//                 Path templateDir = Files.CreateDirectories(TEMPLATE_CLASSPATH_DIR.Resolve("org/openrewrite/csharp/internal/template"));
-//                 Path mClass = templateDir.Resolve("__M__.class");
-//                 Path pClass = templateDir.Resolve("__P__.class");
-//
-//                 // Delete in reverse order to avoid issues with non-empty directories
-//                 foreach (Path path in new Path[]
-//                 {
-//                     TEMPLATE_CLASSPATH_DIR,
-//                     TEMPLATE_CLASSPATH_DIR.Resolve("org"),
-//                     TEMPLATE_CLASSPATH_DIR.Resolve("org/openrewrite"),
-//                     TEMPLATE_CLASSPATH_DIR.Resolve("org/openrewrite/csharp"),
-//                     TEMPLATE_CLASSPATH_DIR.Resolve("org/openrewrite/csharp/internal"),
-//                     templateDir, mClass, pClass
-//                 })
-//                 {
-//                     path.ToFile().DeleteOnExit();
-//                 }
-//
-//                 using (Stream inStream = CSharpTemplateParser.Class.GetClassLoader().GetResourceAsStream("org/openrewrite/csharp/internal/template/__M__.class"))
-//                 {
-//                     Debug.Assert(inStream != null);
-//                     Files.Copy(inStream, mClass);
-//                 }
-//                 using (Stream inStream = CSharpTemplateParser.Class.GetClassLoader().GetResourceAsStream("org/openrewrite/csharp/internal/template/__P__.class"))
-//                 {
-//                     Debug.Assert(inStream != null);
-//                     Files.Copy(inStream, pClass);
-//                 }
-//             }
-//             catch (IOException e)
-//             {
-//                 throw new RuntimeException(e);
-//             }
-//         }
-//         return TEMPLATE_CLASSPATH_DIR;
-//     }
-//
-//     // Property instead of getter
 //     public string Code { get; }
 //
 //     private readonly Action<string> onAfterVariableSubstitution;
 //     private readonly CSharpTemplateParser templateParser;
 //
-//     private CSharpTemplate(bool contextSensitive, CSharpParser.Builder<?, ?> parser, string code, HashSet<string> imports,
-//                          Action<string> onAfterVariableSubstitution, Action<string> onBeforeParseTemplate)
+//     private CSharpTemplate(
+//         bool contextSensitive, 
+//         CSharpParser.Builder parser, 
+//         string template, 
+//         HashSet<string> imports, 
+//         Action<string> onAfterVariableSubstitution, 
+//         Action<string> onBeforeParseTemplate)
+//         : this(template, onAfterVariableSubstitution, new CSharpTemplateParser(contextSensitive, AugmentClasspath(parser), onAfterVariableSubstitution, onBeforeParseTemplate, imports))
 //     {
-//         this(code, onAfterVariableSubstitution, new CSharpTemplateParser(contextSensitive, AugmentClasspath(parser), onAfterVariableSubstitution, onBeforeParseTemplate, imports));
-//     }
-//
-//     private static CSharpParser.Builder<?, ?> AugmentClasspath(CSharpParser.Builder<?, ?> parserBuilder)
-//     {
-//         return parserBuilder.AddClasspathEntry(GetTemplateClasspathDir());
+//         
 //     }
 //
 //     protected CSharpTemplate(string code, Action<string> onAfterVariableSubstitution, CSharpTemplateParser templateParser)
@@ -72,8 +30,13 @@
 //         this.templateParser = templateParser;
 //     }
 //
+//     private static CSharpParser.Builder AugmentClasspath(CSharpParser.Builder parserBuilder)
+//     {
+//         return parserBuilder.AddClasspathEntry(GetTemplateClasspathDir());
+//     }
+//
 //     /// <inheritdoc/>
-//     public override J2 Apply<J2>(Cursor scope, CSharpCoordinates coordinates, params object[] parameters)
+//     public J2 Apply<J2>(Cursor scope, CSharpCoordinates coordinates, params object[] parameters) where J2 : J
 //     {
 //         if (!(scope.Value is J))
 //         {
@@ -147,10 +110,10 @@
 //
 //     public static J2 Apply<J2>(string template, Cursor scope, CSharpCoordinates coordinates, params object[] parameters) where J2 : J
 //     {
-//         return Builder(template).Build().Apply<J2>(scope, coordinates, parameters);
+//         return Create(template).Build().Apply<J2>(scope, coordinates, parameters);
 //     }
 //
-//     public static Builder Builder(string code)
+//     public static Builder Create(string code)
 //     {
 //         return new Builder(code);
 //     }
@@ -158,16 +121,16 @@
 //     public class Builder
 //     {
 //         private readonly string code;
-//         private readonly HashSet<string> imports = new HashSet<string>();
+//         private readonly HashSet<string> _usings = new HashSet<string>();
 //
 //         private bool contextSensitive;
 //
-//         private CSharpParser.Builder<?, ?> parser = org.openrewrite.csharp.CSharpParser.FromCSharpVersion();
+//         private CSharpParser.Builder parser = new();
 //
 //         private Action<string> onAfterVariableSubstitution = s => { };
 //         private Action<string> onBeforeParseTemplate = s => { };
 //
-//         protected Builder(string code)
+//         internal Builder(string code)
 //         {
 //             this.code = code.Trim();
 //         }
@@ -194,43 +157,14 @@
 //             return this;
 //         }
 //
-//         public Builder Imports(params string[] fullyQualifiedTypeNames)
+//         public Builder AddUsing(string namespaceName)
 //         {
-//             foreach (string typeName in fullyQualifiedTypeNames)
-//             {
-//                 ValidateImport(typeName);
-//                 this.imports.Add("using " + typeName + ";\n");
-//             }
+//             this._usings.Add(namespaceName);
 //             return this;
 //         }
 //
-//         public Builder StaticImports(params string[] fullyQualifiedMemberTypeNames)
-//         {
-//             foreach (string typeName in fullyQualifiedMemberTypeNames)
-//             {
-//                 ValidateImport(typeName);
-//                 this.imports.Add("using static " + typeName + ";\n");
-//             }
-//             return this;
-//         }
 //
-//         private void ValidateImport(string typeName)
-//         {
-//             if (string.IsNullOrWhiteSpace(typeName))
-//             {
-//                 throw new ArgumentException("Imports must not be blank");
-//             }
-//             else if (typeName.StartsWith("using ") || typeName.StartsWith("static "))
-//             {
-//                 throw new ArgumentException("Imports are expressed as fully-qualified names and should not include a \"using \" or \"static \" prefix");
-//             }
-//             else if (typeName.EndsWith(";") || typeName.EndsWith("\n"))
-//             {
-//                 throw new ArgumentException("Imports are expressed as fully-qualified names and should not include a suffixed terminator");
-//             }
-//         }
-//
-//         public Builder CSharpParser(CSharpParser.Builder<?, ?> parser)
+//         public Builder CSharpParser(CSharpParser.Builder parser)
 //         {
 //             this.parser = parser;
 //             return this;
@@ -250,8 +184,7 @@
 //
 //         public CSharpTemplate Build()
 //         {
-//             return new CSharpTemplate(contextSensitive, parser.Clone(), code, imports,
-//                     onAfterVariableSubstitution, onBeforeParseTemplate);
+//             return new CSharpTemplate(contextSensitive, parser, code, _usings, onAfterVariableSubstitution, onBeforeParseTemplate);
 //         }
 //     }
 // }

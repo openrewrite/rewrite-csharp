@@ -1,4 +1,5 @@
 ﻿using Rewrite.CSharp.Tests;
+using Rewrite.Tests;
 
 namespace Rewrite.Recipes.Tests;
 

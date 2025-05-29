@@ -37,6 +37,7 @@ public interface Tree : IHasMarkers, IEquatable<Tree>
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
 #endif
+    string Print(Cursor cursor) => Print(cursor, new PrintOutputCapture<object>(0));
     string Print<P>(Cursor cursor, PrintOutputCapture<P> capture)
     {
         Printer<P>(cursor).Visit(this, capture, cursor);
@@ -51,4 +52,15 @@ public interface Tree : IHasMarkers, IEquatable<Tree>
     }
 
     bool IsScope(Tree? tree) => tree?.Id.Equals(Id) ?? false;
+
+
+    public Cursor? Find(Predicate<Core.Tree> predicate) 
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public static class TreeExtensions
+{
+    public static string PrintTrimmed(this Tree tree, Cursor cursor) => tree.Print(cursor).TrimIndent();
 }

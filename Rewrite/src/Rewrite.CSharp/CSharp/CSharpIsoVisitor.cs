@@ -1,907 +1,909 @@
-﻿using Rewrite.RewriteCSharp.Tree;
+﻿using System.Runtime.CompilerServices;
+using Rewrite.RewriteCSharp.Tree;
 using Rewrite.RewriteJava.Tree;
 
 namespace Rewrite.RewriteCSharp;
 
-public class CSharpIsoVisitor<P> : CSharpVisitor<P>
+public abstract class CSharpIsoVisitor<P> : CSharpVisitor<P>
 {
-public override Cs.CompilationUnit? VisitCompilationUnit(Cs.CompilationUnit compilationUnit, P p)
-    {
-        return base.VisitCompilationUnit(compilationUnit, p) as Cs.CompilationUnit;
-    }
+
+public override J? VisitCompilationUnit(Cs.CompilationUnit node, P p)
+{
+    return base.VisitCompilationUnit(node, p) as Cs.CompilationUnit;
+}
 
-public override Cs.OperatorDeclaration? VisitOperatorDeclaration(Cs.OperatorDeclaration operatorDeclaration, P p)
+public override Cs.OperatorDeclaration? VisitOperatorDeclaration(Cs.OperatorDeclaration node, P p)
     {
-        return base.VisitOperatorDeclaration(operatorDeclaration, p) as Cs.OperatorDeclaration;
+        return base.VisitOperatorDeclaration(node, p) as Cs.OperatorDeclaration;
     }
 
-public override Cs.RefExpression? VisitRefExpression(Cs.RefExpression refExpression, P p)
+public override Cs.RefExpression? VisitRefExpression(Cs.RefExpression node, P p)
     {
-        return base.VisitRefExpression(refExpression, p) as Cs.RefExpression;
+        return base.VisitRefExpression(node, p) as Cs.RefExpression;
     }
 
-public override Cs.PointerType? VisitPointerType(Cs.PointerType pointerType, P p)
+public override Cs.PointerType? VisitPointerType(Cs.PointerType node, P p)
     {
-        return base.VisitPointerType(pointerType, p) as Cs.PointerType;
+        return base.VisitPointerType(node, p) as Cs.PointerType;
     }
 
-public override Cs.RefType? VisitRefType(Cs.RefType refType, P p)
+public override Cs.RefType? VisitRefType(Cs.RefType node, P p)
     {
-        return base.VisitRefType(refType, p) as Cs.RefType;
+        return base.VisitRefType(node, p) as Cs.RefType;
     }
 
-public override Cs.ForEachVariableLoop? VisitForEachVariableLoop(Cs.ForEachVariableLoop forEachVariableLoop, P p)
+public override Cs.ForEachVariableLoop? VisitForEachVariableLoop(Cs.ForEachVariableLoop node, P p)
     {
-        return base.VisitForEachVariableLoop(forEachVariableLoop, p) as Cs.ForEachVariableLoop;
+        return base.VisitForEachVariableLoop(node, p) as Cs.ForEachVariableLoop;
     }
 
-public override Cs.ForEachVariableLoop.Control? VisitForEachVariableLoopControl(Cs.ForEachVariableLoop.Control control, P p)
+public override Cs.ForEachVariableLoop.Control? VisitForEachVariableLoopControl(Cs.ForEachVariableLoop.Control node, P p)
     {
-        return (base.VisitForEachVariableLoopControl(control, p)) as Cs.ForEachVariableLoop.Control;
+        return (base.VisitForEachVariableLoopControl(node, p)) as Cs.ForEachVariableLoop.Control;
     }
 
-public override Cs.NameColon? VisitNameColon(Cs.NameColon nameColon, P p)
+public override Cs.NameColon? VisitNameColon(Cs.NameColon node, P p)
     {
-        return base.VisitNameColon(nameColon, p) as Cs.NameColon;
+        return base.VisitNameColon(node, p) as Cs.NameColon;
     }
 
-public override Cs.Argument? VisitArgument(Cs.Argument argument, P p)
+public override Cs.Argument? VisitArgument(Cs.Argument node, P p)
     {
-        return base.VisitArgument(argument, p) as Cs.Argument;
+        return base.VisitArgument(node, p) as Cs.Argument;
     }
 
-public override Cs.AnnotatedStatement? VisitAnnotatedStatement(Cs.AnnotatedStatement annotatedStatement, P p)
+public override Cs.AnnotatedStatement? VisitAnnotatedStatement(Cs.AnnotatedStatement node, P p)
     {
-        return base.VisitAnnotatedStatement(annotatedStatement, p) as Cs.AnnotatedStatement;
+        return base.VisitAnnotatedStatement(node, p) as Cs.AnnotatedStatement;
     }
 
-public override Cs.ArrayRankSpecifier? VisitArrayRankSpecifier(Cs.ArrayRankSpecifier arrayRankSpecifier, P p)
+public override Cs.ArrayRankSpecifier? VisitArrayRankSpecifier(Cs.ArrayRankSpecifier node, P p)
     {
-        return base.VisitArrayRankSpecifier(arrayRankSpecifier, p) as Cs.ArrayRankSpecifier;
+        return base.VisitArrayRankSpecifier(node, p) as Cs.ArrayRankSpecifier;
     }
 
-public override Cs.AssignmentOperation? VisitAssignmentOperation(Cs.AssignmentOperation assignmentOperation, P p)
+public override Cs.AssignmentOperation? VisitAssignmentOperation(Cs.AssignmentOperation node, P p)
     {
-        return base.VisitAssignmentOperation(assignmentOperation, p) as Cs.AssignmentOperation;
+        return base.VisitAssignmentOperation(node, p) as Cs.AssignmentOperation;
     }
 
-public override Cs.AttributeList? VisitAttributeList(Cs.AttributeList attributeList, P p)
+public override Cs.AttributeList? VisitAttributeList(Cs.AttributeList node, P p)
     {
-        return base.VisitAttributeList(attributeList, p) as Cs.AttributeList;
+        return base.VisitAttributeList(node, p) as Cs.AttributeList;
     }
 
-public override Cs.AwaitExpression? VisitAwaitExpression(Cs.AwaitExpression awaitExpression, P p)
+public override Cs.AwaitExpression? VisitAwaitExpression(Cs.AwaitExpression node, P p)
     {
-        return base.VisitAwaitExpression(awaitExpression, p) as Cs.AwaitExpression;
+        return base.VisitAwaitExpression(node, p) as Cs.AwaitExpression;
     }
 
-public override Cs.StackAllocExpression? VisitStackAllocExpression(Cs.StackAllocExpression stackAllocExpression, P p)
+public override Cs.StackAllocExpression? VisitStackAllocExpression(Cs.StackAllocExpression node, P p)
     {
-        return base.VisitStackAllocExpression(stackAllocExpression, p) as Cs.StackAllocExpression;
+        return base.VisitStackAllocExpression(node, p) as Cs.StackAllocExpression;
     }
 
-public override Cs.GotoStatement? VisitGotoStatement(Cs.GotoStatement gotoStatement, P p)
+public override Cs.GotoStatement? VisitGotoStatement(Cs.GotoStatement node, P p)
     {
-        return base.VisitGotoStatement(gotoStatement, p) as Cs.GotoStatement;
+        return base.VisitGotoStatement(node, p) as Cs.GotoStatement;
     }
 
-public override Cs.EventDeclaration? VisitEventDeclaration(Cs.EventDeclaration eventDeclaration, P p)
+public override Cs.EventDeclaration? VisitEventDeclaration(Cs.EventDeclaration node, P p)
     {
-        return base.VisitEventDeclaration(eventDeclaration, p) as Cs.EventDeclaration;
+        return base.VisitEventDeclaration(node, p) as Cs.EventDeclaration;
     }
 
-public override Cs.Binary? VisitBinary(Cs.Binary binary, P p)
+public override Cs.Binary? VisitBinary(Cs.Binary node, P p)
     {
-        return base.VisitBinary(binary, p) as Cs.Binary;
+        return base.VisitBinary(node, p) as Cs.Binary;
     }
 
-public override Cs.BlockScopeNamespaceDeclaration? VisitBlockScopeNamespaceDeclaration(Cs.BlockScopeNamespaceDeclaration blockScopeNamespaceDeclaration, P p)
+public override Cs.BlockScopeNamespaceDeclaration? VisitBlockScopeNamespaceDeclaration(Cs.BlockScopeNamespaceDeclaration node, P p)
     {
-        return base.VisitBlockScopeNamespaceDeclaration(blockScopeNamespaceDeclaration, p) as Cs.BlockScopeNamespaceDeclaration;
+        return base.VisitBlockScopeNamespaceDeclaration(node, p) as Cs.BlockScopeNamespaceDeclaration;
     }
 
-public override Cs.CollectionExpression? VisitCollectionExpression(Cs.CollectionExpression collectionExpression, P p)
+public override Cs.CollectionExpression? VisitCollectionExpression(Cs.CollectionExpression node, P p)
     {
-        return base.VisitCollectionExpression(collectionExpression, p) as Cs.CollectionExpression;
+        return base.VisitCollectionExpression(node, p) as Cs.CollectionExpression;
     }
 
-public override Cs.ExpressionStatement? VisitExpressionStatement(Cs.ExpressionStatement expressionStatement, P p)
+public override Cs.ExpressionStatement? VisitExpressionStatement(Cs.ExpressionStatement node, P p)
     {
-        return base.VisitExpressionStatement(expressionStatement, p) as Cs.ExpressionStatement;
+        return base.VisitExpressionStatement(node, p) as Cs.ExpressionStatement;
     }
 
-public override Cs.ExternAlias? VisitExternAlias(Cs.ExternAlias externAlias, P p)
+public override Cs.ExternAlias? VisitExternAlias(Cs.ExternAlias node, P p)
     {
-        return base.VisitExternAlias(externAlias, p) as Cs.ExternAlias;
+        return base.VisitExternAlias(node, p) as Cs.ExternAlias;
     }
 
-public override Cs.FileScopeNamespaceDeclaration? VisitFileScopeNamespaceDeclaration(Cs.FileScopeNamespaceDeclaration fileScopeNamespaceDeclaration, P p)
+public override Cs.FileScopeNamespaceDeclaration? VisitFileScopeNamespaceDeclaration(Cs.FileScopeNamespaceDeclaration node, P p)
     {
-        return base.VisitFileScopeNamespaceDeclaration(fileScopeNamespaceDeclaration, p) as Cs.FileScopeNamespaceDeclaration;
+        return base.VisitFileScopeNamespaceDeclaration(node, p) as Cs.FileScopeNamespaceDeclaration;
     }
 
-public override Cs.InterpolatedString? VisitInterpolatedString(Cs.InterpolatedString interpolatedString, P p)
+public override Cs.InterpolatedString? VisitInterpolatedString(Cs.InterpolatedString node, P p)
     {
-        return base.VisitInterpolatedString(interpolatedString, p) as Cs.InterpolatedString;
+        return base.VisitInterpolatedString(node, p) as Cs.InterpolatedString;
     }
 
-public override Cs.Interpolation? VisitInterpolation(Cs.Interpolation interpolation, P p)
+public override Cs.Interpolation? VisitInterpolation(Cs.Interpolation node, P p)
     {
-        return base.VisitInterpolation(interpolation, p) as Cs.Interpolation;
+        return base.VisitInterpolation(node, p) as Cs.Interpolation;
     }
 
-public override Cs.NullSafeExpression? VisitNullSafeExpression(Cs.NullSafeExpression nullSafeExpression, P p)
+public override Cs.NullSafeExpression? VisitNullSafeExpression(Cs.NullSafeExpression node, P p)
     {
-        return base.VisitNullSafeExpression(nullSafeExpression, p) as Cs.NullSafeExpression;
+        return base.VisitNullSafeExpression(node, p) as Cs.NullSafeExpression;
     }
 
-public override Cs.StatementExpression? VisitStatementExpression(Cs.StatementExpression statementExpression, P p)
+public override Cs.StatementExpression? VisitStatementExpression(Cs.StatementExpression node, P p)
     {
-        return base.VisitStatementExpression(statementExpression, p) as Cs.StatementExpression;
+        return base.VisitStatementExpression(node, p) as Cs.StatementExpression;
     }
 
-public override Cs.UsingDirective? VisitUsingDirective(Cs.UsingDirective usingDirective, P p)
+public override Cs.UsingDirective? VisitUsingDirective(Cs.UsingDirective node, P p)
     {
-        return base.VisitUsingDirective(usingDirective, p) as Cs.UsingDirective;
+        return base.VisitUsingDirective(node, p) as Cs.UsingDirective;
     }
 
-public override Cs.PropertyDeclaration? VisitPropertyDeclaration(Cs.PropertyDeclaration propertyDeclaration, P p)
+public override Cs.PropertyDeclaration? VisitPropertyDeclaration(Cs.PropertyDeclaration node, P p)
     {
-        return base.VisitPropertyDeclaration(propertyDeclaration, p) as Cs.PropertyDeclaration;
+        return base.VisitPropertyDeclaration(node, p) as Cs.PropertyDeclaration;
     }
 
-public override Cs.Keyword? VisitKeyword(Cs.Keyword keyword, P p)
+public override Cs.Keyword? VisitKeyword(Cs.Keyword node, P p)
     {
-        return base.VisitKeyword(keyword, p) as Cs.Keyword;
+        return base.VisitKeyword(node, p) as Cs.Keyword;
     }
 
-public override Cs.Lambda? VisitLambda(Cs.Lambda lambda, P p)
+public override Cs.Lambda? VisitLambda(Cs.Lambda node, P p)
     {
-        return base.VisitLambda(lambda, p) as Cs.Lambda;
+        return base.VisitLambda(node, p) as Cs.Lambda;
     }
 
-public override Cs.ClassDeclaration? VisitClassDeclaration(Cs.ClassDeclaration classDeclaration, P p)
+public override Cs.ClassDeclaration? VisitClassDeclaration(Cs.ClassDeclaration node, P p)
     {
-        return base.VisitClassDeclaration(classDeclaration, p) as Cs.ClassDeclaration;
+        return base.VisitClassDeclaration(node, p) as Cs.ClassDeclaration;
     }
 
-public override Cs.MethodDeclaration? VisitMethodDeclaration(Cs.MethodDeclaration methodDeclaration, P p)
+public override Cs.MethodDeclaration? VisitMethodDeclaration(Cs.MethodDeclaration node, P p)
     {
-        return base.VisitMethodDeclaration(methodDeclaration, p) as Cs.MethodDeclaration;
+        return base.VisitMethodDeclaration(node, p) as Cs.MethodDeclaration;
     }
 
-public override Cs.UsingStatement? VisitUsingStatement(Cs.UsingStatement usingStatement, P p)
+public override Cs.UsingStatement? VisitUsingStatement(Cs.UsingStatement node, P p)
     {
-        return base.VisitUsingStatement(usingStatement, p) as Cs.UsingStatement;
+        return base.VisitUsingStatement(node, p) as Cs.UsingStatement;
     }
 
-public override Cs.TypeParameterConstraintClause? VisitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, P p)
+public override Cs.TypeParameterConstraintClause? VisitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause node, P p)
     {
-        return base.VisitTypeParameterConstraintClause(typeParameterConstraintClause, p) as Cs.TypeParameterConstraintClause;
+        return base.VisitTypeParameterConstraintClause(node, p) as Cs.TypeParameterConstraintClause;
     }
 
-public override Cs.TypeConstraint? VisitTypeConstraint(Cs.TypeConstraint typeConstraint, P p)
+public override Cs.TypeConstraint? VisitTypeConstraint(Cs.TypeConstraint node, P p)
     {
-        return base.VisitTypeConstraint(typeConstraint, p) as Cs.TypeConstraint;
+        return base.VisitTypeConstraint(node, p) as Cs.TypeConstraint;
     }
 
-public override Cs.AllowsConstraintClause? VisitAllowsConstraintClause(Cs.AllowsConstraintClause allowsConstraintClause, P p)
+public override Cs.AllowsConstraintClause? VisitAllowsConstraintClause(Cs.AllowsConstraintClause node, P p)
     {
-        return base.VisitAllowsConstraintClause(allowsConstraintClause, p) as Cs.AllowsConstraintClause;
+        return base.VisitAllowsConstraintClause(node, p) as Cs.AllowsConstraintClause;
     }
 
-public override Cs.RefStructConstraint? VisitRefStructConstraint(Cs.RefStructConstraint refStructConstraint, P p)
+public override Cs.RefStructConstraint? VisitRefStructConstraint(Cs.RefStructConstraint node, P p)
     {
-        return base.VisitRefStructConstraint(refStructConstraint, p) as Cs.RefStructConstraint;
+        return base.VisitRefStructConstraint(node, p) as Cs.RefStructConstraint;
     }
 
-public override Cs.ClassOrStructConstraint? VisitClassOrStructConstraint(Cs.ClassOrStructConstraint classOrStructConstraint, P p)
+public override Cs.ClassOrStructConstraint? VisitClassOrStructConstraint(Cs.ClassOrStructConstraint node, P p)
     {
-        return base.VisitClassOrStructConstraint(classOrStructConstraint, p) as Cs.ClassOrStructConstraint;
+        return base.VisitClassOrStructConstraint(node, p) as Cs.ClassOrStructConstraint;
     }
 
-public override Cs.ConstructorConstraint? VisitConstructorConstraint(Cs.ConstructorConstraint constructorConstraint, P p)
+public override Cs.ConstructorConstraint? VisitConstructorConstraint(Cs.ConstructorConstraint node, P p)
     {
-        return base.VisitConstructorConstraint(constructorConstraint, p) as Cs.ConstructorConstraint;
+        return base.VisitConstructorConstraint(node, p) as Cs.ConstructorConstraint;
     }
 
-public override Cs.DefaultConstraint? VisitDefaultConstraint(Cs.DefaultConstraint defaultConstraint, P p)
+public override Cs.DefaultConstraint? VisitDefaultConstraint(Cs.DefaultConstraint node, P p)
     {
-        return base.VisitDefaultConstraint(defaultConstraint, p) as Cs.DefaultConstraint;
+        return base.VisitDefaultConstraint(node, p) as Cs.DefaultConstraint;
     }
 
-public override Cs.DeclarationExpression? VisitDeclarationExpression(Cs.DeclarationExpression declarationExpression, P p)
+public override Cs.DeclarationExpression? VisitDeclarationExpression(Cs.DeclarationExpression node, P p)
     {
-        return base.VisitDeclarationExpression(declarationExpression, p) as Cs.DeclarationExpression;
+        return base.VisitDeclarationExpression(node, p) as Cs.DeclarationExpression;
     }
 
-public override Cs.SingleVariableDesignation? VisitSingleVariableDesignation(Cs.SingleVariableDesignation singleVariableDesignation, P p)
+public override Cs.SingleVariableDesignation? VisitSingleVariableDesignation(Cs.SingleVariableDesignation node, P p)
     {
-        return base.VisitSingleVariableDesignation(singleVariableDesignation, p) as Cs.SingleVariableDesignation;
+        return base.VisitSingleVariableDesignation(node, p) as Cs.SingleVariableDesignation;
     }
 
-public override Cs.ParenthesizedVariableDesignation? VisitParenthesizedVariableDesignation(Cs.ParenthesizedVariableDesignation parenthesizedVariableDesignation, P p)
+public override Cs.ParenthesizedVariableDesignation? VisitParenthesizedVariableDesignation(Cs.ParenthesizedVariableDesignation node, P p)
     {
-        return base.VisitParenthesizedVariableDesignation(parenthesizedVariableDesignation, p) as Cs.ParenthesizedVariableDesignation;
+        return base.VisitParenthesizedVariableDesignation(node, p) as Cs.ParenthesizedVariableDesignation;
     }
 
-public override Cs.DiscardVariableDesignation? VisitDiscardVariableDesignation(Cs.DiscardVariableDesignation discardVariableDesignation, P p)
+public override Cs.DiscardVariableDesignation? VisitDiscardVariableDesignation(Cs.DiscardVariableDesignation node, P p)
     {
-        return base.VisitDiscardVariableDesignation(discardVariableDesignation, p) as Cs.DiscardVariableDesignation;
+        return base.VisitDiscardVariableDesignation(node, p) as Cs.DiscardVariableDesignation;
     }
 
-public override Cs.TupleExpression? VisitTupleExpression(Cs.TupleExpression tupleExpression, P p)
+public override Cs.TupleExpression? VisitTupleExpression(Cs.TupleExpression node, P p)
     {
-        return base.VisitTupleExpression(tupleExpression, p) as Cs.TupleExpression;
+        return base.VisitTupleExpression(node, p) as Cs.TupleExpression;
     }
 
-public override Cs.Constructor? VisitConstructor(Cs.Constructor constructor, P p)
+public override Cs.Constructor? VisitConstructor(Cs.Constructor node, P p)
     {
-        return base.VisitConstructor(constructor, p) as Cs.Constructor;
+        return base.VisitConstructor(node, p) as Cs.Constructor;
     }
 
-public override Cs.DestructorDeclaration? VisitDestructorDeclaration(Cs.DestructorDeclaration destructorDeclaration, P p)
+public override Cs.DestructorDeclaration? VisitDestructorDeclaration(Cs.DestructorDeclaration node, P p)
     {
-        return base.VisitDestructorDeclaration(destructorDeclaration, p) as Cs.DestructorDeclaration;
+        return base.VisitDestructorDeclaration(node, p) as Cs.DestructorDeclaration;
     }
 
-public override Cs.Unary? VisitUnary(Cs.Unary unary, P p)
+public override Cs.Unary? VisitUnary(Cs.Unary node, P p)
     {
-        return base.VisitUnary(unary, p) as Cs.Unary;
+        return base.VisitUnary(node, p) as Cs.Unary;
     }
 
-public override Cs.ConstructorInitializer? VisitConstructorInitializer(Cs.ConstructorInitializer constructorInitializer, P p)
+public override Cs.ConstructorInitializer? VisitConstructorInitializer(Cs.ConstructorInitializer node, P p)
     {
-        return base.VisitConstructorInitializer(constructorInitializer, p) as Cs.ConstructorInitializer;
+        return base.VisitConstructorInitializer(node, p) as Cs.ConstructorInitializer;
     }
 
-public override Cs.TupleType? VisitTupleType(Cs.TupleType tupleType, P p)
+public override Cs.TupleType? VisitTupleType(Cs.TupleType node, P p)
     {
-        return base.VisitTupleType(tupleType, p) as Cs.TupleType;
+        return base.VisitTupleType(node, p) as Cs.TupleType;
     }
 
-public override Cs.TupleElement? VisitTupleElement(Cs.TupleElement tupleElement, P p)
+public override Cs.TupleElement? VisitTupleElement(Cs.TupleElement node, P p)
     {
-        return base.VisitTupleElement(tupleElement, p) as Cs.TupleElement;
+        return base.VisitTupleElement(node, p) as Cs.TupleElement;
     }
 
-public override Cs.NewClass? VisitNewClass(Cs.NewClass newClass, P p)
+public override Cs.NewClass? VisitNewClass(Cs.NewClass node, P p)
     {
-        return base.VisitNewClass(newClass, p) as Cs.NewClass;
+        return base.VisitNewClass(node, p) as Cs.NewClass;
     }
 
-public override Cs.InitializerExpression? VisitInitializerExpression(Cs.InitializerExpression initializerExpression, P p)
+public override Cs.InitializerExpression? VisitInitializerExpression(Cs.InitializerExpression node, P p)
     {
-        return base.VisitInitializerExpression(initializerExpression, p) as Cs.InitializerExpression;
+        return base.VisitInitializerExpression(node, p) as Cs.InitializerExpression;
     }
 
-public override Cs.ImplicitElementAccess? VisitImplicitElementAccess(Cs.ImplicitElementAccess implicitElementAccess, P p)
+public override Cs.ImplicitElementAccess? VisitImplicitElementAccess(Cs.ImplicitElementAccess node, P p)
     {
-        return base.VisitImplicitElementAccess(implicitElementAccess, p) as Cs.ImplicitElementAccess;
+        return base.VisitImplicitElementAccess(node, p) as Cs.ImplicitElementAccess;
     }
 
-public override Cs.Yield? VisitYield(Cs.Yield yield, P p)
+public override Cs.Yield? VisitYield(Cs.Yield node, P p)
     {
-        return base.VisitYield(yield, p) as Cs.Yield;
+        return base.VisitYield(node, p) as Cs.Yield;
     }
 
-public override Cs.DefaultExpression? VisitDefaultExpression(Cs.DefaultExpression defaultExpression, P p)
+public override Cs.DefaultExpression? VisitDefaultExpression(Cs.DefaultExpression node, P p)
     {
-        return base.VisitDefaultExpression(defaultExpression, p) as Cs.DefaultExpression;
+        return base.VisitDefaultExpression(node, p) as Cs.DefaultExpression;
     }
 
-public override Cs.IsPattern? VisitIsPattern(Cs.IsPattern isPattern, P p)
+public override Cs.IsPattern? VisitIsPattern(Cs.IsPattern node, P p)
     {
-        return base.VisitIsPattern(isPattern, p) as Cs.IsPattern;
+        return base.VisitIsPattern(node, p) as Cs.IsPattern;
     }
 
-public override Cs.UnaryPattern? VisitUnaryPattern(Cs.UnaryPattern unaryPattern, P p)
+public override Cs.UnaryPattern? VisitUnaryPattern(Cs.UnaryPattern node, P p)
     {
-        return base.VisitUnaryPattern(unaryPattern, p) as Cs.UnaryPattern;
+        return base.VisitUnaryPattern(node, p) as Cs.UnaryPattern;
     }
 
-public override Cs.TypePattern? VisitTypePattern(Cs.TypePattern typePattern, P p)
+public override Cs.TypePattern? VisitTypePattern(Cs.TypePattern node, P p)
     {
-        return base.VisitTypePattern(typePattern, p) as Cs.TypePattern;
+        return base.VisitTypePattern(node, p) as Cs.TypePattern;
     }
 
-public override Cs.BinaryPattern? VisitBinaryPattern(Cs.BinaryPattern binaryPattern, P p)
+public override Cs.BinaryPattern? VisitBinaryPattern(Cs.BinaryPattern node, P p)
     {
-        return base.VisitBinaryPattern(binaryPattern, p) as Cs.BinaryPattern;
+        return base.VisitBinaryPattern(node, p) as Cs.BinaryPattern;
     }
 
-public override Cs.ConstantPattern? VisitConstantPattern(Cs.ConstantPattern constantPattern, P p)
+public override Cs.ConstantPattern? VisitConstantPattern(Cs.ConstantPattern node, P p)
     {
-        return base.VisitConstantPattern(constantPattern, p) as Cs.ConstantPattern;
+        return base.VisitConstantPattern(node, p) as Cs.ConstantPattern;
     }
 
-public override Cs.DiscardPattern? VisitDiscardPattern(Cs.DiscardPattern discardPattern, P p)
+public override Cs.DiscardPattern? VisitDiscardPattern(Cs.DiscardPattern node, P p)
     {
-        return base.VisitDiscardPattern(discardPattern, p) as Cs.DiscardPattern;
+        return base.VisitDiscardPattern(node, p) as Cs.DiscardPattern;
     }
 
-public override Cs.ListPattern? VisitListPattern(Cs.ListPattern listPattern, P p)
+public override Cs.ListPattern? VisitListPattern(Cs.ListPattern node, P p)
     {
-        return base.VisitListPattern(listPattern, p) as Cs.ListPattern;
+        return base.VisitListPattern(node, p) as Cs.ListPattern;
     }
 
-public override Cs.ParenthesizedPattern? VisitParenthesizedPattern(Cs.ParenthesizedPattern parenthesizedPattern, P p)
+public override Cs.ParenthesizedPattern? VisitParenthesizedPattern(Cs.ParenthesizedPattern node, P p)
     {
-        return base.VisitParenthesizedPattern(parenthesizedPattern, p) as Cs.ParenthesizedPattern;
+        return base.VisitParenthesizedPattern(node, p) as Cs.ParenthesizedPattern;
     }
 
-public override Cs.RecursivePattern? VisitRecursivePattern(Cs.RecursivePattern recursivePattern, P p)
+public override Cs.RecursivePattern? VisitRecursivePattern(Cs.RecursivePattern node, P p)
     {
-        return base.VisitRecursivePattern(recursivePattern, p) as Cs.RecursivePattern;
+        return base.VisitRecursivePattern(node, p) as Cs.RecursivePattern;
     }
 
-public override Cs.VarPattern? VisitVarPattern(Cs.VarPattern varPattern, P p)
+public override Cs.VarPattern? VisitVarPattern(Cs.VarPattern node, P p)
     {
-        return base.VisitVarPattern(varPattern, p) as Cs.VarPattern;
+        return base.VisitVarPattern(node, p) as Cs.VarPattern;
     }
 
-public override Cs.PositionalPatternClause? VisitPositionalPatternClause(Cs.PositionalPatternClause positionalPatternClause, P p)
+public override Cs.PositionalPatternClause? VisitPositionalPatternClause(Cs.PositionalPatternClause node, P p)
     {
-        return base.VisitPositionalPatternClause(positionalPatternClause, p) as Cs.PositionalPatternClause;
+        return base.VisitPositionalPatternClause(node, p) as Cs.PositionalPatternClause;
     }
 
-public override Cs.RelationalPattern? VisitRelationalPattern(Cs.RelationalPattern relationalPattern, P p)
+public override Cs.RelationalPattern? VisitRelationalPattern(Cs.RelationalPattern node, P p)
     {
-        return base.VisitRelationalPattern(relationalPattern, p) as Cs.RelationalPattern;
+        return base.VisitRelationalPattern(node, p) as Cs.RelationalPattern;
     }
 
-public override Cs.SlicePattern? VisitSlicePattern(Cs.SlicePattern slicePattern, P p)
+public override Cs.SlicePattern? VisitSlicePattern(Cs.SlicePattern node, P p)
     {
-        return base.VisitSlicePattern(slicePattern, p) as Cs.SlicePattern;
+        return base.VisitSlicePattern(node, p) as Cs.SlicePattern;
     }
 
-public override Cs.PropertyPatternClause? VisitPropertyPatternClause(Cs.PropertyPatternClause propertyPatternClause, P p)
+public override Cs.PropertyPatternClause? VisitPropertyPatternClause(Cs.PropertyPatternClause node, P p)
     {
-        return base.VisitPropertyPatternClause(propertyPatternClause, p) as Cs.PropertyPatternClause;
+        return base.VisitPropertyPatternClause(node, p) as Cs.PropertyPatternClause;
     }
 
-public override Cs.Subpattern? VisitSubpattern(Cs.Subpattern subpattern, P p)
+public override Cs.Subpattern? VisitSubpattern(Cs.Subpattern node, P p)
     {
-        return base.VisitSubpattern(subpattern, p) as Cs.Subpattern;
+        return base.VisitSubpattern(node, p) as Cs.Subpattern;
     }
 
-public override Cs.SwitchExpression? VisitSwitchExpression(Cs.SwitchExpression switchExpression, P p)
+public override Cs.SwitchExpression? VisitSwitchExpression(Cs.SwitchExpression node, P p)
     {
-        return base.VisitSwitchExpression(switchExpression, p) as Cs.SwitchExpression;
+        return base.VisitSwitchExpression(node, p) as Cs.SwitchExpression;
     }
 
-public override Cs.SwitchExpressionArm? VisitSwitchExpressionArm(Cs.SwitchExpressionArm switchExpressionArm, P p)
+public override Cs.SwitchExpressionArm? VisitSwitchExpressionArm(Cs.SwitchExpressionArm node, P p)
     {
-        return base.VisitSwitchExpressionArm(switchExpressionArm, p) as Cs.SwitchExpressionArm;
+        return base.VisitSwitchExpressionArm(node, p) as Cs.SwitchExpressionArm;
     }
 
-public override Cs.SwitchSection? VisitSwitchSection(Cs.SwitchSection switchSection, P p)
+public override Cs.SwitchSection? VisitSwitchSection(Cs.SwitchSection node, P p)
     {
-        return base.VisitSwitchSection(switchSection, p) as Cs.SwitchSection;
+        return base.VisitSwitchSection(node, p) as Cs.SwitchSection;
     }
 
-public override Cs.DefaultSwitchLabel? VisitDefaultSwitchLabel(Cs.DefaultSwitchLabel defaultSwitchLabel, P p)
+public override Cs.DefaultSwitchLabel? VisitDefaultSwitchLabel(Cs.DefaultSwitchLabel node, P p)
     {
-        return base.VisitDefaultSwitchLabel(defaultSwitchLabel, p) as Cs.DefaultSwitchLabel;
+        return base.VisitDefaultSwitchLabel(node, p) as Cs.DefaultSwitchLabel;
     }
 
-public override Cs.CasePatternSwitchLabel? VisitCasePatternSwitchLabel(Cs.CasePatternSwitchLabel casePatternSwitchLabel, P p)
+public override Cs.CasePatternSwitchLabel? VisitCasePatternSwitchLabel(Cs.CasePatternSwitchLabel node, P p)
     {
-        return base.VisitCasePatternSwitchLabel(casePatternSwitchLabel, p) as Cs.CasePatternSwitchLabel;
+        return base.VisitCasePatternSwitchLabel(node, p) as Cs.CasePatternSwitchLabel;
     }
 
-public override Cs.SwitchStatement? VisitSwitchStatement(Cs.SwitchStatement switchStatement, P p)
+public override Cs.SwitchStatement? VisitSwitchStatement(Cs.SwitchStatement node, P p)
     {
-        return base.VisitSwitchStatement(switchStatement, p) as Cs.SwitchStatement;
+        return base.VisitSwitchStatement(node, p) as Cs.SwitchStatement;
     }
 
-public override Cs.LockStatement? VisitLockStatement(Cs.LockStatement lockStatement, P p)
+public override Cs.LockStatement? VisitLockStatement(Cs.LockStatement node, P p)
     {
-        return base.VisitLockStatement(lockStatement, p) as Cs.LockStatement;
+        return base.VisitLockStatement(node, p) as Cs.LockStatement;
     }
 
-public override Cs.FixedStatement? VisitFixedStatement(Cs.FixedStatement fixedStatement, P p)
+public override Cs.FixedStatement? VisitFixedStatement(Cs.FixedStatement node, P p)
     {
-        return base.VisitFixedStatement(fixedStatement, p) as Cs.FixedStatement;
+        return base.VisitFixedStatement(node, p) as Cs.FixedStatement;
     }
 
-public override Cs.CheckedExpression? VisitCheckedExpression(Cs.CheckedExpression checkedExpression, P p)
+public override Cs.CheckedExpression? VisitCheckedExpression(Cs.CheckedExpression node, P p)
     {
-        return base.VisitCheckedExpression(checkedExpression, p) as Cs.CheckedExpression;
+        return base.VisitCheckedExpression(node, p) as Cs.CheckedExpression;
     }
 
-public override Cs.CheckedStatement? VisitCheckedStatement(Cs.CheckedStatement checkedStatement, P p)
+public override Cs.CheckedStatement? VisitCheckedStatement(Cs.CheckedStatement node, P p)
     {
-        return base.VisitCheckedStatement(checkedStatement, p) as Cs.CheckedStatement;
+        return base.VisitCheckedStatement(node, p) as Cs.CheckedStatement;
     }
 
-public override Cs.UnsafeStatement? VisitUnsafeStatement(Cs.UnsafeStatement unsafeStatement, P p)
+public override Cs.UnsafeStatement? VisitUnsafeStatement(Cs.UnsafeStatement node, P p)
     {
-        return base.VisitUnsafeStatement(unsafeStatement, p) as Cs.UnsafeStatement;
+        return base.VisitUnsafeStatement(node, p) as Cs.UnsafeStatement;
     }
 
-public override Cs.RangeExpression? VisitRangeExpression(Cs.RangeExpression rangeExpression, P p)
+public override Cs.RangeExpression? VisitRangeExpression(Cs.RangeExpression node, P p)
     {
-        return base.VisitRangeExpression(rangeExpression, p) as Cs.RangeExpression;
+        return base.VisitRangeExpression(node, p) as Cs.RangeExpression;
     }
 
-public override Cs.QueryExpression? VisitQueryExpression(Cs.QueryExpression queryExpression, P p)
+public override Cs.QueryExpression? VisitQueryExpression(Cs.QueryExpression node, P p)
     {
-        return base.VisitQueryExpression(queryExpression, p) as Cs.QueryExpression;
+        return base.VisitQueryExpression(node, p) as Cs.QueryExpression;
     }
 
-public override Cs.QueryBody? VisitQueryBody(Cs.QueryBody queryBody, P p)
+public override Cs.QueryBody? VisitQueryBody(Cs.QueryBody node, P p)
     {
-        return base.VisitQueryBody(queryBody, p) as Cs.QueryBody;
+        return base.VisitQueryBody(node, p) as Cs.QueryBody;
     }
 
-public override Cs.FromClause? VisitFromClause(Cs.FromClause fromClause, P p)
+public override Cs.FromClause? VisitFromClause(Cs.FromClause node, P p)
     {
-        return base.VisitFromClause(fromClause, p) as Cs.FromClause;
+        return base.VisitFromClause(node, p) as Cs.FromClause;
     }
 
-public override Cs.LetClause? VisitLetClause(Cs.LetClause letClause, P p)
+public override Cs.LetClause? VisitLetClause(Cs.LetClause node, P p)
     {
-        return base.VisitLetClause(letClause, p) as Cs.LetClause;
+        return base.VisitLetClause(node, p) as Cs.LetClause;
     }
 
-public override Cs.JoinClause? VisitJoinClause(Cs.JoinClause joinClause, P p)
+public override Cs.JoinClause? VisitJoinClause(Cs.JoinClause node, P p)
     {
-        return base.VisitJoinClause(joinClause, p) as Cs.JoinClause;
+        return base.VisitJoinClause(node, p) as Cs.JoinClause;
     }
 
-public override Cs.JoinIntoClause? VisitJoinIntoClause(Cs.JoinIntoClause joinIntoClause, P p)
+public override Cs.JoinIntoClause? VisitJoinIntoClause(Cs.JoinIntoClause node, P p)
     {
-        return base.VisitJoinIntoClause(joinIntoClause, p) as Cs.JoinIntoClause;
+        return base.VisitJoinIntoClause(node, p) as Cs.JoinIntoClause;
     }
 
-public override Cs.WhereClause? VisitWhereClause(Cs.WhereClause whereClause, P p)
+public override Cs.WhereClause? VisitWhereClause(Cs.WhereClause node, P p)
     {
-        return base.VisitWhereClause(whereClause, p) as Cs.WhereClause;
+        return base.VisitWhereClause(node, p) as Cs.WhereClause;
     }
 
-public override Cs.OrderByClause? VisitOrderByClause(Cs.OrderByClause orderByClause, P p)
+public override Cs.OrderByClause? VisitOrderByClause(Cs.OrderByClause node, P p)
     {
-        return base.VisitOrderByClause(orderByClause, p) as Cs.OrderByClause;
+        return base.VisitOrderByClause(node, p) as Cs.OrderByClause;
     }
 
-public override Cs.QueryContinuation? VisitQueryContinuation(Cs.QueryContinuation queryContinuation, P p)
+public override Cs.QueryContinuation? VisitQueryContinuation(Cs.QueryContinuation node, P p)
     {
-        return base.VisitQueryContinuation(queryContinuation, p) as Cs.QueryContinuation;
+        return base.VisitQueryContinuation(node, p) as Cs.QueryContinuation;
     }
 
-public override Cs.Ordering? VisitOrdering(Cs.Ordering ordering, P p)
+public override Cs.Ordering? VisitOrdering(Cs.Ordering node, P p)
     {
-        return base.VisitOrdering(ordering, p) as Cs.Ordering;
+        return base.VisitOrdering(node, p) as Cs.Ordering;
     }
 
-public override Cs.SelectClause? VisitSelectClause(Cs.SelectClause selectClause, P p)
+public override Cs.SelectClause? VisitSelectClause(Cs.SelectClause node, P p)
     {
-        return base.VisitSelectClause(selectClause, p) as Cs.SelectClause;
+        return base.VisitSelectClause(node, p) as Cs.SelectClause;
     }
 
-public override Cs.GroupClause? VisitGroupClause(Cs.GroupClause groupClause, P p)
+public override Cs.GroupClause? VisitGroupClause(Cs.GroupClause node, P p)
     {
-        return base.VisitGroupClause(groupClause, p) as Cs.GroupClause;
+        return base.VisitGroupClause(node, p) as Cs.GroupClause;
     }
 
-public override Cs.IndexerDeclaration? VisitIndexerDeclaration(Cs.IndexerDeclaration indexerDeclaration, P p)
+public override Cs.IndexerDeclaration? VisitIndexerDeclaration(Cs.IndexerDeclaration node, P p)
     {
-        return base.VisitIndexerDeclaration(indexerDeclaration, p) as Cs.IndexerDeclaration;
+        return base.VisitIndexerDeclaration(node, p) as Cs.IndexerDeclaration;
     }
 
-public override Cs.DelegateDeclaration? VisitDelegateDeclaration(Cs.DelegateDeclaration delegateDeclaration, P p)
+public override Cs.DelegateDeclaration? VisitDelegateDeclaration(Cs.DelegateDeclaration node, P p)
     {
-        return base.VisitDelegateDeclaration(delegateDeclaration, p) as Cs.DelegateDeclaration;
+        return base.VisitDelegateDeclaration(node, p) as Cs.DelegateDeclaration;
     }
 
-public override Cs.ConversionOperatorDeclaration? VisitConversionOperatorDeclaration(Cs.ConversionOperatorDeclaration conversionOperatorDeclaration, P p)
+public override Cs.ConversionOperatorDeclaration? VisitConversionOperatorDeclaration(Cs.ConversionOperatorDeclaration node, P p)
     {
-        return base.VisitConversionOperatorDeclaration(conversionOperatorDeclaration, p) as Cs.ConversionOperatorDeclaration;
+        return base.VisitConversionOperatorDeclaration(node, p) as Cs.ConversionOperatorDeclaration;
     }
 
-public override Cs.TypeParameter? VisitTypeParameter(Cs.TypeParameter typeParameter, P p)
+public override Cs.TypeParameter? VisitTypeParameter(Cs.TypeParameter node, P p)
     {
-        return base.VisitTypeParameter(typeParameter, p) as Cs.TypeParameter;
+        return base.VisitTypeParameter(node, p) as Cs.TypeParameter;
     }
 
-public override Cs.EnumDeclaration? VisitEnumDeclaration(Cs.EnumDeclaration enumDeclaration, P p)
+public override Cs.EnumDeclaration? VisitEnumDeclaration(Cs.EnumDeclaration node, P p)
     {
-        return base.VisitEnumDeclaration(enumDeclaration, p) as Cs.EnumDeclaration;
+        return base.VisitEnumDeclaration(node, p) as Cs.EnumDeclaration;
     }
 
-public override Cs.EnumMemberDeclaration? VisitEnumMemberDeclaration(Cs.EnumMemberDeclaration enumMemberDeclaration, P p)
+public override Cs.EnumMemberDeclaration? VisitEnumMemberDeclaration(Cs.EnumMemberDeclaration node, P p)
     {
-        return base.VisitEnumMemberDeclaration(enumMemberDeclaration, p) as Cs.EnumMemberDeclaration;
+        return base.VisitEnumMemberDeclaration(node, p) as Cs.EnumMemberDeclaration;
     }
 
-public override Cs.AliasQualifiedName? VisitAliasQualifiedName(Cs.AliasQualifiedName aliasQualifiedName, P p)
+public override Cs.AliasQualifiedName? VisitAliasQualifiedName(Cs.AliasQualifiedName node, P p)
     {
-        return base.VisitAliasQualifiedName(aliasQualifiedName, p) as Cs.AliasQualifiedName;
+        return base.VisitAliasQualifiedName(node, p) as Cs.AliasQualifiedName;
     }
 
-public override Cs.ArrayType? VisitArrayType(Cs.ArrayType arrayType, P p)
+public override Cs.ArrayType? VisitArrayType(Cs.ArrayType node, P p)
     {
-        return base.VisitArrayType(arrayType, p) as Cs.ArrayType;
+        return base.VisitArrayType(node, p) as Cs.ArrayType;
     }
 
-public override Cs.Try? VisitTry(Cs.Try @try, P p)
+public override Cs.Try? VisitTry(Cs.Try node, P p)
     {
-        return base.VisitTry(@try, p) as Cs.Try;
+        return base.VisitTry(node, p) as Cs.Try;
     }
 
-public override Cs.Try.Catch? VisitTryCatch(Cs.Try.Catch @catch, P p)
+public override Cs.Try.Catch? VisitTryCatch(Cs.Try.Catch node, P p)
     {
-        return (base.VisitTryCatch(@catch, p)) as Cs.Try.Catch;
+        return (base.VisitTryCatch(node, p)) as Cs.Try.Catch;
     }
 
-public override Cs.ArrowExpressionClause? VisitArrowExpressionClause(Cs.ArrowExpressionClause arrowExpressionClause, P p)
+public override Cs.ArrowExpressionClause? VisitArrowExpressionClause(Cs.ArrowExpressionClause node, P p)
     {
-        return base.VisitArrowExpressionClause(arrowExpressionClause, p) as Cs.ArrowExpressionClause;
+        return base.VisitArrowExpressionClause(node, p) as Cs.ArrowExpressionClause;
     }
 
-public override Cs.AccessorDeclaration? VisitAccessorDeclaration(Cs.AccessorDeclaration accessorDeclaration, P p)
+public override Cs.AccessorDeclaration? VisitAccessorDeclaration(Cs.AccessorDeclaration node, P p)
     {
-        return base.VisitAccessorDeclaration(accessorDeclaration, p) as Cs.AccessorDeclaration;
+        return base.VisitAccessorDeclaration(node, p) as Cs.AccessorDeclaration;
     }
 
-public override Cs.PointerFieldAccess? VisitPointerFieldAccess(Cs.PointerFieldAccess pointerFieldAccess, P p)
+public override Cs.PointerFieldAccess? VisitPointerFieldAccess(Cs.PointerFieldAccess node, P p)
     {
-        return base.VisitPointerFieldAccess(pointerFieldAccess, p) as Cs.PointerFieldAccess;
+        return base.VisitPointerFieldAccess(node, p) as Cs.PointerFieldAccess;
     }
 
-public override Expression VisitExpression(Expression expression, P p)
+public override Expression VisitExpression(Expression node, P p)
     {
-        return (Expression )(base.VisitExpression(expression, p));
+        return (Expression )(base.VisitExpression(node, p));
     }
 
-public override Statement VisitStatement(Statement statement, P p)
+public override Statement VisitStatement(Statement node, P p)
     {
-        return (Statement )(base.VisitStatement(statement, p));
+        return (Statement )(base.VisitStatement(node, p));
     }
 
-public override J.AnnotatedType? VisitAnnotatedType(J.AnnotatedType annotatedType, P p)
+public override J.AnnotatedType? VisitAnnotatedType(J.AnnotatedType node, P p)
     {
-        return base.VisitAnnotatedType(annotatedType, p) as J.AnnotatedType;
+        return base.VisitAnnotatedType(node, p) as J.AnnotatedType;
     }
 
-public override J.Annotation? VisitAnnotation(J.Annotation annotation, P p)
+public override J.Annotation? VisitAnnotation(J.Annotation node, P p)
     {
-        return base.VisitAnnotation(annotation, p) as J.Annotation;
+        return base.VisitAnnotation(node, p) as J.Annotation;
     }
 
-public override J.ArrayAccess? VisitArrayAccess(J.ArrayAccess arrayAccess, P p)
+public override J.ArrayAccess? VisitArrayAccess(J.ArrayAccess node, P p)
     {
-        return base.VisitArrayAccess(arrayAccess, p) as J.ArrayAccess;
+        return base.VisitArrayAccess(node, p) as J.ArrayAccess;
     }
 
-public override J.ArrayType? VisitArrayType(J.ArrayType arrayType, P p)
+public override J.ArrayType? VisitArrayType(J.ArrayType node, P p)
     {
-        return base.VisitArrayType(arrayType, p) as J.ArrayType;
+        return base.VisitArrayType(node, p) as J.ArrayType;
     }
 
-public override J.Assert? VisitAssert(J.Assert assert, P p)
+public override J.Assert? VisitAssert(J.Assert node, P p)
     {
-        return base.VisitAssert(assert, p) as J.Assert;
+        return base.VisitAssert(node, p) as J.Assert;
     }
 
-public override J.Assignment? VisitAssignment(J.Assignment assignment, P p)
+public override J.Assignment? VisitAssignment(J.Assignment node, P p)
     {
-        return base.VisitAssignment(assignment, p) as J.Assignment;
+        return base.VisitAssignment(node, p) as J.Assignment;
     }
 
-public override J.AssignmentOperation? VisitAssignmentOperation(J.AssignmentOperation assignmentOperation, P p)
+public override J.AssignmentOperation? VisitAssignmentOperation(J.AssignmentOperation node, P p)
     {
-        return base.VisitAssignmentOperation(assignmentOperation, p) as J.AssignmentOperation;
+        return base.VisitAssignmentOperation(node, p) as J.AssignmentOperation;
     }
 
-public override J.Binary? VisitBinary(J.Binary binary, P p)
+public override J.Binary? VisitBinary(J.Binary node, P p)
     {
-        return base.VisitBinary(binary, p) as J.Binary;
+        return base.VisitBinary(node, p) as J.Binary;
     }
 
-public override J.Block? VisitBlock(J.Block block, P p)
+public override J.Block? VisitBlock(J.Block node, P p)
     {
-        return base.VisitBlock(block, p) as J.Block;
+        return base.VisitBlock(node, p) as J.Block;
     }
 
-public override J.Break? VisitBreak(J.Break @break, P p)
+public override J.Break? VisitBreak(J.Break node, P p)
     {
-        return base.VisitBreak(@break, p) as J.Break;
+        return base.VisitBreak(node, p) as J.Break;
     }
 
-public override J.Case? VisitCase(J.Case @case, P p)
+public override J.Case? VisitCase(J.Case node, P p)
     {
-        return base.VisitCase(@case, p) as J.Case;
+        return base.VisitCase(node, p) as J.Case;
     }
 
-public override J.ClassDeclaration? VisitClassDeclaration(J.ClassDeclaration classDeclaration, P p)
+public override J.ClassDeclaration? VisitClassDeclaration(J.ClassDeclaration node, P p)
     {
-        return base.VisitClassDeclaration(classDeclaration, p) as J.ClassDeclaration;
+        return base.VisitClassDeclaration(node, p) as J.ClassDeclaration;
     }
 
-public override J.ClassDeclaration.Kind? VisitClassDeclarationKind(J.ClassDeclaration.Kind kind, P p)
+public override J.ClassDeclaration.Kind? VisitClassDeclarationKind(J.ClassDeclaration.Kind node, P p)
     {
-        return (base.VisitClassDeclarationKind(kind, p)) as J.ClassDeclaration.Kind;
+        return (base.VisitClassDeclarationKind(node, p)) as J.ClassDeclaration.Kind;
     }
 
-public override J.CompilationUnit? VisitCompilationUnit(J.CompilationUnit compilationUnit, P p)
+public override J.CompilationUnit? VisitCompilationUnit(J.CompilationUnit node, P p)
     {
-        return base.VisitCompilationUnit(compilationUnit, p) as J.CompilationUnit;
+        return base.VisitCompilationUnit(node, p) as J.CompilationUnit;
     }
 
-public override J.Continue? VisitContinue(J.Continue @continue, P p)
+public override J.Continue? VisitContinue(J.Continue node, P p)
     {
-        return base.VisitContinue(@continue, p) as J.Continue;
+        return base.VisitContinue(node, p) as J.Continue;
     }
 
-public override J.DoWhileLoop? VisitDoWhileLoop(J.DoWhileLoop doWhileLoop, P p)
+public override J.DoWhileLoop? VisitDoWhileLoop(J.DoWhileLoop node, P p)
     {
-        return base.VisitDoWhileLoop(doWhileLoop, p) as J.DoWhileLoop;
+        return base.VisitDoWhileLoop(node, p) as J.DoWhileLoop;
     }
 
-public override J.Empty? VisitEmpty(J.Empty empty, P p)
+public override J.Empty? VisitEmpty(J.Empty node, P p)
     {
-        return base.VisitEmpty(empty, p) as J.Empty;
+        return base.VisitEmpty(node, p) as J.Empty;
     }
 
-public override J.EnumValue? VisitEnumValue(J.EnumValue enumValue, P p)
+public override J.EnumValue? VisitEnumValue(J.EnumValue node, P p)
     {
-        return base.VisitEnumValue(enumValue, p) as J.EnumValue;
+        return base.VisitEnumValue(node, p) as J.EnumValue;
     }
 
-public override J.EnumValueSet? VisitEnumValueSet(J.EnumValueSet enumValueSet, P p)
+public override J.EnumValueSet? VisitEnumValueSet(J.EnumValueSet node, P p)
     {
-        return base.VisitEnumValueSet(enumValueSet, p) as J.EnumValueSet;
+        return base.VisitEnumValueSet(node, p) as J.EnumValueSet;
     }
 
-public override J.FieldAccess? VisitFieldAccess(J.FieldAccess fieldAccess, P p)
+public override J.FieldAccess? VisitFieldAccess(J.FieldAccess node, P p)
     {
-        return base.VisitFieldAccess(fieldAccess, p) as J.FieldAccess;
+        return base.VisitFieldAccess(node, p) as J.FieldAccess;
     }
 
-public override J.ForEachLoop? VisitForEachLoop(J.ForEachLoop forEachLoop, P p)
+public override J.ForEachLoop? VisitForEachLoop(J.ForEachLoop node, P p)
     {
-        return base.VisitForEachLoop(forEachLoop, p) as J.ForEachLoop;
+        return base.VisitForEachLoop(node, p) as J.ForEachLoop;
     }
 
-public override J.ForEachLoop.Control? VisitForEachControl(J.ForEachLoop.Control control, P p)
+public override J.ForEachLoop.Control? VisitForEachControl(J.ForEachLoop.Control node, P p)
     {
-        return (base.VisitForEachControl(control, p)) as J.ForEachLoop.Control;
+        return (base.VisitForEachControl(node, p)) as J.ForEachLoop.Control;
     }
 
-public override J.ForLoop? VisitForLoop(J.ForLoop forLoop, P p)
+public override J.ForLoop? VisitForLoop(J.ForLoop node, P p)
     {
-        return base.VisitForLoop(forLoop, p) as J.ForLoop;
+        return base.VisitForLoop(node, p) as J.ForLoop;
     }
 
-public override J.ForLoop.Control? VisitForControl(J.ForLoop.Control control, P p)
+public override J.ForLoop.Control? VisitForControl(J.ForLoop.Control node, P p)
     {
-        return (base.VisitForControl(control, p)) as J.ForLoop.Control;
+        return (base.VisitForControl(node, p)) as J.ForLoop.Control;
     }
 
-public override J.ParenthesizedTypeTree? VisitParenthesizedTypeTree(J.ParenthesizedTypeTree parenthesizedTypeTree, P p)
+public override J.ParenthesizedTypeTree? VisitParenthesizedTypeTree(J.ParenthesizedTypeTree node, P p)
     {
-        return base.VisitParenthesizedTypeTree(parenthesizedTypeTree, p) as J.ParenthesizedTypeTree;
+        return base.VisitParenthesizedTypeTree(node, p) as J.ParenthesizedTypeTree;
     }
 
-public override J.Identifier? VisitIdentifier(J.Identifier identifier, P p)
+public override J.Identifier? VisitIdentifier(J.Identifier node, P p)
     {
-        return base.VisitIdentifier(identifier, p) as J.Identifier;
+        return base.VisitIdentifier(node, p) as J.Identifier;
     }
 
-public override J.If? VisitIf(J.If @if, P p)
+public override J.If? VisitIf(J.If node, P p)
     {
-        return base.VisitIf(@if, p) as J.If;
+        return base.VisitIf(node, p) as J.If;
     }
 
-public override J.If.Else? VisitElse(J.If.Else @else, P p)
+public override J.If.Else? VisitElse(J.If.Else node, P p)
     {
-        return (base.VisitElse(@else, p)) as J.If.Else;
+        return (base.VisitElse(node, p)) as J.If.Else;
     }
 
-public override J.Import? VisitImport(J.Import import, P p)
+public override J.Import? VisitImport(J.Import node, P p)
     {
-        return base.VisitImport(import, p) as J.Import;
+        return base.VisitImport(node, p) as J.Import;
     }
 
-public override J.InstanceOf? VisitInstanceOf(J.InstanceOf instanceOf, P p)
+public override J.InstanceOf? VisitInstanceOf(J.InstanceOf node, P p)
     {
-        return base.VisitInstanceOf(instanceOf, p) as J.InstanceOf;
+        return base.VisitInstanceOf(node, p) as J.InstanceOf;
     }
 
-public override J.IntersectionType? VisitIntersectionType(J.IntersectionType intersectionType, P p)
+public override J.IntersectionType? VisitIntersectionType(J.IntersectionType node, P p)
     {
-        return base.VisitIntersectionType(intersectionType, p) as J.IntersectionType;
+        return base.VisitIntersectionType(node, p) as J.IntersectionType;
     }
 
-public override J.Label? VisitLabel(J.Label label, P p)
+public override J.Label? VisitLabel(J.Label node, P p)
     {
-        return base.VisitLabel(label, p) as J.Label;
+        return base.VisitLabel(node, p) as J.Label;
     }
 
-public override J.Lambda? VisitLambda(J.Lambda lambda, P p)
+public override J.Lambda? VisitLambda(J.Lambda node, P p)
     {
-        return base.VisitLambda(lambda, p) as J.Lambda;
+        return base.VisitLambda(node, p) as J.Lambda;
     }
 
-public override J.Lambda.Parameters? VisitLambdaParameters(J.Lambda.Parameters parameters, P p)
+public override J.Lambda.Parameters? VisitLambdaParameters(J.Lambda.Parameters node, P p)
     {
-        return (base.VisitLambdaParameters(parameters, p)) as J.Lambda.Parameters;
+        return (base.VisitLambdaParameters(node, p)) as J.Lambda.Parameters;
     }
 
-public override J.Literal? VisitLiteral(J.Literal literal, P p)
+public override J.Literal? VisitLiteral(J.Literal node, P p)
     {
-        return base.VisitLiteral(literal, p) as J.Literal;
+        return base.VisitLiteral(node, p) as J.Literal;
     }
 
-public override J.MemberReference? VisitMemberReference(J.MemberReference memberReference, P p)
+public override J.MemberReference? VisitMemberReference(J.MemberReference node, P p)
     {
-        return base.VisitMemberReference(memberReference, p) as J.MemberReference;
+        return base.VisitMemberReference(node, p) as J.MemberReference;
     }
 
-public override J.MethodDeclaration? VisitMethodDeclaration(J.MethodDeclaration methodDeclaration, P p)
+public override J.MethodDeclaration? VisitMethodDeclaration(J.MethodDeclaration node, P p)
     {
-        return base.VisitMethodDeclaration(methodDeclaration, p) as J.MethodDeclaration;
+        return base.VisitMethodDeclaration(node, p) as J.MethodDeclaration;
     }
 
-public override J.MethodInvocation? VisitMethodInvocation(J.MethodInvocation methodInvocation, P p)
+public override J.MethodInvocation? VisitMethodInvocation(J.MethodInvocation node, P p)
     {
-        return base.VisitMethodInvocation(methodInvocation, p) as J.MethodInvocation;
+        return base.VisitMethodInvocation(node, p) as J.MethodInvocation;
     }
 
-public override J.Modifier? VisitModifier(J.Modifier modifier, P p)
+public override J.Modifier? VisitModifier(J.Modifier node, P p)
     {
-        return base.VisitModifier(modifier, p) as J.Modifier;
+        return base.VisitModifier(node, p) as J.Modifier;
     }
 
-public override J.MultiCatch? VisitMultiCatch(J.MultiCatch multiCatch, P p)
+public override J.MultiCatch? VisitMultiCatch(J.MultiCatch node, P p)
     {
-        return base.VisitMultiCatch(multiCatch, p) as J.MultiCatch;
+        return base.VisitMultiCatch(node, p) as J.MultiCatch;
     }
 
-public override J.NewArray? VisitNewArray(J.NewArray newArray, P p)
+public override J.NewArray? VisitNewArray(J.NewArray node, P p)
     {
-        return base.VisitNewArray(newArray, p) as J.NewArray;
+        return base.VisitNewArray(node, p) as J.NewArray;
     }
 
-public override J.ArrayDimension? VisitArrayDimension(J.ArrayDimension arrayDimension, P p)
+public override J.ArrayDimension? VisitArrayDimension(J.ArrayDimension node, P p)
     {
-        return base.VisitArrayDimension(arrayDimension, p) as J.ArrayDimension;
+        return base.VisitArrayDimension(node, p) as J.ArrayDimension;
     }
 
-public override J.NewClass? VisitNewClass(J.NewClass newClass, P p)
+public override J.NewClass? VisitNewClass(J.NewClass node, P p)
     {
-        return base.VisitNewClass(newClass, p) as J.NewClass;
+        return base.VisitNewClass(node, p) as J.NewClass;
     }
 
-public override J.NullableType? VisitNullableType(J.NullableType nullableType, P p)
+public override J.NullableType? VisitNullableType(J.NullableType node, P p)
     {
-        return base.VisitNullableType(nullableType, p) as J.NullableType;
+        return base.VisitNullableType(node, p) as J.NullableType;
     }
 
-public override J.Package? VisitPackage(J.Package package, P p)
+public override J.Package? VisitPackage(J.Package node, P p)
     {
-        return base.VisitPackage(package, p) as J.Package;
+        return base.VisitPackage(node, p) as J.Package;
     }
 
-public override J.ParameterizedType? VisitParameterizedType(J.ParameterizedType parameterizedType, P p)
+public override J.ParameterizedType? VisitParameterizedType(J.ParameterizedType node, P p)
     {
-        return base.VisitParameterizedType(parameterizedType, p) as J.ParameterizedType;
+        return base.VisitParameterizedType(node, p) as J.ParameterizedType;
     }
 
-public override J.Parentheses<J2>? VisitParentheses<J2>(J.Parentheses<J2> parentheses, P p)
+public override J.Parentheses<J2>? VisitParentheses<J2>(J.Parentheses<J2> node, P p)
     {
-        return (base.VisitParentheses(parentheses, p)) as J.Parentheses<J2>;
+        return (base.VisitParentheses(node, p)) as J.Parentheses<J2>;
     }
 
-public override J.ControlParentheses<J2>? VisitControlParentheses<J2>(J.ControlParentheses<J2> controlParentheses, P p)
+public override J.ControlParentheses<J2>? VisitControlParentheses<J2>(J.ControlParentheses<J2> node, P p)
     {
-        return (base.VisitControlParentheses(controlParentheses, p)) as J.ControlParentheses<J2>;
+        return (base.VisitControlParentheses(node, p)) as J.ControlParentheses<J2>;
     }
 
-public override J.Primitive? VisitPrimitive(J.Primitive primitive, P p)
+public override J.Primitive? VisitPrimitive(J.Primitive node, P p)
     {
-        return base.VisitPrimitive(primitive, p) as J.Primitive;
+        return base.VisitPrimitive(node, p) as J.Primitive;
     }
 
-public override J.Return? VisitReturn(J.Return @return, P p)
+public override J.Return? VisitReturn(J.Return node, P p)
     {
-        return base.VisitReturn(@return, p) as J.Return;
+        return base.VisitReturn(node, p) as J.Return;
     }
 
-public override J.Switch? VisitSwitch(J.Switch @switch, P p)
+public override J.Switch? VisitSwitch(J.Switch node, P p)
     {
-        return base.VisitSwitch(@switch, p) as J.Switch;
+        return base.VisitSwitch(node, p) as J.Switch;
     }
 
-public override J.SwitchExpression? VisitSwitchExpression(J.SwitchExpression switchExpression, P p)
+public override J.SwitchExpression? VisitSwitchExpression(J.SwitchExpression node, P p)
     {
-        return base.VisitSwitchExpression(switchExpression, p) as J.SwitchExpression;
+        return base.VisitSwitchExpression(node, p) as J.SwitchExpression;
     }
 
-public override J.Synchronized? VisitSynchronized(J.Synchronized synchronized, P p)
+public override J.Synchronized? VisitSynchronized(J.Synchronized node, P p)
     {
-        return base.VisitSynchronized(synchronized, p) as J.Synchronized;
+        return base.VisitSynchronized(node, p) as J.Synchronized;
     }
 
-public override J.Ternary? VisitTernary(J.Ternary ternary, P p)
+public override J.Ternary? VisitTernary(J.Ternary node, P p)
     {
-        return base.VisitTernary(ternary, p) as J.Ternary;
+        return base.VisitTernary(node, p) as J.Ternary;
     }
 
-public override J.Throw? VisitThrow(J.Throw @throw, P p)
+public override J.Throw? VisitThrow(J.Throw node, P p)
     {
-        return base.VisitThrow(@throw, p) as J.Throw;
+        return base.VisitThrow(node, p) as J.Throw;
     }
 
-public override J.Try? VisitTry(J.Try @try, P p)
+public override J.Try? VisitTry(J.Try node, P p)
     {
-        return base.VisitTry(@try, p) as J.Try;
+        return base.VisitTry(node, p) as J.Try;
     }
 
-public override J.Try.Resource? VisitTryResource(J.Try.Resource resource, P p)
+public override J.Try.Resource? VisitTryResource(J.Try.Resource node, P p)
     {
-        return (base.VisitTryResource(resource, p)) as J.Try.Resource;
+        return (base.VisitTryResource(node, p)) as J.Try.Resource;
     }
 
-public override J.Try.Catch? VisitCatch(J.Try.Catch @catch, P p)
+public override J.Try.Catch? VisitCatch(J.Try.Catch node, P p)
     {
-        return (base.VisitCatch(@catch, p)) as J.Try.Catch;
+        return (base.VisitCatch(node, p)) as J.Try.Catch;
     }
 
-public override J.TypeCast? VisitTypeCast(J.TypeCast typeCast, P p)
+public override J.TypeCast? VisitTypeCast(J.TypeCast node, P p)
     {
-        return base.VisitTypeCast(typeCast, p) as J.TypeCast;
+        return base.VisitTypeCast(node, p) as J.TypeCast;
     }
 
-public override J.TypeParameter? VisitTypeParameter(J.TypeParameter typeParameter, P p)
+public override J.TypeParameter? VisitTypeParameter(J.TypeParameter node, P p)
     {
-        return base.VisitTypeParameter(typeParameter, p) as J.TypeParameter;
+        return base.VisitTypeParameter(node, p) as J.TypeParameter;
     }
 
-public override J.TypeParameters? VisitTypeParameters(J.TypeParameters typeParameters, P p)
+public override J.TypeParameters? VisitTypeParameters(J.TypeParameters node, P p)
     {
-        return base.VisitTypeParameters(typeParameters, p) as J.TypeParameters;
+        return base.VisitTypeParameters(node, p) as J.TypeParameters;
     }
 
-public override J.Unary? VisitUnary(J.Unary unary, P p)
+public override J.Unary? VisitUnary(J.Unary node, P p)
     {
-        return base.VisitUnary(unary, p) as J.Unary;
+        return base.VisitUnary(node, p) as J.Unary;
     }
 
-public override J.VariableDeclarations? VisitVariableDeclarations(J.VariableDeclarations variableDeclarations, P p)
+public override J.VariableDeclarations? VisitVariableDeclarations(J.VariableDeclarations node, P p)
     {
-        return base.VisitVariableDeclarations(variableDeclarations, p) as J.VariableDeclarations;
+        return base.VisitVariableDeclarations(node, p) as J.VariableDeclarations;
     }
 
-public override J.VariableDeclarations.NamedVariable? VisitVariable(J.VariableDeclarations.NamedVariable namedVariable, P p)
+public override J.VariableDeclarations.NamedVariable? VisitVariable(J.VariableDeclarations.NamedVariable node, P p)
     {
-        return base.VisitVariable(namedVariable, p) as J.VariableDeclarations.NamedVariable;
+        return base.VisitVariable(node, p) as J.VariableDeclarations.NamedVariable;
     }
 
-public override J.WhileLoop? VisitWhileLoop(J.WhileLoop whileLoop, P p)
+public override J.WhileLoop? VisitWhileLoop(J.WhileLoop node, P p)
     {
-        return base.VisitWhileLoop(whileLoop, p) as J.WhileLoop;
+        return base.VisitWhileLoop(node, p) as J.WhileLoop;
     }
 
-public override J.Wildcard? VisitWildcard(J.Wildcard wildcard, P p)
+public override J.Wildcard? VisitWildcard(J.Wildcard node, P p)
     {
-        return base.VisitWildcard(wildcard, p) as J.Wildcard;
+        return base.VisitWildcard(node, p) as J.Wildcard;
     }
 
-public override J.Yield? VisitYield(J.Yield yield, P p)
+public override J.Yield? VisitYield(J.Yield node, P p)
     {
-        return base.VisitYield(yield, p) as J.Yield;
+        return base.VisitYield(node, p) as J.Yield;
     }
 
-public override J.Unknown? VisitUnknown(J.Unknown unknown, P p)
+public override J.Unknown? VisitUnknown(J.Unknown node, P p)
     {
-        return base.VisitUnknown(unknown, p) as J.Unknown;
+        return base.VisitUnknown(node, p) as J.Unknown;
     }
 
-public override J.Unknown.Source? VisitUnknownSource(J.Unknown.Source source, P p)
+public override J.Unknown.Source? VisitUnknownSource(J.Unknown.Source node, P p)
     {
-        return (base.VisitUnknownSource(source, p)) as J.Unknown.Source;
+        return (base.VisitUnknownSource(node, p)) as J.Unknown.Source;
     }
 }

@@ -23,6 +23,13 @@ namespace Rewrite.RewriteJava.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface J : Rewrite.Core.Tree
 {
+    /// <summary>
+    /// Represents an intersection type.
+    /// <br/>Example:
+    /// <code>{@code
+    /// Serializable & Closeable
+    /// }</code>
+    /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif

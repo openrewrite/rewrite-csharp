@@ -29,7 +29,7 @@ public record CSharpSender : Sender
 
     private class Visitor : CSharpVisitor<SenderContext>
     {
-        public override Cs Visit(Tree? tree, SenderContext ctx)
+        public override Cs Visit(Tree? tree, SenderContext ctx, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
             Cursor = new Cursor(Cursor, tree ?? throw new InvalidOperationException($"Parameter {nameof(tree)} should not be null"));
             ctx.SendNode(tree, x => x, ctx.SendTree);
@@ -1497,6 +1497,7 @@ public record CSharpSender : Sender
             ctx.SendNode(instanceOf, v => v.Clazz, ctx.SendTree);
             ctx.SendNode(instanceOf, v => v.Pattern, ctx.SendTree);
             ctx.SendTypedValue(instanceOf, v => v.Type);
+            ctx.SendNode(instanceOf, v => v.Modifier, ctx.SendTree);
             return instanceOf;
         }
 

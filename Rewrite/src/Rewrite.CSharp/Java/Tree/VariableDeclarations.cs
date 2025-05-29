@@ -4,6 +4,10 @@ partial interface J
 {
     partial class VariableDeclarations
     {
+        public partial class NamedVariable
+        {
+            public VariableDeclarator Name { get; } = name;
+        }
         public JavaType? Type => TypeExpression?.Type;
 
         public VariableDeclarations WithType(JavaType? newType) => TypeExpression == null ? this : WithTypeExpression(TypeExpression.WithType(newType));

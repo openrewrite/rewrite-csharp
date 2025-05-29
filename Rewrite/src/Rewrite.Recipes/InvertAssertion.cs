@@ -4,7 +4,6 @@ using Rewrite.Core;
 using Rewrite.RewriteCSharp.Tree;
 using Rewrite.RewriteJava;
 using Rewrite.RewriteJava.Tree;
-using ExecutionContext = Rewrite.Core.ExecutionContext;
 
 namespace Rewrite.Recipes;
 
@@ -14,14 +13,14 @@ public class InvertAssertion : Recipe
 {
     private const string ASSERT_TRUE = "Xunit.Assert.True";
     
-    public override ITreeVisitor<Tree, ExecutionContext> GetVisitor()
+    public override ITreeVisitor<Tree, IExecutionContext> GetVisitor()
     {
         return new InvertAssertionVisitor();
     }
 
-    private class InvertAssertionVisitor : JavaVisitor<ExecutionContext>
+    private class InvertAssertionVisitor : JavaVisitor<IExecutionContext>
     {
-        public override J.MethodInvocation VisitMethodInvocation(J.MethodInvocation method, ExecutionContext ctx)
+        public override J.MethodInvocation VisitMethodInvocation(J.MethodInvocation method, IExecutionContext ctx)
         {
             // Assert.True(!a);
             var mi = (base.VisitMethodInvocation(method, ctx) as J.MethodInvocation)!;

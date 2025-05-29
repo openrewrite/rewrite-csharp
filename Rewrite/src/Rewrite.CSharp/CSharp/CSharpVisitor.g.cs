@@ -8,6 +8,7 @@
 #pragma warning disable CS0108 // 'member1' hides inherited member 'member2'. Use the new keyword if hiding was intended.
 #pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using Rewrite.Core;
 using Rewrite.RewriteCSharp.Tree;
 using Rewrite.RewriteJava;
@@ -25,1534 +26,1534 @@ public class CSharpVisitor<P> : JavaVisitor<P>
         return sourceFile is Cs;
     }
 
-    public virtual J? VisitCompilationUnit(Cs.CompilationUnit compilationUnit, P p)
+    public virtual J? VisitCompilationUnit(Cs.CompilationUnit node, P p)
     {
-        compilationUnit = compilationUnit.WithPrefix(VisitSpace(compilationUnit.Prefix, Space.Location.COMPILATION_UNIT_PREFIX, p)!);
-        compilationUnit = compilationUnit.WithMarkers(VisitMarkers(compilationUnit.Markers, p));
-        compilationUnit = compilationUnit.Padding.WithExterns(compilationUnit.Padding.Externs.Map(el => VisitRightPadded(el, JRightPadded.Location.COMPILATION_UNIT_EXTERNS, p)));
-        compilationUnit = compilationUnit.Padding.WithUsings(compilationUnit.Padding.Usings.Map(el => VisitRightPadded(el, JRightPadded.Location.COMPILATION_UNIT_USINGS, p)));
-        compilationUnit = compilationUnit.WithAttributeLists(compilationUnit.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
-        compilationUnit = compilationUnit.Padding.WithMembers(compilationUnit.Padding.Members.Map(el => VisitRightPadded(el, JRightPadded.Location.COMPILATION_UNIT_MEMBERS, p)));
-        compilationUnit = compilationUnit.WithEof(VisitSpace(compilationUnit.Eof, Space.Location.COMPILATION_UNIT_EOF, p)!);
-        return compilationUnit;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.COMPILATION_UNIT_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithExterns(node.Padding.Externs.Map(el => VisitRightPadded(el, JRightPadded.Location.COMPILATION_UNIT_EXTERNS, p)));
+        node = node.Padding.WithUsings(node.Padding.Usings.Map(el => VisitRightPadded(el, JRightPadded.Location.COMPILATION_UNIT_USINGS, p)));
+        node = node.WithAttributeLists(node.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
+        node = node.Padding.WithMembers(node.Padding.Members.Map(el => VisitRightPadded(el, JRightPadded.Location.COMPILATION_UNIT_MEMBERS, p)));
+        node = node.WithEof(VisitSpace(node.Eof, Space.Location.COMPILATION_UNIT_EOF, p)!);
+        return node;
     }
 
-    public virtual J? VisitOperatorDeclaration(Cs.OperatorDeclaration operatorDeclaration, P p)
+    public virtual J? VisitOperatorDeclaration(Cs.OperatorDeclaration node, P p)
     {
-        operatorDeclaration = operatorDeclaration.WithPrefix(VisitSpace(operatorDeclaration.Prefix, Space.Location.OPERATOR_DECLARATION_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(operatorDeclaration, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.OPERATOR_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.OperatorDeclaration)
         {
             return tempStatement;
         }
-        operatorDeclaration = (Cs.OperatorDeclaration) tempStatement;
-        operatorDeclaration = operatorDeclaration.WithMarkers(VisitMarkers(operatorDeclaration.Markers, p));
-        operatorDeclaration = operatorDeclaration.WithAttributeLists(operatorDeclaration.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
-        operatorDeclaration = operatorDeclaration.WithModifiers(operatorDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        operatorDeclaration = operatorDeclaration.Padding.WithExplicitInterfaceSpecifier(operatorDeclaration.Padding.ExplicitInterfaceSpecifier == null ? null : VisitRightPadded(operatorDeclaration.Padding.ExplicitInterfaceSpecifier, JRightPadded.Location.OPERATOR_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, p));
-        operatorDeclaration = operatorDeclaration.WithOperatorKeyword(VisitAndCast<Cs.Keyword>(operatorDeclaration.OperatorKeyword, p)!);
-        operatorDeclaration = operatorDeclaration.WithCheckedKeyword(VisitAndCast<Cs.Keyword>(operatorDeclaration.CheckedKeyword, p));
-        operatorDeclaration = operatorDeclaration.Padding.WithOperatorToken(VisitLeftPadded(operatorDeclaration.Padding.OperatorToken, JLeftPadded.Location.OPERATOR_DECLARATION_OPERATOR_TOKEN, p)!);
-        operatorDeclaration = operatorDeclaration.WithReturnType(VisitAndCast<TypeTree>(operatorDeclaration.ReturnType, p)!);
-        operatorDeclaration = operatorDeclaration.Padding.WithParameters(VisitContainer(operatorDeclaration.Padding.Parameters, JContainer.Location.OPERATOR_DECLARATION_PARAMETERS, p)!);
-        operatorDeclaration = operatorDeclaration.WithBody(VisitAndCast<J.Block>(operatorDeclaration.Body, p)!);
-        return operatorDeclaration;
+        node = (Cs.OperatorDeclaration) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithAttributeLists(node.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
+        node = node.WithModifiers(node.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
+        node = node.Padding.WithExplicitInterfaceSpecifier(node.Padding.ExplicitInterfaceSpecifier == null ? null : VisitRightPadded(node.Padding.ExplicitInterfaceSpecifier, JRightPadded.Location.OPERATOR_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, p));
+        node = node.WithOperatorKeyword(VisitAndCast<Cs.Keyword>(node.OperatorKeyword, p)!);
+        node = node.WithCheckedKeyword(VisitAndCast<Cs.Keyword>(node.CheckedKeyword, p));
+        node = node.Padding.WithOperatorToken(VisitLeftPadded(node.Padding.OperatorToken, JLeftPadded.Location.OPERATOR_DECLARATION_OPERATOR_TOKEN, p)!);
+        node = node.WithReturnType(VisitAndCast<TypeTree>(node.ReturnType, p)!);
+        node = node.Padding.WithParameters(VisitContainer(node.Padding.Parameters, JContainer.Location.OPERATOR_DECLARATION_PARAMETERS, p)!);
+        node = node.WithBody(VisitAndCast<J.Block>(node.Body, p)!);
+        return node;
     }
 
-    public virtual J? VisitRefExpression(Cs.RefExpression refExpression, P p)
+    public virtual J? VisitRefExpression(Cs.RefExpression node, P p)
     {
-        refExpression = refExpression.WithPrefix(VisitSpace(refExpression.Prefix, Space.Location.REF_EXPRESSION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(refExpression, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.REF_EXPRESSION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.RefExpression)
         {
             return tempExpression;
         }
-        refExpression = (Cs.RefExpression) tempExpression;
-        refExpression = refExpression.WithMarkers(VisitMarkers(refExpression.Markers, p));
-        refExpression = refExpression.WithExpression(VisitAndCast<Expression>(refExpression.Expression, p)!);
-        return refExpression;
+        node = (Cs.RefExpression) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithExpression(VisitAndCast<Expression>(node.Expression, p)!);
+        return node;
     }
 
-    public virtual J? VisitPointerType(Cs.PointerType pointerType, P p)
+    public virtual J? VisitPointerType(Cs.PointerType node, P p)
     {
-        pointerType = pointerType.WithPrefix(VisitSpace(pointerType.Prefix, Space.Location.POINTER_TYPE_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(pointerType, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.POINTER_TYPE_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.PointerType)
         {
             return tempExpression;
         }
-        pointerType = (Cs.PointerType) tempExpression;
-        pointerType = pointerType.WithMarkers(VisitMarkers(pointerType.Markers, p));
-        pointerType = pointerType.Padding.WithElementType(VisitRightPadded(pointerType.Padding.ElementType, JRightPadded.Location.POINTER_TYPE_ELEMENT_TYPE, p)!);
-        return pointerType;
+        node = (Cs.PointerType) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithElementType(VisitRightPadded(node.Padding.ElementType, JRightPadded.Location.POINTER_TYPE_ELEMENT_TYPE, p)!);
+        return node;
     }
 
-    public virtual J? VisitRefType(Cs.RefType refType, P p)
+    public virtual J? VisitRefType(Cs.RefType node, P p)
     {
-        refType = refType.WithPrefix(VisitSpace(refType.Prefix, Space.Location.REF_TYPE_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(refType, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.REF_TYPE_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.RefType)
         {
             return tempExpression;
         }
-        refType = (Cs.RefType) tempExpression;
-        refType = refType.WithMarkers(VisitMarkers(refType.Markers, p));
-        refType = refType.WithReadonlyKeyword(VisitAndCast<J.Modifier>(refType.ReadonlyKeyword, p));
-        refType = refType.WithTypeIdentifier(VisitAndCast<TypeTree>(refType.TypeIdentifier, p)!);
-        return refType;
+        node = (Cs.RefType) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithReadonlyKeyword(VisitAndCast<J.Modifier>(node.ReadonlyKeyword, p));
+        node = node.WithTypeIdentifier(VisitAndCast<TypeTree>(node.TypeIdentifier, p)!);
+        return node;
     }
 
-    public virtual J? VisitForEachVariableLoop(Cs.ForEachVariableLoop forEachVariableLoop, P p)
+    public virtual J? VisitForEachVariableLoop(Cs.ForEachVariableLoop node, P p)
     {
-        forEachVariableLoop = forEachVariableLoop.WithPrefix(VisitSpace(forEachVariableLoop.Prefix, Space.Location.FOR_EACH_VARIABLE_LOOP_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(forEachVariableLoop, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.FOR_EACH_VARIABLE_LOOP_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.ForEachVariableLoop)
         {
             return tempStatement;
         }
-        forEachVariableLoop = (Cs.ForEachVariableLoop) tempStatement;
-        forEachVariableLoop = forEachVariableLoop.WithMarkers(VisitMarkers(forEachVariableLoop.Markers, p));
-        forEachVariableLoop = forEachVariableLoop.WithControlElement(VisitAndCast<Cs.ForEachVariableLoop.Control>(forEachVariableLoop.ControlElement, p)!);
-        forEachVariableLoop = forEachVariableLoop.Padding.WithBody(VisitRightPadded(forEachVariableLoop.Padding.Body, JRightPadded.Location.FOR_EACH_VARIABLE_LOOP_BODY, p)!);
-        return forEachVariableLoop;
+        node = (Cs.ForEachVariableLoop) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithControlElement(VisitAndCast<Cs.ForEachVariableLoop.Control>(node.ControlElement, p)!);
+        node = node.Padding.WithBody(VisitRightPadded(node.Padding.Body, JRightPadded.Location.FOR_EACH_VARIABLE_LOOP_BODY, p)!);
+        return node;
     }
 
-    public virtual J? VisitForEachVariableLoopControl(Cs.ForEachVariableLoop.Control control, P p)
+    public virtual J? VisitForEachVariableLoopControl(Cs.ForEachVariableLoop.Control node, P p)
     {
-        control = control.WithPrefix(VisitSpace(control.Prefix, Space.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_PREFIX, p)!);
-        control = control.WithMarkers(VisitMarkers(control.Markers, p));
-        control = control.Padding.WithVariable(VisitRightPadded(control.Padding.Variable, JRightPadded.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_VARIABLE, p)!);
-        control = control.Padding.WithIterable(VisitRightPadded(control.Padding.Iterable, JRightPadded.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_ITERABLE, p)!);
-        return control;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithVariable(VisitRightPadded(node.Padding.Variable, JRightPadded.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_VARIABLE, p)!);
+        node = node.Padding.WithIterable(VisitRightPadded(node.Padding.Iterable, JRightPadded.Location.FOR_EACH_VARIABLE_LOOP_CONTROL_ITERABLE, p)!);
+        return node;
     }
 
-    public virtual J? VisitNameColon(Cs.NameColon nameColon, P p)
+    public virtual J? VisitNameColon(Cs.NameColon node, P p)
     {
-        nameColon = nameColon.WithPrefix(VisitSpace(nameColon.Prefix, Space.Location.NAME_COLON_PREFIX, p)!);
-        nameColon = nameColon.WithMarkers(VisitMarkers(nameColon.Markers, p));
-        nameColon = nameColon.Padding.WithName(VisitRightPadded(nameColon.Padding.Name, JRightPadded.Location.NAME_COLON_NAME, p)!);
-        return nameColon;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.NAME_COLON_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithName(VisitRightPadded(node.Padding.Name, JRightPadded.Location.NAME_COLON_NAME, p)!);
+        return node;
     }
 
-    public virtual J? VisitArgument(Cs.Argument argument, P p)
+    public virtual J? VisitArgument(Cs.Argument node, P p)
     {
-        argument = argument.WithPrefix(VisitSpace(argument.Prefix, Space.Location.ARGUMENT_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(argument, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.ARGUMENT_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.Argument)
         {
             return tempExpression;
         }
-        argument = (Cs.Argument) tempExpression;
-        argument = argument.WithMarkers(VisitMarkers(argument.Markers, p));
-        argument = argument.Padding.WithNameColumn(argument.Padding.NameColumn == null ? null : VisitRightPadded(argument.Padding.NameColumn, JRightPadded.Location.ARGUMENT_NAME_COLUMN, p));
-        argument = argument.WithRefKindKeyword(VisitAndCast<Cs.Keyword>(argument.RefKindKeyword, p));
-        argument = argument.WithExpression(VisitAndCast<Expression>(argument.Expression, p)!);
-        return argument;
+        node = (Cs.Argument) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithNameColumn(node.Padding.NameColumn == null ? null : VisitRightPadded(node.Padding.NameColumn, JRightPadded.Location.ARGUMENT_NAME_COLUMN, p));
+        node = node.WithRefKindKeyword(VisitAndCast<Cs.Keyword>(node.RefKindKeyword, p));
+        node = node.WithExpression(VisitAndCast<Expression>(node.Expression, p)!);
+        return node;
     }
 
-    public virtual J? VisitAnnotatedStatement(Cs.AnnotatedStatement annotatedStatement, P p)
+    public virtual J? VisitAnnotatedStatement(Cs.AnnotatedStatement node, P p)
     {
-        annotatedStatement = annotatedStatement.WithPrefix(VisitSpace(annotatedStatement.Prefix, Space.Location.ANNOTATED_STATEMENT_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(annotatedStatement, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.ANNOTATED_STATEMENT_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.AnnotatedStatement)
         {
             return tempStatement;
         }
-        annotatedStatement = (Cs.AnnotatedStatement) tempStatement;
-        annotatedStatement = annotatedStatement.WithMarkers(VisitMarkers(annotatedStatement.Markers, p));
-        annotatedStatement = annotatedStatement.WithAttributeLists(annotatedStatement.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
-        annotatedStatement = annotatedStatement.WithStatement(VisitAndCast<Statement>(annotatedStatement.Statement, p)!);
-        return annotatedStatement;
+        node = (Cs.AnnotatedStatement) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithAttributeLists(node.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
+        node = node.WithStatement(VisitAndCast<Statement>(node.Statement, p)!);
+        return node;
     }
 
-    public virtual J? VisitArrayRankSpecifier(Cs.ArrayRankSpecifier arrayRankSpecifier, P p)
+    public virtual J? VisitArrayRankSpecifier(Cs.ArrayRankSpecifier node, P p)
     {
-        arrayRankSpecifier = arrayRankSpecifier.WithPrefix(VisitSpace(arrayRankSpecifier.Prefix, Space.Location.ARRAY_RANK_SPECIFIER_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(arrayRankSpecifier, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.ARRAY_RANK_SPECIFIER_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.ArrayRankSpecifier)
         {
             return tempExpression;
         }
-        arrayRankSpecifier = (Cs.ArrayRankSpecifier) tempExpression;
-        arrayRankSpecifier = arrayRankSpecifier.WithMarkers(VisitMarkers(arrayRankSpecifier.Markers, p));
-        arrayRankSpecifier = arrayRankSpecifier.Padding.WithSizes(VisitContainer(arrayRankSpecifier.Padding.Sizes, JContainer.Location.ARRAY_RANK_SPECIFIER_SIZES, p)!);
-        return arrayRankSpecifier;
+        node = (Cs.ArrayRankSpecifier) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithSizes(VisitContainer(node.Padding.Sizes, JContainer.Location.ARRAY_RANK_SPECIFIER_SIZES, p)!);
+        return node;
     }
 
-    public virtual J? VisitAssignmentOperation(Cs.AssignmentOperation assignmentOperation, P p)
+    public virtual J? VisitAssignmentOperation(Cs.AssignmentOperation node, P p)
     {
-        assignmentOperation = assignmentOperation.WithPrefix(VisitSpace(assignmentOperation.Prefix, Space.Location.ASSIGNMENT_OPERATION_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(assignmentOperation, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.ASSIGNMENT_OPERATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.AssignmentOperation)
         {
             return tempStatement;
         }
-        assignmentOperation = (Cs.AssignmentOperation) tempStatement;
-        var tempExpression = (Expression) VisitExpression(assignmentOperation, p);
+        node = (Cs.AssignmentOperation) tempStatement;
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.AssignmentOperation)
         {
             return tempExpression;
         }
-        assignmentOperation = (Cs.AssignmentOperation) tempExpression;
-        assignmentOperation = assignmentOperation.WithMarkers(VisitMarkers(assignmentOperation.Markers, p));
-        assignmentOperation = assignmentOperation.WithVariable(VisitAndCast<Expression>(assignmentOperation.Variable, p)!);
-        assignmentOperation = assignmentOperation.Padding.WithOperator(VisitLeftPadded(assignmentOperation.Padding.Operator, JLeftPadded.Location.ASSIGNMENT_OPERATION_OPERATOR, p)!);
-        assignmentOperation = assignmentOperation.WithAssignment(VisitAndCast<Expression>(assignmentOperation.Assignment, p)!);
-        return assignmentOperation;
+        node = (Cs.AssignmentOperation) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithVariable(VisitAndCast<Expression>(node.Variable, p)!);
+        node = node.Padding.WithOperator(VisitLeftPadded(node.Padding.Operator, JLeftPadded.Location.ASSIGNMENT_OPERATION_OPERATOR, p)!);
+        node = node.WithAssignment(VisitAndCast<Expression>(node.Assignment, p)!);
+        return node;
     }
 
-    public virtual J? VisitAttributeList(Cs.AttributeList attributeList, P p)
+    public virtual J? VisitAttributeList(Cs.AttributeList node, P p)
     {
-        attributeList = attributeList.WithPrefix(VisitSpace(attributeList.Prefix, Space.Location.ATTRIBUTE_LIST_PREFIX, p)!);
-        attributeList = attributeList.WithMarkers(VisitMarkers(attributeList.Markers, p));
-        attributeList = attributeList.Padding.WithTarget(attributeList.Padding.Target == null ? null : VisitRightPadded(attributeList.Padding.Target, JRightPadded.Location.ATTRIBUTE_LIST_TARGET, p));
-        attributeList = attributeList.Padding.WithAttributes(attributeList.Padding.Attributes.Map(el => VisitRightPadded(el, JRightPadded.Location.ATTRIBUTE_LIST_ATTRIBUTES, p)));
-        return attributeList;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.ATTRIBUTE_LIST_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithTarget(node.Padding.Target == null ? null : VisitRightPadded(node.Padding.Target, JRightPadded.Location.ATTRIBUTE_LIST_TARGET, p));
+        node = node.Padding.WithAttributes(node.Padding.Attributes.Map(el => VisitRightPadded(el, JRightPadded.Location.ATTRIBUTE_LIST_ATTRIBUTES, p)));
+        return node;
     }
 
-    public virtual J? VisitAwaitExpression(Cs.AwaitExpression awaitExpression, P p)
+    public virtual J? VisitAwaitExpression(Cs.AwaitExpression node, P p)
     {
-        awaitExpression = awaitExpression.WithPrefix(VisitSpace(awaitExpression.Prefix, Space.Location.AWAIT_EXPRESSION_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(awaitExpression, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.AWAIT_EXPRESSION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.AwaitExpression)
         {
             return tempStatement;
         }
-        awaitExpression = (Cs.AwaitExpression) tempStatement;
-        var tempExpression = (Expression) VisitExpression(awaitExpression, p);
+        node = (Cs.AwaitExpression) tempStatement;
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.AwaitExpression)
         {
             return tempExpression;
         }
-        awaitExpression = (Cs.AwaitExpression) tempExpression;
-        awaitExpression = awaitExpression.WithMarkers(VisitMarkers(awaitExpression.Markers, p));
-        awaitExpression = awaitExpression.WithExpression(VisitAndCast<J>(awaitExpression.Expression, p)!);
-        return awaitExpression;
+        node = (Cs.AwaitExpression) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithExpression(VisitAndCast<J>(node.Expression, p)!);
+        return node;
     }
 
-    public virtual J? VisitStackAllocExpression(Cs.StackAllocExpression stackAllocExpression, P p)
+    public virtual J? VisitStackAllocExpression(Cs.StackAllocExpression node, P p)
     {
-        stackAllocExpression = stackAllocExpression.WithPrefix(VisitSpace(stackAllocExpression.Prefix, Space.Location.STACK_ALLOC_EXPRESSION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(stackAllocExpression, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.STACK_ALLOC_EXPRESSION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.StackAllocExpression)
         {
             return tempExpression;
         }
-        stackAllocExpression = (Cs.StackAllocExpression) tempExpression;
-        stackAllocExpression = stackAllocExpression.WithMarkers(VisitMarkers(stackAllocExpression.Markers, p));
-        stackAllocExpression = stackAllocExpression.WithExpression(VisitAndCast<J.NewArray>(stackAllocExpression.Expression, p)!);
-        return stackAllocExpression;
+        node = (Cs.StackAllocExpression) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithExpression(VisitAndCast<J.NewArray>(node.Expression, p)!);
+        return node;
     }
 
-    public virtual J? VisitGotoStatement(Cs.GotoStatement gotoStatement, P p)
+    public virtual J? VisitGotoStatement(Cs.GotoStatement node, P p)
     {
-        gotoStatement = gotoStatement.WithPrefix(VisitSpace(gotoStatement.Prefix, Space.Location.GOTO_STATEMENT_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(gotoStatement, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.GOTO_STATEMENT_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.GotoStatement)
         {
             return tempStatement;
         }
-        gotoStatement = (Cs.GotoStatement) tempStatement;
-        gotoStatement = gotoStatement.WithMarkers(VisitMarkers(gotoStatement.Markers, p));
-        gotoStatement = gotoStatement.WithCaseOrDefaultKeyword(VisitAndCast<Cs.Keyword>(gotoStatement.CaseOrDefaultKeyword, p));
-        gotoStatement = gotoStatement.WithTarget(VisitAndCast<Expression>(gotoStatement.Target, p));
-        return gotoStatement;
+        node = (Cs.GotoStatement) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithCaseOrDefaultKeyword(VisitAndCast<Cs.Keyword>(node.CaseOrDefaultKeyword, p));
+        node = node.WithTarget(VisitAndCast<Expression>(node.Target, p));
+        return node;
     }
 
-    public virtual J? VisitEventDeclaration(Cs.EventDeclaration eventDeclaration, P p)
+    public virtual J? VisitEventDeclaration(Cs.EventDeclaration node, P p)
     {
-        eventDeclaration = eventDeclaration.WithPrefix(VisitSpace(eventDeclaration.Prefix, Space.Location.EVENT_DECLARATION_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(eventDeclaration, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.EVENT_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.EventDeclaration)
         {
             return tempStatement;
         }
-        eventDeclaration = (Cs.EventDeclaration) tempStatement;
-        eventDeclaration = eventDeclaration.WithMarkers(VisitMarkers(eventDeclaration.Markers, p));
-        eventDeclaration = eventDeclaration.WithAttributeLists(eventDeclaration.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
-        eventDeclaration = eventDeclaration.WithModifiers(eventDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        eventDeclaration = eventDeclaration.Padding.WithTypeExpression(VisitLeftPadded(eventDeclaration.Padding.TypeExpression, JLeftPadded.Location.EVENT_DECLARATION_TYPE_EXPRESSION, p)!);
-        eventDeclaration = eventDeclaration.Padding.WithInterfaceSpecifier(eventDeclaration.Padding.InterfaceSpecifier == null ? null : VisitRightPadded(eventDeclaration.Padding.InterfaceSpecifier, JRightPadded.Location.EVENT_DECLARATION_INTERFACE_SPECIFIER, p));
-        eventDeclaration = eventDeclaration.WithName(VisitAndCast<J.Identifier>(eventDeclaration.Name, p)!);
-        eventDeclaration = eventDeclaration.Padding.WithAccessors(eventDeclaration.Padding.Accessors == null ? null : VisitContainer(eventDeclaration.Padding.Accessors, JContainer.Location.EVENT_DECLARATION_ACCESSORS, p));
-        return eventDeclaration;
+        node = (Cs.EventDeclaration) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithAttributeLists(node.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
+        node = node.WithModifiers(node.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
+        node = node.Padding.WithTypeExpression(VisitLeftPadded(node.Padding.TypeExpression, JLeftPadded.Location.EVENT_DECLARATION_TYPE_EXPRESSION, p)!);
+        node = node.Padding.WithInterfaceSpecifier(node.Padding.InterfaceSpecifier == null ? null : VisitRightPadded(node.Padding.InterfaceSpecifier, JRightPadded.Location.EVENT_DECLARATION_INTERFACE_SPECIFIER, p));
+        node = node.WithName(VisitAndCast<J.Identifier>(node.Name, p)!);
+        node = node.Padding.WithAccessors(node.Padding.Accessors == null ? null : VisitContainer(node.Padding.Accessors, JContainer.Location.EVENT_DECLARATION_ACCESSORS, p));
+        return node;
     }
 
-    public virtual J? VisitBinary(Cs.Binary binary, P p)
+    public virtual J? VisitBinary(Cs.Binary node, P p)
     {
-        binary = binary.WithPrefix(VisitSpace(binary.Prefix, Space.Location.BINARY_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(binary, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.BINARY_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.Binary)
         {
             return tempExpression;
         }
-        binary = (Cs.Binary) tempExpression;
-        binary = binary.WithMarkers(VisitMarkers(binary.Markers, p));
-        binary = binary.WithLeft(VisitAndCast<Expression>(binary.Left, p)!);
-        binary = binary.Padding.WithOperator(VisitLeftPadded(binary.Padding.Operator, JLeftPadded.Location.BINARY_OPERATOR, p)!);
-        binary = binary.WithRight(VisitAndCast<Expression>(binary.Right, p)!);
-        return binary;
+        node = (Cs.Binary) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithLeft(VisitAndCast<Expression>(node.Left, p)!);
+        node = node.Padding.WithOperator(VisitLeftPadded(node.Padding.Operator, JLeftPadded.Location.BINARY_OPERATOR, p)!);
+        node = node.WithRight(VisitAndCast<Expression>(node.Right, p)!);
+        return node;
     }
 
-    public virtual J? VisitBlockScopeNamespaceDeclaration(Cs.BlockScopeNamespaceDeclaration blockScopeNamespaceDeclaration, P p)
+    public virtual J? VisitBlockScopeNamespaceDeclaration(Cs.BlockScopeNamespaceDeclaration node, P p)
     {
-        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.WithPrefix(VisitSpace(blockScopeNamespaceDeclaration.Prefix, Space.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(blockScopeNamespaceDeclaration, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.BlockScopeNamespaceDeclaration)
         {
             return tempStatement;
         }
-        blockScopeNamespaceDeclaration = (Cs.BlockScopeNamespaceDeclaration) tempStatement;
-        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.WithMarkers(VisitMarkers(blockScopeNamespaceDeclaration.Markers, p));
-        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithName(VisitRightPadded(blockScopeNamespaceDeclaration.Padding.Name, JRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_NAME, p)!);
-        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithExterns(blockScopeNamespaceDeclaration.Padding.Externs.Map(el => VisitRightPadded(el, JRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_EXTERNS, p)));
-        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithUsings(blockScopeNamespaceDeclaration.Padding.Usings.Map(el => VisitRightPadded(el, JRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_USINGS, p)));
-        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.Padding.WithMembers(blockScopeNamespaceDeclaration.Padding.Members.Map(el => VisitRightPadded(el, JRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_MEMBERS, p)));
-        blockScopeNamespaceDeclaration = blockScopeNamespaceDeclaration.WithEnd(VisitSpace(blockScopeNamespaceDeclaration.End, Space.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_END, p)!);
-        return blockScopeNamespaceDeclaration;
+        node = (Cs.BlockScopeNamespaceDeclaration) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithName(VisitRightPadded(node.Padding.Name, JRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_NAME, p)!);
+        node = node.Padding.WithExterns(node.Padding.Externs.Map(el => VisitRightPadded(el, JRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_EXTERNS, p)));
+        node = node.Padding.WithUsings(node.Padding.Usings.Map(el => VisitRightPadded(el, JRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_USINGS, p)));
+        node = node.Padding.WithMembers(node.Padding.Members.Map(el => VisitRightPadded(el, JRightPadded.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_MEMBERS, p)));
+        node = node.WithEnd(VisitSpace(node.End, Space.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_END, p)!);
+        return node;
     }
 
-    public virtual J? VisitCollectionExpression(Cs.CollectionExpression collectionExpression, P p)
+    public virtual J? VisitCollectionExpression(Cs.CollectionExpression node, P p)
     {
-        collectionExpression = collectionExpression.WithPrefix(VisitSpace(collectionExpression.Prefix, Space.Location.COLLECTION_EXPRESSION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(collectionExpression, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.COLLECTION_EXPRESSION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.CollectionExpression)
         {
             return tempExpression;
         }
-        collectionExpression = (Cs.CollectionExpression) tempExpression;
-        collectionExpression = collectionExpression.WithMarkers(VisitMarkers(collectionExpression.Markers, p));
-        collectionExpression = collectionExpression.Padding.WithElements(collectionExpression.Padding.Elements.Map(el => VisitRightPadded(el, JRightPadded.Location.COLLECTION_EXPRESSION_ELEMENTS, p)));
-        return collectionExpression;
+        node = (Cs.CollectionExpression) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithElements(node.Padding.Elements.Map(el => VisitRightPadded(el, JRightPadded.Location.COLLECTION_EXPRESSION_ELEMENTS, p)));
+        return node;
     }
 
-    public virtual J? VisitExpressionStatement(Cs.ExpressionStatement expressionStatement, P p)
+    public virtual J? VisitExpressionStatement(Cs.ExpressionStatement node, P p)
     {
-        expressionStatement = expressionStatement.WithPrefix(VisitSpace(expressionStatement.Prefix, Space.Location.EXPRESSION_STATEMENT_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(expressionStatement, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.EXPRESSION_STATEMENT_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.ExpressionStatement)
         {
             return tempStatement;
         }
-        expressionStatement = (Cs.ExpressionStatement) tempStatement;
-        expressionStatement = expressionStatement.WithMarkers(VisitMarkers(expressionStatement.Markers, p));
-        expressionStatement = expressionStatement.Padding.WithExpression(VisitRightPadded(expressionStatement.Padding.Expression, JRightPadded.Location.EXPRESSION_STATEMENT_EXPRESSION, p)!);
-        return expressionStatement;
+        node = (Cs.ExpressionStatement) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithExpression(VisitRightPadded(node.Padding.Expression, JRightPadded.Location.EXPRESSION_STATEMENT_EXPRESSION, p)!);
+        return node;
     }
 
-    public virtual J? VisitExternAlias(Cs.ExternAlias externAlias, P p)
+    public virtual J? VisitExternAlias(Cs.ExternAlias node, P p)
     {
-        externAlias = externAlias.WithPrefix(VisitSpace(externAlias.Prefix, Space.Location.EXTERN_ALIAS_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(externAlias, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.EXTERN_ALIAS_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.ExternAlias)
         {
             return tempStatement;
         }
-        externAlias = (Cs.ExternAlias) tempStatement;
-        externAlias = externAlias.WithMarkers(VisitMarkers(externAlias.Markers, p));
-        externAlias = externAlias.Padding.WithIdentifier(VisitLeftPadded(externAlias.Padding.Identifier, JLeftPadded.Location.EXTERN_ALIAS_IDENTIFIER, p)!);
-        return externAlias;
+        node = (Cs.ExternAlias) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithIdentifier(VisitLeftPadded(node.Padding.Identifier, JLeftPadded.Location.EXTERN_ALIAS_IDENTIFIER, p)!);
+        return node;
     }
 
-    public virtual J? VisitFileScopeNamespaceDeclaration(Cs.FileScopeNamespaceDeclaration fileScopeNamespaceDeclaration, P p)
+    public virtual J? VisitFileScopeNamespaceDeclaration(Cs.FileScopeNamespaceDeclaration node, P p)
     {
-        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.WithPrefix(VisitSpace(fileScopeNamespaceDeclaration.Prefix, Space.Location.FILE_SCOPE_NAMESPACE_DECLARATION_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(fileScopeNamespaceDeclaration, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.FILE_SCOPE_NAMESPACE_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.FileScopeNamespaceDeclaration)
         {
             return tempStatement;
         }
-        fileScopeNamespaceDeclaration = (Cs.FileScopeNamespaceDeclaration) tempStatement;
-        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.WithMarkers(VisitMarkers(fileScopeNamespaceDeclaration.Markers, p));
-        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithName(VisitRightPadded(fileScopeNamespaceDeclaration.Padding.Name, JRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_NAME, p)!);
-        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithExterns(fileScopeNamespaceDeclaration.Padding.Externs.Map(el => VisitRightPadded(el, JRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_EXTERNS, p)));
-        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithUsings(fileScopeNamespaceDeclaration.Padding.Usings.Map(el => VisitRightPadded(el, JRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_USINGS, p)));
-        fileScopeNamespaceDeclaration = fileScopeNamespaceDeclaration.Padding.WithMembers(fileScopeNamespaceDeclaration.Padding.Members.Map(el => VisitRightPadded(el, JRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_MEMBERS, p)));
-        return fileScopeNamespaceDeclaration;
+        node = (Cs.FileScopeNamespaceDeclaration) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithName(VisitRightPadded(node.Padding.Name, JRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_NAME, p)!);
+        node = node.Padding.WithExterns(node.Padding.Externs.Map(el => VisitRightPadded(el, JRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_EXTERNS, p)));
+        node = node.Padding.WithUsings(node.Padding.Usings.Map(el => VisitRightPadded(el, JRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_USINGS, p)));
+        node = node.Padding.WithMembers(node.Padding.Members.Map(el => VisitRightPadded(el, JRightPadded.Location.FILE_SCOPE_NAMESPACE_DECLARATION_MEMBERS, p)));
+        return node;
     }
 
-    public virtual J? VisitInterpolatedString(Cs.InterpolatedString interpolatedString, P p)
+    public virtual J? VisitInterpolatedString(Cs.InterpolatedString node, P p)
     {
-        interpolatedString = interpolatedString.WithPrefix(VisitSpace(interpolatedString.Prefix, Space.Location.INTERPOLATED_STRING_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(interpolatedString, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.INTERPOLATED_STRING_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.InterpolatedString)
         {
             return tempExpression;
         }
-        interpolatedString = (Cs.InterpolatedString) tempExpression;
-        interpolatedString = interpolatedString.WithMarkers(VisitMarkers(interpolatedString.Markers, p));
-        interpolatedString = interpolatedString.Padding.WithParts(interpolatedString.Padding.Parts.Map(el => VisitRightPadded(el, JRightPadded.Location.INTERPOLATED_STRING_PARTS, p)));
-        return interpolatedString;
+        node = (Cs.InterpolatedString) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithParts(node.Padding.Parts.Map(el => VisitRightPadded(el, JRightPadded.Location.INTERPOLATED_STRING_PARTS, p)));
+        return node;
     }
 
-    public virtual J? VisitInterpolation(Cs.Interpolation interpolation, P p)
+    public virtual J? VisitInterpolation(Cs.Interpolation node, P p)
     {
-        interpolation = interpolation.WithPrefix(VisitSpace(interpolation.Prefix, Space.Location.INTERPOLATION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(interpolation, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.INTERPOLATION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.Interpolation)
         {
             return tempExpression;
         }
-        interpolation = (Cs.Interpolation) tempExpression;
-        interpolation = interpolation.WithMarkers(VisitMarkers(interpolation.Markers, p));
-        interpolation = interpolation.Padding.WithExpression(VisitRightPadded(interpolation.Padding.Expression, JRightPadded.Location.INTERPOLATION_EXPRESSION, p)!);
-        interpolation = interpolation.Padding.WithAlignment(interpolation.Padding.Alignment == null ? null : VisitRightPadded(interpolation.Padding.Alignment, JRightPadded.Location.INTERPOLATION_ALIGNMENT, p));
-        interpolation = interpolation.Padding.WithFormat(interpolation.Padding.Format == null ? null : VisitRightPadded(interpolation.Padding.Format, JRightPadded.Location.INTERPOLATION_FORMAT, p));
-        return interpolation;
+        node = (Cs.Interpolation) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithExpression(VisitRightPadded(node.Padding.Expression, JRightPadded.Location.INTERPOLATION_EXPRESSION, p)!);
+        node = node.Padding.WithAlignment(node.Padding.Alignment == null ? null : VisitRightPadded(node.Padding.Alignment, JRightPadded.Location.INTERPOLATION_ALIGNMENT, p));
+        node = node.Padding.WithFormat(node.Padding.Format == null ? null : VisitRightPadded(node.Padding.Format, JRightPadded.Location.INTERPOLATION_FORMAT, p));
+        return node;
     }
 
-    public virtual J? VisitNullSafeExpression(Cs.NullSafeExpression nullSafeExpression, P p)
+    public virtual J? VisitNullSafeExpression(Cs.NullSafeExpression node, P p)
     {
-        nullSafeExpression = nullSafeExpression.WithPrefix(VisitSpace(nullSafeExpression.Prefix, Space.Location.NULL_SAFE_EXPRESSION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(nullSafeExpression, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.NULL_SAFE_EXPRESSION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.NullSafeExpression)
         {
             return tempExpression;
         }
-        nullSafeExpression = (Cs.NullSafeExpression) tempExpression;
-        nullSafeExpression = nullSafeExpression.WithMarkers(VisitMarkers(nullSafeExpression.Markers, p));
-        nullSafeExpression = nullSafeExpression.Padding.WithExpression(VisitRightPadded(nullSafeExpression.Padding.Expression, JRightPadded.Location.NULL_SAFE_EXPRESSION_EXPRESSION, p)!);
-        return nullSafeExpression;
+        node = (Cs.NullSafeExpression) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithExpression(VisitRightPadded(node.Padding.Expression, JRightPadded.Location.NULL_SAFE_EXPRESSION_EXPRESSION, p)!);
+        return node;
     }
 
-    public virtual J? VisitStatementExpression(Cs.StatementExpression statementExpression, P p)
+    public virtual J? VisitStatementExpression(Cs.StatementExpression node, P p)
     {
-        statementExpression = statementExpression.WithPrefix(VisitSpace(statementExpression.Prefix, Space.Location.STATEMENT_EXPRESSION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(statementExpression, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.STATEMENT_EXPRESSION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.StatementExpression)
         {
             return tempExpression;
         }
-        statementExpression = (Cs.StatementExpression) tempExpression;
-        statementExpression = statementExpression.WithMarkers(VisitMarkers(statementExpression.Markers, p));
-        statementExpression = statementExpression.WithStatement(VisitAndCast<Statement>(statementExpression.Statement, p)!);
-        return statementExpression;
+        node = (Cs.StatementExpression) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithStatement(VisitAndCast<Statement>(node.Statement, p)!);
+        return node;
     }
 
-    public virtual J? VisitUsingDirective(Cs.UsingDirective usingDirective, P p)
+    public virtual J? VisitUsingDirective(Cs.UsingDirective node, P p)
     {
-        usingDirective = usingDirective.WithPrefix(VisitSpace(usingDirective.Prefix, Space.Location.USING_DIRECTIVE_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(usingDirective, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.USING_DIRECTIVE_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.UsingDirective)
         {
             return tempStatement;
         }
-        usingDirective = (Cs.UsingDirective) tempStatement;
-        usingDirective = usingDirective.WithMarkers(VisitMarkers(usingDirective.Markers, p));
-        usingDirective = usingDirective.Padding.WithGlobal(VisitRightPadded(usingDirective.Padding.Global, JRightPadded.Location.USING_DIRECTIVE_GLOBAL, p)!);
-        usingDirective = usingDirective.Padding.WithStatic(VisitLeftPadded(usingDirective.Padding.Static, JLeftPadded.Location.USING_DIRECTIVE_STATIC, p)!);
-        usingDirective = usingDirective.Padding.WithUnsafe(VisitLeftPadded(usingDirective.Padding.Unsafe, JLeftPadded.Location.USING_DIRECTIVE_UNSAFE, p)!);
-        usingDirective = usingDirective.Padding.WithAlias(usingDirective.Padding.Alias == null ? null : VisitRightPadded(usingDirective.Padding.Alias, JRightPadded.Location.USING_DIRECTIVE_ALIAS, p));
-        usingDirective = usingDirective.WithNamespaceOrType(VisitAndCast<TypeTree>(usingDirective.NamespaceOrType, p)!);
-        return usingDirective;
+        node = (Cs.UsingDirective) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithGlobal(VisitRightPadded(node.Padding.Global, JRightPadded.Location.USING_DIRECTIVE_GLOBAL, p)!);
+        node = node.Padding.WithStatic(VisitLeftPadded(node.Padding.Static, JLeftPadded.Location.USING_DIRECTIVE_STATIC, p)!);
+        node = node.Padding.WithUnsafe(VisitLeftPadded(node.Padding.Unsafe, JLeftPadded.Location.USING_DIRECTIVE_UNSAFE, p)!);
+        node = node.Padding.WithAlias(node.Padding.Alias == null ? null : VisitRightPadded(node.Padding.Alias, JRightPadded.Location.USING_DIRECTIVE_ALIAS, p));
+        node = node.WithNamespaceOrType(VisitAndCast<TypeTree>(node.NamespaceOrType, p)!);
+        return node;
     }
 
-    public virtual J? VisitPropertyDeclaration(Cs.PropertyDeclaration propertyDeclaration, P p)
+    public virtual J? VisitPropertyDeclaration(Cs.PropertyDeclaration node, P p)
     {
-        propertyDeclaration = propertyDeclaration.WithPrefix(VisitSpace(propertyDeclaration.Prefix, Space.Location.PROPERTY_DECLARATION_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(propertyDeclaration, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.PROPERTY_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.PropertyDeclaration)
         {
             return tempStatement;
         }
-        propertyDeclaration = (Cs.PropertyDeclaration) tempStatement;
-        propertyDeclaration = propertyDeclaration.WithMarkers(VisitMarkers(propertyDeclaration.Markers, p));
-        propertyDeclaration = propertyDeclaration.WithAttributeLists(propertyDeclaration.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
-        propertyDeclaration = propertyDeclaration.WithModifiers(propertyDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        propertyDeclaration = propertyDeclaration.WithTypeExpression(VisitAndCast<TypeTree>(propertyDeclaration.TypeExpression, p)!);
-        propertyDeclaration = propertyDeclaration.Padding.WithInterfaceSpecifier(propertyDeclaration.Padding.InterfaceSpecifier == null ? null : VisitRightPadded(propertyDeclaration.Padding.InterfaceSpecifier, JRightPadded.Location.PROPERTY_DECLARATION_INTERFACE_SPECIFIER, p));
-        propertyDeclaration = propertyDeclaration.WithName(VisitAndCast<J.Identifier>(propertyDeclaration.Name, p)!);
-        propertyDeclaration = propertyDeclaration.WithAccessors(VisitAndCast<J.Block>(propertyDeclaration.Accessors, p));
-        propertyDeclaration = propertyDeclaration.WithExpressionBody(VisitAndCast<Cs.ArrowExpressionClause>(propertyDeclaration.ExpressionBody, p));
-        propertyDeclaration = propertyDeclaration.Padding.WithInitializer(propertyDeclaration.Padding.Initializer == null ? null : VisitLeftPadded(propertyDeclaration.Padding.Initializer, JLeftPadded.Location.PROPERTY_DECLARATION_INITIALIZER, p));
-        return propertyDeclaration;
+        node = (Cs.PropertyDeclaration) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithAttributeLists(node.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
+        node = node.WithModifiers(node.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
+        node = node.WithTypeExpression(VisitAndCast<TypeTree>(node.TypeExpression, p)!);
+        node = node.Padding.WithInterfaceSpecifier(node.Padding.InterfaceSpecifier == null ? null : VisitRightPadded(node.Padding.InterfaceSpecifier, JRightPadded.Location.PROPERTY_DECLARATION_INTERFACE_SPECIFIER, p));
+        node = node.WithName(VisitAndCast<J.Identifier>(node.Name, p)!);
+        node = node.WithAccessors(VisitAndCast<J.Block>(node.Accessors, p));
+        node = node.WithExpressionBody(VisitAndCast<Cs.ArrowExpressionClause>(node.ExpressionBody, p));
+        node = node.Padding.WithInitializer(node.Padding.Initializer == null ? null : VisitLeftPadded(node.Padding.Initializer, JLeftPadded.Location.PROPERTY_DECLARATION_INITIALIZER, p));
+        return node;
     }
 
-    public virtual J? VisitKeyword(Cs.Keyword keyword, P p)
+    public virtual J? VisitKeyword(Cs.Keyword node, P p)
     {
-        keyword = keyword.WithPrefix(VisitSpace(keyword.Prefix, Space.Location.KEYWORD_PREFIX, p)!);
-        keyword = keyword.WithMarkers(VisitMarkers(keyword.Markers, p));
-        return keyword;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.KEYWORD_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        return node;
     }
 
-    public virtual J? VisitLambda(Cs.Lambda lambda, P p)
+    public virtual J? VisitLambda(Cs.Lambda node, P p)
     {
-        lambda = lambda.WithPrefix(VisitSpace(lambda.Prefix, Space.Location.LAMBDA_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(lambda, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.LAMBDA_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.Lambda)
         {
             return tempStatement;
         }
-        lambda = (Cs.Lambda) tempStatement;
-        var tempExpression = (Expression) VisitExpression(lambda, p);
+        node = (Cs.Lambda) tempStatement;
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.Lambda)
         {
             return tempExpression;
         }
-        lambda = (Cs.Lambda) tempExpression;
-        lambda = lambda.WithMarkers(VisitMarkers(lambda.Markers, p));
-        lambda = lambda.WithLambdaExpression(VisitAndCast<J.Lambda>(lambda.LambdaExpression, p)!);
-        lambda = lambda.WithReturnType(VisitAndCast<TypeTree>(lambda.ReturnType, p));
-        lambda = lambda.WithModifiers(lambda.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        return lambda;
+        node = (Cs.Lambda) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithLambdaExpression(VisitAndCast<J.Lambda>(node.LambdaExpression, p)!);
+        node = node.WithReturnType(VisitAndCast<TypeTree>(node.ReturnType, p));
+        node = node.WithModifiers(node.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
+        return node;
     }
 
-    public virtual J? VisitClassDeclaration(Cs.ClassDeclaration classDeclaration, P p)
+    public virtual J? VisitClassDeclaration(Cs.ClassDeclaration node, P p)
     {
-        classDeclaration = classDeclaration.WithPrefix(VisitSpace(classDeclaration.Prefix, Space.Location.CLASS_DECLARATION_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(classDeclaration, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.CLASS_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.ClassDeclaration)
         {
             return tempStatement;
         }
-        classDeclaration = (Cs.ClassDeclaration) tempStatement;
-        classDeclaration = classDeclaration.WithMarkers(VisitMarkers(classDeclaration.Markers, p));
-        classDeclaration = classDeclaration.WithAttributeList(classDeclaration.AttributeList.Map(el => (Cs.AttributeList?)Visit(el, p)));
-        classDeclaration = classDeclaration.WithModifiers(classDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        classDeclaration = classDeclaration.Padding.WithKind(VisitAndCast<J.ClassDeclaration.Kind>(classDeclaration.Padding.Kind, p)!);
-        classDeclaration = classDeclaration.WithName(VisitAndCast<J.Identifier>(classDeclaration.Name, p)!);
-        classDeclaration = classDeclaration.Padding.WithTypeParameters(classDeclaration.Padding.TypeParameters == null ? null : VisitContainer(classDeclaration.Padding.TypeParameters, JContainer.Location.CLASS_DECLARATION_TYPE_PARAMETERS, p));
-        classDeclaration = classDeclaration.Padding.WithPrimaryConstructor(classDeclaration.Padding.PrimaryConstructor == null ? null : VisitContainer(classDeclaration.Padding.PrimaryConstructor, JContainer.Location.CLASS_DECLARATION_PRIMARY_CONSTRUCTOR, p));
-        classDeclaration = classDeclaration.Padding.WithExtendings(classDeclaration.Padding.Extendings == null ? null : VisitLeftPadded(classDeclaration.Padding.Extendings, JLeftPadded.Location.CLASS_DECLARATION_EXTENDINGS, p));
-        classDeclaration = classDeclaration.Padding.WithImplementings(classDeclaration.Padding.Implementings == null ? null : VisitContainer(classDeclaration.Padding.Implementings, JContainer.Location.CLASS_DECLARATION_IMPLEMENTINGS, p));
-        classDeclaration = classDeclaration.WithBody(VisitAndCast<J.Block>(classDeclaration.Body, p));
-        classDeclaration = classDeclaration.Padding.WithTypeParameterConstraintClauses(classDeclaration.Padding.TypeParameterConstraintClauses == null ? null : VisitContainer(classDeclaration.Padding.TypeParameterConstraintClauses, JContainer.Location.CLASS_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, p));
-        return classDeclaration;
+        node = (Cs.ClassDeclaration) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithAttributeList(node.AttributeList.Map(el => (Cs.AttributeList?)Visit(el, p)));
+        node = node.WithModifiers(node.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
+        node = node.Padding.WithKind(VisitAndCast<J.ClassDeclaration.Kind>(node.Padding.Kind, p)!);
+        node = node.WithName(VisitAndCast<J.Identifier>(node.Name, p)!);
+        node = node.Padding.WithTypeParameters(node.Padding.TypeParameters == null ? null : VisitContainer(node.Padding.TypeParameters, JContainer.Location.CLASS_DECLARATION_TYPE_PARAMETERS, p));
+        node = node.Padding.WithPrimaryConstructor(node.Padding.PrimaryConstructor == null ? null : VisitContainer(node.Padding.PrimaryConstructor, JContainer.Location.CLASS_DECLARATION_PRIMARY_CONSTRUCTOR, p));
+        node = node.Padding.WithExtendings(node.Padding.Extendings == null ? null : VisitLeftPadded(node.Padding.Extendings, JLeftPadded.Location.CLASS_DECLARATION_EXTENDINGS, p));
+        node = node.Padding.WithImplementings(node.Padding.Implementings == null ? null : VisitContainer(node.Padding.Implementings, JContainer.Location.CLASS_DECLARATION_IMPLEMENTINGS, p));
+        node = node.WithBody(VisitAndCast<J.Block>(node.Body, p));
+        node = node.Padding.WithTypeParameterConstraintClauses(node.Padding.TypeParameterConstraintClauses == null ? null : VisitContainer(node.Padding.TypeParameterConstraintClauses, JContainer.Location.CLASS_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, p));
+        return node;
     }
 
-    public virtual J? VisitMethodDeclaration(Cs.MethodDeclaration methodDeclaration, P p)
+    public virtual J? VisitMethodDeclaration(Cs.MethodDeclaration node, P p)
     {
-        methodDeclaration = methodDeclaration.WithPrefix(VisitSpace(methodDeclaration.Prefix, Space.Location.METHOD_DECLARATION_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(methodDeclaration, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.METHOD_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.MethodDeclaration)
         {
             return tempStatement;
         }
-        methodDeclaration = (Cs.MethodDeclaration) tempStatement;
-        methodDeclaration = methodDeclaration.WithMarkers(VisitMarkers(methodDeclaration.Markers, p));
-        methodDeclaration = methodDeclaration.WithAttributes(methodDeclaration.Attributes.Map(el => (Cs.AttributeList?)Visit(el, p)));
-        methodDeclaration = methodDeclaration.WithModifiers(methodDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        methodDeclaration = methodDeclaration.Padding.WithTypeParameters(methodDeclaration.Padding.TypeParameters == null ? null : VisitContainer(methodDeclaration.Padding.TypeParameters, JContainer.Location.METHOD_DECLARATION_TYPE_PARAMETERS, p));
-        methodDeclaration = methodDeclaration.WithReturnTypeExpression(VisitAndCast<TypeTree>(methodDeclaration.ReturnTypeExpression, p)!);
-        methodDeclaration = methodDeclaration.Padding.WithExplicitInterfaceSpecifier(methodDeclaration.Padding.ExplicitInterfaceSpecifier == null ? null : VisitRightPadded(methodDeclaration.Padding.ExplicitInterfaceSpecifier, JRightPadded.Location.METHOD_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, p));
-        methodDeclaration = methodDeclaration.WithName(VisitAndCast<J.Identifier>(methodDeclaration.Name, p)!);
-        methodDeclaration = methodDeclaration.Padding.WithParameters(VisitContainer(methodDeclaration.Padding.Parameters, JContainer.Location.METHOD_DECLARATION_PARAMETERS, p)!);
-        methodDeclaration = methodDeclaration.WithBody(VisitAndCast<Statement>(methodDeclaration.Body, p));
-        methodDeclaration = methodDeclaration.Padding.WithTypeParameterConstraintClauses(VisitContainer(methodDeclaration.Padding.TypeParameterConstraintClauses, JContainer.Location.METHOD_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, p)!);
-        return methodDeclaration;
+        node = (Cs.MethodDeclaration) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithAttributes(node.Attributes.Map(el => (Cs.AttributeList?)Visit(el, p)));
+        node = node.WithModifiers(node.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
+        node = node.Padding.WithTypeParameters(node.Padding.TypeParameters == null ? null : VisitContainer(node.Padding.TypeParameters, JContainer.Location.METHOD_DECLARATION_TYPE_PARAMETERS, p));
+        node = node.WithReturnTypeExpression(VisitAndCast<TypeTree>(node.ReturnTypeExpression, p)!);
+        node = node.Padding.WithExplicitInterfaceSpecifier(node.Padding.ExplicitInterfaceSpecifier == null ? null : VisitRightPadded(node.Padding.ExplicitInterfaceSpecifier, JRightPadded.Location.METHOD_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, p));
+        node = node.WithName(VisitAndCast<J.Identifier>(node.Name, p)!);
+        node = node.Padding.WithParameters(VisitContainer(node.Padding.Parameters, JContainer.Location.METHOD_DECLARATION_PARAMETERS, p)!);
+        node = node.WithBody(VisitAndCast<Statement>(node.Body, p));
+        node = node.Padding.WithTypeParameterConstraintClauses(VisitContainer(node.Padding.TypeParameterConstraintClauses, JContainer.Location.METHOD_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, p)!);
+        return node;
     }
 
-    public virtual J? VisitUsingStatement(Cs.UsingStatement usingStatement, P p)
+    public virtual J? VisitUsingStatement(Cs.UsingStatement node, P p)
     {
-        usingStatement = usingStatement.WithPrefix(VisitSpace(usingStatement.Prefix, Space.Location.USING_STATEMENT_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(usingStatement, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.USING_STATEMENT_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.UsingStatement)
         {
             return tempStatement;
         }
-        usingStatement = (Cs.UsingStatement) tempStatement;
-        usingStatement = usingStatement.WithMarkers(VisitMarkers(usingStatement.Markers, p));
-        usingStatement = usingStatement.WithAwaitKeyword(VisitAndCast<Cs.Keyword>(usingStatement.AwaitKeyword, p));
-        usingStatement = usingStatement.Padding.WithExpression(VisitLeftPadded(usingStatement.Padding.Expression, JLeftPadded.Location.USING_STATEMENT_EXPRESSION, p)!);
-        usingStatement = usingStatement.WithStatement(VisitAndCast<Statement>(usingStatement.Statement, p)!);
-        return usingStatement;
+        node = (Cs.UsingStatement) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithAwaitKeyword(VisitAndCast<Cs.Keyword>(node.AwaitKeyword, p));
+        node = node.Padding.WithExpression(VisitLeftPadded(node.Padding.Expression, JLeftPadded.Location.USING_STATEMENT_EXPRESSION, p)!);
+        node = node.WithStatement(VisitAndCast<Statement>(node.Statement, p)!);
+        return node;
     }
 
-    public virtual J? VisitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause typeParameterConstraintClause, P p)
+    public virtual J? VisitTypeParameterConstraintClause(Cs.TypeParameterConstraintClause node, P p)
     {
-        typeParameterConstraintClause = typeParameterConstraintClause.WithPrefix(VisitSpace(typeParameterConstraintClause.Prefix, Space.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_PREFIX, p)!);
-        typeParameterConstraintClause = typeParameterConstraintClause.WithMarkers(VisitMarkers(typeParameterConstraintClause.Markers, p));
-        typeParameterConstraintClause = typeParameterConstraintClause.Padding.WithTypeParameter(VisitRightPadded(typeParameterConstraintClause.Padding.TypeParameter, JRightPadded.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER, p)!);
-        typeParameterConstraintClause = typeParameterConstraintClause.Padding.WithTypeParameterConstraints(VisitContainer(typeParameterConstraintClause.Padding.TypeParameterConstraints, JContainer.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER_CONSTRAINTS, p)!);
-        return typeParameterConstraintClause;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithTypeParameter(VisitRightPadded(node.Padding.TypeParameter, JRightPadded.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER, p)!);
+        node = node.Padding.WithTypeParameterConstraints(VisitContainer(node.Padding.TypeParameterConstraints, JContainer.Location.TYPE_PARAMETER_CONSTRAINT_CLAUSE_TYPE_PARAMETER_CONSTRAINTS, p)!);
+        return node;
     }
 
-    public virtual J? VisitTypeConstraint(Cs.TypeConstraint typeConstraint, P p)
+    public virtual J? VisitTypeConstraint(Cs.TypeConstraint node, P p)
     {
-        typeConstraint = typeConstraint.WithPrefix(VisitSpace(typeConstraint.Prefix, Space.Location.TYPE_CONSTRAINT_PREFIX, p)!);
-        typeConstraint = typeConstraint.WithMarkers(VisitMarkers(typeConstraint.Markers, p));
-        typeConstraint = typeConstraint.WithTypeExpression(VisitAndCast<TypeTree>(typeConstraint.TypeExpression, p)!);
-        return typeConstraint;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.TYPE_CONSTRAINT_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithTypeExpression(VisitAndCast<TypeTree>(node.TypeExpression, p)!);
+        return node;
     }
 
-    public virtual J? VisitAllowsConstraintClause(Cs.AllowsConstraintClause allowsConstraintClause, P p)
+    public virtual J? VisitAllowsConstraintClause(Cs.AllowsConstraintClause node, P p)
     {
-        allowsConstraintClause = allowsConstraintClause.WithPrefix(VisitSpace(allowsConstraintClause.Prefix, Space.Location.ALLOWS_CONSTRAINT_CLAUSE_PREFIX, p)!);
-        allowsConstraintClause = allowsConstraintClause.WithMarkers(VisitMarkers(allowsConstraintClause.Markers, p));
-        allowsConstraintClause = allowsConstraintClause.Padding.WithExpressions(VisitContainer(allowsConstraintClause.Padding.Expressions, JContainer.Location.ALLOWS_CONSTRAINT_CLAUSE_EXPRESSIONS, p)!);
-        return allowsConstraintClause;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.ALLOWS_CONSTRAINT_CLAUSE_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithExpressions(VisitContainer(node.Padding.Expressions, JContainer.Location.ALLOWS_CONSTRAINT_CLAUSE_EXPRESSIONS, p)!);
+        return node;
     }
 
-    public virtual J? VisitRefStructConstraint(Cs.RefStructConstraint refStructConstraint, P p)
+    public virtual J? VisitRefStructConstraint(Cs.RefStructConstraint node, P p)
     {
-        refStructConstraint = refStructConstraint.WithPrefix(VisitSpace(refStructConstraint.Prefix, Space.Location.REF_STRUCT_CONSTRAINT_PREFIX, p)!);
-        refStructConstraint = refStructConstraint.WithMarkers(VisitMarkers(refStructConstraint.Markers, p));
-        return refStructConstraint;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.REF_STRUCT_CONSTRAINT_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        return node;
     }
 
-    public virtual J? VisitClassOrStructConstraint(Cs.ClassOrStructConstraint classOrStructConstraint, P p)
+    public virtual J? VisitClassOrStructConstraint(Cs.ClassOrStructConstraint node, P p)
     {
-        classOrStructConstraint = classOrStructConstraint.WithPrefix(VisitSpace(classOrStructConstraint.Prefix, Space.Location.CLASS_OR_STRUCT_CONSTRAINT_PREFIX, p)!);
-        classOrStructConstraint = classOrStructConstraint.WithMarkers(VisitMarkers(classOrStructConstraint.Markers, p));
-        return classOrStructConstraint;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.CLASS_OR_STRUCT_CONSTRAINT_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        return node;
     }
 
-    public virtual J? VisitConstructorConstraint(Cs.ConstructorConstraint constructorConstraint, P p)
+    public virtual J? VisitConstructorConstraint(Cs.ConstructorConstraint node, P p)
     {
-        constructorConstraint = constructorConstraint.WithPrefix(VisitSpace(constructorConstraint.Prefix, Space.Location.CONSTRUCTOR_CONSTRAINT_PREFIX, p)!);
-        constructorConstraint = constructorConstraint.WithMarkers(VisitMarkers(constructorConstraint.Markers, p));
-        return constructorConstraint;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.CONSTRUCTOR_CONSTRAINT_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        return node;
     }
 
-    public virtual J? VisitDefaultConstraint(Cs.DefaultConstraint defaultConstraint, P p)
+    public virtual J? VisitDefaultConstraint(Cs.DefaultConstraint node, P p)
     {
-        defaultConstraint = defaultConstraint.WithPrefix(VisitSpace(defaultConstraint.Prefix, Space.Location.DEFAULT_CONSTRAINT_PREFIX, p)!);
-        defaultConstraint = defaultConstraint.WithMarkers(VisitMarkers(defaultConstraint.Markers, p));
-        return defaultConstraint;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.DEFAULT_CONSTRAINT_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        return node;
     }
 
-    public virtual J? VisitDeclarationExpression(Cs.DeclarationExpression declarationExpression, P p)
+    public virtual J? VisitDeclarationExpression(Cs.DeclarationExpression node, P p)
     {
-        declarationExpression = declarationExpression.WithPrefix(VisitSpace(declarationExpression.Prefix, Space.Location.DECLARATION_EXPRESSION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(declarationExpression, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.DECLARATION_EXPRESSION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.DeclarationExpression)
         {
             return tempExpression;
         }
-        declarationExpression = (Cs.DeclarationExpression) tempExpression;
-        declarationExpression = declarationExpression.WithMarkers(VisitMarkers(declarationExpression.Markers, p));
-        declarationExpression = declarationExpression.WithTypeExpression(VisitAndCast<TypeTree>(declarationExpression.TypeExpression, p));
-        declarationExpression = declarationExpression.WithVariables(VisitAndCast<Cs.VariableDesignation>(declarationExpression.Variables, p)!);
-        return declarationExpression;
+        node = (Cs.DeclarationExpression) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithTypeExpression(VisitAndCast<TypeTree>(node.TypeExpression, p));
+        node = node.WithVariables(VisitAndCast<Cs.VariableDesignation>(node.Variables, p)!);
+        return node;
     }
 
-    public virtual J? VisitSingleVariableDesignation(Cs.SingleVariableDesignation singleVariableDesignation, P p)
+    public virtual J? VisitSingleVariableDesignation(Cs.SingleVariableDesignation node, P p)
     {
-        singleVariableDesignation = singleVariableDesignation.WithPrefix(VisitSpace(singleVariableDesignation.Prefix, Space.Location.SINGLE_VARIABLE_DESIGNATION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(singleVariableDesignation, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.SINGLE_VARIABLE_DESIGNATION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.SingleVariableDesignation)
         {
             return tempExpression;
         }
-        singleVariableDesignation = (Cs.SingleVariableDesignation) tempExpression;
-        singleVariableDesignation = singleVariableDesignation.WithMarkers(VisitMarkers(singleVariableDesignation.Markers, p));
-        singleVariableDesignation = singleVariableDesignation.WithName(VisitAndCast<J.Identifier>(singleVariableDesignation.Name, p)!);
-        return singleVariableDesignation;
+        node = (Cs.SingleVariableDesignation) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithName(VisitAndCast<J.Identifier>(node.Name, p)!);
+        return node;
     }
 
-    public virtual J? VisitParenthesizedVariableDesignation(Cs.ParenthesizedVariableDesignation parenthesizedVariableDesignation, P p)
+    public virtual J? VisitParenthesizedVariableDesignation(Cs.ParenthesizedVariableDesignation node, P p)
     {
-        parenthesizedVariableDesignation = parenthesizedVariableDesignation.WithPrefix(VisitSpace(parenthesizedVariableDesignation.Prefix, Space.Location.PARENTHESIZED_VARIABLE_DESIGNATION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(parenthesizedVariableDesignation, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.PARENTHESIZED_VARIABLE_DESIGNATION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.ParenthesizedVariableDesignation)
         {
             return tempExpression;
         }
-        parenthesizedVariableDesignation = (Cs.ParenthesizedVariableDesignation) tempExpression;
-        parenthesizedVariableDesignation = parenthesizedVariableDesignation.WithMarkers(VisitMarkers(parenthesizedVariableDesignation.Markers, p));
-        parenthesizedVariableDesignation = parenthesizedVariableDesignation.Padding.WithVariables(VisitContainer(parenthesizedVariableDesignation.Padding.Variables, JContainer.Location.PARENTHESIZED_VARIABLE_DESIGNATION_VARIABLES, p)!);
-        return parenthesizedVariableDesignation;
+        node = (Cs.ParenthesizedVariableDesignation) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithVariables(VisitContainer(node.Padding.Variables, JContainer.Location.PARENTHESIZED_VARIABLE_DESIGNATION_VARIABLES, p)!);
+        return node;
     }
 
-    public virtual J? VisitDiscardVariableDesignation(Cs.DiscardVariableDesignation discardVariableDesignation, P p)
+    public virtual J? VisitDiscardVariableDesignation(Cs.DiscardVariableDesignation node, P p)
     {
-        discardVariableDesignation = discardVariableDesignation.WithPrefix(VisitSpace(discardVariableDesignation.Prefix, Space.Location.DISCARD_VARIABLE_DESIGNATION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(discardVariableDesignation, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.DISCARD_VARIABLE_DESIGNATION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.DiscardVariableDesignation)
         {
             return tempExpression;
         }
-        discardVariableDesignation = (Cs.DiscardVariableDesignation) tempExpression;
-        discardVariableDesignation = discardVariableDesignation.WithMarkers(VisitMarkers(discardVariableDesignation.Markers, p));
-        discardVariableDesignation = discardVariableDesignation.WithDiscard(VisitAndCast<J.Identifier>(discardVariableDesignation.Discard, p)!);
-        return discardVariableDesignation;
+        node = (Cs.DiscardVariableDesignation) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithDiscard(VisitAndCast<J.Identifier>(node.Discard, p)!);
+        return node;
     }
 
-    public virtual J? VisitTupleExpression(Cs.TupleExpression tupleExpression, P p)
+    public virtual J? VisitTupleExpression(Cs.TupleExpression node, P p)
     {
-        tupleExpression = tupleExpression.WithPrefix(VisitSpace(tupleExpression.Prefix, Space.Location.TUPLE_EXPRESSION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(tupleExpression, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.TUPLE_EXPRESSION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.TupleExpression)
         {
             return tempExpression;
         }
-        tupleExpression = (Cs.TupleExpression) tempExpression;
-        tupleExpression = tupleExpression.WithMarkers(VisitMarkers(tupleExpression.Markers, p));
-        tupleExpression = tupleExpression.Padding.WithArguments(VisitContainer(tupleExpression.Padding.Arguments, JContainer.Location.TUPLE_EXPRESSION_ARGUMENTS, p)!);
-        return tupleExpression;
+        node = (Cs.TupleExpression) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithArguments(VisitContainer(node.Padding.Arguments, JContainer.Location.TUPLE_EXPRESSION_ARGUMENTS, p)!);
+        return node;
     }
 
-    public virtual J? VisitConstructor(Cs.Constructor constructor, P p)
+    public virtual J? VisitConstructor(Cs.Constructor node, P p)
     {
-        constructor = constructor.WithPrefix(VisitSpace(constructor.Prefix, Space.Location.CONSTRUCTOR_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(constructor, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.CONSTRUCTOR_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.Constructor)
         {
             return tempStatement;
         }
-        constructor = (Cs.Constructor) tempStatement;
-        constructor = constructor.WithMarkers(VisitMarkers(constructor.Markers, p));
-        constructor = constructor.WithInitializer(VisitAndCast<Cs.ConstructorInitializer>(constructor.Initializer, p));
-        constructor = constructor.WithConstructorCore(VisitAndCast<J.MethodDeclaration>(constructor.ConstructorCore, p)!);
-        return constructor;
+        node = (Cs.Constructor) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithInitializer(VisitAndCast<Cs.ConstructorInitializer>(node.Initializer, p));
+        node = node.WithConstructorCore(VisitAndCast<J.MethodDeclaration>(node.ConstructorCore, p)!);
+        return node;
     }
 
-    public virtual J? VisitDestructorDeclaration(Cs.DestructorDeclaration destructorDeclaration, P p)
+    public virtual J? VisitDestructorDeclaration(Cs.DestructorDeclaration node, P p)
     {
-        destructorDeclaration = destructorDeclaration.WithPrefix(VisitSpace(destructorDeclaration.Prefix, Space.Location.DESTRUCTOR_DECLARATION_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(destructorDeclaration, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.DESTRUCTOR_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.DestructorDeclaration)
         {
             return tempStatement;
         }
-        destructorDeclaration = (Cs.DestructorDeclaration) tempStatement;
-        destructorDeclaration = destructorDeclaration.WithMarkers(VisitMarkers(destructorDeclaration.Markers, p));
-        destructorDeclaration = destructorDeclaration.WithMethodCore(VisitAndCast<J.MethodDeclaration>(destructorDeclaration.MethodCore, p)!);
-        return destructorDeclaration;
+        node = (Cs.DestructorDeclaration) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithMethodCore(VisitAndCast<J.MethodDeclaration>(node.MethodCore, p)!);
+        return node;
     }
 
-    public virtual J? VisitUnary(Cs.Unary unary, P p)
+    public virtual J? VisitUnary(Cs.Unary node, P p)
     {
-        unary = unary.WithPrefix(VisitSpace(unary.Prefix, Space.Location.UNARY_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(unary, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.UNARY_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.Unary)
         {
             return tempStatement;
         }
-        unary = (Cs.Unary) tempStatement;
-        var tempExpression = (Expression) VisitExpression(unary, p);
+        node = (Cs.Unary) tempStatement;
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.Unary)
         {
             return tempExpression;
         }
-        unary = (Cs.Unary) tempExpression;
-        unary = unary.WithMarkers(VisitMarkers(unary.Markers, p));
-        unary = unary.Padding.WithOperator(VisitLeftPadded(unary.Padding.Operator, JLeftPadded.Location.UNARY_OPERATOR, p)!);
-        unary = unary.WithExpression(VisitAndCast<Expression>(unary.Expression, p)!);
-        return unary;
+        node = (Cs.Unary) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithOperator(VisitLeftPadded(node.Padding.Operator, JLeftPadded.Location.UNARY_OPERATOR, p)!);
+        node = node.WithExpression(VisitAndCast<Expression>(node.Expression, p)!);
+        return node;
     }
 
-    public virtual J? VisitConstructorInitializer(Cs.ConstructorInitializer constructorInitializer, P p)
+    public virtual J? VisitConstructorInitializer(Cs.ConstructorInitializer node, P p)
     {
-        constructorInitializer = constructorInitializer.WithPrefix(VisitSpace(constructorInitializer.Prefix, Space.Location.CONSTRUCTOR_INITIALIZER_PREFIX, p)!);
-        constructorInitializer = constructorInitializer.WithMarkers(VisitMarkers(constructorInitializer.Markers, p));
-        constructorInitializer = constructorInitializer.WithKeyword(VisitAndCast<Cs.Keyword>(constructorInitializer.Keyword, p)!);
-        constructorInitializer = constructorInitializer.Padding.WithArguments(VisitContainer(constructorInitializer.Padding.Arguments, JContainer.Location.CONSTRUCTOR_INITIALIZER_ARGUMENTS, p)!);
-        return constructorInitializer;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.CONSTRUCTOR_INITIALIZER_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithKeyword(VisitAndCast<Cs.Keyword>(node.Keyword, p)!);
+        node = node.Padding.WithArguments(VisitContainer(node.Padding.Arguments, JContainer.Location.CONSTRUCTOR_INITIALIZER_ARGUMENTS, p)!);
+        return node;
     }
 
-    public virtual J? VisitTupleType(Cs.TupleType tupleType, P p)
+    public virtual J? VisitTupleType(Cs.TupleType node, P p)
     {
-        tupleType = tupleType.WithPrefix(VisitSpace(tupleType.Prefix, Space.Location.TUPLE_TYPE_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(tupleType, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.TUPLE_TYPE_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.TupleType)
         {
             return tempExpression;
         }
-        tupleType = (Cs.TupleType) tempExpression;
-        tupleType = tupleType.WithMarkers(VisitMarkers(tupleType.Markers, p));
-        tupleType = tupleType.Padding.WithElements(VisitContainer(tupleType.Padding.Elements, JContainer.Location.TUPLE_TYPE_ELEMENTS, p)!);
-        return tupleType;
+        node = (Cs.TupleType) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithElements(VisitContainer(node.Padding.Elements, JContainer.Location.TUPLE_TYPE_ELEMENTS, p)!);
+        return node;
     }
 
-    public virtual J? VisitTupleElement(Cs.TupleElement tupleElement, P p)
+    public virtual J? VisitTupleElement(Cs.TupleElement node, P p)
     {
-        tupleElement = tupleElement.WithPrefix(VisitSpace(tupleElement.Prefix, Space.Location.TUPLE_ELEMENT_PREFIX, p)!);
-        tupleElement = tupleElement.WithMarkers(VisitMarkers(tupleElement.Markers, p));
-        tupleElement = tupleElement.WithType(VisitAndCast<TypeTree>(tupleElement.Type, p)!);
-        tupleElement = tupleElement.WithName(VisitAndCast<J.Identifier>(tupleElement.Name, p));
-        return tupleElement;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.TUPLE_ELEMENT_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithType(VisitAndCast<TypeTree>(node.Type, p)!);
+        node = node.WithName(VisitAndCast<J.Identifier>(node.Name, p));
+        return node;
     }
 
-    public virtual J? VisitNewClass(Cs.NewClass newClass, P p)
+    public virtual J? VisitNewClass(Cs.NewClass node, P p)
     {
-        newClass = newClass.WithPrefix(VisitSpace(newClass.Prefix, Space.Location.NEW_CLASS_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(newClass, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.NEW_CLASS_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.NewClass)
         {
             return tempStatement;
         }
-        newClass = (Cs.NewClass) tempStatement;
-        var tempExpression = (Expression) VisitExpression(newClass, p);
+        node = (Cs.NewClass) tempStatement;
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.NewClass)
         {
             return tempExpression;
         }
-        newClass = (Cs.NewClass) tempExpression;
-        newClass = newClass.WithMarkers(VisitMarkers(newClass.Markers, p));
-        newClass = newClass.WithNewClassCore(VisitAndCast<J.NewClass>(newClass.NewClassCore, p)!);
-        newClass = newClass.WithInitializer(VisitAndCast<Cs.InitializerExpression>(newClass.Initializer, p));
-        return newClass;
+        node = (Cs.NewClass) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithNewClassCore(VisitAndCast<J.NewClass>(node.NewClassCore, p)!);
+        node = node.WithInitializer(VisitAndCast<Cs.InitializerExpression>(node.Initializer, p));
+        return node;
     }
 
-    public virtual J? VisitInitializerExpression(Cs.InitializerExpression initializerExpression, P p)
+    public virtual J? VisitInitializerExpression(Cs.InitializerExpression node, P p)
     {
-        initializerExpression = initializerExpression.WithPrefix(VisitSpace(initializerExpression.Prefix, Space.Location.INITIALIZER_EXPRESSION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(initializerExpression, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.INITIALIZER_EXPRESSION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.InitializerExpression)
         {
             return tempExpression;
         }
-        initializerExpression = (Cs.InitializerExpression) tempExpression;
-        initializerExpression = initializerExpression.WithMarkers(VisitMarkers(initializerExpression.Markers, p));
-        initializerExpression = initializerExpression.Padding.WithExpressions(VisitContainer(initializerExpression.Padding.Expressions, JContainer.Location.INITIALIZER_EXPRESSION_EXPRESSIONS, p)!);
-        return initializerExpression;
+        node = (Cs.InitializerExpression) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithExpressions(VisitContainer(node.Padding.Expressions, JContainer.Location.INITIALIZER_EXPRESSION_EXPRESSIONS, p)!);
+        return node;
     }
 
-    public virtual J? VisitImplicitElementAccess(Cs.ImplicitElementAccess implicitElementAccess, P p)
+    public virtual J? VisitImplicitElementAccess(Cs.ImplicitElementAccess node, P p)
     {
-        implicitElementAccess = implicitElementAccess.WithPrefix(VisitSpace(implicitElementAccess.Prefix, Space.Location.IMPLICIT_ELEMENT_ACCESS_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(implicitElementAccess, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.IMPLICIT_ELEMENT_ACCESS_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.ImplicitElementAccess)
         {
             return tempExpression;
         }
-        implicitElementAccess = (Cs.ImplicitElementAccess) tempExpression;
-        implicitElementAccess = implicitElementAccess.WithMarkers(VisitMarkers(implicitElementAccess.Markers, p));
-        implicitElementAccess = implicitElementAccess.Padding.WithArgumentList(VisitContainer(implicitElementAccess.Padding.ArgumentList, JContainer.Location.IMPLICIT_ELEMENT_ACCESS_ARGUMENT_LIST, p)!);
-        return implicitElementAccess;
+        node = (Cs.ImplicitElementAccess) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithArgumentList(VisitContainer(node.Padding.ArgumentList, JContainer.Location.IMPLICIT_ELEMENT_ACCESS_ARGUMENT_LIST, p)!);
+        return node;
     }
 
-    public virtual J? VisitYield(Cs.Yield yield, P p)
+    public virtual J? VisitYield(Cs.Yield node, P p)
     {
-        yield = yield.WithPrefix(VisitSpace(yield.Prefix, Space.Location.YIELD_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(yield, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.YIELD_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.Yield)
         {
             return tempStatement;
         }
-        yield = (Cs.Yield) tempStatement;
-        yield = yield.WithMarkers(VisitMarkers(yield.Markers, p));
-        yield = yield.WithReturnOrBreakKeyword(VisitAndCast<Cs.Keyword>(yield.ReturnOrBreakKeyword, p)!);
-        yield = yield.WithExpression(VisitAndCast<Expression>(yield.Expression, p));
-        return yield;
+        node = (Cs.Yield) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithReturnOrBreakKeyword(VisitAndCast<Cs.Keyword>(node.ReturnOrBreakKeyword, p)!);
+        node = node.WithExpression(VisitAndCast<Expression>(node.Expression, p));
+        return node;
     }
 
-    public virtual J? VisitDefaultExpression(Cs.DefaultExpression defaultExpression, P p)
+    public virtual J? VisitDefaultExpression(Cs.DefaultExpression node, P p)
     {
-        defaultExpression = defaultExpression.WithPrefix(VisitSpace(defaultExpression.Prefix, Space.Location.DEFAULT_EXPRESSION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(defaultExpression, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.DEFAULT_EXPRESSION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.DefaultExpression)
         {
             return tempExpression;
         }
-        defaultExpression = (Cs.DefaultExpression) tempExpression;
-        defaultExpression = defaultExpression.WithMarkers(VisitMarkers(defaultExpression.Markers, p));
-        defaultExpression = defaultExpression.Padding.WithTypeOperator(defaultExpression.Padding.TypeOperator == null ? null : VisitContainer(defaultExpression.Padding.TypeOperator, JContainer.Location.DEFAULT_EXPRESSION_TYPE_OPERATOR, p));
-        return defaultExpression;
+        node = (Cs.DefaultExpression) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithTypeOperator(node.Padding.TypeOperator == null ? null : VisitContainer(node.Padding.TypeOperator, JContainer.Location.DEFAULT_EXPRESSION_TYPE_OPERATOR, p));
+        return node;
     }
 
-    public virtual J? VisitIsPattern(Cs.IsPattern isPattern, P p)
+    public virtual J? VisitIsPattern(Cs.IsPattern node, P p)
     {
-        isPattern = isPattern.WithPrefix(VisitSpace(isPattern.Prefix, Space.Location.IS_PATTERN_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(isPattern, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.IS_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.IsPattern)
         {
             return tempExpression;
         }
-        isPattern = (Cs.IsPattern) tempExpression;
-        isPattern = isPattern.WithMarkers(VisitMarkers(isPattern.Markers, p));
-        isPattern = isPattern.WithExpression(VisitAndCast<Expression>(isPattern.Expression, p)!);
-        isPattern = isPattern.Padding.WithPattern(VisitLeftPadded(isPattern.Padding.Pattern, JLeftPadded.Location.IS_PATTERN_PATTERN, p)!);
-        return isPattern;
+        node = (Cs.IsPattern) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithExpression(VisitAndCast<Expression>(node.Expression, p)!);
+        node = node.Padding.WithPattern(VisitLeftPadded(node.Padding.Pattern, JLeftPadded.Location.IS_PATTERN_PATTERN, p)!);
+        return node;
     }
 
-    public virtual J? VisitUnaryPattern(Cs.UnaryPattern unaryPattern, P p)
+    public virtual J? VisitUnaryPattern(Cs.UnaryPattern node, P p)
     {
-        unaryPattern = unaryPattern.WithPrefix(VisitSpace(unaryPattern.Prefix, Space.Location.UNARY_PATTERN_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(unaryPattern, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.UNARY_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.UnaryPattern)
         {
             return tempExpression;
         }
-        unaryPattern = (Cs.UnaryPattern) tempExpression;
-        unaryPattern = unaryPattern.WithMarkers(VisitMarkers(unaryPattern.Markers, p));
-        unaryPattern = unaryPattern.WithOperator(VisitAndCast<Cs.Keyword>(unaryPattern.Operator, p)!);
-        unaryPattern = unaryPattern.WithPattern(VisitAndCast<Cs.Pattern>(unaryPattern.Pattern, p)!);
-        return unaryPattern;
+        node = (Cs.UnaryPattern) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithOperator(VisitAndCast<Cs.Keyword>(node.Operator, p)!);
+        node = node.WithPattern(VisitAndCast<Cs.Pattern>(node.Pattern, p)!);
+        return node;
     }
 
-    public virtual J? VisitTypePattern(Cs.TypePattern typePattern, P p)
+    public virtual J? VisitTypePattern(Cs.TypePattern node, P p)
     {
-        typePattern = typePattern.WithPrefix(VisitSpace(typePattern.Prefix, Space.Location.TYPE_PATTERN_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(typePattern, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.TYPE_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.TypePattern)
         {
             return tempExpression;
         }
-        typePattern = (Cs.TypePattern) tempExpression;
-        typePattern = typePattern.WithMarkers(VisitMarkers(typePattern.Markers, p));
-        typePattern = typePattern.WithTypeIdentifier(VisitAndCast<TypeTree>(typePattern.TypeIdentifier, p)!);
-        typePattern = typePattern.WithDesignation(VisitAndCast<Cs.VariableDesignation>(typePattern.Designation, p));
-        return typePattern;
+        node = (Cs.TypePattern) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithTypeIdentifier(VisitAndCast<TypeTree>(node.TypeIdentifier, p)!);
+        node = node.WithDesignation(VisitAndCast<Cs.VariableDesignation>(node.Designation, p));
+        return node;
     }
 
-    public virtual J? VisitBinaryPattern(Cs.BinaryPattern binaryPattern, P p)
+    public virtual J? VisitBinaryPattern(Cs.BinaryPattern node, P p)
     {
-        binaryPattern = binaryPattern.WithPrefix(VisitSpace(binaryPattern.Prefix, Space.Location.BINARY_PATTERN_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(binaryPattern, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.BINARY_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.BinaryPattern)
         {
             return tempExpression;
         }
-        binaryPattern = (Cs.BinaryPattern) tempExpression;
-        binaryPattern = binaryPattern.WithMarkers(VisitMarkers(binaryPattern.Markers, p));
-        binaryPattern = binaryPattern.WithLeft(VisitAndCast<Cs.Pattern>(binaryPattern.Left, p)!);
-        binaryPattern = binaryPattern.Padding.WithOperator(VisitLeftPadded(binaryPattern.Padding.Operator, JLeftPadded.Location.BINARY_PATTERN_OPERATOR, p)!);
-        binaryPattern = binaryPattern.WithRight(VisitAndCast<Cs.Pattern>(binaryPattern.Right, p)!);
-        return binaryPattern;
+        node = (Cs.BinaryPattern) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithLeft(VisitAndCast<Cs.Pattern>(node.Left, p)!);
+        node = node.Padding.WithOperator(VisitLeftPadded(node.Padding.Operator, JLeftPadded.Location.BINARY_PATTERN_OPERATOR, p)!);
+        node = node.WithRight(VisitAndCast<Cs.Pattern>(node.Right, p)!);
+        return node;
     }
 
-    public virtual J? VisitConstantPattern(Cs.ConstantPattern constantPattern, P p)
+    public virtual J? VisitConstantPattern(Cs.ConstantPattern node, P p)
     {
-        constantPattern = constantPattern.WithPrefix(VisitSpace(constantPattern.Prefix, Space.Location.CONSTANT_PATTERN_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(constantPattern, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.CONSTANT_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.ConstantPattern)
         {
             return tempExpression;
         }
-        constantPattern = (Cs.ConstantPattern) tempExpression;
-        constantPattern = constantPattern.WithMarkers(VisitMarkers(constantPattern.Markers, p));
-        constantPattern = constantPattern.WithValue(VisitAndCast<Expression>(constantPattern.Value, p)!);
-        return constantPattern;
+        node = (Cs.ConstantPattern) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithValue(VisitAndCast<Expression>(node.Value, p)!);
+        return node;
     }
 
-    public virtual J? VisitDiscardPattern(Cs.DiscardPattern discardPattern, P p)
+    public virtual J? VisitDiscardPattern(Cs.DiscardPattern node, P p)
     {
-        discardPattern = discardPattern.WithPrefix(VisitSpace(discardPattern.Prefix, Space.Location.DISCARD_PATTERN_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(discardPattern, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.DISCARD_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.DiscardPattern)
         {
             return tempExpression;
         }
-        discardPattern = (Cs.DiscardPattern) tempExpression;
-        discardPattern = discardPattern.WithMarkers(VisitMarkers(discardPattern.Markers, p));
-        return discardPattern;
+        node = (Cs.DiscardPattern) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        return node;
     }
 
-    public virtual J? VisitListPattern(Cs.ListPattern listPattern, P p)
+    public virtual J? VisitListPattern(Cs.ListPattern node, P p)
     {
-        listPattern = listPattern.WithPrefix(VisitSpace(listPattern.Prefix, Space.Location.LIST_PATTERN_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(listPattern, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.LIST_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.ListPattern)
         {
             return tempExpression;
         }
-        listPattern = (Cs.ListPattern) tempExpression;
-        listPattern = listPattern.WithMarkers(VisitMarkers(listPattern.Markers, p));
-        listPattern = listPattern.Padding.WithPatterns(VisitContainer(listPattern.Padding.Patterns, JContainer.Location.LIST_PATTERN_PATTERNS, p)!);
-        listPattern = listPattern.WithDesignation(VisitAndCast<Cs.VariableDesignation>(listPattern.Designation, p));
-        return listPattern;
+        node = (Cs.ListPattern) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithPatterns(VisitContainer(node.Padding.Patterns, JContainer.Location.LIST_PATTERN_PATTERNS, p)!);
+        node = node.WithDesignation(VisitAndCast<Cs.VariableDesignation>(node.Designation, p));
+        return node;
     }
 
-    public virtual J? VisitParenthesizedPattern(Cs.ParenthesizedPattern parenthesizedPattern, P p)
+    public virtual J? VisitParenthesizedPattern(Cs.ParenthesizedPattern node, P p)
     {
-        parenthesizedPattern = parenthesizedPattern.WithPrefix(VisitSpace(parenthesizedPattern.Prefix, Space.Location.PARENTHESIZED_PATTERN_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(parenthesizedPattern, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.PARENTHESIZED_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.ParenthesizedPattern)
         {
             return tempExpression;
         }
-        parenthesizedPattern = (Cs.ParenthesizedPattern) tempExpression;
-        parenthesizedPattern = parenthesizedPattern.WithMarkers(VisitMarkers(parenthesizedPattern.Markers, p));
-        parenthesizedPattern = parenthesizedPattern.Padding.WithPattern(VisitContainer(parenthesizedPattern.Padding.Pattern, JContainer.Location.PARENTHESIZED_PATTERN_PATTERN, p)!);
-        return parenthesizedPattern;
+        node = (Cs.ParenthesizedPattern) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithPattern(VisitContainer(node.Padding.Pattern, JContainer.Location.PARENTHESIZED_PATTERN_PATTERN, p)!);
+        return node;
     }
 
-    public virtual J? VisitRecursivePattern(Cs.RecursivePattern recursivePattern, P p)
+    public virtual J? VisitRecursivePattern(Cs.RecursivePattern node, P p)
     {
-        recursivePattern = recursivePattern.WithPrefix(VisitSpace(recursivePattern.Prefix, Space.Location.RECURSIVE_PATTERN_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(recursivePattern, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.RECURSIVE_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.RecursivePattern)
         {
             return tempExpression;
         }
-        recursivePattern = (Cs.RecursivePattern) tempExpression;
-        recursivePattern = recursivePattern.WithMarkers(VisitMarkers(recursivePattern.Markers, p));
-        recursivePattern = recursivePattern.WithTypeQualifier(VisitAndCast<TypeTree>(recursivePattern.TypeQualifier, p));
-        recursivePattern = recursivePattern.WithPositionalPattern(VisitAndCast<Cs.PositionalPatternClause>(recursivePattern.PositionalPattern, p));
-        recursivePattern = recursivePattern.WithPropertyPattern(VisitAndCast<Cs.PropertyPatternClause>(recursivePattern.PropertyPattern, p));
-        recursivePattern = recursivePattern.WithDesignation(VisitAndCast<Cs.VariableDesignation>(recursivePattern.Designation, p));
-        return recursivePattern;
+        node = (Cs.RecursivePattern) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithTypeQualifier(VisitAndCast<TypeTree>(node.TypeQualifier, p));
+        node = node.WithPositionalPattern(VisitAndCast<Cs.PositionalPatternClause>(node.PositionalPattern, p));
+        node = node.WithPropertyPattern(VisitAndCast<Cs.PropertyPatternClause>(node.PropertyPattern, p));
+        node = node.WithDesignation(VisitAndCast<Cs.VariableDesignation>(node.Designation, p));
+        return node;
     }
 
-    public virtual J? VisitVarPattern(Cs.VarPattern varPattern, P p)
+    public virtual J? VisitVarPattern(Cs.VarPattern node, P p)
     {
-        varPattern = varPattern.WithPrefix(VisitSpace(varPattern.Prefix, Space.Location.VAR_PATTERN_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(varPattern, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.VAR_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.VarPattern)
         {
             return tempExpression;
         }
-        varPattern = (Cs.VarPattern) tempExpression;
-        varPattern = varPattern.WithMarkers(VisitMarkers(varPattern.Markers, p));
-        varPattern = varPattern.WithDesignation(VisitAndCast<Cs.VariableDesignation>(varPattern.Designation, p)!);
-        return varPattern;
+        node = (Cs.VarPattern) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithDesignation(VisitAndCast<Cs.VariableDesignation>(node.Designation, p)!);
+        return node;
     }
 
-    public virtual J? VisitPositionalPatternClause(Cs.PositionalPatternClause positionalPatternClause, P p)
+    public virtual J? VisitPositionalPatternClause(Cs.PositionalPatternClause node, P p)
     {
-        positionalPatternClause = positionalPatternClause.WithPrefix(VisitSpace(positionalPatternClause.Prefix, Space.Location.POSITIONAL_PATTERN_CLAUSE_PREFIX, p)!);
-        positionalPatternClause = positionalPatternClause.WithMarkers(VisitMarkers(positionalPatternClause.Markers, p));
-        positionalPatternClause = positionalPatternClause.Padding.WithSubpatterns(VisitContainer(positionalPatternClause.Padding.Subpatterns, JContainer.Location.POSITIONAL_PATTERN_CLAUSE_SUBPATTERNS, p)!);
-        return positionalPatternClause;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.POSITIONAL_PATTERN_CLAUSE_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithSubpatterns(VisitContainer(node.Padding.Subpatterns, JContainer.Location.POSITIONAL_PATTERN_CLAUSE_SUBPATTERNS, p)!);
+        return node;
     }
 
-    public virtual J? VisitRelationalPattern(Cs.RelationalPattern relationalPattern, P p)
+    public virtual J? VisitRelationalPattern(Cs.RelationalPattern node, P p)
     {
-        relationalPattern = relationalPattern.WithPrefix(VisitSpace(relationalPattern.Prefix, Space.Location.RELATIONAL_PATTERN_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(relationalPattern, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.RELATIONAL_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.RelationalPattern)
         {
             return tempExpression;
         }
-        relationalPattern = (Cs.RelationalPattern) tempExpression;
-        relationalPattern = relationalPattern.WithMarkers(VisitMarkers(relationalPattern.Markers, p));
-        relationalPattern = relationalPattern.Padding.WithOperator(VisitLeftPadded(relationalPattern.Padding.Operator, JLeftPadded.Location.RELATIONAL_PATTERN_OPERATOR, p)!);
-        relationalPattern = relationalPattern.WithValue(VisitAndCast<Expression>(relationalPattern.Value, p)!);
-        return relationalPattern;
+        node = (Cs.RelationalPattern) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithOperator(VisitLeftPadded(node.Padding.Operator, JLeftPadded.Location.RELATIONAL_PATTERN_OPERATOR, p)!);
+        node = node.WithValue(VisitAndCast<Expression>(node.Value, p)!);
+        return node;
     }
 
-    public virtual J? VisitSlicePattern(Cs.SlicePattern slicePattern, P p)
+    public virtual J? VisitSlicePattern(Cs.SlicePattern node, P p)
     {
-        slicePattern = slicePattern.WithPrefix(VisitSpace(slicePattern.Prefix, Space.Location.SLICE_PATTERN_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(slicePattern, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.SLICE_PATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.SlicePattern)
         {
             return tempExpression;
         }
-        slicePattern = (Cs.SlicePattern) tempExpression;
-        slicePattern = slicePattern.WithMarkers(VisitMarkers(slicePattern.Markers, p));
-        return slicePattern;
+        node = (Cs.SlicePattern) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        return node;
     }
 
-    public virtual J? VisitPropertyPatternClause(Cs.PropertyPatternClause propertyPatternClause, P p)
+    public virtual J? VisitPropertyPatternClause(Cs.PropertyPatternClause node, P p)
     {
-        propertyPatternClause = propertyPatternClause.WithPrefix(VisitSpace(propertyPatternClause.Prefix, Space.Location.PROPERTY_PATTERN_CLAUSE_PREFIX, p)!);
-        propertyPatternClause = propertyPatternClause.WithMarkers(VisitMarkers(propertyPatternClause.Markers, p));
-        propertyPatternClause = propertyPatternClause.Padding.WithSubpatterns(VisitContainer(propertyPatternClause.Padding.Subpatterns, JContainer.Location.PROPERTY_PATTERN_CLAUSE_SUBPATTERNS, p)!);
-        return propertyPatternClause;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.PROPERTY_PATTERN_CLAUSE_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithSubpatterns(VisitContainer(node.Padding.Subpatterns, JContainer.Location.PROPERTY_PATTERN_CLAUSE_SUBPATTERNS, p)!);
+        return node;
     }
 
-    public virtual J? VisitSubpattern(Cs.Subpattern subpattern, P p)
+    public virtual J? VisitSubpattern(Cs.Subpattern node, P p)
     {
-        subpattern = subpattern.WithPrefix(VisitSpace(subpattern.Prefix, Space.Location.SUBPATTERN_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(subpattern, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.SUBPATTERN_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.Subpattern)
         {
             return tempExpression;
         }
-        subpattern = (Cs.Subpattern) tempExpression;
-        subpattern = subpattern.WithMarkers(VisitMarkers(subpattern.Markers, p));
-        subpattern = subpattern.WithName(VisitAndCast<Expression>(subpattern.Name, p));
-        subpattern = subpattern.Padding.WithPattern(VisitLeftPadded(subpattern.Padding.Pattern, JLeftPadded.Location.SUBPATTERN_PATTERN, p)!);
-        return subpattern;
+        node = (Cs.Subpattern) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithName(VisitAndCast<Expression>(node.Name, p));
+        node = node.Padding.WithPattern(VisitLeftPadded(node.Padding.Pattern, JLeftPadded.Location.SUBPATTERN_PATTERN, p)!);
+        return node;
     }
 
-    public virtual J? VisitSwitchExpression(Cs.SwitchExpression switchExpression, P p)
+    public virtual J? VisitSwitchExpression(Cs.SwitchExpression node, P p)
     {
-        switchExpression = switchExpression.WithPrefix(VisitSpace(switchExpression.Prefix, Space.Location.SWITCH_EXPRESSION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(switchExpression, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.SWITCH_EXPRESSION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.SwitchExpression)
         {
             return tempExpression;
         }
-        switchExpression = (Cs.SwitchExpression) tempExpression;
-        switchExpression = switchExpression.WithMarkers(VisitMarkers(switchExpression.Markers, p));
-        switchExpression = switchExpression.Padding.WithExpression(VisitRightPadded(switchExpression.Padding.Expression, JRightPadded.Location.SWITCH_EXPRESSION_EXPRESSION, p)!);
-        switchExpression = switchExpression.Padding.WithArms(VisitContainer(switchExpression.Padding.Arms, JContainer.Location.SWITCH_EXPRESSION_ARMS, p)!);
-        return switchExpression;
+        node = (Cs.SwitchExpression) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithExpression(VisitRightPadded(node.Padding.Expression, JRightPadded.Location.SWITCH_EXPRESSION_EXPRESSION, p)!);
+        node = node.Padding.WithArms(VisitContainer(node.Padding.Arms, JContainer.Location.SWITCH_EXPRESSION_ARMS, p)!);
+        return node;
     }
 
-    public virtual J? VisitSwitchExpressionArm(Cs.SwitchExpressionArm switchExpressionArm, P p)
+    public virtual J? VisitSwitchExpressionArm(Cs.SwitchExpressionArm node, P p)
     {
-        switchExpressionArm = switchExpressionArm.WithPrefix(VisitSpace(switchExpressionArm.Prefix, Space.Location.SWITCH_EXPRESSION_ARM_PREFIX, p)!);
-        switchExpressionArm = switchExpressionArm.WithMarkers(VisitMarkers(switchExpressionArm.Markers, p));
-        switchExpressionArm = switchExpressionArm.WithPattern(VisitAndCast<Cs.Pattern>(switchExpressionArm.Pattern, p)!);
-        switchExpressionArm = switchExpressionArm.Padding.WithWhenExpression(switchExpressionArm.Padding.WhenExpression == null ? null : VisitLeftPadded(switchExpressionArm.Padding.WhenExpression, JLeftPadded.Location.SWITCH_EXPRESSION_ARM_WHEN_EXPRESSION, p));
-        switchExpressionArm = switchExpressionArm.Padding.WithExpression(VisitLeftPadded(switchExpressionArm.Padding.Expression, JLeftPadded.Location.SWITCH_EXPRESSION_ARM_EXPRESSION, p)!);
-        return switchExpressionArm;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.SWITCH_EXPRESSION_ARM_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithPattern(VisitAndCast<Cs.Pattern>(node.Pattern, p)!);
+        node = node.Padding.WithWhenExpression(node.Padding.WhenExpression == null ? null : VisitLeftPadded(node.Padding.WhenExpression, JLeftPadded.Location.SWITCH_EXPRESSION_ARM_WHEN_EXPRESSION, p));
+        node = node.Padding.WithExpression(VisitLeftPadded(node.Padding.Expression, JLeftPadded.Location.SWITCH_EXPRESSION_ARM_EXPRESSION, p)!);
+        return node;
     }
 
-    public virtual J? VisitSwitchSection(Cs.SwitchSection switchSection, P p)
+    public virtual J? VisitSwitchSection(Cs.SwitchSection node, P p)
     {
-        switchSection = switchSection.WithPrefix(VisitSpace(switchSection.Prefix, Space.Location.SWITCH_SECTION_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(switchSection, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.SWITCH_SECTION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.SwitchSection)
         {
             return tempStatement;
         }
-        switchSection = (Cs.SwitchSection) tempStatement;
-        switchSection = switchSection.WithMarkers(VisitMarkers(switchSection.Markers, p));
-        switchSection = switchSection.WithLabels(switchSection.Labels.Map(el => (Cs.SwitchLabel?)Visit(el, p)));
-        switchSection = switchSection.Padding.WithStatements(switchSection.Padding.Statements.Map(el => VisitRightPadded(el, JRightPadded.Location.SWITCH_SECTION_STATEMENTS, p)));
-        return switchSection;
+        node = (Cs.SwitchSection) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithLabels(node.Labels.Map(el => (Cs.SwitchLabel?)Visit(el, p)));
+        node = node.Padding.WithStatements(node.Padding.Statements.Map(el => VisitRightPadded(el, JRightPadded.Location.SWITCH_SECTION_STATEMENTS, p)));
+        return node;
     }
 
-    public virtual J? VisitDefaultSwitchLabel(Cs.DefaultSwitchLabel defaultSwitchLabel, P p)
+    public virtual J? VisitDefaultSwitchLabel(Cs.DefaultSwitchLabel node, P p)
     {
-        defaultSwitchLabel = defaultSwitchLabel.WithPrefix(VisitSpace(defaultSwitchLabel.Prefix, Space.Location.DEFAULT_SWITCH_LABEL_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(defaultSwitchLabel, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.DEFAULT_SWITCH_LABEL_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.DefaultSwitchLabel)
         {
             return tempExpression;
         }
-        defaultSwitchLabel = (Cs.DefaultSwitchLabel) tempExpression;
-        defaultSwitchLabel = defaultSwitchLabel.WithMarkers(VisitMarkers(defaultSwitchLabel.Markers, p));
-        defaultSwitchLabel = defaultSwitchLabel.WithColonToken(VisitSpace(defaultSwitchLabel.ColonToken, Space.Location.DEFAULT_SWITCH_LABEL_COLON_TOKEN, p)!);
-        return defaultSwitchLabel;
+        node = (Cs.DefaultSwitchLabel) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithColonToken(VisitSpace(node.ColonToken, Space.Location.DEFAULT_SWITCH_LABEL_COLON_TOKEN, p)!);
+        return node;
     }
 
-    public virtual J? VisitCasePatternSwitchLabel(Cs.CasePatternSwitchLabel casePatternSwitchLabel, P p)
+    public virtual J? VisitCasePatternSwitchLabel(Cs.CasePatternSwitchLabel node, P p)
     {
-        casePatternSwitchLabel = casePatternSwitchLabel.WithPrefix(VisitSpace(casePatternSwitchLabel.Prefix, Space.Location.CASE_PATTERN_SWITCH_LABEL_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(casePatternSwitchLabel, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.CASE_PATTERN_SWITCH_LABEL_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.CasePatternSwitchLabel)
         {
             return tempExpression;
         }
-        casePatternSwitchLabel = (Cs.CasePatternSwitchLabel) tempExpression;
-        casePatternSwitchLabel = casePatternSwitchLabel.WithMarkers(VisitMarkers(casePatternSwitchLabel.Markers, p));
-        casePatternSwitchLabel = casePatternSwitchLabel.WithPattern(VisitAndCast<Cs.Pattern>(casePatternSwitchLabel.Pattern, p)!);
-        casePatternSwitchLabel = casePatternSwitchLabel.Padding.WithWhenClause(casePatternSwitchLabel.Padding.WhenClause == null ? null : VisitLeftPadded(casePatternSwitchLabel.Padding.WhenClause, JLeftPadded.Location.CASE_PATTERN_SWITCH_LABEL_WHEN_CLAUSE, p));
-        casePatternSwitchLabel = casePatternSwitchLabel.WithColonToken(VisitSpace(casePatternSwitchLabel.ColonToken, Space.Location.CASE_PATTERN_SWITCH_LABEL_COLON_TOKEN, p)!);
-        return casePatternSwitchLabel;
+        node = (Cs.CasePatternSwitchLabel) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithPattern(VisitAndCast<Cs.Pattern>(node.Pattern, p)!);
+        node = node.Padding.WithWhenClause(node.Padding.WhenClause == null ? null : VisitLeftPadded(node.Padding.WhenClause, JLeftPadded.Location.CASE_PATTERN_SWITCH_LABEL_WHEN_CLAUSE, p));
+        node = node.WithColonToken(VisitSpace(node.ColonToken, Space.Location.CASE_PATTERN_SWITCH_LABEL_COLON_TOKEN, p)!);
+        return node;
     }
 
-    public virtual J? VisitSwitchStatement(Cs.SwitchStatement switchStatement, P p)
+    public virtual J? VisitSwitchStatement(Cs.SwitchStatement node, P p)
     {
-        switchStatement = switchStatement.WithPrefix(VisitSpace(switchStatement.Prefix, Space.Location.SWITCH_STATEMENT_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(switchStatement, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.SWITCH_STATEMENT_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.SwitchStatement)
         {
             return tempStatement;
         }
-        switchStatement = (Cs.SwitchStatement) tempStatement;
-        switchStatement = switchStatement.WithMarkers(VisitMarkers(switchStatement.Markers, p));
-        switchStatement = switchStatement.Padding.WithExpression(VisitContainer(switchStatement.Padding.Expression, JContainer.Location.SWITCH_STATEMENT_EXPRESSION, p)!);
-        switchStatement = switchStatement.Padding.WithSections(VisitContainer(switchStatement.Padding.Sections, JContainer.Location.SWITCH_STATEMENT_SECTIONS, p)!);
-        return switchStatement;
+        node = (Cs.SwitchStatement) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithExpression(VisitContainer(node.Padding.Expression, JContainer.Location.SWITCH_STATEMENT_EXPRESSION, p)!);
+        node = node.Padding.WithSections(VisitContainer(node.Padding.Sections, JContainer.Location.SWITCH_STATEMENT_SECTIONS, p)!);
+        return node;
     }
 
-    public virtual J? VisitLockStatement(Cs.LockStatement lockStatement, P p)
+    public virtual J? VisitLockStatement(Cs.LockStatement node, P p)
     {
-        lockStatement = lockStatement.WithPrefix(VisitSpace(lockStatement.Prefix, Space.Location.LOCK_STATEMENT_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(lockStatement, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.LOCK_STATEMENT_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.LockStatement)
         {
             return tempStatement;
         }
-        lockStatement = (Cs.LockStatement) tempStatement;
-        lockStatement = lockStatement.WithMarkers(VisitMarkers(lockStatement.Markers, p));
-        lockStatement = lockStatement.WithExpression(VisitAndCast<J.ControlParentheses<Expression>>(lockStatement.Expression, p)!);
-        lockStatement = lockStatement.Padding.WithStatement(VisitRightPadded(lockStatement.Padding.Statement, JRightPadded.Location.LOCK_STATEMENT_STATEMENT, p)!);
-        return lockStatement;
+        node = (Cs.LockStatement) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithExpression(VisitAndCast<J.ControlParentheses<Expression>>(node.Expression, p)!);
+        node = node.Padding.WithStatement(VisitRightPadded(node.Padding.Statement, JRightPadded.Location.LOCK_STATEMENT_STATEMENT, p)!);
+        return node;
     }
 
-    public virtual J? VisitFixedStatement(Cs.FixedStatement fixedStatement, P p)
+    public virtual J? VisitFixedStatement(Cs.FixedStatement node, P p)
     {
-        fixedStatement = fixedStatement.WithPrefix(VisitSpace(fixedStatement.Prefix, Space.Location.FIXED_STATEMENT_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(fixedStatement, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.FIXED_STATEMENT_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.FixedStatement)
         {
             return tempStatement;
         }
-        fixedStatement = (Cs.FixedStatement) tempStatement;
-        fixedStatement = fixedStatement.WithMarkers(VisitMarkers(fixedStatement.Markers, p));
-        fixedStatement = fixedStatement.WithDeclarations(VisitAndCast<J.ControlParentheses<J.VariableDeclarations>>(fixedStatement.Declarations, p)!);
-        fixedStatement = fixedStatement.WithBlock(VisitAndCast<J.Block>(fixedStatement.Block, p)!);
-        return fixedStatement;
+        node = (Cs.FixedStatement) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithDeclarations(VisitAndCast<J.ControlParentheses<J.VariableDeclarations>>(node.Declarations, p)!);
+        node = node.WithBlock(VisitAndCast<J.Block>(node.Block, p)!);
+        return node;
     }
 
-    public virtual J? VisitCheckedExpression(Cs.CheckedExpression checkedExpression, P p)
+    public virtual J? VisitCheckedExpression(Cs.CheckedExpression node, P p)
     {
-        checkedExpression = checkedExpression.WithPrefix(VisitSpace(checkedExpression.Prefix, Space.Location.CHECKED_EXPRESSION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(checkedExpression, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.CHECKED_EXPRESSION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.CheckedExpression)
         {
             return tempExpression;
         }
-        checkedExpression = (Cs.CheckedExpression) tempExpression;
-        checkedExpression = checkedExpression.WithMarkers(VisitMarkers(checkedExpression.Markers, p));
-        checkedExpression = checkedExpression.WithCheckedOrUncheckedKeyword(VisitAndCast<Cs.Keyword>(checkedExpression.CheckedOrUncheckedKeyword, p)!);
-        checkedExpression = checkedExpression.WithExpression(VisitAndCast<J.ControlParentheses<Expression>>(checkedExpression.Expression, p)!);
-        return checkedExpression;
+        node = (Cs.CheckedExpression) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithCheckedOrUncheckedKeyword(VisitAndCast<Cs.Keyword>(node.CheckedOrUncheckedKeyword, p)!);
+        node = node.WithExpression(VisitAndCast<J.ControlParentheses<Expression>>(node.Expression, p)!);
+        return node;
     }
 
-    public virtual J? VisitCheckedStatement(Cs.CheckedStatement checkedStatement, P p)
+    public virtual J? VisitCheckedStatement(Cs.CheckedStatement node, P p)
     {
-        checkedStatement = checkedStatement.WithPrefix(VisitSpace(checkedStatement.Prefix, Space.Location.CHECKED_STATEMENT_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(checkedStatement, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.CHECKED_STATEMENT_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.CheckedStatement)
         {
             return tempStatement;
         }
-        checkedStatement = (Cs.CheckedStatement) tempStatement;
-        checkedStatement = checkedStatement.WithMarkers(VisitMarkers(checkedStatement.Markers, p));
-        checkedStatement = checkedStatement.WithKeyword(VisitAndCast<Cs.Keyword>(checkedStatement.Keyword, p)!);
-        checkedStatement = checkedStatement.WithBlock(VisitAndCast<J.Block>(checkedStatement.Block, p)!);
-        return checkedStatement;
+        node = (Cs.CheckedStatement) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithKeyword(VisitAndCast<Cs.Keyword>(node.Keyword, p)!);
+        node = node.WithBlock(VisitAndCast<J.Block>(node.Block, p)!);
+        return node;
     }
 
-    public virtual J? VisitUnsafeStatement(Cs.UnsafeStatement unsafeStatement, P p)
+    public virtual J? VisitUnsafeStatement(Cs.UnsafeStatement node, P p)
     {
-        unsafeStatement = unsafeStatement.WithPrefix(VisitSpace(unsafeStatement.Prefix, Space.Location.UNSAFE_STATEMENT_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(unsafeStatement, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.UNSAFE_STATEMENT_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.UnsafeStatement)
         {
             return tempStatement;
         }
-        unsafeStatement = (Cs.UnsafeStatement) tempStatement;
-        unsafeStatement = unsafeStatement.WithMarkers(VisitMarkers(unsafeStatement.Markers, p));
-        unsafeStatement = unsafeStatement.WithBlock(VisitAndCast<J.Block>(unsafeStatement.Block, p)!);
-        return unsafeStatement;
+        node = (Cs.UnsafeStatement) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithBlock(VisitAndCast<J.Block>(node.Block, p)!);
+        return node;
     }
 
-    public virtual J? VisitRangeExpression(Cs.RangeExpression rangeExpression, P p)
+    public virtual J? VisitRangeExpression(Cs.RangeExpression node, P p)
     {
-        rangeExpression = rangeExpression.WithPrefix(VisitSpace(rangeExpression.Prefix, Space.Location.RANGE_EXPRESSION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(rangeExpression, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.RANGE_EXPRESSION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.RangeExpression)
         {
             return tempExpression;
         }
-        rangeExpression = (Cs.RangeExpression) tempExpression;
-        rangeExpression = rangeExpression.WithMarkers(VisitMarkers(rangeExpression.Markers, p));
-        rangeExpression = rangeExpression.Padding.WithStart(rangeExpression.Padding.Start == null ? null : VisitRightPadded(rangeExpression.Padding.Start, JRightPadded.Location.RANGE_EXPRESSION_START, p));
-        rangeExpression = rangeExpression.WithEnd(VisitAndCast<Expression>(rangeExpression.End, p));
-        return rangeExpression;
+        node = (Cs.RangeExpression) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithStart(node.Padding.Start == null ? null : VisitRightPadded(node.Padding.Start, JRightPadded.Location.RANGE_EXPRESSION_START, p));
+        node = node.WithEnd(VisitAndCast<Expression>(node.End, p));
+        return node;
     }
 
-    public virtual J? VisitQueryExpression(Cs.QueryExpression queryExpression, P p)
+    public virtual J? VisitQueryExpression(Cs.QueryExpression node, P p)
     {
-        queryExpression = queryExpression.WithPrefix(VisitSpace(queryExpression.Prefix, Space.Location.QUERY_EXPRESSION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(queryExpression, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.QUERY_EXPRESSION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.QueryExpression)
         {
             return tempExpression;
         }
-        queryExpression = (Cs.QueryExpression) tempExpression;
-        queryExpression = queryExpression.WithMarkers(VisitMarkers(queryExpression.Markers, p));
-        queryExpression = queryExpression.WithFromClause(VisitAndCast<Cs.FromClause>(queryExpression.FromClause, p)!);
-        queryExpression = queryExpression.WithBody(VisitAndCast<Cs.QueryBody>(queryExpression.Body, p)!);
-        return queryExpression;
+        node = (Cs.QueryExpression) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithFromClause(VisitAndCast<Cs.FromClause>(node.FromClause, p)!);
+        node = node.WithBody(VisitAndCast<Cs.QueryBody>(node.Body, p)!);
+        return node;
     }
 
-    public virtual J? VisitQueryBody(Cs.QueryBody queryBody, P p)
+    public virtual J? VisitQueryBody(Cs.QueryBody node, P p)
     {
-        queryBody = queryBody.WithPrefix(VisitSpace(queryBody.Prefix, Space.Location.QUERY_BODY_PREFIX, p)!);
-        queryBody = queryBody.WithMarkers(VisitMarkers(queryBody.Markers, p));
-        queryBody = queryBody.WithClauses(queryBody.Clauses.Map(el => (Cs.QueryClause?)Visit(el, p)));
-        queryBody = queryBody.WithSelectOrGroup(VisitAndCast<Cs.SelectOrGroupClause>(queryBody.SelectOrGroup, p));
-        queryBody = queryBody.WithContinuation(VisitAndCast<Cs.QueryContinuation>(queryBody.Continuation, p));
-        return queryBody;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.QUERY_BODY_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithClauses(node.Clauses.Map(el => (Cs.QueryClause?)Visit(el, p)));
+        node = node.WithSelectOrGroup(VisitAndCast<Cs.SelectOrGroupClause>(node.SelectOrGroup, p));
+        node = node.WithContinuation(VisitAndCast<Cs.QueryContinuation>(node.Continuation, p));
+        return node;
     }
 
-    public virtual J? VisitFromClause(Cs.FromClause fromClause, P p)
+    public virtual J? VisitFromClause(Cs.FromClause node, P p)
     {
-        fromClause = fromClause.WithPrefix(VisitSpace(fromClause.Prefix, Space.Location.FROM_CLAUSE_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(fromClause, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.FROM_CLAUSE_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.FromClause)
         {
             return tempExpression;
         }
-        fromClause = (Cs.FromClause) tempExpression;
-        fromClause = fromClause.WithMarkers(VisitMarkers(fromClause.Markers, p));
-        fromClause = fromClause.WithTypeIdentifier(VisitAndCast<TypeTree>(fromClause.TypeIdentifier, p));
-        fromClause = fromClause.Padding.WithIdentifier(VisitRightPadded(fromClause.Padding.Identifier, JRightPadded.Location.FROM_CLAUSE_IDENTIFIER, p)!);
-        fromClause = fromClause.WithExpression(VisitAndCast<Expression>(fromClause.Expression, p)!);
-        return fromClause;
+        node = (Cs.FromClause) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithTypeIdentifier(VisitAndCast<TypeTree>(node.TypeIdentifier, p));
+        node = node.Padding.WithIdentifier(VisitRightPadded(node.Padding.Identifier, JRightPadded.Location.FROM_CLAUSE_IDENTIFIER, p)!);
+        node = node.WithExpression(VisitAndCast<Expression>(node.Expression, p)!);
+        return node;
     }
 
-    public virtual J? VisitLetClause(Cs.LetClause letClause, P p)
+    public virtual J? VisitLetClause(Cs.LetClause node, P p)
     {
-        letClause = letClause.WithPrefix(VisitSpace(letClause.Prefix, Space.Location.LET_CLAUSE_PREFIX, p)!);
-        letClause = letClause.WithMarkers(VisitMarkers(letClause.Markers, p));
-        letClause = letClause.Padding.WithIdentifier(VisitRightPadded(letClause.Padding.Identifier, JRightPadded.Location.LET_CLAUSE_IDENTIFIER, p)!);
-        letClause = letClause.WithExpression(VisitAndCast<Expression>(letClause.Expression, p)!);
-        return letClause;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.LET_CLAUSE_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithIdentifier(VisitRightPadded(node.Padding.Identifier, JRightPadded.Location.LET_CLAUSE_IDENTIFIER, p)!);
+        node = node.WithExpression(VisitAndCast<Expression>(node.Expression, p)!);
+        return node;
     }
 
-    public virtual J? VisitJoinClause(Cs.JoinClause joinClause, P p)
+    public virtual J? VisitJoinClause(Cs.JoinClause node, P p)
     {
-        joinClause = joinClause.WithPrefix(VisitSpace(joinClause.Prefix, Space.Location.JOIN_CLAUSE_PREFIX, p)!);
-        joinClause = joinClause.WithMarkers(VisitMarkers(joinClause.Markers, p));
-        joinClause = joinClause.Padding.WithIdentifier(VisitRightPadded(joinClause.Padding.Identifier, JRightPadded.Location.JOIN_CLAUSE_IDENTIFIER, p)!);
-        joinClause = joinClause.Padding.WithInExpression(VisitRightPadded(joinClause.Padding.InExpression, JRightPadded.Location.JOIN_CLAUSE_IN_EXPRESSION, p)!);
-        joinClause = joinClause.Padding.WithLeftExpression(VisitRightPadded(joinClause.Padding.LeftExpression, JRightPadded.Location.JOIN_CLAUSE_LEFT_EXPRESSION, p)!);
-        joinClause = joinClause.WithRightExpression(VisitAndCast<Expression>(joinClause.RightExpression, p)!);
-        joinClause = joinClause.Padding.WithInto(joinClause.Padding.Into == null ? null : VisitLeftPadded(joinClause.Padding.Into, JLeftPadded.Location.JOIN_CLAUSE_INTO, p));
-        return joinClause;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.JOIN_CLAUSE_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithIdentifier(VisitRightPadded(node.Padding.Identifier, JRightPadded.Location.JOIN_CLAUSE_IDENTIFIER, p)!);
+        node = node.Padding.WithInExpression(VisitRightPadded(node.Padding.InExpression, JRightPadded.Location.JOIN_CLAUSE_IN_EXPRESSION, p)!);
+        node = node.Padding.WithLeftExpression(VisitRightPadded(node.Padding.LeftExpression, JRightPadded.Location.JOIN_CLAUSE_LEFT_EXPRESSION, p)!);
+        node = node.WithRightExpression(VisitAndCast<Expression>(node.RightExpression, p)!);
+        node = node.Padding.WithInto(node.Padding.Into == null ? null : VisitLeftPadded(node.Padding.Into, JLeftPadded.Location.JOIN_CLAUSE_INTO, p));
+        return node;
     }
 
-    public virtual J? VisitJoinIntoClause(Cs.JoinIntoClause joinIntoClause, P p)
+    public virtual J? VisitJoinIntoClause(Cs.JoinIntoClause node, P p)
     {
-        joinIntoClause = joinIntoClause.WithPrefix(VisitSpace(joinIntoClause.Prefix, Space.Location.JOIN_INTO_CLAUSE_PREFIX, p)!);
-        joinIntoClause = joinIntoClause.WithMarkers(VisitMarkers(joinIntoClause.Markers, p));
-        joinIntoClause = joinIntoClause.WithIdentifier(VisitAndCast<J.Identifier>(joinIntoClause.Identifier, p)!);
-        return joinIntoClause;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.JOIN_INTO_CLAUSE_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithIdentifier(VisitAndCast<J.Identifier>(node.Identifier, p)!);
+        return node;
     }
 
-    public virtual J? VisitWhereClause(Cs.WhereClause whereClause, P p)
+    public virtual J? VisitWhereClause(Cs.WhereClause node, P p)
     {
-        whereClause = whereClause.WithPrefix(VisitSpace(whereClause.Prefix, Space.Location.WHERE_CLAUSE_PREFIX, p)!);
-        whereClause = whereClause.WithMarkers(VisitMarkers(whereClause.Markers, p));
-        whereClause = whereClause.WithCondition(VisitAndCast<Expression>(whereClause.Condition, p)!);
-        return whereClause;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.WHERE_CLAUSE_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithCondition(VisitAndCast<Expression>(node.Condition, p)!);
+        return node;
     }
 
-    public virtual J? VisitOrderByClause(Cs.OrderByClause orderByClause, P p)
+    public virtual J? VisitOrderByClause(Cs.OrderByClause node, P p)
     {
-        orderByClause = orderByClause.WithPrefix(VisitSpace(orderByClause.Prefix, Space.Location.ORDER_BY_CLAUSE_PREFIX, p)!);
-        orderByClause = orderByClause.WithMarkers(VisitMarkers(orderByClause.Markers, p));
-        orderByClause = orderByClause.Padding.WithOrderings(orderByClause.Padding.Orderings.Map(el => VisitRightPadded(el, JRightPadded.Location.ORDER_BY_CLAUSE_ORDERINGS, p)));
-        return orderByClause;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.ORDER_BY_CLAUSE_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithOrderings(node.Padding.Orderings.Map(el => VisitRightPadded(el, JRightPadded.Location.ORDER_BY_CLAUSE_ORDERINGS, p)));
+        return node;
     }
 
-    public virtual J? VisitQueryContinuation(Cs.QueryContinuation queryContinuation, P p)
+    public virtual J? VisitQueryContinuation(Cs.QueryContinuation node, P p)
     {
-        queryContinuation = queryContinuation.WithPrefix(VisitSpace(queryContinuation.Prefix, Space.Location.QUERY_CONTINUATION_PREFIX, p)!);
-        queryContinuation = queryContinuation.WithMarkers(VisitMarkers(queryContinuation.Markers, p));
-        queryContinuation = queryContinuation.WithIdentifier(VisitAndCast<J.Identifier>(queryContinuation.Identifier, p)!);
-        queryContinuation = queryContinuation.WithBody(VisitAndCast<Cs.QueryBody>(queryContinuation.Body, p)!);
-        return queryContinuation;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.QUERY_CONTINUATION_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithIdentifier(VisitAndCast<J.Identifier>(node.Identifier, p)!);
+        node = node.WithBody(VisitAndCast<Cs.QueryBody>(node.Body, p)!);
+        return node;
     }
 
-    public virtual J? VisitOrdering(Cs.Ordering ordering, P p)
+    public virtual J? VisitOrdering(Cs.Ordering node, P p)
     {
-        ordering = ordering.WithPrefix(VisitSpace(ordering.Prefix, Space.Location.ORDERING_PREFIX, p)!);
-        ordering = ordering.WithMarkers(VisitMarkers(ordering.Markers, p));
-        ordering = ordering.Padding.WithExpression(VisitRightPadded(ordering.Padding.Expression, JRightPadded.Location.ORDERING_EXPRESSION, p)!);
-        return ordering;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.ORDERING_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithExpression(VisitRightPadded(node.Padding.Expression, JRightPadded.Location.ORDERING_EXPRESSION, p)!);
+        return node;
     }
 
-    public virtual J? VisitSelectClause(Cs.SelectClause selectClause, P p)
+    public virtual J? VisitSelectClause(Cs.SelectClause node, P p)
     {
-        selectClause = selectClause.WithPrefix(VisitSpace(selectClause.Prefix, Space.Location.SELECT_CLAUSE_PREFIX, p)!);
-        selectClause = selectClause.WithMarkers(VisitMarkers(selectClause.Markers, p));
-        selectClause = selectClause.WithExpression(VisitAndCast<Expression>(selectClause.Expression, p)!);
-        return selectClause;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.SELECT_CLAUSE_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithExpression(VisitAndCast<Expression>(node.Expression, p)!);
+        return node;
     }
 
-    public virtual J? VisitGroupClause(Cs.GroupClause groupClause, P p)
+    public virtual J? VisitGroupClause(Cs.GroupClause node, P p)
     {
-        groupClause = groupClause.WithPrefix(VisitSpace(groupClause.Prefix, Space.Location.GROUP_CLAUSE_PREFIX, p)!);
-        groupClause = groupClause.WithMarkers(VisitMarkers(groupClause.Markers, p));
-        groupClause = groupClause.Padding.WithGroupExpression(VisitRightPadded(groupClause.Padding.GroupExpression, JRightPadded.Location.GROUP_CLAUSE_GROUP_EXPRESSION, p)!);
-        groupClause = groupClause.WithKey(VisitAndCast<Expression>(groupClause.Key, p)!);
-        return groupClause;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.GROUP_CLAUSE_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithGroupExpression(VisitRightPadded(node.Padding.GroupExpression, JRightPadded.Location.GROUP_CLAUSE_GROUP_EXPRESSION, p)!);
+        node = node.WithKey(VisitAndCast<Expression>(node.Key, p)!);
+        return node;
     }
 
-    public virtual J? VisitIndexerDeclaration(Cs.IndexerDeclaration indexerDeclaration, P p)
+    public virtual J? VisitIndexerDeclaration(Cs.IndexerDeclaration node, P p)
     {
-        indexerDeclaration = indexerDeclaration.WithPrefix(VisitSpace(indexerDeclaration.Prefix, Space.Location.INDEXER_DECLARATION_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(indexerDeclaration, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.INDEXER_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.IndexerDeclaration)
         {
             return tempStatement;
         }
-        indexerDeclaration = (Cs.IndexerDeclaration) tempStatement;
-        indexerDeclaration = indexerDeclaration.WithMarkers(VisitMarkers(indexerDeclaration.Markers, p));
-        indexerDeclaration = indexerDeclaration.WithModifiers(indexerDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        indexerDeclaration = indexerDeclaration.WithTypeExpression(VisitAndCast<TypeTree>(indexerDeclaration.TypeExpression, p)!);
-        indexerDeclaration = indexerDeclaration.Padding.WithExplicitInterfaceSpecifier(indexerDeclaration.Padding.ExplicitInterfaceSpecifier == null ? null : VisitRightPadded(indexerDeclaration.Padding.ExplicitInterfaceSpecifier, JRightPadded.Location.INDEXER_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, p));
-        indexerDeclaration = indexerDeclaration.WithIndexer(VisitAndCast<Expression>(indexerDeclaration.Indexer, p)!);
-        indexerDeclaration = indexerDeclaration.Padding.WithParameters(VisitContainer(indexerDeclaration.Padding.Parameters, JContainer.Location.INDEXER_DECLARATION_PARAMETERS, p)!);
-        indexerDeclaration = indexerDeclaration.Padding.WithExpressionBody(indexerDeclaration.Padding.ExpressionBody == null ? null : VisitLeftPadded(indexerDeclaration.Padding.ExpressionBody, JLeftPadded.Location.INDEXER_DECLARATION_EXPRESSION_BODY, p));
-        indexerDeclaration = indexerDeclaration.WithAccessors(VisitAndCast<J.Block>(indexerDeclaration.Accessors, p));
-        return indexerDeclaration;
+        node = (Cs.IndexerDeclaration) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithModifiers(node.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
+        node = node.WithTypeExpression(VisitAndCast<TypeTree>(node.TypeExpression, p)!);
+        node = node.Padding.WithExplicitInterfaceSpecifier(node.Padding.ExplicitInterfaceSpecifier == null ? null : VisitRightPadded(node.Padding.ExplicitInterfaceSpecifier, JRightPadded.Location.INDEXER_DECLARATION_EXPLICIT_INTERFACE_SPECIFIER, p));
+        node = node.WithIndexer(VisitAndCast<Expression>(node.Indexer, p)!);
+        node = node.Padding.WithParameters(VisitContainer(node.Padding.Parameters, JContainer.Location.INDEXER_DECLARATION_PARAMETERS, p)!);
+        node = node.Padding.WithExpressionBody(node.Padding.ExpressionBody == null ? null : VisitLeftPadded(node.Padding.ExpressionBody, JLeftPadded.Location.INDEXER_DECLARATION_EXPRESSION_BODY, p));
+        node = node.WithAccessors(VisitAndCast<J.Block>(node.Accessors, p));
+        return node;
     }
 
-    public virtual J? VisitDelegateDeclaration(Cs.DelegateDeclaration delegateDeclaration, P p)
+    public virtual J? VisitDelegateDeclaration(Cs.DelegateDeclaration node, P p)
     {
-        delegateDeclaration = delegateDeclaration.WithPrefix(VisitSpace(delegateDeclaration.Prefix, Space.Location.DELEGATE_DECLARATION_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(delegateDeclaration, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.DELEGATE_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.DelegateDeclaration)
         {
             return tempStatement;
         }
-        delegateDeclaration = (Cs.DelegateDeclaration) tempStatement;
-        delegateDeclaration = delegateDeclaration.WithMarkers(VisitMarkers(delegateDeclaration.Markers, p));
-        delegateDeclaration = delegateDeclaration.WithAttributes(delegateDeclaration.Attributes.Map(el => (Cs.AttributeList?)Visit(el, p)));
-        delegateDeclaration = delegateDeclaration.WithModifiers(delegateDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        delegateDeclaration = delegateDeclaration.Padding.WithReturnType(VisitLeftPadded(delegateDeclaration.Padding.ReturnType, JLeftPadded.Location.DELEGATE_DECLARATION_RETURN_TYPE, p)!);
-        delegateDeclaration = delegateDeclaration.WithIdentifier(VisitAndCast<J.Identifier>(delegateDeclaration.Identifier, p)!);
-        delegateDeclaration = delegateDeclaration.Padding.WithTypeParameters(delegateDeclaration.Padding.TypeParameters == null ? null : VisitContainer(delegateDeclaration.Padding.TypeParameters, JContainer.Location.DELEGATE_DECLARATION_TYPE_PARAMETERS, p));
-        delegateDeclaration = delegateDeclaration.Padding.WithParameters(VisitContainer(delegateDeclaration.Padding.Parameters, JContainer.Location.DELEGATE_DECLARATION_PARAMETERS, p)!);
-        delegateDeclaration = delegateDeclaration.Padding.WithTypeParameterConstraintClauses(delegateDeclaration.Padding.TypeParameterConstraintClauses == null ? null : VisitContainer(delegateDeclaration.Padding.TypeParameterConstraintClauses, JContainer.Location.DELEGATE_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, p));
-        return delegateDeclaration;
+        node = (Cs.DelegateDeclaration) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithAttributes(node.Attributes.Map(el => (Cs.AttributeList?)Visit(el, p)));
+        node = node.WithModifiers(node.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
+        node = node.Padding.WithReturnType(VisitLeftPadded(node.Padding.ReturnType, JLeftPadded.Location.DELEGATE_DECLARATION_RETURN_TYPE, p)!);
+        node = node.WithIdentifier(VisitAndCast<J.Identifier>(node.Identifier, p)!);
+        node = node.Padding.WithTypeParameters(node.Padding.TypeParameters == null ? null : VisitContainer(node.Padding.TypeParameters, JContainer.Location.DELEGATE_DECLARATION_TYPE_PARAMETERS, p));
+        node = node.Padding.WithParameters(VisitContainer(node.Padding.Parameters, JContainer.Location.DELEGATE_DECLARATION_PARAMETERS, p)!);
+        node = node.Padding.WithTypeParameterConstraintClauses(node.Padding.TypeParameterConstraintClauses == null ? null : VisitContainer(node.Padding.TypeParameterConstraintClauses, JContainer.Location.DELEGATE_DECLARATION_TYPE_PARAMETER_CONSTRAINT_CLAUSES, p));
+        return node;
     }
 
-    public virtual J? VisitConversionOperatorDeclaration(Cs.ConversionOperatorDeclaration conversionOperatorDeclaration, P p)
+    public virtual J? VisitConversionOperatorDeclaration(Cs.ConversionOperatorDeclaration node, P p)
     {
-        conversionOperatorDeclaration = conversionOperatorDeclaration.WithPrefix(VisitSpace(conversionOperatorDeclaration.Prefix, Space.Location.CONVERSION_OPERATOR_DECLARATION_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(conversionOperatorDeclaration, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.CONVERSION_OPERATOR_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.ConversionOperatorDeclaration)
         {
             return tempStatement;
         }
-        conversionOperatorDeclaration = (Cs.ConversionOperatorDeclaration) tempStatement;
-        conversionOperatorDeclaration = conversionOperatorDeclaration.WithMarkers(VisitMarkers(conversionOperatorDeclaration.Markers, p));
-        conversionOperatorDeclaration = conversionOperatorDeclaration.WithModifiers(conversionOperatorDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        conversionOperatorDeclaration = conversionOperatorDeclaration.Padding.WithKind(VisitLeftPadded(conversionOperatorDeclaration.Padding.Kind, JLeftPadded.Location.CONVERSION_OPERATOR_DECLARATION_KIND, p)!);
-        conversionOperatorDeclaration = conversionOperatorDeclaration.Padding.WithReturnType(VisitLeftPadded(conversionOperatorDeclaration.Padding.ReturnType, JLeftPadded.Location.CONVERSION_OPERATOR_DECLARATION_RETURN_TYPE, p)!);
-        conversionOperatorDeclaration = conversionOperatorDeclaration.Padding.WithParameters(VisitContainer(conversionOperatorDeclaration.Padding.Parameters, JContainer.Location.CONVERSION_OPERATOR_DECLARATION_PARAMETERS, p)!);
-        conversionOperatorDeclaration = conversionOperatorDeclaration.Padding.WithExpressionBody(conversionOperatorDeclaration.Padding.ExpressionBody == null ? null : VisitLeftPadded(conversionOperatorDeclaration.Padding.ExpressionBody, JLeftPadded.Location.CONVERSION_OPERATOR_DECLARATION_EXPRESSION_BODY, p));
-        conversionOperatorDeclaration = conversionOperatorDeclaration.WithBody(VisitAndCast<J.Block>(conversionOperatorDeclaration.Body, p));
-        return conversionOperatorDeclaration;
+        node = (Cs.ConversionOperatorDeclaration) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithModifiers(node.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
+        node = node.Padding.WithKind(VisitLeftPadded(node.Padding.Kind, JLeftPadded.Location.CONVERSION_OPERATOR_DECLARATION_KIND, p)!);
+        node = node.Padding.WithReturnType(VisitLeftPadded(node.Padding.ReturnType, JLeftPadded.Location.CONVERSION_OPERATOR_DECLARATION_RETURN_TYPE, p)!);
+        node = node.Padding.WithParameters(VisitContainer(node.Padding.Parameters, JContainer.Location.CONVERSION_OPERATOR_DECLARATION_PARAMETERS, p)!);
+        node = node.Padding.WithExpressionBody(node.Padding.ExpressionBody == null ? null : VisitLeftPadded(node.Padding.ExpressionBody, JLeftPadded.Location.CONVERSION_OPERATOR_DECLARATION_EXPRESSION_BODY, p));
+        node = node.WithBody(VisitAndCast<J.Block>(node.Body, p));
+        return node;
     }
 
-    public virtual J? VisitTypeParameter(Cs.TypeParameter typeParameter, P p)
+    public virtual J? VisitTypeParameter(Cs.TypeParameter node, P p)
     {
-        typeParameter = typeParameter.WithPrefix(VisitSpace(typeParameter.Prefix, Space.Location.TYPE_PARAMETER_PREFIX, p)!);
-        typeParameter = typeParameter.WithMarkers(VisitMarkers(typeParameter.Markers, p));
-        typeParameter = typeParameter.WithAttributeLists(typeParameter.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
-        typeParameter = typeParameter.Padding.WithVariance(typeParameter.Padding.Variance == null ? null : VisitLeftPadded(typeParameter.Padding.Variance, JLeftPadded.Location.TYPE_PARAMETER_VARIANCE, p));
-        typeParameter = typeParameter.WithName(VisitAndCast<J.Identifier>(typeParameter.Name, p)!);
-        return typeParameter;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.TYPE_PARAMETER_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithAttributeLists(node.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
+        node = node.Padding.WithVariance(node.Padding.Variance == null ? null : VisitLeftPadded(node.Padding.Variance, JLeftPadded.Location.TYPE_PARAMETER_VARIANCE, p));
+        node = node.WithName(VisitAndCast<J.Identifier>(node.Name, p)!);
+        return node;
     }
 
-    public virtual J? VisitEnumDeclaration(Cs.EnumDeclaration enumDeclaration, P p)
+    public virtual J? VisitEnumDeclaration(Cs.EnumDeclaration node, P p)
     {
-        enumDeclaration = enumDeclaration.WithPrefix(VisitSpace(enumDeclaration.Prefix, Space.Location.ENUM_DECLARATION_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(enumDeclaration, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.ENUM_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.EnumDeclaration)
         {
             return tempStatement;
         }
-        enumDeclaration = (Cs.EnumDeclaration) tempStatement;
-        enumDeclaration = enumDeclaration.WithMarkers(VisitMarkers(enumDeclaration.Markers, p));
-        enumDeclaration = enumDeclaration.WithAttributeLists(enumDeclaration.AttributeLists?.Map(el => (Cs.AttributeList?)Visit(el, p)));
-        enumDeclaration = enumDeclaration.WithModifiers(enumDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        enumDeclaration = enumDeclaration.Padding.WithName(VisitLeftPadded(enumDeclaration.Padding.Name, JLeftPadded.Location.ENUM_DECLARATION_NAME, p)!);
-        enumDeclaration = enumDeclaration.Padding.WithBaseType(enumDeclaration.Padding.BaseType == null ? null : VisitLeftPadded(enumDeclaration.Padding.BaseType, JLeftPadded.Location.ENUM_DECLARATION_BASE_TYPE, p));
-        enumDeclaration = enumDeclaration.Padding.WithMembers(enumDeclaration.Padding.Members == null ? null : VisitContainer(enumDeclaration.Padding.Members, JContainer.Location.ENUM_DECLARATION_MEMBERS, p));
-        return enumDeclaration;
+        node = (Cs.EnumDeclaration) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithAttributeLists(node.AttributeLists?.Map(el => (Cs.AttributeList?)Visit(el, p)));
+        node = node.WithModifiers(node.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
+        node = node.Padding.WithName(VisitLeftPadded(node.Padding.Name, JLeftPadded.Location.ENUM_DECLARATION_NAME, p)!);
+        node = node.Padding.WithBaseType(node.Padding.BaseType == null ? null : VisitLeftPadded(node.Padding.BaseType, JLeftPadded.Location.ENUM_DECLARATION_BASE_TYPE, p));
+        node = node.Padding.WithMembers(node.Padding.Members == null ? null : VisitContainer(node.Padding.Members, JContainer.Location.ENUM_DECLARATION_MEMBERS, p));
+        return node;
     }
 
-    public virtual J? VisitEnumMemberDeclaration(Cs.EnumMemberDeclaration enumMemberDeclaration, P p)
+    public virtual J? VisitEnumMemberDeclaration(Cs.EnumMemberDeclaration node, P p)
     {
-        enumMemberDeclaration = enumMemberDeclaration.WithPrefix(VisitSpace(enumMemberDeclaration.Prefix, Space.Location.ENUM_MEMBER_DECLARATION_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(enumMemberDeclaration, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.ENUM_MEMBER_DECLARATION_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.EnumMemberDeclaration)
         {
             return tempExpression;
         }
-        enumMemberDeclaration = (Cs.EnumMemberDeclaration) tempExpression;
-        enumMemberDeclaration = enumMemberDeclaration.WithMarkers(VisitMarkers(enumMemberDeclaration.Markers, p));
-        enumMemberDeclaration = enumMemberDeclaration.WithAttributeLists(enumMemberDeclaration.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
-        enumMemberDeclaration = enumMemberDeclaration.WithName(VisitAndCast<J.Identifier>(enumMemberDeclaration.Name, p)!);
-        enumMemberDeclaration = enumMemberDeclaration.Padding.WithInitializer(enumMemberDeclaration.Padding.Initializer == null ? null : VisitLeftPadded(enumMemberDeclaration.Padding.Initializer, JLeftPadded.Location.ENUM_MEMBER_DECLARATION_INITIALIZER, p));
-        return enumMemberDeclaration;
+        node = (Cs.EnumMemberDeclaration) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithAttributeLists(node.AttributeLists.Map(el => (Cs.AttributeList?)Visit(el, p)));
+        node = node.WithName(VisitAndCast<J.Identifier>(node.Name, p)!);
+        node = node.Padding.WithInitializer(node.Padding.Initializer == null ? null : VisitLeftPadded(node.Padding.Initializer, JLeftPadded.Location.ENUM_MEMBER_DECLARATION_INITIALIZER, p));
+        return node;
     }
 
-    public virtual J? VisitAliasQualifiedName(Cs.AliasQualifiedName aliasQualifiedName, P p)
+    public virtual J? VisitAliasQualifiedName(Cs.AliasQualifiedName node, P p)
     {
-        aliasQualifiedName = aliasQualifiedName.WithPrefix(VisitSpace(aliasQualifiedName.Prefix, Space.Location.ALIAS_QUALIFIED_NAME_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(aliasQualifiedName, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.ALIAS_QUALIFIED_NAME_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.AliasQualifiedName)
         {
             return tempExpression;
         }
-        aliasQualifiedName = (Cs.AliasQualifiedName) tempExpression;
-        aliasQualifiedName = aliasQualifiedName.WithMarkers(VisitMarkers(aliasQualifiedName.Markers, p));
-        aliasQualifiedName = aliasQualifiedName.Padding.WithAlias(VisitRightPadded(aliasQualifiedName.Padding.Alias, JRightPadded.Location.ALIAS_QUALIFIED_NAME_ALIAS, p)!);
-        aliasQualifiedName = aliasQualifiedName.WithName(VisitAndCast<Expression>(aliasQualifiedName.Name, p)!);
-        return aliasQualifiedName;
+        node = (Cs.AliasQualifiedName) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithAlias(VisitRightPadded(node.Padding.Alias, JRightPadded.Location.ALIAS_QUALIFIED_NAME_ALIAS, p)!);
+        node = node.WithName(VisitAndCast<Expression>(node.Name, p)!);
+        return node;
     }
 
-    public virtual J? VisitArrayType(Cs.ArrayType arrayType, P p)
+    public virtual J? VisitArrayType(Cs.ArrayType node, P p)
     {
-        arrayType = arrayType.WithPrefix(VisitSpace(arrayType.Prefix, Space.Location.ARRAY_TYPE_PREFIX, p)!);
-        var tempExpression = (Expression) VisitExpression(arrayType, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.ARRAY_TYPE_PREFIX, p)!);
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.ArrayType)
         {
             return tempExpression;
         }
-        arrayType = (Cs.ArrayType) tempExpression;
-        arrayType = arrayType.WithMarkers(VisitMarkers(arrayType.Markers, p));
-        arrayType = arrayType.WithTypeExpression(VisitAndCast<TypeTree>(arrayType.TypeExpression, p));
-        arrayType = arrayType.WithDimensions(arrayType.Dimensions.Map(el => (J.ArrayDimension?)Visit(el, p)));
-        return arrayType;
+        node = (Cs.ArrayType) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithTypeExpression(VisitAndCast<TypeTree>(node.TypeExpression, p));
+        node = node.WithDimensions(node.Dimensions.Map(el => (J.ArrayDimension?)Visit(el, p)));
+        return node;
     }
 
-    public virtual J? VisitTry(Cs.Try @try, P p)
+    public virtual J? VisitTry(Cs.Try node, P p)
     {
-        @try = @try.WithPrefix(VisitSpace(@try.Prefix, Space.Location.TRY_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(@try, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.TRY_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.Try)
         {
             return tempStatement;
         }
-        @try = (Cs.Try) tempStatement;
-        @try = @try.WithMarkers(VisitMarkers(@try.Markers, p));
-        @try = @try.WithBody(VisitAndCast<J.Block>(@try.Body, p)!);
-        @try = @try.WithCatches(@try.Catches.Map(el => (Cs.Try.Catch?)Visit(el, p)));
-        @try = @try.Padding.WithFinally(@try.Padding.Finally == null ? null : VisitLeftPadded(@try.Padding.Finally, JLeftPadded.Location.TRY_FINALLIE, p));
-        return @try;
+        node = (Cs.Try) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithBody(VisitAndCast<J.Block>(node.Body, p)!);
+        node = node.WithCatches(node.Catches.Map(el => (Cs.Try.Catch?)Visit(el, p)));
+        node = node.Padding.WithFinally(node.Padding.Finally == null ? null : VisitLeftPadded(node.Padding.Finally, JLeftPadded.Location.TRY_FINALLIE, p));
+        return node;
     }
 
-    public virtual J? VisitTryCatch(Cs.Try.Catch @catch, P p)
+    public virtual J? VisitTryCatch(Cs.Try.Catch node, P p)
     {
-        @catch = @catch.WithPrefix(VisitSpace(@catch.Prefix, Space.Location.TRY_CATCH_PREFIX, p)!);
-        @catch = @catch.WithMarkers(VisitMarkers(@catch.Markers, p));
-        @catch = @catch.WithParameter(VisitAndCast<J.ControlParentheses<J.VariableDeclarations>>(@catch.Parameter, p)!);
-        @catch = @catch.Padding.WithFilterExpression(@catch.Padding.FilterExpression == null ? null : VisitLeftPadded(@catch.Padding.FilterExpression, JLeftPadded.Location.TRY_CATCH_FILTER_EXPRESSION, p));
-        @catch = @catch.WithBody(VisitAndCast<J.Block>(@catch.Body, p)!);
-        return @catch;
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.TRY_CATCH_PREFIX, p)!);
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithParameter(VisitAndCast<J.ControlParentheses<J.VariableDeclarations>>(node.Parameter, p)!);
+        node = node.Padding.WithFilterExpression(node.Padding.FilterExpression == null ? null : VisitLeftPadded(node.Padding.FilterExpression, JLeftPadded.Location.TRY_CATCH_FILTER_EXPRESSION, p));
+        node = node.WithBody(VisitAndCast<J.Block>(node.Body, p)!);
+        return node;
     }
 
-    public virtual J? VisitArrowExpressionClause(Cs.ArrowExpressionClause arrowExpressionClause, P p)
+    public virtual J? VisitArrowExpressionClause(Cs.ArrowExpressionClause node, P p)
     {
-        arrowExpressionClause = arrowExpressionClause.WithPrefix(VisitSpace(arrowExpressionClause.Prefix, Space.Location.ARROW_EXPRESSION_CLAUSE_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(arrowExpressionClause, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.ARROW_EXPRESSION_CLAUSE_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.ArrowExpressionClause)
         {
             return tempStatement;
         }
-        arrowExpressionClause = (Cs.ArrowExpressionClause) tempStatement;
-        arrowExpressionClause = arrowExpressionClause.WithMarkers(VisitMarkers(arrowExpressionClause.Markers, p));
-        arrowExpressionClause = arrowExpressionClause.Padding.WithExpression(VisitRightPadded(arrowExpressionClause.Padding.Expression, JRightPadded.Location.ARROW_EXPRESSION_CLAUSE_EXPRESSION, p)!);
-        return arrowExpressionClause;
+        node = (Cs.ArrowExpressionClause) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.Padding.WithExpression(VisitRightPadded(node.Padding.Expression, JRightPadded.Location.ARROW_EXPRESSION_CLAUSE_EXPRESSION, p)!);
+        return node;
     }
 
-    public virtual J? VisitAccessorDeclaration(Cs.AccessorDeclaration accessorDeclaration, P p)
+    public virtual J? VisitAccessorDeclaration(Cs.AccessorDeclaration node, P p)
     {
-        accessorDeclaration = accessorDeclaration.WithPrefix(VisitSpace(accessorDeclaration.Prefix, Space.Location.ACCESSOR_DECLARATION_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(accessorDeclaration, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.ACCESSOR_DECLARATION_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.AccessorDeclaration)
         {
             return tempStatement;
         }
-        accessorDeclaration = (Cs.AccessorDeclaration) tempStatement;
-        accessorDeclaration = accessorDeclaration.WithMarkers(VisitMarkers(accessorDeclaration.Markers, p));
-        accessorDeclaration = accessorDeclaration.WithAttributes(accessorDeclaration.Attributes.Map(el => (Cs.AttributeList?)Visit(el, p)));
-        accessorDeclaration = accessorDeclaration.WithModifiers(accessorDeclaration.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
-        accessorDeclaration = accessorDeclaration.Padding.WithKind(VisitLeftPadded(accessorDeclaration.Padding.Kind, JLeftPadded.Location.ACCESSOR_DECLARATION_KIND, p)!);
-        accessorDeclaration = accessorDeclaration.WithExpressionBody(VisitAndCast<Cs.ArrowExpressionClause>(accessorDeclaration.ExpressionBody, p));
-        accessorDeclaration = accessorDeclaration.WithBody(VisitAndCast<J.Block>(accessorDeclaration.Body, p));
-        return accessorDeclaration;
+        node = (Cs.AccessorDeclaration) tempStatement;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithAttributes(node.Attributes.Map(el => (Cs.AttributeList?)Visit(el, p)));
+        node = node.WithModifiers(node.Modifiers.Map(el => (J.Modifier?)Visit(el, p)));
+        node = node.Padding.WithKind(VisitLeftPadded(node.Padding.Kind, JLeftPadded.Location.ACCESSOR_DECLARATION_KIND, p)!);
+        node = node.WithExpressionBody(VisitAndCast<Cs.ArrowExpressionClause>(node.ExpressionBody, p));
+        node = node.WithBody(VisitAndCast<J.Block>(node.Body, p));
+        return node;
     }
 
-    public virtual J? VisitPointerFieldAccess(Cs.PointerFieldAccess pointerFieldAccess, P p)
+    public virtual J? VisitPointerFieldAccess(Cs.PointerFieldAccess node, P p)
     {
-        pointerFieldAccess = pointerFieldAccess.WithPrefix(VisitSpace(pointerFieldAccess.Prefix, Space.Location.POINTER_FIELD_ACCESS_PREFIX, p)!);
-        var tempStatement = (Statement) VisitStatement(pointerFieldAccess, p);
+        node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.POINTER_FIELD_ACCESS_PREFIX, p)!);
+        var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.PointerFieldAccess)
         {
             return tempStatement;
         }
-        pointerFieldAccess = (Cs.PointerFieldAccess) tempStatement;
-        var tempExpression = (Expression) VisitExpression(pointerFieldAccess, p);
+        node = (Cs.PointerFieldAccess) tempStatement;
+        var tempExpression = (Expression) VisitExpression(node, p);
         if (tempExpression is not Cs.PointerFieldAccess)
         {
             return tempExpression;
         }
-        pointerFieldAccess = (Cs.PointerFieldAccess) tempExpression;
-        pointerFieldAccess = pointerFieldAccess.WithMarkers(VisitMarkers(pointerFieldAccess.Markers, p));
-        pointerFieldAccess = pointerFieldAccess.WithTarget(VisitAndCast<Expression>(pointerFieldAccess.Target, p)!);
-        pointerFieldAccess = pointerFieldAccess.Padding.WithName(VisitLeftPadded(pointerFieldAccess.Padding.Name, JLeftPadded.Location.POINTER_FIELD_ACCESS_NAME, p)!);
-        return pointerFieldAccess;
+        node = (Cs.PointerFieldAccess) tempExpression;
+        node = node.WithMarkers(VisitMarkers(node.Markers, p));
+        node = node.WithTarget(VisitAndCast<Expression>(node.Target, p)!);
+        node = node.Padding.WithName(VisitLeftPadded(node.Padding.Name, JLeftPadded.Location.POINTER_FIELD_ACCESS_NAME, p)!);
+        return node;
     }
 
 }

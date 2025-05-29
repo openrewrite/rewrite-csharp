@@ -1,6 +1,6 @@
 namespace Rewrite.Core;
 
-public class DelegatingExecutionContext(ExecutionContext @delegate) : ExecutionContext
+public class DelegatingExecutionContext(IExecutionContext @delegate) : IExecutionContext
 {
     public T? GetMessage<T>(string key, T? defaultValue = default)
     {

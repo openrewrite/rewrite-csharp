@@ -25,5 +25,7 @@ partial interface J
 
             return base.Equals(obj);
         }
+
+        public List<Identifier> Names => [this];
     }
 }

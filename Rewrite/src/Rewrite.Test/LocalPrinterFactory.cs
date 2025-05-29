@@ -1,4 +1,5 @@
-﻿using Rewrite.Core;
+﻿using System.Runtime.CompilerServices;
+using Rewrite.Core;
 using Rewrite.RewriteCSharp;
 
 namespace Rewrite.CSharp.Tests;
@@ -13,7 +14,7 @@ public class LocalPrinterFactory : IPrinterFactory
     private class LocalPrinter<T> : TreeVisitor<Rewrite.Core.Tree, PrintOutputCapture<T>>
     {
         readonly CSharpPrinter<T> _printer = new ();
-        public override Core.Tree? Visit(Core.Tree? tree, PrintOutputCapture<T> p)
+        public override Core.Tree? Visit(Core.Tree? tree, PrintOutputCapture<T> p, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
             return _printer.Visit(tree, p);
         }

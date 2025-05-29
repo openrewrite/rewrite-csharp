@@ -39,8 +39,8 @@ public class ProjectParser
     }
 
     private readonly Project _project;
-    private readonly IList<Parser.Input> _inputs = [];
-    private readonly Parser _parser;
+    private readonly IList<IParser.Input> _inputs = [];
+    private readonly IParser _parser;
     private readonly string solutionDir;
 
 
@@ -66,7 +66,7 @@ public class ProjectParser
         var projectItems = _project.GetItems("Compile").ToList();
         foreach (var projectItem in projectItems)
         {
-            _inputs.Add(new Parser.Input(Path.Combine(projectItem.Project.DirectoryPath, projectItem.EvaluatedInclude),
+            _inputs.Add(new IParser.Input(Path.Combine(projectItem.Project.DirectoryPath, projectItem.EvaluatedInclude),
                 () => new FileStream(Path.Combine(projectItem.Project.DirectoryPath, projectItem.EvaluatedInclude),
                     FileMode.Open)));
         }

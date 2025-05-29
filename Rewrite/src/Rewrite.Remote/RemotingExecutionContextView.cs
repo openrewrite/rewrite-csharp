@@ -1,13 +1,12 @@
 using Rewrite.Core;
-using ExecutionContext = Rewrite.Core.ExecutionContext;
 
 namespace Rewrite.Remote;
 
-public class RemotingExecutionContextView(ExecutionContext @delegate) : DelegatingExecutionContext(@delegate)
+public class RemotingExecutionContextView(IExecutionContext @delegate) : DelegatingExecutionContext(@delegate)
 {
-    private readonly ExecutionContext _delegate = @delegate;
+    private readonly IExecutionContext _delegate = @delegate;
 
-    public static RemotingExecutionContextView View(ExecutionContext ctx)
+    public static RemotingExecutionContextView View(IExecutionContext ctx)
     {
         if (ctx is RemotingExecutionContextView)
         {

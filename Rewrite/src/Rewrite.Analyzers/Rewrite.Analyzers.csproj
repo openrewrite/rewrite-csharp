@@ -7,9 +7,9 @@
         <DefineConstants>$(DefineConstants);Analyzer</DefineConstants>
     </PropertyGroup>
     <PropertyGroup>
-        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+        <EnforceExtendedAnalyzerRules>false</EnforceExtendedAnalyzerRules>
         <IncludeBuildOutput>false</IncludeBuildOutput> <!-- disable convention based nuget creation - we're controlling it fully manually -->
-        <NoWarn>NU5128;RS2000;RS2008</NoWarn>
+        <NoWarn>NU5128;RS2000;RS2008;RS1042;RS1038</NoWarn>
         
         <BuildOutputTargetFolder>analyzers</BuildOutputTargetFolder>
         <IncludeSymbols>false</IncludeSymbols>
@@ -25,14 +25,18 @@
         </Compile>
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" >
+      <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="$(MicrosoftCodeAnalysisVersion)">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0"  PrivateAssets="all"/>
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisVersion)" PrivateAssets="all" />
+      <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="$(MicrosoftCodeAnalysisVersion)" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" GeneratePathProperty="true" PrivateAssets="all" />
       <PackageReference Include="YamlDotNet" Version="16.0.0" GeneratePathProperty="true" PrivateAssets="all" />
-
+        <PackageReference Include="PolySharp" Version="1.15.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
     <PropertyGroup>
         <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn> <!-- append additional dlls from nuget references - analyzers can't reference nuget packages without this hack -->

@@ -1,4 +1,6 @@
-﻿namespace Rewrite.RewriteCSharp.Tree;
+﻿using Rewrite.RewriteJava.Tree;
+
+namespace Rewrite.RewriteCSharp.Tree;
 
 public partial interface CSharpSourceFile : Cs, MutableSourceFile
 {

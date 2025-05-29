@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using ExecutionContext = Rewrite.Core.ExecutionContext;
 
 namespace Rewrite.RewriteCSharp.Format;
 
@@ -7,5 +6,5 @@ namespace Rewrite.RewriteCSharp.Format;
 [Description("Formats the code for standard whitespace and indentation")]
 public class AutoFormatRecipe : Recipe
 {
-    public override ITreeVisitor<Core.Tree, ExecutionContext> GetVisitor() => new AutoFormatVisitor<ExecutionContext>();
+    public override ITreeVisitor<Core.Tree, IExecutionContext> GetVisitor() => new AutoFormatVisitor<IExecutionContext>();
 }

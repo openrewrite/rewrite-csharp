@@ -26,7 +26,7 @@ public record YamlReceiver : Receiver
 
     private class Visitor : YamlVisitor<ReceiverContext>
     {
-        public override Yaml? Visit(Tree? tree, ReceiverContext ctx)
+        public override Yaml? Visit(Tree? tree, ReceiverContext ctx, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
             Cursor = new Cursor(Cursor, tree!);
 

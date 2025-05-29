@@ -23,6 +23,17 @@ namespace Rewrite.RewriteJava.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface J : Rewrite.Core.Tree
 {
+    /// <summary>
+    /// Represents a switch case label in a switch statement.
+    /// <br/>Example:
+    /// <code>{@code
+    /// switch(x) {
+    ///     case 1:
+    ///         doSomething();
+    ///         break;
+    /// }
+    /// }</code>
+    /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif

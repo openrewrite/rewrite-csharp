@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
 using Rewrite.Remote;
@@ -26,7 +27,7 @@ public record PropertiesReceiver : Receiver
 
     private class Visitor : PropertiesVisitor<ReceiverContext>
     {
-        public override Properties? Visit(Tree? tree, ReceiverContext ctx)
+        public override Properties? Visit(Tree? tree, ReceiverContext ctx, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
             Cursor = new Cursor(Cursor, tree!);
 

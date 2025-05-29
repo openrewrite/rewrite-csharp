@@ -1,4 +1,6 @@
-﻿namespace Rewrite.CSharp.Tests;
+﻿using Rewrite.Tests;
+
+namespace Rewrite.CSharp.Tests;
 
 public class GlobalSetup
 {

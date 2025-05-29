@@ -26,7 +26,7 @@ public record XmlReceiver : Receiver
 
     private class Visitor : XmlVisitor<ReceiverContext>
     {
-        public override Xml? Visit(Tree? tree, ReceiverContext ctx)
+        public override Xml? Visit(Tree? tree, ReceiverContext ctx, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
             Cursor = new Cursor(Cursor, tree!);
 

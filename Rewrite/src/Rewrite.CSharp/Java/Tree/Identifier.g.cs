@@ -23,6 +23,13 @@ namespace Rewrite.RewriteJava.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface J : Rewrite.Core.Tree
 {
+    /// <summary>
+    /// Represents an identifier in Java code.
+    /// <br/>Example:
+    /// <code>{@code
+    /// MyClass variableName;
+    /// }</code>
+    /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif
@@ -34,7 +41,7 @@ public partial interface J : Rewrite.Core.Tree
     string simpleName,
     JavaType? type,
     JavaType.Variable? fieldType
-    ) : J, TypeTree, Expression, Expression<Identifier>, TypedTree<Identifier>, J<Identifier>, TypeTree<Identifier>, MutableTree<Identifier>
+    ) : J, TypeTree, Expression, VariableDeclarator, Expression<Identifier>, TypedTree<Identifier>, J<Identifier>, TypeTree<Identifier>, MutableTree<Identifier>
     {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {

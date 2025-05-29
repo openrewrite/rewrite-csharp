@@ -55,28 +55,18 @@ public class ParseExceptionResult(
     /**
      * The type of tree element that was being parsed when the failure occurred.
      */
-    public static ParseExceptionResult Build(Type parserClass, Exception t, string? message)
+    public static ParseExceptionResult Build(Exception t)
     {
-        var simpleName = t.GetType().Name;
         return new ParseExceptionResult(
             Tree.RandomId(),
-            parserClass.Name,
-            !string.IsNullOrEmpty(simpleName) ? simpleName : t.GetType().Name,
-            (message ?? "") + t.SanitizeStackTrace(parserClass),
+            "",
+            t.GetType().Name,
+            t.ToString(),
             null
         );
     }
 
-    public static ParseExceptionResult Build(Parser parser, Exception t, string? message)
-    {
-        return Build(parser.GetType(), t, message);
-    }
-
-    public static ParseExceptionResult Build(Parser parser, Exception t)
-    {
-        return Build(parser.GetType(), t, null);
-    }
-
+    
     public bool Equals(Marker.Marker? other)
     {
         return other is ParseExceptionResult && other.Id == Id;

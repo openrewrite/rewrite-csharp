@@ -5,6 +5,7 @@
 using NuGet.Configuration;
 using Nuke.Common.IO;
 using Rewrite.CSharp.Tests;
+using Rewrite.Tests;
 
 [assembly: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 

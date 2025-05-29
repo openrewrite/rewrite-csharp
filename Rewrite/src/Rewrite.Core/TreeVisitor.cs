@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Rewrite.Core.Marker;
 
 namespace Rewrite.Core;
@@ -9,6 +10,7 @@ public abstract class TreeVisitor<T, P> : ITreeVisitor<T, P> where T : class, Tr
 {
 
     public Cursor Cursor { get; set; } = new (null, Cursor.ROOT_VALUE);
+    
 
     public bool IsAdaptableTo(Type adaptTo)
     {
@@ -56,14 +58,14 @@ public abstract class TreeVisitor<T, P> : ITreeVisitor<T, P> where T : class, Tr
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
 #endif
-    public virtual T? Visit(Tree? tree, P p)
+    public virtual T? Visit(Tree? tree, P p, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
     {
         if (tree is null)
         {
             return DefaultValue(tree, p);
         }
 
-        Cursor = new Cursor(Cursor, tree);
+        Cursor = new Cursor(Cursor, tree, callingMethodName, callingArgumentExpression);
 
         T? t = null;
         var isAcceptable = tree.IsAcceptable(this, p) && (tree is not SourceFile file || IsAcceptable(file, p));
@@ -102,7 +104,7 @@ public abstract class TreeVisitor<T, P> : ITreeVisitor<T, P> where T : class, Tr
         return (T2?)Visit(tree, p);
     }
 
-    public virtual Markers VisitMarkers(Marker.Markers? markers, P p)
+    public virtual Markers VisitMarkers(Markers? markers, P p)
     {
         if (markers == null || ReferenceEquals(markers, Marker.Markers.EMPTY))
         {
@@ -120,7 +122,7 @@ public abstract class TreeVisitor<T, P> : ITreeVisitor<T, P> where T : class, Tr
         };
     }
 
-    public virtual M VisitMarker<M>(M marker, P p) where M : Marker.Marker
+    public virtual Core.Marker.Marker VisitMarker(Core.Marker.Marker marker, P p)
     {
         return marker;
     }

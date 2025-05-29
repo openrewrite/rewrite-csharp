@@ -670,15 +670,35 @@ public interface JavaType
         }
     }
 
-    public class Primitive(Primitive.PrimitiveType kind) : JavaType
+    public class Primitive : JavaType
     {
-        public PrimitiveType Kind => kind;
+        private readonly Primitive.PrimitiveType _kind;
 
-        public string GetKeyword() => kind == PrimitiveType.None ? "" : kind.ToString().ToLower();
+        internal Primitive(Primitive.PrimitiveType kind)
+        {
+            _kind = kind;
+        }
+        
+        public static Primitive Boolean { get; } = new(PrimitiveType.Boolean);
+        public static Primitive Byte { get; } = new(PrimitiveType.Byte);
+        public static Primitive Char { get; } = new(PrimitiveType.Char);
+        public static Primitive Double { get; } = new(PrimitiveType.Double);
+        public static Primitive Float { get; } = new(PrimitiveType.Float);
+        public static Primitive Int { get; } = new(PrimitiveType.Int);
+        public static Primitive Long { get; } = new(PrimitiveType.Long);
+        public static Primitive Short { get; } = new(PrimitiveType.Short);
+        public static Primitive Void { get; } = new(PrimitiveType.Void);
+        public static Primitive String { get; } = new(PrimitiveType.String);
+        public static Primitive None { get; } = new(PrimitiveType.None);
+        public static Primitive Null { get; } = new(PrimitiveType.Null);
+
+        public PrimitiveType Kind => _kind;
+
+        public string GetKeyword() => _kind == PrimitiveType.None ? "" : _kind.ToString().ToLower();
 
         public bool IsNumeric()
         {
-            return kind is PrimitiveType.Double or PrimitiveType.Int or PrimitiveType.Float or PrimitiveType.Long
+            return _kind is PrimitiveType.Double or PrimitiveType.Int or PrimitiveType.Float or PrimitiveType.Long
                 or PrimitiveType.Short;
         }
 

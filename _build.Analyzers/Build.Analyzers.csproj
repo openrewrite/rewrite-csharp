@@ -8,16 +8,16 @@
         <RootNamespace>BuildAnalyzers</RootNamespace>
     </PropertyGroup>
     <PropertyGroup>
-        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+        <EnforceExtendedAnalyzerRules>false</EnforceExtendedAnalyzerRules>
         <IncludeBuildOutput>false</IncludeBuildOutput> <!-- disable convention based nuget creation - we're controlling it fully manually -->
-        <NoWarn>NU5128;RS2000;RS2008</NoWarn>
+        <NoWarn>NU5128;RS2000;RS2008;RS1035</NoWarn>
 
         <BuildOutputTargetFolder>analyzers</BuildOutputTargetFolder>
         <IncludeSymbols>false</IncludeSymbols>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" >
+      <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="4.14.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>

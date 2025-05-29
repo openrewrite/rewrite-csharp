@@ -23,6 +23,13 @@ namespace Rewrite.RewriteJava.Tree;
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
 public partial interface J : Rewrite.Core.Tree
 {
+    /// <summary>
+    /// Represents a Java instanceof expression.
+    /// <br/>Example:
+    /// <code>{@code
+    /// obj instanceof String
+    /// }</code>
+    /// </summary>
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif
@@ -33,7 +40,8 @@ public partial interface J : Rewrite.Core.Tree
     JRightPadded<Expression> expression,
     J clazz,
     J? pattern,
-    JavaType? type
+    JavaType? type,
+    Modifier? modifier
     ) : J, Expression, TypedTree, Expression<InstanceOf>, TypedTree<InstanceOf>, J<InstanceOf>, MutableTree<InstanceOf>
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
@@ -70,19 +78,19 @@ public partial interface J : Rewrite.Core.Tree
 
         public InstanceOf WithId(Guid newId)
         {
-            return newId == Id ? this : new InstanceOf(newId, Prefix, Markers, _expression, Clazz, Pattern, Type);
+            return newId == Id ? this : new InstanceOf(newId, Prefix, Markers, _expression, Clazz, Pattern, Type, Modifier);
         }
         public Space Prefix { get;  set; } = prefix;
 
         public InstanceOf WithPrefix(Space newPrefix)
         {
-            return newPrefix == Prefix ? this : new InstanceOf(Id, newPrefix, Markers, _expression, Clazz, Pattern, Type);
+            return newPrefix == Prefix ? this : new InstanceOf(Id, newPrefix, Markers, _expression, Clazz, Pattern, Type, Modifier);
         }
         public Markers Markers { get;  set; } = markers;
 
         public InstanceOf WithMarkers(Markers newMarkers)
         {
-            return ReferenceEquals(newMarkers, Markers) ? this : new InstanceOf(Id, Prefix, newMarkers, _expression, Clazz, Pattern, Type);
+            return ReferenceEquals(newMarkers, Markers) ? this : new InstanceOf(Id, Prefix, newMarkers, _expression, Clazz, Pattern, Type, Modifier);
         }
         private JRightPadded<Expression> _expression = expression;
         public Expression Expression => _expression.Element;
@@ -95,19 +103,25 @@ public partial interface J : Rewrite.Core.Tree
 
         public InstanceOf WithClazz(J newClazz)
         {
-            return ReferenceEquals(newClazz, Clazz) ? this : new InstanceOf(Id, Prefix, Markers, _expression, newClazz, Pattern, Type);
+            return ReferenceEquals(newClazz, Clazz) ? this : new InstanceOf(Id, Prefix, Markers, _expression, newClazz, Pattern, Type, Modifier);
         }
         public J? Pattern { get;  set; } = pattern;
 
         public InstanceOf WithPattern(J? newPattern)
         {
-            return ReferenceEquals(newPattern, Pattern) ? this : new InstanceOf(Id, Prefix, Markers, _expression, Clazz, newPattern, Type);
+            return ReferenceEquals(newPattern, Pattern) ? this : new InstanceOf(Id, Prefix, Markers, _expression, Clazz, newPattern, Type, Modifier);
         }
         public JavaType? Type { get;  set; } = type;
 
         public InstanceOf WithType(JavaType? newType)
         {
-            return newType == Type ? this : new InstanceOf(Id, Prefix, Markers, _expression, Clazz, Pattern, newType);
+            return newType == Type ? this : new InstanceOf(Id, Prefix, Markers, _expression, Clazz, Pattern, newType, Modifier);
+        }
+        public J.Modifier? Modifier { get;  set; } = modifier;
+
+        public InstanceOf WithModifier(J.Modifier? newModifier)
+        {
+            return ReferenceEquals(newModifier, Modifier) ? this : new InstanceOf(Id, Prefix, Markers, _expression, Clazz, Pattern, Type, newModifier);
         }
         public sealed record PaddingHelper(J.InstanceOf T)
         {
@@ -115,7 +129,7 @@ public partial interface J : Rewrite.Core.Tree
 
             public J.InstanceOf WithExpression(JRightPadded<Expression> newExpression)
             {
-                return Expression == newExpression ? T : new J.InstanceOf(T.Id, T.Prefix, T.Markers, newExpression, T.Clazz, T.Pattern, T.Type);
+                return Expression == newExpression ? T : new J.InstanceOf(T.Id, T.Prefix, T.Markers, newExpression, T.Clazz, T.Pattern, T.Type, T.Modifier);
             }
 
         }

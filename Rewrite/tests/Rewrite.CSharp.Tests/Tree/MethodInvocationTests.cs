@@ -67,6 +67,7 @@ public class MethodInvocationTests : RewriteTest
 
         var lst = src.Parse();
         lst.ToString().ShouldBeSameAs(src.Before);
+        Console.WriteLine(lst.RenderLstTree());
     }
 
     [Test]

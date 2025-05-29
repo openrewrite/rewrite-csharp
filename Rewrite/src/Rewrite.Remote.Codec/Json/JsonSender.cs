@@ -18,7 +18,7 @@ public record JsonSender : Sender
 
     private class Visitor : JsonVisitor<SenderContext>
     {
-        public override Json Visit(Tree? tree, SenderContext ctx)
+        public override Json Visit(Tree? tree, SenderContext ctx, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
             Cursor = new Cursor(Cursor, tree ?? throw new InvalidOperationException($"Parameter {nameof(tree)} should not be null"));
             ctx.SendNode(tree, x => x, ctx.SendTree);

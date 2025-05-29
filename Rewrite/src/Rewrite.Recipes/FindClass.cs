@@ -5,7 +5,6 @@ using Rewrite.RewriteCSharp;
 using Rewrite.RewriteCSharp.Tree;
 using Rewrite.RewriteJava;
 using Rewrite.RewriteJava.Tree;
-using ExecutionContext = Rewrite.Core.ExecutionContext;
 
 namespace Rewrite.Recipes;
 
@@ -17,20 +16,20 @@ public class FindClass: Recipe
     [Description("A special sign to specifically highlight the class found by the recipe")]
     [Example("~~>")]
     public string? Description { get; set; }
-    public override ITreeVisitor<Tree, ExecutionContext> GetVisitor()
+    public override ITreeVisitor<Tree, IExecutionContext> GetVisitor()
     {
         return new FindClassVisitor(Description);
     }
 
-    private class FindClassVisitor(string? description = null) : CSharpVisitor<ExecutionContext>
+    private class FindClassVisitor(string? description = null) : CSharpVisitor<IExecutionContext>
     {
-        public override J? VisitClassDeclaration(J.ClassDeclaration classDeclaration, ExecutionContext ctx)
+        public override J? VisitClassDeclaration(J.ClassDeclaration classDeclaration, IExecutionContext ctx)
         {
             return ApplyMarker(base.VisitClassDeclaration(classDeclaration, ctx));
 
         }
 
-        public override J? VisitClassDeclaration(Cs.ClassDeclaration classDeclaration, ExecutionContext p)
+        public override J? VisitClassDeclaration(Cs.ClassDeclaration classDeclaration, IExecutionContext p)
         {
             return ApplyMarker(base.VisitClassDeclaration(classDeclaration, p));
         }

@@ -13,4 +13,7 @@ class RecipeArgument : OptionDescriptor
     }
 
     public object? Value { get; internal set; }
+    
+    public override string ToString() => $"{Name}: {Value}";
+
 }

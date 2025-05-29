@@ -1,10 +1,9 @@
 ﻿using Rewrite.Core;
+using Rewrite.CSharp.Tests;
 using Rewrite.Diagnostics;
 using Rewrite.Test;
-using Serilog;
-using Serilog.Sinks.SystemConsole.Themes;
 
-namespace Rewrite.CSharp.Tests;
+namespace Rewrite.Tests;
 
 public static class CommonTestHooks
 {
