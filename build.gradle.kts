@@ -29,3 +29,6 @@ tasks.register("getTasks") {
         println(json)
     }
 }
+tasks.withType<JavaCompile>().configureEach {
+    options.compilerArgs.add("-Xlint:unchecked")
+}
