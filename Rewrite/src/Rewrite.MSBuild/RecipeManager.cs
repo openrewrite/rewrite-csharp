@@ -293,7 +293,9 @@ public class RecipeManager
                     .Distinct()
                     .Where(x => x != "")
                     .OrderBy(x => x)
-                    .Last();
+                    .LastOrDefault();
+                if(targetFolder is null)
+                    return [];
                 var targetFilesRegex = new Regex($"^{targetFolder}.+");
                 var files =  lib.Files.Where(x => targetFilesRegex.IsMatch(x));
                 
