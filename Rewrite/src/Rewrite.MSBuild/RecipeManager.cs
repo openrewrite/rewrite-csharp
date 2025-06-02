@@ -99,8 +99,8 @@ public class RecipeManager
         // var executionContext = await RecipeExecutionContext.Create(selectedRecipePackage, cachingSourceProvider, cancellationToken);
         if (!_loadedRecipes.TryGetValue(selectedRecipePackage, out var recipeExecutionContext))
         {
-            var projectDefintion = CreatePackageRestoreSpec(selectedRecipePackage);
-            var lockFile = await RestoreProject(projectDefintion, cachingSourceProvider, cancellationToken);
+            var projectDefinition = CreatePackageRestoreSpec(selectedRecipePackage);
+            var lockFile = await RestoreProject(projectDefinition, cachingSourceProvider, cancellationToken);
             var requiredAssemblies = GetRequiredAssemblies(lockFile, settings);
             recipeExecutionContext = new RecipeExecutionContext(selectedRecipePackage, requiredAssemblies.Select(x => x.AssemblyPath).ToList());
             _loadedRecipes.Add(selectedRecipePackage, recipeExecutionContext);
@@ -279,9 +279,27 @@ public class RecipeManager
                 .Select(assembly => (Folder: libsToPath[(targetLib.Name!, targetLib.Version!)], File: assembly.Path, PackageIdentity: new PackageIdentity(targetLib.Name, targetLib.Version))))
             
             .ToList();
-        var dllsInAnalyzerSubfolder = new Regex(@"^analyzers/dotnet/cs/[^/]+\.dll$", RegexOptions.Compiled);
-        var analyzerDlls = lockFile.Libraries.SelectMany(lib => lib.Files.Select(file => (Folder: lib.Path, File: file, PackageIdentity: new PackageIdentity(lib.Name, lib.Version)) ))
-            .Where(x => dllsInAnalyzerSubfolder.IsMatch(x.File))
+        var targetFolderRegex = new Regex(@"^analyzers/dotnet/(roslyn[0-9]\.[0-9]/)?cs/");
+        
+        var analyzerDlls = lockFile.Libraries.SelectMany(lib =>
+            {
+                // we may have folder structure like this, so we need to just pick files from one folder
+                // "analyzers/dotnet/roslyn4.7/cs/test.dll",
+                // "analyzers/dotnet/roslyn4.7/cs/test2.dll",
+                // "analyzers/dotnet/roslyn4.3/cs/test.dll",
+                // "analyzers/dotnet/cs/test.dll"
+                var targetFolder = lib.Files
+                    .Select(x => targetFolderRegex.Match(x).Value)
+                    .Distinct()
+                    .Where(x => x != "")
+                    .OrderBy(x => x)
+                    .Last();
+                var targetFilesRegex = new Regex($"^{targetFolder}.+");
+                var files =  lib.Files.Where(x => targetFilesRegex.IsMatch(x));
+                
+                return files.Select(file => (Folder: lib.Path, File: file, PackageIdentity: new PackageIdentity(lib.Name, lib.Version)));
+            })
+            // .Where(x => dllsInAnalyzerSubfolder.IsMatch(x.File))
             .ToList();
         
         //

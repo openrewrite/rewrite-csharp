@@ -35,9 +35,15 @@ public class RecipeExecutionContext : AssemblyLoadContext
     public RecipeExecutionContext(PackageIdentity recipePackageName, List<AbsolutePath> assemblies) : base(recipePackageName.ToString())
     {
         SyntaxFactory.CompilationUnit();
-        _assemblies = assemblies.ToDictionary(x => AssemblyName.GetAssemblyName(x), x => x, _assemblyNameEqualityComparer);
-        var recipes = FindRecipeAssemblies();
-        Recipes = recipes.SelectMany(x => x).ToList();
+        _assemblies = assemblies
+            .Where(x => !x.Name.EndsWith(".resources.dll"))
+            .ToDictionary(x => AssemblyName.GetAssemblyName(x), x => x, _assemblyNameEqualityComparer);
+        Recipes = FindRecipesInAssemblies();
+        // Recipes = recipes
+            // .SelectMany(x => x)
+            // .GroupBy(x => x.Id)
+            // .Select(x => x.First()) // eliminate roslyn recipes where multiple types address same diagnostic id
+            // .ToList();
     }
     
 
@@ -146,9 +152,10 @@ public class RecipeExecutionContext : AssemblyLoadContext
     }
 
     
-    private ILookup<AbsolutePath, RecipeDescriptor> FindRecipeAssemblies()
+    private List<RecipeDescriptor> FindRecipesInAssemblies()
     {
-        var results = new List<(AbsolutePath Path, RecipeDescriptor Recipie)>();
+        // var results = new List<(AbsolutePath Path, RecipeDescriptor Recipie)>();
+        var results = new List<RecipeDescriptor>();
         // var resolver = new PathAssemblyResolver(assembliesInRecipePackage.Select(x => x.Name.ToString()));
         // var runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
         // var currentDirAssemblies = Directory.EnumerateFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "*.dll");
@@ -156,20 +163,20 @@ public class RecipeExecutionContext : AssemblyLoadContext
         // var resolver = new PathAssemblyResolver(runtimeAssemblies);
         var resolver = new RecipieAssemblyResolver();
         using var mlc = new MetadataLoadContext(resolver);
-        var recipeAttributeAssembly = mlc.LoadFromAssemblyPath(typeof(RecipesAttribute).Assembly.Location);
-        var recipeAttributeType = recipeAttributeAssembly.GetType(typeof(RecipesAttribute).FullName!)!;
-        var diagnosticAnalyzerAssembly = mlc.LoadFromAssemblyPath(typeof(DiagnosticAnalyzer).Assembly.Location);
-        var diagnosticAnalyzerAttributeType = diagnosticAnalyzerAssembly.GetType(typeof(DiagnosticAnalyzerAttribute).FullName!)!;
+        var mlcRecipeAttributeAssembly = mlc.LoadFromAssemblyPath(typeof(RecipesAttribute).Assembly.Location);
+        var mlcRecipeAttributeType = mlcRecipeAttributeAssembly.GetType(typeof(RecipesAttribute).FullName!)!;
+        var mlcDiagnosticAnalyzerAssembly = mlc.LoadFromAssemblyPath(typeof(DiagnosticAnalyzer).Assembly.Location);
+        var mlcDiagnosticAnalyzerAttributeType = mlcDiagnosticAnalyzerAssembly.GetType(typeof(DiagnosticAnalyzerAttribute).FullName!)!;
+        var mlcCodeFixupAssembly = mlc.LoadFromAssemblyPath(typeof(ExportCodeFixProviderAttribute).Assembly.Location);
+        var mlcCodeFixupAttributeType = mlcCodeFixupAssembly.GetType(typeof(ExportCodeFixProviderAttribute).FullName!)!;
         // var loadedDiagnosticAnalyzerType = LoadFromAssemblyPath(typeof(DiagnosticAnalyzerAttribute).Assembly.Location);
         // Load assembly into MetadataLoadContext.
-        foreach (var assemblyPath in _assemblies.Values)
-        {
-            
-            var metadataAssembly = mlc.LoadFromAssemblyPath(assemblyPath);
-            var recipeAttribute = metadataAssembly.GetCustomAttributesData()
-                .FirstOrDefault(x => x.AttributeType == recipeAttributeType);
 
-            if (recipeAttribute != null)
+        var metadataAssemblies = _assemblies.Values.Select(x => mlc.LoadFromAssemblyPath(x)).ToList();
+
+        var openRewriteRecipes = metadataAssemblies
+            .SelectMany(assembly => assembly.GetCustomAttributesData().Where(x => x.AttributeType == mlcRecipeAttributeType))
+            .SelectMany(recipeAttribute =>
             {
                 IReadOnlyCollection<CustomAttributeTypedArgument> recipeAttributeArguments = recipeAttribute
                     .ConstructorArguments[0].Value as IReadOnlyCollection<CustomAttributeTypedArgument> ?? new List<CustomAttributeTypedArgument>();
@@ -177,41 +184,114 @@ public class RecipeExecutionContext : AssemblyLoadContext
                     .Where(x => x.Value != null)
                     .Select(x => (string)x.Value!)
                     .ToList();
-                var recipeDescriptors = recipeDescriptorsJson.Select(x => JsonConvert.DeserializeObject<RecipeDescriptor>(x)).ToList();
-                results.AddRange(recipeDescriptors.Select(x => (assemblyPath, x!)));
-            }
+                var recipeDescriptors = recipeDescriptorsJson.Select(x => JsonConvert.DeserializeObject<RecipeDescriptor>(x)!).ToList();
+                return recipeDescriptors;
+            })
+            .ToList();
 
-            var hasExportedAnalyzers = metadataAssembly.ExportedTypes
-                .Any(x => x.GetCustomAttributesData().Any(attr => attr.AttributeType == diagnosticAnalyzerAttributeType));
-            if (hasExportedAnalyzers)
+        var analyzerRecipes = metadataAssemblies
+            .SelectMany(x => x.ExportedTypes)
+            .Where(type => type.GetCustomAttributesData().Any(attr => attr.AttributeType == mlcDiagnosticAnalyzerAttributeType))
+            .Select(x => LoadFromAssemblyPath(x.Assembly.Location).GetType(x.FullName!)!)
+            .Select(Activator.CreateInstance)
+            .Cast<DiagnosticAnalyzer>()
+            .SelectMany(analyzer => analyzer.SupportedDiagnostics.Select(descriptor => (Descriptor: descriptor, Analyzer: analyzer)))
+            .DistinctBy(x => x.Descriptor.Id) // while we could have multiple analyzers contributing same ID, for description purposes we just need single
+            .Select(x => new RecipeDescriptor()
             {
-                // for roslyn based recipes, we need to actually load them to grab descriptions
-                // var loadedAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
+                Id = x.Descriptor.Id,
+                Kind = RecipeKind.RoslynAnalyzer,
+                DisplayName = x.Descriptor.Title.ToString(),
+                Description = x.Descriptor.Description.ToString(),
+                TypeName = TypeName.Parse(x.Analyzer.GetType().AssemblyQualifiedName!),
+                Tags = ["roslyn"],
+                Options = OptionDescriptor.FromRecipeType<RoslynRecipe>() 
+            })
+            .ToList();
+        
+        
+        var fixersById = metadataAssemblies
+            .SelectMany(x => x.ExportedTypes)
+            .Where(type => type.GetCustomAttributesData().Any(attr => attr.AttributeType == mlcCodeFixupAttributeType))
+            .Select(x => LoadFromAssemblyPath(x.Assembly.Location).GetType(x.FullName!)!)
+            .Select(Activator.CreateInstance)
+            .Cast<CodeFixProvider>()
+            .SelectMany(fix => fix.FixableDiagnosticIds.Select(x => (Id: x, Fixer: fix)))
+            .DistinctBy(x => x.Id)
+            .ToDictionary(x => x.Id, x => x.Fixer);
 
-                var loadedAssembly = this.LoadFromAssemblyPath(assemblyPath);
-                var diagnosticAnalyzerType = typeof(DiagnosticAnalyzerAttribute);
-                var analyzerTypes = loadedAssembly.ExportedTypes.Where(x => x.GetCustomAttributesData().Any(attr => attr.AttributeType == diagnosticAnalyzerType)).ToList();
-                var analyzers = analyzerTypes.Select(Activator.CreateInstance).Cast<DiagnosticAnalyzer>().ToList();
-                var analyzersWithDescriptors = analyzers
-                    .SelectMany(analyzer => analyzer.SupportedDiagnostics
-                        .DistinctBy(x => x.Id)
-                        .Select(descriptor => (analyzer, descriptor)))
-                    .ToList();
-                var roslynBasedRecipeDescriptors = analyzersWithDescriptors.Select(x => new RecipeDescriptor()
-                {
-                    Id = x.descriptor.Id,
-                    Kind = RecipeKind.RoslynFixer,
-                    DisplayName = x.descriptor.Title.ToString(),
-                    Description = x.descriptor.Description.ToString(),
-                    TypeName = TypeName.Parse(x.analyzer.GetType().AssemblyQualifiedName!),
-                    Tags = ["roslyn"],
-                    Options = OptionDescriptor.FromRecipeType<RoslynRecipe>() 
-                }).ToList();
-                results.AddRange(roslynBasedRecipeDescriptors.Select(x => (assemblyPath, x)));
-            }
-        }
+        var fixupRecipes = analyzerRecipes
+            .Join(fixersById, x => x.Id, x => x.Key, (descriptor, fixer) => (Descriptor: descriptor, Fixer: fixer.Value))
+            .Select(x => x.Descriptor with
+            {
+                Kind = RecipeKind.RoslynFixer,
+                TypeName = TypeName.Parse(x.Fixer.GetType().AssemblyQualifiedName!),
+            })
+            .ToList();
 
-        return results.ToLookup(x => x.Path, x => x.Recipie);
+        return openRewriteRecipes.Union(fixupRecipes).ToList();
+        //
+        // foreach (var assemblyPath in _assemblies.Values)
+        // {
+        //     
+        //     var metadataAssembly = mlc.LoadFromAssemblyPath(assemblyPath);
+        //     var recipeAttribute = metadataAssembly.GetCustomAttributesData()
+        //         .FirstOrDefault(x => x.AttributeType == mlcRecipeAttributeType);
+        //
+        //     if (recipeAttribute != null)
+        //     {
+        //         IReadOnlyCollection<CustomAttributeTypedArgument> recipeAttributeArguments = recipeAttribute
+        //             .ConstructorArguments[0].Value as IReadOnlyCollection<CustomAttributeTypedArgument> ?? new List<CustomAttributeTypedArgument>();
+        //         var recipeDescriptorsJson = recipeAttributeArguments
+        //             .Where(x => x.Value != null)
+        //             .Select(x => (string)x.Value!)
+        //             .ToList();
+        //         var recipeDescriptors = recipeDescriptorsJson.Select(x => JsonConvert.DeserializeObject<RecipeDescriptor>(x)).ToList();
+        //         results.AddRange(recipeDescriptors.Select(x => (assemblyPath, x!)));
+        //     }
+        //
+        //     var hasAnalyzersOrFixups = metadataAssembly.ExportedTypes
+        //         .Any(x => x.GetCustomAttributesData().Any(attr => attr.AttributeType == mlcDiagnosticAnalyzerAttributeType || attr.AttributeType == mlcCodeFixupAttributeType));
+        //     if (hasAnalyzersOrFixups)
+        //     {
+        //         // for roslyn based recipes, we need to actually load them to grab descriptions
+        //         // var loadedAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
+        //
+        //         var loadedAssembly = this.LoadFromAssemblyPath(assemblyPath);
+        //         var diagnosticAnalyzerType = typeof(DiagnosticAnalyzerAttribute);
+        //         var analyzerTypes = loadedAssembly.ExportedTypes.Where(x => x.GetCustomAttributesData().Any(attr => attr.AttributeType == diagnosticAnalyzerType)).ToList();
+        //         var analyzers = analyzerTypes.Select(Activator.CreateInstance).Cast<DiagnosticAnalyzer>().ToList();
+        //         var analyzersWithDescriptors = analyzers
+        //             .SelectMany(analyzer => analyzer.SupportedDiagnostics
+        //                 .DistinctBy(x => x.Id)
+        //                 .Select(descriptor => (analyzer, descriptor)))
+        //             .ToList();
+        //         
+        //         var codeFixupTypes = loadedAssembly.ExportedTypes.Where(x => x.GetCustomAttributesData().Any(attr => attr.AttributeType == mlcCodeFixupAttributeType)).ToList();
+        //         var codeFixups = codeFixupTypes.Select(Activator.CreateInstance).Cast<CodeFixProvider>().ToList();
+        //         var fixableIds = codeFixups
+        //             .SelectMany(analyzer => analyzer.FixableDiagnosticIds)
+        //             .ToHashSet();
+        //
+        //         analyzersWithDescriptors = analyzersWithDescriptors
+        //             .Where(x => fixableIds.Contains(x.descriptor.Id))
+        //             .ToList();
+        //         
+        //         var roslynBasedRecipeDescriptors = analyzersWithDescriptors.Select(x => new RecipeDescriptor()
+        //         {
+        //             Id = x.descriptor.Id,
+        //             Kind = RecipeKind.RoslynFixer,
+        //             DisplayName = x.descriptor.Title.ToString(),
+        //             Description = x.descriptor.Description.ToString(),
+        //             TypeName = TypeName.Parse(x.analyzer.GetType().AssemblyQualifiedName!),
+        //             Tags = ["roslyn"],
+        //             Options = OptionDescriptor.FromRecipeType<RoslynRecipe>() 
+        //         }).ToList();
+        //         results.AddRange(roslynBasedRecipeDescriptors.Select(x => (assemblyPath, x)));
+        //     }
+        // }
+
+        // return results.ToLookup(x => x.Path, x => x.Recipie);
     }
     
     

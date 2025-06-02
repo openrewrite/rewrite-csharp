@@ -1,0 +1,32 @@
+package org.openrewrite.csharp.recipes.roslynator.analyzers;
+
+import org.openrewrite.NlsRewrite;
+import org.openrewrite.csharp.RoslynRecipe;
+
+public class VariableDeclaratorCodeFixProviderRCS1129 extends RoslynRecipe {
+
+    @Override
+    public String getRecipeId() {
+        return "RCS1129";
+    }
+
+    @Override
+    public String getNugetPackageName() {
+        return "Roslynator.Analyzers";
+    }
+
+    @Override
+    public String getNugetPackageVersion() {
+        return "4.13.1";
+    }
+
+    @Override
+    public @NlsRewrite.DisplayName String getDisplayName() {
+        return "Remove redundant field initialization";
+    }
+
+    @Override
+    public @NlsRewrite.Description String getDescription() {
+        return "";
+    }
+}
