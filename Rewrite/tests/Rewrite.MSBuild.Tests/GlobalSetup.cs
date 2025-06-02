@@ -23,7 +23,7 @@ public class GlobalHooks
     {
         var globalPackagesFolder = (AbsolutePath)SettingsUtility.GetGlobalPackagesFolder(Settings.LoadDefaultSettings(null));
         var rewritePackagesInGlobalCache = Directory.EnumerateDirectories(globalPackagesFolder, "Rewrite.*", SearchOption.TopDirectoryOnly)
-            .Select(x => (AbsolutePath)x)
+            .Select(x => (AbsolutePath)x / ThisAssembly.AssemblyInformationalVersion.Replace("+","-"))
             .ToList();
         foreach (var rewritePackagePath in rewritePackagesInGlobalCache)
         {

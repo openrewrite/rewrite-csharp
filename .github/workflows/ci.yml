@@ -59,7 +59,7 @@ jobs:
 #          (cd Rewrite && dotnet restore Rewrite.sln --no-cache --force --force-evaluate)
 #          (cd Rewrite && dotnet publish Rewrite.sln --no-restore)
 
-      - name: DotNet Build & Test
+      - name: Build & Test
         run: |
           ./build.sh CIBuild
 
@@ -72,13 +72,13 @@ jobs:
           reporter: dotnet-trx
 
 
-      - name: java-build
-        run: |
-          ./gradlew ${{ env.GRADLE_SWITCHES }} assemble
-
-      - name: Java Tests
-        run: |
-          ./gradlew ${{ env.GRADLE_SWITCHES }} test
+#      - name: java-build
+#        run: |
+#          ./gradlew ${{ env.GRADLE_SWITCHES }} assemble
+#
+#      - name: Java Tests
+#        run: |
+#          ./gradlew ${{ env.GRADLE_SWITCHES }} test
 
       - name: Report Java Test Results
         if: always()
