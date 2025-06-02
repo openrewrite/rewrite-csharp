@@ -202,7 +202,8 @@ partial class Build : NukeBuild
                 .SetVersion(Version.NuGetPackageVersion));
 
             var publishDir = Solution.src.Rewrite_Server.Directory / "bin" / "Release" / TargetFramework / "publish";
-            Environment.SetEnvironmentVariable("ROSLYN_RECIPE_EXECUTABLE", publishDir / "Rewrite.Server.exe");
+            var extension = IsWin ? ".exe" : "";
+            Environment.SetEnvironmentVariable("ROSLYN_RECIPE_EXECUTABLE", publishDir / $"Rewrite.Server{extension}");
             var zipFilePath = ArtifactsDirectory / "DotnetServer.zip";
             zipFilePath.DeleteFile();
             publishDir.ZipTo(ArtifactsDirectory / "DotnetServer.zip");
