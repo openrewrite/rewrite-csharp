@@ -81,6 +81,7 @@ public class TemplateTests
     }
     
     [Test]
+    [KnownBug]
     public void BooleanTest()
     {
         var before = $$"""

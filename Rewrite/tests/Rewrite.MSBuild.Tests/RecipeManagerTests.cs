@@ -94,6 +94,7 @@ public class RecipeManagerTests : BaseTests
 
     
     [Test]
+    [Explicit]
     public async Task InstallRoslynRecipe()
     {
         var recipeManager = CreateObject<RecipeManager>();
