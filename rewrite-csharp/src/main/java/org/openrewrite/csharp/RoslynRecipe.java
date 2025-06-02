@@ -39,7 +39,13 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
     private static final String PREVIOUS_RECIPE = RoslynRecipe.class.getName() + ".PREVIOUS_RECIPE";
     private static final String INIT_REPO_DIR = RoslynRecipe.class.getName() + ".INIT_REPO_DIR";
 
-    String executable = "C:\\Projects\\openrewrite\\rewrite-csharp\\Rewrite\\src\\Rewrite.Server\\bin\\Debug\\net9.0\\Rewrite.Server.exe";
+    public final String getExecutable() {
+        String executable = System.getenv("ROSLYN_RECIPE_EXECUTABLE");
+        if (executable == null) {
+            throw new IllegalStateException("ROSLYN_RECIPE_EXECUTABLE environment variable not set");
+        }
+        return executable;
+    }
 
     public abstract String getRecipeId();
 
@@ -107,7 +113,7 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
         List<String> command = new ArrayList<>();
         Map<String, String> env = getCommandEnvironment(acc, ctx);
         String template = "${exec} run-recipe --solution ${solution} --id ${recipeId} --package ${package} --version ${version}";
-        template = template.replace("${exec}", Objects.requireNonNull(this.executable));
+        template = template.replace("${exec}", Objects.requireNonNull(this.getExecutable()));
         template = template.replace("${solution}", acc.solutionFile.toString());
         template = template.replace("${recipeId}", Objects.requireNonNull(this.getRecipeId()));
         template = template.replace("${package}", Objects.requireNonNull(this.getNugetPackageName()));

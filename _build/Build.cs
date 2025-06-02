@@ -100,7 +100,7 @@ partial class Build : NukeBuild
 
     Target Clean => _ => _
         .Description("Clean out artifacts and all the bin/obj directories")
-        .DependsOn(StopServer, CleanNugetCache)
+        .DependsOn(StopServer)
         .Before(Restore)
         .Executes(() =>
         {
