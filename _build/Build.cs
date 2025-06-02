@@ -31,6 +31,7 @@ using Rewrite.MSBuild;
 using Rewrite.RewriteXml.Tree;
 using Serilog;
 using Spectre.Console;
+using ReflectionMagic;
 using static GradleTasks;
 
 // ReSharper disable UnusedMember.Local
@@ -139,7 +140,7 @@ partial class Build : NukeBuild
             var rewritePackageNames = Solution.AllProjects.Where(x => x.Name.StartsWith("Rewrite")).Select(x => x.Name.ToLower());
             foreach (var rewritePackageName in rewritePackageNames)
             {
-                var packagePath = globalPackagesFolder / rewritePackageName;
+                var packagePath = globalPackagesFolder / rewritePackageName / Version.NuGetPackageVersion;
                 packagePath.DeleteDirectory();
             }
         });
@@ -192,6 +193,7 @@ partial class Build : NukeBuild
     Target PublishServer => _ => _
         .Description("Publishes server into artifacts directory as a zip file")
         .DependsOn(Restore)
+        .DependentFor(GradleTest)
         .Before(Test)
         .Executes(() =>
         {
@@ -200,10 +202,13 @@ partial class Build : NukeBuild
                 .SetVersion(Version.NuGetPackageVersion));
 
             var publishDir = Solution.src.Rewrite_Server.Directory / "bin" / "Release" / TargetFramework / "publish";
+            Environment.SetEnvironmentVariable("ROSLYN_RECIPE_EXECUTABLE", publishDir / "Rewrite.Server.exe");
             var zipFilePath = ArtifactsDirectory / "DotnetServer.zip";
             zipFilePath.DeleteFile();
             publishDir.ZipTo(ArtifactsDirectory / "DotnetServer.zip");
         });
+
+
 
     Target StopServer => _ => _
         .Description("Stops any instances of Rewrite.Server that may have not shutdown (such as when they were launched by gradle)")
@@ -239,6 +244,7 @@ partial class Build : NukeBuild
     Target Test => _ => _
         .Description("Runs .NET tests")
         .DependsOn(Restore)
+
         .Executes(() =>
         {
             DotNetTest(x => x
@@ -400,10 +406,31 @@ partial class Build : NukeBuild
             //     completeOnFailure: true);
         });
 
+    IReadOnlyCollection<ExecutableTarget> GetExecutableTargets() => this.AsDynamic().ExecutableTargets;
+    Target SetDefaultModule => _ => _
+        .Unlisted()
+        .DependentFor(GradleTest)
+        .Executes(() =>
+            {
+                if (Module == null && this.GetExecutableTargets().Contains(GradleTest))
+                {
+                    Module = "rewrite-csharp";
+                }
+            });
+
+    Target GradleAssembleAndTest => _ => _
+        .Unlisted()
+        .DependsOn(PublishServer)
+        .Executes(() =>
+        {
+            Gradle(c => c
+                .SetTasks(":rewrite-csharp:assemble", ":rewrite-csharp:test"));
+        });
+
     [Category("CI")]
     Target CIBuild => _ => _
         .Description("Builds, tests and produces test reports for regular builds on CI")
-        .DependsOn(Pack, PublishServer, Test);
+        .DependsOn(Pack, PublishServer, Test, GradleAssembleAndTest);
 
     [Category("CI")]
     Target CIRelease => _ => _

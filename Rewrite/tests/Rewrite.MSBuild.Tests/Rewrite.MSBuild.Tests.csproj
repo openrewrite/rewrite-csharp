@@ -8,6 +8,10 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
         <PackageReference Include="FluentAssertions" Version="7.2.0" />
+        <PackageReference Include="Nerdbank.GitVersioning" Version="3.7.115">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Nuke.Common" Version="9.0.4" />
         <PackageReference Include="TUnit" Version="0.19.32" />
         <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.6.3" />

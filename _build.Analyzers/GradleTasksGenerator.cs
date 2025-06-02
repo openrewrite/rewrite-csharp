@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
@@ -20,6 +21,8 @@ public class GradleTasksGenerator : ISourceGenerator
         var json = configFile?.GetText(context.CancellationToken)?.ToString();
         if(json == null)
             return;
+        var buildType = context.Compilation.GetTypeByMetadataName("Build");
+        var userDeclaredMembers = buildType?.MemberNames.ToImmutableHashSet() ?? ImmutableHashSet<string>.Empty;
         var tasks = JsonConvert.DeserializeObject<List<GradleTask>>(json) ?? [];
         var src = $$"""
 
@@ -59,6 +62,7 @@ public class GradleTasksGenerator : ISourceGenerator
 
         context.AddSource($"KnownGradleTasks.g.cs", SourceText.From(src, Encoding.UTF8));
 
+        //.Where(x => !userDeclaredMembers.Contains(x.Name.ToPascalCase()))
 
         src = $$"""
 
@@ -80,6 +84,8 @@ public class GradleTasksGenerator : ISourceGenerator
 
                 partial class Build
                 {
+                [Parameter("Target Module")] string Module;
+
                 {{tasks.Render(task =>
                 $$"""
                     [Category("Gradle (external)")]
@@ -87,8 +93,13 @@ public class GradleTasksGenerator : ISourceGenerator
                         .Description("{{task.Description}}")
                         .Executes(() =>
                         {
+                            var taskName = "{{task.Name}}";
+                            if(Module != null)
+                            {
+                                taskName = $":{Module}:{taskName}";
+                            }
                             global::GradleTasks.Gradle(c => c
-                                .SetTasks("{{task.Name}}")
+                                .SetTasks(taskName)
                             );
                         });
 
