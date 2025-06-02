@@ -1,6 +1,8 @@
 plugins {
     id("org.openrewrite.build.language-library")
     id("org.openrewrite.build.moderne-source-available-license") version "latest.release"
+    id("com.netflix.nebula.release")
+    id("com.netflix.nebula.maven-nebula-publish")
 }
 
 val latest = if (System.getenv("RELEASE_PUBLICATION") != null) "latest.release" else "latest.integration"
@@ -23,4 +25,17 @@ dependencies {
     testImplementation("org.openrewrite:rewrite-xml")
 
     testRuntimeOnly("org.openrewrite:rewrite-java-17")
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "ModerneArtifactory"
+            url = uri("https://artifactory.moderne.ninja/artifactory/moderne-recipes")
+            credentials {
+                username = (project.findProperty("moderne.artifactory.username") as String?) ?: System.getenv("MODERNE_ARTIFACTORY_USERNAME")
+                password = (project.findProperty("moderne.artifactory.password") as String?) ?: System.getenv("MODERNE_ARTIFACTORY_PASSWORD")
+            }
+        }
+    }
 }

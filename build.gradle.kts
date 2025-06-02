@@ -11,6 +11,18 @@ allprojects {
     description = "OpenRewrite C# language module."
 }
 
+repositories {
+    mavenCentral()
+    maven {
+        name = "ModerneArtifactoryCache3"
+        url = uri("https://artifactory.moderne.ninja/artifactory/moderne-cache-3")
+        credentials {
+            username = (project.findProperty("moderne.artifactory.username") as String?) ?: System.getenv("MODERNE_ARTIFACTORY_USERNAME")
+            password = (project.findProperty("moderne.artifactory.password") as String?) ?: System.getenv("MODERNE_ARTIFACTORY_PASSWORD")
+        }
+    }
+}
+
 tasks.register("getTasks") {
     group = "custom"
     description = "Outputs all tasks as formatted JSON into a file"
