@@ -44,6 +44,7 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
         if (executable == null) {
             throw new IllegalStateException("ROSLYN_RECIPE_EXECUTABLE environment variable not set");
         }
+        executable = executable + "Rewrite.Server.dll";
         return executable;
     }
 
@@ -112,7 +113,7 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
 
         List<String> command = new ArrayList<>();
         Map<String, String> env = getCommandEnvironment(acc, ctx);
-        String template = "${exec} run-recipe --solution ${solution} --id ${recipeId} --package ${package} --version ${version}";
+        String template = "dotnet ${exec} run-recipe --solution ${solution} --id ${recipeId} --package ${package} --version ${version}";
         template = template.replace("${exec}", Objects.requireNonNull(this.getExecutable()));
         template = template.replace("${solution}", acc.solutionFile.toString());
         template = template.replace("${recipeId}", Objects.requireNonNull(this.getRecipeId()));
