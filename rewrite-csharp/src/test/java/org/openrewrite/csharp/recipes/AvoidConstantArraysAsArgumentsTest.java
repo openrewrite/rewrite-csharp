@@ -1,6 +1,7 @@
 package org.openrewrite.csharp.recipes;
 
 import org.junit.jupiter.api.Test;
+import org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers.AvoidConstArraysCA1861;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 import org.openrewrite.test.TypeValidation;
@@ -14,7 +15,7 @@ public class AvoidConstantArraysAsArgumentsTest implements RewriteTest {
     @Override
     public void defaults(RecipeSpec spec) {
         spec
-          .recipe(new AvoidConstantArraysAsArguments())
+          .recipe(new AvoidConstArraysCA1861())
           .typeValidationOptions(TypeValidation.builder()
             .immutableExecutionContext(false).build());
     }

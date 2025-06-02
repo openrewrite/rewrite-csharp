@@ -1,0 +1,32 @@
+package org.openrewrite.csharp.recipes.roslynator.analyzers;
+
+import org.openrewrite.NlsRewrite;
+import org.openrewrite.csharp.RoslynRecipe;
+
+public class ClassDeclarationRCS1108 extends RoslynRecipe {
+
+    @Override
+    public String getRecipeId() {
+        return "RCS1108";
+    }
+
+    @Override
+    public String getNugetPackageName() {
+        return "Roslynator.Analyzers";
+    }
+
+    @Override
+    public String getNugetPackageVersion() {
+        return "4.13.1";
+    }
+
+    @Override
+    public @NlsRewrite.DisplayName String getDisplayName() {
+        return "Add 'static' modifier to all partial class declarations";
+    }
+
+    @Override
+    public @NlsRewrite.Description String getDescription() {
+        return "";
+    }
+}

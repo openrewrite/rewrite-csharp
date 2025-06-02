@@ -25,6 +25,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NuGet.Configuration;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Tools.PowerShell;
+using Nuke.Common.Utilities;
 using Rewrite.Core;
 using Rewrite.MSBuild;
 using Rewrite.RewriteXml.Tree;
@@ -264,7 +265,7 @@ partial class Build : NukeBuild
     [Category("Test")]
     Target GenerateRoslynRecipes => _ => _
         .Description("Generates Java recipe classes per .NET roslyn recipe found in common packages")
-        .DependsOn(Restore)
+        // .DependsOn(Restore)
         .Executes(async () =>
         {
             var services = new ServiceCollection();
@@ -298,13 +299,15 @@ partial class Build : NukeBuild
 
             var models = installablePackages.SelectMany(packageInfo => packageInfo.Recipes.Select(recipe =>
             {
-                var className = recipe.Id.StartsWith(recipe.TypeName) ? recipe.Id : $"{recipe.TypeName.FullName.Split('.').Last()}{recipe.Id}";
+                var className = recipe.Id.StartsWith(recipe.TypeName) ? recipe.Id : recipe.TypeName.FullName.Split('.').Last();
+                className = className.ReplaceRegex("(Analyzer|Fixer|CodeFixProvider)$", _ =>  "");
+                className = $"{className}{recipe.Id}";
                 var @namespace = packageInfo.Package.Id.ToLower();
                 return new
                 {
                     recipe.Id,
-                    recipe.Description,
-                    recipe.DisplayName,
+                    Description = recipe.Description.Replace("\"","\\\"").Replace('\r',' ').Replace('\n',' '),
+                    DisplayName = recipe.DisplayName.Replace("\"","\\\"").Replace('\r',' ').Replace('\n',' '),
                     PackageName = packageInfo.Package.Id,
                     PackageVersion = packageInfo.Package.Version,
                     ClassName = className,
@@ -313,7 +316,7 @@ partial class Build : NukeBuild
                 };
             })).ToList();
 
-            var result = models.Select(model => (model.FileName, Content: $$"""
+            var result = models.Select(model => (model.FileName, Content: $$""""
                  package org.openrewrite.csharp.recipes.{{model.Namespace}};
 
                  import org.openrewrite.NlsRewrite;
@@ -347,7 +350,7 @@ partial class Build : NukeBuild
                      }
                  }
 
-                 """))
+                 """"))
                 .ToList();
             foreach (var (filename,source) in result)
             {
