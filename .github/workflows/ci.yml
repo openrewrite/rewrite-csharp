@@ -85,7 +85,7 @@ jobs:
         with:
           name: Java Tests Results
           path: |
-            rewrite-csharp-remote-server/build/test-results/test/*.xml
+            rewrite-csharp/build/test-results/test/*.xml
           reporter: java-junit
 
       - name: Upload Test logs
