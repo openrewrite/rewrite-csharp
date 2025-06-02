@@ -9,9 +9,9 @@
     <NukeScriptDirectory>..</NukeScriptDirectory>
     <NukeTelemetryVersion>1</NukeTelemetryVersion>
     <IsPackable>false</IsPackable>
-      <NukeUpdateReferences Condition="'$(NukeUpdateReferences)' == ''">True</NukeUpdateReferences> 
+    <NukeUpdateReferences Condition="'$(NukeUpdateReferences)' == ''">True</NukeUpdateReferences>
   </PropertyGroup>
-    
+
   <ItemGroup>
 
     <PackageReference Include="NuGet.Configuration" Version="6.13.2" />
@@ -22,8 +22,10 @@
       <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
   </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Rewrite\src\Rewrite.MSBuild\Rewrite.MSBuild.csproj" />
-        <ProjectReference Include="..\_build.Analyzers\Build.Analyzers.csproj" 
+<!--        <ProjectReference Include="..\Rewrite\src\Rewrite.MSBuild\Rewrite.MSBuild.csproj" Condition="'$(Generator)' == ''" />-->
+        <PackageReference Include="Rewrite.MSBuild" Version="[0.24.35-gf4307f4688]" />
+
+        <ProjectReference Include="..\_build.Analyzers\Build.Analyzers.csproj"
                           OutputItemType="Analyzer">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -39,7 +41,7 @@
       <Folder Include="Tools\Gradle\" />
     </ItemGroup>
     <ItemGroup>
-      <NukeSpecificationFiles Include="GradleTasks.json" />      
+      <NukeSpecificationFiles Include="GradleTasks.json" />
     </ItemGroup>
     <ItemGroup>
         <Content Remove="FigletFonts\**" />
