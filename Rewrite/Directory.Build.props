@@ -12,6 +12,7 @@
     <PropertyGroup>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <WarningsNotAsErrors>CS0618</WarningsNotAsErrors>
+        <NoWarn>NU5104</NoWarn>
         <LangVersion>latest</LangVersion>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>

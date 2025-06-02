@@ -1,0 +1,32 @@
+package org.openrewrite.csharp.recipes.roslynator.analyzers;
+
+import org.openrewrite.NlsRewrite;
+import org.openrewrite.csharp.RoslynRecipe;
+
+public class UseRegexInstanceInsteadOfStaticMethodCodeFixProviderRCS1186 extends RoslynRecipe {
+
+    @Override
+    public String getRecipeId() {
+        return "RCS1186";
+    }
+
+    @Override
+    public String getNugetPackageName() {
+        return "Roslynator.Analyzers";
+    }
+
+    @Override
+    public String getNugetPackageVersion() {
+        return "4.13.1";
+    }
+
+    @Override
+    public @NlsRewrite.DisplayName String getDisplayName() {
+        return "Use Regex instance instead of static method";
+    }
+
+    @Override
+    public @NlsRewrite.Description String getDescription() {
+        return "";
+    }
+}

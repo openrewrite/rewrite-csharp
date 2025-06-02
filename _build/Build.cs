@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
+using System.Threading.Tasks;
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.Execution;
@@ -19,9 +21,14 @@ using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.PathConstruction;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using LibGit2Sharp;
+using Microsoft.Extensions.DependencyInjection;
 using NuGet.Configuration;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Tools.PowerShell;
+using Rewrite.Core;
+using Rewrite.MSBuild;
+using Rewrite.RewriteXml.Tree;
+using Serilog;
 using Spectre.Console;
 using static GradleTasks;
 
@@ -192,6 +199,8 @@ partial class Build : NukeBuild
                 .SetVersion(Version.NuGetPackageVersion));
 
             var publishDir = Solution.src.Rewrite_Server.Directory / "bin" / "Release" / TargetFramework / "publish";
+            var zipFilePath = ArtifactsDirectory / "DotnetServer.zip";
+            zipFilePath.DeleteFile();
             publishDir.ZipTo(ArtifactsDirectory / "DotnetServer.zip");
         });
 
@@ -250,6 +259,100 @@ partial class Build : NukeBuild
                 )
             );
             InjectLogsIntoTrx();
+        });
+
+    [Category("Test")]
+    Target GenerateRoslynRecipes => _ => _
+        .Description("Generates Java recipe classes per .NET roslyn recipe found in common packages")
+        .DependsOn(Restore)
+        .Executes(async () =>
+        {
+            var services = new ServiceCollection();
+            services.AddLogging(c => c
+                .AddSerilog());
+            services.AddSingleton<RecipeManager>();
+            services.AddSingleton<NuGet.Common.ILogger, NugetLogger>();
+            var serviceProvider = services.BuildServiceProvider();
+            T CreateObject<T>(params object[] args) => ActivatorUtilities.CreateInstance<T>(serviceProvider, args);
+
+            var recipeManager = CreateObject<RecipeManager>();
+
+            string[] feeds =
+            [
+                "https://api.nuget.org/v3/index.json"
+            ];
+
+            var packageSources = feeds.Select(x => new PackageSource(x)).ToList();
+            // var recipeManager = new RecipeManager();
+            // CA1802: Use Literals Where Appropriate
+            // CA1861: Avoid constant arrays as arguments
+            var packages =  new(string Package, string Version)[]
+            {
+                ("Microsoft.CodeAnalysis.NetAnalyzers", "9.0.0"), //https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/categories
+                ("Roslynator.Analyzers", "4.13.1"), //https://github.com/dotnet/roslynator
+                ("Meziantou.Analyzer", "2.0.201"), //https://github.com/meziantou/Meziantou.Analyzer
+            };
+
+            var installablePackages = await Task.WhenAll(packages.Select(x => recipeManager.InstallRecipePackage(x.Package, x.Version, packageSources: packageSources)));
+            var recipesDir = RootDirectory / "rewrite-csharp" / "src" / "main" / "java" / "org" / "openrewrite" / "csharp" / "recipes";
+
+            var models = installablePackages.SelectMany(packageInfo => packageInfo.Recipes.Select(recipe =>
+            {
+                var className = recipe.Id.StartsWith(recipe.TypeName) ? recipe.Id : $"{recipe.TypeName.FullName.Split('.').Last()}{recipe.Id}";
+                var @namespace = packageInfo.Package.Id.ToLower();
+                return new
+                {
+                    recipe.Id,
+                    recipe.Description,
+                    recipe.DisplayName,
+                    PackageName = packageInfo.Package.Id,
+                    PackageVersion = packageInfo.Package.Version,
+                    ClassName = className,
+                    Namespace = @namespace,
+                    FileName = recipesDir / @namespace.Replace(".", "/") / $"{className}.java"
+                };
+            })).ToList();
+
+            var result = models.Select(model => (model.FileName, Content: $$"""
+                 package org.openrewrite.csharp.recipes.{{model.Namespace}};
+
+                 import org.openrewrite.NlsRewrite;
+                 import org.openrewrite.csharp.RoslynRecipe;
+
+                 public class {{model.ClassName}} extends RoslynRecipe {
+
+                     @Override
+                     public String getRecipeId() {
+                         return "{{model.Id}}";
+                     }
+
+                     @Override
+                     public String getNugetPackageName() {
+                         return "{{model.PackageName}}";
+                     }
+
+                     @Override
+                     public String getNugetPackageVersion() {
+                         return "{{model.PackageVersion}}";
+                     }
+
+                     @Override
+                     public @NlsRewrite.DisplayName String getDisplayName() {
+                         return "{{model.DisplayName}}";
+                     }
+
+                     @Override
+                     public @NlsRewrite.Description String getDescription() {
+                         return "{{model.Description}}";
+                     }
+                 }
+
+                 """))
+                .ToList();
+            foreach (var (filename,source) in result)
+            {
+                filename.WriteAllText(source);
+            }
         });
 
     void InjectLogsIntoTrx()
