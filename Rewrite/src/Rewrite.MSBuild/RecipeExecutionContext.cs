@@ -28,6 +28,7 @@ namespace Rewrite.MSBuild;
 public class RecipeExecutionContext : AssemblyLoadContext
 {
     private Dictionary<AssemblyName, AbsolutePath> _assemblies;
+    private readonly HashSet<Assembly> _recipeAssemblies = [];
     public IReadOnlyList<RecipeDescriptor> Recipes { get; private set; }
 
     private static IEqualityComparer<AssemblyName> _assemblyNameEqualityComparer = EqualityComparer<AssemblyName>.Create((a, b) => a?.Name == b?.Name, a => a.Name!.GetHashCode());
@@ -84,11 +85,10 @@ public class RecipeExecutionContext : AssemblyLoadContext
     {
         if (!recipeStartInfo.Arguments.TryGetValue(nameof(RoslynRecipe.SolutionFilePath), out var solutionFilePath) || solutionFilePath.Value is null)
             throw new InvalidOperationException($"{nameof(RoslynRecipe)} requires {nameof(RoslynRecipe.SolutionFilePath)} property to be set to valid path");
-        var recipeType = GetRecipeType(recipeStartInfo);
-        var roslynRecipe = new RoslynRecipe()
+        var recipeTypes = GetRecipeType(recipeStartInfo);
+        var roslynRecipe = new RoslynRecipe(_recipeAssemblies)
         {
             DiagnosticId = recipeStartInfo.Id,
-            RecipeAssembly = recipeType.Assembly,
             ApplyFixer = fixup,
             SolutionFilePath = (string)solutionFilePath.Value
         };
@@ -175,11 +175,19 @@ public class RecipeExecutionContext : AssemblyLoadContext
         var metadataAssemblies = _assemblies.Values.Select(x => mlc.LoadFromAssemblyPath(x)).ToList();
 
         var openRewriteRecipes = metadataAssemblies
-            .SelectMany(assembly => assembly.GetCustomAttributesData().Where(x => x.AttributeType == mlcRecipeAttributeType))
-            .SelectMany(recipeAttribute =>
+            .SelectMany(assembly => assembly
+                .GetCustomAttributesData()
+                .Where(x => x.AttributeType == mlcRecipeAttributeType)
+                .Select(x => (assembly, CustomAttributeData: x)))
+            .SelectMany(assemblyWithRecipes =>
             {
+                var (assembly, recipeAttribute) = assemblyWithRecipes;
                 IReadOnlyCollection<CustomAttributeTypedArgument> recipeAttributeArguments = recipeAttribute
                     .ConstructorArguments[0].Value as IReadOnlyCollection<CustomAttributeTypedArgument> ?? new List<CustomAttributeTypedArgument>();
+                if (recipeAttributeArguments.Count > 0)
+                {
+                    this._recipeAssemblies.Add(LoadFromAssemblyPath(assembly.Location));
+                }
                 var recipeDescriptorsJson = recipeAttributeArguments
                     .Where(x => x.Value != null)
                     .Select(x => (string)x.Value!)
@@ -188,11 +196,18 @@ public class RecipeExecutionContext : AssemblyLoadContext
                 return recipeDescriptors;
             })
             .ToList();
+        
+        
 
         var analyzerRecipes = metadataAssemblies
             .SelectMany(x => x.ExportedTypes)
             .Where(type => type.GetCustomAttributesData().Any(attr => attr.AttributeType == mlcDiagnosticAnalyzerAttributeType))
-            .Select(x => LoadFromAssemblyPath(x.Assembly.Location).GetType(x.FullName!)!)
+            .Select(x =>
+            {
+                var assembly = LoadFromAssemblyPath(x.Assembly.Location);
+                _recipeAssemblies.Add(assembly);
+                return assembly.GetType(x.FullName!)!;
+            })
             .Select(Activator.CreateInstance)
             .Cast<DiagnosticAnalyzer>()
             .SelectMany(analyzer => analyzer.SupportedDiagnostics.Select(descriptor => (Descriptor: descriptor, Analyzer: analyzer)))
@@ -213,7 +228,12 @@ public class RecipeExecutionContext : AssemblyLoadContext
         var fixersById = metadataAssemblies
             .SelectMany(x => x.ExportedTypes)
             .Where(type => type.GetCustomAttributesData().Any(attr => attr.AttributeType == mlcCodeFixupAttributeType))
-            .Select(x => LoadFromAssemblyPath(x.Assembly.Location).GetType(x.FullName!)!)
+            .Select(x =>
+            {
+                var assembly = LoadFromAssemblyPath(x.Assembly.Location);
+                _recipeAssemblies.Add(assembly);
+                return assembly.GetType(x.FullName!)!;
+            })
             .Select(Activator.CreateInstance)
             .Cast<CodeFixProvider>()
             .SelectMany(fix => fix.FixableDiagnosticIds.Select(x => (Id: x, Fixer: fix)))

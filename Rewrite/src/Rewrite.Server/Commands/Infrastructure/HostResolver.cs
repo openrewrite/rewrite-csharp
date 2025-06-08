@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Spectre.Console.Cli;
 
-namespace Rewrite.Remote.Server.Commands.Infrastructure;
+namespace Rewrite.Server.Commands.Infrastructure;
 
 public sealed class HostResolver : ITypeResolver, IDisposable
 {

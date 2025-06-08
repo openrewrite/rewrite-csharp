@@ -18,15 +18,17 @@ namespace Rewrite.MSBuild;
 
 [DisplayName("Roslyn Fixup Recipe Runner")]
 [Description("Executes Roslyn's Fixups as OpenRewrite Recipes")]
-public class RoslynRecipe : ScanningRecipe<object>
+public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies) : ScanningRecipe<object>
 {
-    [DisplayName("Recipe Assembly")]
-    [Description("Assembly containing recipe assembly")]
-    public required Assembly RecipeAssembly { get; set; }
+    internal List<Assembly> RecipeAssemblies { get; set; } = recipeAssemblies.ToList();
     
     [DisplayName("Description")]
     [Description("A special sign to specifically highlight the class found by the recipe")]
-    public required string DiagnosticId { get; set; }
+    public string DiagnosticId { get => DiagnosticsId.First(); set => DiagnosticsId.Add(value); }
+
+    [DisplayName("Description")]
+    [Description("A special sign to specifically highlight the class found by the recipe")]
+    public HashSet<string> DiagnosticsId { get; set; } = new();
 
     [DisplayName("Should Apply Fixer")]
     [Description("If true, a code fix will be applied, otherwise only location of issues will be reported")]
@@ -35,6 +37,10 @@ public class RoslynRecipe : ScanningRecipe<object>
     [DisplayName("Solution File Path")]
     [Description("The path to solution on which recipe is to be run")]
     public required string SolutionFilePath { get; set; }
+
+    [DisplayName("Dry Run")]
+    [Description("Run without applying")]
+    public bool DryRun { get; set; } = false;
     public override Tree GetInitialValue(IExecutionContext ctx)
     {
         return J.Empty.Create();
@@ -51,30 +57,32 @@ public class RoslynRecipe : ScanningRecipe<object>
         return base.Generate(acc, ctx);
     }
 
+
     /// <summary>
     /// Executes the recipe against source code stored in <see cref="SolutionFilePath"/>
     /// </summary>
     /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>Documents that have been changed</returns>
-    public async Task<IList<Document>> Execute(CancellationToken cancellationToken)
+    /// <returns>Documents that have been changed, grouped by issue ID</returns>
+    public async Task<RecipeExecutionResult> Execute(CancellationToken cancellationToken)
     {
+        List<IssueFixResult> fixedIssues = new();
         Stopwatch watch = new();
         watch.Start();
         var workspace = MSBuildWorkspace.Create();
 
         var originalSolution = await workspace.OpenSolutionAsync(SolutionFilePath, cancellationToken: cancellationToken);
         var solution = new SolutionHolder(originalSolution);
-        var analyzerAssembly = RecipeAssembly;
+        // var analyzerAssembly = RecipeAssemblies;
    
-        var allAnalyzers = analyzerAssembly
-            .GetTypes()
+        var allAnalyzers = RecipeAssemblies
+            .SelectMany(x => x.ExportedTypes)
             .Where(x => typeof(DiagnosticAnalyzer).IsAssignableFrom(x) && !x.IsAbstract)
             .Select(Activator.CreateInstance)
             .Cast<DiagnosticAnalyzer>()
             .ToImmutableArray();
         
-        var fixers = analyzerAssembly
-            .GetTypes()
+        var fixers = RecipeAssemblies
+            .SelectMany(x => x.ExportedTypes)
             .Where(x => typeof(CodeFixProvider).IsAssignableFrom(x) && !x.IsAbstract)
             .Select(Activator.CreateInstance)
             .Cast<CodeFixProvider>()
@@ -88,45 +96,49 @@ public class RoslynRecipe : ScanningRecipe<object>
                 .DistinctBy(x => x.Id)
                 .Select(descriptor => (descriptor.Id, Analyzer: analyzer)))
             .Join(fixers, x => x.Id, x => x.Key, (a, b) => (a.Id, a.Analyzer, Fixer: b.Value))
-            .ToDictionary(x => x.Id, x => x);
+            .Where(x => DiagnosticsId.Contains(x.Id))
+            .GroupBy(x => x.Id)
+            .Select(x => (x.Key, x.First().Analyzer, x.FirstOrDefault().Fixer))
+            .ToDictionary(x => x.Key, x => (x.Analyzer, x.Fixer));
 
-        var analyzersToRun = analyzersWithFixersById
-            .Where(x => x.Key == DiagnosticId)
-            .Select(x => x.Value.Analyzer)
-            .Distinct()
-            .ToImmutableArray();
+        // var analyzersToRun = analyzersWithFixersById
+        //     .Where(x => DiagnosticsId.Contains(x.Key))
+        //     .Select(x => x.Value.Analyzer)
+        //     .Distinct()
+        //     .ToImmutableArray();
 
-        if (analyzersToRun.Length == 0)
+        if (analyzersWithFixersById.Count == 0)
         {
             Console.Error.WriteLine($"No analyzers targeting issue {DiagnosticId} has been found");
-            return new List<Document>();
+            return new RecipeExecutionResult(SolutionFilePath, watch.Elapsed, []);
         }
         
         Console.WriteLine($"Solution loaded in {watch.Elapsed}");
-        Console.WriteLine($"Found {analyzersToRun.Length} code fixers");
+        Console.WriteLine($"Found {analyzersWithFixersById.Count} code fixers");
         foreach (var fixer in analyzersWithFixersById.Select(x => x.Value.Fixer).Distinct())
         {
             Console.WriteLine($"- {fixer}");
         }
+        
+        var issuesTypesInCodebase = (await GetDiagnostics(solution, analyzersWithFixersById, cancellationToken))
+            .Select(x => x.Id)
+            .ToHashSet();
+        var analyzersWithFixersByIdForIssuesInCodebase = analyzersWithFixersById
+            .Where(x => issuesTypesInCodebase.Contains(x.Key))
+            .ToDictionary(x => x.Key, x => x.Value);
 
-        foreach (var analyzerWithFixer in analyzersToRun)
+        foreach (var (issueId, (analyzer, codeFixProvider)) in analyzersWithFixersByIdForIssuesInCodebase)
         {
             var recipeWatch = Stopwatch.StartNew();
-            var diagnostics = new List<Diagnostic>();
-            var compilationTasks = solution.Solution.Projects.Select(p => p.GetCompilationAsync(cancellationToken));
-            var compilations = await Task.WhenAll(compilationTasks);
+            // var compilationTasks = solution.Solution.Projects.Select(p => p.GetCompilationAsync(cancellationToken));
+            // var compilations = await Task.WhenAll(compilationTasks);
 
-
-            foreach (var compilation in compilations.Where(x => x != null).Cast<Compilation>())
+            var analyzersToRun = new Dictionary<string, (DiagnosticAnalyzer, CodeFixProvider)>()
             {
-                var withAnalyzers = compilation.WithAnalyzers([analyzerWithFixer]);
-                var diags = await withAnalyzers.GetAnalyzerDiagnosticsAsync();
-                diags = diags.Where(x => solution.Solution.GetDocument(x.Location.SourceTree) is not SourceGeneratedDocument).ToImmutableArray();
-                diagnostics.AddRange(diags);
-            }
-
+                {issueId, (analyzer, codeFixProvider)}
+            };
+            var diagnostics = await GetDiagnostics(solution, analyzersToRun, cancellationToken);
             var diagnosticsById = diagnostics.ToLookup(x => x.Id);
-
             var diagnosticsToProcess = diagnosticsById.ToList();
             foreach (var diagnosticIssue in diagnosticsToProcess)
             {
@@ -143,7 +155,7 @@ public class RoslynRecipe : ScanningRecipe<object>
 
 
                 var diagnosticProvider = new FixMultipleDiagnosticProvider(diagnosticsByDocument);
-                var codeFixProvider = analyzersWithFixersById[diagnosticIssue.Key].Fixer;
+                // var codeFixProvider = analyzersWithFixersById[diagnosticIssue.Key].Fixer;
                 var fixAllProvider = codeFixProvider.GetFixAllProvider() ?? throw new InvalidOperationException($"Bulk fix provider not available for {diagnosticIssue.Key}: {diagnosticIssue.First().Descriptor.Title}");
 
                 Console.WriteLine(
@@ -195,22 +207,59 @@ public class RoslynRecipe : ScanningRecipe<object>
                 //     Console.WriteLine("======");
                 //     Console.WriteLine(diffs);
                 // }
-
+                
                 solution.Solution = newSolution;
-                Console.WriteLine(recipeWatch);
+                var affectedDocumentIds = await GetChangedDocumentsAsync(originalSolution, solution.Solution, cancellationToken);
+                var affectedDocuments = affectedDocumentIds
+                    .Select(docId => solution.Solution.GetDocument(docId)!)
+                    .ToList();
+                var issueFixResult = new IssueFixResult(
+                    IssueId: issueId, 
+                    ExecutionTime: recipeWatch.Elapsed, 
+                    Fixes: affectedDocuments
+                        .Select(x => new DocumentFixResult(x.FilePath!))
+                        .ToList());
+                fixedIssues.Add(issueFixResult);
                 recipeWatch.Stop();
             }
         }
-        var affectedDocumentIds = await GetChangedDocumentsAsync(originalSolution, solution.Solution, cancellationToken);
-        var affectedDocuments = affectedDocumentIds
-            .Select(docId => solution.Solution.GetDocument(docId)!)
-            .ToList();
+
+        if (!DryRun)
+        {
+            workspace.TryApplyChanges(solution.Solution);
+        }
+
         watch.Stop();
-        Console.WriteLine(watch.Elapsed);
-        var result = workspace.TryApplyChanges(solution.Solution);
-        return affectedDocuments;
+        var recipeExecutionResult = new RecipeExecutionResult(SolutionFilePath, watch.Elapsed, fixedIssues);
+        return recipeExecutionResult;
     }
 
+    private async Task<List<Diagnostic>> GetDiagnostics(
+        SolutionHolder solution, 
+        Dictionary<string, (DiagnosticAnalyzer Analyzer, CodeFixProvider CodeFixProvider)> analyzersWithFixers, 
+        CancellationToken cancellationToken)
+    {
+        var compilationTasks = solution.Solution.Projects.Select(p => p.GetCompilationAsync(cancellationToken));
+        var compilations = await Task.WhenAll(compilationTasks);
+
+        List<Diagnostic> diagnostics = [];
+        foreach (var compilation in compilations.Where(x => x != null).Cast<Compilation>())
+        {
+            var withAnalyzers = compilation.WithAnalyzers(analyzersWithFixers
+                .Values
+                .Select(x => x.Analyzer)
+                .Distinct()
+                .ToImmutableArray());
+            var diags = await withAnalyzers.GetAnalyzerDiagnosticsAsync(cancellationToken);
+            diags = diags
+                .Where(x => solution.Solution.GetDocument(x.Location.SourceTree) is not SourceGeneratedDocument)
+                .ToImmutableArray();
+            diagnostics.AddRange(diags);
+        }
+
+        return diagnostics;
+    }
+    
     static async Task<IEnumerable<DocumentId>> GetChangedDocumentsAsync(
         Solution oldSolution,
         Solution newSolution,

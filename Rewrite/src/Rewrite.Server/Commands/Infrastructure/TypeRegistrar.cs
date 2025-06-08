@@ -2,7 +2,7 @@
 using Spectre.Console.Cli;
 using Spectre.Console.Cli.Help;
 
-namespace Rewrite.Remote.Server.Commands.Infrastructure;
+namespace Rewrite.Server.Commands.Infrastructure;
 
 public sealed class TypeRegistrar : ITypeRegistrar
 {

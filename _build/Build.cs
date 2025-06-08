@@ -35,7 +35,7 @@ using ReflectionMagic;
 using static GradleTasks;
 
 // ReSharper disable UnusedMember.Local
-[HandleHelpRequestsAttribute(Priority = 20)]
+[HandleHelpRequests(Priority = 20)]
 partial class Build : NukeBuild
 {
     static Build()
@@ -203,7 +203,7 @@ partial class Build : NukeBuild
 
             var publishDir = Solution.src.Rewrite_Server.Directory / "bin" / "Release" / TargetFramework / "publish";
             var extension = IsWin ? ".exe" : "";
-            Environment.SetEnvironmentVariable("ROSLYN_RECIPE_EXECUTABLE", publishDir / $"Rewrite.Server{extension}");
+            Environment.SetEnvironmentVariable("ROSLYN_RECIPE_EXECUTABLE", publishDir);
             var zipFilePath = ArtifactsDirectory / "DotnetServer.zip";
             zipFilePath.DeleteFile();
             publishDir.ZipTo(ArtifactsDirectory / "DotnetServer.zip");
@@ -245,7 +245,6 @@ partial class Build : NukeBuild
     Target Test => _ => _
         .Description("Runs .NET tests")
         .DependsOn(Restore)
-
         .Executes(() =>
         {
             DotNetTest(x => x
@@ -269,7 +268,7 @@ partial class Build : NukeBuild
             InjectLogsIntoTrx();
         });
 
-    [Category("Test")]
+
     Target GenerateRoslynRecipes => _ => _
         .Description("Generates Java recipe classes per .NET roslyn recipe found in common packages")
         // .DependsOn(Restore)
@@ -396,15 +395,6 @@ partial class Build : NukeBuild
                 .SetApiKey(NugetApiKey)
                 .EnableSkipDuplicate()
                 .SetTargetPath(ArtifactsDirectory / "*.nupkg"));
-
-            // NuGetTasks.NuGetPush(s => s
-            //         .SetSource(NugetFeed)
-            //         .SetApiKey(NugetApiKey)
-            //         .CombineWith(
-            //             artifacts, (cs, v) => cs
-            //                 .SetTargetPath(v)),
-            //     degreeOfParallelism: 3,
-            //     completeOnFailure: true);
         });
 
     IReadOnlyCollection<ExecutableTarget> GetExecutableTargets() => this.AsDynamic().ExecutableTargets;

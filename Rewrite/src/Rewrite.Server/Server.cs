@@ -8,11 +8,13 @@ using Microsoft.Extensions.Logging;
 using NMica.Utils.IO;
 using NuGet.Configuration;
 using NuGet.LibraryModel;
+using NuGet.Packaging.Core;
 using NuGet.Versioning;
 using PeterO.Cbor;
 using Rewrite.Core;
 using Rewrite.Core.Marker;
 using Rewrite.MSBuild;
+using Rewrite.Server.Commands;
 
 
 namespace Rewrite.Remote.Server;
@@ -190,7 +192,7 @@ public class Server : BackgroundService
     {
         var recipeName = CBORObject.Read(stream).AsString();
         var source = CBORObject.Read(stream).AsString();
-        var recipeId = InstallableRecipe.ParseUri(new Uri(source));
+        var recipePackage = InstallableRecipe.ParseUri(new Uri(source));
 
         var options = new Dictionary<string, Func<Type, object>>();
 
@@ -206,15 +208,16 @@ public class Server : BackgroundService
 
         var requestLog = new
         {
-            RecipeIdentity = recipeId.ToString(),
+            RecipeIdentity = recipePackage.ToString(),
             Options = options,
             SourceFilePath = ((SourceFile)received).SourcePath
         };
         _log.LogInformation("Handling LoadRecipeAssemblyAndRunVisitor Request: {@Request}", requestLog);
 
 
-        var descriptor = _recipeManager.FindRecipeDescriptor(recipeId);
-        var startInfo = descriptor.CreateRecipeStartInfo();
+        var descriptor = _recipeManager.FindRecipeDescriptor(recipePackage);
+        var recipePackageInfo = new RecipePackageInfo(new PackageIdentity(recipePackage.NugetPackageName, NuGetVersion.Parse(recipePackage.NugetPackageVersion)), [descriptor]);
+        var startInfo = recipePackageInfo.CreateRecipeStartInfo(descriptor);
         foreach (var item in options)
         {
             var prop = startInfo.Arguments[item.Key];
@@ -222,7 +225,7 @@ public class Server : BackgroundService
             var propValue = item.Value(type);
             startInfo.WithOption(item.Key, propValue);
         }
-        var loadedRecipe =_recipeManager.CreateRecipe(recipeId, startInfo);
+        var loadedRecipe =_recipeManager.CreateRecipe(startInfo);
         // var loadedRecipe = await
         //     RecipeManager.LoadRecipeAssemblyAsync(recipeName, packageId, packageVersion, _options.NugetPackagesFolder,
         //         options,

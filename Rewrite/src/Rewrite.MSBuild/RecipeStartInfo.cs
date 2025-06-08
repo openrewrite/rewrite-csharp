@@ -1,5 +1,8 @@
 ﻿
-namespace Rewrite.Core.Config;
+using NuGet.Packaging.Core;
+using Rewrite.Core.Config;
+
+namespace Rewrite.MSBuild;
 
 public class RecipeStartInfo
 {
@@ -8,6 +11,7 @@ public class RecipeStartInfo
     public required RecipeKind Kind { get; init; }
     public required string DisplayName { get; init; }
     public required string Description { get; init; }
+    public required PackageIdentity NugetPackageId { get; init; }
     
     private readonly Dictionary<string,RecipeArgument> _arguments = new();
 
@@ -45,4 +49,5 @@ public class RecipeStartInfo
     
     public override string ToString() => $"[{Id}] {DisplayName}";
 
+    
 }

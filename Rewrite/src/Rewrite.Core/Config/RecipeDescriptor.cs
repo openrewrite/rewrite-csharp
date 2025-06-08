@@ -28,27 +28,7 @@ record RecipeDescriptor
     public override string ToString() => $"[{Id}] {DisplayName}";
 
 #if !Analyzer
-    public RecipeStartInfo CreateRecipeStartInfo()
-    {
-        var startInfo = new RecipeStartInfo()
-        {
-            Id = Id,
-            DisplayName = DisplayName,
-            Description = Description,
-            Kind = Kind,
-            TypeName = TypeName,
-            Arguments = this.Options.Select(x => new RecipeArgument
-            {
-                Name = x.Name,
-                Description = x.Description,
-                Type = x.Type,
-                DisplayName = x.DisplayName,
-                Example = x.Example,
-                Required = x.Required,
-            }).ToDictionary(x => x.Name, x => x)
-        };
-        return startInfo;
-    }
+    
 #endif
 
 }

@@ -1,6 +1,6 @@
 ﻿using Spectre.Console.Cli;
 
-namespace Rewrite.Remote.Server.Commands.Infrastructure;
+namespace Rewrite.Server.Commands.Infrastructure;
 
 public sealed class TypeResolver : ITypeResolver, IDisposable
 {
