@@ -36,21 +36,33 @@ public class RecipeManager
     }
     public RecipeDescriptor FindRecipeDescriptor(InstallableRecipe installableRecipeId)
     {
-        var context = FindContext(installableRecipeId);
+        var context = FindContext(installableRecipeId.GetPackageIdentity());
         return context.Recipes.FirstOrDefault(x => x.Id == installableRecipeId.Id) 
                ?? throw new InvalidOperationException($"Recipe {installableRecipeId.Id} not found in loaded package {installableRecipeId.NugetPackageName}:{installableRecipeId.NugetPackageVersion}");
     }
 
-    public Recipe CreateRecipe(InstallableRecipe installableRecipeId, RecipeStartInfo startInfo)
+    public Recipe CreateRecipe(RecipeStartInfo startInfo)
     {
-        _log.LogInformation("Starting recipe {@RecipeId} with Options: {@Options}", installableRecipeId, startInfo.Arguments.Values.Where(x => x.Value != null).ToDictionary(x => x.Name, x => x.Value));
-        var context = FindContext(installableRecipeId);
+        _log.LogInformation("Starting recipe {@RecipeId} with Options: {@Options}", startInfo.NugetPackageId, startInfo.Arguments.Values.Where(x => x.Value != null).ToDictionary(x => x.Name, x => x.Value));
+        var context = FindContext(startInfo.NugetPackageId);
         var recipeDescriptor = context.CreateRecipe(startInfo);
         return recipeDescriptor;
         
     }
 
 
+    public async Task<RecipePackageInfo> InstallRecipePackage(
+        RecipePackage installableRecipeId,
+        List<PackageSource>? packageSources = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await InstallRecipePackage(
+            installableRecipeId.NugetPackageName, 
+            installableRecipeId.NugetPackageVersion, 
+            packageSources: packageSources, 
+            cancellationToken: cancellationToken);
+    }
+    
     public async Task<RecipePackageInfo> InstallRecipePackage(
         string packageId,
         string packageVersion,
@@ -59,20 +71,25 @@ public class RecipeManager
         CancellationToken cancellationToken = default)
     {
         return await InstallRecipePackage(
-            new LibraryRange(packageId, 
-                VersionRange.Combine([NuGetVersion.Parse(packageVersion)]), 
-                LibraryDependencyTarget.Package), 
-            includePrerelease, 
+            new PackageIdentity(packageId, NuGetVersion.Parse(packageVersion)), 
+            includePrerelease,
             packageSources, 
             cancellationToken);
     }
 
     public async Task<RecipePackageInfo> InstallRecipePackage(
-        RecipePackage installableRecipeId,
+        PackageIdentity packageId,
+        bool includePrerelease = false,
         List<PackageSource>? packageSources = null,
         CancellationToken cancellationToken = default)
     {
-        return await InstallRecipePackage(installableRecipeId.NugetPackageName, installableRecipeId.NugetPackageVersion, packageSources: packageSources, cancellationToken: cancellationToken);
+        return await InstallRecipePackage(
+            new LibraryRange(packageId.Id, 
+                VersionRange.Combine([packageId.Version]), 
+                LibraryDependencyTarget.Package), 
+            includePrerelease, 
+            packageSources, 
+            cancellationToken);
     }
 
     public async Task<RecipePackageInfo> InstallRecipePackage(
@@ -117,10 +134,8 @@ public class RecipeManager
 
     }
 
-    private RecipeExecutionContext FindContext(InstallableRecipe installableRecipeId) => FindContext(installableRecipeId.NugetPackageName, installableRecipeId.NugetPackageVersion);
-    private RecipeExecutionContext FindContext(string packageName, string packageVersion)
+    private RecipeExecutionContext FindContext(PackageIdentity packageIdentity)
     {
-        var packageIdentity = new PackageIdentity(packageName, NuGetVersion.Parse(packageVersion));
         if(!_loadedRecipes.TryGetValue(packageIdentity, out var context))
         {
             throw new InvalidOperationException($"Recipe package containting recipe {packageIdentity} isn't loaded");

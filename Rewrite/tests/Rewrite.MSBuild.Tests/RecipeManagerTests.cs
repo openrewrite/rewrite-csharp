@@ -78,9 +78,9 @@ public class RecipeManagerTests : BaseTests
         ).Parse();
     
         var recipeDescriptor = recipeManager.FindRecipeDescriptor(recipeIdentity);
-        var recipeStartInfo = recipeDescriptor.CreateRecipeStartInfo()
+        var recipeStartInfo = installable.CreateRecipeStartInfo(recipeDescriptor)
             .WithOption("Description", "!!--->");
-        var recipe = recipeManager.CreateRecipe(recipeIdentity, recipeStartInfo);
+        var recipe = recipeManager.CreateRecipe(recipeStartInfo);
         recipe.Should().NotBeNull();
         recipe.GetType().GetProperty("Description")!.GetValue(recipe).Should().Be("!!--->");
         
@@ -108,15 +108,56 @@ public class RecipeManagerTests : BaseTests
         // var recipeManager = new RecipeManager();
         // CA1802: Use Literals Where Appropriate
         // CA1861: Avoid constant arrays as arguments
+        // CA1866
         var installableRecipe = new InstallableRecipe("CA1861", "Microsoft.CodeAnalysis.NetAnalyzers", "9.0.0");
         var recipesPackage = await recipeManager.InstallRecipePackage(installableRecipe, packageSources);
         recipesPackage.Recipes.Should().NotBeEmpty();
         var recipeDescriptor = recipesPackage.GetRecipeDescriptor(installableRecipe.Id);
-        var recipeStartInfo = recipeDescriptor.CreateRecipeStartInfo();
-        recipeStartInfo.WithOption(nameof(RoslynRecipe.SolutionFilePath), @"C:\Projects\openrewrite\rewrite-csharp\Rewrite\tests\fixtures\server\bitwarden-server.sln");
-        var recipe = (RoslynRecipe)recipeManager.CreateRecipe(installableRecipe, recipeStartInfo);
+        var recipeStartInfo = recipesPackage.CreateRecipeStartInfo(recipeDescriptor);
+        recipeStartInfo.WithOption(nameof(RoslynRecipe.SolutionFilePath), @"C:\Projects\openrewrite\rewrite-csharp\Rewrite\tests\fixtures\quartznet\Quartz.sln");
+        var recipe = (RoslynRecipe)recipeManager.CreateRecipe(recipeStartInfo);
         recipe.Should().NotBeNull();
         var affectedDocuments = await recipe.Execute(CancellationToken.None);
-        affectedDocuments.Should().NotBeEmpty();
+        affectedDocuments.FixedIssues.Should().NotBeEmpty();
+        affectedDocuments.FixedIssues.SelectMany(x => x.Fixes).Should().NotBeEmpty();
+    }
+    
+    
+    [Test]
+    [Explicit]
+    public async Task FindApplicableRecipe(CancellationToken cancellationToken)
+    {
+        var recipeManager = CreateObject<RecipeManager>();
+        
+        string[] feeds =
+        [
+            "https://api.nuget.org/v3/index.json"
+        ];
+        
+        var packageSources = feeds.Select(x => new PackageSource(x)).ToList();
+        // var recipeManager = new RecipeManager();
+        // CA1802: Use Literals Where Appropriate
+        // CA1861: Avoid constant arrays as arguments
+        var installableRecipe = new InstallableRecipe("CA1861", "FluentAssertions", "7.2.0");
+        var recipesPackage = await recipeManager.InstallRecipePackage(installableRecipe, packageSources, cancellationToken);
+        recipesPackage.Recipes.Should().NotBeEmpty();
+        
+        var recipeStartInfo = recipesPackage.CreateRecipeStartInfo(recipesPackage.Recipes.First());
+        recipeStartInfo.WithOption(nameof(RoslynRecipe.SolutionFilePath), @"C:\Projects\openrewrite\rewrite-csharp\Rewrite\tests\fixtures\quartznet\Quartz.sln");
+        var combinedRecipe = (RoslynRecipe)recipeManager.CreateRecipe(recipeStartInfo);
+        combinedRecipe.DiagnosticsId.Clear();
+        combinedRecipe.DryRun = true;
+        foreach (var recipeDescriptor in recipesPackage.Recipes)
+        {
+            combinedRecipe.DiagnosticsId.Add(recipeDescriptor.Id);
+            
+        }
+        
+        var recipeResult = await combinedRecipe.Execute(cancellationToken);
+        Console.WriteLine("Fixed Issues:");
+        foreach (var fixedIssue in recipeResult.FixedIssues)
+        {
+            Console.WriteLine(fixedIssue.IssueId);
+        }
     }
 }

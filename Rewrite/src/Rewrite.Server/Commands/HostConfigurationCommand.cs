@@ -1,8 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Spectre.Console.Cli;
 
-namespace Rewrite.Remote.Server.Commands;
+namespace Rewrite.Server.Commands;
 
 public abstract class HostConfigurationCommand<TSettings> : Command<TSettings> where TSettings : CommandSettings
 {
