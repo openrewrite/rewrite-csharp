@@ -13,7 +13,7 @@ using Rewrite.RewriteJava.Tree;
 namespace Rewrite.RewriteCSharp.Format;
 
 
-public class AutoFormatVisitor<TState> : CSharpIsoVisitor<TState>
+public class AutoFormatVisitor<TState> : CSharpVisitor<TState>
 {
     private readonly Core.Tree? _stopAfter;
 

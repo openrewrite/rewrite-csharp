@@ -29,13 +29,17 @@ public partial interface Cs : J
     #endif
     bool Core.Tree.IsAcceptable<R, P>(ITreeVisitor<R, P> v, P p)
     {
-        return v.IsAdaptableTo(typeof(CSharpVisitor<>));
+        return v.IsAdaptableTo(typeof(CSharpVisitorAsync<>)) || v.IsAdaptableTo(typeof(CSharpVisitor<>));
     }
     #if DEBUG_VISITOR
     [DebuggerStepThrough]
     #endif
     R? Core.Tree.Accept<R, P>(ITreeVisitor<R, P> v, P p) where R : class
     {
+        // if (v is ITreeVisitorAsync<R, P>)
+        // {
+        //     return (R?)(AcceptCSharp(v.Adapt<J, CSharpVisitorAsync<P>>(), p).Result);
+        // }
         return (R?)AcceptCSharp(v.Adapt<J, CSharpVisitor<P>>(), p);
     }
     #if DEBUG_VISITOR
@@ -45,5 +49,8 @@ public partial interface Cs : J
     {
         return v.DefaultValue(this, p);
     }
-
+    // async Task <J?> AcceptCSharp<P>(CSharpVisitorAsync<P> v, P p)
+    // {
+    //     return v.DefaultValue(this, p);
+    // }
 }

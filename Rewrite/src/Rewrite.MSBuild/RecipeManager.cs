@@ -111,8 +111,14 @@ public class RecipeManager
         {
             throw new InvalidOperationException($"Could not find a compatible version for {libraryRange.Name}");
         }
+
         _log.LogInformation("Selected recipe {SelectedPackage} as best matching version for requested {RequestedPackage}", bestAvailableVersion, libraryRange );
         var selectedRecipePackage = new PackageIdentity(libraryRange.Name, bestAvailableVersion.Version);
+        if (_loadedRecipes.TryGetValue(selectedRecipePackage, out var loadedContext))
+        {
+            _log.LogDebug("{SelectedPackage} package is already loaded into memory - reusing", selectedRecipePackage);
+            return new RecipePackageInfo(selectedRecipePackage, loadedContext.Recipes);
+        }
         // var executionContext = await RecipeExecutionContext.Create(selectedRecipePackage, cachingSourceProvider, cancellationToken);
         if (!_loadedRecipes.TryGetValue(selectedRecipePackage, out var recipeExecutionContext))
         {
