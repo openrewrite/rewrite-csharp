@@ -6,7 +6,7 @@ namespace Rewrite.RewriteCSharp.Format;
 /// <summary>
 /// Visitor that ensures space objects are unique by reference equality
 /// </summary>
-internal class UniqueSpaceVisitor : CSharpIsoVisitor<int>
+internal class UniqueSpaceVisitor : CSharpVisitor<int>
 {
     /// <summary>Space objects seen so far, compared by reference equality</summary>
     private readonly HashSet<Space> _spaces = new(ReferenceEqualityComparer.Instance);

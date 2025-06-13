@@ -11,8 +11,8 @@
     </PropertyGroup>
     <PropertyGroup>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <WarningsNotAsErrors>CS0618</WarningsNotAsErrors>
-        <NoWarn>NU5104</NoWarn>
+        <WarningsNotAsErrors>CS0618;CS1998</WarningsNotAsErrors>
+        <NoWarn>NU5104;CS1998</NoWarn>
         <LangVersion>latest</LangVersion>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>

@@ -1714,7 +1714,7 @@ public class CSharpParserVisitor : CSharpSyntaxVisitor<object>
             // fixed up. The expression for it will become lhs from previous loop iteration (stored in currentExpression)
             // ps: god help you if you need to fix this logic :)
             var bindingNode = lstNode.Descendents()
-                .FirstOrDefault(predicate: x => x.Markers.Contains<MemberBinding>());
+                .FirstOrDefault(predicate: x => x?.Markers?.Contains<MemberBinding>( ) ?? false);
             if (bindingNode != null)
             {
                 var newMarkers = bindingNode.Markers

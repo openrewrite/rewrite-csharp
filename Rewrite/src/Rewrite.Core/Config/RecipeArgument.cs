@@ -13,7 +13,22 @@ class RecipeArgument : OptionDescriptor
     }
 
     public object? Value { get; internal set; }
-    
+
+    private Type _type = null!;
+    private string _typeName = null!;
+
+    public override required string Type
+    {
+        get => _typeName;
+        init
+        {
+            _typeName = value;
+            _type = System.Type.GetType(value) ?? throw new TypeLoadException($"Type {value} cannot be loaded");
+        }
+    }
+
+    public Type GetArgumentType() => _type;
+
     public override string ToString() => $"{Name}: {Value}";
 
 }

@@ -5,14 +5,19 @@ using TypeName = Rewrite.Core.Config.TypeName;
 namespace Rewrite.Core;
 
 public record RecipePackage(string NugetPackageName, string NugetPackageVersion);
+/// <summary>
+/// Represents a single recipe inside a nuget package
+/// </summary>
 public record InstallableRecipe(string Id, string NugetPackageName, string NugetPackageVersion) : RecipePackage(NugetPackageName, NugetPackageVersion)
 {
     public string ToUri() => $"recipe://{NugetPackageName}/{NugetPackageVersion}/{Id}";
 
 
+    public static InstallableRecipe ParseUri(string uri) => ParseUri(new Uri(uri));
     public static InstallableRecipe ParseUri(Uri uri)
     {
         var segments = uri.PathAndQuery.Trim('/').Split("/");
+        if (uri.Scheme != "recipe" || segments.Length != 2) throw new InvalidOperationException("Uri should be in format of 'recipe://PACKAGE_ID/PACKAGE_VERSION/RECIPE_ID"); 
         var packageName = uri.Host;
         var version = segments[0];
         var id = segments[1];

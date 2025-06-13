@@ -108,7 +108,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         return node;
     }
 
-    public override Cs VisitTry(Cs.Try node, PrintOutputCapture<TState> p)
+    public override J? VisitTry(Cs.Try node, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(node, Space.Location.TRY_PREFIX, p);
         p.Append("try");
@@ -121,7 +121,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
 
 
 
-    public override Cs VisitTryCatch(Cs.Try.Catch node, PrintOutputCapture<TState> p)
+    public override J? VisitTryCatch(Cs.Try.Catch node, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(node, Space.Location.CATCH_PREFIX, p);
         p.Append("catch");
@@ -137,7 +137,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         return node;
     }
 
-    public override Cs VisitArrayType(Cs.ArrayType node, PrintOutputCapture<TState> p)
+    public override J? VisitArrayType(Cs.ArrayType node, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(node, Space.Location.ARRAY_TYPE_PREFIX, p);
         Visit(node.TypeExpression, p);
@@ -264,7 +264,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         return node;
     }
 
-    public override J VisitForEachVariableLoop(Cs.ForEachVariableLoop node, PrintOutputCapture<TState> p)
+    public override J? VisitForEachVariableLoop(Cs.ForEachVariableLoop node, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(node, Space.Location.FOR_EACH_LOOP_PREFIX, p);
         p.Append("foreach");
@@ -279,7 +279,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         return node;
     }
 
-    public override Cs VisitGroupClause(Cs.GroupClause node, PrintOutputCapture<TState> p)
+    public override J? VisitGroupClause(Cs.GroupClause node, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(node, Space.Location.GROUP_CLAUSE_PREFIX, p);
         p.Append("group");
@@ -836,7 +836,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
     }
 
 
-    public override Cs VisitPointerFieldAccess(Cs.PointerFieldAccess node, PrintOutputCapture<TState> p)
+    public override J? VisitPointerFieldAccess(Cs.PointerFieldAccess node, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(node, Space.Location.POINTER_FIELD_ACCESS_PREFIX, p);
         Visit(node.Target, p);
@@ -875,7 +875,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         return result;
     }
 
-    public override Cs VisitCompilationUnit(Cs.CompilationUnit node, PrintOutputCapture<TState> p)
+    public override J? VisitCompilationUnit(Cs.CompilationUnit node, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(node, Space.Location.COMPILATION_UNIT_PREFIX, p);
 
@@ -1027,7 +1027,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         return node;
     }
 
-    public override Cs VisitBlockScopeNamespaceDeclaration(Cs.BlockScopeNamespaceDeclaration node,
+    public override J? VisitBlockScopeNamespaceDeclaration(Cs.BlockScopeNamespaceDeclaration node,
         PrintOutputCapture<TState> p)
     {
         BeforeSyntax(node, Space.Location.BLOCK_SCOPE_NAMESPACE_DECLARATION_PREFIX, p);
@@ -1100,7 +1100,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         return node;
     }
 
-    public override Cs VisitFileScopeNamespaceDeclaration(Cs.FileScopeNamespaceDeclaration node, PrintOutputCapture<TState> p)
+    public override J? VisitFileScopeNamespaceDeclaration(Cs.FileScopeNamespaceDeclaration node, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(node, Space.Location.FILE_SCOPE_NAMESPACE_DECLARATION_PREFIX, p);
         p.Append("namespace");
@@ -1341,7 +1341,7 @@ public class CSharpPrinter<TState> : CSharpVisitor<PrintOutputCapture<TState>>
         return node;
     }
 
-    public override Cs VisitLambda(Cs.Lambda node, PrintOutputCapture<TState> p)
+    public override J? VisitLambda(Cs.Lambda node, PrintOutputCapture<TState> p)
     {
         BeforeSyntax(node, Space.Location.LAMBDA_PREFIX, p);
 

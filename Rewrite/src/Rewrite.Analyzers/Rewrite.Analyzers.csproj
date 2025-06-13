@@ -9,7 +9,7 @@
     <PropertyGroup>
         <EnforceExtendedAnalyzerRules>false</EnforceExtendedAnalyzerRules>
         <IncludeBuildOutput>false</IncludeBuildOutput> <!-- disable convention based nuget creation - we're controlling it fully manually -->
-        <NoWarn>NU5128;RS2000;RS2008;RS1042;RS1038</NoWarn>
+        <NoWarn>NU5128;RS2000;RS2008;RS1042;RS1038;CS8669</NoWarn>
         
         <BuildOutputTargetFolder>analyzers</BuildOutputTargetFolder>
         <IncludeSymbols>false</IncludeSymbols>

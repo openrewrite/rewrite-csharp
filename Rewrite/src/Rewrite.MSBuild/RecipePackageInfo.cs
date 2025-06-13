@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using NuGet.Packaging.Core;
 using NuGet.Versioning;
 using Rewrite.Core;
@@ -46,6 +47,28 @@ public class RecipePackageInfo(PackageIdentity packageIdentity, IReadOnlyList<Re
                 Required = x.Required,
             }).ToDictionary(x => x.Name, x => x)
         };
+        return startInfo;
+    }
+
+    public RecipeStartInfo CreateRecipeStartInfo(RecipeDescriptor recipeDescriptor, Dictionary<string, JToken> arguments)
+    {
+        var startInfo = CreateRecipeStartInfo(recipeDescriptor);
+        var requiredOptionNames = startInfo.Arguments.Values.Where(x => x.Required).Select(x => x.Name).ToHashSet();
+        var providedOptionNames = arguments.Keys.ToHashSet();
+        var missingOptions = requiredOptionNames.ToHashSet();
+        missingOptions.ExceptWith(providedOptionNames);
+        if (missingOptions.Count > 0)
+        {
+            throw new ArgumentException($"Missing required options for recipe {recipeDescriptor.Id}: {string.Join(", ", missingOptions)}");
+        }
+        foreach (var (propertyName, propertyValueToken) in arguments)
+        {
+            if (!startInfo.Arguments.TryGetValue(propertyName, out var argument))
+            {
+                throw new ArgumentException($"Recipe option {propertyName} not found as part of recipe {recipeDescriptor.Id} yet was provided as an argument");
+            }
+            argument.Value = propertyValueToken.ToObject(argument.GetArgumentType());
+        }
         return startInfo;
     }
 }
