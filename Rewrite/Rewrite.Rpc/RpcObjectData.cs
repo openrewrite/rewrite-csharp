@@ -6,24 +6,17 @@ namespace Rewrite.Rpc;
 public class RpcObjectData
 {
     public const int ADDED_LIST_ITEM = -1;
-    public RpcObjectData(ObjectState state, string? valueType, object? value, int? @ref, string? trace)
-    {
-        State = state;
-        ValueType = valueType;
-        Value = value;
-        Ref = @ref;
-        Trace = trace;
-    }
+    
 
     [System.Text.Json.Serialization.JsonConverter(typeof(StringEnumConverter))]
-    public ObjectState State { get; set; }
+    public required ObjectState State { get; init; }
     
-    public string? ValueType { get; set; }
+    public string? ValueType { get; init; }
     
-    public object? Value { get; set; }
+    public object? Value { get; init; }
     
-    public int? Ref { get; set; }
-    public string? Trace { get; set; }
+    public int? Ref { get; init; }
+    public string? Trace { get; init; }
 
     public T? GetValue<T>()
     {
