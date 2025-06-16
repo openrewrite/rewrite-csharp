@@ -29,7 +29,7 @@ public partial interface Cs : J
     #endif
     bool Core.Tree.IsAcceptable<R, P>(ITreeVisitor<R, P> v, P p)
     {
-        return v.IsAdaptableTo(typeof(CSharpVisitorAsync<>)) || v.IsAdaptableTo(typeof(CSharpVisitor<>));
+        return v.IsAdaptableTo(typeof(CSharpVisitor<>));
     }
     #if DEBUG_VISITOR
     [DebuggerStepThrough]

@@ -3,12 +3,15 @@ using Newtonsoft.Json;
 using Rewrite.Core;
 using Rewrite.Core.Config;
 using Rewrite.MSBuild;
+using StreamJsonRpc;
 using static Rewrite.Rpc.RpcObjectData.ObjectState;
 
 namespace Rewrite.Rpc;
 
-public class LanguageServer : ILanguageServer
+public class LanguageServer(RecipeManager recipeManager, ILanguageServer counterparty) : ILanguageServer
 {
+    private readonly ILanguageServer _counterparty = counterparty;
+
     /// <summary>
     /// Keeps track of the local and remote state of objects that are used in
     /// visits and other operations for which incremental state sharing is useful
@@ -30,12 +33,8 @@ public class LanguageServer : ILanguageServer
     /// </summary>
     private readonly Dictionary<object, int> _localRefs = new ();
     
-    private RecipeManager _recipeManager;
+    private RecipeManager _recipeManager = recipeManager;
 
-    public LanguageServer(RecipeManager recipeManager)
-    {
-        _recipeManager = recipeManager;
-    }
 
     public Task<string[]> Parse(ParseRequest request)
     {
@@ -44,6 +43,7 @@ public class LanguageServer : ILanguageServer
 
     public async Task<VisitResponse> Visit(VisitRequest request)
     {
+        
         var before = await GetObject<Tree>(request.TreeId);
         var p = (IExecutionContext)(await GetVisitorP(request))!;
 
