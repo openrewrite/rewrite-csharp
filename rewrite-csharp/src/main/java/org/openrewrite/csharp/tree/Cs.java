@@ -3323,7 +3323,7 @@ public interface Cs extends J {
 
         @Override
         @Transient
-        public  CoordinateBuilder.@Nullable ClassDeclaration getCoordinates() {
+        public CoordinateBuilder.@Nullable ClassDeclaration getCoordinates() {
             //todo: Setup coordinate builder - atm it's private
 //            return new CoordinateBuilder.ClassDeclaration(this);
             return null;
