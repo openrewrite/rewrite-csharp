@@ -23,13 +23,23 @@
 package org.openrewrite.csharp;
 
 import org.jspecify.annotations.Nullable;
-import org.openrewrite.*;
+import org.openrewrite.Cursor;
+import org.openrewrite.SourceFile;
+import org.openrewrite.csharp.tree.Cs;
+import org.openrewrite.csharp.tree.CsContainer;
+import org.openrewrite.csharp.tree.CsLeftPadded;
+import org.openrewrite.csharp.tree.CsRightPadded;
+import org.openrewrite.csharp.tree.CsSpace;
 import org.openrewrite.internal.ListUtils;
-import org.openrewrite.marker.Markers;
-import org.openrewrite.tree.*;
 import org.openrewrite.java.JavaVisitor;
-import org.openrewrite.java.tree.*;
-import org.openrewrite.csharp.tree.*;
+import org.openrewrite.java.tree.Expression;
+import org.openrewrite.java.tree.J;
+import org.openrewrite.java.tree.JContainer;
+import org.openrewrite.java.tree.JLeftPadded;
+import org.openrewrite.java.tree.JRightPadded;
+import org.openrewrite.java.tree.Space;
+import org.openrewrite.java.tree.Statement;
+import org.openrewrite.marker.Markers;
 
 import java.util.List;
 
@@ -1461,7 +1471,7 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         return pointerFieldAccess;
     }
 
-    public <J2 extends J> JContainer<J2> visitContainer(@Nullable JContainer<J2> container,
+    public <J2 extends J> @Nullable JContainer<J2> visitContainer(@Nullable JContainer<J2> container,
                                                         CsContainer.Location loc, P p) {
         if (container == null) {
             //noinspection ConstantConditions
@@ -1479,7 +1489,7 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
                 JContainer.build(before, js, container.getMarkers());
     }
 
-    public <T> JLeftPadded<T> visitLeftPadded(@Nullable JLeftPadded<T> left, CsLeftPadded.Location loc, P p) {
+    public <T> @Nullable JLeftPadded<T> visitLeftPadded(@Nullable JLeftPadded<T> left, CsLeftPadded.Location loc, P p) {
         if (left == null) {
             //noinspection ConstantConditions
             return null;
@@ -1508,7 +1518,7 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
         return (before == left.getBefore() && t == left.getElement()) ? left : new JLeftPadded<>(before, t, left.getMarkers());
     }
 
-    public <T> JRightPadded<T> visitRightPadded(@Nullable JRightPadded<T> right, CsRightPadded.Location loc, P p) {
+    public <T> @Nullable JRightPadded<T> visitRightPadded(@Nullable JRightPadded<T> right, CsRightPadded.Location loc, P p) {
         if (right == null) {
             //noinspection ConstantConditions
             return null;

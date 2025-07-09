@@ -22,12 +22,21 @@ import org.openrewrite.PrintOutputCapture;
 import org.openrewrite.Tree;
 import org.openrewrite.csharp.marker.OmitBraces;
 import org.openrewrite.csharp.marker.SingleExpressionBlock;
-import org.openrewrite.csharp.tree.*;
+import org.openrewrite.csharp.tree.Cs;
+import org.openrewrite.csharp.tree.CsContainer;
+import org.openrewrite.csharp.tree.CsLeftPadded;
+import org.openrewrite.csharp.tree.CsRightPadded;
+import org.openrewrite.csharp.tree.CsSpace;
 import org.openrewrite.java.JavaPrinter;
 import org.openrewrite.java.marker.CompactConstructor;
 import org.openrewrite.java.marker.Semicolon;
 import org.openrewrite.java.marker.TrailingComma;
-import org.openrewrite.java.tree.*;
+import org.openrewrite.java.tree.J;
+import org.openrewrite.java.tree.JContainer;
+import org.openrewrite.java.tree.JLeftPadded;
+import org.openrewrite.java.tree.JRightPadded;
+import org.openrewrite.java.tree.Space;
+import org.openrewrite.java.tree.Statement;
 import org.openrewrite.marker.Marker;
 import org.openrewrite.marker.Markers;
 
@@ -91,6 +100,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return node;
     }
 
+    @Override
     public J visitPointerType(Cs.PointerType node, PrintOutputCapture<P> p) {
         beforeSyntax(node, CsSpace.Location.POINTER_TYPE_PREFIX, p);
         visitRightPadded(node.getPadding().getElementType(), CsRightPadded.Location.POINTER_TYPE_ELEMENT_TYPE, "*", p);
@@ -98,6 +108,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return node;
     }
 
+    @Override
     public Cs visitTry(Cs.Try tryable, PrintOutputCapture<P> p) {
         beforeSyntax(tryable, Space.Location.TRY_PREFIX, p);
         p.append("try");
@@ -109,6 +120,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     }
 
 
+    @Override
     public Cs visitTryCatch(Cs.Try.Catch catch_, PrintOutputCapture<P> p) {
         beforeSyntax(catch_, Space.Location.CATCH_PREFIX, p);
         p.append("catch");
@@ -247,6 +259,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return node;
     }
 
+    @Override
     public J visitForEachVariableLoop(Cs.ForEachVariableLoop forEachLoop, PrintOutputCapture<P> p) {
         beforeSyntax(forEachLoop, Space.Location.FOR_EACH_LOOP_PREFIX, p);
         p.append("foreach");
@@ -305,6 +318,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         }
     }
 
+    @Override
     public J visitSwitchExpression(Cs.SwitchExpression node, PrintOutputCapture<P> p) {
         beforeSyntax(node, CsSpace.Location.SWITCH_EXPRESSION_PREFIX, p);
         visitRightPadded(node.getPadding().getExpression(), CsRightPadded.Location.SWITCH_EXPRESSION_EXPRESSION, p);
@@ -314,6 +328,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return node;
     }
 
+    @Override
     public J visitSwitchStatement(Cs.SwitchStatement node, PrintOutputCapture<P> p) {
         beforeSyntax(node, CsSpace.Location.SWITCH_STATEMENT_PREFIX, p);
         p.append("switch");
@@ -323,6 +338,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return node;
     }
 
+    @Override
     public J visitSwitchSection(Cs.SwitchSection node, PrintOutputCapture<P> p) {
         beforeSyntax(node, CsSpace.Location.SWITCH_SECTION_PREFIX, p);
         visit(node.getLabels(), p);
@@ -331,6 +347,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return node;
     }
 
+    @Override
     public J visitUnsafeStatement(Cs.UnsafeStatement node, PrintOutputCapture<P> p) {
         beforeSyntax(node, CsSpace.Location.UNSAFE_STATEMENT_PREFIX, p);
         p.append("unsafe");
@@ -348,6 +365,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return node;
     }
 
+    @Override
     public J visitCheckedStatement(Cs.CheckedStatement node, PrintOutputCapture<P> p) {
         beforeSyntax(node, CsSpace.Location.CHECKED_STATEMENT_PREFIX, p);
         visit(node.getKeyword(), p);
@@ -375,6 +393,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return node;
     }
 
+    @Override
     public J visitRangeExpression(Cs.RangeExpression node, PrintOutputCapture<P> p) {
         beforeSyntax(node, CsSpace.Location.RANGE_EXPRESSION_PREFIX, p);
         visitRightPadded(node.getPadding().getStart(), CsRightPadded.Location.RANGE_EXPRESSION_START, p);
@@ -384,6 +403,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return node;
     }
 
+    @Override
     public J visitFixedStatement(Cs.FixedStatement node, PrintOutputCapture<P> p) {
         beforeSyntax(node, CsSpace.Location.FIXED_STATEMENT_PREFIX, p);
         p.append("fixed");
@@ -393,6 +413,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return node;
     }
 
+    @Override
     public J visitLockStatement(Cs.LockStatement node, PrintOutputCapture<P> p) {
         beforeSyntax(node, CsSpace.Location.LOCK_STATEMENT_PREFIX, p);
         p.append("lock");
@@ -402,6 +423,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return node;
     }
 
+    @Override
     public J visitCasePatternSwitchLabel(Cs.CasePatternSwitchLabel node, PrintOutputCapture<P> p) {
         beforeSyntax(node, CsSpace.Location.CASE_PATTERN_SWITCH_LABEL_PREFIX, p);
         p.append("case");
@@ -413,6 +435,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return node;
     }
 
+    @Override
     public J visitDefaultSwitchLabel(Cs.DefaultSwitchLabel node, PrintOutputCapture<P> p) {
         beforeSyntax(node, CsSpace.Location.DEFAULT_SWITCH_LABEL_PREFIX, p);
         p.append("default");
@@ -422,6 +445,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         return node;
     }
 
+    @Override
     public J visitSwitchExpressionArm(Cs.SwitchExpressionArm node, PrintOutputCapture<P> p) {
         beforeSyntax(node, CsSpace.Location.SWITCH_EXPRESSION_ARM_PREFIX, p);
         visit(node.getPattern(), p);
@@ -1373,7 +1397,7 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
     public J visitClassOrStructConstraint(Cs.ClassOrStructConstraint classOrStructConstraint, PrintOutputCapture<P> p)
     {
         beforeSyntax(classOrStructConstraint, CsSpace.Location.TYPE_PARAMETERS_CONSTRAINT_PREFIX, p);
-        p.append(classOrStructConstraint.getKind().equals(Cs.ClassOrStructConstraint.TypeKind.Class) ? "class" : "struct");
+        p.append(classOrStructConstraint.getKind() == Cs.ClassOrStructConstraint.TypeKind.Class ? "class" : "struct");
         return classOrStructConstraint;
     }
 
