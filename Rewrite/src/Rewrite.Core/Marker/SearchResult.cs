@@ -7,11 +7,11 @@ public record SearchResult(Guid Id, string? Description = null) : Marker
         return other is SearchResult && other.Id.Equals(Id);
     }
 
-    public static T Found<T>(MutableTree<T> tree, string? Description = null)
-    where T : class, MutableTree
-    {
-        return tree.WithMarkers(tree.Markers.AddIfAbsent(new SearchResult(Tree.RandomId(), Description)));
-    }
+    // public static T Found<T>(MutableTree<T> tree, string? Description = null)
+    // where T : class, MutableTree
+    // {
+    //     return tree.WithMarkers(tree.Markers.AddIfAbsent(new SearchResult(Tree.RandomId(), Description)));
+    // }
 
     public string Print(Cursor cursor, Func<string, string> commentWrapper, bool verbose)
     {

@@ -11,7 +11,7 @@ namespace Rewrite.RewriteJson.Tree;
 [SuppressMessage("ReSharper", "RedundantExtendsListEntry")]
 [SuppressMessage("ReSharper", "UnusedMember.Global")]
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
-public interface Json : Rewrite.Core.Tree
+public partial interface Json : Rewrite.Core.Tree
 {
     bool Core.Tree.IsAcceptable<R, P>(ITreeVisitor<R, P> v, P p)
     {
@@ -28,7 +28,7 @@ public interface Json : Rewrite.Core.Tree
         return v.DefaultValue(this, p);
     }
 
-    public class Array(
+    public partial class Array(
         Guid id,
         Space prefix,
         Markers markers,
@@ -116,7 +116,7 @@ public interface Json : Rewrite.Core.Tree
         }
     }
 
-    public class Document(
+    public partial class Document(
         Guid id,
         string sourcePath,
         Space prefix,
@@ -220,7 +220,7 @@ public interface Json : Rewrite.Core.Tree
         }
     }
 
-    public sealed class Empty(
+    public sealed partial class Empty(
         Guid id,
         Space prefix,
         Markers markers
@@ -263,7 +263,7 @@ public interface Json : Rewrite.Core.Tree
         }
     }
 
-    public sealed class Identifier(
+    public sealed partial class Identifier(
         Guid id,
         Space prefix,
         Markers markers,
@@ -314,7 +314,7 @@ public interface Json : Rewrite.Core.Tree
         }
     }
 
-    public sealed class Literal(
+    public sealed partial class Literal(
         Guid id,
         Space prefix,
         Markers markers,
@@ -373,7 +373,7 @@ public interface Json : Rewrite.Core.Tree
         }
     }
 
-    public class Member(
+    public partial class Member(
         Guid id,
         Space prefix,
         Markers markers,
@@ -469,7 +469,7 @@ public interface Json : Rewrite.Core.Tree
         }
     }
 
-    public class JsonObject(
+    public partial class JsonObject(
         Guid id,
         Space prefix,
         Markers markers,

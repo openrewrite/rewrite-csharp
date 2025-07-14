@@ -1,6 +1,6 @@
 namespace Rewrite.Core;
 
-public interface SourceFile : Tree
+public partial interface SourceFile : Tree
 {
     string SourcePath { get; }
     string? CharsetName { get; }

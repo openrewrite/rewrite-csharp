@@ -1,5 +1,9 @@
 namespace Rewrite.Core;
 
+public partial interface MutableSourceFile<T> : MutableSourceFile where T : MutableSourceFile<T>
+{
+}
+
 public partial interface MutableSourceFile : SourceFile
 {
     MutableSourceFile WithSourcePath(string sourcePath);

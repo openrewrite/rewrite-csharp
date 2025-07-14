@@ -58,6 +58,8 @@ namespace Rewrite.Analyzers
             context.RegisterSymbolAction(AnalyzeProperty, SymbolKind.Property);
         }
 
+
+
         private void AnalyzeClass(SymbolAnalysisContext context)
         {
             var namedType = (INamedTypeSymbol)context.Symbol;

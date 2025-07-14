@@ -1,9 +1,7 @@
 namespace Rewrite.Core.Marker;
 
-public interface Marker : IEquatable<Marker>
+public interface Marker : IEquatable<Marker>, IHasId<Guid>
 {
-    Guid Id { get; }
-
     string Print(Cursor cursor, Func<string, string> commentWrapper, bool verbose)
     {
         return "";

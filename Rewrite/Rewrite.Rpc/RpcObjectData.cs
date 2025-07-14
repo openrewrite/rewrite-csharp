@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Rewrite.Rpc;
 
-public class RpcObjectData
+public sealed class RpcObjectData
 {
     public const int ADDED_LIST_ITEM = -1;
     
@@ -15,7 +15,7 @@ public class RpcObjectData
     
     public object? Value { get; init; }
     
-    public int? Ref { get; init; }
+    public long? Ref { get; init; }
     public string? Trace { get; init; }
 
     public T? GetValue<T>()
@@ -25,8 +25,11 @@ public class RpcObjectData
         var jObj = (JObject)Value;
         return jObj.ToObject<T>();
     }
+
     
+
     public enum ObjectState {
+        
         NO_CHANGE,
         ADD,
         DELETE,

@@ -40,8 +40,6 @@ public class CSharpVisitor<P> : JavaVisitor<P>
     
     public virtual J? VisitOperatorDeclaration(Cs.OperatorDeclaration node, P p)
     {
-
-        
         node = node.WithPrefix(VisitSpace(node.Prefix, Space.Location.OPERATOR_DECLARATION_PREFIX, p)!);
         var tempStatement = (Statement) VisitStatement(node, p);
         if (tempStatement is not Cs.OperatorDeclaration)

@@ -2,7 +2,7 @@
 
 namespace Rewrite.RewriteText;
 
-public class PlainTextSourceFile : SourceFile
+public partial class PlainTextSourceFile : SourceFile
 {
     public PlainTextSourceFile(Guid id, Markers markers, string sourcePath, string? charsetName, bool charsetBomMarked, Checksum? checksum, FileAttributes? fileAttributes)
     {

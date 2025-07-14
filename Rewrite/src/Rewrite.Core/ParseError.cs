@@ -3,7 +3,7 @@ using Rewrite.Core.Marker;
 
 namespace Rewrite.Core;
 
-public class ParseError(
+public partial class ParseError(
     Guid id,
     Markers markers,
     string sourcePath,
@@ -16,13 +16,13 @@ public class ParseError(
 {
     public Guid Id => id;
 
-    public ParseError WithId(Guid newId)
-    {
-        return newId == id
-            ? this
-            : new ParseError(newId, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, text,
-                erroneous);
-    }
+    // public ParseError WithId(Guid newId)
+    // {
+    //     return newId == id
+    //         ? this
+    //         : new ParseError(newId, markers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, text,
+    //             erroneous);
+    // }
 
     public Markers Markers => markers;
 
@@ -33,6 +33,7 @@ public class ParseError(
             : new ParseError(id, newMarkers, sourcePath, fileAttributes, charsetName, charsetBomMarked, checksum, text,
                 erroneous);
     }
+
 
     public string SourcePath => sourcePath;
 

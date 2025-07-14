@@ -11,7 +11,7 @@ namespace Rewrite.RewriteXml.Tree;
 [SuppressMessage("ReSharper", "RedundantExtendsListEntry")]
 [SuppressMessage("ReSharper", "UnusedMember.Global")]
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
-public interface Xml : Rewrite.Core.Tree
+public partial interface Xml : Rewrite.Core.Tree
 {
     bool Core.Tree.IsAcceptable<R, P>(ITreeVisitor<R, P> v, P p)
     {
@@ -28,7 +28,7 @@ public interface Xml : Rewrite.Core.Tree
         return v.DefaultValue(this, p);
     }
 
-    public class Document(
+    public partial class Document(
         Guid id,
         string sourcePath,
         string prefix,
@@ -140,7 +140,7 @@ public interface Xml : Rewrite.Core.Tree
         }
     }
 
-    public sealed class Prolog(
+    public sealed partial class Prolog(
         Guid id,
         string prefix,
         Markers markers,
@@ -207,7 +207,7 @@ public interface Xml : Rewrite.Core.Tree
         }
     }
 
-    public sealed class XmlDecl(
+    public sealed partial class XmlDecl(
         Guid id,
         string prefix,
         Markers markers,
@@ -274,7 +274,7 @@ public interface Xml : Rewrite.Core.Tree
         }
     }
 
-    public sealed class ProcessingInstruction(
+    public sealed partial class ProcessingInstruction(
         Guid id,
         string prefix,
         Markers markers,
@@ -341,7 +341,7 @@ public interface Xml : Rewrite.Core.Tree
         }
     }
 
-    public sealed class Tag(
+    public sealed partial class Tag(
         Guid id,
         string prefix,
         Markers markers,
@@ -413,7 +413,7 @@ public interface Xml : Rewrite.Core.Tree
             return newBeforeTagDelimiterPrefix == beforeTagDelimiterPrefix ? this : new Tag(id, prefix, markers, name, attributes, content, closingTag, newBeforeTagDelimiterPrefix);
         }
 
-        public sealed class Closing(
+        public sealed partial class Closing(
             Guid id,
             string prefix,
             Markers markers,
@@ -483,7 +483,7 @@ public interface Xml : Rewrite.Core.Tree
         }
     }
 
-    public sealed class Attribute(
+    public sealed partial class Attribute(
         Guid id,
         string prefix,
         Markers markers,
@@ -539,7 +539,7 @@ public interface Xml : Rewrite.Core.Tree
             return ReferenceEquals(newVal, val) ? this : new Attribute(id, prefix, markers, key, beforeEquals, newVal);
         }
 
-        public sealed class Value(
+        public sealed partial class Value(
             Guid id,
             string prefix,
             Markers markers,
@@ -616,7 +616,7 @@ public interface Xml : Rewrite.Core.Tree
         }
     }
 
-    public sealed class CharData(
+    public sealed partial class CharData(
         Guid id,
         string prefix,
         Markers markers,
@@ -683,7 +683,7 @@ public interface Xml : Rewrite.Core.Tree
         }
     }
 
-    public sealed class Comment(
+    public sealed partial class Comment(
         Guid id,
         string prefix,
         Markers markers,
@@ -734,7 +734,7 @@ public interface Xml : Rewrite.Core.Tree
         }
     }
 
-    public sealed class DocTypeDecl(
+    public sealed partial class DocTypeDecl(
         Guid id,
         string prefix,
         Markers markers,
@@ -806,7 +806,7 @@ public interface Xml : Rewrite.Core.Tree
             return newBeforeTagDelimiterPrefix == beforeTagDelimiterPrefix ? this : new DocTypeDecl(id, prefix, markers, name, externalId, internalSubset, subsets, newBeforeTagDelimiterPrefix);
         }
 
-        public sealed class ExternalSubsets(
+        public sealed partial class ExternalSubsets(
             Guid id,
             string prefix,
             Markers markers,
@@ -868,7 +868,7 @@ public interface Xml : Rewrite.Core.Tree
         }
     }
 
-    public sealed class Element(
+    public sealed partial class Element(
         Guid id,
         string prefix,
         Markers markers,
@@ -927,7 +927,7 @@ public interface Xml : Rewrite.Core.Tree
         }
     }
 
-    public sealed class Ident(
+    public sealed partial class Ident(
         Guid id,
         string prefix,
         Markers markers,
@@ -978,7 +978,7 @@ public interface Xml : Rewrite.Core.Tree
         }
     }
 
-    public sealed class JspDirective(
+    public sealed partial class JspDirective(
         Guid id,
         string prefix,
         Markers markers,

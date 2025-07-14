@@ -8,19 +8,16 @@ public class PrintOutputCapture<TState>(TState p, PrintOutputCapture<TState>.IMa
     public TState Context { get; } = p;
 
     public IMarkerPrinter MarkerPrinter { get; } = markerPrinter;
-
-    public StringBuilder Out { get; } = new StringBuilder();
+    
+    protected StringBuilder Out { get; } = new ();
 
     public PrintOutputCapture(TState p) : this(p, IMarkerPrinter.Default)
     {
+        
     }
-
-    public string GetOut()
-    {
-        return Out.ToString();
-    }
-
-    public PrintOutputCapture<TState> Append(string? text)
+    
+    public virtual int Length => Out.Length;
+    public virtual PrintOutputCapture<TState> Append(string? text)
     {
         if (text is { Length: > 0 })
         {
@@ -30,7 +27,7 @@ public class PrintOutputCapture<TState>(TState p, PrintOutputCapture<TState>.IMa
         return this;
     }
 
-    public PrintOutputCapture<TState> Append(char c)
+    public virtual PrintOutputCapture<TState> Append(char c)
     {
         Out.Append(c);
         return this;

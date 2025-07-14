@@ -33,7 +33,7 @@ public partial interface J : Rewrite.Core.Tree
     Expression indexed,
     ArrayDimension dimension,
     JavaType? type
-    ) : J, Expression, TypedTree, Expression<ArrayAccess>, TypedTree<ArrayAccess>, J<ArrayAccess>, MutableTree<ArrayAccess>
+    ) : J, Expression, TypedTree
     {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {

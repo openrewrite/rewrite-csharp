@@ -13,6 +13,7 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Nuke.Common" Version="9.0.4" />
+        <PackageReference Include="Spectre.Console" Version="0.50.0" />
         <PackageReference Include="TUnit" Version="0.19.32" />
         <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.6.3" />
         <PackageReference Include="coverlet.collector" Version="6.0.4">
@@ -22,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Rewrite.Rpc\Rewrite.Rpc.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.MSBuild\Rewrite.MSBuild.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.Test\Rewrite.Test.csproj" />
       <ProjectReference Include="..\Rewrite.Tests\Rewrite.Tests.csproj" />

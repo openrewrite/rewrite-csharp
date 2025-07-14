@@ -151,21 +151,21 @@ public class AutoFormatVisitor<TState> : CSharpVisitor<TState>
     {
         public Dictionary<Rewrite.Core.Tree, TextSpan> SpanMap { get; } = new();
 
-        public override J? PreVisit(Rewrite.Core.Tree? tree, PrintOutputCapture<int> p)
+        public override J? PreVisit(Rewrite.Core.Tree? tree, PrintOutputCapture<int> p, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
             if (tree != null)
             {
                 var j = (J)tree;
-                SpanMap.Add(tree, new TextSpan(p.Out.Length + j.Prefix.ToString().Length, 0));
+                SpanMap.Add(tree, new TextSpan(p.Length + j.Prefix.ToString().Length, 0));
             }
             return tree as J;
         }
 
-        public override J? PostVisit(Rewrite.Core.Tree tree, PrintOutputCapture<int> p)
+        public override J? PostVisit(Rewrite.Core.Tree tree, PrintOutputCapture<int> p, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
             if (SpanMap.TryGetValue(tree, out TextSpan span))
             {
-                SpanMap[tree] = new TextSpan(span.Start, p.Out.Length - span.Start);
+                SpanMap[tree] = new TextSpan(span.Start, p.Length - span.Start);
             }
             return tree as J;
         }
@@ -191,9 +191,9 @@ public class AutoFormatVisitor<TState> : CSharpVisitor<TState>
         {
             if (space == Space.EMPTY)
                 return space; // special case cuz markers are hardcoded with Space.Empty
-            var start = p.Out.Length;
+            var start = p.Length;
             visitBase();
-            var end = p.Out.Length;
+            var end = p.Length;
             var span = new TextSpan(start, end - start);
 
             var overlappingChanges = _changes.Where(change => span.IntersectsWith(change.Span)).ToList();

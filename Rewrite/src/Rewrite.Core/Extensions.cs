@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace Rewrite.Core;
 
 public static class Extensions
@@ -9,4 +11,5 @@ public static class Extensions
         if (first == null || second == null) return false;
         return first.SequenceEqual(second);
     }
+
 }

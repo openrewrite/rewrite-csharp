@@ -58,7 +58,7 @@ public static class Extensions
 
     private class ReplaceContainerVisitor(J oldNode, J newNode) : CSharpVisitor<object?>
     {
-        public override J? PreVisit(Core.Tree? tree, object? p)
+        public override J? PreVisit(Core.Tree? tree, object? p, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
             if (oldNode.Equals(tree))
             {
@@ -72,7 +72,7 @@ public static class Extensions
     private class ReplaceNodeVisitor(J oldNode, J newNode) : CSharpVisitor<object?>
     {
         bool _stop = false;
-        public override J? PreVisit(Core.Tree? tree, object? p)
+        public override J? PreVisit(Core.Tree? tree, object? p, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
             if (oldNode.Equals(tree))
             {

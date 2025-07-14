@@ -1,170 +1,253 @@
 ﻿using System.Collections;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.CodeAnalysis.Text;
+using NMica.Utils;
 using Rewrite.Core;
 using Rewrite.RewriteCSharp;
 using Rewrite.RewriteCSharp.Tree;
 using Rewrite.RewriteJava.Tree;
 using Socolin.ANSITerminalColor;
+using Spectre.Console;
+using Spectre.Console.Rendering;
+using Tree = Rewrite.Core.Tree;
 
 namespace Rewrite.Test;
 
 public static class LstTextRender
 {
-    const bool StringWhitespace = true;
-
-    public static string RenderLstTree(this Tree tree)
+   
+    public static Table RenderLstTree(this Tree tree)
     {
         var walker = new Walker();
-        var results = new Dictionary<Guid, OutputLine>();
-        walker.Visit(tree, results);
+        var graph = new Dictionary<Guid, OutputLine>();
+        walker.Visit(tree, graph);
 
-        Column columnTree = new("Tree");
-        Column columnRender = new("Render");
-        Column columnParentProperty = new("Parent property");
-        var compilationRoot = results.Values.First();
-        PrintNode(compilationRoot, "", false, columnTree, columnRender, columnParentProperty);
-        var table = RenderTable(columnTree, columnRender, columnParentProperty);
+        var table = new Table()
+            .AddColumn("Tree")
+            .AddColumn("Render", c => c.NoWrap())
+            .AddColumn("ParentProperty");
+        var rowData = RenderTreeLines(graph.Values.First(), "", false).ToList();
+        foreach (var item in rowData)
+        {
+            var codeSegmentSelector = item.Render.Segments.Where(x => x.SegmentType == MarkupString.SegmentType.Code).ToList();
+            var firstCodeSegment = codeSegmentSelector.First();
+            var lastCodeSegment = codeSegmentSelector.Last();
+            firstCodeSegment.Value = firstCodeSegment.Value.TrimStart();
+            lastCodeSegment.Value = lastCodeSegment.Value.TrimEnd();
+        }
+        foreach (var row in rowData)
+        {
+            var code = row.Render
+                .Truncate(100)
+                .ToString()
+                .SingularSpace()
+                .LineBreaksAsSpaces();
+            table.AddRow(row.NodeTreeRender, code, row.Property ?? "");
+        }
+
         return table;
     }
 
-    private class Column(string name)
+    static IEnumerable<OutputLine> RenderTreeLines(OutputLine tree, string indent, bool last)
     {
-        public List<string> Lines { get; } = new();
-        public string Name { get; set; } = name;
-    }
+        tree.NodeTreeRender = indent + "+-" + tree.Node;
+        yield return tree;
 
-    static string RenderTable(params Column[] columns)
-    {
-        foreach (var column in columns)
-        {
-            PadRight(column);
-        }
-
-        var sb = new StringBuilder();
-
-
-        var header = string.Join(" | ", columns.Select(column => column.Name));
-        sb.AppendLine(header);
-
-
-        sb.AppendLine(new string('=', header.GetVisibleLength()));
-        for (int lineNum = 0; lineNum < columns[0].Lines.Count; lineNum++)
-        {
-            //columns.Select(column => column.Lines[lineNum].Length).ToList();
-            var tableLine = string.Join(" | ", columns.Select(column => column.Lines[lineNum]));
-            sb.AppendLine(tableLine);
-        }
-
-        return sb.ToString();
-    }
-    static int GetVisibleLength(this string input)
-    {
-        // Regular expression pattern to match ANSI escape codes
-        string ansiPattern = @"\x1B\[[0-9;]*[A-Za-z]";
-
-        // Remove ANSI escape codes
-        string cleanString = Regex.Replace(input, ansiPattern, string.Empty);
-
-        // Return the length of the cleaned string
-        return cleanString.Length;
-    }
-    static void PadRight(Column column)
-    {
-        var col1Size = column.Lines.Select(x => x?.GetVisibleLength() ?? 0).Max();
-        for (int i = 0; i < column.Lines.Count; i++)
-        {
-            var val = column.Lines[i] ?? "";
-            var padded = val.PadRightIgnoringAnsi(col1Size);
-            //padded.GetVisibleLength().Dump();
-            column.Lines[i] = padded;
-        }
-
-        column.Name = column.Name.PadRightIgnoringAnsi(col1Size);
-        //column.Name.GetVisibleLength().Dump("header");
-    }
-    private static readonly Regex AnsiRegex = new Regex(@"\x1B\[[0-9;]*[mGKH]", RegexOptions.Compiled);
-
-    public static string TrimIgnoreAnsiCodes(this string input)
-    {
-        if (string.IsNullOrEmpty(input))
-            return input;
-        input = input.Trim();
-
-        var pattern = @"^(?<start>\x1B\[[0-9;]*[mK])?(?<body>.*?)(?<end>\x1B\[[0-9;]*[mK])?$";
-
-        var match = Regex.Match(input, pattern, RegexOptions.Singleline);
-
-        if (!match.Success)
-            return input;
-
-        var leadingCodes = match.Groups["start"].Value;  // Group 1: Leading ANSI codes
-        var bodyText = match.Groups["body"].Value;      // Group 2: Main text content
-        var trailingCodes = match.Groups["end"].Value; // Group 3: Trailing ANSI codes
-
-        return leadingCodes + bodyText.Trim() + trailingCodes;
-    }
-
-    public static string PadRightIgnoringAnsi(this string input, int totalWidth, char paddingChar = ' ')
-    {
-        // Strip ANSI codes temporarily to calculate the actual visible length
-        string strippedString = AnsiRegex.Replace(input, "");
-
-        // Calculate padding based on visible length without ANSI codes
-        int paddingNeeded = Math.Max(0, totalWidth - strippedString.Length);
-
-        // Pad the original string with padding character
-        return input + new string(paddingChar, paddingNeeded);
-    }
-
-    static void PrintNode(OutputLine tree, String indent, bool last, Column columnTree, Column columnRender, Column columnParentProperty)
-    {
-        columnTree.Lines.Add(indent + "+-" + tree.Node);
         indent += last ? "  " : "| ";
-        var render = tree.Render;
-        if (StringWhitespace)
-        {
-            render = Regex.Replace(render, @"[\r\n]+", " ", RegexOptions.Multiline);
-            render = Regex.Replace(render, @"\s{2,}", " ");
-            render = Regex.Replace(render, $" ({AnsiRegex} )", "$1");
-            render = render.TrimIgnoreAnsiCodes();
-            render = TrimString(render, 100);
-        }
 
-        columnRender.Lines.Add(render);
-        columnParentProperty.Lines.Add(tree.Property ?? "");
         for (int i = 0; i < tree.Children.Count; i++)
         {
-            PrintNode(tree.Children[i], indent, i == tree.Children.Count - 1, columnTree, columnRender, columnParentProperty);
+            foreach (var child in RenderTreeLines(tree.Children[i], indent, i == tree.Children.Count - 1))
+                yield return child;
         }
     }
+    
+   
 
-    class SyntaxHighlighter(Tree targetNode) : CSharpPrinter<int>
+    class SyntaxHighlighter(Tree targetNode) : CSharpPrinter<MarkupPrintCapture, object>
     {
-        public override J? PreVisit(Tree? tree, PrintOutputCapture<int> p)
+        public override J? PreVisit(Tree? tree, MarkupPrintCapture p, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
 
             if (tree?.Id == targetNode.Id)
             {
-                p.Append(AnsiColor.Foreground(Terminal256ColorCodes.GreenC2).ToEscapeSequence());
+                p.StartHighlight("green");
             }
             return tree as J;
         }
-        public override J PostVisit(Tree tree, PrintOutputCapture<int> p)
+        public override J PostVisit(Tree tree, MarkupPrintCapture p, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
             if (tree.Id == targetNode.Id)
             {
-                p.Append(AnsiColor.Reset.ToEscapeSequence());
+                p.EndHighlight();
             }
             return (J)tree;
         }
-        public static string Highlight(Tree root, Tree node)
+        public static MarkupString Highlight(Tree root, Tree node)
         {
-            PrintOutputCapture<int> p = new(1);
+            MarkupPrintCapture p = new();
             var visitor = new SyntaxHighlighter(node).Visit(root, p);
-            return p.Out.ToString();
+            return new MarkupString(p.ToString(), p.Highlights);
         }
+
+    }
+
+    internal class MarkupPrintCapture() : PrintOutputCapture<object>(new())
+    {
+        private HighlightSpan? _currentHighlight;
+        public List<HighlightSpan> Highlights { get; } = new();
+        private StringBuilder _codeBuffer = new();
+
+
+        public void StartHighlight(string metadata)
+        {
+            _currentHighlight = new(metadata, Length, 0);
+        }
+
+        public void EndHighlight()
+        {
+            var highlight = _currentHighlight! with { Length = Length - _currentHighlight.Start };
+            Highlights.Add(highlight);
+            _currentHighlight = null;
+        }
+       
+    }
+
+    public class MarkupString : HighlightString
+    {
+        public enum SegmentType
+        {
+            Code,
+            Markup
+        }
+
+        public class Segment(SegmentType segmentType, string value)
+        {
+            public SegmentType SegmentType { get; set; } = segmentType;
+            public string Value { get; set; } = value;
+
+            public void Deconstruct(out SegmentType segmentType, out string value)
+            {
+                segmentType = this.SegmentType;
+                value = this.Value;
+            }
+        }
+
+        public List<Segment> Segments { get; } = new();
+        public MarkupString(string text, List<HighlightSpan> highlights) : base(text, highlights)
+        {
+            ComputeSegments();
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            foreach (var segment in Segments)
+            {
+                if (segment.SegmentType == SegmentType.Code)
+                    sb.Append(Markup.Escape(segment.Value));
+                else
+                    sb.Append(segment.Value);
+            }
+            return sb.ToString();
+        }
+
+        private void ComputeSegments()
+        {
+            // if (Highlights.Count == 0)
+            //     return Text;
+
+            var events = new List<(int Position, bool IsStart, HighlightSpan Span)>();
+
+            foreach (var span in Highlights)
+            {
+                // Skip spans with no width
+                if (span.Length <= 0)
+                    continue;
+
+                events.Add((span.Start, true, span));
+                events.Add((span.End, false, span));
+            }
+
+            events.Sort((a, b) =>
+            {
+                int cmp = a.Position.CompareTo(b.Position);
+                if (cmp != 0)
+                    return cmp;
+
+                // Close before open if at same position
+                if (a.IsStart == b.IsStart)
+                    return 0;
+
+                return a.IsStart ? 1 : -1;
+            });
+
+            // var result = new System.Text.StringBuilder();
+            int currentIndex = 0;
+            var openTags = new Stack<string>();
+
+            foreach (var (position, isStart, span) in events)
+            {
+                if (position > currentIndex)
+                {
+                    Segments.Add(new(SegmentType.Code, Text.Substring(currentIndex, position - currentIndex)));
+                    currentIndex = position;
+                }
+
+                if (isStart)
+                {
+                    Segments.Add(new(SegmentType.Markup, $"[{span.HighlightMetadata}]"));
+                    openTags.Push(span.HighlightMetadata);
+                }
+                else
+                {
+                    // Close only the matching tag
+                    var tempStack = new Stack<string>();
+                    while (openTags.Count > 0)
+                    {
+                        var tag = openTags.Pop();
+                        Segments.Add(new(SegmentType.Markup, "[/]"));
+                        if (tag == span.HighlightMetadata)
+                            break;
+                        tempStack.Push(tag);
+                    }
+
+                    while (tempStack.Count > 0)
+                    {
+                        var tag = tempStack.Pop();
+                        Segments.Add(new(SegmentType.Markup, $"[{tag}]"));
+                        openTags.Push(tag);
+                    }
+                }
+            }
+
+            if (currentIndex < Text.Length)
+                Segments.Add(new(SegmentType.Code, Text.Substring(currentIndex)));
+
+            while (openTags.Count > 0)
+            {
+                Segments.Add(new(SegmentType.Markup, "[/]"));
+                openTags.Pop();
+            }
+
+        }
+
+    }
+
+    public class HighlightString(string text, List<HighlightSpan> highlights)
+    {
+        public string Text { get; } = text;
+        protected List<HighlightSpan> Highlights { get; } = highlights;
+
+        public override string ToString() => Text;
+    }
+
+    public record HighlightSpan(string HighlightMetadata, int Start, int Length)
+    {
+        public int End => Start + Length;
     }
 
     class Walker : CSharpVisitor<Dictionary<Guid, OutputLine>>
@@ -182,7 +265,7 @@ public static class LstTextRender
             segments.Reverse();
             return string.Join(".", segments);
         }
-        public override J? PreVisit(Tree? tree, Dictionary<Guid, OutputLine> p)
+        public override J? PreVisit(Tree? tree, Dictionary<Guid, OutputLine> p, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(tree))] string callingArgumentExpression = "")
         {
 
             if (tree == null)
@@ -256,24 +339,11 @@ public static class LstTextRender
         }
     }
 
-    public static string TrimString(string? input, int maxLength)
-    {
-        if (input == null || maxLength <= 0)
-        {
-            return string.Empty;
-        }
-
-        if (input.GetVisibleLength() > maxLength)
-        {
-            return input.Substring(0, maxLength) + "..." + AnsiColor.Reset.ToEscapeSequence();
-        }
-
-        return input;
-    }
-    class OutputLine
+    internal class OutputLine
     {
         public required string Node { get; init; }
-        public string Render { get; set; } = "";
+        public string NodeTreeRender { get; set; } = "";
+        public MarkupString Render { get; set; } = new("",new());
         public string? Parent { get; set; }
         public string? Property { get; set; }
         public List<OutputLine> Children { get; } = new();
@@ -307,5 +377,61 @@ public static class Extensions
         }
 
         return false;
+    }
+    
+    private static readonly Regex RepeatingSpaceRegex = new (@"\s{2,}", RegexOptions.Compiled);
+    private static readonly Regex LineBreaksRegex = new (@"[\r\n]+", RegexOptions.Compiled | RegexOptions.Multiline);
+    /// <summary>
+    /// Reduce all repeating whitespace to a single space character
+    /// </summary>
+    /// <returns></returns>
+    public static string SingularSpace(this string s) => RepeatingSpaceRegex.Replace(s, " ");
+    public static string LineBreaksAsSpaces(this string s) => LineBreaksRegex.Replace(s, " ");
+    
+    public static LstTextRender.MarkupString Truncate(this LstTextRender.MarkupString source, int maxVisibleLength)
+    {
+        var newSegments = new List<LstTextRender.MarkupString.Segment>();
+        int currentLength = 0;
+        bool done = false;
+
+        foreach (var segment in source.Segments)
+        {
+            if (segment.SegmentType == LstTextRender.MarkupString.SegmentType.Markup)
+            {
+                // Always preserve markup (including closing tags after truncation)
+                newSegments.Add(new(segment.SegmentType, segment.Value));
+                continue;
+            }
+
+            if (done)
+            {
+                // We've already hit the limit, skip remaining code segments
+                continue;
+            }
+
+            var segmentLength = segment.Value.Length;
+
+            if (currentLength + segmentLength <= maxVisibleLength)
+            {
+                // Include full code segment
+                newSegments.Add(new(segment.SegmentType, segment.Value));
+                currentLength += segmentLength;
+            }
+            else
+            {
+                // Truncate this segment
+                int remaining = maxVisibleLength - currentLength;
+                if (remaining > 0)
+                {
+                    newSegments.Add(new(LstTextRender.MarkupString.SegmentType.Code, segment.Value.Substring(0, remaining)));
+                }
+                done = true;
+            }
+        }
+
+        var result = new LstTextRender.MarkupString(string.Empty, []);
+        result.Segments.Clear();
+        result.Segments.AddRange(newSegments);
+        return result;
     }
 }

@@ -5,13 +5,13 @@ using MyAttributes = Rewrite.Core.FileAttributes;
 
 namespace Rewrite.RewriteJava.Tree;
 
-// public interface Expression<T> : Expression, TypedTree<T> where T : Expression
-// {
-//     J J.WithPrefix(Space space) => ((J<T>)this).WithPrefix(space);
-//     Expression Expression.WithPrefix(Space space) => ((J<T>)this).WithPrefix(space);
-//     TypedTree TypedTree.WithType(JavaType? type) => ((TypedTree<T>)this).WithType(type);
-//     Expression Expression.WithType(JavaType? type) => ((TypedTree<T>)this).WithType(type);
-// }
+public interface Expression<T> : Expression, TypedTree<T> where T : Expression
+{
+    // J J.WithPrefix(Space space) => ((J<T>)this).WithPrefix(space);
+    // Expression Expression.WithPrefix(Space space) => ((J<T>)this).WithPrefix(space);
+    // TypedTree TypedTree.WithType(JavaType? type) => ((TypedTree<T>)this).WithType(type);
+    // Expression Expression.WithType(JavaType? type) => ((TypedTree<T>)this).WithType(type);
+}
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "PossibleUnintendedReferenceComparison")]
 public partial interface Expression :  TypedTree

@@ -3,7 +3,7 @@ using Rewrite.Core.Marker;
 
 namespace Rewrite.Core;
 
-public interface Tree : IHasMarkers, IEquatable<Tree>
+public partial interface Tree : IHasMarkers, IEquatable<Tree>, IHasId<Guid>
 {
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
@@ -23,7 +23,6 @@ public interface Tree : IHasMarkers, IEquatable<Tree>
         return Guid.NewGuid();
     }
 
-    Guid Id { get; }
 
     bool IsAcceptable<R, P>(ITreeVisitor<R, P> v, P p) where R : class, Tree;
 
@@ -41,7 +40,7 @@ public interface Tree : IHasMarkers, IEquatable<Tree>
     string Print<P>(Cursor cursor, PrintOutputCapture<P> capture)
     {
         Printer<P>(cursor).Visit(this, capture, cursor);
-        return capture.GetOut();
+        return capture.ToString();
     }
 #if DEBUG_VISITOR
     [DebuggerStepThrough]
@@ -58,6 +57,8 @@ public interface Tree : IHasMarkers, IEquatable<Tree>
     {
         throw new NotImplementedException();
     }
+
+    public Tree WithId(Guid id);
 }
 
 public static class TreeExtensions

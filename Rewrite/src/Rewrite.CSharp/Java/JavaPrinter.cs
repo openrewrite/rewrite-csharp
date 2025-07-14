@@ -6,7 +6,11 @@ using Rewrite.RewriteJava.Tree;
 
 namespace Rewrite.RewriteJava;
 
-public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
+public class JavaPrinter<TState> : JavaPrinter<PrintOutputCapture<TState>, TState>
+{
+}
+
+public class JavaPrinter<TOutputCapture, P> : JavaVisitor<TOutputCapture> where TOutputCapture : PrintOutputCapture<P>
 {
     private static readonly Func<string, string> JAVA_MARKER_WRAPPER =
         o => $"/*~~{o}{(string.IsNullOrEmpty(o) ? "" : "~~")}>*/";
@@ -15,7 +19,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     {
     }
 
-    protected virtual void VisitRightPadded<T>(IList<JRightPadded<T>> nodes, JRightPadded.Location location, string suffixBetween, PrintOutputCapture<P> p) where T : J
+    protected virtual void VisitRightPadded<T>(IList<JRightPadded<T>> nodes, JRightPadded.Location location, string suffixBetween, TOutputCapture p) where T : J
     {
         for (int i = 0; i < nodes.Count; ++i)
         {
@@ -30,7 +34,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
     }
 
-    protected virtual void VisitContainer<T>(string before, JContainer<T>? container, JContainer.Location location, string suffixBetween, string? after, PrintOutputCapture<P> p) where T : J
+    protected virtual void VisitContainer<T>(string before, JContainer<T>? container, JContainer.Location location, string suffixBetween, string? after, TOutputCapture p) where T : J
     {
         if (container != null)
         {
@@ -43,7 +47,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     }
 
 
-    public override Space VisitSpace(Space space, Space.Location? loc, PrintOutputCapture<P> p)
+    public override Space VisitSpace(Space space, Space.Location? loc, TOutputCapture p)
     {
         p.Append(space.Whitespace);
         var comments = space.Comments;
@@ -60,7 +64,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     }
 
     protected virtual void VisitLeftPadded<T>(string? prefix, JLeftPadded<T>? leftPadded, JLeftPadded.Location location,
-        PrintOutputCapture<P> p) where T : J
+        TOutputCapture p) where T : J
     {
         if (leftPadded != null)
         {
@@ -76,7 +80,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     }
 
     protected virtual void VisitRightPadded<T>(JRightPadded<T>? rightPadded, JRightPadded.Location location, string? suffix,
-        PrintOutputCapture<P> p) where T : J
+        TOutputCapture p) where T : J
     {
         if (rightPadded != null)
         {
@@ -91,7 +95,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
     }
 
-    public override J? VisitModifier(J.Modifier node, PrintOutputCapture<P> p)
+    public override J? VisitModifier(J.Modifier node, TOutputCapture p)
     {
         Visit(node.Annotations, p);
         var keyword = node.ModifierType switch
@@ -122,7 +126,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitAnnotation(J.Annotation node, PrintOutputCapture<P> p)
+    public override J? VisitAnnotation(J.Annotation node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.ANNOTATION_PREFIX, p);
         p.Append('@');
@@ -132,7 +136,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitAnnotatedType(J.AnnotatedType node, PrintOutputCapture<P> p)
+    public override J? VisitAnnotatedType(J.AnnotatedType node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.ANNOTATED_TYPE_PREFIX, p);
         Visit(node.Annotations, p);
@@ -141,7 +145,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitArrayDimension(J.ArrayDimension node, PrintOutputCapture<P> p)
+    public override J? VisitArrayDimension(J.ArrayDimension node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.DIMENSION_PREFIX, p);
         p.Append('[');
@@ -150,7 +154,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitArrayType(J.ArrayType node, PrintOutputCapture<P> p)
+    public override J? VisitArrayType(J.ArrayType node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.ARRAY_TYPE_PREFIX, p);
 
@@ -178,7 +182,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    private void PrintDimensions(J.ArrayType node, PrintOutputCapture<P> p)
+    private void PrintDimensions(J.ArrayType node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.ARRAY_TYPE_PREFIX, p);
         Visit(node.Annotations, p);
@@ -194,7 +198,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         AfterSyntax(node, p);
     }
 
-    public override J? VisitAssert(J.Assert node, PrintOutputCapture<P> p)
+    public override J? VisitAssert(J.Assert node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.ASSERT_PREFIX, p);
         p.Append("assert");
@@ -204,7 +208,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitAssignment(J.Assignment node, PrintOutputCapture<P> p)
+    public override J? VisitAssignment(J.Assignment node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.ASSIGNMENT_PREFIX, p);
         Visit(node.Variable, p);
@@ -213,7 +217,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitAssignmentOperation(J.AssignmentOperation node, PrintOutputCapture<P> p)
+    public override J? VisitAssignmentOperation(J.AssignmentOperation node, TOutputCapture p)
     {
         string keyword = node.Operator switch
         {
@@ -240,7 +244,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitBinary(J.Binary node, PrintOutputCapture<P> p)
+    public override J? VisitBinary(J.Binary node, TOutputCapture p)
     {
         string keyword = node.Operator switch
         {
@@ -276,7 +280,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
     }
 
 
-    public override J? VisitBlock(J.Block node, PrintOutputCapture<P> p)
+    public override J? VisitBlock(J.Block node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.BLOCK_PREFIX, p);
         if (node.Static)
@@ -293,7 +297,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    protected virtual void VisitStatements(IList<JRightPadded<Statement>> statements, JRightPadded.Location location, PrintOutputCapture<P> p)
+    protected virtual void VisitStatements(IList<JRightPadded<Statement>> statements, JRightPadded.Location location, TOutputCapture p)
     {
         foreach (var paddedStat in statements)
         {
@@ -301,7 +305,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
     }
 
-    protected void VisitStatement(JRightPadded<Statement>? node, JRightPadded.Location location, PrintOutputCapture<P> p)
+    protected void VisitStatement(JRightPadded<Statement>? node, JRightPadded.Location location, TOutputCapture p)
     {
         if (node != null)
         {
@@ -312,7 +316,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
     }
 
-    public virtual void PrintStatementTerminator(Statement s, PrintOutputCapture<P> p)
+    public virtual void PrintStatementTerminator(Statement s, TOutputCapture p)
     {
         while (true)
         {
@@ -355,7 +359,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
     }
 
-    public override J? VisitBreak(J.Break node, PrintOutputCapture<P> p)
+    public override J? VisitBreak(J.Break node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.BREAK_PREFIX, p);
         p.Append("break");
@@ -364,7 +368,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitCase(J.Case node, PrintOutputCapture<P> p)
+    public override J? VisitCase(J.Case node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.CASE_PREFIX, p);
         Expression elem = (Expression)node.CaseLabels[0];
@@ -390,7 +394,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitCatch(J.Try.Catch node, PrintOutputCapture<P> p)
+    public override J? VisitCatch(J.Try.Catch node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.CATCH_PREFIX, p);
         p.Append("catch");
@@ -400,7 +404,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitClassDeclaration(J.ClassDeclaration node, PrintOutputCapture<P> p)
+    public override J? VisitClassDeclaration(J.ClassDeclaration node, TOutputCapture p)
     {
         var kind = node.DeclarationKind switch
         {
@@ -435,7 +439,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitCompilationUnit(J.CompilationUnit node, PrintOutputCapture<P> p)
+    public override J? VisitCompilationUnit(J.CompilationUnit node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.COMPILATION_UNIT_PREFIX, p);
         VisitRightPadded(node.Padding.PackageDeclaration, JRightPadded.Location.PACKAGE, ";", p);
@@ -451,7 +455,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitContinue(J.Continue node, PrintOutputCapture<P> p)
+    public override J? VisitContinue(J.Continue node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.CONTINUE_PREFIX, p);
         p.Append("continue");
@@ -460,7 +464,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitControlParentheses<T>(J.ControlParentheses<T> node, PrintOutputCapture<P> p)
+    public override J? VisitControlParentheses<T>(J.ControlParentheses<T> node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.CONTROL_PARENTHESES_PREFIX, p);
         p.Append('(');
@@ -469,7 +473,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitDoWhileLoop(J.DoWhileLoop node, PrintOutputCapture<P> p)
+    public override J? VisitDoWhileLoop(J.DoWhileLoop node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.DO_WHILE_PREFIX, p);
         p.Append("do");
@@ -479,7 +483,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitElse(J.If.Else node, PrintOutputCapture<P> p)
+    public override J? VisitElse(J.If.Else node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.ELSE_PREFIX, p);
         p.Append("else");
@@ -488,14 +492,14 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitEmpty(J.Empty node, PrintOutputCapture<P> p)
+    public override J? VisitEmpty(J.Empty node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.EMPTY_PREFIX, p);
         AfterSyntax(node, p);
         return node;
     }
 
-    public override J? VisitEnumValue(J.EnumValue node, PrintOutputCapture<P> p)
+    public override J? VisitEnumValue(J.EnumValue node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.ENUM_VALUE_PREFIX, p);
         Visit(node.Annotations, p);
@@ -518,7 +522,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitEnumValueSet(J.EnumValueSet node, PrintOutputCapture<P> p)
+    public override J? VisitEnumValueSet(J.EnumValueSet node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.ENUM_VALUE_SET_PREFIX, p);
         VisitRightPadded(node.Padding.Enums, JRightPadded.Location.ENUM_VALUE, ",", p);
@@ -531,7 +535,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitFieldAccess(J.FieldAccess node, PrintOutputCapture<P> p)
+    public override J? VisitFieldAccess(J.FieldAccess node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.FIELD_ACCESS_PREFIX, p);
         Visit(node.Target, p);
@@ -540,7 +544,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitForLoop(J.ForLoop node, PrintOutputCapture<P> p)
+    public override J? VisitForLoop(J.ForLoop node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.FOR_PREFIX, p);
         p.Append("for");
@@ -557,7 +561,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitForEachLoop(J.ForEachLoop node, PrintOutputCapture<P> p)
+    public override J? VisitForEachLoop(J.ForEachLoop node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.FOR_EACH_LOOP_PREFIX, p);
         p.Append("for");
@@ -572,7 +576,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitIdentifier(J.Identifier node, PrintOutputCapture<P> p)
+    public override J? VisitIdentifier(J.Identifier node, TOutputCapture p)
     {
         VisitSpace(Space.EMPTY, Space.Location.ANNOTATIONS, p);
         Visit(node.Annotations, p);
@@ -582,7 +586,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitIf(J.If node, PrintOutputCapture<P> p)
+    public override J? VisitIf(J.If node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.IF_PREFIX, p);
         p.Append("if");
@@ -593,7 +597,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitImport(J.Import node, PrintOutputCapture<P> p)
+    public override J? VisitImport(J.Import node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.IMPORT_PREFIX, p);
         p.Append("import");
@@ -608,7 +612,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitInstanceOf(J.InstanceOf node, PrintOutputCapture<P> p)
+    public override J? VisitInstanceOf(J.InstanceOf node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.INSTANCEOF_PREFIX, p);
         VisitRightPadded(node.Padding.Expression, JRightPadded.Location.INSTANCEOF, "instanceof", p);
@@ -618,7 +622,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitIntersectionType(J.IntersectionType node, PrintOutputCapture<P> p)
+    public override J? VisitIntersectionType(J.IntersectionType node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.INTERSECTION_TYPE_PREFIX, p);
         VisitContainer("", node.Padding.Bounds, JContainer.Location.TYPE_BOUNDS, "&", "", p);
@@ -626,7 +630,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitLabel(J.Label node, PrintOutputCapture<P> p)
+    public override J? VisitLabel(J.Label node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.LABEL_PREFIX, p);
         VisitRightPadded(node.Padding.Name, JRightPadded.Location.LABEL, ":", p);
@@ -635,7 +639,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitLambda(J.Lambda node, PrintOutputCapture<P> p)
+    public override J? VisitLambda(J.Lambda node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.LAMBDA_PREFIX, p);
         VisitSpace(node.Params.Prefix, Space.Location.LAMBDA_PARAMETERS_PREFIX, p);
@@ -658,7 +662,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitLiteral(J.Literal node, PrintOutputCapture<P> p)
+    public override J? VisitLiteral(J.Literal node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.LITERAL_PREFIX, p);
         var unicodeEscapes = node.UnicodeEscapes;
@@ -705,7 +709,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitMemberReference(J.MemberReference node, PrintOutputCapture<P> p)
+    public override J? VisitMemberReference(J.MemberReference node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.MEMBER_REFERENCE_PREFIX, p);
         VisitRightPadded(node.Padding.Containing, JRightPadded.Location.MEMBER_REFERENCE_CONTAINING, p);
@@ -716,7 +720,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitMethodDeclaration(J.MethodDeclaration node, PrintOutputCapture<P> p)
+    public override J? VisitMethodDeclaration(J.MethodDeclaration node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.METHOD_DECLARATION_PREFIX, p);
         VisitSpace(Space.EMPTY, Space.Location.ANNOTATIONS, p);
@@ -755,7 +759,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitMethodInvocation(J.MethodInvocation node, PrintOutputCapture<P> p)
+    public override J? VisitMethodInvocation(J.MethodInvocation node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.METHOD_INVOCATION_PREFIX, p);
         VisitRightPadded(node.Padding.Select, JRightPadded.Location.METHOD_SELECT, ".", p);
@@ -766,7 +770,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitMultiCatch(J.MultiCatch node, PrintOutputCapture<P> p)
+    public override J? VisitMultiCatch(J.MultiCatch node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.MULTI_CATCH_PREFIX, p);
         VisitRightPadded(node.Padding.Alternatives, JRightPadded.Location.CATCH_ALTERNATIVE, "|", p);
@@ -774,7 +778,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitVariableDeclarations(J.VariableDeclarations node, PrintOutputCapture<P> p)
+    public override J? VisitVariableDeclarations(J.VariableDeclarations node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.VARIABLE_DECLARATIONS_PREFIX, p);
         VisitSpace(Space.EMPTY, Space.Location.ANNOTATIONS, p);
@@ -806,7 +810,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitNewArray(J.NewArray node, PrintOutputCapture<P> p)
+    public override J? VisitNewArray(J.NewArray node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.NEW_ARRAY_PREFIX, p);
         if (node.TypeExpression != null)
@@ -821,7 +825,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitNewClass(J.NewClass node, PrintOutputCapture<P> p)
+    public override J? VisitNewClass(J.NewClass node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.NEW_CLASS_PREFIX, p);
         VisitRightPadded(node.Padding.Enclosing, JRightPadded.Location.NEW_CLASS_ENCLOSING, ".", p);
@@ -839,7 +843,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitNullableType(J.NullableType node, PrintOutputCapture<P> p)
+    public override J? VisitNullableType(J.NullableType node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.NULLABLE_TYPE_PREFIX, p);
         Visit(node.TypeTree, p);
@@ -849,7 +853,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitPackage(J.Package node, PrintOutputCapture<P> p)
+    public override J? VisitPackage(J.Package node, TOutputCapture p)
     {
         foreach (var annotation in node.Annotations)
         {
@@ -863,7 +867,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitParameterizedType(J.ParameterizedType node, PrintOutputCapture<P> p)
+    public override J? VisitParameterizedType(J.ParameterizedType node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.PARAMETERIZED_TYPE_PREFIX, p);
         Visit(node.Clazz, p);
@@ -872,7 +876,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitPrimitive(J.Primitive node, PrintOutputCapture<P> p)
+    public override J? VisitPrimitive(J.Primitive node, TOutputCapture p)
     {
         var keyword = node.Type.Kind switch
         {
@@ -895,7 +899,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitParentheses<T>(J.Parentheses<T> node, PrintOutputCapture<P> p)
+    public override J? VisitParentheses<T>(J.Parentheses<T> node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.PARENTHESES_PREFIX, p);
         p.Append('(');
@@ -904,7 +908,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitReturn(J.Return node, PrintOutputCapture<P> p)
+    public override J? VisitReturn(J.Return node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.RETURN_PREFIX, p);
         p.Append("return");
@@ -913,7 +917,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitSwitch(J.Switch node, PrintOutputCapture<P> p)
+    public override J? VisitSwitch(J.Switch node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.SWITCH_PREFIX, p);
         p.Append("switch");
@@ -923,7 +927,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitSwitchExpression(J.SwitchExpression node, PrintOutputCapture<P> p)
+    public override J? VisitSwitchExpression(J.SwitchExpression node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.SWITCH_EXPRESSION_PREFIX, p);
         p.Append("switch");
@@ -933,7 +937,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitSynchronized(J.Synchronized node, PrintOutputCapture<P> p)
+    public override J? VisitSynchronized(J.Synchronized node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.SYNCHRONIZED_PREFIX, p);
         p.Append("synchronized");
@@ -943,7 +947,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitTernary(J.Ternary node, PrintOutputCapture<P> p)
+    public override J? VisitTernary(J.Ternary node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.TERNARY_PREFIX, p);
         Visit(node.Condition, p);
@@ -953,7 +957,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitThrow(J.Throw node, PrintOutputCapture<P> p)
+    public override J? VisitThrow(J.Throw node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.THROW_PREFIX, p);
         p.Append("throw");
@@ -962,7 +966,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitTry(J.Try node, PrintOutputCapture<P> p)
+    public override J? VisitTry(J.Try node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.TRY_PREFIX, p);
         p.Append("try");
@@ -996,7 +1000,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitTypeCast(J.TypeCast node, PrintOutputCapture<P> p)
+    public override J? VisitTypeCast(J.TypeCast node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.TYPE_CAST_PREFIX, p);
         Visit(node.Clazz, p);
@@ -1005,7 +1009,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitTypeParameter(J.TypeParameter node, PrintOutputCapture<P> p)
+    public override J? VisitTypeParameter(J.TypeParameter node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.TYPE_PARAMETERS_PREFIX, p);
         Visit(node.Annotations, p);
@@ -1015,7 +1019,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitUnary(J.Unary node, PrintOutputCapture<P> p)
+    public override J? VisitUnary(J.Unary node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.UNARY_PREFIX, p);
         switch (node.Operator)
@@ -1060,7 +1064,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitUnknown(J.Unknown node, PrintOutputCapture<P> p)
+    public override J? VisitUnknown(J.Unknown node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.UNKNOWN_PREFIX, p);
         Visit(node.UnknownSource, p);
@@ -1068,7 +1072,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitUnknownSource(J.Unknown.Source node, PrintOutputCapture<P> p)
+    public override J? VisitUnknownSource(J.Unknown.Source node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.UNKNOWN_SOURCE_PREFIX, p);
         p.Append(node.Text);
@@ -1076,7 +1080,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitVariable(J.VariableDeclarations.NamedVariable node, PrintOutputCapture<P> p)
+    public override J? VisitVariable(J.VariableDeclarations.NamedVariable node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.VARIABLE_PREFIX, p);
         Visit(node.Name, p);
@@ -1094,7 +1098,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitWhileLoop(J.WhileLoop node, PrintOutputCapture<P> p)
+    public override J? VisitWhileLoop(J.WhileLoop node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.WHILE_PREFIX, p);
         p.Append("while");
@@ -1104,7 +1108,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitWildcard(J.Wildcard node, PrintOutputCapture<P> p)
+    public override J? VisitWildcard(J.Wildcard node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.WILDCARD_PREFIX, p);
         p.Append('?');
@@ -1129,7 +1133,7 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    public override J? VisitYield(J.Yield node, PrintOutputCapture<P> p)
+    public override J? VisitYield(J.Yield node, TOutputCapture p)
     {
         BeforeSyntax(node, Space.Location.YIELD_PREFIX, p);
         if (!node.Implicit)
@@ -1142,12 +1146,12 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         return node;
     }
 
-    protected void BeforeSyntax(J node, Space.Location loc, PrintOutputCapture<P> p)
+    protected void BeforeSyntax(J node, Space.Location loc, TOutputCapture p)
     {
         BeforeSyntax(node.Prefix, node.Markers, loc, p);
     }
 
-    protected void BeforeSyntax(Space prefix, Markers markers, Space.Location? loc, PrintOutputCapture<P> p)
+    protected void BeforeSyntax(Space prefix, Markers markers, Space.Location? loc, TOutputCapture p)
     {
         foreach (var marker in markers)
         {
@@ -1167,12 +1171,12 @@ public class JavaPrinter<P> : JavaVisitor<PrintOutputCapture<P>>
         }
     }
 
-    protected void AfterSyntax(J j, PrintOutputCapture<P> p)
+    protected void AfterSyntax(J j, TOutputCapture p)
     {
         AfterSyntax(j.Markers, p);
     }
 
-    protected void AfterSyntax(Markers markers, PrintOutputCapture<P> p)
+    protected void AfterSyntax(Markers markers, TOutputCapture p)
     {
         foreach (var marker in markers)
         {

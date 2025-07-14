@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Immutable;
+using System.Text;
 
 namespace Rewrite.Core.Marker;
 
-public record Markers(Guid Id, IList<Marker> MarkerList) : IReadOnlyCollection<Marker>
+public partial record Markers(Guid Id, IList<Marker> MarkerList) : IReadOnlyCollection<Marker>
 {
     public static readonly Markers EMPTY = new(Tree.RandomId(), ImmutableList<Marker>.Empty);
 
@@ -83,4 +84,23 @@ public record Markers(Guid Id, IList<Marker> MarkerList) : IReadOnlyCollection<M
     }
 
     public int Count => MarkerList.Count;
+
+    public override string ToString()
+    {
+        var sb = new StringBuilder($"{Id}");
+        if (MarkerList.Count == 0)
+        {
+            return sb.ToString();
+        }
+        if (MarkerList.Count <= 3)
+        {
+            sb.Append(string.Join(", ", MarkerList.Select(x => x.GetType().Name)));
+        }
+        else
+        {
+            sb.Append($"[{MarkerList.Count} markers");
+        }
+
+        return sb.ToString();
+    }
 }

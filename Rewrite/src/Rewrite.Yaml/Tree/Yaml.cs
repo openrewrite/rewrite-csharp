@@ -11,7 +11,7 @@ namespace Rewrite.RewriteYaml.Tree;
 [SuppressMessage("ReSharper", "RedundantExtendsListEntry")]
 [SuppressMessage("ReSharper", "UnusedMember.Global")]
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
-public interface Yaml : Rewrite.Core.Tree
+public partial interface Yaml : Rewrite.Core.Tree
 {
     bool Core.Tree.IsAcceptable<R, P>(ITreeVisitor<R, P> v, P p)
     {
@@ -28,7 +28,7 @@ public interface Yaml : Rewrite.Core.Tree
         return v.DefaultValue(this, p);
     }
 
-    public sealed class Documents(
+    public sealed partial class Documents(
         Guid id,
         Markers markers,
         string sourcePath,
@@ -116,7 +116,7 @@ public interface Yaml : Rewrite.Core.Tree
         }
     }
 
-    public sealed class Document(
+    public sealed partial class Document(
         Guid id,
         string prefix,
         Markers markers,
@@ -172,7 +172,7 @@ public interface Yaml : Rewrite.Core.Tree
             return ReferenceEquals(newEnding, ending) ? this : new Document(id, prefix, markers, @explicit, block, newEnding);
         }
 
-        public sealed class End(
+        public sealed partial class End(
             Guid id,
             string prefix,
             Markers markers,
@@ -238,7 +238,7 @@ public interface Yaml : Rewrite.Core.Tree
     {
     }
 
-    public sealed class Scalar(
+    public sealed partial class Scalar(
         Guid id,
         string prefix,
         Markers markers,
@@ -315,7 +315,7 @@ public interface Yaml : Rewrite.Core.Tree
         }
     }
 
-    public class Mapping(
+    public partial class Mapping(
         Guid id,
         Markers markers,
         string? openingBracePrefix,
@@ -371,7 +371,7 @@ public interface Yaml : Rewrite.Core.Tree
             return ReferenceEquals(newAnchor, anchor) ? this : new Mapping(id, markers, openingBracePrefix, entries, closingBracePrefix, newAnchor);
         }
 
-        public sealed class Entry(
+        public sealed partial class Entry(
             Guid id,
             string prefix,
             Markers markers,
@@ -449,7 +449,7 @@ public interface Yaml : Rewrite.Core.Tree
         }
     }
 
-    public class Sequence(
+    public partial class Sequence(
         Guid id,
         Markers markers,
         string? openingBracketPrefix,
@@ -505,7 +505,7 @@ public interface Yaml : Rewrite.Core.Tree
             return ReferenceEquals(newAnchor, anchor) ? this : new Sequence(id, markers, openingBracketPrefix, entries, closingBracketPrefix, newAnchor);
         }
 
-        public sealed class Entry(
+        public sealed partial class Entry(
             Guid id,
             string prefix,
             Markers markers,
@@ -583,7 +583,7 @@ public interface Yaml : Rewrite.Core.Tree
         }
     }
 
-    public sealed class Alias(
+    public sealed partial class Alias(
         Guid id,
         string prefix,
         Markers markers,
@@ -634,7 +634,7 @@ public interface Yaml : Rewrite.Core.Tree
         }
     }
 
-    public sealed class Anchor(
+    public sealed partial class Anchor(
         Guid id,
         string prefix,
         string postfix,

@@ -1,6 +1,7 @@
 ﻿namespace Rewrite.Core.Marker;
 
-public interface IHasMarkers
+public partial interface IHasMarkers
 {
     public Markers Markers { get; }
+    public IHasMarkers WithMarkers(Markers markers);
 }

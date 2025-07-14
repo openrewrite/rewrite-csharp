@@ -89,4 +89,6 @@ public sealed class TextComment : Comment
     {
         return other is TextComment textComment && Equals(textComment);
     }
+
+    public Guid Id => DeterministicGuidGenerator.FromString($"{Text}{Suffix}");
 }

@@ -6,6 +6,9 @@ using FileAttributes = Rewrite.Core.FileAttributes;
 namespace Rewrite.RewriteJson.Tree;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
-public interface JsonValue : Json
+public partial interface JsonValue : Json
+{
+}
+public partial interface JsonValue<out T>
 {
 }

@@ -11,7 +11,7 @@ namespace Rewrite.RewriteProperties.Tree;
 [SuppressMessage("ReSharper", "RedundantExtendsListEntry")]
 [SuppressMessage("ReSharper", "UnusedMember.Global")]
 [SuppressMessage("ReSharper", "RedundantNameQualifier")]
-public interface Properties : Rewrite.Core.Tree
+public partial interface Properties : Rewrite.Core.Tree
 {
     bool Core.Tree.IsAcceptable<R, P>(ITreeVisitor<R, P> v, P p)
     {
@@ -28,7 +28,7 @@ public interface Properties : Rewrite.Core.Tree
         return v.DefaultValue(this, p);
     }
 
-    public sealed class File(
+    public sealed partial class File(
         Guid id,
         string prefix,
         Markers markers,
@@ -136,7 +136,7 @@ public interface Properties : Rewrite.Core.Tree
     {
     }
 
-    public sealed class Entry(
+    public sealed partial class Entry(
         Guid id,
         string prefix,
         Markers markers,
@@ -219,7 +219,7 @@ public interface Properties : Rewrite.Core.Tree
         }
     }
 
-    public sealed class Value(
+    public sealed partial class Value(
         Guid id,
         string prefix,
         Markers markers,
@@ -276,7 +276,7 @@ public interface Properties : Rewrite.Core.Tree
         }
     }
 
-    public sealed class Comment(
+    public sealed partial class Comment(
         Guid id,
         string prefix,
         Markers markers,

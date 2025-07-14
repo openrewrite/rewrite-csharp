@@ -6,6 +6,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
+        <ProjectReference Include="..\Rewrite.Analyzers\Rewrite.Analyzers.csproj" OutputItemType="Analyzer"/>
+
     </ItemGroup>
 
 </Project>

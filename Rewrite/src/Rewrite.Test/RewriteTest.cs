@@ -7,6 +7,7 @@ using Rewrite.Core.Quark;
 using Rewrite.CSharp.Tests;
 using Rewrite.RewriteCSharp;
 using Rewrite.RewriteJava.Tree;
+using Spectre.Console;
 
 namespace Rewrite.Test;
 
@@ -105,7 +106,7 @@ public class RewriteTest
                 var nextSpec = sourceSpecIter.Current;
 
                 markers = nextSpec.Markers.MarkerList.Aggregate(markers, (current, marker) => current.SetByType(marker));
-                sourceFile = (sourceFile as MutableTree<SourceFile>)?.WithMarkers(markers);
+                sourceFile = sourceFile?.WithMarkers(markers);
 
                 if (sourceFile != null)
                     nextSpec.ValidateSource?.Invoke(sourceFile, TypeValidation.Before(testMethodSpec, testClassSpec));
@@ -189,7 +190,7 @@ public class RewriteTest
         }
         if(shouldRenderLst)
         {
-            _output.WriteLine(sourceFile.RenderLstTree());
+            AnsiConsole.Write(sourceFile.RenderLstTree());
         }
     }
 

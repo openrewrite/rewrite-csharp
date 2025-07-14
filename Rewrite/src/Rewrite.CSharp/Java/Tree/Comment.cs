@@ -7,7 +7,7 @@ namespace Rewrite.RewriteJava.Tree;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "PossibleUnintendedReferenceComparison")]
-public interface Comment : IEquatable<Comment>
+public interface Comment : IEquatable<Comment>, IHasId<Guid>
 {
     public bool Multiline { get; }
 
