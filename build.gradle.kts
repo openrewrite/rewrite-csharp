@@ -42,5 +42,10 @@ tasks.register("getTasks") {
     }
 }
 tasks.withType<JavaCompile>().configureEach {
-    options.compilerArgs.add("-Xlint:unchecked")
+//    options.compilerArgs.add("-Xlint:unchecked")
+    options.compilerArgs.add("-nowarn")
+}
+
+tasks.withType<Javadoc>().configureEach {
+    options.quiet()
 }

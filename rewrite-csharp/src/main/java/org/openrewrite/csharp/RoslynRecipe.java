@@ -23,6 +23,7 @@ import org.openrewrite.scheduling.WorkingDirectoryExecutionContextView;
 import org.openrewrite.text.PlainText;
 import org.openrewrite.tree.ParseError;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
@@ -44,8 +45,25 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
         if (executable == null) {
             throw new IllegalStateException("ROSLYN_RECIPE_EXECUTABLE environment variable not set");
         }
-        executable = executable + "Rewrite.Server.dll";
+        if(!executable.endsWith(".dll"))
+        {
+            executable = ensureTrailingSeparator(executable) + "Rewrite.Server.dll";
+        }
+
         return executable;
+    }
+
+    public static String ensureTrailingSeparator(String path) {
+        if (path == null || path.isEmpty()) return File.separator;
+        String separator = File.separator;
+        if (path.endsWith("/") || path.endsWith("\\")) {
+            // Normalize to current OS separator
+            if (!path.endsWith(separator)) {
+                path = path.substring(0, path.length() - 1) + separator;
+            }
+            return path;
+        }
+        return path + separator;
     }
 
     public abstract String getRecipeId();
@@ -115,6 +133,7 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
 
         List<String> command = new ArrayList<>();
         Map<String, String> env = getCommandEnvironment(acc, ctx);
+//        String template = "dotnet";
         String template = "dotnet ${exec} run-recipe --solution ${solution} --id ${recipeId} --package ${package} --version ${version}";
         template = template.replace("${exec}", Objects.requireNonNull(this.getExecutable()));
         template = template.replace("${solution}", acc.solutionFile.toString());
@@ -148,6 +167,7 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
                 if (Files.exists(err)) {
                     error += "\n" + new String(Files.readAllBytes(err));
                 }
+                error += "\nCommand:" + template;
                 throw new RuntimeException(error);
             } else {
                 for (Map.Entry<Path, Long> entry : acc.beforeModificationTimestamps.entrySet()) {

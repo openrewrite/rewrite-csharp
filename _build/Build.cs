@@ -46,6 +46,7 @@ partial class Build : NukeBuild
 
     public Build()
     {
+        AnsiConsole.Console.Profile.Width = 220;
         FigletFont LoadFont(string fontName)
         {
             var assembly = Assembly.GetExecutingAssembly();
@@ -321,8 +322,9 @@ partial class Build : NukeBuild
                     FileName = recipesDir / @namespace.Replace(".", "/") / $"{className}.java"
                 };
             })).ToList();
-
+            var license = File.ReadAllText(Solution._solution._build.Directory / "License.txt").Trim();
             var result = models.Select(model => (model.FileName, Content: $$""""
+                 {{license}}
                  package org.openrewrite.csharp.recipes.{{model.Namespace}};
 
                  import org.openrewrite.NlsRewrite;
@@ -418,16 +420,37 @@ partial class Build : NukeBuild
                 .SetTasks(":rewrite-csharp:assemble", ":rewrite-csharp:test"));
         });
 
+
+    Target SetTestOutputFlags => _ => _
+        .Unlisted()
+        .Description("Sets github actions flags if any java or c# test output files were generated")
+        .After(Test, GradleAssembleAndTest)
+        .Executes(() =>
+        {
+            var hasTrx = TestResultsDirectory.GlobFiles("*.trx").Any();
+            var hasJavaTest = (RootDirectory / "rewrite-csharp" / "build" / "test-results" / "test").GlobFiles("*.xml").Any();
+            GitHubActions?.SetVariable("dotnet_tests_found", hasTrx);
+            GitHubActions?.SetVariable("java_tests_found", hasJavaTest);
+        });
+
     [Category("CI")]
     Target CIBuild => _ => _
         .Description("Builds, tests and produces test reports for regular builds on CI")
-        .DependsOn(Pack, PublishServer, Test, GradleAssembleAndTest);
+        .DependsOn(Pack, PublishServer, Test, GradleAssembleAndTest, SetTestOutputFlags);
+
+
 
     [Category("CI")]
     Target CIRelease => _ => _
         .Description("Creates and publishes release artifacts to maven & nuget")
-        .DependsOn(Pack, PublishServer, GradlePublish, NugetPush);
+        .DependsOn(Pack, PublishServer, GradlePublish, NugetPush, SetTestOutputFlags);
 
+    Target CreateGithubRelease => _ => _
+        .Unlisted()
+        .DependsOn(PublishServer)
+        .Executes(() =>
+        {
+        });
 
     [Category("Test")]
     Target DownloadTestFixtures => _ => _
@@ -496,14 +519,14 @@ partial class Build : NukeBuild
             if (isPreRelease)
             {
                 Gradle(c => ApplyCommonGradleSettings(c)
-                    .SetTasks(KnownGradleTasks.Candidate, "publish", KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
+                    .SetTasks(KnownGradleTasks.Candidate, KnownGradleTasks.Snapshot, "publish", KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
 
                 );
             }
             else
             {
                 Gradle(c => ApplyCommonGradleSettings(c)
-                    .SetTasks(KnownGradleTasks.Final, "publish", KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
+                    .SetTasks(KnownGradleTasks.Final, KnownGradleTasks.Snapshot, "publish", KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
                     .AddProcessAdditionalArguments("--info")
                 );
             }

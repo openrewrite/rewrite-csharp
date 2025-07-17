@@ -24,7 +24,7 @@ public partial class GradleTasks : ToolTasks
     /// <summary><p>Gradle build tool for Java</p><p>For more details, visit the <a href="https://gradle.org/">official website</a>.</p></summary>
     public static IReadOnlyCollection<Output> Gradle(ArgumentStringHandler arguments, string workingDirectory = null, IReadOnlyDictionary<string, string> environmentVariables = null, int? timeout = null, bool? logOutput = null, bool? logInvocation = null, Action<OutputType, string> logger = null, Func<IProcess, object> exitHandler = null) => new GradleTasks().Run(arguments, workingDirectory, environmentVariables, timeout, logOutput, logInvocation, logger, exitHandler);
     /// <summary><p>Runs task(s)</p><p>For more details, visit the <a href="https://gradle.org/">official website</a>.</p></summary>
-    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>&lt;tasks&gt;</c> via <see cref="GradleSettings.Tasks"/></li><li><c>-Dorg.gradle.jvmargs</c> via <see cref="GradleSettings.JvmOptions"/></li><li><c>-Dorg.gradle.warning.mode</c> via <see cref="GradleSettings.WarningMode"/></li><li><c>-P</c> via <see cref="GradleSettings.ProjectProperty"/></li></ul></remarks>
+    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>&lt;tasks&gt;</c> via <see cref="GradleSettings.Tasks"/></li><li><c>-Dorg.gradle.jvmargs</c> via <see cref="GradleSettings.JvmOptions"/></li><li><c>-Dorg.gradle.warning.mode</c> via <see cref="GradleSettings.WarningMode"/></li><li><c>-P</c> via <see cref="GradleSettings.ProjectProperty"/></li><li><c>-x</c> via <see cref="GradleSettings.ExcludeTasks"/></li></ul></remarks>
     public static IReadOnlyCollection<Output> Gradle(GradleSettings options = null) => new GradleTasks().Run<GradleSettings>(options);
     /// <inheritdoc cref="GradleTasks.Gradle(.GradleSettings)"/>
     public static IReadOnlyCollection<Output> Gradle(Configure<GradleSettings> configurator) => new GradleTasks().Run<GradleSettings>(configurator.Invoke(new GradleSettings()));
@@ -40,6 +40,8 @@ public partial class GradleSettings : ToolOptions
 {
     /// <summary></summary>
     [Argument(Format = "{value}", Position = 1)] public IReadOnlyList<KnownGradleTasks> Tasks => Get<List<KnownGradleTasks>>(() => Tasks);
+    /// <summary></summary>
+    [Argument(Format = "-x {value}")] public IReadOnlyList<KnownGradleTasks> ExcludeTasks => Get<List<KnownGradleTasks>>(() => ExcludeTasks);
     /// <summary></summary>
     [Argument(Format = "-Dorg.gradle.warning.mode={value}")] public WarningMode WarningMode => Get<WarningMode>(() => WarningMode);
     /// <summary></summary>
@@ -76,6 +78,29 @@ public static partial class GradleSettingsExtensions
     /// <inheritdoc cref="GradleSettings.Tasks"/>
     [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.Tasks))]
     public static T ClearTasks<T>(this T o) where T : GradleSettings => o.Modify(b => b.ClearCollection(() => o.Tasks));
+    #endregion
+    #region ExcludeTasks
+    /// <inheritdoc cref="GradleSettings.ExcludeTasks"/>
+    [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.ExcludeTasks))]
+    public static T SetExcludeTasks<T>(this T o, params KnownGradleTasks[] v) where T : GradleSettings => o.Modify(b => b.Set(() => o.ExcludeTasks, v));
+    /// <inheritdoc cref="GradleSettings.ExcludeTasks"/>
+    [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.ExcludeTasks))]
+    public static T SetExcludeTasks<T>(this T o, IEnumerable<KnownGradleTasks> v) where T : GradleSettings => o.Modify(b => b.Set(() => o.ExcludeTasks, v));
+    /// <inheritdoc cref="GradleSettings.ExcludeTasks"/>
+    [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.ExcludeTasks))]
+    public static T AddExcludeTasks<T>(this T o, params KnownGradleTasks[] v) where T : GradleSettings => o.Modify(b => b.AddCollection(() => o.ExcludeTasks, v));
+    /// <inheritdoc cref="GradleSettings.ExcludeTasks"/>
+    [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.ExcludeTasks))]
+    public static T AddExcludeTasks<T>(this T o, IEnumerable<KnownGradleTasks> v) where T : GradleSettings => o.Modify(b => b.AddCollection(() => o.ExcludeTasks, v));
+    /// <inheritdoc cref="GradleSettings.ExcludeTasks"/>
+    [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.ExcludeTasks))]
+    public static T RemoveExcludeTasks<T>(this T o, params KnownGradleTasks[] v) where T : GradleSettings => o.Modify(b => b.RemoveCollection(() => o.ExcludeTasks, v));
+    /// <inheritdoc cref="GradleSettings.ExcludeTasks"/>
+    [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.ExcludeTasks))]
+    public static T RemoveExcludeTasks<T>(this T o, IEnumerable<KnownGradleTasks> v) where T : GradleSettings => o.Modify(b => b.RemoveCollection(() => o.ExcludeTasks, v));
+    /// <inheritdoc cref="GradleSettings.ExcludeTasks"/>
+    [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.ExcludeTasks))]
+    public static T ClearExcludeTasks<T>(this T o) where T : GradleSettings => o.Modify(b => b.ClearCollection(() => o.ExcludeTasks));
     #endregion
     #region WarningMode
     /// <inheritdoc cref="GradleSettings.WarningMode"/>

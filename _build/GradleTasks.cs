@@ -6,6 +6,16 @@ using Serilog;
 
 partial class GradleTasks
 {
+    protected override Action<OutputType, string> GetLogger(ToolOptions options = null)
+        => (type, message) =>
+    {
+        if (message.StartsWith("Note:"))
+        {
+            type = OutputType.Std;
+        }
+        base.GetLogger(options)(type,message);
+    };
+
 
     public GradleTasks()
     {

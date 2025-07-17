@@ -36,35 +36,41 @@ jobs:
         with:
           fetch-depth: 0
           show-progress: false
+
       - uses: actions/setup-dotnet@v4
+        name: Install .NET 8.0.x
         with:
           dotnet-version: '8.0.x'
 
       - uses: actions/setup-dotnet@v4
+        name: Install .NET 9.0.x
         with:
           dotnet-version: '9.0.x'
 
       - uses: gradle/actions/setup-gradle@v4
-      - name: set-up-jdk
-        uses: actions/setup-java@v4
+        name: Install Gradle
+
+      - uses: actions/setup-java@v4
+        name: Install JDK 21
         with:
           distribution: temurin
           java-version: 21
 
-      - name: check-java
-        run: java --version
-
-#      - name: dotnet-build
-#        run: |
-#          (cd Rewrite && dotnet restore Rewrite.sln --no-cache --force --force-evaluate)
-#          (cd Rewrite && dotnet publish Rewrite.sln --no-restore)
+      - name: Check tooling info
+        run: |
+            java --version
+            which dotnet
+            dotnet --version
+            dotnet --info
 
       - name: Build & Test
+        id: build
         run: |
           ./build.sh CIBuild
 
       - name: Report .NET Test Results
-        if: always()
+        #if: always()
+        if: steps.build.outputs.dotnet_tests_found == 'true'
         uses: dorny/test-reporter@v2
         with:
           name: .NET Tests Results
@@ -72,16 +78,9 @@ jobs:
           reporter: dotnet-trx
 
 
-#      - name: java-build
-#        run: |
-#          ./gradlew ${{ env.GRADLE_SWITCHES }} assemble
-#
-#      - name: Java Tests
-#        run: |
-#          ./gradlew ${{ env.GRADLE_SWITCHES }} test
-
       - name: Report Java Test Results
-        if: always()
+        #if: always()
+        if: steps.build.outputs.java_tests_found == 'true'
         uses: dorny/test-reporter@v2
         with:
           name: Java Tests Results
@@ -98,14 +97,14 @@ jobs:
             artifacts/test-results/*.log
             rewrite-csharp-remote-server/build/reports/tests/**
 
-      - name: publish-java-snapshots
-        if: github.event_name != 'pull_request'
-        run: ./gradlew ${{ env.GRADLE_SWITCHES }} snapshot publish -PforceSigning -x test
-        env:
-          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.SONATYPE_USERNAME }}
-          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.SONATYPE_TOKEN }}
-          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.OSSRH_SIGNING_KEY }}
-          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.OSSRH_SIGNING_PASSWORD }}
+#      - name: publish-java-snapshots
+#        if: github.event_name != 'pull_request'
+#        run: ./gradlew ${{ env.GRADLE_SWITCHES }} snapshot publish -PforceSigning -x test
+#        env:
+#          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.SONATYPE_USERNAME }}
+#          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.SONATYPE_TOKEN }}
+#          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.OSSRH_SIGNING_KEY }}
+#          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.OSSRH_SIGNING_PASSWORD }}
 
 
 

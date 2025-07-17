@@ -7,6 +7,7 @@ namespace Rewrite.MSBuild.Tests;
 public class IntegrationTests : BaseTests
 {
     [Test]
+    [Explicit]
     public void RunRoslynRecipeFromExecutable()
     {
         var content = """

@@ -17,6 +17,11 @@
             "position": 1
           },
           {
+            "name": "ExcludeTasks",
+            "type": "List<KnownGradleTasks>",
+            "format": "-x {value}"
+          },
+          {
             "name": "WarningMode",
             "type": "WarningMode",
             "format": "-Dorg.gradle.warning.mode={value}"

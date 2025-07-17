@@ -39,3 +39,12 @@ publishing {
         }
     }
 }
+tasks.withType<JavaCompile>().configureEach {
+//    options.compilerArgs.add("-Xlint:unchecked")
+    options.compilerArgs.add("-nowarn")
+}
+tasks.withType<Javadoc>().configureEach {
+    (options as StandardJavadocDocletOptions).apply {
+        exclude("org/openrewrite/csharp/tree/Cs.java")
+    }
+}
