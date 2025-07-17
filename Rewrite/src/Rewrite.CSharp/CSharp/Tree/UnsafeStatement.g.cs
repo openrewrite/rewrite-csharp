@@ -62,8 +62,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     J.Block block
-    ) : Cs, Statement, J<UnsafeStatement>, MutableTree<UnsafeStatement>
-    {
+    ) : Cs,Statement    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitUnsafeStatement(this, p);

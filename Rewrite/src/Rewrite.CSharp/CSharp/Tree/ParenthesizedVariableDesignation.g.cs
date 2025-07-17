@@ -46,8 +46,7 @@ public partial interface Cs : J
     Markers markers,
     JContainer<VariableDesignation> variables,
     JavaType? type
-    ) : Cs.VariableDesignation, Cs, Expression<ParenthesizedVariableDesignation>, J<ParenthesizedVariableDesignation>, MutableTree<ParenthesizedVariableDesignation>
-    {
+    ) : Cs.VariableDesignation,Cs    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

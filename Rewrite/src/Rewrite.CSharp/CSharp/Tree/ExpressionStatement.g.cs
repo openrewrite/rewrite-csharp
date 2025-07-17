@@ -32,8 +32,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     JRightPadded<Expression> expression
-    ) : Cs, Statement, J<ExpressionStatement>, MutableTree<ExpressionStatement>
-    {
+    ) : Cs,Statement    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

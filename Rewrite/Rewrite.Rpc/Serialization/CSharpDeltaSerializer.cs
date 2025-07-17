@@ -36,9 +36,17 @@ public class CSharpDeltaSerializer : CSharpVisitor<SerializationContext>
         var ctx = p.As(node);
         // ctx.SerializeProperty(x => x.Prefix, (after, context) => Visit(after, context));
         ctx.SerializeList(x => x.Modifiers, (after, context) => Visit(after, context));
+        ctx.SerializeProperty(x => x.Kind, (after, context) => Visit(after, context));
         ctx.SerializeProperty(x => x.Name, (after, context) => Visit(after, context));
         return node;
 
+    }
+
+    public override J? VisitClassDeclarationKind(J.ClassDeclaration.Kind node, SerializationContext p)
+    {
+        var ctx = p.As(node);
+        ctx.SerializeProperty(x => x.KindType);
+        return node;
     }
 
     public override J? VisitModifier(J.Modifier node, SerializationContext p)

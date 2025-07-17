@@ -69,26 +69,28 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                if (tree instanceof SourceFile && !(tree instanceof Quark) && !(tree instanceof ParseError) &&
-                    !tree.getClass().getName().equals("org.openrewrite.java.tree.J$CompilationUnit")) {
-                    SourceFile sourceFile = (SourceFile) tree;
-                    String fileName = sourceFile.getSourcePath().getFileName().toString();
-                    int lastDot = fileName.lastIndexOf('.');
-                    if (lastDot > 0) {
-                        String extension = fileName.substring(lastDot + 1);
-                        if ("sln".equals(extension)) {
-                            acc.solutionFile = sourceFile.getSourcePath();
-                        }
-                        acc.extensionCounts.computeIfAbsent(extension, e -> new AtomicInteger(0)).incrementAndGet();
+            if (tree instanceof SourceFile
+                    && !(tree instanceof Quark)
+                    && !(tree instanceof ParseError)
+                    && !tree.getClass().getName().equals("org.openrewrite.java.tree.J$CompilationUnit")) {
+                SourceFile sourceFile = (SourceFile) tree;
+                String fileName = sourceFile.getSourcePath().getFileName().toString();
+                int lastDot = fileName.lastIndexOf('.');
+                if (lastDot > 0) {
+                    String extension = fileName.substring(lastDot + 1);
+                    if ("sln".equals(extension)) {
+                        acc.solutionFile = sourceFile.getSourcePath();
                     }
-
-                    // only extract initial source files for first roslyn recipe
-                    if (Objects.equals(ctx.getMessage(FIRST_RECIPE), ctx.getCycleDetails().getRecipePosition())) {
-                        // FIXME filter out more source types; possibly only write plain text, json, and yaml?
-                        acc.writeSource(sourceFile);
-                    }
+                    acc.extensionCounts.computeIfAbsent(extension, e -> new AtomicInteger(0)).incrementAndGet();
                 }
-                return tree;
+
+                // only extract initial source files for first roslyn recipe
+                if (Objects.equals(ctx.getMessage(FIRST_RECIPE), ctx.getCycleDetails().getRecipePosition())) {
+                    // FIXME filter out more source types; possibly only write plain text, json, and yaml?
+                    acc.writeSource(sourceFile);
+                }
+            }
+            return tree;
             }
         };
     }

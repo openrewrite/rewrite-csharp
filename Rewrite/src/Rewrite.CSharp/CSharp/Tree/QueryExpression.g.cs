@@ -55,8 +55,7 @@ public partial interface Cs : J
     Markers markers,
     FromClause fromClause,
     QueryBody body
-    ) : Cs, Expression, Expression<QueryExpression>, J<QueryExpression>, MutableTree<QueryExpression>
-    {
+    ) : Cs,Expression    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitQueryExpression(this, p);

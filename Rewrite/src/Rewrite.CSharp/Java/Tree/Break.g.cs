@@ -38,8 +38,7 @@ public partial interface J : Rewrite.Core.Tree
     Space prefix,
     Markers markers,
     Identifier? label
-    ) : J, Statement, J<Break>, MutableTree<Break>
-    {
+    ) : J,Statement    {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {
             return v.VisitBreak(this, p);

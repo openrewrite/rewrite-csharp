@@ -38,8 +38,7 @@ public partial interface J : Rewrite.Core.Tree
     Space prefix,
     Markers markers,
     JContainer<TypeTree> bounds
-    ) : J, TypeTree, Expression, Expression<IntersectionType>, TypedTree<IntersectionType>, J<IntersectionType>, TypeTree<IntersectionType>, MutableTree<IntersectionType>
-    {
+    ) : J,TypeTree,Expression    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

@@ -40,8 +40,7 @@ public partial interface J : Rewrite.Core.Tree
     Block? body,
     JLeftPadded<Expression>? defaultValue,
     JavaType.Method? methodType
-    ) : J, Statement, TypedTree, TypedTree<MethodDeclaration>, J<MethodDeclaration>, MutableTree<MethodDeclaration>
-    {
+    ) : J,Statement,TypedTree    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

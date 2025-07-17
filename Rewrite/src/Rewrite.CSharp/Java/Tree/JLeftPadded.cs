@@ -7,14 +7,15 @@ namespace Rewrite.RewriteJava.Tree;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "PossibleUnintendedReferenceComparison")]
-public sealed class JLeftPadded<T>(
+public sealed partial class JLeftPadded<T>(
     Space before,
     T element,
     Markers markers
-) : JLeftPadded, IHasPrefix
+) : JLeftPadded,IHasPrefix, IHasMarkers
 {
     public Space Before => before;
 
+    IHasPrefix IHasPrefix.WithPrefix(Space prefix) => WithBefore(prefix);
     public JLeftPadded<T> WithBefore(Space newBefore)
     {
         return ReferenceEquals(newBefore, before) ? this : new JLeftPadded<T>(newBefore, element, markers);
@@ -37,7 +38,7 @@ public sealed class JLeftPadded<T>(
 
     public override Markers Markers => markers;
 
-    public JLeftPadded<T> WithMarkers(Markers newMarkers)
+    public override JLeftPadded<T> WithMarkers(Markers newMarkers)
     {
         return ReferenceEquals(newMarkers, markers) ? this : new JLeftPadded<T>(before, element, newMarkers);
     }
@@ -66,6 +67,8 @@ public abstract partial class JLeftPadded : IHasMarkers
     {
         return new JLeftPadded<T>(before, element, markers);
     }
+
+    public abstract JLeftPadded WithMarkers(Markers newMarkers);
     public partial record Location(Space.Location BeforeLocation)
     {
         // public static readonly Location ASSERT_DETAIL = new(Space.Location.ASSERT_DETAIL_PREFIX);

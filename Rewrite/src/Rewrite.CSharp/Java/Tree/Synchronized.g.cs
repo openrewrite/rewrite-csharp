@@ -32,8 +32,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     J.ControlParentheses<Expression> @lock,
     Block body
-    ) : J, Statement, J<Synchronized>, MutableTree<Synchronized>
-    {
+    ) : J,Statement    {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {
             return v.VisitSynchronized(this, p);

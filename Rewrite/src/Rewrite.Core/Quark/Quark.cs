@@ -5,7 +5,9 @@ namespace Rewrite.Core.Quark;
 // FIXME implement
 public partial class Quark : SourceFile
 {
-    global::Rewrite.Core.Tree global::Rewrite.Core.Tree.WithMarkers(global::Rewrite.Core.Marker.Markers markers) => WithMarkers(markers);
+    public Quark WithMarkers(global::Rewrite.Core.Marker.Markers markers) => throw new NotImplementedException();
+    public Quark WithId(Guid id) => throw new NotImplementedException();
+    // global::Rewrite.Core.Tree global::Rewrite.Core.Tree.WithMarkers(global::Rewrite.Core.Marker.Markers markers) => WithMarkers(markers);
     public Quark(Guid id, string sourcePath, string? charsetName, bool charsetBomMarked, Checksum? checksum, FileAttributes? fileAttributes)
     {
         Id = id;

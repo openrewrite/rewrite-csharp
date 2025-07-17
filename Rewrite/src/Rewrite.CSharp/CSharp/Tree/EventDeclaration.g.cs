@@ -57,8 +57,7 @@ public partial interface Cs : J
     JRightPadded<TypeTree>? interfaceSpecifier,
     J.Identifier name,
     JContainer<Statement>? accessors
-    ) : Cs, Statement, J<EventDeclaration>, MutableTree<EventDeclaration>
-    {
+    ) : Cs,Statement    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

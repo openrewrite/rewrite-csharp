@@ -36,8 +36,7 @@ public partial interface Cs : J
     JLeftPadded<bool> @unsafe,
     JRightPadded<J.Identifier>? alias,
     TypeTree namespaceOrType
-    ) : Cs, Statement, J<UsingDirective>, MutableTree<UsingDirective>
-    {
+    ) : Cs,Statement    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

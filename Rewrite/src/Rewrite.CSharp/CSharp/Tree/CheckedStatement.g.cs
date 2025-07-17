@@ -56,8 +56,7 @@ public partial interface Cs : J
     Markers markers,
     Keyword keyword,
     J.Block block
-    ) : Cs, Statement, J<CheckedStatement>, MutableTree<CheckedStatement>
-    {
+    ) : Cs,Statement    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitCheckedStatement(this, p);

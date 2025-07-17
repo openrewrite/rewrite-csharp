@@ -837,7 +837,7 @@ public interface JavaType
         }
     }
 
-    public sealed class Unknown : FullyQualified, JavaType
+    public sealed class Unknown : FullyQualified,JavaType
     {
         private static readonly Unknown instance = new();
 

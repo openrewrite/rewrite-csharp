@@ -4,11 +4,11 @@ namespace Rewrite.RewriteJava.Tree;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "PossibleUnintendedReferenceComparison")]
-public class JContainer<T>(
+public partial class JContainer<T>(
     Space before,
     IList<JRightPadded<T>> elements,
     Markers markers
-) : JContainer, IHasPrefix
+) : JContainer,IHasPrefix
 {
     [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -110,9 +110,12 @@ public class JContainer<T>(
     }
 
     Space IHasPrefix.Prefix => Before;
+
+    public override JContainer<T> WithPrefix(Space prefix) => ReferenceEquals(prefix, Before) ? this : new JContainer<T>(prefix, Elements, Markers);
 }
 public static class JContainerExtensions
 {
+    
     public static JContainer<T> WithElements<T>(this JContainer<T> before, IList<T>? elements)
         where T : J
     {
@@ -140,9 +143,9 @@ public static class JContainerExtensions
         return before.Padding.WithElements(JRightPadded<T>.WithElements(before.Elements, elements));
     }
 }
-public partial class JContainer
+public abstract partial class JContainer
 {
-
+    public abstract JContainer WithPrefix(Space prefix);
     public static JContainer<T> Create<T>(IList<JRightPadded<T>> elements) => new (Space.EMPTY, elements, Markers.EMPTY);
     public static JContainer<T> Create<T>(IList<JRightPadded<T>> elements, Space space) => new (space, elements, Markers.EMPTY);
     public static JContainer<T> Create<T>(IList<JRightPadded<T>> elements, Space before, Markers markers) => new (before, elements, markers);

@@ -29,15 +29,19 @@ public class RpcTests
         var before = (Cs.CompilationUnit)CSharpParser.Instance.Parse(code);
         var serializer = new DeltaSerializer();
 
+        var newObj = new Cs.CompilationUnit(default!,default!,default!,default!,default!,default!,default!,default!,default!,default!,default!,default!,default!);
         var result = serializer.Serialize(null, before);
         Render(before, result);
 
-        
-        var clazz = before.Descendents().OfType<Cs.ClassDeclaration>().First();
-        clazz = clazz.WithName(clazz.Name.WithSimpleName("TheirClass"));
-        var after = before.WithMembers(new List<Statement>() { clazz });
-        result = serializer.Serialize(before, after);
-        Render(before, after, result);
+        serializer = new DeltaSerializer();
+
+        var obj = serializer.Deserialize(newObj, result);
+        AnsiConsole.Write(GetSourcePanel("Deserialized", obj));
+        // var clazz = before.Descendents().OfType<Cs.ClassDeclaration>().First();
+        // clazz = clazz.WithName(clazz.Name.WithSimpleName("TheirClass"));
+        // var after = before.WithMembers(new List<Statement>() { clazz });
+        // result = serializer.Serialize(before, after);
+        // Render(before, after, result);
     }
     
     [Test]
@@ -80,30 +84,27 @@ public class RpcTests
                 Markup.Escape(item.Trace ?? "null")
             );
         }
-
-        Panel GetSourcePanel(string header, object? source)
-        {
-            var src = SyntaxHighlighter.GetMarkup(source?.ToString() ?? "null");
-            IRenderable content = src;
-            if (source is Core.Tree tree)
-            {
-                content = new Rows(src, tree.RenderLstTree());
-            }
-
-            return new Panel(content)
-            {
-                Header = new PanelHeader("Before"),
-                Expand = true
-            };
-        }
-        
         
         var beforePanel = GetSourcePanel("Before", before);
         var afterPanel = GetSourcePanel("After", after);
         var panel = new Panel(new Rows(beforePanel, afterPanel, table)) { Header = new PanelHeader((after ?? before)!.GetType().Name)};
         AnsiConsole.Write(panel);
     }
+    static Panel GetSourcePanel(string header, object? source)
+    {
+        var src = SyntaxHighlighter.GetMarkup(source?.ToString() ?? "null");
+        IRenderable content = src;
+        if (source is Core.Tree tree)
+        {
+            content = new Rows(src, tree.RenderLstTree());
+        }
 
+        return new Panel(content)
+        {
+            Header = new PanelHeader(header),
+            Expand = true
+        };
+    }
     private static string RenderValue(object? value)
     {
         if (value == null)

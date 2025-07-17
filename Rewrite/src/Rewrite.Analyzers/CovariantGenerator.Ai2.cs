@@ -37,7 +37,7 @@ public partial class CovariantGenerator
             .GroupBy(m => GetMethodSignature(m.method))
             .ToDictionary(g => g.Key, g => g.First());
 
-        foreach (var kv  in allMethods)
+        foreach (var kv in allMethods)
         {
             var sig = kv.Key;
             var entry = kv.Value;
@@ -59,6 +59,8 @@ public partial class CovariantGenerator
 
             bool hasDefaultImpl = HasDefaultImplementation(method);
             WriteTypeParameterConstraints(writer, method);
+            var returnType = interfaceSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+
             if (hasDefaultImpl)
             {
                 writer.Write(" => (");
@@ -87,6 +89,9 @@ public partial class CovariantGenerator
                 writer.Write(")");
                 WriteTypeParameterConstraints(writer, method);
                 writer.Write(" => ");
+                writer.Write("(");
+                writer.Write(returnType);
+                writer.Write(")");
                 writer.Write(method.Name);
                 WriteTypeArguments(writer, method);
                 writer.Write("(");
@@ -201,10 +206,19 @@ public partial class CovariantGenerator
                 writer.WriteLine("}");
             }
 
-            foreach (var (iface, method) in group)
+            foreach (var pair in group)
             {
+                
+                var iface = pair.iface;
+                var method = pair.method;
                 var redirectKey = iface.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat) + "." + methodSig;
                 if (!emittedRedirects.Add(redirectKey)) continue;
+                //
+                var impl = classSymbol.FindImplementationForInterfaceMember(method);
+                if (impl is IMethodSymbol { IsImplicitlyDeclared: false } && SymbolEqualityComparer.Default.Equals(impl.ContainingSymbol, classSymbol))
+                    continue;
+                
+                var returnType = iface.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
 
                 writer.Write(iface.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
                 writer.Write(" ");
@@ -217,6 +231,9 @@ public partial class CovariantGenerator
                 writer.Write(")");
                 WriteTypeParameterConstraints(writer, method);
                 writer.Write(" => ");
+                writer.Write("(");
+                writer.Write(returnType);
+                writer.Write(")");
                 writer.Write(template.Name);
                 WriteTypeArguments(writer, method);
                 writer.Write("(");

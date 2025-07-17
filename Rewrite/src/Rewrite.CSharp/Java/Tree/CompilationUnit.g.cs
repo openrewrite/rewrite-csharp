@@ -48,8 +48,7 @@ public partial interface J : Rewrite.Core.Tree
     IList<JRightPadded<Import>> imports,
     IList<ClassDeclaration> classes,
     Space eof
-    ) : J, JavaSourceFile<CompilationUnit>, MutableSourceFile<CompilationUnit>, J<CompilationUnit>, MutableTree<CompilationUnit>
-    {
+    ) : J    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

@@ -34,8 +34,7 @@ public partial interface Cs : J
     J.Lambda lambdaExpression,
     TypeTree? returnType,
     IList<J.Modifier> modifiers
-    ) : Cs, Statement, Expression, Expression<Lambda>, J<Lambda>, MutableTree<Lambda>
-    {
+    ) : Cs,Statement,Expression    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitLambda(this, p);

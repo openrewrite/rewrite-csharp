@@ -40,8 +40,7 @@ public partial interface J : Rewrite.Core.Tree
     Expression target,
     JLeftPadded<Identifier> name,
     JavaType? type
-    ) : J, TypeTree, Expression, Statement, Expression<FieldAccess>, TypedTree<FieldAccess>, J<FieldAccess>, TypeTree<FieldAccess>, MutableTree<FieldAccess>
-    {
+    ) : J,TypeTree,Expression,Statement    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

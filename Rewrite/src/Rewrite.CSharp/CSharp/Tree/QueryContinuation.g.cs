@@ -51,8 +51,7 @@ public partial interface Cs : J
     Markers markers,
     J.Identifier identifier,
     QueryBody body
-    ) : Cs, J<QueryContinuation>, MutableTree<QueryContinuation>
-    {
+    ) : Cs    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitQueryContinuation(this, p);

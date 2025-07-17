@@ -6,11 +6,11 @@ using FileAttributes = Rewrite.Core.FileAttributes;
 namespace Rewrite.RewriteJava.Tree;
 
 
-public interface TypedTree<T> : J<T>, TypedTree where T : TypedTree
-{
+// public interface TypedTree<T> : J<T>, TypedTree where T : TypedTree
+// {
     // public new T WithType(JavaType? type);
     // TypedTree TypedTree.WithType(JavaType? type) => WithType(type);
-}
+// }
 /// <summary>
 /// A tree with type attribution information. Unlike <see cref="TypeTree"/>,
 /// this does not necessarily mean the tree is the name of a type. So for

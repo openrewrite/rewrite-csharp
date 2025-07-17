@@ -58,8 +58,7 @@ public partial interface Cs : J
     Markers markers,
     J.ControlParentheses<J.VariableDeclarations> declarations,
     J.Block block
-    ) : Cs, Statement, J<FixedStatement>, MutableTree<FixedStatement>
-    {
+    ) : Cs,Statement    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitFixedStatement(this, p);

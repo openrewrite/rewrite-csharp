@@ -33,8 +33,7 @@ public partial interface Cs : J
     Markers markers,
     JRightPadded<J.Identifier>? target,
     IList<JRightPadded<J.Annotation>> attributes
-    ) : Cs, J<AttributeList>, MutableTree<AttributeList>
-    {
+    ) : Cs    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

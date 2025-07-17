@@ -41,8 +41,7 @@ public partial interface J : Rewrite.Core.Tree
     Space arrow,
     J body,
     JavaType? type
-    ) : J, Statement, Expression, TypedTree, Expression<Lambda>, TypedTree<Lambda>, J<Lambda>, MutableTree<Lambda>
-    {
+    ) : J,Statement,Expression,TypedTree    {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {
             return v.VisitLambda(this, p);
@@ -99,7 +98,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     bool parenthesized,
     IList<JRightPadded<J>> elements
-        ) : J, J<Parameters>, MutableTree<Parameters>
+        ) : J, MutableTree
         {
             [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

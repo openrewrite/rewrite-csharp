@@ -44,7 +44,7 @@ public partial interface Cs : J
     Markers markers,
     JRightPadded<J.Identifier> alias,
     Expression name
-    ) : Cs, TypeTree, Expression, Rewrite.Core.Marker.Marker
+    ) : Cs,TypeTree,Expression,Rewrite.Core.Marker.Marker
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

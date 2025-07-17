@@ -51,8 +51,7 @@ public partial interface Cs : J
     JContainer<Statement> parameters,
     JLeftPadded<Expression>? expressionBody,
     J.Block? body
-    ) : Cs, Statement, J<ConversionOperatorDeclaration>, MutableTree<ConversionOperatorDeclaration>
-    {
+    ) : Cs,Statement    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

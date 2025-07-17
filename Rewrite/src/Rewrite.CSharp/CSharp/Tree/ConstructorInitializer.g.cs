@@ -46,8 +46,7 @@ public partial interface Cs : J
     Markers markers,
     Keyword keyword,
     JContainer<Expression> arguments
-    ) : Cs, J<ConstructorInitializer>, MutableTree<ConstructorInitializer>
-    {
+    ) : Cs    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

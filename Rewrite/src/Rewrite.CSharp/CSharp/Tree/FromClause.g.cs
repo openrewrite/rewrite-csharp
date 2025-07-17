@@ -50,8 +50,7 @@ public partial interface Cs : J
     TypeTree? typeIdentifier,
     JRightPadded<J.Identifier> identifier,
     Expression expression
-    ) : Cs, Cs.QueryClause, Expression, Expression<FromClause>, J<FromClause>, MutableTree<FromClause>
-    {
+    ) : Cs,Cs.QueryClause,Expression    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

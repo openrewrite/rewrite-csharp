@@ -33,7 +33,7 @@ public partial interface Cs : J
     Markers markers,
     IList<AttributeList> attributeLists,
     Statement statement
-    ) : Cs, Statement
+    ) : Cs,Statement
     {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {

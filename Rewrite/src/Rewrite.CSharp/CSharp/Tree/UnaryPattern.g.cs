@@ -51,8 +51,7 @@ public partial interface Cs : J
     Markers markers,
     Keyword @operator,
     Pattern pattern
-    ) : Cs, Cs.Pattern, Expression, Expression<UnaryPattern>, J<UnaryPattern>, MutableTree<UnaryPattern>
-    {
+    ) : Cs,Cs.Pattern,Expression    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitUnaryPattern(this, p);

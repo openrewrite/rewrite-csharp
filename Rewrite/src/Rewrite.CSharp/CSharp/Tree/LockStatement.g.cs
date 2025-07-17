@@ -52,8 +52,7 @@ public partial interface Cs : J
     Markers markers,
     J.ControlParentheses<Expression> expression,
     JRightPadded<Statement> statement
-    ) : Cs, Statement, J<LockStatement>, MutableTree<LockStatement>
-    {
+    ) : Cs,Statement    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

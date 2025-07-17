@@ -84,8 +84,7 @@ public class SerializationContext(object? before, object? after, DeltaSerializer
             Trace = TraceContext.Current.ToString()
         };
         Output.Add(@event);
-
-        if (state is RpcObjectData.ObjectState.ADD or RpcObjectData.ObjectState.CHANGE && visitIfChanged != null)
+        if (state is RpcObjectData.ObjectState.ADD or RpcObjectData.ObjectState.CHANGE && visitIfChanged != null && isNew)
         {
             var childContext = new SerializationContext(beforeValue!, afterValue, Serializer, Output);
             visitIfChanged.Invoke((TProp?)afterValue!, childContext);

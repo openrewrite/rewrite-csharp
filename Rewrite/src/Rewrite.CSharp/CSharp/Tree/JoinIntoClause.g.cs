@@ -51,8 +51,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     J.Identifier identifier
-    ) : Cs, Cs.QueryClause, J<JoinIntoClause>, MutableTree<JoinIntoClause>
-    {
+    ) : Cs,Cs.QueryClause    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitJoinIntoClause(this, p);

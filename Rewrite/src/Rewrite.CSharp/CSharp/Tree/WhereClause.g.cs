@@ -52,8 +52,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     Expression condition
-    ) : Cs, Cs.QueryClause, J<WhereClause>, MutableTree<WhereClause>
-    {
+    ) : Cs,Cs.QueryClause    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitWhereClause(this, p);

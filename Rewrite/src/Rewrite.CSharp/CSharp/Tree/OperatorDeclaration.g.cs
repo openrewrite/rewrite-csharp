@@ -59,8 +59,7 @@ public partial interface Cs : J
     JContainer<Expression> parameters,
     J.Block body,
     JavaType.Method? methodType
-    ) : Cs, Statement, J<OperatorDeclaration>, MutableTree<OperatorDeclaration>
-    {
+    ) : Cs,Statement    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

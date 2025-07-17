@@ -69,8 +69,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     J.MethodDeclaration methodCore
-    ) : Cs, Statement, J<DestructorDeclaration>, MutableTree<DestructorDeclaration>
-    {
+    ) : Cs,Statement    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitDestructorDeclaration(this, p);

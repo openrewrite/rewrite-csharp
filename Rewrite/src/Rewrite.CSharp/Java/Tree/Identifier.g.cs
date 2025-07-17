@@ -41,8 +41,7 @@ public partial interface J : Rewrite.Core.Tree
     string simpleName,
     JavaType? type,
     JavaType.Variable? fieldType
-    ) : J, TypeTree, Expression, VariableDeclarator, Expression<Identifier>, TypedTree<Identifier>, J<Identifier>, TypeTree<Identifier>, MutableTree<Identifier>
-    {
+    ) : J,TypeTree,Expression,VariableDeclarator    {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {
             return v.VisitIdentifier(this, p);

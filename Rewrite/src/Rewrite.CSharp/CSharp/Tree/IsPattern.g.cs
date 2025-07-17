@@ -55,8 +55,7 @@ public partial interface Cs : J
     Markers markers,
     Expression expression,
     JLeftPadded<Pattern> pattern
-    ) : Cs, Expression, Expression<IsPattern>, J<IsPattern>, MutableTree<IsPattern>
-    {
+    ) : Cs,Expression    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

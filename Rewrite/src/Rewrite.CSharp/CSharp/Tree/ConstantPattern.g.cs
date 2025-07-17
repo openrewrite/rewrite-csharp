@@ -59,8 +59,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     Expression value
-    ) : Cs.Pattern, Expression<ConstantPattern>, J<ConstantPattern>, MutableTree<ConstantPattern>
-    {
+    ) : Cs.Pattern    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitConstantPattern(this, p);

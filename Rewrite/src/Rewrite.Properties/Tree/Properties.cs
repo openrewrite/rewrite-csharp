@@ -39,7 +39,7 @@ public partial interface Properties : Rewrite.Core.Tree
         bool charsetBomMarked,
         FileAttributes? fileAttributes,
         Checksum? checksum
-    ) : Properties, MutableSourceFile<File>, MutableTree<File>
+    ) : Properties, MutableSourceFile<File>, MutableTree
     {
         public Properties? AcceptProperties<P>(PropertiesVisitor<P> v, P p)
         {
@@ -132,7 +132,7 @@ public partial interface Properties : Rewrite.Core.Tree
         }
     }
 
-    public interface Content : Properties
+    public partial interface Content : Properties
     {
     }
 
@@ -144,7 +144,7 @@ public partial interface Properties : Rewrite.Core.Tree
         string beforeEquals,
         Entry.Delimiter? delim,
         Value value
-    ) : Properties.Content, MutableTree<Entry>
+    ) : Properties.Content, MutableTree
     {
         public Properties? AcceptProperties<P>(PropertiesVisitor<P> v, P p)
         {
@@ -282,7 +282,7 @@ public partial interface Properties : Rewrite.Core.Tree
         Markers markers,
         Comment.Delimiter delim,
         string message
-    ) : Properties.Content, MutableTree<Comment>
+    ) : Properties.Content, MutableTree
     {
         public Properties? AcceptProperties<P>(PropertiesVisitor<P> v, P p)
         {

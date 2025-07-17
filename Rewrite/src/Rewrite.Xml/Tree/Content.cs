@@ -6,6 +6,6 @@ using FileAttributes = Rewrite.Core.FileAttributes;
 namespace Rewrite.RewriteXml.Tree;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
-public interface Content : Xml
+public partial interface Content : Xml
 {
 }

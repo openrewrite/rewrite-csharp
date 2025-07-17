@@ -36,7 +36,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     JContainer<AllowsConstraint> expressions
-    ) : Cs, Cs.TypeParameterConstraint
+    ) : Cs,Cs.TypeParameterConstraint
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

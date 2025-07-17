@@ -32,8 +32,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     J.NewArray expression
-    ) : Cs, Expression, Expression<StackAllocExpression>, J<StackAllocExpression>, MutableTree<StackAllocExpression>
-    {
+    ) : Cs,Expression    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitStackAllocExpression(this, p);

@@ -37,8 +37,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     TypeTree typeExpression
-    ) : Cs, Cs.TypeParameterConstraint, TypedTree, TypedTree<TypeConstraint>, J<TypeConstraint>, MutableTree<TypeConstraint>
-    {
+    ) : Cs,Cs.TypeParameterConstraint,TypedTree    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

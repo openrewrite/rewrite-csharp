@@ -6,6 +6,6 @@ using FileAttributes = Rewrite.Core.FileAttributes;
 namespace Rewrite.RewriteYaml.Tree;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
-public interface YamlKey : Yaml
+public partial interface YamlKey : Yaml
 {
 }

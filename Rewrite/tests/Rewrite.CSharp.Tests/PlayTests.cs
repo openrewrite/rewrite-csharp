@@ -74,35 +74,6 @@ public class PlayTests : RewriteTest
         visitor.Visit(node, 0);
     }
     
-    [Test]
-    [Explicit]
-    public async Task BenchmarkAsync()
-    {
-        var node = CSharpParser.Instance.Parse(File.ReadAllText(@"C:\Projects\openrewrite\rewrite-csharp\Rewrite\tests\fixtures\server\test\Core.Test\AdminConsole\OrganizationFeatures\Policies\SavePolicyCommandTests.cs"));
-        var printer = new CSharpPrinter<object>();
-        var asyncPrinter = new CSharpPrinterAsync<object>();
-
-        // var sync = Stopwatch.StartNew();
-        // for (int i = 0; i < 100; i++)
-        // {
-        //     printer.Visit(node, new PrintOutputCapture<object>(new object()));
-        // }
-        // sync.Stop();
-        
-        var async = Stopwatch.StartNew();
-        var o = new PrintOutputCapture<object>(new object());
-        for (int i = 0; i < 100; i++)
-        {
-            o = new PrintOutputCapture<object>(new object());
-            await asyncPrinter.Visit(node, o);
-        }
-        Console.WriteLine(o.Out.ToString());
-        async.Stop();
-        
-        // Console.WriteLine(sync.Elapsed);
-        Console.WriteLine(async.Elapsed);
-    }
-    
     class TestVisitor : CSharpIsoVisitor<int>
     {
         public override JRightPadded<J2>? VisitRightPadded<J2>(JRightPadded<J2>? right, JRightPadded.Location loc, int p)

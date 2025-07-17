@@ -43,8 +43,7 @@ public partial interface J : Rewrite.Core.Tree
     IList<Annotation> annotations,
     Identifier name,
     NewClass? initializer
-    ) : J, J<EnumValue>, MutableTree<EnumValue>
-    {
+    ) : J    {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {
             return v.VisitEnumValue(this, p);

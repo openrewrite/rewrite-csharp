@@ -32,8 +32,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     Statement statement
-    ) : Cs, Expression, Expression<StatementExpression>, J<StatementExpression>, MutableTree<StatementExpression>
-    {
+    ) : Cs,Expression    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitStatementExpression(this, p);

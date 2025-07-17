@@ -42,8 +42,7 @@ public partial interface Cs : J
     Markers markers,
     JRightPadded<Expression> groupExpression,
     Expression key
-    ) : Cs, Cs.SelectOrGroupClause, J<GroupClause>, MutableTree<GroupClause>
-    {
+    ) : Cs,Cs.SelectOrGroupClause    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

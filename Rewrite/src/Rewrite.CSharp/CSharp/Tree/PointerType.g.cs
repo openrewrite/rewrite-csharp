@@ -45,8 +45,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     JRightPadded<TypeTree> elementType
-    ) : Cs, TypeTree, Expression, Expression<PointerType>, TypedTree<PointerType>, J<PointerType>, TypeTree<PointerType>, MutableTree<PointerType>
-    {
+    ) : Cs,TypeTree,Expression    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

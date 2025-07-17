@@ -32,8 +32,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     J.ControlParentheses<TypeTree> clazz,
     Expression expression
-    ) : J, Expression, TypedTree, Expression<TypeCast>, TypedTree<TypeCast>, J<TypeCast>, MutableTree<TypeCast>
-    {
+    ) : J,Expression,TypedTree    {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {
             return v.VisitTypeCast(this, p);

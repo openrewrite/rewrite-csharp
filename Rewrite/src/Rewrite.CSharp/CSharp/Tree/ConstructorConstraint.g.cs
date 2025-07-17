@@ -39,8 +39,7 @@ public partial interface Cs : J
     Guid id,
     Space prefix,
     Markers markers
-    ) : Cs, Cs.TypeParameterConstraint, J<ConstructorConstraint>, MutableTree<ConstructorConstraint>
-    {
+    ) : Cs,Cs.TypeParameterConstraint    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitConstructorConstraint(this, p);

@@ -51,8 +51,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     IList<JRightPadded<Ordering>> orderings
-    ) : Cs, Cs.QueryClause, J<OrderByClause>, MutableTree<OrderByClause>
-    {
+    ) : Cs,Cs.QueryClause    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

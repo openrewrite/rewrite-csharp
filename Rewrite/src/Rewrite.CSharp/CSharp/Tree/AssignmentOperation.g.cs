@@ -35,8 +35,7 @@ public partial interface Cs : J
     JLeftPadded<AssignmentOperation.OperatorType> @operator,
     Expression assignment,
     JavaType? type
-    ) : Cs, Statement, Expression, TypedTree, Expression<AssignmentOperation>, TypedTree<AssignmentOperation>, J<AssignmentOperation>, MutableTree<AssignmentOperation>
-    {
+    ) : Cs,Statement,Expression,TypedTree    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

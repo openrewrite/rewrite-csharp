@@ -34,8 +34,7 @@ public partial interface J : Rewrite.Core.Tree
     string? valueSource,
     IList<Literal.UnicodeEscape>? unicodeEscapes,
     JavaType.Primitive type
-    ) : J, Expression, TypedTree, Expression<Literal>, TypedTree<Literal>, J<Literal>, MutableTree<Literal>
-    {
+    ) : J,Expression,TypedTree    {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {
             return v.VisitLiteral(this, p);

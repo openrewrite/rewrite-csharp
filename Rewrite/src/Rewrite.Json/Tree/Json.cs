@@ -33,7 +33,7 @@ public partial interface Json : Rewrite.Core.Tree
         Space prefix,
         Markers markers,
         IList<JsonRightPadded<JsonValue>> values
-    ) : JsonValue, MutableTree<Array>
+    ) : JsonValue, MutableTree
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -127,7 +127,7 @@ public partial interface Json : Rewrite.Core.Tree
         FileAttributes? fileAttributes,
         JsonValue value,
         Space eof
-    ) : Json, MutableSourceFile<Document>, MutableTree<Document>
+    ) : Json, MutableSourceFile<Document>, MutableTree
     {
         public Json? AcceptJson<P>(JsonVisitor<P> v, P p)
         {
@@ -224,7 +224,7 @@ public partial interface Json : Rewrite.Core.Tree
         Guid id,
         Space prefix,
         Markers markers
-    ) : JsonValue, MutableTree<Empty>
+    ) : JsonValue, MutableTree
     {
         public Json? AcceptJson<P>(JsonVisitor<P> v, P p)
         {
@@ -268,7 +268,7 @@ public partial interface Json : Rewrite.Core.Tree
         Space prefix,
         Markers markers,
         string name
-    ) : JsonKey, MutableTree<Identifier>
+    ) : JsonKey, MutableTree
     {
         public Json? AcceptJson<P>(JsonVisitor<P> v, P p)
         {
@@ -320,7 +320,7 @@ public partial interface Json : Rewrite.Core.Tree
         Markers markers,
         string source,
         object value
-    ) : JsonValue, JsonKey, MutableTree<Literal>
+    ) : JsonValue, JsonKey, MutableTree
     {
         public Json? AcceptJson<P>(JsonVisitor<P> v, P p)
         {
@@ -379,7 +379,7 @@ public partial interface Json : Rewrite.Core.Tree
         Markers markers,
         JsonRightPadded<JsonKey> key,
         JsonValue value
-    ) : Json, MutableTree<Member>
+    ) : Json, MutableTree
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
@@ -474,7 +474,7 @@ public partial interface Json : Rewrite.Core.Tree
         Space prefix,
         Markers markers,
         IList<JsonRightPadded<Json>> members
-    ) : JsonValue, MutableTree<JsonObject>
+    ) : JsonValue, MutableTree
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

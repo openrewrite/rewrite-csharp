@@ -55,8 +55,7 @@ public partial interface Cs : J
     Markers markers,
     JRightPadded<J.Identifier> identifier,
     Expression expression
-    ) : Cs, Cs.QueryClause, J<LetClause>, MutableTree<LetClause>
-    {
+    ) : Cs,Cs.QueryClause    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

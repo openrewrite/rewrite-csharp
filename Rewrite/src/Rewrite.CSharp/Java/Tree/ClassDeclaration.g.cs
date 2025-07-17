@@ -49,8 +49,7 @@ public partial interface J : Rewrite.Core.Tree
     JContainer<TypeTree>? permits,
     Block body,
     JavaType.FullyQualified? type
-    ) : J, Statement, TypedTree, TypedTree<ClassDeclaration>, J<ClassDeclaration>, MutableTree<ClassDeclaration>
-    {
+    ) : J,Statement,TypedTree    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding
@@ -179,7 +178,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     IList<J.Annotation> annotations,
     Kind.Types kindType
-        ) : J, J<Kind>, MutableTree<Kind>
+        ) : J, MutableTree
         {
             public J? AcceptJava<P>(JavaVisitor<P> v, P p)
             {

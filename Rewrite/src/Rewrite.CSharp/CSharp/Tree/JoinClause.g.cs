@@ -55,8 +55,7 @@ public partial interface Cs : J
     JRightPadded<Expression> leftExpression,
     Expression rightExpression,
     JLeftPadded<JoinIntoClause>? into
-    ) : Cs, Cs.QueryClause, J<JoinClause>, MutableTree<JoinClause>
-    {
+    ) : Cs,Cs.QueryClause    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

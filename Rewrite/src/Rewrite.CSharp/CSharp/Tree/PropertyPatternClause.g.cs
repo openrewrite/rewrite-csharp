@@ -53,8 +53,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     JContainer<Expression> subpatterns
-    ) : Cs, J<PropertyPatternClause>, MutableTree<PropertyPatternClause>
-    {
+    ) : Cs    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

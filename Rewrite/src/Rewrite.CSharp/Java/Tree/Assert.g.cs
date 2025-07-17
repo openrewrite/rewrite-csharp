@@ -32,8 +32,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     Expression condition,
     JLeftPadded<Expression>? detail
-    ) : J, Statement, J<Assert>, MutableTree<Assert>
-    {
+    ) : J,Statement    {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {
             return v.VisitAssert(this, p);

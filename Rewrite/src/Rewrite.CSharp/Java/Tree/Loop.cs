@@ -7,6 +7,6 @@ namespace Rewrite.RewriteJava.Tree;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "PossibleUnintendedReferenceComparison")]
-public interface Loop : Statement
+public partial interface Loop : Statement
 {
 }

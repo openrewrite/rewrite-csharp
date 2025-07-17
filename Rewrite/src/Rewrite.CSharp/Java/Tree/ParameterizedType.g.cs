@@ -33,8 +33,7 @@ public partial interface J : Rewrite.Core.Tree
     NameTree clazz,
     JContainer<Expression>? typeParameters,
     JavaType? type
-    ) : J, TypeTree, Expression, Expression<ParameterizedType>, TypedTree<ParameterizedType>, J<ParameterizedType>, TypeTree<ParameterizedType>, MutableTree<ParameterizedType>
-    {
+    ) : J,TypeTree,Expression    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

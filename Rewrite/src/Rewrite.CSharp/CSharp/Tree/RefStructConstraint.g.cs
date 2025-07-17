@@ -35,8 +35,7 @@ public partial interface Cs : J
     Guid id,
     Space prefix,
     Markers markers
-    ) : Cs, Cs.AllowsConstraint, J<RefStructConstraint>, MutableTree<RefStructConstraint>
-    {
+    ) : Cs,Cs.AllowsConstraint    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitRefStructConstraint(this, p);

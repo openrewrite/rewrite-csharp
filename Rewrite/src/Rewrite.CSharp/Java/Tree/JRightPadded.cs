@@ -113,7 +113,7 @@ public sealed class JRightPadded<T>(
 
     public override Markers Markers => markers;
 
-    public JRightPadded<T> WithMarkers(Markers newMarkers)
+    public override JRightPadded<T> WithMarkers(Markers newMarkers)
     {
         return ReferenceEquals(newMarkers, markers) ? this : new JRightPadded<T>(element, after, newMarkers);
     }
@@ -190,4 +190,5 @@ public abstract partial class JRightPadded : IHasMarkers
     }
 
     public abstract Markers Markers { get; }
+    public abstract JRightPadded WithMarkers(Markers markers);
 }

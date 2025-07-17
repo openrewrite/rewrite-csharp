@@ -4,6 +4,6 @@ partial interface J
 {
     partial class MemberReference
     {
-        Expression Expression.WithType(JavaType? newType) => WithType(Type);
+        // Expression Expression.WithType(JavaType? newType) => WithType(Type);
     }
 }

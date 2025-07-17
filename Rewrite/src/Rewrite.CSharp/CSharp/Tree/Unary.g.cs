@@ -34,8 +34,7 @@ public partial interface Cs : J
     JLeftPadded<Unary.Types> @operator,
     Expression expression,
     JavaType? type
-    ) : Cs, Statement, Expression, TypedTree, Expression<Unary>, TypedTree<Unary>, J<Unary>, MutableTree<Unary>
-    {
+    ) : Cs,Statement,Expression,TypedTree    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

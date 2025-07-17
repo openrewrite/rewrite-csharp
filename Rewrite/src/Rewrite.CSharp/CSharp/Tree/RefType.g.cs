@@ -50,8 +50,7 @@ public partial interface Cs : J
     J.Modifier? readonlyKeyword,
     TypeTree typeIdentifier,
     JavaType? type
-    ) : Cs, TypeTree, Expression, Expression<RefType>, TypedTree<RefType>, J<RefType>, TypeTree<RefType>, MutableTree<RefType>
-    {
+    ) : Cs,TypeTree,Expression    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitRefType(this, p);

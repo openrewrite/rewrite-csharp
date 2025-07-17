@@ -34,8 +34,7 @@ public partial interface J : Rewrite.Core.Tree
     IList<Modifier> modifiers,
     Expression name,
     JContainer<TypeTree>? bounds
-    ) : J, J<TypeParameter>, MutableTree<TypeParameter>
-    {
+    ) : J    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

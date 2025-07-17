@@ -61,7 +61,7 @@ public partial interface Cs : J
     JLeftPadded<AccessorDeclaration.AccessorKinds> kind,
     ArrowExpressionClause? expressionBody,
     J.Block? body
-    ) : Cs, Statement
+    ) : Cs,Statement
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

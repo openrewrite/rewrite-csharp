@@ -44,8 +44,7 @@ public partial interface Cs : J
     Markers markers,
     Keyword checkedOrUncheckedKeyword,
     J.ControlParentheses<Expression> expression
-    ) : Cs, Expression, Expression<CheckedExpression>, J<CheckedExpression>, MutableTree<CheckedExpression>
-    {
+    ) : Cs,Expression    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitCheckedExpression(this, p);

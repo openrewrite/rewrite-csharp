@@ -49,8 +49,7 @@ public partial interface Cs : J
     Pattern pattern,
     JLeftPadded<Expression>? whenClause,
     Space colonToken
-    ) : Cs, Cs.SwitchLabel, Expression<CasePatternSwitchLabel>, J<CasePatternSwitchLabel>, MutableTree<CasePatternSwitchLabel>
-    {
+    ) : Cs,Cs.SwitchLabel    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

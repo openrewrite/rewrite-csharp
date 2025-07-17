@@ -58,8 +58,7 @@ public partial interface Cs : J
     JContainer<TypeParameter>? typeParameters,
     JContainer<Statement> parameters,
     JContainer<TypeParameterConstraintClause>? typeParameterConstraintClauses
-    ) : Cs, Statement, J<DelegateDeclaration>, MutableTree<DelegateDeclaration>
-    {
+    ) : Cs,Statement    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

@@ -31,8 +31,7 @@ public partial interface J : Rewrite.Core.Tree
     Space prefix,
     Markers markers,
     IList<JRightPadded<NameTree>> alternatives
-    ) : J, TypeTree, TypedTree<MultiCatch>, J<MultiCatch>, TypeTree<MultiCatch>, MutableTree<MultiCatch>
-    {
+    ) : J,TypeTree    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

@@ -36,8 +36,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     ClassOrStructConstraint.TypeKind kind
-    ) : Cs, Cs.TypeParameterConstraint, J<ClassOrStructConstraint>, MutableTree<ClassOrStructConstraint>
-    {
+    ) : Cs,Cs.TypeParameterConstraint    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitClassOrStructConstraint(this, p);

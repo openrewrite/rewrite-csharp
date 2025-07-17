@@ -41,8 +41,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     Expression expression
-    ) : Cs, Cs.SelectOrGroupClause, J<SelectClause>, MutableTree<SelectClause>
-    {
+    ) : Cs,Cs.SelectOrGroupClause    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitSelectClause(this, p);

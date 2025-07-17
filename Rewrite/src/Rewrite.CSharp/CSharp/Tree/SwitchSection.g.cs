@@ -55,8 +55,7 @@ public partial interface Cs : J
     Markers markers,
     IList<SwitchLabel> labels,
     IList<JRightPadded<Statement>> statements
-    ) : Cs, Statement, J<SwitchSection>, MutableTree<SwitchSection>
-    {
+    ) : Cs,Statement    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

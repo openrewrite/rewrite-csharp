@@ -22,7 +22,7 @@ public class FindClass([Option(displayName: "Description", description: "A speci
     {
         public override Cs VisitClassDeclaration(Cs.ClassDeclaration classDeclaration, IExecutionContext ctx)
         {
-            var tree = (MutableTree<Cs.ClassDeclaration>)base.VisitClassDeclaration(classDeclaration, ctx)!;
+            var tree = (Cs)base.VisitClassDeclaration(classDeclaration, ctx)!;
             return tree.WithMarkers(tree.Markers.AddIfAbsent<SearchResult>(new SearchResult(RandomId(), description)));
         }
     }

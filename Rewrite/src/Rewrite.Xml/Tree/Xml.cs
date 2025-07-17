@@ -40,8 +40,7 @@ public partial interface Xml : Rewrite.Core.Tree
         Prolog prolog,
         Tag root,
         string eof
-    ) : Xml, MutableSourceFile<Document>, MutableTree<Document>
-    {
+    ) : Xml,MutableSourceFile<Document>    {
         public Xml? AcceptXml<P>(XmlVisitor<P> v, P p)
         {
             return v.VisitDocument(this, p);
@@ -147,8 +146,7 @@ public partial interface Xml : Rewrite.Core.Tree
         XmlDecl? xmlDecl,
         IList<Misc> misc,
         IList<JspDirective> jspDirectives
-    ) : Xml, MutableTree<Prolog>
-    {
+    ) : Xml    {
         public Xml? AcceptXml<P>(XmlVisitor<P> v, P p)
         {
             return v.VisitProlog(this, p);
@@ -214,8 +212,7 @@ public partial interface Xml : Rewrite.Core.Tree
         string name,
         IList<Attribute> attributes,
         string beforeTagDelimiterPrefix
-    ) : Xml, Misc, MutableTree<XmlDecl>
-    {
+    ) : Xml,Misc    {
         public Xml? AcceptXml<P>(XmlVisitor<P> v, P p)
         {
             return v.VisitXmlDecl(this, p);
@@ -281,8 +278,7 @@ public partial interface Xml : Rewrite.Core.Tree
         string name,
         CharData processingInstructions,
         string beforeTagDelimiterPrefix
-    ) : Xml, Content, Misc, MutableTree<ProcessingInstruction>
-    {
+    ) : Xml,Content,Misc    {
         public Xml? AcceptXml<P>(XmlVisitor<P> v, P p)
         {
             return v.VisitProcessingInstruction(this, p);
@@ -350,8 +346,7 @@ public partial interface Xml : Rewrite.Core.Tree
         IList<Content> content,
         Tag.Closing? closingTag,
         string beforeTagDelimiterPrefix
-    ) : Xml, Content, MutableTree<Tag>
-    {
+    ) : Xml,Content    {
         public Xml? AcceptXml<P>(XmlVisitor<P> v, P p)
         {
             return v.VisitTag(this, p);
@@ -419,7 +414,7 @@ public partial interface Xml : Rewrite.Core.Tree
             Markers markers,
             string name,
             string beforeTagDelimiterPrefix
-        ) : Xml, MutableTree<Closing>
+        ) : Xml
         {
             public Xml? AcceptXml<P>(XmlVisitor<P> v, P p)
             {
@@ -490,8 +485,7 @@ public partial interface Xml : Rewrite.Core.Tree
         Ident key,
         string beforeEquals,
         Attribute.Value val
-    ) : Xml, MutableTree<Attribute>
-    {
+    ) : Xml    {
         public Xml? AcceptXml<P>(XmlVisitor<P> v, P p)
         {
             return v.VisitAttribute(this, p);
@@ -545,7 +539,7 @@ public partial interface Xml : Rewrite.Core.Tree
             Markers markers,
             Value.Quote quoteStyle,
             string text
-        ) : Xml, MutableTree<Value>
+        ) : Xml
         {
             public Xml? AcceptXml<P>(XmlVisitor<P> v, P p)
             {
@@ -623,8 +617,7 @@ public partial interface Xml : Rewrite.Core.Tree
         bool cdata,
         string text,
         string afterText
-    ) : Xml, Content, MutableTree<CharData>
-    {
+    ) : Xml,Content    {
         public Xml? AcceptXml<P>(XmlVisitor<P> v, P p)
         {
             return v.VisitCharData(this, p);
@@ -688,8 +681,7 @@ public partial interface Xml : Rewrite.Core.Tree
         string prefix,
         Markers markers,
         string text
-    ) : Xml, Content, Misc, MutableTree<Comment>
-    {
+    ) : Xml,Content,Misc    {
         public Xml? AcceptXml<P>(XmlVisitor<P> v, P p)
         {
             return v.VisitComment(this, p);
@@ -743,8 +735,7 @@ public partial interface Xml : Rewrite.Core.Tree
         IList<Ident> internalSubset,
         DocTypeDecl.ExternalSubsets? subsets,
         string beforeTagDelimiterPrefix
-    ) : Xml, Misc, MutableTree<DocTypeDecl>
-    {
+    ) : Xml,Misc    {
         public Xml? AcceptXml<P>(XmlVisitor<P> v, P p)
         {
             return v.VisitDocTypeDecl(this, p);
@@ -811,7 +802,7 @@ public partial interface Xml : Rewrite.Core.Tree
             string prefix,
             Markers markers,
             IList<Xml.Element> elements
-        ) : Xml, MutableTree<ExternalSubsets>
+        ) : Xml
         {
             public Xml? AcceptXml<P>(XmlVisitor<P> v, P p)
             {
@@ -874,8 +865,7 @@ public partial interface Xml : Rewrite.Core.Tree
         Markers markers,
         IList<Ident> subset,
         string beforeTagDelimiterPrefix
-    ) : Xml, MutableTree<Element>
-    {
+    ) : Xml    {
         public Xml? AcceptXml<P>(XmlVisitor<P> v, P p)
         {
             return v.VisitElement(this, p);
@@ -932,8 +922,7 @@ public partial interface Xml : Rewrite.Core.Tree
         string prefix,
         Markers markers,
         string name
-    ) : Xml, MutableTree<Ident>
-    {
+    ) : Xml    {
         public Xml? AcceptXml<P>(XmlVisitor<P> v, P p)
         {
             return v.VisitIdent(this, p);
@@ -986,8 +975,7 @@ public partial interface Xml : Rewrite.Core.Tree
         string type,
         IList<Attribute> attributes,
         string beforeDirectiveEndPrefix
-    ) : Xml, Content, MutableTree<JspDirective>
-    {
+    ) : Xml,Content    {
         public Xml? AcceptXml<P>(XmlVisitor<P> v, P p)
         {
             return v.VisitJspDirective(this, p);

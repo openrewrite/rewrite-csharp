@@ -40,8 +40,7 @@ public partial interface Cs : J
     Markers markers,
     JRightPadded<Expression> expression,
     Ordering.DirectionKind? direction
-    ) : Cs, J<Ordering>, MutableTree<Ordering>
-    {
+    ) : Cs    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

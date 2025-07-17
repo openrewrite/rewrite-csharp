@@ -37,8 +37,7 @@ public partial interface Yaml : Rewrite.Core.Tree
         bool charsetBomMarked,
         Checksum? checksum,
         IList<Document> docs
-    ) : Yaml, MutableSourceFile<Documents>, MutableTree<Documents>
-    {
+    ) : Yaml,MutableSourceFile<Documents>    {
         public Yaml? AcceptYaml<P>(YamlVisitor<P> v, P p)
         {
             return v.VisitDocuments(this, p);
@@ -123,8 +122,7 @@ public partial interface Yaml : Rewrite.Core.Tree
         bool @explicit,
         Block block,
         Document.End ending
-    ) : Yaml, MutableTree<Document>
-    {
+    ) : Yaml    {
         public Yaml? AcceptYaml<P>(YamlVisitor<P> v, P p)
         {
             return v.VisitDocument(this, p);
@@ -177,7 +175,7 @@ public partial interface Yaml : Rewrite.Core.Tree
             string prefix,
             Markers markers,
             bool @explicit
-        ) : Yaml, MutableTree<End>
+        ) : Yaml
         {
             public Yaml? AcceptYaml<P>(YamlVisitor<P> v, P p)
             {
@@ -234,7 +232,7 @@ public partial interface Yaml : Rewrite.Core.Tree
         }
     }
 
-    public interface Block : Yaml
+    public partial interface Block : Yaml
     {
     }
 
@@ -245,8 +243,7 @@ public partial interface Yaml : Rewrite.Core.Tree
         Scalar.Style scalarStyle,
         Anchor? anchor,
         string value
-    ) : Yaml.Block, YamlKey, MutableTree<Scalar>
-    {
+    ) : Yaml.Block,YamlKey    {
         public Yaml? AcceptYaml<P>(YamlVisitor<P> v, P p)
         {
             return v.VisitScalar(this, p);
@@ -322,8 +319,7 @@ public partial interface Yaml : Rewrite.Core.Tree
         IList<Mapping.Entry> entries,
         string? closingBracePrefix,
         Anchor? anchor
-    ) : Yaml.Block, MutableTree<Mapping>
-    {
+    ) : Yaml.Block    {
         public Yaml? AcceptYaml<P>(YamlVisitor<P> v, P p)
         {
             return v.VisitMapping(this, p);
@@ -378,7 +374,7 @@ public partial interface Yaml : Rewrite.Core.Tree
             YamlKey key,
             string beforeMappingValueIndicator,
             Yaml.Block value
-        ) : Yaml, MutableTree<Entry>
+        ) : Yaml, MutableTree
         {
             public Yaml? AcceptYaml<P>(YamlVisitor<P> v, P p)
             {
@@ -456,8 +452,7 @@ public partial interface Yaml : Rewrite.Core.Tree
         IList<Sequence.Entry> entries,
         string? closingBracketPrefix,
         Anchor? anchor
-    ) : Yaml.Block, MutableTree<Sequence>
-    {
+    ) : Yaml.Block    {
         public Yaml? AcceptYaml<P>(YamlVisitor<P> v, P p)
         {
             return v.VisitSequence(this, p);
@@ -512,7 +507,7 @@ public partial interface Yaml : Rewrite.Core.Tree
             Yaml.Block block,
             bool dash,
             string? trailingCommaPrefix
-        ) : Yaml, MutableTree<Entry>
+        ) : Yaml, MutableTree
         {
             public Yaml? AcceptYaml<P>(YamlVisitor<P> v, P p)
             {
@@ -588,8 +583,7 @@ public partial interface Yaml : Rewrite.Core.Tree
         string prefix,
         Markers markers,
         Anchor anchor
-    ) : Yaml.Block, YamlKey, MutableTree<Alias>
-    {
+    ) : Yaml.Block,YamlKey    {
         public Yaml? AcceptYaml<P>(YamlVisitor<P> v, P p)
         {
             return v.VisitAlias(this, p);
@@ -640,8 +634,7 @@ public partial interface Yaml : Rewrite.Core.Tree
         string postfix,
         Markers markers,
         string key
-    ) : Yaml, MutableTree<Anchor>
-    {
+    ) : Yaml    {
         public Yaml? AcceptYaml<P>(YamlVisitor<P> v, P p)
         {
             return v.VisitAnchor(this, p);

@@ -41,8 +41,7 @@ public partial interface J : Rewrite.Core.Tree
     Expression deconstructor,
     JContainer<J> nested,
     JavaType type
-    ) : J, TypedTree, TypedTree<DeconstructionPattern>, J<DeconstructionPattern>, MutableTree<DeconstructionPattern>
-    {
+    ) : J,TypedTree    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

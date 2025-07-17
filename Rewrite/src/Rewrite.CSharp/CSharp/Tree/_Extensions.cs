@@ -1,4 +1,4 @@
-﻿using Rewrite.Core;
+using Rewrite.Core;
 using Rewrite.RewriteJava.Tree;
 
 namespace Rewrite.RewriteCSharp.Tree;
@@ -39,66 +39,55 @@ public partial interface Cs
         JavaType? TypedTree.Type => this.Expression.Type;
         public StackAllocExpression WithType(JavaType? type) => WithExpression(Expression.WithType(type));
     }
-    public partial class Subpattern : Expression<Subpattern>
-    {
+    public partial class Subpattern     {
         JavaType? TypedTree.Type => this.Pattern.Type;
         public Subpattern WithType(JavaType? type) => WithPattern((Pattern)Pattern.WithType(type));
     }
-    public partial class AliasQualifiedName : Expression<AliasQualifiedName>
-    {
+    public partial class AliasQualifiedName     {
         JavaType? TypedTree.Type => this.Name.Type;
         public AliasQualifiedName WithType(JavaType? type) => WithName(Name.WithType(type));
     }
-    public new partial class ClassDeclaration : Expression<ClassDeclaration>
-    {
+    public new partial class ClassDeclaration     {
         public J.ClassDeclaration.Kind Kind => _kind;
         JavaType? TypedTree.Type => Type;
         public ClassDeclaration WithType(JavaType? type) => WithType((JavaType.FullyQualified?)type);
         public CoordinateBuilder.ClassDeclaration Coordinates => new (this);
         CoordinateBuilder.Statement Statement.Coordinates => Coordinates;
     }
-    public new partial class MethodDeclaration : Expression<MethodDeclaration>
-    {
+    public new partial class MethodDeclaration     {
         public bool IsAbstract => this.Modifiers.Any(x => x.Keyword == "abstract");
         public JavaType? Type => this.MethodType;
         public MethodDeclaration WithType(JavaType? type) => WithMethodType(type as JavaType.Method);
         public CoordinateBuilder.MethodDeclaration Coordinates => new (this);
         CoordinateBuilder.Statement Statement.Coordinates => Coordinates;
     }
-    public partial class IndexerDeclaration : Expression<IndexerDeclaration>
-    {
+    public partial class IndexerDeclaration     {
         public JavaType? Type => this.TypeExpression.Type;
         public IndexerDeclaration WithType(JavaType? type) => WithTypeExpression(TypeExpression.WithType(type));
 
     }
-    public partial class QueryExpression : Expression<QueryExpression>
-    {
+    public partial class QueryExpression     {
         public JavaType? Type => this.FromClause.Type;
         public QueryExpression WithType(JavaType? type) => WithFromClause(FromClause.WithType(type));
     }
-    public partial class FromClause : Expression<FromClause>
-    {
+    public partial class FromClause     {
         public JavaType? Type => this.Expression.Type;
         public FromClause WithType(JavaType? type) => WithExpression(Expression.WithType(type));
     }
-    public partial class RangeExpression : Expression<RangeExpression>
-    {
+    public partial class RangeExpression     {
         public JavaType? Type => Start?.Type ?? End?.Type;
         public RangeExpression WithType(JavaType? type) => this;
     }
-    public partial class DefaultSwitchLabel : Expression<DefaultSwitchLabel>
-    {
+    public partial class DefaultSwitchLabel     {
         public JavaType? Type => null;
         public DefaultSwitchLabel WithType(JavaType? type) => this;
     }
 
-    public partial class CasePatternSwitchLabel : Expression<CasePatternSwitchLabel>
-    {
+    public partial class CasePatternSwitchLabel     {
         public JavaType? Type => Pattern.Type;
         public CasePatternSwitchLabel WithType(JavaType? type) => WithPattern((Pattern)Pattern.WithType(type));
     }
-    public new partial class SwitchExpression : Expression<SwitchExpression>
-    {
+    public new partial class SwitchExpression     {
         public JavaType? Type => Expression.Type;
         public SwitchExpression WithType(JavaType? type) => WithExpression(Expression.WithType(type));
     }

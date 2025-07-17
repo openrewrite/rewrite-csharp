@@ -42,8 +42,7 @@ public partial interface Cs : J
     J.Block? body,
     JContainer<TypeParameterConstraintClause>? typeParameterConstraintClauses,
     JavaType.FullyQualified? type
-    ) : Cs, Statement, TypedTree, TypedTree<ClassDeclaration>, J<ClassDeclaration>, MutableTree<ClassDeclaration>
-    {
+    ) : Cs,Statement,TypedTree    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

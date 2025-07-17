@@ -49,8 +49,7 @@ public partial interface Cs : J
     IList<AttributeList> attributeLists,
     JLeftPadded<TypeParameter.VarianceKind>? variance,
     J.Identifier name
-    ) : Cs, J<TypeParameter>, MutableTree<TypeParameter>
-    {
+    ) : Cs    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

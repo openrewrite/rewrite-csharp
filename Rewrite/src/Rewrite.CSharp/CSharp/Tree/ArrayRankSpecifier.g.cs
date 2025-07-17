@@ -32,7 +32,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     JContainer<Expression> sizes
-    ) : Cs, Expression
+    ) : Cs,Expression
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

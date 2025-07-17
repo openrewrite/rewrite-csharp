@@ -49,8 +49,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     JRightPadded<J.Identifier> name
-    ) : Cs, J<NameColon>, MutableTree<NameColon>
-    {
+    ) : Cs    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

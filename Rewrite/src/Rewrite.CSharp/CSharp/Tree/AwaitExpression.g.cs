@@ -33,8 +33,7 @@ public partial interface Cs : J
     Markers markers,
     J expression,
     JavaType? type
-    ) : Cs, Expression, Statement, Expression<AwaitExpression>, J<AwaitExpression>, MutableTree<AwaitExpression>
-    {
+    ) : Cs,Expression,Statement    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitAwaitExpression(this, p);

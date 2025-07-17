@@ -34,8 +34,7 @@ public partial interface Cs : J
     Keyword? awaitKeyword,
     JLeftPadded<Expression> expression,
     Statement statement
-    ) : Cs, Statement, J<UsingStatement>, MutableTree<UsingStatement>
-    {
+    ) : Cs,Statement    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

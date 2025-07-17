@@ -34,8 +34,7 @@ public partial interface J : Rewrite.Core.Tree
     IList<ArrayDimension> dimensions,
     JContainer<Expression>? initializer,
     JavaType? type
-    ) : J, Expression, TypedTree, Expression<NewArray>, TypedTree<NewArray>, J<NewArray>, MutableTree<NewArray>
-    {
+    ) : J,Expression,TypedTree    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

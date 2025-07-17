@@ -2,13 +2,13 @@
 
 namespace Rewrite.RewriteJava.Tree;
 //
-public partial interface J<T> : J  where T : J
-{
+// public partial interface J<T> : J  where T : J
+// {
     // public new T WithPrefix(Space prefix);
     // J J.WithPrefix(Space prefix) => WithPrefix(prefix);
     // public new T WithMarkers(Markers markers);
     // J J.WithMarkers(Markers markers) => WithMarkers(markers);
-}
+// }
 public partial interface J : IHasPrefix
 {
     // Core.Tree Core.Tree.WithId(Guid id) => WithId(id);

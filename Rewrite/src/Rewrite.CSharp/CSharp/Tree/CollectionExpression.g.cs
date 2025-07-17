@@ -33,8 +33,7 @@ public partial interface Cs : J
     Markers markers,
     IList<JRightPadded<Expression>> elements,
     JavaType? type
-    ) : Cs, Expression, TypedTree, Expression<CollectionExpression>, TypedTree<CollectionExpression>, J<CollectionExpression>, MutableTree<CollectionExpression>
-    {
+    ) : Cs,Expression,TypedTree    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

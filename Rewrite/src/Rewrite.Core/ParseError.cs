@@ -25,7 +25,7 @@ public partial class ParseError(
     // }
 
     public Markers Markers => markers;
-
+    public ParseError WithId(Guid id) => throw new NotImplementedException();
     public ParseError WithMarkers(Markers newMarkers)
     {
         return ReferenceEquals(newMarkers, markers)

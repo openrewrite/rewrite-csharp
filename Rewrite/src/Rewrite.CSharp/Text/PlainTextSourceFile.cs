@@ -14,7 +14,14 @@ public partial class PlainTextSourceFile : SourceFile
         Checksum = checksum;
         FileAttributes = fileAttributes;
     }
-
+    public PlainTextSourceFile WithId(Guid newId)
+    {
+        return newId == Id ? this : new PlainTextSourceFile(newId, Markers, SourcePath, CharsetName, CharsetBomMarked, Checksum, FileAttributes);
+    }
+    public PlainTextSourceFile WithMarkers(Markers newMarkers)
+    {
+        return ReferenceEquals(newMarkers, Markers) ? this : new PlainTextSourceFile(Id, newMarkers, SourcePath, CharsetName, CharsetBomMarked, Checksum, FileAttributes);
+    }
     public Guid Id { get; }
     public Markers Markers { get; }
     public string SourcePath { get; }

@@ -34,8 +34,7 @@ public partial interface Cs : J
     string start,
     IList<JRightPadded<Expression>> parts,
     string end
-    ) : Cs, Expression, Expression<InterpolatedString>, J<InterpolatedString>, MutableTree<InterpolatedString>
-    {
+    ) : Cs,Expression    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

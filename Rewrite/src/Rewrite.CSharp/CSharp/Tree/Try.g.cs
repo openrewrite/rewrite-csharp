@@ -34,8 +34,7 @@ public partial interface Cs : J
     J.Block body,
     IList<Try.Catch> catches,
     JLeftPadded<J.Block>? @finally
-    ) : Cs, Statement, J<Try>, MutableTree<Try>
-    {
+    ) : Cs,Statement    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding
@@ -130,7 +129,7 @@ public partial interface Cs : J
     J.ControlParentheses<J.VariableDeclarations> parameter,
     JLeftPadded<J.ControlParentheses<Expression>>? filterExpression,
     J.Block body
-        ) : Cs, J<Catch>, MutableTree<Catch>
+        ) : Cs, MutableTree
         {
             [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

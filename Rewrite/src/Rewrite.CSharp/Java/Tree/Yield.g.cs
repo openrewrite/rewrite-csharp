@@ -32,8 +32,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     bool @implicit,
     Expression value
-    ) : J, Statement, J<Yield>, MutableTree<Yield>
-    {
+    ) : J,Statement    {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {
             return v.VisitYield(this, p);

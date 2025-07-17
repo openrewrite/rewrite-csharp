@@ -38,8 +38,7 @@ public partial interface J : Rewrite.Core.Tree
     JRightPadded<bool> @static,
     IList<JRightPadded<Statement>> statements,
     Space end
-    ) : J, Statement, J<Block>, MutableTree<Block>
-    {
+    ) : J,Statement    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

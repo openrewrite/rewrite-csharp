@@ -34,8 +34,7 @@ public partial interface Cs : J
     TypeTree? typeExpression,
     IList<J.ArrayDimension> dimensions,
     JavaType? type
-    ) : Cs, Expression, TypeTree, Expression<ArrayType>, TypedTree<ArrayType>, J<ArrayType>, TypeTree<ArrayType>, MutableTree<ArrayType>
-    {
+    ) : Cs,Expression,TypeTree    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitArrayType(this, p);

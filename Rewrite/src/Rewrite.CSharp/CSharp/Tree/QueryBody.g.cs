@@ -54,8 +54,7 @@ public partial interface Cs : J
     IList<QueryClause> clauses,
     SelectOrGroupClause? selectOrGroup,
     QueryContinuation? continuation
-    ) : Cs, J<QueryBody>, MutableTree<QueryBody>
-    {
+    ) : Cs    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitQueryBody(this, p);

@@ -5,11 +5,11 @@ using FileAttributes = Rewrite.Core.FileAttributes;
 
 namespace Rewrite.RewriteJava.Tree;
 
-public interface TypeTree<T> : TypeTree, TypedTree<T> where T : TypeTree
-{
+// public interface TypeTree<T> : TypeTree, TypedTree<T> where T : TypeTree
+// {
     // public new T WithType(JavaType? type);
     // TypeTree TypeTree.WithType(JavaType? type) => WithType(type);
-}
+// }
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "PossibleUnintendedReferenceComparison")]
 public partial interface TypeTree : NameTree

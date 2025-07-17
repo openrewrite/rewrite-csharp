@@ -49,8 +49,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     JRightPadded<Expression> expression
-    ) : Cs, Statement, J<ArrowExpressionClause>, MutableTree<ArrowExpressionClause>
-    {
+    ) : Cs,Statement    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

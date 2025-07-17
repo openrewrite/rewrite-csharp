@@ -48,8 +48,7 @@ public partial interface Cs : J
     IList<AttributeList> attributeLists,
     J.Identifier name,
     JLeftPadded<Expression>? initializer
-    ) : Cs, Expression, Expression<EnumMemberDeclaration>, J<EnumMemberDeclaration>, MutableTree<EnumMemberDeclaration>
-    {
+    ) : Cs,Expression    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

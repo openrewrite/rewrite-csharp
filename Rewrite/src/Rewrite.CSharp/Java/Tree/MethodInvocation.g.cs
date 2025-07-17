@@ -35,8 +35,7 @@ public partial interface J : Rewrite.Core.Tree
     Identifier name,
     JContainer<Expression> arguments,
     JavaType.Method? methodType
-    ) : J, Statement, TypedTree, MethodCall, Expression<MethodInvocation>, TypedTree<MethodInvocation>, J<MethodInvocation>, MutableTree<MethodInvocation>
-    {
+    ) : J,Statement,TypedTree,MethodCall    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

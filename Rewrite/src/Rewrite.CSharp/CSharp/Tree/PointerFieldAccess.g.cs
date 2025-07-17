@@ -34,8 +34,7 @@ public partial interface Cs : J
     Expression target,
     JLeftPadded<J.Identifier> name,
     JavaType? type
-    ) : Cs, TypeTree, Expression, Statement, Expression<PointerFieldAccess>, TypedTree<PointerFieldAccess>, J<PointerFieldAccess>, TypeTree<PointerFieldAccess>, MutableTree<PointerFieldAccess>
-    {
+    ) : Cs,TypeTree,Expression,Statement    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

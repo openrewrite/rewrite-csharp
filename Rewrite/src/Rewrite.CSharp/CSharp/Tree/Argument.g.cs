@@ -34,7 +34,7 @@ public partial interface Cs : J
     JRightPadded<J.Identifier>? nameColumn,
     Keyword? refKindKeyword,
     Expression expression
-    ) : Cs, Expression
+    ) : Cs,Expression
     {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 

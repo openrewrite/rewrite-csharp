@@ -42,8 +42,7 @@ public partial interface Cs : J
     Markers markers,
     Keyword returnOrBreakKeyword,
     Expression? expression
-    ) : Cs, Statement, J<Yield>, MutableTree<Yield>
-    {
+    ) : Cs,Statement    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitYield(this, p);

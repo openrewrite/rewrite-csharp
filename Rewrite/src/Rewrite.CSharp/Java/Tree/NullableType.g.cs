@@ -32,8 +32,7 @@ public partial interface J : Rewrite.Core.Tree
     Markers markers,
     IList<Annotation> annotations,
     JRightPadded<TypeTree> typeTree
-    ) : J, TypeTree, Expression, Expression<NullableType>, TypedTree<NullableType>, J<NullableType>, TypeTree<NullableType>, MutableTree<NullableType>
-    {
+    ) : J,TypeTree,Expression    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

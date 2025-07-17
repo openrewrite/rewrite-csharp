@@ -42,8 +42,7 @@ public partial interface J : Rewrite.Core.Tree
     J? pattern,
     JavaType? type,
     Modifier? modifier
-    ) : J, Expression, TypedTree, Expression<InstanceOf>, TypedTree<InstanceOf>, J<InstanceOf>, MutableTree<InstanceOf>
-    {
+    ) : J,Expression,TypedTree    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

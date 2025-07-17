@@ -50,8 +50,7 @@ public partial interface Cs : J
     Markers markers,
     Keyword? caseOrDefaultKeyword,
     Expression? target
-    ) : Cs, Statement, J<GotoStatement>, MutableTree<GotoStatement>
-    {
+    ) : Cs,Statement    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitGotoStatement(this, p);

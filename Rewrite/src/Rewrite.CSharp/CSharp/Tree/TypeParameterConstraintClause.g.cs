@@ -33,8 +33,7 @@ public partial interface Cs : J
     Markers markers,
     JRightPadded<J.Identifier> typeParameter,
     JContainer<TypeParameterConstraint> typeParameterConstraints
-    ) : Cs, J<TypeParameterConstraintClause>, MutableTree<TypeParameterConstraintClause>
-    {
+    ) : Cs    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

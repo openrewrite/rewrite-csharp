@@ -31,8 +31,7 @@ public partial interface J : Rewrite.Core.Tree
     Space prefix,
     Markers markers,
     Expression? expression
-    ) : J, Statement, J<Return>, MutableTree<Return>
-    {
+    ) : J,Statement    {
         public J? AcceptJava<P>(JavaVisitor<P> v, P p)
         {
             return v.VisitReturn(this, p);

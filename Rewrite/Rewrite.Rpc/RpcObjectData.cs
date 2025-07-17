@@ -22,8 +22,16 @@ public sealed class RpcObjectData
     {
         if (Value is null)
             return default;
-        var jObj = (JObject)Value;
-        return jObj.ToObject<T>();
+        if(Value is JObject jObj)
+        {
+            return jObj.ToObject<T>();
+        }
+
+        if (Value is T t)
+        {
+            return t;
+        }
+        throw new InvalidOperationException($"Can't deserialize value {Value.GetType()}: {Value} to type " + typeof(T).Name);
     }
 
     

@@ -44,8 +44,7 @@ public partial interface Cs : J
     Space prefix,
     Markers markers,
     J.Identifier name
-    ) : Cs.VariableDesignation, Cs, Expression<SingleVariableDesignation>, J<SingleVariableDesignation>, MutableTree<SingleVariableDesignation>
-    {
+    ) : Cs.VariableDesignation,Cs    {
         public J? AcceptCSharp<P>(CSharpVisitor<P> v, P p)
         {
             return v.VisitSingleVariableDesignation(this, p);

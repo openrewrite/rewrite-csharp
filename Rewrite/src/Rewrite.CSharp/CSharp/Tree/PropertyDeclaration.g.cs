@@ -39,8 +39,7 @@ public partial interface Cs : J
     J.Block? accessors,
     ArrowExpressionClause? expressionBody,
     JLeftPadded<Expression>? initializer
-    ) : Cs, Statement, TypedTree, TypedTree<PropertyDeclaration>, J<PropertyDeclaration>, MutableTree<PropertyDeclaration>
-    {
+    ) : Cs,Statement,TypedTree    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding

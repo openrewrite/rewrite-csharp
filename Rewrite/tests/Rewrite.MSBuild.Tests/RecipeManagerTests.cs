@@ -94,7 +94,6 @@ public class RecipeManagerTests : BaseTests
 
     
     [Test]
-    [Explicit]
     public async Task InstallRoslynRecipe()
     {
         var recipeManager = CreateObject<RecipeManager>();
@@ -114,7 +113,16 @@ public class RecipeManagerTests : BaseTests
         recipesPackage.Recipes.Should().NotBeEmpty();
         var recipeDescriptor = recipesPackage.GetRecipeDescriptor(installableRecipe.Id);
         var recipeStartInfo = recipesPackage.CreateRecipeStartInfo(recipeDescriptor);
-        recipeStartInfo.WithOption(nameof(RoslynRecipe.SolutionFilePath), @"C:\Projects\openrewrite\rewrite-csharp\Rewrite\tests\fixtures\quartznet\Quartz.sln");
+        var content = """
+            class A
+            {
+                string Test() => string.Join(" ", new[] { "Hello", "world!" });
+            }
+            """;
+        using var testProject = TestProject.CreateTemporaryLibrary(content);
+        
+        
+        recipeStartInfo.WithOption(nameof(RoslynRecipe.SolutionFilePath), (string)testProject.SolutionFile);
         var recipe = (RoslynRecipe)recipeManager.CreateRecipe(recipeStartInfo);
         recipe.Should().NotBeNull();
         var affectedDocuments = await recipe.Execute(CancellationToken.None);
@@ -123,41 +131,4 @@ public class RecipeManagerTests : BaseTests
     }
     
     
-    [Test]
-    [Explicit]
-    public async Task FindApplicableRecipe(CancellationToken cancellationToken)
-    {
-        var recipeManager = CreateObject<RecipeManager>();
-        
-        string[] feeds =
-        [
-            "https://api.nuget.org/v3/index.json"
-        ];
-        
-        var packageSources = feeds.Select(x => new PackageSource(x)).ToList();
-        // var recipeManager = new RecipeManager();
-        // CA1802: Use Literals Where Appropriate
-        // CA1861: Avoid constant arrays as arguments
-        var installableRecipe = new InstallableRecipe("CA1861", "FluentAssertions", "7.2.0");
-        var recipesPackage = await recipeManager.InstallRecipePackage(installableRecipe, packageSources, cancellationToken);
-        recipesPackage.Recipes.Should().NotBeEmpty();
-        
-        var recipeStartInfo = recipesPackage.CreateRecipeStartInfo(recipesPackage.Recipes.First());
-        recipeStartInfo.WithOption(nameof(RoslynRecipe.SolutionFilePath), @"C:\Projects\openrewrite\rewrite-csharp\Rewrite\tests\fixtures\quartznet\Quartz.sln");
-        var combinedRecipe = (RoslynRecipe)recipeManager.CreateRecipe(recipeStartInfo);
-        combinedRecipe.DiagnosticsId.Clear();
-        combinedRecipe.DryRun = true;
-        foreach (var recipeDescriptor in recipesPackage.Recipes)
-        {
-            combinedRecipe.DiagnosticsId.Add(recipeDescriptor.Id);
-            
-        }
-        
-        var recipeResult = await combinedRecipe.Execute(cancellationToken);
-        Console.WriteLine("Fixed Issues:");
-        foreach (var fixedIssue in recipeResult.FixedIssues)
-        {
-            Console.WriteLine(fixedIssue.IssueId);
-        }
-    }
 }

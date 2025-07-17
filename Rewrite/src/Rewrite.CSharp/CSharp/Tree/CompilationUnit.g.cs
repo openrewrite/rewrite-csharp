@@ -41,8 +41,7 @@ public partial interface Cs : J
     IList<AttributeList> attributeLists,
     IList<JRightPadded<Statement>> members,
     Space eof
-    ) : Cs, JavaSourceFile<CompilationUnit>, J<CompilationUnit>, MutableTree<CompilationUnit>
-    {
+    ) : Cs    {
         [NonSerialized] private WeakReference<PaddingHelper>? _padding;
 
         public PaddingHelper Padding
