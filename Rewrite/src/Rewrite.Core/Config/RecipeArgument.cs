@@ -23,7 +23,17 @@ class RecipeArgument : OptionDescriptor
         init
         {
             _typeName = value;
-            _type = System.Type.GetType(value) ?? throw new TypeLoadException($"Type {value} cannot be loaded");
+            var type = value switch
+            {
+                "string" => typeof(string),
+                "int" => typeof(int),
+                "long" => typeof(long),
+                "bool" => typeof(bool),
+                "float" => typeof(float),
+                "double" => typeof(double),
+                _ => System.Type.GetType(value)
+            }  ?? throw new TypeLoadException($"Type {value} cannot be loaded");
+            _type = type;
         }
     }
 

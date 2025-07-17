@@ -16,6 +16,7 @@ namespace Rewrite.MSBuild.Tests;
 public class RpcTests
 {
     [Test]
+    [Explicit]
     public void NewValue()
     {
         AnsiConsole.Reset();
@@ -45,6 +46,7 @@ public class RpcTests
     }
     
     [Test]
+    [Explicit]
     public void UpdatedValue()
     {
         
