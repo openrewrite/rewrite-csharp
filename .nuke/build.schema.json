@@ -30,6 +30,7 @@
         "CleanNugetCache",
         "CleanTestResults",
         "Compile",
+        "CreateGithubRelease",
         "DownloadTestFixtures",
         "GenerateRoslynRecipes",
         "GradleAssemble",

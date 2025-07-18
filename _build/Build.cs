@@ -24,8 +24,10 @@ using LibGit2Sharp;
 using Microsoft.Extensions.DependencyInjection;
 using NuGet.Configuration;
 using Nuke.Common.CI.GitHubActions;
+using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Tools.PowerShell;
 using Nuke.Common.Utilities;
+using Octokit;
 using Rewrite.Core;
 using Rewrite.MSBuild;
 using Rewrite.RewriteXml.Tree;
@@ -33,11 +35,15 @@ using Serilog;
 using Spectre.Console;
 using ReflectionMagic;
 using static GradleTasks;
+using Commit = LibGit2Sharp.Commit;
+using Credentials = LibGit2Sharp.Credentials;
+using NotFoundException = LibGit2Sharp.NotFoundException;
 
 // ReSharper disable UnusedMember.Local
 [HandleHelpRequests(Priority = 20)]
 partial class Build : NukeBuild
 {
+
     static Build()
     {
         Environment.SetEnvironmentVariable("NUKE_TELEMETRY_OPTOUT", "true");
@@ -87,6 +93,8 @@ partial class Build : NukeBuild
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
+    [Parameter("GitHub personal access token with access to the repo")] readonly string GitHubToken;
+
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
     AbsolutePath TestResultsDirectory => ArtifactsDirectory /  "test-results";
     AbsolutePath TestFixturesDirectory => RootDirectory / "Rewrite" / "tests" / "fixtures";
@@ -94,6 +102,7 @@ partial class Build : NukeBuild
     [Solution(GenerateProjects = true)] Solution Solution;
     [NerdbankGitVersioning] NerdbankGitVersioning Version;
     [GitRepositoryExt] LibGit2Sharp.Repository GitRepository;
+    AbsolutePath DotnetServerFilePath => ArtifactsDirectory / "DotnetServer.zip";
 
     const string TargetFramework = "net9.0";
 
@@ -205,9 +214,8 @@ partial class Build : NukeBuild
             var publishDir = Solution.src.Rewrite_Server.Directory / "bin" / "Release" / TargetFramework / "publish";
             var extension = IsWin ? ".exe" : "";
             Environment.SetEnvironmentVariable("ROSLYN_RECIPE_EXECUTABLE", publishDir);
-            var zipFilePath = ArtifactsDirectory / "DotnetServer.zip";
-            zipFilePath.DeleteFile();
-            publishDir.ZipTo(ArtifactsDirectory / "DotnetServer.zip");
+            DotnetServerFilePath.DeleteFile();
+            publishDir.ZipTo(DotnetServerFilePath);
         });
 
 
@@ -421,7 +429,7 @@ partial class Build : NukeBuild
         });
 
 
-    Target SetTestOutputFlags => _ => _
+    Target SignalIfTestcaseOutputExists => _ => _
         .Unlisted()
         .Description("Sets github actions flags if any java or c# test output files were generated")
         .After(Test, GradleAssembleAndTest)
@@ -436,20 +444,21 @@ partial class Build : NukeBuild
     [Category("CI")]
     Target CIBuild => _ => _
         .Description("Builds, tests and produces test reports for regular builds on CI")
-        .DependsOn(Pack, PublishServer, Test, GradleAssembleAndTest, SetTestOutputFlags);
+        .DependsOn(Pack, PublishServer, Test, GradleAssembleAndTest, GithubRelease, SignalIfTestcaseOutputExists);
 
 
 
     [Category("CI")]
     Target CIRelease => _ => _
         .Description("Creates and publishes release artifacts to maven & nuget")
-        .DependsOn(Pack, PublishServer, GradlePublish, NugetPush, SetTestOutputFlags);
+        .DependsOn(Pack, PublishServer, GradlePublish, NugetPush, SignalIfTestcaseOutputExists);
 
     Target CreateGithubRelease => _ => _
         .Unlisted()
         .DependsOn(PublishServer)
         .Executes(() =>
         {
+
         });
 
     [Category("Test")]
@@ -533,6 +542,72 @@ partial class Build : NukeBuild
 
         });
 
+    Target GithubRelease => _ => _
+        .Description("Creates a GitHub release (or amends existing)")
+        .Requires(() => GitHubToken)
+        .Executes(async () =>
+        {
+            await CreateGitHubRelease($"v{Version.SemVer1}");
+            if (string.Equals(GitRepository.Head.FriendlyName, "main", StringComparison.OrdinalIgnoreCase) && !GitRepository.Info.IsHeadDetached)
+            {
+                await CreateGitHubRelease($"latest");
+            }
+        });
+
+    public async Task CreateGitHubRelease(string releaseName)
+    {
+        var client = new GitHubClient(new ProductHeaderValue("OpenRewrite"))
+        {
+            Credentials = new Octokit.Credentials(GitHubToken, AuthenticationType.Bearer)
+        };
+        var (owner, repoName) = GetGitHubOwnerAndRepo();
+
+        Release release;
+        try
+        {
+            release = await client.Repository.Release.Get(owner, repoName, releaseName);
+        }
+        catch (Octokit.NotFoundException)
+        {
+            var newRelease = new NewRelease(releaseName)
+            {
+                Name = releaseName,
+                Draft = false,
+                Prerelease = false
+            };
+            release = await client.Repository.Release.Create(owner, repoName, newRelease);
+        }
+
+        var existingAsset = release.Assets.FirstOrDefault(x => x.Name == DotnetServerFilePath.Name);
+        if (existingAsset != null)
+        {
+            await client.Repository.Release.DeleteAsset(owner, repoName, existingAsset.Id);
+        }
+
+        var stream = File.OpenRead(DotnetServerFilePath);
+        var releaseAssetUpload = new ReleaseAssetUpload(DotnetServerFilePath.Name, "application/zip", stream, TimeSpan.FromHours(1));
+        var releaseAsset = await client.Repository.Release.UploadAsset(release, releaseAssetUpload);
+
+    }
+    public  (string Owner, string Repo) GetGitHubOwnerAndRepo()
+    {
+        var originRemote = GitRepository.Network.Remotes["origin"];
+        if (originRemote == null)
+            throw new Exception("No origin remote");
+
+        var url = originRemote.Url;
+
+        // Handle SSH and HTTPS GitHub URLs
+        // Examples:
+        //  - git@github.com:owner/repo.git
+        //  - https://github.com/owner/repo.git
+        string pattern = @"github\.com[:/](?<owner>[^/]+?)/(?<repo>[^/]+?)(\.git)?$";
+        var match = System.Text.RegularExpressions.Regex.Match(url, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        if (!match.Success)
+            throw new Exception("Origin not set to github remote url");
+
+        return (match.Groups["owner"].Value, match.Groups["repo"].Value);
+    }
 
     string[] GetTagsForCurrentCheckout()
     {
