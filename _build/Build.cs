@@ -530,14 +530,14 @@ partial class Build : NukeBuild
             if (isPreRelease)
             {
                 Gradle(c => ApplyCommonGradleSettings(c)
-                    .SetTasks(KnownGradleTasks.Candidate, KnownGradleTasks.Snapshot, "publish", KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
+                    .SetTasks(KnownGradleTasks.Candidate, "publish", KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
 
                 );
             }
             else
             {
                 Gradle(c => ApplyCommonGradleSettings(c)
-                    .SetTasks(KnownGradleTasks.Final, KnownGradleTasks.Snapshot, "publish", KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
+                    .SetTasks(KnownGradleTasks.Final, "publish", KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
                     .AddProcessAdditionalArguments("--info")
                 );
             }
