@@ -307,6 +307,8 @@ partial class Build : NukeBuild
                 ("Microsoft.CodeAnalysis.NetAnalyzers", "9.0.0"), //https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/categories
                 ("Roslynator.Analyzers", "4.13.1"), //https://github.com/dotnet/roslynator
                 ("Meziantou.Analyzer", "2.0.201"), //https://github.com/meziantou/Meziantou.Analyzer
+                ("StyleCop.Analyzers", "1.1.118"), //https://github.com/DotNetAnalyzers/StyleCopAnalyzers/tree/master
+                ("WpfAnalyzers", "4.1.1"),
             };
 
             var installablePackages = await Task.WhenAll(packages.Select(x => recipeManager.InstallRecipePackage(x.Package, x.Version, packageSources: packageSources)));
@@ -545,6 +547,7 @@ partial class Build : NukeBuild
     Target GithubRelease => _ => _
         .Description("Creates a GitHub release (or amends existing)")
         .Requires(() => GitHubToken)
+        .After(Pack, NugetPush, GradlePublish, Test, GradleAssembleAndTest, GradleTest)
         .Executes(async () =>
         {
             await CreateGitHubRelease($"v{Version.SemVer1}");

@@ -161,7 +161,7 @@ public class RecipeExecutionContext : AssemblyLoadContext
         // var currentDirAssemblies = Directory.EnumerateFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "*.dll");
         // var allAssemblies = runtimeAssemblies.Union(currentDirAssemblies);
         // var resolver = new PathAssemblyResolver(runtimeAssemblies);
-        var resolver = new RecipieAssemblyResolver();
+        var resolver = new RecipeAssemblyResolver(_assemblies.Values);
         using var mlc = new MetadataLoadContext(resolver);
         var mlcRecipeAttributeAssembly = mlc.LoadFromAssemblyPath(typeof(RecipesAttribute).Assembly.Location);
         var mlcRecipeAttributeType = mlcRecipeAttributeAssembly.GetType(typeof(RecipesAttribute).FullName!)!;
@@ -200,10 +200,11 @@ public class RecipeExecutionContext : AssemblyLoadContext
         
 
         var analyzerRecipes = metadataAssemblies
-            .SelectMany(x => x.ExportedTypes)
+            .SelectMany(x => x.DefinedTypes)
             .Where(type => type.GetCustomAttributesData().Any(attr => attr.AttributeType == mlcDiagnosticAnalyzerAttributeType))
             .Select(x =>
             {
+                
                 var assembly = LoadFromAssemblyPath(x.Assembly.Location);
                 _recipeAssemblies.Add(assembly);
                 return assembly.GetType(x.FullName!)!;
@@ -226,7 +227,7 @@ public class RecipeExecutionContext : AssemblyLoadContext
         
         
         var fixersById = metadataAssemblies
-            .SelectMany(x => x.ExportedTypes)
+            .SelectMany(x => x.DefinedTypes)
             .Where(type => type.GetCustomAttributesData().Any(attr => attr.AttributeType == mlcCodeFixupAttributeType))
             .Select(x =>
             {

@@ -1,18 +1,20 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
+using NMica.Utils.IO;
 
 namespace Rewrite.MSBuild;
 
-public class RecipieAssemblyResolver : MetadataAssemblyResolver
+public class RecipeAssemblyResolver : MetadataAssemblyResolver
 {
     private PathAssemblyResolver _resolver;
-    public RecipieAssemblyResolver()
+    public RecipeAssemblyResolver(IEnumerable<AbsolutePath> additionalAssemblies)
     {
         
         var runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
         var currentDirAssemblies = Directory.EnumerateFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "*.dll");
-        var allAssemblies = runtimeAssemblies.Union(currentDirAssemblies);
+        var allAssemblies = runtimeAssemblies.Union(currentDirAssemblies).Union(additionalAssemblies.Select(x => (string)x));
+        
         _resolver = new PathAssemblyResolver(allAssemblies);
     }
 

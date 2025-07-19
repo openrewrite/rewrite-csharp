@@ -62,7 +62,18 @@ public class RecipeManager
             packageSources: packageSources, 
             cancellationToken: cancellationToken);
     }
-    
+    public async Task<RecipePackageInfo> InstallRecipePackage(
+        string packageId,
+        bool includePrerelease = false,
+        List<PackageSource>? packageSources = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await InstallRecipePackage(
+            new LibraryRange(packageId), 
+            includePrerelease,
+            packageSources, 
+            cancellationToken);
+    }
     public async Task<RecipePackageInfo> InstallRecipePackage(
         string packageId,
         string packageVersion,
@@ -318,7 +329,7 @@ public class RecipeManager
                 if(targetFolder is null)
                     return [];
                 var targetFilesRegex = new Regex($"^{targetFolder}.+");
-                var files =  lib.Files.Where(x => targetFilesRegex.IsMatch(x));
+                var files =  lib.Files.Where(x => targetFilesRegex.IsMatch(x) & x.EndsWith(".dll"));
                 
                 return files.Select(file => (Folder: lib.Path, File: file, PackageIdentity: new PackageIdentity(lib.Name, lib.Version)));
             })
