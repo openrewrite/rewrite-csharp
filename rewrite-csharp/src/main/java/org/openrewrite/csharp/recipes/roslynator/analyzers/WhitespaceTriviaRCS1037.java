@@ -13,6 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/*
+ * -------------------THIS FILE IS AUTO GENERATED--------------------------
+ * Changes to this file may cause incorrect behavior and will be lost if
+ * the code is regenerated.
+*/
+
 package org.openrewrite.csharp.recipes.roslynator.analyzers;
 
 import org.openrewrite.NlsRewrite;

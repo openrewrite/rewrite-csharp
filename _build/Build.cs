@@ -302,18 +302,18 @@ partial class Build : NukeBuild
             // var recipeManager = new RecipeManager();
             // CA1802: Use Literals Where Appropriate
             // CA1861: Avoid constant arrays as arguments
-            var packages =  new(string Package, string Version)[]
+            var packages =  new(string Package, bool PreRelease)[]
             {
-                ("Microsoft.CodeAnalysis.NetAnalyzers", "9.0.0"), //https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/categories
-                ("Roslynator.Analyzers", "4.13.1"), //https://github.com/dotnet/roslynator
-                ("Meziantou.Analyzer", "2.0.201"), //https://github.com/meziantou/Meziantou.Analyzer
-                ("StyleCop.Analyzers", "1.1.118"), //https://github.com/DotNetAnalyzers/StyleCopAnalyzers/tree/master
-                ("WpfAnalyzers", "4.1.1"),
+                ("Microsoft.CodeAnalysis.NetAnalyzers", false), //https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/categories
+                ("Roslynator.Analyzers", false), //https://github.com/dotnet/roslynator
+                ("Meziantou.Analyzer", false), //https://github.com/meziantou/Meziantou.Analyzer
+                ("StyleCop.Analyzers", false), //https://github.com/DotNetAnalyzers/StyleCopAnalyzers/tree/master
+                ("WpfAnalyzers", false),
             };
 
-            var installablePackages = await Task.WhenAll(packages.Select(x => recipeManager.InstallRecipePackage(x.Package, x.Version, packageSources: packageSources)));
+            var installablePackages = await Task.WhenAll(packages.Select(x => recipeManager.InstallRecipePackage(x.Package, packageSources: packageSources)));
             var recipesDir = RootDirectory / "rewrite-csharp" / "src" / "main" / "java" / "org" / "openrewrite" / "csharp" / "recipes";
-
+            recipesDir.CreateOrCleanDirectory();
             var models = installablePackages.SelectMany(packageInfo => packageInfo.Recipes.Select(recipe =>
             {
                 var className = recipe.Id.StartsWith(recipe.TypeName) ? recipe.Id : recipe.TypeName.FullName.Split('.').Last();
@@ -335,6 +335,12 @@ partial class Build : NukeBuild
             var license = File.ReadAllText(Solution._solution._build.Directory / "License.txt").Trim();
             var result = models.Select(model => (model.FileName, Content: $$""""
                  {{license}}
+                 /*
+                  * -------------------THIS FILE IS AUTO GENERATED--------------------------
+                  * Changes to this file may cause incorrect behavior and will be lost if
+                  * the code is regenerated.
+                 */
+
                  package org.openrewrite.csharp.recipes.{{model.Namespace}};
 
                  import org.openrewrite.NlsRewrite;

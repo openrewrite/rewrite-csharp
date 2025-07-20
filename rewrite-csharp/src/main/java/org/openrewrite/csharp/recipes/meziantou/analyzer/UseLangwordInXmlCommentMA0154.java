@@ -13,6 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/*
+ * -------------------THIS FILE IS AUTO GENERATED--------------------------
+ * Changes to this file may cause incorrect behavior and will be lost if
+ * the code is regenerated.
+*/
+
 package org.openrewrite.csharp.recipes.meziantou.analyzer;
 
 import org.openrewrite.NlsRewrite;
@@ -32,7 +38,7 @@ public class UseLangwordInXmlCommentMA0154 extends RoslynRecipe {
 
     @Override
     public String getNugetPackageVersion() {
-        return "2.0.201";
+        return "2.0.205";
     }
 
     @Override
