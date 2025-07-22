@@ -496,27 +496,6 @@ partial class Build : NukeBuild
             }
         });
 
-    // Target GradleAssemble => _ => _
-    //     .Executes(() =>
-    //     {
-    //         GradleTasks.Gradle(c => c
-    //             .SetJvmOptions("-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError")
-    //             .SetTasks(KnownGradleTasks.Assemble)
-    //             .SetWarningMode(WarningMode.None)
-    //             .SetProcessAdditionalArguments("--console=plain","--info","--stacktrace","--no-daemon")
-    //         );
-    //     });
-    //
-    // Target GradleClean => _ => _
-    //     .Executes(() =>
-    //     {
-    //         GradleTasks.Gradle(c => c
-    //             .SetTasks(KnownGradleTasks.Clean, KnownGradleTasks.Assemble)
-    //             .SetWarningMode(WarningMode.None)
-    //             .SetProcessAdditionalArguments("--console=plain","--info","--stacktrace","--no-daemon")
-    //         );
-    //     });
-
     Target GradlePublish => _ => _
         .Description("Invokes Gradle to create a Java release")
         .After(Pack, NugetPush)
