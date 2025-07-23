@@ -100,14 +100,14 @@ jobs:
             artifacts/test-results/*.log
             rewrite-csharp-remote-server/build/reports/tests/**
 
-#      - name: publish-java-snapshots
-#        if: github.event_name != 'pull_request'
-#        run: ./gradlew ${{ env.GRADLE_SWITCHES }} snapshot publish -PforceSigning -x test
-#        env:
-#          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.SONATYPE_USERNAME }}
-#          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.SONATYPE_TOKEN }}
-#          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.OSSRH_SIGNING_KEY }}
-#          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.OSSRH_SIGNING_PASSWORD }}
+      - name: publish-java-snapshots
+        if: github.event_name != 'pull_request'
+        run: ./gradlew ${{ env.GRADLE_SWITCHES }} snapshot publish -PforceSigning -x test
+        env:
+          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.SONATYPE_USERNAME }}
+          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.SONATYPE_TOKEN }}
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.OSSRH_SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.OSSRH_SIGNING_PASSWORD }}
 
 
 
