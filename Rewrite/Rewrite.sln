@@ -54,11 +54,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Diagnostics", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Build.Analyzers", "..\_build.Analyzers\Build.Analyzers.csproj", "{58BBCF75-2B23-45E0-B548-010800159123}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.RoslynRecipe", "Rewrite.RoslynRecipe\Rewrite.RoslynRecipe.csproj", "{B4F6209F-A442-4F1C-ABA9-8008B9F5A3EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.RoslynRecipe", "src\Rewrite.RoslynRecipe\Rewrite.RoslynRecipe.csproj", "{B4F6209F-A442-4F1C-ABA9-8008B9F5A3EE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Refasmer", "src\Rewrite.Refasmer\Rewrite.Refasmer.csproj", "{A9DA7715-ABCF-4973-B0F6-5C691FB2F8C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Rpc", "Rewrite.Rpc\Rewrite.Rpc.csproj", "{DA626A07-E03D-4F24-A240-9D1D00F72256}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Rpc", "src\Rewrite.Rpc\Rewrite.Rpc.csproj", "{DA626A07-E03D-4F24-A240-9D1D00F72256}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

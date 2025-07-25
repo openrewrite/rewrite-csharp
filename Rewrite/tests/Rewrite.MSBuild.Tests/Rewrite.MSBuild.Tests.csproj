@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Rewrite.Rpc\Rewrite.Rpc.csproj" />
+      <ProjectReference Include="..\..\src\Rewrite.Rpc\Rewrite.Rpc.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.MSBuild\Rewrite.MSBuild.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.Test\Rewrite.Test.csproj" />
       <ProjectReference Include="..\Rewrite.Tests\Rewrite.Tests.csproj" />

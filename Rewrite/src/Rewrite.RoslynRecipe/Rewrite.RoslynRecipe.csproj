@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\src\Rewrite.MSBuild\Rewrite.MSBuild.csproj" />
+      <ProjectReference Include="..\Rewrite.MSBuild\Rewrite.MSBuild.csproj" />
     </ItemGroup>
 
 </Project>
