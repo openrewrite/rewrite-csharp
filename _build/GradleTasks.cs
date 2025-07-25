@@ -33,6 +33,12 @@ partial class GradleSettings
 
 partial class KnownGradleTasks
 {
+    /// <summary>
+    /// Builds the artifacts (JAR, sources, Javadoc, etc.)
+    /// Resolves publication metadata (e.g., version, dependencies)
+    /// Pushes them to the target repository (usually defined in publishing.repositories)
+    /// </summary>
+    public static KnownGradleTasks Publish = (KnownGradleTasks)"publish";
     public override string ToString()
     {
         var str = base.ToString();

@@ -502,8 +502,8 @@ partial class Build : NukeBuild
         .Executes(() =>
         {
             var isPreRelease = GitHubActions?.RefName?.Contains("-rc.") ?? true;
-
-            GradleSettings ApplyCommonGradleSettings(GradleSettings options) => options
+            var isPullRequest = GitHubActions?.EventName == "pull_request";
+            var gradleSettings = new GradleSettings()
                 .SetJvmOptions("-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError")
                 .SetWarningMode(WarningMode.None)
                 .SetProjectProperty(
@@ -511,22 +511,32 @@ partial class Build : NukeBuild
                     "release.disableGitChecks=true",
                     "release.useLastTag=true"
                 )
-                .SetProcessAdditionalArguments("--console=plain", "--info", "--stacktrace", "--no-daemon");
+                .SetProcessAdditionalArguments("--console=plain", "--info", "--stacktrace", "--no-daemon")
+                .AddTasks(
+                    KnownGradleTasks.Publish,
+                    KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository);
+
             if (isPreRelease)
             {
-                Gradle(c => ApplyCommonGradleSettings(c)
-                    .SetTasks(KnownGradleTasks.Candidate, "publish", KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
+                gradleSettings = gradleSettings
+                    .AddTasks(KnownGradleTasks.Candidate);
 
-                );
             }
             else
             {
-                Gradle(c => ApplyCommonGradleSettings(c)
-                    .SetTasks(KnownGradleTasks.Final, "publish", KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
-                    .AddProcessAdditionalArguments("--info")
-                );
+                gradleSettings = gradleSettings
+                    .AddTasks(KnownGradleTasks.Final)
+                    .SetVerbosity(GradleVerbosity.Info);
             }
 
+            if (!isPullRequest)
+            {
+                gradleSettings = gradleSettings
+                    .AddTasks(KnownGradleTasks.Snapshot)
+                    .EnableForceSigning();
+            }
+
+            Gradle(gradleSettings);
         });
 
     Target GithubRelease => _ => _

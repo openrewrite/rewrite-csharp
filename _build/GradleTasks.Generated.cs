@@ -24,7 +24,7 @@ public partial class GradleTasks : ToolTasks
     /// <summary><p>Gradle build tool for Java</p><p>For more details, visit the <a href="https://gradle.org/">official website</a>.</p></summary>
     public static IReadOnlyCollection<Output> Gradle(ArgumentStringHandler arguments, string workingDirectory = null, IReadOnlyDictionary<string, string> environmentVariables = null, int? timeout = null, bool? logOutput = null, bool? logInvocation = null, Action<OutputType, string> logger = null, Func<IProcess, object> exitHandler = null) => new GradleTasks().Run(arguments, workingDirectory, environmentVariables, timeout, logOutput, logInvocation, logger, exitHandler);
     /// <summary><p>Runs task(s)</p><p>For more details, visit the <a href="https://gradle.org/">official website</a>.</p></summary>
-    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>&lt;tasks&gt;</c> via <see cref="GradleSettings.Tasks"/></li><li><c>-Dorg.gradle.jvmargs</c> via <see cref="GradleSettings.JvmOptions"/></li><li><c>-Dorg.gradle.warning.mode</c> via <see cref="GradleSettings.WarningMode"/></li><li><c>-P</c> via <see cref="GradleSettings.ProjectProperty"/></li><li><c>-x</c> via <see cref="GradleSettings.ExcludeTasks"/></li></ul></remarks>
+    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>&lt;tasks&gt;</c> via <see cref="GradleSettings.Tasks"/></li><li><c>--</c> via <see cref="GradleSettings.Verbosity"/></li><li><c>-Dorg.gradle.jvmargs</c> via <see cref="GradleSettings.JvmOptions"/></li><li><c>-Dorg.gradle.warning.mode</c> via <see cref="GradleSettings.WarningMode"/></li><li><c>-P</c> via <see cref="GradleSettings.ProjectProperty"/></li><li><c>-PforceSigning</c> via <see cref="GradleSettings.ForceSigning"/></li><li><c>-x</c> via <see cref="GradleSettings.ExcludeTasks"/></li></ul></remarks>
     public static IReadOnlyCollection<Output> Gradle(GradleSettings options = null) => new GradleTasks().Run<GradleSettings>(options);
     /// <inheritdoc cref="GradleTasks.Gradle(.GradleSettings)"/>
     public static IReadOnlyCollection<Output> Gradle(Configure<GradleSettings> configurator) => new GradleTasks().Run<GradleSettings>(configurator.Invoke(new GradleSettings()));
@@ -48,6 +48,10 @@ public partial class GradleSettings : ToolOptions
     [Argument(Format = "-Dorg.gradle.jvmargs={value}")] public string JvmOptions => Get<string>(() => JvmOptions);
     /// <summary></summary>
     [Argument(Format = "-P{value}")] public IReadOnlyList<string> ProjectProperty => Get<List<string>>(() => ProjectProperty);
+    /// <summary></summary>
+    [Argument(Format = "-PforceSigning")] public bool? ForceSigning => Get<bool?>(() => ForceSigning);
+    /// <summary></summary>
+    [Argument(Format = "--{value}")] public GradleVerbosity Verbosity => Get<GradleVerbosity>(() => Verbosity);
 }
 #endregion
 #region GradleSettingsExtensions
@@ -141,6 +145,31 @@ public static partial class GradleSettingsExtensions
     [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.ProjectProperty))]
     public static T ClearProjectProperty<T>(this T o) where T : GradleSettings => o.Modify(b => b.ClearCollection(() => o.ProjectProperty));
     #endregion
+    #region ForceSigning
+    /// <inheritdoc cref="GradleSettings.ForceSigning"/>
+    [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.ForceSigning))]
+    public static T SetForceSigning<T>(this T o, bool? v) where T : GradleSettings => o.Modify(b => b.Set(() => o.ForceSigning, v));
+    /// <inheritdoc cref="GradleSettings.ForceSigning"/>
+    [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.ForceSigning))]
+    public static T ResetForceSigning<T>(this T o) where T : GradleSettings => o.Modify(b => b.Remove(() => o.ForceSigning));
+    /// <inheritdoc cref="GradleSettings.ForceSigning"/>
+    [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.ForceSigning))]
+    public static T EnableForceSigning<T>(this T o) where T : GradleSettings => o.Modify(b => b.Set(() => o.ForceSigning, true));
+    /// <inheritdoc cref="GradleSettings.ForceSigning"/>
+    [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.ForceSigning))]
+    public static T DisableForceSigning<T>(this T o) where T : GradleSettings => o.Modify(b => b.Set(() => o.ForceSigning, false));
+    /// <inheritdoc cref="GradleSettings.ForceSigning"/>
+    [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.ForceSigning))]
+    public static T ToggleForceSigning<T>(this T o) where T : GradleSettings => o.Modify(b => b.Set(() => o.ForceSigning, !o.ForceSigning));
+    #endregion
+    #region Verbosity
+    /// <inheritdoc cref="GradleSettings.Verbosity"/>
+    [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.Verbosity))]
+    public static T SetVerbosity<T>(this T o, GradleVerbosity v) where T : GradleSettings => o.Modify(b => b.Set(() => o.Verbosity, v));
+    /// <inheritdoc cref="GradleSettings.Verbosity"/>
+    [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.Verbosity))]
+    public static T ResetVerbosity<T>(this T o) where T : GradleSettings => o.Modify(b => b.Remove(() => o.Verbosity));
+    #endregion
 }
 #endregion
 #region WarningMode
@@ -158,6 +187,23 @@ public partial class WarningMode : Enumeration
     public static implicit operator WarningMode(string value)
     {
         return new WarningMode { Value = value };
+    }
+}
+#endregion
+#region GradleVerbosity
+/// <summary>Used within <see cref="GradleTasks"/>.</summary>
+[PublicAPI]
+[Serializable]
+[ExcludeFromCodeCoverage]
+[TypeConverter(typeof(TypeConverter<GradleVerbosity>))]
+public partial class GradleVerbosity : Enumeration
+{
+    public static GradleVerbosity Quite = (GradleVerbosity) "Quite";
+    public static GradleVerbosity Info = (GradleVerbosity) "Info";
+    public static GradleVerbosity Debug = (GradleVerbosity) "Debug";
+    public static implicit operator GradleVerbosity(string value)
+    {
+        return new GradleVerbosity { Value = value };
     }
 }
 #endregion

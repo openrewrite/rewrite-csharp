@@ -35,6 +35,17 @@
             "name": "ProjectProperty",
             "type": "List<string>",
             "format": "-P{value}"
+          },
+          {
+            "name": "ForceSigning",
+            "type": "bool",
+            "format": "-PforceSigning"
+          },
+          {
+            "name": "Verbosity",
+            "type": "GradleVerbosity",
+            "format": "--{value}",
+            "customValue": true
           }
         ]
       }
@@ -48,6 +59,14 @@
         "Summary",
         "None",
         "Fail"
+      ]
+    },
+    {
+      "name": "GradleVerbosity",
+      "values": [
+        "Quite",
+        "Info",
+        "Debug"
       ]
     }
   ]

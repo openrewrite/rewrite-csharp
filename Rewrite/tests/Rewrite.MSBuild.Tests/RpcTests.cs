@@ -34,9 +34,9 @@ public class RpcTests
         var result = serializer.Serialize(null, before);
         Render(before, result);
 
-        serializer = new DeltaSerializer();
+        var deserializer = new DeltaSerializer();
 
-        var obj = serializer.Deserialize(newObj, result);
+        var obj = deserializer.Deserialize(newObj, result);
         AnsiConsole.Write(GetSourcePanel("Deserialized", obj));
         // var clazz = before.Descendents().OfType<Cs.ClassDeclaration>().First();
         // clazz = clazz.WithName(clazz.Name.WithSimpleName("TheirClass"));
