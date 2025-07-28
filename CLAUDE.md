@@ -14,90 +14,40 @@ The project consists of two main parts:
    - `rewrite-csharp` - Core C# LST (Lossless Semantic Tree) classes
    - `rewrite-csharp-remote` - Serializers/deserializers for cross-process communication
    - `rewrite-csharp-remote-server` - Embedded C# TCP server (zipped DLLs)
+   - `rewrite-test-engine-remote` - Test engine for C# LST tests
 
-2. **C# Components** (.NET/MSBuild-based):
-   - `Rewrite.Core` - Core framework port to C#
-   - `Rewrite.CSharp` - C# language-specific implementations
-   - `Rewrite.Remote` - Remoting infrastructure
+2. **C# Components** (.NET 9.0/MSBuild-based):
+   - `Rewrite.Core` - Core framework port to C# (AST/visitor patterns)
+   - `Rewrite.CSharp` - C# language-specific implementations (parser, printer, visitor)
+   - `Rewrite.Remote` - Remoting infrastructure for Java-C# communication
    - `Rewrite.Server` - Language server implementation
-   - `Rewrite.Analyzers` - Source generators and analyzers
+   - `Rewrite.Analyzers` - Source generators to reduce boilerplate code
    - `Rewrite.MSBuild` - MSBuild integration
+   - `Rewrite.Rpc` - components for cross language communication and serialization of AST (between java and c#)
+   - `Rewrite.Recipes` - Recipe implementations
+   - Supporting modules for JSON, YAML, XML, Properties file parsing
 
-The Java side communicates with the C# language server via TCP for recipe execution during CLI operations.
+The Java side communicates with the C# language server via JSON RPC over STDIO for recipe execution during CLI operations.
 
-## Build Commands
 
-The project uses NUKE build system for C# and Gradle for Java components.
 
-### Basic Build Commands
-```bash
-# Clean build artifacts
-./build.ps1 Clean
+## Key Architectural Patterns
 
-# Restore NuGet packages
-./build.ps1 Restore
+### AST/Visitor Pattern
+The core framework uses Abstract Syntax Tree (AST) representation with visitor pattern for tree traversal and transformation. The LST (Lossless Semantic Tree) preserves all formatting and whitespace.
 
-# Compile the project
-./build.ps1 Compile
+### Source Generators
+Extensive use of C# source generators in `Rewrite.Analyzers` to generate boilerplate code for builders, visitors, and toString methods. When modifying analyzers, rebuild is required.
 
-# Build and package
-./build.ps1 Pack
-```
+### Parser Architecture
+Uses Roslyn (Microsoft.CodeAnalysis) for C# parsing, converting Roslyn syntax trees to OpenRewrite LST format while preserving semantic information via Roslyn's semantic model.
 
-### Test Commands
-```bash
-# Run all .NET tests
-./build.ps1 Test
-
-# Run specific test project
-dotnet test Rewrite/tests/Rewrite.CSharp.Tests
-
-# Run a single test
-dotnet test --filter "FullyQualifiedName~TestClassName.TestMethodName"
-
-# Download test fixtures (required for integration tests)
-./build.ps1 DownloadTestFixtures
-```
-
-### Java/Gradle Commands
-```bash
-# Run Java tests
-./gradlew :rewrite-csharp:test
-
-# Build Java components
-./gradlew :rewrite-csharp:assemble
-
-# Run both build and test
-./build.ps1 GradleAssembleAndTest
-```
-
-### Publishing Commands
-```bash
-# Publish the language server
-./build.ps1 PublishServer
-
-# Create NuGet packages
-./build.ps1 Pack
-
-# Push to NuGet (requires API key)
-./build.ps1 NugetPush --nuget-api-key YOUR_KEY
-```
-
-## Development Workflow
-
-1. **Before Running Tests**: Download test fixtures using `./build.ps1 DownloadTestFixtures`
-2. **Clean Build**: Use `./build.ps1 Clean` to remove all artifacts and bin/obj directories
-3. **Stop Server**: Use `./build.ps1 StopServer` to kill any running Rewrite.Server instances
-
-## Test Infrastructure
-
-- Test results are output to `artifacts/test-results/` in TRX format
-- The project includes integration tests using real codebases (e.g., Bitwarden)
-- Test fixtures are defined in `Rewrite/tests/fixtures/fixtures.txt`
+### Cross-Runtime Communication
+JSONRPC remoting between Java CLI and C# language server with custom serialization protocol for efficient data transfer. The server runs as a separate process during CLI operations
 
 ## Important Notes
 
-- The project supports both .NET 8.0.x and 9.0.x
 - When making changes, ensure compatibility with both Java and C# components
 - The remoting mechanism is critical for cross-runtime communication
-- Source generators are used extensively to reduce boilerplate code
+- Source generators require rebuilding analyzer projects when changed
+- Integration with Java side requires both Gradle and .NET builds
