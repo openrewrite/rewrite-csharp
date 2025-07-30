@@ -9,13 +9,7 @@ using Spectre.Console.Cli;
 using Spectre.Console.Cli.Help;
 using Parser = CommandLine.Parser;
 
-// var parseResult = new Parser().ParseArguments<Options>(args);
-// parseResult.WithNotParsed(x =>
-// {
-//     var helpText = HelpText.AutoBuild(parseResult, h => HelpText.DefaultParsingErrorsHandler(parseResult, h), e => e);
-//     Console.Error.WriteLine(helpText);
-//     Environment.Exit(1);
-// });
+
 var builder = Host.CreateApplicationBuilder(args);
 // builder.Logging.ClearProviders();
 var commandApp = new CommandApp();

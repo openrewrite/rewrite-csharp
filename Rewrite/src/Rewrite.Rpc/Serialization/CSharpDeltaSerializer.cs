@@ -26,6 +26,23 @@ public class CSharpDeltaSerializer : CSharpVisitor<SerializationContext>
         ctx.SerializeProperty(x => x.After, (x, diffContext) => Visit(x, diffContext));
         ctx.SerializeProperty(x => x.Markers, (x, diffContext) => Visit(x, diffContext));
     }
+    public void Visit<T>(JLeftPadded<T> node, SerializationContext context)
+    {
+        var ctx = context.As(node);
+        ctx.SerializeProperty(x => x.Before, (x, diffContext) => Visit(x, diffContext));
+        ctx.SerializeProperty(x => x.Element, (x, diffContext) => Visit((Tree)x!, diffContext), callingArgumentExpression: $"RP[{node.Element!.GetType().Name}]");
+        
+        ctx.SerializeProperty(x => x.Markers, (x, diffContext) => Visit(x, diffContext));
+    }
+    
+    public void Visit<T>(JContainer<T> node, SerializationContext context) where T : Tree
+    {
+        var ctx = context.As(node);
+        ctx.SerializeProperty(x => x.Before, (x, diffContext) => Visit(x, diffContext));
+        ctx.SerializeList(x => x.Elements, x => x.Element.Id, (x, diffContext) => Visit(x, diffContext));
+        
+        ctx.SerializeProperty(x => x.Markers, (x, diffContext) => Visit(x, diffContext));
+    }
 
     public override J? PreVisit(Tree? node, SerializationContext p, [CallerMemberName] string callingMethodName = "", [CallerArgumentExpression(nameof(node))] string callingArgumentExpression = "")
     {
@@ -41,6 +58,10 @@ public class CSharpDeltaSerializer : CSharpVisitor<SerializationContext>
     public override J? VisitCompilationUnit(Cs.CompilationUnit node, SerializationContext p)
     {
         var ctx = p.As(node);
+        ctx.SerializeProperty(x => x.CharsetBomMarked);
+        ctx.SerializeProperty(x => x.CharsetName);
+        ctx.SerializeProperty(x => x.Checksum);
+        ctx.SerializeProperty(x => x.SourcePath);
         ctx.SerializeList(x => x.Padding.Externs, (x, context) => Visit(x, context));
         ctx.SerializeList(x => x.Padding.Usings, x => x.Element.Id, (x, context) => Visit(x, context));
         ctx.SerializeList(x => x.AttributeLists, (x, context) => Visit(x, context));
