@@ -15,7 +15,6 @@
  */
 package org.openrewrite.csharp.tree;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
@@ -28,7 +27,6 @@ import org.openrewrite.internal.ListUtils;
 import org.openrewrite.internal.NamingService;
 import org.openrewrite.java.JavaPrinter;
 import org.openrewrite.java.JavaTypeVisitor;
-import org.openrewrite.java.JavaVisitor;
 import org.openrewrite.java.internal.TypesInUse;
 import org.openrewrite.java.tree.*;
 import org.openrewrite.marker.Marker;
@@ -46,7 +44,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 
@@ -457,7 +454,7 @@ public interface Cs extends J {
             return getPadding().withExplicitInterfaceSpecifier(JRightPadded.withElement(this.explicitInterfaceSpecifier, explicitInterfaceSpecifier));
         }
 
-        public Operator getOperatorToken() {
+        public @Nullable Operator getOperatorToken() {
             return operatorToken == null ? null : operatorToken.getElement();
         }
 
@@ -3294,8 +3291,7 @@ public interface Cs extends J {
         @Nullable
         JContainer<TypeParameterConstraintClause> typeParameterConstraintClauses;
 
-        @Nullable
-        public List<TypeParameterConstraintClause> getTypeParameterConstraintClauses() {
+        public @Nullable List<TypeParameterConstraintClause> getTypeParameterConstraintClauses() {
             return typeParameterConstraintClauses == null ? null : typeParameterConstraintClauses.getElements();
         }
 
@@ -3325,10 +3321,9 @@ public interface Cs extends J {
             return v.visitClassDeclaration(this, p);
         }
 
-
         @Override
         @Transient
-        public CoordinateBuilder.ClassDeclaration getCoordinates() {
+        public CoordinateBuilder.@Nullable ClassDeclaration getCoordinates() {
             //todo: Setup coordinate builder - atm it's private
 //            return new CoordinateBuilder.ClassDeclaration(this);
             return null;
@@ -3502,7 +3497,7 @@ public interface Cs extends J {
         }
 
         @Override
-        public JavaType getType() {
+        public @Nullable JavaType getType() {
             return methodType == null ? null : methodType.getReturnType();
         }
 
@@ -3550,8 +3545,7 @@ public interface Cs extends J {
                 return t.parameters == parameters ? t : new Cs.MethodDeclaration(t.id, t.prefix, t.markers, t.attributes, t.modifiers, t.typeParameters, t.returnTypeExpression, t.explicitInterfaceSpecifier, t.name, parameters, t.body, t.methodType, t.typeParameterConstraintClauses);
             }
 
-            @Nullable
-            public JRightPadded<TypeTree> getExplicitInterfaceSpecifier() {
+            public @Nullable JRightPadded<TypeTree> getExplicitInterfaceSpecifier() {
                 return t.explicitInterfaceSpecifier;
             }
 
@@ -6759,7 +6753,7 @@ public interface Cs extends J {
         }
 
         @Override
-        public <T extends J> T withType(@Nullable JavaType type) {
+        public <T extends J> @Nullable T withType(@Nullable JavaType type) {
             return null;
         }
 
@@ -6857,7 +6851,7 @@ public interface Cs extends J {
         }
 
         @Override
-        public JavaType getType() {
+        public @Nullable JavaType getType() {
             return arms.getElements().isEmpty() ? null : arms.getElements().get(0).getExpression().getType();
         }
 
@@ -7205,7 +7199,7 @@ public interface Cs extends J {
         Space colonToken;
 
         @Override
-        public JavaType getType() {
+        public @Nullable JavaType getType() {
             return null;
         }
 
@@ -7326,7 +7320,7 @@ public interface Cs extends J {
         }
 
         @Override
-        public <T extends J> T withType(@Nullable JavaType type) {
+        public <T extends J> @Nullable T withType(@Nullable JavaType type) {
             return null;
         }
 
@@ -7974,7 +7968,7 @@ public interface Cs extends J {
         }
 
         @Override
-        public JavaType getType() {
+        public @Nullable JavaType getType() {
             return null;
         }
 
