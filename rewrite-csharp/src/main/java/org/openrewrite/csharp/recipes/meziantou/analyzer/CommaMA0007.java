@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.meziantou.analyzer;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class CommaMA0007 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class CommaMA0007 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Add a comma after the last value";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class UseNameofFixWPF0150 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class UseNameofFixWPF0150 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Use nameof() instead of literal";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "Use nameof() as it is less fragile than string literal.";
     }
 }

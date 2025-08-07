@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class MarkTypesWithSerializableCA2237 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class MarkTypesWithSerializableCA2237 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Mark ISerializable types with serializable";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "To be recognized by the common language runtime as serializable, types must be marked by using the SerializableAttribute attribute even when the type uses a custom serialization routine through implementation of the ISerializable interface.";
     }
 }

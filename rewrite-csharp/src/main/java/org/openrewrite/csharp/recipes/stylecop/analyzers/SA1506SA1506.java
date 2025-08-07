@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class SA1506SA1506 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class SA1506SA1506 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Element documentation headers should not be followed by blank line";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "An element documentation header above a C# element is followed by a blank line.";
     }
 }

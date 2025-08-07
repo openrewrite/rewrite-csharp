@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.roslynator.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class BinaryExpressionRCS1166 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class BinaryExpressionRCS1166 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Value type object is never equal to null";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

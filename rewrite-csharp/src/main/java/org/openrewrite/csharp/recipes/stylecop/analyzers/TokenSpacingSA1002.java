@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class TokenSpacingSA1002 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class TokenSpacingSA1002 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Semicolons should be spaced correctly";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "The spacing around a semicolon is incorrect, within a C# code file.";
     }
 }

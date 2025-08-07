@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class SA1509SA1509 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class SA1509SA1509 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Opening braces should not be preceded by blank line";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "An opening brace within a C# element, statement, or expression is preceded by a blank line.";
     }
 }

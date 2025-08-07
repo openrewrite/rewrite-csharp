@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class SA1131SA1131 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class SA1131SA1131 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Use readable conditions";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "When a comparison is made between a variable and a literal, the variable should be placed on the left-hand-side to maximize readability.";
     }
 }

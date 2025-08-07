@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class DoNotUseWhenAllOrWaitAllWithSingleArgumentCA1843 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class DoNotUseWhenAllOrWaitAllWithSingleArgumentCA1843 extends RoslynReci
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Do not use 'WaitAll' with a single task";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "Using 'WaitAll' with a single task may result in performance loss, await or return the task instead.";
     }
 }

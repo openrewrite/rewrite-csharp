@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class UsingSA1211 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class UsingSA1211 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Using alias directives should be ordered alphabetically by alias name";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "The using-alias directives within a C# code file are not sorted alphabetically by alias name.";
     }
 }

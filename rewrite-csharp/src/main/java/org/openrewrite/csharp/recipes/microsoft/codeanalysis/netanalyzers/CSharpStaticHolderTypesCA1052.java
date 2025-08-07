@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class CSharpStaticHolderTypesCA1052 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class CSharpStaticHolderTypesCA1052 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Static holder types should be Static or NotInheritable";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class TokenSpacingSA1017 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class TokenSpacingSA1017 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Closing attribute brackets should be spaced correctly";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "A closing attribute bracket within a C# element is not spaced correctly.";
     }
 }

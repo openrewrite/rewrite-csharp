@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.roslynator.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class UsePatternMatchingInsteadOfAsAndNullCheckRCS1221 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class UsePatternMatchingInsteadOfAsAndNullCheckRCS1221 extends RoslynReci
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Use pattern matching instead of combination of 'as' operator and null check";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

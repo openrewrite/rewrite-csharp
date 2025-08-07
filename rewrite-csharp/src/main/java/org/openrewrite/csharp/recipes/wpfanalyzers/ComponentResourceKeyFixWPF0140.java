@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class ComponentResourceKeyFixWPF0140 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class ComponentResourceKeyFixWPF0140 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Use containing type when creating a ComponentResourceKey";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "Use containing type when creating a ComponentResourceKey.";
     }
 }

@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class SealMethodsThatSatisfyPrivateInterfacesCA2119 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class SealMethodsThatSatisfyPrivateInterfacesCA2119 extends RoslynRecipe 
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Seal methods that satisfy private interfaces";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "An inheritable public type provides an overridable method implementation of an internal (Friend in Visual Basic) interface. To fix a violation of this rule, prevent the method from being overridden outside the assembly.";
     }
 }

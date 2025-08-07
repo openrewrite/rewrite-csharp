@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class SA1101SA1101 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class SA1101SA1101 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Prefix local calls with this";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "A call to an instance member of the local class or a base class is not prefixed with 'this.', within a C# code file.";
     }
 }

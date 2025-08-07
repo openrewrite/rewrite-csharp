@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.meziantou.analyzer;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class SimplifyCallerArgumentExpressionMA0108 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class SimplifyCallerArgumentExpressionMA0108 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Remove redundant argument value";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

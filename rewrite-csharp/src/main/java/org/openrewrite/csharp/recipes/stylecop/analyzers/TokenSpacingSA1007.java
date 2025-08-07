@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class TokenSpacingSA1007 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class TokenSpacingSA1007 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Operator keyword should be followed by space";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "The operator keyword within a C# operator overload method is not followed by any whitespace.";
     }
 }

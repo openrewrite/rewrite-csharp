@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class SA1104SA1105SA1104 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class SA1104SA1105SA1104 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Query clause should begin on new line when previous clause spans multiple lines";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "A clause within a C# query expression begins on the same line as the previous clause, when the previous clause spans across multiple lines.";
     }
 }

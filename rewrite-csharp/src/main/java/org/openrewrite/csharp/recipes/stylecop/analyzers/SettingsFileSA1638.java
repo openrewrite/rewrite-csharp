@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class SettingsFileSA1638 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class SettingsFileSA1638 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "File header file name documentation should match file name";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "The file attribute within copyright tag of the file header at the top of a C# code file does not contain the name of the file.";
     }
 }

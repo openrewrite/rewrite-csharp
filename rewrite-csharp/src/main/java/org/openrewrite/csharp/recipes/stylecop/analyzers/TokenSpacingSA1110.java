@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class TokenSpacingSA1110 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class TokenSpacingSA1110 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Opening parenthesis or bracket should be on declaration line";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "The opening parenthesis or bracket is not placed on the same line as the method/indexer/attribute/array name.";
     }
 }

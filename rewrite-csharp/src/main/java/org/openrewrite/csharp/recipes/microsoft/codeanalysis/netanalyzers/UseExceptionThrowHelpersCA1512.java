@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class UseExceptionThrowHelpersCA1512 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class UseExceptionThrowHelpersCA1512 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Use ArgumentOutOfRangeException throw helper";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "Throw helpers are simpler and more efficient than an if block constructing a new exception instance.";
     }
 }

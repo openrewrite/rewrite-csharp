@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.roslynator.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class InvocationExpressionRCS1267 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class InvocationExpressionRCS1267 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Use string interpolation instead of 'string.Concat'";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

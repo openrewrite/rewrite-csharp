@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.meziantou.analyzer;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class DoNotUseBlockingCallInAsyncContextMA0045 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class DoNotUseBlockingCallInAsyncContextMA0045 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Do not use blocking calls in a sync method (need to make calling method async)";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

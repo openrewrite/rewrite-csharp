@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class SA1410SA1411SA1410 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class SA1410SA1411SA1410 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Remove delegate parenthesis when possible";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "A call to a C# anonymous method does not contain any method parameters, yet the statement still includes parenthesis.";
     }
 }

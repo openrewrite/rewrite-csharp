@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class SA1642SA1643SA1642 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class SA1642SA1643SA1642 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Constructor summary documentation should begin with standard text";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "The XML documentation header for a C# constructor does not contain the appropriate summary text.";
     }
 }

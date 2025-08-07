@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.meziantou.analyzer;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class OptimizeLinqUsageMA0078 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class OptimizeLinqUsageMA0078 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Use 'Cast' instead of 'Select' to cast";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

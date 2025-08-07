@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.roslynator.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class UseExplicitTypeInsteadOfVarRCS1008 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class UseExplicitTypeInsteadOfVarRCS1008 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "[deprecated] Use explicit type instead of 'var' (when the type is not obvious)";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

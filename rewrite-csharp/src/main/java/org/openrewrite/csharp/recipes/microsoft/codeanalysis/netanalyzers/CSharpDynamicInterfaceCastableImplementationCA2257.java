@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class CSharpDynamicInterfaceCastableImplementationCA2257 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class CSharpDynamicInterfaceCastableImplementationCA2257 extends RoslynRe
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Members defined on an interface with the 'DynamicInterfaceCastableImplementationAttribute' should be 'static'";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "Since a type that implements 'IDynamicInterfaceCastable' may not implement a dynamic interface in metadata, calls to an instance interface member that is not an explicit implementation defined on this type are likely to fail at runtime. Mark new interface members 'static' to avoid runtime errors.";
     }
 }

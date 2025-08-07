@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class CSharpIdentifiersShouldNotContainUnderscoresCA1707 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class CSharpIdentifiersShouldNotContainUnderscoresCA1707 extends RoslynRe
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Identifiers should not contain underscores";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "By convention, identifier names do not contain the underscore (_) character. This rule checks namespaces, types, members, and parameters.";
     }
 }

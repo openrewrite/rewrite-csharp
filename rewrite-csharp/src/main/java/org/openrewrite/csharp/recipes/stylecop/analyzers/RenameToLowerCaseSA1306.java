@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class RenameToLowerCaseSA1306 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class RenameToLowerCaseSA1306 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Field names should begin with lower-case letter";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "The name of a field in C# does not begin with a lower-case letter.";
     }
 }

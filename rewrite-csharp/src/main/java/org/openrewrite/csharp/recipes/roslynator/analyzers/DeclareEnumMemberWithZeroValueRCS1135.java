@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.roslynator.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class DeclareEnumMemberWithZeroValueRCS1135 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class DeclareEnumMemberWithZeroValueRCS1135 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Declare enum member with zero value (when enum has FlagsAttribute)";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

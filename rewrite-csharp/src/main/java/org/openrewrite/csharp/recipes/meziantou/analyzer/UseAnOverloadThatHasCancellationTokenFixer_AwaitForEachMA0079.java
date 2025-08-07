@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.meziantou.analyzer;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class UseAnOverloadThatHasCancellationTokenFixer_AwaitForEachMA0079 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class UseAnOverloadThatHasCancellationTokenFixer_AwaitForEachMA0079 exten
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Forward the CancellationToken using .WithCancellation()";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

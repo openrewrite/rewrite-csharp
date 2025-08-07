@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class CSharpAvoidDuplicateElementInitializationCA2244 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class CSharpAvoidDuplicateElementInitializationCA2244 extends RoslynRecip
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Do not duplicate indexed element initializations";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "Indexed elements in objects initializers must initialize unique elements. A duplicate index might overwrite a previous element initialization.";
     }
 }

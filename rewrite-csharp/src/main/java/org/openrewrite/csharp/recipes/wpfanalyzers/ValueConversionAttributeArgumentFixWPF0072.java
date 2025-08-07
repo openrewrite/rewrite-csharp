@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class ValueConversionAttributeArgumentFixWPF0072 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class ValueConversionAttributeArgumentFixWPF0072 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "ValueConversion must use correct types";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "ValueConversion must use correct types.";
     }
 }

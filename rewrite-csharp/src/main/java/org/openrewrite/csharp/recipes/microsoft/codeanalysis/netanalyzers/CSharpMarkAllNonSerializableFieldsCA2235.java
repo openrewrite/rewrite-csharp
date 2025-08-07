@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class CSharpMarkAllNonSerializableFieldsCA2235 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class CSharpMarkAllNonSerializableFieldsCA2235 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Mark all non-serializable fields";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "An instance field of a type that is not serializable is declared in a type that is serializable.";
     }
 }

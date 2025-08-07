@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class PropertySummaryDocumentationSA1624 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class PropertySummaryDocumentationSA1624 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Property summary documentation should omit accessor with restricted access";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "The documentation text within a C# property’s <summary> tag takes into account all of the accessors within the property, but one of the accessors has limited access.";
     }
 }

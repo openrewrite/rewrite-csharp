@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class UseDependencyPropertyKeyFixWPF0040 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class UseDependencyPropertyKeyFixWPF0040 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "A readonly DependencyProperty must be set with DependencyPropertyKey";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "A readonly DependencyProperty must be set with DependencyPropertyKey.";
     }
 }

@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class UseSetValueFixWPF0043 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class UseSetValueFixWPF0043 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Don't set DataContext and Style using SetCurrentValue";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "Set DataContext and Style using SetValue.";
     }
 }

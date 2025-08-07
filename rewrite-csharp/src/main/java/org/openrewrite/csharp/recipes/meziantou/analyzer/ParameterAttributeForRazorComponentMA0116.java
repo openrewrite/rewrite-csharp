@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.meziantou.analyzer;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class ParameterAttributeForRazorComponentMA0116 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class ParameterAttributeForRazorComponentMA0116 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Parameters with [SupplyParameterFromQuery] attributes should also be marked as [Parameter]";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

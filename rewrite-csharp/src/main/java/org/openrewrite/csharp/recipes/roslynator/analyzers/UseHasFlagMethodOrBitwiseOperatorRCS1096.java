@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.roslynator.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class UseHasFlagMethodOrBitwiseOperatorRCS1096 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class UseHasFlagMethodOrBitwiseOperatorRCS1096 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Use 'HasFlag' method or bitwise operator";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

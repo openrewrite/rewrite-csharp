@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class DocumentationFixWPF0061 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class DocumentationFixWPF0061 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Accessor method for attached property should have standard documentation text";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "Accessor method for attached property should have standard documentation text.";
     }
 }

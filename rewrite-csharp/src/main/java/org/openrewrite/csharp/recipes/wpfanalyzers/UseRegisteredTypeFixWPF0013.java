@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class UseRegisteredTypeFixWPF0013 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class UseRegisteredTypeFixWPF0013 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "CLR accessor for attached property must match registered type";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "CLR accessor for attached property must match registered type.";
     }
 }

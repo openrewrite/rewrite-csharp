@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.meziantou.analyzer;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class UseStringCreateInsteadOfFormattableStringMA0111 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class UseStringCreateInsteadOfFormattableStringMA0111 extends RoslynRecip
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Use string.Create instead of FormattableString";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

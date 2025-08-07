@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class UseEnvironmentMembersCA1837 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class UseEnvironmentMembersCA1837 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Use 'Environment.ProcessId'";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "'Environment.ProcessId' is simpler and faster than 'Process.GetCurrentProcess().Id'.";
     }
 }

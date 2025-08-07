@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class RemoveEmptyFinalizersCA1821 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class RemoveEmptyFinalizersCA1821 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Remove empty Finalizers";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "Finalizers should be avoided where possible, to avoid the additional performance overhead involved in tracking object lifetime.";
     }
 }

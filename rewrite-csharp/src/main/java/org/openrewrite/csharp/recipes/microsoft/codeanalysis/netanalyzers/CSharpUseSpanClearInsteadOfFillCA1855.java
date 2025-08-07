@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class CSharpUseSpanClearInsteadOfFillCA1855 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class CSharpUseSpanClearInsteadOfFillCA1855 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Prefer 'Clear' over 'Fill'";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "It is more efficient to use 'Clear', instead of 'Fill' with default value.";
     }
 }

@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class TokenSpacingSA1026 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class TokenSpacingSA1026 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Code should not contain space after new or stackalloc keyword in implicitly typed array allocation";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "An implicitly typed array allocation within a C# code file is not spaced correctly.";
     }
 }

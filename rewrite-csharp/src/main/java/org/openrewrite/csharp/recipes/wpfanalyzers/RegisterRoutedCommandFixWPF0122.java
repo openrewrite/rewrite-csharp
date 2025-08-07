@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class RegisterRoutedCommandFixWPF0122 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class RegisterRoutedCommandFixWPF0122 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Register name and owning type for routed command";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "Register containing type as owner for routed command.";
     }
 }
