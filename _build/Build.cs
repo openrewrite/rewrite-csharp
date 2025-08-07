@@ -343,7 +343,6 @@ partial class Build : NukeBuild
 
                  package org.openrewrite.csharp.recipes.{{model.Namespace}};
 
-                 import org.openrewrite.NlsRewrite;
                  import org.openrewrite.csharp.RoslynRecipe;
 
                  public class {{model.ClassName}} extends RoslynRecipe {
@@ -364,12 +363,12 @@ partial class Build : NukeBuild
                      }
 
                      @Override
-                     public @NlsRewrite.DisplayName String getDisplayName() {
+                     public String getDisplayName() {
                          return "{{model.DisplayName}}";
                      }
 
                      @Override
-                     public @NlsRewrite.Description String getDescription() {
+                     public String getDescription() {
                          return "{{model.Description}}";
                      }
                  }
