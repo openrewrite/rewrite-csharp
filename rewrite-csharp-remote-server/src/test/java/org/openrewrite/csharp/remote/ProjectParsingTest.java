@@ -58,11 +58,10 @@ public class ProjectParsingTest {
                   pathToSolution,
                   pathToSolution.getParent(),
                   ctx)
-                .forEach(sf -> {
+                .forEach(sf ->
                     System.out.println(sf.print(new Cursor(new Cursor(
                       null,
-                      Cursor.ROOT_VALUE), sf)));
-                }));
+                      Cursor.ROOT_VALUE), sf)))));
         }
     }
 
