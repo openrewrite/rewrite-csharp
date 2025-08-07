@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class ImplementStandardExceptionConstructorsCA1032 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class ImplementStandardExceptionConstructorsCA1032 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Implement standard exception constructors";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "Failure to provide the full set of constructors can make it difficult to correctly handle exceptions.";
     }
 }

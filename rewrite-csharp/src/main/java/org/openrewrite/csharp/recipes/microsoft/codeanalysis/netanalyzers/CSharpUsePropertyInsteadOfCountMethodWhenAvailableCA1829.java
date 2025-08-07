@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class CSharpUsePropertyInsteadOfCountMethodWhenAvailableCA1829 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class CSharpUsePropertyInsteadOfCountMethodWhenAvailableCA1829 extends Ro
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Use Length/Count property instead of Count() when available";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "Enumerable.Count() potentially enumerates the sequence while a Length/Count property is a direct access.";
     }
 }

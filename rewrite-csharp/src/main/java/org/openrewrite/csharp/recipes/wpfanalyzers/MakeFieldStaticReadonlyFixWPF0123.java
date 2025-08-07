@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class MakeFieldStaticReadonlyFixWPF0123 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class MakeFieldStaticReadonlyFixWPF0123 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Backing field for a RoutedCommand should be static and readonly";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "Backing field for a RoutedCommand should be static and readonly.";
     }
 }

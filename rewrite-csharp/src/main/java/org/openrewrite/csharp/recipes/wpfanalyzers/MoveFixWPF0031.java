@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class MoveFixWPF0031 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class MoveFixWPF0031 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "DependencyPropertyKey member must be declared before DependencyProperty member";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "DependencyPropertyKey member must be declared before DependencyProperty member.";
     }
 }

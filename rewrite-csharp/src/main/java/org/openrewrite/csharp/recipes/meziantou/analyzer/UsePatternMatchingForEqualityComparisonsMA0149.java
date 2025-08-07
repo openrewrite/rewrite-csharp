@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.meziantou.analyzer;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class UsePatternMatchingForEqualityComparisonsMA0149 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class UsePatternMatchingForEqualityComparisonsMA0149 extends RoslynRecipe
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Use pattern matching instead of inequality operators for discrete value";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

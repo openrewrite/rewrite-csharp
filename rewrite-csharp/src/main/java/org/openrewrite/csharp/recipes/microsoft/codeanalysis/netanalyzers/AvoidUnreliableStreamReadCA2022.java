@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class AvoidUnreliableStreamReadCA2022 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class AvoidUnreliableStreamReadCA2022 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Avoid inexact read with 'Stream.Read'";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "A call to 'Stream.Read' may return fewer bytes than requested, resulting in unreliable code if the return value is not checked.";
     }
 }

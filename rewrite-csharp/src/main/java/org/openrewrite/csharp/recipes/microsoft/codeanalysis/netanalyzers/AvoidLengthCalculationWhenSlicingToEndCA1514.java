@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class AvoidLengthCalculationWhenSlicingToEndCA1514 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class AvoidLengthCalculationWhenSlicingToEndCA1514 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Avoid redundant length argument";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "An explicit length calculation can be error-prone and can be avoided when slicing to end of the buffer.";
     }
 }

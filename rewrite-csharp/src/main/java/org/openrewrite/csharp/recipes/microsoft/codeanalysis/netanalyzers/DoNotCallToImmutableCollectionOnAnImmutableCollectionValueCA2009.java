@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class DoNotCallToImmutableCollectionOnAnImmutableCollectionValueCA2009 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class DoNotCallToImmutableCollectionOnAnImmutableCollectionValueCA2009 ex
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Do not call ToImmutableCollection on an ImmutableCollection value";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

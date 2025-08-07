@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class UseSetCurrentValueFixWPF0041 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class UseSetCurrentValueFixWPF0041 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Set mutable dependency properties using SetCurrentValue";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "Prefer setting mutable dependency properties using SetCurrentValue.";
     }
 }

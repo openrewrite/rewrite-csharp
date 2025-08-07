@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.roslynator.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class ConvertLambdaExpressionBodyToExpressionBodyRCS1021 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class ConvertLambdaExpressionBodyToExpressionBodyRCS1021 extends RoslynRe
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Convert lambda expression body to expression body";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

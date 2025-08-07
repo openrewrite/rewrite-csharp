@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.meziantou.analyzer;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class MethodOverridesShouldNotChangeParameterDefaultsMA0061 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class MethodOverridesShouldNotChangeParameterDefaultsMA0061 extends Rosly
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Method overrides should not change default values";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

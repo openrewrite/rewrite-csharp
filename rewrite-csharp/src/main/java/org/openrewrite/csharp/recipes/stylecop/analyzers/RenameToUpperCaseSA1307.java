@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class RenameToUpperCaseSA1307 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class RenameToUpperCaseSA1307 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Accessible fields should begin with upper-case letter";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "The name of a public or internal field in C# does not begin with an upper-case letter.";
     }
 }

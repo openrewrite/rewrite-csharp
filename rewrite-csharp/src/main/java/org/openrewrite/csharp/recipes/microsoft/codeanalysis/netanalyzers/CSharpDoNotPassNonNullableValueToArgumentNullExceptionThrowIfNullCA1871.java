@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class CSharpDoNotPassNonNullableValueToArgumentNullExceptionThrowIfNullCA1871 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class CSharpDoNotPassNonNullableValueToArgumentNullExceptionThrowIfNullCA
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Do not pass a nullable struct to 'ArgumentNullException.ThrowIfNull'";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "'ArgumentNullException.ThrowIfNull' accepts an 'object', so passing a nullable struct may cause the value to be boxed.";
     }
 }

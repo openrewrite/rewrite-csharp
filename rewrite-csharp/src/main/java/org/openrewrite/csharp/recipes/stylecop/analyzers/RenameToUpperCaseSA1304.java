@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class RenameToUpperCaseSA1304 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class RenameToUpperCaseSA1304 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Non-private readonly fields should begin with upper-case letter";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "The name of a non-private readonly C# field should being with an upper-case letter.";
     }
 }

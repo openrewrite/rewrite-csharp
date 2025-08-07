@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class SA1617SA1617 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class SA1617SA1617 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Void return value should not be documented";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "A C# code element does not contain a return value, or returns void, but the documentation header for the element contains a <returns> tag.";
     }
 }

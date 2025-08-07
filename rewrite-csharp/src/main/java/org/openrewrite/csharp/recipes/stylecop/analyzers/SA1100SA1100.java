@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class SA1100SA1100 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class SA1100SA1100 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Do not prefix calls with base unless local implementation exists";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "A call to a member from an inherited class begins with 'base.', and the local class does not contain an override or implementation of the member.";
     }
 }

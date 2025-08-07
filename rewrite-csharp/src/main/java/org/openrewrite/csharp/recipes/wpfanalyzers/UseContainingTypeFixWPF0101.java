@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class UseContainingTypeFixWPF0101 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class UseContainingTypeFixWPF0101 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Containing type should be used as registered owner";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "When registering a RoutedEvent register containing type as owner type.";
     }
 }

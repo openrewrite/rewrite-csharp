@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class CSharpDoNotUseEnumerableMethodsOnIndexableCollectionsInsteadUseTheCollectionDirectlyCA1826 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class CSharpDoNotUseEnumerableMethodsOnIndexableCollectionsInsteadUseTheC
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Do not use Enumerable methods on indexable collections";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "This collection is directly indexable. Going through LINQ here causes unnecessary allocations and CPU work.";
     }
 }

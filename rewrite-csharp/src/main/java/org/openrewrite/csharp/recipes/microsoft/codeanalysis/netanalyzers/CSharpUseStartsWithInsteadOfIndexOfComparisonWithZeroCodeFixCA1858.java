@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class CSharpUseStartsWithInsteadOfIndexOfComparisonWithZeroCodeFixCA1858 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class CSharpUseStartsWithInsteadOfIndexOfComparisonWithZeroCodeFixCA1858 
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Use 'StartsWith' instead of 'IndexOf'";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "It is both clearer and faster to use 'StartsWith' instead of comparing the result of 'IndexOf' to zero.";
     }
 }

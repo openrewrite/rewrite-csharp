@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.meziantou.analyzer;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class DoNotRemoveOriginalExceptionFromThrowStatementMA0027 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class DoNotRemoveOriginalExceptionFromThrowStatementMA0027 extends Roslyn
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Prefer rethrowing an exception implicitly";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

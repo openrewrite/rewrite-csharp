@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class RenameMemberFixWPF0004 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class RenameMemberFixWPF0004 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "CLR method for a DependencyProperty must match registered name";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "CLR methods for accessing a DependencyProperty must have names matching the name the DependencyProperty is registered with.";
     }
 }

@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class AvoidUnusedPrivateFieldsCA1823 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class AvoidUnusedPrivateFieldsCA1823 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Avoid unused private fields";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "Private fields were detected that do not appear to be accessed in the assembly.";
     }
 }

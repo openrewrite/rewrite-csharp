@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.meziantou.analyzer;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class UseJSRuntimeInvokeVoidAsyncWhenReturnValueIsNotUsedMA0120 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class UseJSRuntimeInvokeVoidAsyncWhenReturnValueIsNotUsedMA0120 extends R
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Use InvokeVoidAsync when the returned value is not used";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "";
     }
 }

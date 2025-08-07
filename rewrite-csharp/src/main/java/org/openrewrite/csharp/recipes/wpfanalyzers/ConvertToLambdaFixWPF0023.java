@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class ConvertToLambdaFixWPF0023 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class ConvertToLambdaFixWPF0023 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "The callback is trivial, convert to lambda";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "The callback is trivial, convert to lambda for better locality.";
     }
 }

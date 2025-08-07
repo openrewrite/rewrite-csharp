@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class UseStringEqualsOverStringCompareCA2251 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class UseStringEqualsOverStringCompareCA2251 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Use 'string.Equals'";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "It is both clearer and likely faster to use 'string.Equals' instead of comparing the result of 'string.Compare' to zero.";
     }
 }

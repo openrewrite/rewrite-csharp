@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class ConstructorArgumentAttributeArgumentFixWPF0082 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class ConstructorArgumentAttributeArgumentFixWPF0082 extends RoslynRecipe
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "[ConstructorArgument] must match";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "[ConstructorArgument] must match the name of the constructor parameter.";
     }
 }

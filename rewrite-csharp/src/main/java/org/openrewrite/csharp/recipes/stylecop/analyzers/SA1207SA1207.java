@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class SA1207SA1207 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class SA1207SA1207 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Protected should come before internal";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "The keyword '{0}' is positioned after the keyword '{1}' within the declaration of a {0} {1} C# element.";
     }
 }

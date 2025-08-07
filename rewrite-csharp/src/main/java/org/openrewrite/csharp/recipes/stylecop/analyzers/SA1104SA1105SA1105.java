@@ -21,7 +21,6 @@
 
 package org.openrewrite.csharp.recipes.stylecop.analyzers;
 
-import org.openrewrite.NlsRewrite;
 import org.openrewrite.csharp.RoslynRecipe;
 
 public class SA1104SA1105SA1105 extends RoslynRecipe {
@@ -42,12 +41,12 @@ public class SA1104SA1105SA1105 extends RoslynRecipe {
     }
 
     @Override
-    public @NlsRewrite.DisplayName String getDisplayName() {
+    public String getDisplayName() {
         return "Query clauses spanning multiple lines should begin on own line";
     }
 
     @Override
-    public @NlsRewrite.Description String getDescription() {
+    public String getDescription() {
         return "A clause within a C# query expression spans across multiple lines, and does not begin on its own line.";
     }
 }
