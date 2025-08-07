@@ -15,7 +15,6 @@
  */
 package org.openrewrite.csharp.tree;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
@@ -28,7 +27,6 @@ import org.openrewrite.internal.ListUtils;
 import org.openrewrite.internal.NamingService;
 import org.openrewrite.java.JavaPrinter;
 import org.openrewrite.java.JavaTypeVisitor;
-import org.openrewrite.java.JavaVisitor;
 import org.openrewrite.java.internal.TypesInUse;
 import org.openrewrite.java.tree.*;
 import org.openrewrite.marker.Marker;
@@ -46,7 +44,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 
@@ -3378,7 +3375,6 @@ public interface Cs extends J {
             }
 
 
-
             public J.ClassDeclaration.Kind getKind() {
                 return t.kind;
             }
@@ -3453,6 +3449,7 @@ public interface Cs extends J {
         public TypeTree getExplicitInterfaceSpecifier() {
             return explicitInterfaceSpecifier.getElement();
         }
+
         public Cs.MethodDeclaration withExplicitInterfaceSpecifier(TypeTree explicitInterfaceSpecifier) {
             return getPadding().withExplicitInterfaceSpecifier(this.explicitInterfaceSpecifier.withElement(explicitInterfaceSpecifier));
         }
@@ -7677,6 +7674,7 @@ public interface Cs extends J {
             return new CoordinateBuilder.Statement(this);
         }
     }
+
     /**
      * Represents a C# checked or unchecked expression which controls overflow checking behavior.
      * <p>
@@ -7748,6 +7746,7 @@ public interface Cs extends J {
             return new CoordinateBuilder.Expression(this);
         }
     }
+
     /**
      * Represents a C# checked statement which enforces overflow checking for arithmetic operations
      * and conversions. Operations within a checked block will throw OverflowException if arithmetic
@@ -8109,8 +8108,7 @@ public interface Cs extends J {
     }
 
 
-    public interface SelectOrGroupClause extends Cs
-    {
+    public interface SelectOrGroupClause extends Cs {
 
     }
 
@@ -8198,10 +8196,10 @@ public interface Cs extends J {
         }
     }
 
-    interface QueryClause extends Cs
-    {
+    interface QueryClause extends Cs {
 
     }
+
     /**
      * Represents a LINQ from clause that introduces a range variable and its source collection.
      * This is typically the initial clause of a LINQ query.
@@ -8328,6 +8326,7 @@ public interface Cs extends J {
             }
         }
     }
+
     /**
      * Represents a let clause in a C# LINQ query expression that introduces
      * a new range variable based on a computation.
@@ -8399,7 +8398,6 @@ public interface Cs extends J {
         public LetClause withIdentifier(J.Identifier identifier) {
             return getPadding().withIdentifier(JRightPadded.withElement(this.identifier, identifier));
         }
-
 
 
         @Override
@@ -9116,6 +9114,7 @@ public interface Cs extends J {
             }
         }
     }
+
     /**
      * Represents a C# indexer declaration which allows objects to be indexed like arrays.
      * <pre>
@@ -10697,6 +10696,7 @@ public interface Cs extends J {
             }
         }
     }
+
     @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
     @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
     @RequiredArgsConstructor
