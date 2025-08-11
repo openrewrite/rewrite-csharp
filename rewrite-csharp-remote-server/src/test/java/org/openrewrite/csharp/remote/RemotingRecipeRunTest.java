@@ -35,7 +35,6 @@ import org.openrewrite.remote.RemotingRecipeManager;
 import org.openrewrite.remote.TcpUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -52,7 +51,7 @@ import static org.assertj.core.api.Assertions.fail;
 public class RemotingRecipeRunTest {
 
     @Test
-    public void testRemotingRecipeInstallAndRun() throws IOException {
+    public void testRemotingRecipeInstallAndRun() throws Exception {
         File nuPkgLocation = new File("./build/nupkgs");
         nuPkgLocation.mkdir();
         int port = TcpUtils.findAvailableTcpPortInternal();
