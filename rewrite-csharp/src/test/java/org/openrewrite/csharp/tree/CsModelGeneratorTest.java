@@ -1,14 +1,12 @@
 package org.openrewrite.csharp.tree;
 
 import org.junit.jupiter.api.Test;
-import org.openrewrite.ExecutionContext;
-import org.openrewrite.InMemoryExecutionContext;
-import org.openrewrite.PrintOutputCapture;
+import org.openrewrite.*;
 import org.openrewrite.csharp.CSharpPrinter;
 import org.openrewrite.internal.ListUtils;
 import org.openrewrite.java.JavaParser;
+import org.openrewrite.java.JavaTemplate;
 import org.openrewrite.java.JavaVisitor;
-import org.openrewrite.Tree;
 import org.openrewrite.java.tree.*;
 import org.openrewrite.marker.Markers;
 
@@ -25,7 +23,7 @@ public class CsModelGeneratorTest {
     public void generateCsModel() throws IOException {
         Path csJavaPath = Paths.get("src/main/java/org/openrewrite/csharp/tree/Cs.java");
         Path csModelPath = Paths.get("src/main/java/org/openrewrite/csharp/tree/CsModel.java");
-        Path csModel2Path = Paths.get("src/main/java/org/openrewrite/csharp/tree/CsModel.cs");
+        Path csModel2Path = Paths.get("../Rewrite/src/Rewrite.CSharp/CSharp/CsModel.cs");
 
         String csJavaSource = Files.readString(csJavaPath);
 
@@ -53,6 +51,8 @@ public class CsModelGeneratorTest {
 //        Files.writeString(csModelPath, output);
 //
 //        System.out.println("Successfully generated CsModel.java");
+
+        transformed = (J.CompilationUnit) new JavaToCsharpTransformer().visitNonNull(transformed, ctx);
 
         var csPrinter = new CSharpPrinter<Integer>();
         var printOutput = new PrintOutputCapture<Integer>(0);
@@ -249,6 +249,43 @@ public class CsModelGeneratorTest {
               .anyMatch(x -> x.getSimpleName().equals("Nullable"));
             multiVariable = multiVariable.withLeadingAnnotations(new ArrayList<>());
             return multiVariable;
+        }
+
+        @Override
+        public J visitModifier(J.Modifier modifer, ExecutionContext executionContext) {
+            return null;
+        }
+
+        @Override
+        public J visitPackage(J.Package pkg, ExecutionContext executionContext) {
+            var identifier = (J.Identifier)pkg.getExpression();
+            pkg = pkg.withExpression(identifier.withSimpleName("Rewrite.RewriteCSharp"));
+            return pkg;
+        }
+
+        @Override
+        public J visitCompilationUnit(J.CompilationUnit cu, ExecutionContext executionContext) {
+            var imports = """
+              import System.Diagnostics;
+              import System.Diagnostics.CodeAnalysis;
+              import Rewrite.Core;
+              import Rewrite.Core.Marker;
+              import Rewrite.RewriteJava.Tree;
+              """;
+
+            var fragment = Parser.Input.fromString(imports);
+            var template = JavaTemplate
+              .builder(imports)
+              .doAfterVariableSubstitution(x -> {
+                  System.out.println(x);
+              })
+              .build();
+
+            cu = cu.withImports(new ArrayList<>());
+            cu = template.apply(new Cursor(getCursor().getParent(), cu), cu.getPackageDeclaration().getCoordinates().after());
+            return cu;
+
+
         }
     }
 }
