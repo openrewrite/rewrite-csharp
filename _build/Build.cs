@@ -180,6 +180,7 @@ partial class Build : NukeBuild
     Target Pack => _ => _
         .Description("Creates nuget packages inside artifacts directory")
         .DependsOn(Restore, PublishServer)
+        .After(Test)
         .Executes(() =>
         {
             DotNetPack(x => x

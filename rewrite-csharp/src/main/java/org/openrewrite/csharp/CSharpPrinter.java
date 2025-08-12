@@ -32,6 +32,7 @@ import org.openrewrite.marker.Marker;
 import org.openrewrite.marker.Markers;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.UnaryOperator;
 
 public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
@@ -1438,8 +1439,34 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         }
 
         @Override
+        public J visitImport(J.Import import_, PrintOutputCapture<P> p) {
+            beforeSyntax(import_, Space.Location.IMPORT_PREFIX, p);
+            p.append("using");
+            if (import_.isStatic()) {
+                visitSpace(import_.getPadding().getStatic().getBefore(), Space.Location.STATIC_IMPORT, p);
+                p.append("static");
+            }
+            visit(import_.getQualid(), p);
+            afterSyntax(import_, p);
+            return import_;
+        }
+
+
+
+        @Override
+        public J visitPackage(J.Package pkg, PrintOutputCapture<P> p) {
+
+            beforeSyntax(pkg, Space.Location.PACKAGE_PREFIX, p);
+            p.append("namespace");
+            visit(pkg.getExpression(), p);
+            afterSyntax(pkg, p);
+            return pkg;
+        }
+
+        @Override
         public J visitClassDeclaration(J.ClassDeclaration classDecl, PrintOutputCapture<P> p) {
-            J csParent = CSharpPrinter.this.getCursor().getValue();
+            Object parent = CSharpPrinter.this.getCursor().getValue();
+            J csParent = parent instanceof J ? (J)parent : null;
             Cs.ClassDeclaration csClassDeclaration = csParent instanceof Cs.ClassDeclaration ? (Cs.ClassDeclaration) csParent : null;
             String kind = "";
             switch (classDecl.getPadding().getKind().getType()) {
@@ -1491,8 +1518,10 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         @Override
         public J visitAnnotation(J.Annotation annotation, PrintOutputCapture<P> p) {
             beforeSyntax(annotation, Space.Location.ANNOTATION_PREFIX, p);
+            p.append("[");
             visit(annotation.getAnnotationType(), p);
             visitContainer("(", annotation.getPadding().getArguments(), JContainer.Location.ANNOTATION_ARGUMENTS, ",", ")", p);
+            p.append("]");
             afterSyntax(annotation, p);
             return annotation;
         }

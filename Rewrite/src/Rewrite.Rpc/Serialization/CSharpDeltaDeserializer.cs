@@ -30,24 +30,29 @@ public class CSharpDeltaDeserializer : CSharpVisitor<DeserializationContext>
     {
         var ctx = p.As(node);
         var (id, prefix, markers) = DeserializeJHeader(node, p);
+        
+        var charsetBomMarked = ctx.DeserializeProperty(x => x.CharsetBomMarked);
+        var charsetName = ctx.DeserializeProperty(x => x.CharsetName);
+        var checksum = ctx.DeserializeProperty(x => x.Checksum);
+        var sourcePath = ctx.DeserializeProperty(x => x.SourcePath)!;
         var externs = ctx.DeserializeList(x => x.Padding.Externs, (x, context) => Visit(x, context));
         var usings = ctx.DeserializeList(x => x.Padding.Usings, x => x.Element.Id, (x, context) => Visit(x, context));
-        var attributeLists = ctx.DeserializeList(x => x.AttributeLists, x => x.Id,(x, context) => (Cs.AttributeList?)Visit(x, context));
-        var members = ctx.DeserializeList(x => x.Padding.Members, (x, context) => Visit(x, context)) ?? new List<JRightPadded<Statement>>();
-        var eof = ctx.DeserializeProperty(x => x?.Eof, (x, context) => Visit(x, context)) ?? Space.EMPTY;
+        var attributeLists = ctx.DeserializeList(x => x.AttributeLists, (x, context) => (Cs.AttributeList?)Visit(x, context));
+        var members = ctx.DeserializeList(x => x.Padding.Members, (x, context) => Visit(x, context));
+        var eof = ctx.DeserializeProperty(x => x.Eof, (x, context) => Visit(x, context))!;
         
         return new Cs.CompilationUnit(
             id,
             prefix,
             markers,
-            null!, // sourcePath - not shown in serializer
-            new FileAttributes(), // fileAttributes - not shown in serializer  
-            null, // charsetName - not shown in serializer
-            false, // charsetBomMarked - not shown in serializer
-            null, // checksum - not shown in serializer
-            new List<JRightPadded<Cs.ExternAlias>>(),
-            new List<JRightPadded<Cs.UsingDirective>>(),
-            new List<Cs.AttributeList>(),
+            sourcePath,
+            new FileAttributes(),
+            charsetName,
+            charsetBomMarked,
+            checksum,
+            externs,
+            usings,
+            attributeLists,
             members,
             eof
         );
@@ -56,37 +61,43 @@ public class CSharpDeltaDeserializer : CSharpVisitor<DeserializationContext>
     public override J? VisitClassDeclaration(Cs.ClassDeclaration? node, DeserializationContext p)
     {
         var ctx = p.As(node);
-
         var (id, prefix, markers) = DeserializeJHeader(node, p);
 
-        // var attributeLists = ctx.DeserializeList(x => x.AttributeList, x => x.Id, (after, context) => (Cs.AttributeList)Visit(after, context)!);
-        var modifiers = ctx.DeserializeList(x => x.Modifiers, x => x.Id, (after, context) => VisitModifier(after, context));
-        var kind = ctx.DeserializeProperty(x => x.Kind, (after, context) => VisitClassDeclarationKind(after, context))!;
-        var name = ctx.DeserializeProperty(x => x.Name, (after, context) => VisitIdentifier(after, context))!;
-        
-        // Note: The serializer only shows a partial implementation.
-        // A complete implementation would handle all properties of ClassDeclaration
-        return new Cs.ClassDeclaration(
-            id, 
-            prefix, 
-            markers, 
-            new List<Cs.AttributeList>(), 
-            modifiers,
-            kind, 
-            name, 
-            null,
-            default,
-            default,
-            default,default,
-            default,
-            default);
+        var attributeList = ctx.DeserializeList(x => x.AttributeList, (x, context) => (Cs.AttributeList?)Visit(x, context));
+        var modifiers = ctx.DeserializeList(x => x.Modifiers, (x, context) => (J.Modifier?)Visit(x, context));
+        var kind = ctx.DeserializeProperty(x => x.Padding.Kind, (x, context) => Visit(x, context))!;
+        var name = ctx.DeserializeProperty(x => x.Name, (x, context) => (J.Identifier?)Visit(x, context))!;
+        var typeParameters = ctx.DeserializeProperty(x => x.Padding.TypeParameters, (x, context) => Visit(x, context));
+        var primaryConstructor = ctx.DeserializeProperty(x => x.Padding.PrimaryConstructor, (x, context) => Visit(x, context));
+        var extendings = ctx.DeserializeProperty(x => x.Padding.Extendings, (x, context) => Visit(x, context));
+        var implementings = ctx.DeserializeProperty(x => x.Padding.Implementings, (x, context) => Visit(x, context));
+        var body = ctx.DeserializeProperty(x => x.Body, (x, context) => (J.Block?)Visit(x, context))!;
+        var typeParameterConstraintClauses = ctx.DeserializeProperty(x => x.Padding.TypeParameterConstraintClauses, (x, context) => Visit(x, context));
+
+        throw new NotImplementedException();
+        // return new Cs.ClassDeclaration(
+        //     id, 
+        //     prefix, 
+        //     markers, 
+        //     attributeList, 
+        //     modifiers,
+        //     kind, 
+        //     name, 
+        //     typeParameters,
+        //     primaryConstructor,
+        //     extendings,
+        //     implementings,
+        //     body,
+        //     typeParameterConstraintClauses,
+        //     new J.ClassDeclaration.Kind.Type(J.ClassDeclaration.Kind.Type.Class)
+        // );
     }
 
     public override J? VisitClassDeclarationKind(J.ClassDeclaration.Kind? node, DeserializationContext p)
     {
         var ctx = p.As(node);
         var (id, prefix, markers) = DeserializeJHeader(node, p);
-        var type = ctx.DeserializeProperty(x => x.KindType);
+        var type = ctx.DeserializeProperty(x => x.KindType)!;
         return new J.ClassDeclaration.Kind(id, prefix, markers, new List<J.Annotation>(), type);
     }
 
@@ -163,6 +174,26 @@ public class CSharpDeltaDeserializer : CSharpVisitor<DeserializationContext>
         // The serializer doesn't show Marker implementation, 
         // so this is a placeholder that would need to be expanded
         return node;
+    }
+    
+    public JLeftPadded<T>? Visit<T>(JLeftPadded<T>? node, DeserializationContext context) where T : class
+    {
+        var ctx = context.As(node);
+        var before = ctx.DeserializeProperty(x => x.Before, (x, diffContext) => Visit(x, diffContext)) ?? Space.EMPTY;
+        var element = ctx.DeserializeProperty(x => x.Element, (x, diffContext) => Visit((Tree?)x, diffContext));
+        var markers = ctx.DeserializeProperty(x => x?.Markers, (x, diffContext) => Visit(x, diffContext)) ?? Markers.EMPTY;
+        
+        return new JLeftPadded<T>(before, (T)element!, markers);
+    }
+    
+    public JContainer<T>? Visit<T>(JContainer<T>? node, DeserializationContext context) where T : Tree
+    {
+        var ctx = context.As(node);
+        var before = ctx.DeserializeProperty(x => x.Before, (x, diffContext) => Visit(x, diffContext)) ?? Space.EMPTY;
+        var elements = ctx.DeserializeList(x => x.Elements, x => x.Element.Id, (x, diffContext) => Visit(x, diffContext));
+        var markers = ctx.DeserializeProperty(x => x?.Markers, (x, diffContext) => Visit(x, diffContext)) ?? Markers.EMPTY;
+        
+        return JContainer<T>.Build(before, elements, markers);
     }
     
     public JRightPadded<T>? Visit<T>(JRightPadded<T>? node, DeserializationContext context) where T : Tree
