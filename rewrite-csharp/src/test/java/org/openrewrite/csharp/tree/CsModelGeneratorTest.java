@@ -50,9 +50,9 @@ public class CsModelGeneratorTest {
 //        output = fixNullableAnnotationInOutput(output);
 
 
-        Files.writeString(csModelPath, output);
-
-        System.out.println("Successfully generated CsModel.java");
+//        Files.writeString(csModelPath, output);
+//
+//        System.out.println("Successfully generated CsModel.java");
 
         var csPrinter = new CSharpPrinter<Integer>();
         var printOutput = new PrintOutputCapture<Integer>(0);
@@ -62,42 +62,6 @@ public class CsModelGeneratorTest {
 
     }
 
-    private String fixNullableAnnotationInOutput(String output) {
-        // Fix patterns like:
-        // @Nullable\n        // Cs.Keyword
-        // to:
-        // Cs.@Nullable Keyword
-
-        String[] lines = output.split("\n");
-        List<String> fixed = new ArrayList<>();
-
-        for (int i = 0; i < lines.length; i++) {
-            String line = lines[i];
-            String trimmed = line.trim();
-
-            // Check if this line is @Nullable and next line is Cs.Something or CsModel.Something
-            if (trimmed.equals("@Nullable") && i + 1 < lines.length) {
-                String nextLine = lines[i + 1];
-                String nextTrimmed = nextLine.trim();
-
-                if (nextTrimmed.startsWith("Cs.") || nextTrimmed.startsWith("CsModel.")) {
-                    // Extract the type after Cs. or CsModel.
-                    String prefix = nextTrimmed.startsWith("Cs.") ? "Cs." : "CsModel.";
-                    String rest = nextTrimmed.substring(prefix.length());
-
-                    // Skip the @Nullable line and modify the next line
-                    fixed.add(nextLine.replace(nextTrimmed, prefix + "@Nullable " + rest));
-                    i++; // Skip the next line as we've processed it
-                } else {
-                    fixed.add(line);
-                }
-            } else {
-                fixed.add(line);
-            }
-        }
-
-        return String.join("\n", fixed);
-    }
 
     private static class CsModelTransformer extends JavaVisitor<ExecutionContext> {
 
@@ -286,4 +250,5 @@ public class CsModelGeneratorTest {
             multiVariable = multiVariable.withLeadingAnnotations(new ArrayList<>());
             return multiVariable;
         }
+    }
 }
