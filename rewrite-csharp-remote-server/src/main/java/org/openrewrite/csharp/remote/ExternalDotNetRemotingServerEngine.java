@@ -41,8 +41,7 @@ public class ExternalDotNetRemotingServerEngine extends DotNetRemotingServerEngi
         ProcessBuilder result = super.configureProcess(processBuilder);
         List<String> commands = result.command();
         commands.add("--dummy");
-        result = result.command(commands);
-        return result;
+        return result.command(commands);
     }
 
 }

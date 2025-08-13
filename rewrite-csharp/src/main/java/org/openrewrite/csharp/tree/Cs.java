@@ -15,11 +15,25 @@
  */
 package org.openrewrite.csharp.tree;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+import lombok.With;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.jspecify.annotations.Nullable;
-import org.openrewrite.*;
+import org.openrewrite.Checksum;
+import org.openrewrite.Cursor;
+import org.openrewrite.FileAttributes;
+import org.openrewrite.Incubating;
+import org.openrewrite.PrintOutputCapture;
+import org.openrewrite.SourceFile;
+import org.openrewrite.Tree;
+import org.openrewrite.TreeVisitor;
 import org.openrewrite.csharp.CSharpPrinter;
 import org.openrewrite.csharp.CSharpVisitor;
 import org.openrewrite.csharp.service.CSharpNamingService;
@@ -28,7 +42,20 @@ import org.openrewrite.internal.NamingService;
 import org.openrewrite.java.JavaPrinter;
 import org.openrewrite.java.JavaTypeVisitor;
 import org.openrewrite.java.internal.TypesInUse;
-import org.openrewrite.java.tree.*;
+import org.openrewrite.java.tree.CoordinateBuilder;
+import org.openrewrite.java.tree.Expression;
+import org.openrewrite.java.tree.J;
+import org.openrewrite.java.tree.JContainer;
+import org.openrewrite.java.tree.JLeftPadded;
+import org.openrewrite.java.tree.JRightPadded;
+import org.openrewrite.java.tree.JavaSourceFile;
+import org.openrewrite.java.tree.JavaType;
+import org.openrewrite.java.tree.Loop;
+import org.openrewrite.java.tree.NameTree;
+import org.openrewrite.java.tree.Space;
+import org.openrewrite.java.tree.Statement;
+import org.openrewrite.java.tree.TypeTree;
+import org.openrewrite.java.tree.TypedTree;
 import org.openrewrite.marker.Marker;
 import org.openrewrite.marker.Markers;
 
@@ -454,7 +481,7 @@ public interface Cs extends J {
             return getPadding().withExplicitInterfaceSpecifier(JRightPadded.withElement(this.explicitInterfaceSpecifier, explicitInterfaceSpecifier));
         }
 
-        public Operator getOperatorToken() {
+        public @Nullable Operator getOperatorToken() {
             return operatorToken == null ? null : operatorToken.getElement();
         }
 
@@ -3230,9 +3257,8 @@ public interface Cs extends J {
             J.ClassDeclaration.Kind k = getPadding().getKind();
             if (k.getType() == type) {
                 return this;
-            } else {
-                return getPadding().withKind(k.withType(type));
             }
+            return getPadding().withKind(k.withType(type));
         }
 
         @With
@@ -3291,8 +3317,7 @@ public interface Cs extends J {
         @Nullable
         JContainer<TypeParameterConstraintClause> typeParameterConstraintClauses;
 
-        @Nullable
-        public List<TypeParameterConstraintClause> getTypeParameterConstraintClauses() {
+        public @Nullable List<TypeParameterConstraintClause> getTypeParameterConstraintClauses() {
             return typeParameterConstraintClauses == null ? null : typeParameterConstraintClauses.getElements();
         }
 
@@ -3322,10 +3347,9 @@ public interface Cs extends J {
             return v.visitClassDeclaration(this, p);
         }
 
-
         @Override
         @Transient
-        public CoordinateBuilder.ClassDeclaration getCoordinates() {
+        public  CoordinateBuilder.@Nullable ClassDeclaration getCoordinates() {
             //todo: Setup coordinate builder - atm it's private
 //            return new CoordinateBuilder.ClassDeclaration(this);
             return null;
@@ -3499,7 +3523,7 @@ public interface Cs extends J {
         }
 
         @Override
-        public JavaType getType() {
+        public @Nullable JavaType getType() {
             return methodType == null ? null : methodType.getReturnType();
         }
 
@@ -3547,8 +3571,7 @@ public interface Cs extends J {
                 return t.parameters == parameters ? t : new Cs.MethodDeclaration(t.id, t.prefix, t.markers, t.attributes, t.modifiers, t.typeParameters, t.returnTypeExpression, t.explicitInterfaceSpecifier, t.name, parameters, t.body, t.methodType, t.typeParameterConstraintClauses);
             }
 
-            @Nullable
-            public JRightPadded<TypeTree> getExplicitInterfaceSpecifier() {
+            public @Nullable JRightPadded<TypeTree> getExplicitInterfaceSpecifier() {
                 return t.explicitInterfaceSpecifier;
             }
 
@@ -6756,7 +6779,7 @@ public interface Cs extends J {
         }
 
         @Override
-        public <T extends J> T withType(@Nullable JavaType type) {
+        public <T extends J> @Nullable T withType(@Nullable JavaType type) {
             return null;
         }
 
@@ -6854,7 +6877,7 @@ public interface Cs extends J {
         }
 
         @Override
-        public JavaType getType() {
+        public @Nullable JavaType getType() {
             return arms.getElements().isEmpty() ? null : arms.getElements().get(0).getExpression().getType();
         }
 
@@ -7202,7 +7225,7 @@ public interface Cs extends J {
         Space colonToken;
 
         @Override
-        public JavaType getType() {
+        public @Nullable JavaType getType() {
             return null;
         }
 
@@ -7323,7 +7346,7 @@ public interface Cs extends J {
         }
 
         @Override
-        public <T extends J> T withType(@Nullable JavaType type) {
+        public <T extends J> @Nullable T withType(@Nullable JavaType type) {
             return null;
         }
 
@@ -7973,7 +7996,7 @@ public interface Cs extends J {
         }
 
         @Override
-        public JavaType getType() {
+        public @Nullable JavaType getType() {
             return null;
         }
 

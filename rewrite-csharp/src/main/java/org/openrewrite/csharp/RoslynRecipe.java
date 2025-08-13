@@ -15,9 +15,18 @@
  */
 package org.openrewrite.csharp;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.ToString;
 import org.jspecify.annotations.Nullable;
-import org.openrewrite.*;
+import org.openrewrite.ExecutionContext;
+import org.openrewrite.PrintOutputCapture;
+import org.openrewrite.ScanningRecipe;
+import org.openrewrite.SourceFile;
+import org.openrewrite.Tree;
+import org.openrewrite.TreeVisitor;
 import org.openrewrite.quark.Quark;
 import org.openrewrite.scheduling.WorkingDirectoryExecutionContextView;
 import org.openrewrite.text.PlainText;
@@ -27,9 +36,21 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -37,7 +58,6 @@ import static java.util.Collections.emptyList;
 
 public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulator> {
     private static final String FIRST_RECIPE = RoslynRecipe.class.getName() + ".FIRST_RECIPE";
-    private static final String PREVIOUS_RECIPE = RoslynRecipe.class.getName() + ".PREVIOUS_RECIPE";
     private static final String INIT_REPO_DIR = RoslynRecipe.class.getName() + ".INIT_REPO_DIR";
 
     public final String getExecutable() {
@@ -54,7 +74,9 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
     }
 
     public static String ensureTrailingSeparator(String path) {
-        if (path == null || path.isEmpty()) return File.separator;
+        if (path == null || path.isEmpty()) {
+            return File.separator;
+        }
         String separator = File.separator;
         if (path.endsWith("/") || path.endsWith("\\")) {
             // Normalize to current OS separator
@@ -87,10 +109,10 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-            if (tree instanceof SourceFile
-                    && !(tree instanceof Quark)
-                    && !(tree instanceof ParseError)
-                    && !tree.getClass().getName().equals("org.openrewrite.java.tree.J$CompilationUnit")) {
+            if (tree instanceof SourceFile &&
+                    !(tree instanceof Quark) &&
+                    !(tree instanceof ParseError) &&
+                    !"org.openrewrite.java.tree.J$CompilationUnit".equals(tree.getClass().getName())) {
                 SourceFile sourceFile = (SourceFile) tree;
                 String fileName = sourceFile.getSourcePath().getFileName().toString();
                 int lastDot = fileName.lastIndexOf('.');
@@ -162,22 +184,22 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
             Process process = builder.start();
             if (!process.waitFor(5, TimeUnit.MINUTES)) {
                 throw new RuntimeException(String.format("Command '%s' timed out after 5 minutes", String.join(" ", command)));
-            } else if (process.exitValue() != 0) {
+            }
+            if (process.exitValue() != 0) {
                 String error = "Command failed: " + String.join(" ", command);
                 if (Files.exists(err)) {
                     error += "\n" + new String(Files.readAllBytes(err));
                 }
                 error += "\nCommand:" + template;
                 throw new RuntimeException(error);
-            } else {
-                for (Map.Entry<Path, Long> entry : acc.beforeModificationTimestamps.entrySet()) {
-                    Path path = entry.getKey();
-                    if (!Files.exists(path) || Files.getLastModifiedTime(path).toMillis() > entry.getValue()) {
-                        acc.modified(path);
-                    }
-                }
-                processOutput(out, acc, ctx);
             }
+            for (Map.Entry<Path, Long> entry : acc.beforeModificationTimestamps.entrySet()) {
+                Path path = entry.getKey();
+                if (!Files.exists(path) || Files.getLastModifiedTime(path).toMillis() > entry.getValue()) {
+                    acc.modified(path);
+                }
+            }
+            processOutput(out, acc, ctx);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         } catch (InterruptedException e) {
@@ -185,13 +207,11 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
         } finally {
             if (out != null) {
                 String content = new String(Files.readAllBytes(out));
-                System.out.println(content);
                 //noinspection ResultOfMethodCallIgnored
                 out.toFile().delete();
             }
             if (err != null) {
                 String content = new String(Files.readAllBytes(err));
-                System.out.println(content);
                 //noinspection ResultOfMethodCallIgnored
                 err.toFile().delete();
             }
@@ -245,8 +265,10 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
     public static class Accumulator {
         @Getter
         final Path directory;
+
         @Getter
         Path solutionFile;
+
         final Map<Path, Long> beforeModificationTimestamps = new HashMap<>();
         final Set<Path> modified = new LinkedHashSet<>();
         final Map<String, AtomicInteger> extensionCounts = new HashMap<>();
@@ -283,11 +305,11 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
         public String parser() {
             if (extensionCounts.containsKey("tsx")) {
                 return "tsx";
-            } else if (extensionCounts.containsKey("ts")) {
-                return "ts";
-            } else {
-                return "babel";
             }
+            if (extensionCounts.containsKey("ts")) {
+                return "ts";
+            }
+            return "babel";
         }
 
         public void writeSource(SourceFile tree) {

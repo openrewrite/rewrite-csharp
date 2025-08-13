@@ -22,10 +22,9 @@ import org.openrewrite.test.RewriteTest;
 import org.openrewrite.test.TypeValidation;
 
 import static org.openrewrite.test.SourceSpecs.text;
-
 import static org.openrewrite.xml.Assertions.xml;
 
-public class AvoidConstantArraysAsArgumentsTest implements RewriteTest {
+class AvoidConstantArraysAsArgumentsTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
@@ -36,7 +35,7 @@ public class AvoidConstantArraysAsArgumentsTest implements RewriteTest {
     }
 
     @Test
-    public void runRecipe() {
+    void runRecipe() {
         rewriteRun(
           text(
             """
@@ -58,7 +57,8 @@ public class AvoidConstantArraysAsArgumentsTest implements RewriteTest {
               """,
             spec -> spec.path("Test.sln")
           ),
-          text("""
+          text(
+                """
             root = true
 
             [*]

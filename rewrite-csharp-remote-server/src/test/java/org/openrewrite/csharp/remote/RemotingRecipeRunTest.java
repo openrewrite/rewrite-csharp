@@ -17,11 +17,13 @@ package org.openrewrite.csharp.remote;
 
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
-import org.openrewrite.*;
-import org.openrewrite.config.RecipeDescriptor;
+import org.openrewrite.InMemoryExecutionContext;
+import org.openrewrite.Recipe;
+import org.openrewrite.RecipeRun;
+import org.openrewrite.SourceFile;
+import org.openrewrite.Tree;
 import org.openrewrite.csharp.tree.Cs;
 import org.openrewrite.internal.InMemoryLargeSourceSet;
-import org.openrewrite.java.JavaParser;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JRightPadded;
 import org.openrewrite.java.tree.Space;
@@ -92,7 +94,7 @@ public class RemotingRecipeRunTest {
               ctx
             );
 
-            Recipe selectedRecipe = recipes.getRecipes().stream().filter(x -> x.getName().equals("Rewrite.Recipes.FindClass"))
+            Recipe selectedRecipe = recipes.getRecipes().stream().filter(x -> "Rewrite.Recipes.FindClass".equals(x.getName()))
                     .findFirst()
                     .orElseThrow();
 
@@ -146,7 +148,7 @@ public class RemotingRecipeRunTest {
 
             RecipeRun run = remotingRecipe.run(new InMemoryLargeSourceSet(Collections.singletonList(tree)), ctx);
             assertThat(run.getChangeset().getAllResults()).hasSize(1);
-            run.getChangeset().getAllResults().forEach(r -> System.out.println(r.diff()));
+            run.getChangeset().getAllResults().forEach(r ->{});
         } catch (Exception e) {
             server.close();
             fail(e);
