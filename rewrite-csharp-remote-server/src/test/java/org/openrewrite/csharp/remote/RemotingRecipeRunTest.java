@@ -138,7 +138,7 @@ public class RemotingRecipeRunTest {
 
             RecipeRun run = remotingRecipe.run(new InMemoryLargeSourceSet(Collections.singletonList(tree)), ctx);
             assertThat(run.getChangeset().getAllResults()).hasSize(1);
-            run.getChangeset().getAllResults().forEach(r ->{});
+            run.getChangeset().getAllResults().forEach(r -> System.out.println(r.diff()));
         } catch (Exception e) {
             server.close();
             fail(e);

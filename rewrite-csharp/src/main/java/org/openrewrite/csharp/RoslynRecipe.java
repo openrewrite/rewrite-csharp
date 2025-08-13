@@ -186,10 +186,12 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
         } finally {
             if (out != null) {
                 String content = new String(Files.readAllBytes(out));
+                System.out.println(content);
                 //noinspection ResultOfMethodCallIgnored
                 out.toFile().delete();
             }
             if (err != null) {
+                System.out.println(content);
                 String content = new String(Files.readAllBytes(err));
                 //noinspection ResultOfMethodCallIgnored
                 err.toFile().delete();
