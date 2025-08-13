@@ -454,7 +454,7 @@ public interface Cs extends J {
             return getPadding().withExplicitInterfaceSpecifier(JRightPadded.withElement(this.explicitInterfaceSpecifier, explicitInterfaceSpecifier));
         }
 
-        public Operator getOperatorToken() {
+        public @Nullable Operator getOperatorToken() {
             return operatorToken == null ? null : operatorToken.getElement();
         }
 
@@ -3230,9 +3230,8 @@ public interface Cs extends J {
             J.ClassDeclaration.Kind k = getPadding().getKind();
             if (k.getType() == type) {
                 return this;
-            } else {
-                return getPadding().withKind(k.withType(type));
             }
+            return getPadding().withKind(k.withType(type));
         }
 
         @With
@@ -3291,8 +3290,7 @@ public interface Cs extends J {
         @Nullable
         JContainer<TypeParameterConstraintClause> typeParameterConstraintClauses;
 
-        @Nullable
-        public List<TypeParameterConstraintClause> getTypeParameterConstraintClauses() {
+        public @Nullable List<TypeParameterConstraintClause> getTypeParameterConstraintClauses() {
             return typeParameterConstraintClauses == null ? null : typeParameterConstraintClauses.getElements();
         }
 
@@ -3322,10 +3320,9 @@ public interface Cs extends J {
             return v.visitClassDeclaration(this, p);
         }
 
-
         @Override
         @Transient
-        public CoordinateBuilder.ClassDeclaration getCoordinates() {
+        public  CoordinateBuilder.@Nullable ClassDeclaration getCoordinates() {
             //todo: Setup coordinate builder - atm it's private
 //            return new CoordinateBuilder.ClassDeclaration(this);
             return null;
@@ -3499,7 +3496,7 @@ public interface Cs extends J {
         }
 
         @Override
-        public JavaType getType() {
+        public @Nullable JavaType getType() {
             return methodType == null ? null : methodType.getReturnType();
         }
 
@@ -3547,8 +3544,7 @@ public interface Cs extends J {
                 return t.parameters == parameters ? t : new Cs.MethodDeclaration(t.id, t.prefix, t.markers, t.attributes, t.modifiers, t.typeParameters, t.returnTypeExpression, t.explicitInterfaceSpecifier, t.name, parameters, t.body, t.methodType, t.typeParameterConstraintClauses);
             }
 
-            @Nullable
-            public JRightPadded<TypeTree> getExplicitInterfaceSpecifier() {
+            public @Nullable JRightPadded<TypeTree> getExplicitInterfaceSpecifier() {
                 return t.explicitInterfaceSpecifier;
             }
 
@@ -6756,7 +6752,7 @@ public interface Cs extends J {
         }
 
         @Override
-        public <T extends J> T withType(@Nullable JavaType type) {
+        public <T extends J> @Nullable T withType(@Nullable JavaType type) {
             return null;
         }
 
@@ -6854,7 +6850,7 @@ public interface Cs extends J {
         }
 
         @Override
-        public JavaType getType() {
+        public @Nullable JavaType getType() {
             return arms.getElements().isEmpty() ? null : arms.getElements().get(0).getExpression().getType();
         }
 
@@ -7202,7 +7198,7 @@ public interface Cs extends J {
         Space colonToken;
 
         @Override
-        public JavaType getType() {
+        public @Nullable JavaType getType() {
             return null;
         }
 
@@ -7323,7 +7319,7 @@ public interface Cs extends J {
         }
 
         @Override
-        public <T extends J> T withType(@Nullable JavaType type) {
+        public <T extends J> @Nullable T withType(@Nullable JavaType type) {
             return null;
         }
 
@@ -7973,7 +7969,7 @@ public interface Cs extends J {
         }
 
         @Override
-        public JavaType getType() {
+        public @Nullable JavaType getType() {
             return null;
         }
 

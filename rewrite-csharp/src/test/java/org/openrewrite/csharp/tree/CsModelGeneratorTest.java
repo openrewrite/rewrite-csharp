@@ -15,15 +15,15 @@
  */
 package org.openrewrite.csharp.tree;
 
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.PrintOutputCapture;
+import org.openrewrite.Tree;
 import org.openrewrite.csharp.CSharpPrinter;
-import org.openrewrite.internal.ListUtils;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.java.JavaVisitor;
-import org.openrewrite.Tree;
 import org.openrewrite.java.tree.*;
 import org.openrewrite.marker.Markers;
 
@@ -31,7 +31,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class CsModelGeneratorTest {
@@ -85,16 +88,15 @@ public class CsModelGeneratorTest {
 
         @Override
         public J.CompilationUnit visitCompilationUnit(J.CompilationUnit cu, ExecutionContext ctx) {
-            cu = (J.CompilationUnit) super.visitCompilationUnit(cu, ctx);
-            return cu;
+            return (J.CompilationUnit) super.visitCompilationUnit(cu, ctx);
         }
 
         @Override
-        public J.ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx) {
+        public  J.@Nullable ClassDeclaration visitClassDeclaration(J.ClassDeclaration classDecl, ExecutionContext ctx) {
             String className = classDecl.getSimpleName();
 
             // Skip Padding classes entirely
-            if (className.equals("Padding")) {
+            if ("Padding".equals(className)) {
                 return null;
             }
 
@@ -103,7 +105,7 @@ public class CsModelGeneratorTest {
 
             // Change interface name from Cs to CsModel for the top-level interface
             if (isTopLevelInterface && classDecl.getKind() == J.ClassDeclaration.Kind.Type.Interface &&
-              className.equals("Cs")) {
+              "Cs".equals(className)) {
                 classDecl = classDecl.withName(classDecl.getName().withSimpleName("CsModel"));
                 isTopLevelInterface = false;
             }
@@ -126,7 +128,7 @@ public class CsModelGeneratorTest {
                       if (stmt instanceof J.ClassDeclaration) {
                           J.ClassDeclaration innerClass = (J.ClassDeclaration) stmt;
                           // Keep non-Padding classes
-                          return !innerClass.getSimpleName().equals("Padding");
+                          return !"Padding".equals(innerClass.getSimpleName());
                       }
                       return true;
                   })
@@ -151,7 +153,7 @@ public class CsModelGeneratorTest {
             List<String> otherInterfaces = new ArrayList<>();
             for (TypeTree impl : implementsList) {
                 String implName = getTypeName(impl);
-                if (!implName.equals("Cs") && !implName.equals("CsModel")) {
+                if (!"Cs".equals(implName) && !"CsModel".equals(implName)) {
                     otherInterfaces.add(implName);
                 }
             }
@@ -198,13 +200,15 @@ public class CsModelGeneratorTest {
 
         private String getTypeName(TypeTree type) {
             if (type instanceof J.Identifier) {
-                return ((J.Identifier) type).getSimpleName();
-            } else if (type instanceof J.FieldAccess) {
-                return ((J.FieldAccess) type).getSimpleName();
-            } else if (type instanceof J.ParameterizedType) {
-                NameTree clazz = ((J.ParameterizedType) type).getClazz();
+                return ((J.Identifier)type).getSimpleName();
+            }
+            if (type instanceof J.FieldAccess) {
+                return ((J.FieldAccess)type).getSimpleName();
+            }
+            if (type instanceof J.ParameterizedType) {
+                NameTree clazz = ((J.ParameterizedType)type).getClazz();
                 if (clazz instanceof TypeTree) {
-                    return getTypeName((TypeTree) clazz);
+                    return getTypeName((TypeTree)clazz);
                 }
                 return clazz.toString();
             }
@@ -212,7 +216,7 @@ public class CsModelGeneratorTest {
         }
 
         @Override
-        public J.VariableDeclarations visitVariableDeclarations(J.VariableDeclarations multiVariable, ExecutionContext ctx) {
+        public  J.@Nullable VariableDeclarations visitVariableDeclarations(J.VariableDeclarations multiVariable, ExecutionContext ctx) {
             // Check if this field should be excluded
             if (shouldExcludeField(multiVariable)) {
                 return null;
@@ -221,9 +225,7 @@ public class CsModelGeneratorTest {
 
             multiVariable = multiVariable.withLeadingAnnotations(annotations.stream().filter(x -> x.getSimpleName().contains("Nullable")).toList());
             // Remove all modifiers (private, final, etc.)
-            multiVariable = multiVariable.withModifiers(Collections.emptyList());
-
-            return multiVariable;
+            return multiVariable.withModifiers(Collections.emptyList());
         }
 
         private boolean shouldExcludeField(J.VariableDeclarations field) {
@@ -247,7 +249,7 @@ public class CsModelGeneratorTest {
         }
 
         @Override
-        public J.MethodDeclaration visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext ctx) {
+        public  J.@Nullable MethodDeclaration visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext ctx) {
             // Remove all methods
             return null;
         }
@@ -261,9 +263,8 @@ public class CsModelGeneratorTest {
             boolean isNullable = multiVariable
               .getLeadingAnnotations()
               .stream()
-              .anyMatch(x -> x.getSimpleName().equals("Nullable"));
-            multiVariable = multiVariable.withLeadingAnnotations(new ArrayList<>());
-            return multiVariable;
+              .anyMatch(x -> "Nullable".equals(x.getSimpleName()));
+            return multiVariable.withLeadingAnnotations(new ArrayList<>());
         }
     }
 }
