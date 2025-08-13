@@ -524,8 +524,8 @@ partial class Build : NukeBuild
             else
             {
                 gradleSettings = gradleSettings
-                    .AddTasks(KnownGradleTasks.Final)
-                    .SetVerbosity(GradleVerbosity.Info);
+                    .AddTasks(KnownGradleTasks.Final);
+                    // TODO .SetVerbosity(GradleVerbosity.Info);
             }
 
             if (!isPullRequest)
