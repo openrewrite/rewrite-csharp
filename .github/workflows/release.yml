@@ -28,7 +28,7 @@ jobs:
       - name: Set git config
         run: git config --global init.defaultBranch main
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: set-up-jdk
