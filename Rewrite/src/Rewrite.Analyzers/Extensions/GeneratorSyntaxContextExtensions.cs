@@ -1,6 +1,6 @@
-﻿namespace Lombok.NET.Extensions;
+﻿namespace Rewrite.Analyzers.Extensions;
 
-public class GeneratorSyntaxContextExtensions
+public static class GeneratorSyntaxContextExtensions
 {
     
 }

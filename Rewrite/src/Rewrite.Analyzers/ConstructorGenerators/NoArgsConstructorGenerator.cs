@@ -1,9 +1,9 @@
-﻿using Lombok.NET.Extensions;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Rewrite.Analyzers.Extensions;
 
-namespace Lombok.NET.ConstructorGenerators;
+namespace Rewrite.Analyzers.ConstructorGenerators;
 
 /// <summary>
 /// Generator which generates an empty constructor. No parameters, no body.
@@ -11,12 +11,21 @@ namespace Lombok.NET.ConstructorGenerators;
 [Generator]
 internal sealed class NoArgsConstructorGenerator : BaseConstructorGenerator
 {
-	/// <summary>
+    /// <summary>
+    /// The name (as used in user code) of the attribute this generator targets.
+    /// </summary>
+    protected override string AttributeName { get; } = typeof(NoArgsConstructorAttribute).FullName!;
+
+    /// <summary>
 	/// Gets the to-be-generated constructor's parameters as well as its body.
 	/// </summary>
 	/// <returns>The constructor's parameters and its body.</returns>
-	protected override (SyntaxKind modifier, ParameterListSyntax constructorParameters, BlockSyntax constructorBody) GetConstructorParts(TypeDeclarationSyntax typeDeclaration, AttributeData attribute)
+	protected override (SyntaxKind modifier, ParameterListSyntax constructorParameters, BlockSyntax constructorBody) GetConstructorParts<T>(
+        IReadOnlyCollection<T> typeDeclaration,
+        AttributeData attribute,
+        SemanticModel contextSemanticModel)
 	{
+        
 		var modifierTypeArgument = attribute.NamedArguments.FirstOrDefault(kv => kv.Key == nameof(NoArgsConstructorAttribute.ModifierType));
 		var modifierType = (AccessTypes?)(modifierTypeArgument.Value.Value as int?);
 		var modifier = modifierType switch
@@ -30,9 +39,4 @@ internal sealed class NoArgsConstructorGenerator : BaseConstructorGenerator
 
 		return (modifier, SyntaxFactory.ParameterList(), SyntaxFactory.Block());
 	}
-
-	/// <summary>
-	/// The name (as used in user code) of the attribute this generator targets.
-	/// </summary>
-	protected override string AttributeName { get; } = "Lombok.NET.NoArgsConstructorAttribute";
 }

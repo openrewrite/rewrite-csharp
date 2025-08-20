@@ -7,6 +7,7 @@ using Nuke.Common.IO;
 using Rewrite.CSharp.Tests;
 using Rewrite.Tests;
 using Spectre.Console;
+using TUnit.Core;
 
 [assembly: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 
@@ -14,7 +15,7 @@ namespace Rewrite.MSBuild.Tests;
 
 public class GlobalHooks
 {
-    [Before(TestSession)]
+    [Before(HookType.TestSession)]
     public static void BeforeTestSession()
     {
 // #pragma warning disable CA1416
@@ -25,7 +26,7 @@ public class GlobalHooks
         AnsiConsole.Profile.Capabilities.Ansi = true;
         CommonTestHooks.BeforeTestSession();
     }
-    [Before(TestDiscovery)]
+    [Before(HookType.TestDiscovery)]
     public static void CleanNugetDirectory()
     {
         var globalPackagesFolder = (AbsolutePath)SettingsUtility.GetGlobalPackagesFolder(Settings.LoadDefaultSettings(null));
@@ -38,7 +39,7 @@ public class GlobalHooks
         }
     }
 
-    [After(TestSession)]
+    [After(HookType.TestSession)]
     public static void CleanUp()
     {
     }

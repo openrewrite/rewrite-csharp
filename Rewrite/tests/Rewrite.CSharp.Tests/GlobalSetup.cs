@@ -5,7 +5,7 @@ namespace Rewrite.CSharp.Tests;
 public class GlobalSetup
 {
     
-    [Before(TestDiscovery)]
+    [Before(HookType.TestDiscovery)]
     public static void Initialize()
     {
         CommonTestHooks.BeforeTestSession();

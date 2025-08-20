@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace Lombok.NET;
+namespace Rewrite.Analyzers;
 
 /// <summary>
 /// Builds a predicate by chaining multiple conditions.

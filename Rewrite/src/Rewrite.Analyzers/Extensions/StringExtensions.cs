@@ -1,4 +1,4 @@
-namespace Lombok.NET.Extensions;
+namespace Rewrite.Analyzers.Extensions;
 
 /// <summary>
 /// Extension methods for string-related operations.
@@ -86,6 +86,21 @@ internal static class StringExtensions
 		"volatile",
 		"while"
 	};
+    
+    
+
+    // public static string EnsureSafeIdentifier(this string s) => $"{s[0].ToString().ToLower()}{s.Remove(0, 1)}";
+    // public static string ToCamelCase(this string s) => $"{s[0].ToString().ToLower()}{s.Remove(0, 1)}";
+
+
+    // public static string Ident(this object source, int identLevels)
+    // {
+    //     var lines = source.ToString()?.TrimStart(' ').Split('\n') ?? [];
+    //     var ident = new string(' ', identLevels * 4);
+    //     return string.Join("\n", lines.Select((x, i) => $"""{ (i > 0 ? ident : "") }{x}"""));
+    // }
+
+
 
 	/// <summary>
 	/// Lowercases the first character of a given string.

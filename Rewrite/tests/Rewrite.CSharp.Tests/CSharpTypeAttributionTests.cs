@@ -15,7 +15,7 @@ public class CSharpTypeAttributionTests : RewriteTest
     [Test]
     [KnownBug]
     // ReSharper disable once UnusedMember.Local
-    void ClosureImplicitParameterAttributed()
+    public void ClosureImplicitParameterAttributed()
     {
         RewriteRun(
             CSharp(

@@ -1,8 +1,8 @@
-using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
+using Rewrite.Analyzers.Extensions;
 
-namespace Lombok.NET;
+namespace Rewrite.Analyzers;
 
 /// <summary>
 /// The result class for incremental generators. Either contains source code or a diagnostic which should be raised.

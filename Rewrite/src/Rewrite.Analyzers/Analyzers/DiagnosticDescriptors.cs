@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 
-namespace Lombok.NET.Analyzers;
+namespace Rewrite.Analyzers.Analyzers;
 
 /// <summary>
 /// Contains definitions of diagnostics which can be raised by Lombok.NET.
@@ -73,7 +73,7 @@ public static class DiagnosticDescriptors
 	public static readonly DiagnosticDescriptor InvalidJson = new(
 		"LOM006",
 		"Invalid JSON",
-		"Unable to generate code, since the JSON input is invalid.",
+		"Unable to generate code, since the JSON input is invalid",
 		"Usage",
 		DiagnosticSeverity.Error,
 		true
@@ -85,7 +85,7 @@ public static class DiagnosticDescriptors
 	public static readonly DiagnosticDescriptor TypeCannotBeFileLocal = new(
 		"LOM007",
 		"Type cannot be file-local",
-		"The type '{0}' must not be file-local in order to generate code for it.",
+		"The type '{0}' must not be file-local in order to generate code for it",
 		"Usage",
 		DiagnosticSeverity.Error,
 		true

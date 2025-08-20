@@ -8,7 +8,7 @@ using static Assertions;
 public class AssignmentTests : RewriteTest
 {
     [Test]
-    private void Simple()
+    public void Simple()
     {
         RewriteRun(
           CSharp(
@@ -27,7 +27,7 @@ public class AssignmentTests : RewriteTest
     }
 
     [Test]
-    private void AssignmentOperation()
+    public void AssignmentOperation()
     {
         RewriteRun(
           CSharp(
@@ -56,7 +56,7 @@ public class AssignmentTests : RewriteTest
     }
 
     [Test]
-    private void NullCoalescing()
+    public void NullCoalescing()
     {
         RewriteRun(
           CSharp(

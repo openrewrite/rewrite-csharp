@@ -1,6 +1,8 @@
+using System.Text;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
-namespace Lombok.NET.Extensions;
+namespace Rewrite.Analyzers.Extensions;
 
 /// <summary>
 /// Extensions for <see cref="IncrementalGeneratorInitializationContext"/>.
@@ -21,7 +23,7 @@ internal static class IncrementalGeneratorInitializationContextExtensions
 	{
 		if (result.IsValid)
 		{
-			context.AddSource($"{result.TypeName}.g.cs", result.Source);
+			context.AddSource($"{result.TypeName}.g.cs", SourceText.From(result.Source!.ToString(), Encoding.UTF8)!);
 		}
 		else if(result.Diagnostic is not null)
 		{

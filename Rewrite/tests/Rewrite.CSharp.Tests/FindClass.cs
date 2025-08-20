@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using Rewrite.Core;
+using Rewrite.Core.Config;
 using Rewrite.Core.Marker;
 using Rewrite.RewriteJava;
 using Rewrite.RewriteJava.Tree;

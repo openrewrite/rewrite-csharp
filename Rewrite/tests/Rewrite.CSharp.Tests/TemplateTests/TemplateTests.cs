@@ -1,4 +1,4 @@
-﻿using System.Runtime.Serialization;
+using System.Runtime.Serialization;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -80,9 +80,7 @@ public class TemplateTests
         Console.WriteLine(result?.RenderLstTree());
     }
     
-    [Test]
-    [KnownBug]
-    public void BooleanTest()
+    [Test]`n    public [KnownBug] public void BooleanTest()
     {
         var before = $$"""
                        bool m() {

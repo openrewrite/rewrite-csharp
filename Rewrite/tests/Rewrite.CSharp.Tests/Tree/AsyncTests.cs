@@ -9,7 +9,7 @@ using static Assertions;
 public class AsyncTests : RewriteTest
 {
     [Test]
-    private void Simple()
+    public void Simple()
     {
         RewriteRun(
           CSharp(
@@ -25,8 +25,7 @@ public class AsyncTests : RewriteTest
           )
         );
     }
-    [Test]
-    private void AwaitStatement()
+    [Test]`n    public void AwaitStatement()
     {
         RewriteRun(
             CSharp(
@@ -44,8 +43,7 @@ public class AsyncTests : RewriteTest
         );
     }
 
-    [Test]
-    private void AsyncLambda()
+    [Test]`n    public void AsyncLambda()
     {
         RewriteRun(
           CSharp(

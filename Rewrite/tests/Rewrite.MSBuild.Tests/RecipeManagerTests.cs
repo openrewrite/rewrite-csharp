@@ -13,6 +13,7 @@ using Rewrite.Test;
 using Rewrite.Test.CSharp;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
+using TUnit.Core;
 using AbsolutePath = Nuke.Common.IO.AbsolutePath;
 
 namespace Rewrite.MSBuild.Tests;

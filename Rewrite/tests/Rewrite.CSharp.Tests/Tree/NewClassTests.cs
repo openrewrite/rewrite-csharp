@@ -7,8 +7,7 @@ using static Assertions;
 
 public class NewClassTests : RewriteTest
 {
-    [Test]
-    void SimpleNewClassCase()
+    [Test]`n    public void SimpleNewClassCase()
     {
         RewriteRun(
             CSharp(
@@ -21,8 +20,7 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]
-    void SimpleNewClassSpaces()
+    [Test]`n    public void SimpleNewClassSpaces()
     {
         RewriteRun(
             CSharp(
@@ -35,8 +33,7 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]
-    void SimpleNewNestedClassCase()
+    [Test]`n    public void SimpleNewNestedClassCase()
     {
         RewriteRun(
             CSharp(
@@ -55,8 +52,7 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]
-    void SimpleNewNestedClassSpaces()
+    [Test]`n    public void SimpleNewNestedClassSpaces()
     {
         RewriteRun(
             CSharp(
@@ -75,8 +71,7 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]
-    void SimpleNewNestedParametrizedClassSpaces()
+    [Test]`n    public void SimpleNewNestedParametrizedClassSpaces()
     {
         RewriteRun(
             CSharp(
@@ -95,8 +90,7 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]
-    void NewClassWithEmptyInitializer()
+    [Test]`n    public void NewClassWithEmptyInitializer()
     {
         RewriteRun(
             CSharp(
@@ -131,8 +125,7 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]
-    void NewClassWithInitializer()
+    [Test]`n    public void NewClassWithInitializer()
     {
         RewriteRun(
             CSharp(
@@ -149,8 +142,7 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]
-    void NewClassWithMultiValueInitializer()
+    [Test]`n    public void NewClassWithMultiValueInitializer()
     {
         var src = CSharp(
                 """
@@ -165,8 +157,7 @@ public class NewClassTests : RewriteTest
 
     }
 
-    [Test]
-    void NewClassWithInitializerSpaces()
+    [Test]`n    public void NewClassWithInitializerSpaces()
     {
         RewriteRun(
             CSharp(
@@ -184,8 +175,7 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]
-    void Generics()
+    [Test]`n    public void Generics()
     {
         RewriteRun(
             CSharp(
@@ -199,8 +189,7 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]
-    void ImplicitNewClass()
+    [Test]`n    public void ImplicitNewClass()
     {
         RewriteRun(
             CSharp(
@@ -215,8 +204,7 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]
-    void ImplicitElementAccess()
+    [Test]`n    public void ImplicitElementAccess()
     {
         RewriteRun(
             CSharp(
@@ -231,8 +219,7 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]
-    void AnonymousObjectCreation()
+    [Test]`n    public void AnonymousObjectCreation()
     {
         RewriteRun(
             CSharp(
@@ -248,8 +235,7 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]
-    void ComplexAnonymousObjectCreation()
+    [Test]`n    public void ComplexAnonymousObjectCreation()
     {
         RewriteRun(
             CSharp(
@@ -270,8 +256,7 @@ public class NewClassTests : RewriteTest
 
 
 
-    [Test]
-    void ComplexAnonymousObjectCreationWithFieldAccess()
+    [Test]`n    public void ComplexAnonymousObjectCreationWithFieldAccess()
     {
         RewriteRun(
             CSharp(
@@ -294,8 +279,7 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]
-    void DictionaryCreation()
+    [Test]`n    public void DictionaryCreation()
     {
         RewriteRun(
             CSharp(
@@ -311,8 +295,7 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]
-    void DictionaryDictionaryCreation()
+    [Test]`n    public void DictionaryDictionaryCreation()
     {
         RewriteRun(
             CSharp(

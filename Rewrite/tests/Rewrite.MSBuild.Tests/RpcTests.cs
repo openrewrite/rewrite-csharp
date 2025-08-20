@@ -9,6 +9,7 @@ using Rewrite.Rpc.Serialization;
 using Rewrite.Test;
 using Spectre.Console;
 using Spectre.Console.Rendering;
+using TUnit.Core;
 using YamlDotNet.Core;
 
 namespace Rewrite.MSBuild.Tests;

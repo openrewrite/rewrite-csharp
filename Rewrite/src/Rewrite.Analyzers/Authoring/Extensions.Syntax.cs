@@ -3,8 +3,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxKind;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
-namespace MyProject.Analyzers.Authoring;
+
+namespace Rewrite.Analyzers.Authoring;
 
 public static partial class Extensions
 {
@@ -32,23 +32,7 @@ public static partial class Extensions
     }
     
     
-    public static bool HasAttribute(this SyntaxList<AttributeListSyntax> attributes, string name)
-    {
-        string fullname, shortname;
-        var attrLen = "Attribute".Length;
-        if (name.EndsWith("Attribute"))
-        {
-            fullname = name;
-            shortname = name.Remove(name.Length - attrLen, attrLen);
-        }
-        else
-        {
-            fullname = name + "Attribute";
-            shortname = name;
-        }
 
-        return attributes.Any(al => al.Attributes.Any(a => a.Name.ToString() == shortname || a.Name.ToString() == fullname));
-    }
     /// <summary>
     /// Generates a filename-safe string for a TypeDeclarationSyntax, including namespace, nesting, and generic arity.
     /// Example: Namespace.Outer`1.Inner`2.g.cs

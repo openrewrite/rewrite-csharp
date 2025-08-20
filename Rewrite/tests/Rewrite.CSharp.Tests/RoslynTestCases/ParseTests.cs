@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
@@ -16,9 +16,7 @@ public class ParseTests : RewriteTest
     private readonly CSharpParser _parser = new CSharpParser.Builder().Build();
 
 
-    [Test]
-    [Explicit]
-    public void TestReport()
+    [Test]`n    public [Explicit] public void TestReport()
     {
         var badTestCases = new List<(SourceTestCase, List<Diagnostic>)>();
         var testCases = CSharpSyntaxFragments.GetData().ToList();

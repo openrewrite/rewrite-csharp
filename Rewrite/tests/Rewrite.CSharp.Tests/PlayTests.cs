@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -37,9 +37,7 @@ public class PlayTests : RewriteTest
         after.ShouldBeSameAs(before);
     }
 
-    [Test]
-    [Explicit]
-    public void MyTest()
+    [Test]`n    public [Explicit] public void MyTest()
     {
         var root = new CSharpParser.Builder().Build().Parse(
             """
@@ -58,9 +56,7 @@ public class PlayTests : RewriteTest
     }
 
 
-    [Test]
-    [Explicit]
-    public void TestCursor()
+    [Test]`n    public [Explicit] public void TestCursor()
     {
         var node = CSharpParser.Instance.Parse(
             """

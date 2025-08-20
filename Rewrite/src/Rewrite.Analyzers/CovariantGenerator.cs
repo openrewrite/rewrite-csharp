@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
-using MyProject.Analyzers.Authoring;
+using Rewrite.Analyzers.Authoring;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Rewrite.Analyzers;
@@ -134,10 +134,7 @@ public sealed partial class CovariantGenerator : IIncrementalGenerator
 
                     writer.Indent--;
                     writer.Write(partialDeclaration.After);
-                    if (typeDeclaration.GetGeneratorQualifiedSourceFileName(this).Contains("NamedVariable"))
-                    {
-                        Debugger.Break();
-                    }
+
                     return (Source: writer.InnerWriter.ToString(), FileName: typeDeclaration.GetGeneratorQualifiedSourceFileName(this));
 // #pragma warning restore CS0162 // Unreachable code detected
 

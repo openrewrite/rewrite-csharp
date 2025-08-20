@@ -1,16 +1,15 @@
 using System.Collections;
-using System.Collections.Immutable;
 using System.Text;
 
 namespace Rewrite.Core.Marker;
 
 public partial record Markers(Guid Id, IList<Marker> MarkerList) : IReadOnlyCollection<Marker>
 {
-    public static readonly Markers EMPTY = new(Tree.RandomId(), ImmutableList<Marker>.Empty);
+    public static readonly Markers EMPTY = new(Tree.RandomId(), new List<Marker>());
 
     public static Markers Create(params Marker[] markers)
     {
-        return new Markers( Core.Tree.RandomId(), markers.ToImmutableList());
+        return new Markers( Core.Tree.RandomId(), markers);
     }
 
     public Markers WithId(Guid id)

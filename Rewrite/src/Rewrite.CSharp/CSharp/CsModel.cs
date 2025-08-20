@@ -1,6 +1,9 @@
-﻿namespace Rewrite.CSharp;
+﻿using Rewrite.Analyzers;
+using Rewrite.RewriteJava.Tree;
 
-partial interface CsModel
+namespace Rewrite.RewriteCSharp;
+
+
+partial interface CsModel : J
 {
-    
 }

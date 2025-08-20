@@ -7,8 +7,7 @@ using static Assertions;
 
 public class NullableTypeTests : RewriteTest
 {
-    [Test]
-    void NullableFieldDeclaration()
+    [Test]`n    public void NullableFieldDeclaration()
     {
 
         RewriteRun(
@@ -22,8 +21,7 @@ public class NullableTypeTests : RewriteTest
         );
     }
 
-    [Test]
-    void CommentsOnNullableFieldDeclaration()
+    [Test]`n    public void CommentsOnNullableFieldDeclaration()
     {
 
         RewriteRun(

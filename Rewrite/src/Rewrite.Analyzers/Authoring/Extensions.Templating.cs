@@ -1,11 +1,10 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace MyProject.Analyzers.Authoring;
+namespace Rewrite.Analyzers.Authoring;
 
 [PublicAPI]
 public static partial class Extensions

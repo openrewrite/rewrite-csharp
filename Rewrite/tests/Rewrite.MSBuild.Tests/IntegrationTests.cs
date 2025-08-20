@@ -1,6 +1,8 @@
 ﻿using NMica.Utils.IO;
 using Nuke.Common;
 using Nuke.Common.Tooling;
+using TUnit.Assertions;
+using TUnit.Core;
 
 namespace Rewrite.MSBuild.Tests;
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Lombok.NET.ConstructorGenerators;
+namespace Rewrite.Analyzers.ConstructorGenerators;
 
 /// <summary>
 /// Generates a constructor which takes all of the members as arguments.
@@ -13,7 +13,7 @@ internal sealed class AllArgsConstructorGenerator : RequiredArgsConstructorGener
 	/// <summary>
 	/// The name (as used in user code) of the attribute this generator targets.
 	/// </summary>
-	protected override string AttributeName { get; } = "Lombok.NET.AllArgsConstructorAttribute";
+    protected override string AttributeName { get; } = typeof(AllArgsConstructorAttribute).FullName!;
 
 	/// <summary>
 	/// Specifies if the property is considered required. In the case of the AllArgsConstructor, this is always the case. 

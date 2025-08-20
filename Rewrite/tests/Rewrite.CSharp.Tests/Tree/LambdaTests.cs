@@ -8,8 +8,7 @@ using static Assertions;
 public class LambdaTests : RewriteTest
 {
 
-    [Test]
-    void SimpleLambda()
+    [Test]`n    public void SimpleLambda()
     {
         RewriteRun(
             CSharp(
@@ -21,8 +20,7 @@ public class LambdaTests : RewriteTest
             )
         );
     }
-    [Test]
-    void SimpleLambdaWithComments()
+    [Test]`n    public void SimpleLambdaWithComments()
     {
         RewriteRun(
             CSharp(
@@ -36,8 +34,7 @@ public class LambdaTests : RewriteTest
     }
 
 
-    [Test]
-    void SimpleLambdaWithBlockBody()
+    [Test]`n    public void SimpleLambdaWithBlockBody()
     {
         RewriteRun(
             CSharp(
@@ -53,8 +50,7 @@ public class LambdaTests : RewriteTest
         );
     }
 
-    [Test]
-    void ParenthesizedMultiArgsLambda()
+    [Test]`n    public void ParenthesizedMultiArgsLambda()
     {
         RewriteRun(
             CSharp(
@@ -67,8 +63,7 @@ public class LambdaTests : RewriteTest
         );
     }
 
-    [Test]
-    void ParenthesizedMultiArgsLambdaWithComments()
+    [Test]`n    public void ParenthesizedMultiArgsLambdaWithComments()
     {
         RewriteRun(
             CSharp(
@@ -81,8 +76,7 @@ public class LambdaTests : RewriteTest
         );
     }
 
-    [Test]
-    void ParenthesizedMultiArgsLambdaWithBlockBody()
+    [Test]`n    public void ParenthesizedMultiArgsLambdaWithBlockBody()
     {
         RewriteRun(
             CSharp(
@@ -98,20 +92,17 @@ public class LambdaTests : RewriteTest
         );
     }
 
-    [Test]
-    private void AsyncLambda()
+    [Test]`n    public void AsyncLambda()
     {
         RewriteRun(CSharp("Task.Run(async () => {});"));
     }
 
-    [Test]
-    private void LambdaWithModifiers()
+    [Test]`n    public void LambdaWithModifiers()
     {
         RewriteRun(CSharp("Task.Run( async static () => {});"));
     }
 
-    [Test]
-    private void LambdaWithReturnType()
+    [Test]`n    public void LambdaWithReturnType()
     {
         RewriteRun(CSharp("Task.Run( async static bool () => {});"));
     }

@@ -2,6 +2,7 @@
 using NuGet.Configuration;
 using Rewrite.Core;
 using Serilog;
+using TUnit.Core;
 
 namespace Rewrite.MSBuild.Tests;
 

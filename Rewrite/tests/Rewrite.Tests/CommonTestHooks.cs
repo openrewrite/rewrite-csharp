@@ -2,6 +2,7 @@
 using Rewrite.CSharp.Tests;
 using Rewrite.Diagnostics;
 using Rewrite.Test;
+using TUnit.Core;
 
 namespace Rewrite.Tests;
 
@@ -11,7 +12,7 @@ public static class CommonTestHooks
     public static void BeforeTestSession()
     {
         var noColor = false;
-        var customProperties = TestContext.Parameters.ToDictionary(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase) ?? new Dictionary<string, string>();
+        var customProperties = TestContext.Parameters.ToDictionary(x => x.Key, x => x.Value.First(), StringComparer.OrdinalIgnoreCase) ?? new Dictionary<string, string>();
         if (customProperties.TryGetValue("NoAnsi", out var noAnsiStr) && bool.TryParse(noAnsiStr, out var noAnsi))
         {
             noColor = true;

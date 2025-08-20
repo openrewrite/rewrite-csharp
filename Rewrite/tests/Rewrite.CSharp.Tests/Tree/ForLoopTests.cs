@@ -8,8 +8,7 @@ using static Assertions;
 public class ForLoopTests : RewriteTest
 {
 
-    [Test]
-    void ForLoopMultipleInit()
+    [Test]`n    public void ForLoopMultipleInit()
     {
         RewriteRun(
             CSharp(
@@ -27,8 +26,7 @@ public class ForLoopTests : RewriteTest
         );
     }
 
-    [Test]
-    void ForLoop()
+    [Test]`n    public void ForLoop()
     {
         RewriteRun(
             CSharp(
@@ -44,8 +42,7 @@ public class ForLoopTests : RewriteTest
         );
     }
 
-    [Test]
-    void InfiniteLoop()
+    [Test]`n    public void InfiniteLoop()
     {
         RewriteRun(
             CSharp(
@@ -61,8 +58,7 @@ public class ForLoopTests : RewriteTest
         );
     }
 
-    [Test]
-    void Format()
+    [Test]`n    public void Format()
     {
         RewriteRun(
             CSharp(
@@ -78,8 +74,7 @@ public class ForLoopTests : RewriteTest
         );
     }
 
-    [Test]
-    void FormatInfiniteLoop()
+    [Test]`n    public void FormatInfiniteLoop()
     {
         RewriteRun(
             CSharp(
@@ -94,8 +89,7 @@ public class ForLoopTests : RewriteTest
         );
     }
 
-    [Test]
-    void FormatLoopNoInit()
+    [Test]`n    public void FormatLoopNoInit()
     {
         RewriteRun(
             CSharp(
@@ -110,8 +104,7 @@ public class ForLoopTests : RewriteTest
         );
     }
 
-    [Test]
-    void FormatLoopNoCondition()
+    [Test]`n    public void FormatLoopNoCondition()
     {
         RewriteRun(
             CSharp(
@@ -127,8 +120,7 @@ public class ForLoopTests : RewriteTest
         );
     }
 
-    [Test]
-    void StatementTerminatorForSingleLineForLoops()
+    [Test]`n    public void StatementTerminatorForSingleLineForLoops()
     {
         RewriteRun(
             CSharp(
@@ -143,8 +135,7 @@ public class ForLoopTests : RewriteTest
         );
     }
 
-    [Test]
-    void InitializerIsAnAssignment()
+    [Test]`n    public void InitializerIsAnAssignment()
     {
         RewriteRun(
             CSharp(
@@ -162,8 +153,7 @@ public class ForLoopTests : RewriteTest
         );
     }
 
-    [Test]
-    void MultiVariableInitialization()
+    [Test]`n    public void MultiVariableInitialization()
     {
         RewriteRun(
             CSharp(
@@ -178,8 +168,7 @@ public class ForLoopTests : RewriteTest
         );
     }
 
-    [Test]
-    void MultiInitExpressions()
+    [Test]`n    public void MultiInitExpressions()
     {
         RewriteRun(
             CSharp(

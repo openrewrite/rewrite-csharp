@@ -1,12 +1,24 @@
 using Microsoft.CodeAnalysis;
 
-namespace Lombok.NET.Extensions;
+namespace Rewrite.Analyzers.Extensions;
 
 /// <summary>
 /// Extension methods for symbol-related operations.
 /// </summary>
 internal static class SymbolExtensions
 {
+    public static bool InheritsFrom(this INamedTypeSymbol symbol, string type)
+    {
+        var current = symbol.BaseType;
+        while (current != null)
+        {
+            if (current.Name == type)
+                return true;
+            current = current.BaseType;
+        }
+        return false;
+    }
+    
 	private static readonly IDictionary<AccessTypes, Accessibility> AccessibilitiesByAccessType = new Dictionary<AccessTypes, Accessibility>(4)
 	{
 		[AccessTypes.Private] = Accessibility.Private,

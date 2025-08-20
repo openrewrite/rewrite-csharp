@@ -1,9 +1,10 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.CodeDom.Compiler;
+using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace MyProject.Analyzers.Authoring;
+namespace Rewrite.Analyzers.Authoring;
 
 [PublicAPI]
 public abstract record PartialTypeModel
@@ -113,6 +114,31 @@ public abstract record PartialTypeModel
         return (before.Trim(), after.Trim(), bodyIndentationLevel);
     }
 
+    public static string RenderPartialBody(TypeDeclarationSyntax partialType, params MemberDeclarationSyntax[] body)
+    {
+        var sb =  new StringBuilder();
+        foreach (var member in body)
+        {
+            sb.AppendLine(member.ToFullString());
+        }
+
+        return RenderPartialBody(partialType, sb.ToString());
+    }
+
+    public static string RenderPartialBody(TypeDeclarationSyntax partialType, string body)
+    {
+        var sb = new StringBuilder();
+        using var writer = new IndentedTextWriter(new StringWriter(sb), "    ");
+        var partialDeclaration = GetPartialDeclaration(partialType);
+        writer.WriteLine("#nullable enable");
+        writer.WriteLine(partialDeclaration.Before);
+        writer.Indent = partialDeclaration.BodyIndentationLevel;
+        writer.WriteLine(body);
+        writer.Indent--;
+        writer.Write(partialDeclaration.After);
+        return sb.ToString();
+    }
+    
     public string PartialDeclarationTemplate { get; private set; }
     public int IdentLevel { get; private set; }
     public string FileName { get; }

@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Lombok.NET.Analyzers;
+namespace Rewrite.Analyzers.Analyzers;
 
 /// <summary>
 /// Code fix for types which need to be partial. Simply adds the partial modifier to the type declaration.

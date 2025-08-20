@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 
 namespace Rewrite.Core;
 
@@ -26,7 +25,7 @@ public static class ListUtils
             T tree = list[i];
             T? newTree = map(i, tree);
 
-            if (!EqualityComparer<T>.Default.Equals(newTree, tree))
+            if (!EqualityComparer<T>.Default.Equals(newTree!, tree))
             {
                 if (!ReferenceEquals(newList, list))
                 {
@@ -157,7 +156,7 @@ public static class ListUtils
             }
 
             // Compare the current input and mapped items for equality.
-            if (!EqualityComparer<T>.Default.Equals(t, mappedItem))
+            if (!EqualityComparer<T>.Default.Equals(t, mappedItem!))
             {
                 areAllElementsSame = false;
             }
@@ -170,7 +169,7 @@ public static class ListUtils
     {
         if (t == null && ls == null)
         {
-            return ImmutableList<T>.Empty;
+            return new List<T>();
         }
         else if (t == null)
         {

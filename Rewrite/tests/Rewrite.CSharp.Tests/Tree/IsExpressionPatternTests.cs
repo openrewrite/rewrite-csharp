@@ -8,8 +8,7 @@ using static Assertions;
 public class IsPatternTests : RewriteTest
 {
 
-    [Test]
-    private void IsType()
+    [Test]`n    public void IsType()
     {
         RewriteRun(
             CSharp(
@@ -20,8 +19,7 @@ public class IsPatternTests : RewriteTest
         );
     }
 
-    [Test]
-    private void IsTypeWithVariable()
+    [Test]`n    public void IsTypeWithVariable()
     {
         RewriteRun(
             CSharp(
@@ -32,8 +30,7 @@ public class IsPatternTests : RewriteTest
         );
     }
 
-    [Test]
-    private void IsTypeWithDiscard()
+    [Test]`n    public void IsTypeWithDiscard()
     {
         RewriteRun(
             CSharp(
@@ -44,8 +41,7 @@ public class IsPatternTests : RewriteTest
         );
     }
 
-    [Test]
-    private void IsVarWithTupleDeconstruction()
+    [Test]`n    public void IsVarWithTupleDeconstruction()
     {
         RewriteRun(
             CSharp(
@@ -56,8 +52,7 @@ public class IsPatternTests : RewriteTest
         );
     }
 
-    [Test]
-    private void IsIntConstant()
+    [Test]`n    public void IsIntConstant()
     {
         RewriteRun(
             CSharp(
@@ -68,8 +63,7 @@ public class IsPatternTests : RewriteTest
         );
     }
 
-    [Test]
-    private void IsStringConstant()
+    [Test]`n    public void IsStringConstant()
     {
         RewriteRun(
             CSharp(
@@ -80,8 +74,7 @@ public class IsPatternTests : RewriteTest
         );
     }
 
-    [Test]
-    private void IsPropertyPattern()
+    [Test]`n    public void IsPropertyPattern()
     {
         RewriteRun(
             CSharp(
@@ -92,8 +85,7 @@ public class IsPatternTests : RewriteTest
         );
     }
 
-    [Test]
-    private void IsVarPattern()
+    [Test]`n    public void IsVarPattern()
     {
         RewriteRun(
             CSharp(
@@ -104,8 +96,7 @@ public class IsPatternTests : RewriteTest
         );
     }
 
-    [Test]
-    private void IsPositional()
+    [Test]`n    public void IsPositional()
     {
         RewriteRun(
             CSharp(
@@ -116,8 +107,7 @@ public class IsPatternTests : RewriteTest
         );
     }
 
-    [Test]
-    private void IsRelational()
+    [Test]`n    public void IsRelational()
     {
         RewriteRun(
             CSharp(
@@ -128,8 +118,7 @@ public class IsPatternTests : RewriteTest
         );
     }
 
-    [Test]
-    private void IsArray()
+    [Test]`n    public void IsArray()
     {
         RewriteRun(
             CSharp(
@@ -140,8 +129,7 @@ public class IsPatternTests : RewriteTest
         );
     }
 
-    [Test]
-    private void PropertyNameNested()
+    [Test]`n    public void PropertyNameNested()
     {
         RewriteRun(
             CSharp(

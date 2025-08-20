@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Text.RegularExpressions;
 using Rewrite.MSBuild;
@@ -13,9 +13,7 @@ public class SolutionTests : RewriteTest
 {
 
 
-    [Test]
-    [Explicit]
-    public void PlayTest()
+    [Test]`n    public [Explicit] public void PlayTest()
     {
         var actual = """
                      hello
@@ -25,9 +23,7 @@ public class SolutionTests : RewriteTest
         actual.ShouldBeSameAs(expected);
     }
 
-    [Test]
-    [Explicit]
-    public void RewriteTest()
+    [Test]`n    public [Explicit] public void RewriteTest()
     {
         this.RewriteRun(CSharp("""
                      var newElements = combinatorSelector.Transform!(element);
@@ -35,17 +31,13 @@ public class SolutionTests : RewriteTest
 
     }
 
-    [Test]
-    [Explicit]
-    public async Task ParseSingleFile()
+    [Test]`n    public [Explicit] public async Task ParseSingleFile()
     {
         var src = await File.ReadAllTextAsync(@"C:\projects\openrewrite\rewrite-csharp\Rewrite\tests\fixtures\Bogus\Source\Bogus.Tests\SchemaTests\LocaleSchemaTests.cs");
         RewriteRun(CSharp(src));
     }
 
-    [Test]
-    [Explicit]
-    public async Task UnknownSyntaxReport()
+    [Test]`n    public [Explicit] public async Task UnknownSyntaxReport()
     {
         // Type.GetType("Nuke.Common.ParameterService")
         // AbsolutePath path = NukeBuild.RootDirectory;

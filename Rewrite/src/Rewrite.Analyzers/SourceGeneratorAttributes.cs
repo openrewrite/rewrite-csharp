@@ -1,4 +1,4 @@
-﻿namespace Lombok.NET;
+﻿namespace Rewrite.Analyzers;
 
 /// <summary>
 /// Tells Lombok.NET to generate an AllArgsConstructor for this type. 

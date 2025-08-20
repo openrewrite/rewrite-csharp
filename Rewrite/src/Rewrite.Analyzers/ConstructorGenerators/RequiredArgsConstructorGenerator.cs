@@ -1,10 +1,10 @@
-﻿using Lombok.NET.Extensions;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Rewrite.Analyzers.Extensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace Lombok.NET.ConstructorGenerators;
+namespace Rewrite.Analyzers.ConstructorGenerators;
 
 /// <summary>
 /// Generates a constructor which takes all of the required members as arguments.
@@ -15,19 +15,27 @@ namespace Lombok.NET.ConstructorGenerators;
 [Generator]
 internal class RequiredArgsConstructorGenerator : BaseConstructorGenerator
 {
-	/// <summary>
-	/// The name (as used in user code) of the attribute this generator targets.
-	/// </summary>
-	protected override string AttributeName { get; } = "Lombok.NET.RequiredArgsConstructorAttribute";
+    /// <summary>
+    /// The name (as used in user code) of the attribute this generator targets.
+    /// </summary>
+    // protected override string AttributeName { get; } = typeof(RequiredArgsConstructorAttribute).FullName!; //"Lombok.NET.RequiredArgsConstructorAttribute";
+    protected override string AttributeName { get; } = typeof(RequiredArgsConstructorAttribute).FullName!;
 
-	/// <summary>
-	/// Gets the to-be-generated constructor's parameters as well as its body.
-	/// </summary>
-	/// <param name="typeDeclaration">The type declaration to generate the parts for.</param>
-	/// <param name="attribute">The attribute declared on the type.</param>
-	/// <returns>The constructor's parameters and its body.</returns>
-	protected override (SyntaxKind modifier, ParameterListSyntax constructorParameters, BlockSyntax constructorBody) GetConstructorParts(TypeDeclarationSyntax typeDeclaration, AttributeData attribute)
-	{
+    /// <summary>
+    /// Gets the to-be-generated constructor's parameters as well as its body.
+    /// </summary>
+    /// <param name="typeDeclaration">The type declaration to generate the parts for.</param>
+    /// <param name="attribute">The attribute declared on the type.</param>
+    /// <param name="model"></param>
+    /// <param name="contextSemanticModel"></param>
+    /// <returns>The constructor's parameters and its body.</returns>
+    protected override (SyntaxKind modifier, ParameterListSyntax constructorParameters, BlockSyntax constructorBody) GetConstructorParts<T>(
+        IReadOnlyCollection<T> typeDeclaration,
+        AttributeData attribute,
+        SemanticModel contextSemanticModel)
+    {
+        
+
 		var memberTypeArgument = attribute.NamedArguments.FirstOrDefault(kv => kv.Key == nameof(RequiredArgsConstructorAttribute.MemberType));
 		var accessTypesArgument = attribute.NamedArguments.FirstOrDefault(kv => kv.Key == nameof(RequiredArgsConstructorAttribute.AccessTypes));
 		var modifierTypeArgument = attribute.NamedArguments.FirstOrDefault(kv => kv.Key == nameof(RequiredArgsConstructorAttribute.ModifierType));
@@ -40,17 +48,19 @@ internal class RequiredArgsConstructorGenerator : BaseConstructorGenerator
 			AccessTypes.Internal => SyntaxKind.InternalKeyword,
 			AccessTypes.Protected => SyntaxKind.ProtectedKeyword,
 			AccessTypes.Private => SyntaxKind.PrivateKeyword,
-			_ => typeDeclaration.GetAccessibilityModifier(),
+			// _ => typeDeclaration.GetAccessibilityModifier(),
+			_ => SyntaxKind.PublicKeyword
 		};
 		switch (memberType)
 		{
 			case MemberType.Field:
 			{
-				var fields = typeDeclaration.Members
+				var fields = typeDeclaration
+                    .SelectMany(x => x.Members)
 					.OfType<FieldDeclarationSyntax>()
 					.Where(IsFieldRequired)
 					.Where(p => !p.Modifiers.Any(SyntaxKind.StaticKeyword))
-					.Where(accessType)
+					// .Where(accessType)
 					.ToList();
 				if (fields.Count == 0)
 				{
@@ -58,14 +68,15 @@ internal class RequiredArgsConstructorGenerator : BaseConstructorGenerator
 				}
 
 				List<(TypeSyntax Type, string Name)> typesAndNames = fields
-					.SelectMany(p => p.Declaration.Variables.Select(v => (p.Declaration.Type, v.Identifier.Text)))
+					.SelectMany(p => p.Declaration.Variables.Select(v => (p.Declaration.Type.WithLeadingTrivia(), v.Identifier.Text)))
 					.ToList();
 
 				return GetConstructorParts(modifier, typesAndNames, static s => s.ToCamelCaseIdentifier());
 			}
 			case MemberType.Property:
 			{
-				var properties = typeDeclaration.Members
+				var properties = typeDeclaration
+                    .SelectMany(x => x.Members)
 					.OfType<PropertyDeclarationSyntax>()
 					.Where(IsPropertyRequired)
 					.Where(p => !p.Modifiers.Any(SyntaxKind.StaticKeyword))
