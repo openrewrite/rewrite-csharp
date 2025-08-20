@@ -88,7 +88,9 @@ public class FindClassDeclarationTests : RewriteTest
         );
     }
 
-    [Test]`n    public [KnownBug] public void ClassWithoutBody2()
+    [Test]
+    [KnownBug]
+    public void ClassWithoutBody2()
     {
         RewriteRun(
             CSharp(

@@ -7,7 +7,8 @@ using static Assertions;
 
 public class NewClassTests : RewriteTest
 {
-    [Test]`n    public void SimpleNewClassCase()
+    [Test]
+    public void SimpleNewClassCase()
     {
         RewriteRun(
             CSharp(
@@ -20,7 +21,8 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]`n    public void SimpleNewClassSpaces()
+    [Test]
+    public void SimpleNewClassSpaces()
     {
         RewriteRun(
             CSharp(
@@ -33,7 +35,8 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]`n    public void SimpleNewNestedClassCase()
+    [Test]
+    public void SimpleNewNestedClassCase()
     {
         RewriteRun(
             CSharp(
@@ -52,7 +55,8 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]`n    public void SimpleNewNestedClassSpaces()
+    [Test]
+    public void SimpleNewNestedClassSpaces()
     {
         RewriteRun(
             CSharp(
@@ -71,7 +75,8 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]`n    public void SimpleNewNestedParametrizedClassSpaces()
+    [Test]
+    public void SimpleNewNestedParametrizedClassSpaces()
     {
         RewriteRun(
             CSharp(
@@ -90,7 +95,8 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]`n    public void NewClassWithEmptyInitializer()
+    [Test]
+    public void NewClassWithEmptyInitializer()
     {
         RewriteRun(
             CSharp(
@@ -125,7 +131,8 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]`n    public void NewClassWithInitializer()
+    [Test]
+    public void NewClassWithInitializer()
     {
         RewriteRun(
             CSharp(
@@ -142,7 +149,8 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]`n    public void NewClassWithMultiValueInitializer()
+    [Test]
+    public void NewClassWithMultiValueInitializer()
     {
         var src = CSharp(
                 """
@@ -157,7 +165,8 @@ public class NewClassTests : RewriteTest
 
     }
 
-    [Test]`n    public void NewClassWithInitializerSpaces()
+    [Test]
+    public void NewClassWithInitializerSpaces()
     {
         RewriteRun(
             CSharp(
@@ -175,7 +184,8 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]`n    public void Generics()
+    [Test]
+    public void Generics()
     {
         RewriteRun(
             CSharp(
@@ -189,7 +199,8 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]`n    public void ImplicitNewClass()
+    [Test]
+    public void ImplicitNewClass()
     {
         RewriteRun(
             CSharp(
@@ -204,7 +215,8 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]`n    public void ImplicitElementAccess()
+    [Test]
+    public void ImplicitElementAccess()
     {
         RewriteRun(
             CSharp(
@@ -219,7 +231,8 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]`n    public void AnonymousObjectCreation()
+    [Test]
+    public void AnonymousObjectCreation()
     {
         RewriteRun(
             CSharp(
@@ -235,7 +248,8 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]`n    public void ComplexAnonymousObjectCreation()
+    [Test]
+    public void ComplexAnonymousObjectCreation()
     {
         RewriteRun(
             CSharp(
@@ -256,7 +270,8 @@ public class NewClassTests : RewriteTest
 
 
 
-    [Test]`n    public void ComplexAnonymousObjectCreationWithFieldAccess()
+    [Test]
+    public void ComplexAnonymousObjectCreationWithFieldAccess()
     {
         RewriteRun(
             CSharp(
@@ -279,7 +294,8 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]`n    public void DictionaryCreation()
+    [Test]
+    public void DictionaryCreation()
     {
         RewriteRun(
             CSharp(
@@ -295,7 +311,8 @@ public class NewClassTests : RewriteTest
         );
     }
 
-    [Test]`n    public void DictionaryDictionaryCreation()
+    [Test]
+    public void DictionaryDictionaryCreation()
     {
         RewriteRun(
             CSharp(

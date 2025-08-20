@@ -18,7 +18,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Nuke.Common" Version="9.0.4" />
+        <PackageReference Include="Nuke.Tooling" Version="9.0.4" />
         <PackageReference Include="Spectre.Console" Version="0.50.0" />
         <PackageReference Include="TUnit" Version="0.56.50" />
         <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.6.3" />
@@ -33,6 +33,7 @@
       <ProjectReference Include="..\..\src\Rewrite.MSBuild\Rewrite.MSBuild.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.Test\Rewrite.Test.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.Diagnostics\Rewrite.Diagnostics.csproj" />
+      <ProjectReference Include="..\Rewrite.Tests\Rewrite.Tests.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -48,7 +49,7 @@
 <!--        <ProjectReference Include="..\..\src\Rewrite.Test\Rewrite.Test.csproj" />-->
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="..\Rewrite.Tests\CommonTestHooks.cs">
+        <Compile Include="..\Rewrite.CSharp.Tests\CommonTestHooks.cs">
             <Link>CommonTestHooks.cs</Link>
         </Compile>
     </ItemGroup>

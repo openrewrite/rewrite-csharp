@@ -8,7 +8,8 @@ using static Assertions;
 public class ParenthesesTests : RewriteTest
 {
 
-    [Test]`n    public void Parentheses() {
+    [Test]
+    public void Parentheses() {
         RewriteRun(
             CSharp(
                 """
@@ -20,7 +21,8 @@ public class ParenthesesTests : RewriteTest
         );
     }
 
-    [Test]`n    public void ParenthesesWithComments() {
+    [Test]
+    public void ParenthesesWithComments() {
         RewriteRun(
             CSharp(
                 """

@@ -11,7 +11,8 @@ using static Assertions;
 public class PropertyDeclarationTests : RewriteTest
 {
 
-    [Test]`n    public void SimpleAutoPropertyDeclaration()
+    [Test]
+    public void SimpleAutoPropertyDeclaration()
     {
         RewriteRun(
             CSharp(
@@ -29,7 +30,8 @@ public class PropertyDeclarationTests : RewriteTest
         );
     }
 
-    [Test]`n    public void AutoPropertyWithInitializerDeclaration()
+    [Test]
+    public void AutoPropertyWithInitializerDeclaration()
     {
         RewriteRun(
             CSharp(
@@ -48,7 +50,8 @@ public class PropertyDeclarationTests : RewriteTest
         );
     }
 
-    [Test]`n    public void SimpleExplicitPropertyDeclaration()
+    [Test]
+    public void SimpleExplicitPropertyDeclaration()
     {
         RewriteRun(
             CSharp(
@@ -80,7 +83,8 @@ public class PropertyDeclarationTests : RewriteTest
         );
     }
 
-    [Test]`n    public void ExpressionBodyAccessorsPropertyDeclaration()
+    [Test]
+    public void ExpressionBodyAccessorsPropertyDeclaration()
     {
         RewriteRun(
             CSharp(
@@ -103,7 +107,8 @@ public class PropertyDeclarationTests : RewriteTest
         );
     }
 
-    [Test]`n    public void ExpressionBodyPropertyDeclaration()
+    [Test]
+    public void ExpressionBodyPropertyDeclaration()
     {
         RewriteRun(
             CSharp(
@@ -118,7 +123,8 @@ public class PropertyDeclarationTests : RewriteTest
         );
     }
 
-    [Test]`n    public void BinaryExpressionProperty()
+    [Test]
+    public void BinaryExpressionProperty()
     {
         var sourceSpec = CSharp(
             """
@@ -130,7 +136,8 @@ public class PropertyDeclarationTests : RewriteTest
         RewriteRun(sourceSpec);
     }
 
-    [Test]`n    public void UnaryExpressionProperty()
+    [Test]
+    public void UnaryExpressionProperty()
     {
         var sourceSpec = CSharp(
             """
@@ -143,7 +150,8 @@ public class PropertyDeclarationTests : RewriteTest
     }
 
 
-    [Test]`n    public void AccessorWithAnnotation()
+    [Test]
+    public void AccessorWithAnnotation()
     {
         var sourceSpec = CSharp(
             """

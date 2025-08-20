@@ -9,7 +9,8 @@ using static Assertions;
 
 public class LockTests : RewriteTest
 {
-    [Test]`n    public void LockStatement()
+    [Test]
+    public void LockStatement()
     {
         RewriteRun(
             CSharp(
@@ -22,7 +23,8 @@ public class LockTests : RewriteTest
             )
         );
     }
-    [Test]`n    public void LockNoBlock()
+    [Test]
+    public void LockNoBlock()
     {
         RewriteRun(
             CSharp(

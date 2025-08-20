@@ -9,7 +9,8 @@ using static Assertions;
 
 public class CheckedTests : RewriteTest
 {
-    [Test]`n    public void CheckedStatement()
+    [Test]
+    public void CheckedStatement()
     {
         RewriteRun(
             CSharp(
@@ -22,7 +23,8 @@ public class CheckedTests : RewriteTest
             )
         );
     }
-    [Test]`n    public void UnCheckedStatement()
+    [Test]
+    public void UnCheckedStatement()
     {
         RewriteRun(
             CSharp(
@@ -36,7 +38,8 @@ public class CheckedTests : RewriteTest
         );
     }
 
-    [Test]`n    public void CheckedExpression()
+    [Test]
+    public void CheckedExpression()
     {
         RewriteRun(
             CSharp(
@@ -46,7 +49,8 @@ public class CheckedTests : RewriteTest
             )
         );
     }
-    [Test]`n    public void UnCheckedExpression()
+    [Test]
+    public void UnCheckedExpression()
     {
         RewriteRun(
             CSharp(

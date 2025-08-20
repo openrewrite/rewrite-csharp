@@ -9,7 +9,8 @@ using static Assertions;
 
 public class UnsafeTests : RewriteTest
 {
-    [Test]`n    public void UnsafeStatement()
+    [Test]
+    public void UnsafeStatement()
     {
         RewriteRun(
             CSharp(

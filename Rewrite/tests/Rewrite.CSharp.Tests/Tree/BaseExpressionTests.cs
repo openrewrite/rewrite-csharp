@@ -8,7 +8,8 @@ using static Assertions;
 
 public class BaseExpressionTests : RewriteTest
 {
-    [Test]`n    public void BaseExpresion()
+    [Test]
+    public void BaseExpresion()
     {
         RewriteRun(
             CSharp(

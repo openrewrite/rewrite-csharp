@@ -25,7 +25,7 @@
       <ProjectReference Include="..\..\src\Rewrite.Test\Rewrite.Test.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="..\Rewrite.Tests\CommonTestHooks.cs">
+        <Compile Include="..\Rewrite.CSharp.Tests\CommonTestHooks.cs">
             <Link>CommonTestHooks.cs</Link>
         </Compile>
     </ItemGroup>

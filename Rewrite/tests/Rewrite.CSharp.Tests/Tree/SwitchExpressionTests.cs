@@ -23,7 +23,8 @@ public class SwitchExpressionTests : RewriteTest
         );
     }
 
-    [Test]`n    public void TuplePattern()
+    [Test]
+    public void TuplePattern()
     {
         RewriteRun(
             CSharp(
@@ -38,7 +39,8 @@ public class SwitchExpressionTests : RewriteTest
         );
     }
 
-    [Test]`n    public void TypePattern()
+    [Test]
+    public void TypePattern()
     {
         RewriteRun(
             CSharp(
@@ -52,7 +54,8 @@ public class SwitchExpressionTests : RewriteTest
         );
     }
 
-    [Test]`n    public void RangePattern()
+    [Test]
+    public void RangePattern()
     {
         RewriteRun(
             CSharp(
@@ -69,7 +72,8 @@ public class SwitchExpressionTests : RewriteTest
         );
     }
 
-    [Test]`n    public void TypePatternWithWhenClause()
+    [Test]
+    public void TypePatternWithWhenClause()
     {
         RewriteRun(
             CSharp(
@@ -83,7 +87,8 @@ public class SwitchExpressionTests : RewriteTest
         );
     }
 
-    [Test]`n    public void PropertyPattern()
+    [Test]
+    public void PropertyPattern()
     {
         RewriteRun(
             CSharp(
@@ -97,7 +102,8 @@ public class SwitchExpressionTests : RewriteTest
         );
     }
 
-    [Test]`n    public void PropertyPatternWithDesignator()
+    [Test]
+    public void PropertyPatternWithDesignator()
     {
         RewriteRun(
             CSharp(
@@ -111,7 +117,8 @@ public class SwitchExpressionTests : RewriteTest
         );
     }
 
-    [Test]`n    public void PositionalPattern()
+    [Test]
+    public void PositionalPattern()
     {
         RewriteRun(
             CSharp(
@@ -126,7 +133,8 @@ public class SwitchExpressionTests : RewriteTest
         );
     }
 
-    [Test]`n    public void NullCheckPattern()
+    [Test]
+    public void NullCheckPattern()
     {
         RewriteRun(
             CSharp(
@@ -141,7 +149,8 @@ public class SwitchExpressionTests : RewriteTest
         );
     }
 
-    [Test]`n    public void MultiplePatternsUsingOr()
+    [Test]
+    public void MultiplePatternsUsingOr()
     {
         RewriteRun(
             CSharp(
@@ -155,7 +164,8 @@ public class SwitchExpressionTests : RewriteTest
         );
     }
 
-    [Test]`n    public void NestedPatterns()
+    [Test]
+    public void NestedPatterns()
     {
         RewriteRun(
             CSharp(
@@ -173,7 +183,8 @@ public class SwitchExpressionTests : RewriteTest
         );
     }
 
-    [Test]`n    public void RecursivePatterns()
+    [Test]
+    public void RecursivePatterns()
     {
         RewriteRun(
             CSharp(
@@ -188,7 +199,8 @@ public class SwitchExpressionTests : RewriteTest
         );
     }
 
-    [Test]`n    public void PatternMatchingWithRecords()
+    [Test]
+    public void PatternMatchingWithRecords()
     {
         RewriteRun(
             CSharp(

@@ -11,6 +11,7 @@ using Nuke.Common.IO;
 using Rewrite.Core;
 using Rewrite.Test;
 using Rewrite.Test.CSharp;
+using Rewrite.Tests;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 using TUnit.Core;
@@ -63,8 +64,8 @@ public class RecipeManagerTests : BaseTests
         
         string[] packageSources =
         [
-            NukeBuild.RootDirectory / "artifacts",
-            NukeBuild.RootDirectory / "artifacts" / "test",
+            DirectoryHelper.RepositoryRoot / "artifacts",
+            DirectoryHelper.RepositoryRoot / "artifacts" / "test",
             "https://api.nuget.org/v3/index.json"
         ];
         

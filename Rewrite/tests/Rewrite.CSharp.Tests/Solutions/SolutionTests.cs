@@ -1,9 +1,12 @@
 using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Text.RegularExpressions;
+using Nuke.Common.IO;
+// using NMica.Utils.IO;
 using Rewrite.MSBuild;
 using Rewrite.RewriteCSharp.Marker;
 using Rewrite.Test.CSharp;
+using Rewrite.Tests;
 
 namespace Rewrite.CSharp.Tests.Solutions;
 
@@ -13,7 +16,9 @@ public class SolutionTests : RewriteTest
 {
 
 
-    [Test]`n    public [Explicit] public void PlayTest()
+    [Test]
+    [Explicit]
+    public void PlayTest()
     {
         var actual = """
                      hello
@@ -23,7 +28,9 @@ public class SolutionTests : RewriteTest
         actual.ShouldBeSameAs(expected);
     }
 
-    [Test]`n    public [Explicit] public void RewriteTest()
+    [Test]
+    [Explicit]
+    public void RewriteTest()
     {
         this.RewriteRun(CSharp("""
                      var newElements = combinatorSelector.Transform!(element);
@@ -31,13 +38,17 @@ public class SolutionTests : RewriteTest
 
     }
 
-    [Test]`n    public [Explicit] public async Task ParseSingleFile()
+    [Test]
+    [Explicit]
+    public async Task ParseSingleFile()
     {
         var src = await File.ReadAllTextAsync(@"C:\projects\openrewrite\rewrite-csharp\Rewrite\tests\fixtures\Bogus\Source\Bogus.Tests\SchemaTests\LocaleSchemaTests.cs");
         RewriteRun(CSharp(src));
     }
 
-    [Test]`n    public [Explicit] public async Task UnknownSyntaxReport()
+    [Test]
+    [Explicit]
+    public async Task UnknownSyntaxReport()
     {
         // Type.GetType("Nuke.Common.ParameterService")
         // AbsolutePath path = NukeBuild.RootDirectory;
@@ -171,7 +182,7 @@ public class SolutionTests : RewriteTest
 
     public IEnumerable<Func<(AbsolutePath SolutionOrProject, AbsolutePath RootDir)>> Fixtures()
     {
-        var fixturesDirectory = NukeBuild.RootDirectory / "Rewrite" / "tests" / "fixtures";
+        var fixturesDirectory = DirectoryHelper.RepositoryRoot / "Rewrite" / "tests" / "fixtures";
         if (!fixturesDirectory.Exists())
             yield break;
         foreach (var fixture in fixturesDirectory.GetDirectories())

@@ -1,6 +1,7 @@
 ﻿using NMica.Utils.IO;
 using Nuke.Common;
 using Nuke.Common.Tooling;
+using Rewrite.Tests;
 using TUnit.Assertions;
 using TUnit.Core;
 
@@ -20,7 +21,7 @@ public class IntegrationTests : BaseTests
             """;
         using var testProject = TestProject.CreateTemporaryLibrary(content);
         
-        var serverExecutable = NukeBuild.RootDirectory / "Rewrite" / "src" / "Rewrite.Server" / "bin" / "Debug" / "net9.0" / "Rewrite.Server.dll";
+        var serverExecutable = DirectoryHelper.RepositoryRoot / "Rewrite" / "src" / "Rewrite.Server" / "bin" / "Debug" / "net9.0" / "Rewrite.Server.dll";
         Fail.When(!File.Exists(serverExecutable), $"{serverExecutable} not found. Did you build the solution?");
         var recipeId = "CA1861"; // Avoid constant arrays as arguments
         var package = "Microsoft.CodeAnalysis.NetAnalyzers";

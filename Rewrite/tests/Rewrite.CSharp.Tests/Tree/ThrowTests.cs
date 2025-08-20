@@ -7,7 +7,8 @@ using static Assertions;
 
 public class ThrowTests : RewriteTest
 {
-    [Test]`n    public void SimpleThrowStatement()
+    [Test]
+    public void SimpleThrowStatement()
     {
         RewriteRun(
             CSharp(
@@ -22,7 +23,8 @@ public class ThrowTests : RewriteTest
         );
     }
 
-    [Test]`n    public void EmptyThrowStatement()
+    [Test]
+    public void EmptyThrowStatement()
     {
         RewriteRun(
             CSharp(
@@ -49,7 +51,8 @@ public class ThrowTests : RewriteTest
         );
     }
 
-    [Test]`n    public void ThrowExpression()
+    [Test]
+    public void ThrowExpression()
     {
         RewriteRun(
             CSharp(

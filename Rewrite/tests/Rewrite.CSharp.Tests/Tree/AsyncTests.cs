@@ -25,7 +25,8 @@ public class AsyncTests : RewriteTest
           )
         );
     }
-    [Test]`n    public void AwaitStatement()
+    [Test]
+    public void AwaitStatement()
     {
         RewriteRun(
             CSharp(
@@ -43,7 +44,8 @@ public class AsyncTests : RewriteTest
         );
     }
 
-    [Test]`n    public void AsyncLambda()
+    [Test]
+    public void AsyncLambda()
     {
         RewriteRun(
           CSharp(

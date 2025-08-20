@@ -8,7 +8,8 @@ using static Assertions;
 public class LambdaTests : RewriteTest
 {
 
-    [Test]`n    public void SimpleLambda()
+    [Test]
+    public void SimpleLambda()
     {
         RewriteRun(
             CSharp(
@@ -20,7 +21,8 @@ public class LambdaTests : RewriteTest
             )
         );
     }
-    [Test]`n    public void SimpleLambdaWithComments()
+    [Test]
+    public void SimpleLambdaWithComments()
     {
         RewriteRun(
             CSharp(
@@ -34,7 +36,8 @@ public class LambdaTests : RewriteTest
     }
 
 
-    [Test]`n    public void SimpleLambdaWithBlockBody()
+    [Test]
+    public void SimpleLambdaWithBlockBody()
     {
         RewriteRun(
             CSharp(
@@ -50,7 +53,8 @@ public class LambdaTests : RewriteTest
         );
     }
 
-    [Test]`n    public void ParenthesizedMultiArgsLambda()
+    [Test]
+    public void ParenthesizedMultiArgsLambda()
     {
         RewriteRun(
             CSharp(
@@ -63,7 +67,8 @@ public class LambdaTests : RewriteTest
         );
     }
 
-    [Test]`n    public void ParenthesizedMultiArgsLambdaWithComments()
+    [Test]
+    public void ParenthesizedMultiArgsLambdaWithComments()
     {
         RewriteRun(
             CSharp(
@@ -76,7 +81,8 @@ public class LambdaTests : RewriteTest
         );
     }
 
-    [Test]`n    public void ParenthesizedMultiArgsLambdaWithBlockBody()
+    [Test]
+    public void ParenthesizedMultiArgsLambdaWithBlockBody()
     {
         RewriteRun(
             CSharp(
@@ -92,17 +98,20 @@ public class LambdaTests : RewriteTest
         );
     }
 
-    [Test]`n    public void AsyncLambda()
+    [Test]
+    public void AsyncLambda()
     {
         RewriteRun(CSharp("Task.Run(async () => {});"));
     }
 
-    [Test]`n    public void LambdaWithModifiers()
+    [Test]
+    public void LambdaWithModifiers()
     {
         RewriteRun(CSharp("Task.Run( async static () => {});"));
     }
 
-    [Test]`n    public void LambdaWithReturnType()
+    [Test]
+    public void LambdaWithReturnType()
     {
         RewriteRun(CSharp("Task.Run( async static bool () => {});"));
     }

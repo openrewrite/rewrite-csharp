@@ -9,7 +9,8 @@ using static Assertions;
 
 public class LiteralTests : RewriteTest
 {
-    [Test]`n    public void Boolean()
+    [Test]
+    public void Boolean()
     {
         RewriteRun(
             CSharp(
@@ -24,7 +25,8 @@ public class LiteralTests : RewriteTest
         );
     }
 
-    [Test]`n    public void Number()
+    [Test]
+    public void Number()
     {
         RewriteRun(
             CSharp(
@@ -48,7 +50,8 @@ public class LiteralTests : RewriteTest
         );
     }
 
-    [Test]`n    public void NativeInts()
+    [Test]
+    public void NativeInts()
     {
         RewriteRun(
             CSharp(
@@ -63,7 +66,8 @@ public class LiteralTests : RewriteTest
         );
     }
 
-    [Test]`n    public void Null()
+    [Test]
+    public void Null()
     {
         RewriteRun(
             CSharp(

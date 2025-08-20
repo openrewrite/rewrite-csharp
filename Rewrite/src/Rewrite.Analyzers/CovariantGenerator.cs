@@ -50,6 +50,7 @@ public sealed partial class CovariantGenerator : IIncrementalGenerator
                     var sb = new StringBuilder();
                     using var writer = new IndentedTextWriter(new StringWriter(sb), "    ");
                     var partialDeclaration = PartialTypeModel.GetPartialDeclaration(typeDeclaration);
+                    writer.WriteLine("//test1");
                     writer.WriteLine(partialDeclaration.Before);
                     writer.Indent = partialDeclaration.BodyIndentationLevel;
                     try

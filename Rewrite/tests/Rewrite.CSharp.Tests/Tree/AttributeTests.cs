@@ -80,7 +80,8 @@ public class AttributeTests : RewriteTest
         RewriteRun(
             CSharp(
                 """
-                [Fact(Skip = "yes")]`n    public class Foo;
+                [Fact(Skip = "yes")]
+                class Foo;
                 """
             )
         );

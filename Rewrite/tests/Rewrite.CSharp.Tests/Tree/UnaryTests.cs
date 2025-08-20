@@ -7,7 +7,8 @@ using static Assertions;
 
 public class UnaryTests : RewriteTest
 {
-    [Test]`n    public void Format()
+    [Test]
+    public void Format()
     {
         RewriteRun(
           CSharp(
@@ -30,7 +31,8 @@ public class UnaryTests : RewriteTest
         );
     }
 
-    [Test]`n    public void Negation()
+    [Test]
+    public void Negation()
     {
         RewriteRun(
             CSharp(
@@ -43,7 +45,8 @@ public class UnaryTests : RewriteTest
         );
     }
 
-    [Test]`n    public void NullWarningSuppress()
+    [Test]
+    public void NullWarningSuppress()
     {
         RewriteRun(
             CSharp(
@@ -56,7 +59,9 @@ public class UnaryTests : RewriteTest
         );
     }
 
-    [Test]`n    public [KnownBug] void NullableFunctionProperty()
+    [Test]
+    [KnownBug]
+    public void NullableFunctionProperty()
     {
         RewriteRun(
             CSharp(
@@ -67,7 +72,8 @@ public class UnaryTests : RewriteTest
         );
     }
 
-    [Test]`n    public void IndexExpression()
+    [Test]
+    public void IndexExpression()
     {
         RewriteRun(
             CSharp(
@@ -78,7 +84,8 @@ public class UnaryTests : RewriteTest
         );
     }
 
-    [Test]`n    public void AddressOfExpression()
+    [Test]
+    public void AddressOfExpression()
     {
         RewriteRun(
             CSharp(
@@ -89,7 +96,8 @@ public class UnaryTests : RewriteTest
         );
     }
 
-    [Test]`n    public void PointerIndirection()
+    [Test]
+    public void PointerIndirection()
     {
         RewriteRun(
             CSharp(
@@ -100,7 +108,8 @@ public class UnaryTests : RewriteTest
         );
     }
 
-    [Test]`n    public void PointerType()
+    [Test]
+    public void PointerType()
     {
         RewriteRun(
             CSharp(
