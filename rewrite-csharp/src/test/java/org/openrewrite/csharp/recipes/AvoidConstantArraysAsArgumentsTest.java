@@ -16,16 +16,19 @@
 package org.openrewrite.csharp.recipes;
 
 import org.junit.jupiter.api.Test;
+import org.openrewrite.Recipe;
+import org.openrewrite.config.CompositeRecipe;
+import org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers.AbstractTypesShouldNotHaveConstructorsCA1012;
 import org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers.AvoidConstArraysCA1861;
 import org.openrewrite.test.RecipeSpec;
-import org.openrewrite.test.RewriteTest;
+import org.openrewrite.test.SourceSpecs;
 import org.openrewrite.test.TypeValidation;
 
-import static org.openrewrite.test.SourceSpecs.text;
+import java.util.List;
 
-import static org.openrewrite.xml.Assertions.xml;
+import static java.util.Collections.singletonList;
 
-public class AvoidConstantArraysAsArgumentsTest implements RewriteTest {
+public class AvoidConstantArraysAsArgumentsTest extends RoslynRecipeTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
@@ -37,70 +40,144 @@ public class AvoidConstantArraysAsArgumentsTest implements RewriteTest {
 
     @Test
     public void runRecipe() {
+        Solution solution = createSolution()
+            .addProject(new Project("RoslynSample.csproj")
+                .addSourceFile("Sample.cs",
+                    """
+                      public class Test
+                      {
+                          public void DoSomething()
+                          {
+                              string message = string.Join(" ", new[] { "Hello", "world!" });
+                          }
+                      }
+                      """,
+                    """
+                      public class Test
+                      {
+                          private static readonly string[] value = new[] { "Hello", "world!" };
+
+                          public void DoSomething()
+                          {
+                              string message = string.Join(" ", value);
+                          }
+                      }
+                      """));
+
+        rewriteRun(solution.toSourceSpecs());
+    }
+
+    @Test
+    public void multipleSolutions() {
+        Solution solution1 = createSolution("Solution1.sln")
+            .addProject(new Project("Project1/Project1.csproj")
+                .addSourceFile("Class1.cs",
+                    """
+                      public class Class1
+                      {
+                          public void Method1()
+                          {
+                              string result = string.Join(",", new[] { "a", "b", "c" });
+                          }
+                      }
+                      """,
+                    """
+                      public class Class1
+                      {
+                          private static readonly string[] value = new[] { "a", "b", "c" };
+
+                          public void Method1()
+                          {
+                              string result = string.Join(",", value);
+                          }
+                      }
+                      """));
+        Solution solution2 = createSolution("Solution2.sln")
+            .addProject(new Project("Project2/Project2.csproj")
+                .addSourceFile("Class2.cs",
+                    """
+                      public class Class2
+                      {
+                          public void Method2()
+                          {
+                              var items = string.Join("|", new[] { "x", "y", "z" });
+                          }
+                      }
+                      """,
+                    """
+                      public class Class2
+                      {
+                          private static readonly string[] value = new[] { "x", "y", "z" };
+
+                          public void Method2()
+                          {
+                              var items = string.Join("|", value);
+                          }
+                      }
+                      """));
+
+        rewriteRun(combineSolutions(solution1, solution2));
+    }
+
+    @Test
+    public void compositeRecipe(){
+        Solution solution1 = createSolution("Solution1.sln")
+          .addProject(new Project("Project1/Project1.csproj")
+            .addSourceFile("Class1.cs",
+              """
+                public class Class1
+                {
+                    public void Method1()
+                    {
+                        string result = string.Join(",", new[] { "a", "b", "c" });
+                    }
+                }
+                """,
+              """
+                public class Class1
+                {
+                    private static readonly string[] value = new[] { "a", "b", "c" };
+
+                    public void Method1()
+                    {
+                        string result = string.Join(",", value);
+                    }
+                }
+                """));
+        Solution solution2 = createSolution("Solution2.sln")
+          .addProject(new Project("Project2/Project2.csproj")
+            .addSourceFile("Class2.cs",
+              """
+                public class Class2
+                {
+                    public void Method2()
+                    {
+                        var items = string.Join("|", new[] { "x", "y", "z" });
+                    }
+                }
+                """,
+              """
+                public class Class2
+                {
+                    private static readonly string[] value = new[] { "x", "y", "z" };
+
+                    public void Method2()
+                    {
+                        var items = string.Join("|", value);
+                    }
+                }
+                """));
+
+        Recipe recipe = new CompositeRecipe(List.of(
+          new AvoidConstArraysCA1861(),
+          new AbstractTypesShouldNotHaveConstructorsCA1012())
+        );
+
+        var sources = this.combineSolutions(solution1, solution2);
         rewriteRun(
-          text(
-            """
-              Microsoft Visual Studio Solution File, Format Version 12.00
-              Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoslynSample", "RoslynSample.csproj", "{81D4529D-02A5-4A2F-B8F3-261D2E365A73}"
-              EndProject
-              Global
-                  GlobalSection(SolutionConfigurationPlatforms) = preSolution
-                      Debug|Any CPU = Debug|Any CPU
-                      Release|Any CPU = Release|Any CPU
-                  EndGlobalSection
-                  GlobalSection(ProjectConfigurationPlatforms) = postSolution
-                      {81D4529D-02A5-4A2F-B8F3-261D2E365A73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-                      {81D4529D-02A5-4A2F-B8F3-261D2E365A73}.Debug|Any CPU.Build.0 = Debug|Any CPU
-                      {81D4529D-02A5-4A2F-B8F3-261D2E365A73}.Release|Any CPU.ActiveCfg = Release|Any CPU
-                      {81D4529D-02A5-4A2F-B8F3-261D2E365A73}.Release|Any CPU.Build.0 = Release|Any CPU
-                  EndGlobalSection
-              EndGlobal
-              """,
-            spec -> spec.path("Test.sln")
-          ),
-          text("""
-            root = true
-
-            [*]
-            charset = utf-8
-            end_of_line = lf
-            """,
-          spec -> spec.path(".editorconfig")),
-          xml(
-            //language=xml
-            """
-              <Project Sdk="Microsoft.NET.Sdk">
-                  <PropertyGroup>
-                      <TargetFramework>net9.0</TargetFramework>
-                      <ImplicitUsings>enable</ImplicitUsings>
-                      <Nullable>enable</Nullable>
-                  </PropertyGroup>
-              </Project>
-              """,
-            spec -> spec.path("RoslynSample.csproj")
-          ),
-          text(
-            """
-              public class Test
-              {
-                  public void DoSomething()
-                  {
-                      string message = string.Join(" ", new[] { "Hello", "world!" });
-                  }
-              }
-              """,
-            """
-              public class Test
-              {
-                  private static readonly string[] value = new[] { "Hello", "world!" };
-
-                  public void DoSomething()
-                  {
-                      string message = string.Join(" ", value);
-                  }
-              }
-              """,
-            spec -> spec.path("Sample.cs")));
-
+          spec -> spec
+            .recipe(recipe),
+          sources
+        );
     }
 }

@@ -1,15 +1,9 @@
-﻿using System.Collections;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Rewrite.Test.CSharp;
-using Rewrite.Test;
 using Socolin.ANSITerminalColor;
 
 namespace Rewrite.CSharp.Tests.RoslynTestCases;
-
-using static Assertions;
 
 public class ParseTests : RewriteTest
 {

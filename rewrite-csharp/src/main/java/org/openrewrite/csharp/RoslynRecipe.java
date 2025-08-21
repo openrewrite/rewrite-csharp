@@ -34,11 +34,19 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.Collections.emptyList;
+import static org.openrewrite.scheduling.WorkingDirectoryExecutionContextView.WORKING_DIRECTORY_ROOT;
 
 public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulator> {
     private static final String FIRST_RECIPE = RoslynRecipe.class.getName() + ".FIRST_RECIPE";
+    private static final String RECIPE_COUNT = RoslynRecipe.class.getName() + ".RECIPE_COUNT";
+    private static final String RECIPE_LIST = RoslynRecipe.class.getName() + ".RECIPE_LIST";
     private static final String PREVIOUS_RECIPE = RoslynRecipe.class.getName() + ".PREVIOUS_RECIPE";
     private static final String INIT_REPO_DIR = RoslynRecipe.class.getName() + ".INIT_REPO_DIR";
+
+    @Override
+    public int maxCycles() {
+        return 1;
+    }
 
     public final String getExecutable() {
         String executable = System.getenv("ROSLYN_RECIPE_EXECUTABLE");
@@ -74,6 +82,13 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
 
     @Override
     public Accumulator getInitialValue(ExecutionContext ctx) {
+        WorkingDirectoryExecutionContextView.view(ctx).getWorkingDirectory(); // ensure working directory is created
+        List<RoslynRecipe> recipes = ctx.getMessage(RECIPE_LIST, new ArrayList<>());
+        recipes.add(this);
+        ctx.putMessage(RECIPE_LIST, recipes);
+//        int recipeCount = ctx.getMessage(RECIPE_COUNT, 0);
+//        recipeCount++;
+//        ctx.putMessage(RECIPE_COUNT, recipeCount);
         Path directory = createDirectory(ctx, "repo");
         if (ctx.getMessage(INIT_REPO_DIR) == null) {
             ctx.putMessage(INIT_REPO_DIR, directory);
@@ -97,10 +112,11 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
                 if (lastDot > 0) {
                     String extension = fileName.substring(lastDot + 1);
                     if ("sln".equals(extension)) {
-                        acc.solutionFile = sourceFile.getSourcePath();
+                        acc.solutionFiles.add(sourceFile.getSourcePath());
                     }
                     acc.extensionCounts.computeIfAbsent(extension, e -> new AtomicInteger(0)).incrementAndGet();
                 }
+
 
                 // only extract initial source files for first roslyn recipe
                 if (Objects.equals(ctx.getMessage(FIRST_RECIPE), ctx.getCycleDetails().getRecipePosition())) {
@@ -115,85 +131,135 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
 
     @Override
     public Collection<? extends SourceFile> generate(Accumulator acc, ExecutionContext ctx) {
-//        Path previous = ctx.getMessage(PREVIOUS_RECIPE);
-//        if (previous != null && !Objects.equals(ctx.getMessage(FIRST_RECIPE), ctx.getCycleDetails().getRecipePosition())) {
-//            acc.copyFromPrevious(previous);
-//        }
+        Path previous = ctx.getMessage(PREVIOUS_RECIPE);
+        if (previous != null && !Objects.equals(ctx.getMessage(FIRST_RECIPE), ctx.getCycleDetails().getRecipePosition())) {
+            acc.copyFromPrevious(previous);
+        }
+        if(isLastRecipe(ctx)) {
+            runRoslynRecipe(acc, ctx);
+        }
+        ctx.putMessage(PREVIOUS_RECIPE, acc.getDirectory());
 
-        runRoslynRecipe(acc, ctx);
-//        ctx.putMessage(PREVIOUS_RECIPE, acc.getDirectory());
-//
         // FIXME check for generated files
         return emptyList();
     }
+    boolean isLastRecipe(ExecutionContext ctx) {
+        List<RoslynRecipe> recipes = ctx.getMessage(RECIPE_LIST, new ArrayList<>());
 
+        return ctx.getCycleDetails().getRecipePosition() == recipes.size();
+    }
+
+    private Path getCodeDir(ExecutionContext ctx) {
+        Path workingDirectoryRoot = ctx.getMessage(WORKING_DIRECTORY_ROOT);
+        if (workingDirectoryRoot == null) {
+            WorkingDirectoryExecutionContextView.view(ctx).getWorkingDirectory(); // ensure we have a global root for the whole run
+            workingDirectoryRoot = ctx.getMessage(WORKING_DIRECTORY_ROOT);
+        }
+
+        assert workingDirectoryRoot != null;
+
+        return Optional.of(workingDirectoryRoot)
+                .map(d -> d.resolve("repo"))
+                .map(d -> {
+                    try {
+                        return Files.createDirectory(d).toRealPath();
+                    } catch (IOException e) {
+                        throw new UncheckedIOException(e);
+                    }
+                })
+                .orElseThrow(() -> new IllegalStateException("Failed to create code working directory"));
+
+        return workingDirectoryRoot.resolve("roslyn");
+    }
+
+    final String template = "dotnet ${exec} run-recipe --solution ${solution} --id ${recipeId} --package ${package} --version ${version}";
     @SneakyThrows
     protected void runRoslynRecipe(Accumulator acc, ExecutionContext ctx) {
         Path dir = acc.getDirectory();
+        List<RoslynRecipe> recipes = ctx.getMessage(RECIPE_LIST, new ArrayList<>());
 
-        List<String> command = new ArrayList<>();
         Map<String, String> env = getCommandEnvironment(acc, ctx);
-//        String template = "dotnet";
-        String template = "dotnet ${exec} run-recipe --solution ${solution} --id ${recipeId} --package ${package} --version ${version}";
-        template = template.replace("${exec}", Objects.requireNonNull(this.getExecutable()));
-        template = template.replace("${solution}", acc.solutionFile.toString());
-        template = template.replace("${recipeId}", Objects.requireNonNull(this.getRecipeId()));
-        template = template.replace("${package}", Objects.requireNonNull(this.getNugetPackageName()));
-        template = template.replace("${version}", Objects.requireNonNull(this.getNugetPackageVersion()));
+        var commandBuilder = new StringBuilder();
+        for(RoslynRecipe recipe : recipes) {
+            commandBuilder.append(recipe.getNugetPackageName());
+            commandBuilder.append(":");
+            commandBuilder.append(recipe.getNugetPackageVersion());
+            commandBuilder.append("/");
+            commandBuilder.append(recipe.getRecipeId());
+            commandBuilder.append(" -> ");
+            for (var solutionFile : acc.getSolutionFiles()) {
 
-        for (String part : template.split(" ")) {
-            part = part.trim();
-            command.add(part);
+                commandBuilder.append(solutionFile.toString());
+                commandBuilder.append("\n");
+            }
         }
+        var codeDir = getCodeDir(ctx);
 
-        Path out = null, err = null;
-        try {
-            ProcessBuilder builder = new ProcessBuilder();
-            builder.command(command);
-            builder.directory(dir.toFile());
-            builder.environment().put("TERM", "dumb");
-            env.forEach(builder.environment()::put);
+        var recipeCommand = template;
+        recipeCommand = recipeCommand.replace("${exec}", Objects.requireNonNull(this.getExecutable()));
+        recipeCommand = recipeCommand.replace("${recipeId}", Objects.requireNonNull(this.getRecipeId()));
+        recipeCommand = recipeCommand.replace("${package}", Objects.requireNonNull(this.getNugetPackageName()));
+        recipeCommand = recipeCommand.replace("${version}", Objects.requireNonNull(this.getNugetPackageVersion()));
 
-            out = Files.createTempFile(WorkingDirectoryExecutionContextView.view(ctx).getWorkingDirectory(), "node", null);
-            err = Files.createTempFile(WorkingDirectoryExecutionContextView.view(ctx).getWorkingDirectory(), "node", null);
-            builder.redirectOutput(ProcessBuilder.Redirect.to(out.toFile()));
-            builder.redirectError(ProcessBuilder.Redirect.to(err.toFile()));
+        for (var solutionFile : acc.getSolutionFiles()) {
 
-            Process process = builder.start();
-            if (!process.waitFor(5, TimeUnit.MINUTES)) {
-                throw new RuntimeException(String.format("Command '%s' timed out after 5 minutes", String.join(" ", command)));
-            } else if (process.exitValue() != 0) {
-                String error = "Command failed: " + String.join(" ", command);
-                if (Files.exists(err)) {
-                    error += "\n" + new String(Files.readAllBytes(err));
-                }
-                error += "\nCommand:" + template;
-                throw new RuntimeException(error);
-            } else {
-                for (Map.Entry<Path, Long> entry : acc.beforeModificationTimestamps.entrySet()) {
-                    Path path = entry.getKey();
-                    if (!Files.exists(path) || Files.getLastModifiedTime(path).toMillis() > entry.getValue()) {
-                        acc.modified(path);
+            var finalCommand = recipeCommand;
+            finalCommand = finalCommand.replace("${solution}", solutionFile.toString());
+            List<String> command = new ArrayList<>();
+            for (String part : finalCommand.split(" ")) {
+                part = part.trim();
+                command.add(part);
+            }
+
+            Path out = null, err = null;
+            try {
+                ProcessBuilder builder = new ProcessBuilder();
+                builder.command(command);
+                builder.directory(dir.toFile());
+                builder.environment().put("TERM", "dumb");
+                env.forEach(builder.environment()::put);
+
+                out = Files.createTempFile(WorkingDirectoryExecutionContextView.view(ctx).getWorkingDirectory(), "roslyn", null);
+                err = Files.createTempFile(WorkingDirectoryExecutionContextView.view(ctx).getWorkingDirectory(), "roslyn", null);
+                builder.redirectOutput(ProcessBuilder.Redirect.to(out.toFile()));
+                builder.redirectError(ProcessBuilder.Redirect.to(err.toFile()));
+
+                Process process = builder.start();
+                if (!process.waitFor(5, TimeUnit.MINUTES)) {
+                    throw new RuntimeException(String.format("Command '%s' timed out after 5 minutes", String.join(" ", command)));
+                } else if (process.exitValue() != 0) {
+                    String error = "Command failed: " + String.join(" ", command);
+                    if (Files.exists(err)) {
+                        error += "\n" + new String(Files.readAllBytes(err));
                     }
+                    error += "\nCommand:" + finalCommand;
+                    throw new RuntimeException(error);
+                } else {
+                    for (Map.Entry<Path, Long> entry : acc.beforeModificationTimestamps.entrySet()) {
+                        Path path = entry.getKey();
+                        if (!Files.exists(path) || Files.getLastModifiedTime(path).toMillis() > entry.getValue()) {
+                            acc.modified(path);
+                        }
+                    }
+                    processOutput(out, acc, ctx);
                 }
-                processOutput(out, acc, ctx);
-            }
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (out != null) {
-                String content = new String(Files.readAllBytes(out));
-                System.out.println(content);
-                //noinspection ResultOfMethodCallIgnored
-                out.toFile().delete();
-            }
-            if (err != null) {
-                String content = new String(Files.readAllBytes(err));
-                System.out.println(content);
-                //noinspection ResultOfMethodCallIgnored
-                err.toFile().delete();
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                if (out != null) {
+                    String content = new String(Files.readAllBytes(out));
+                    System.out.println(content);
+                    //noinspection ResultOfMethodCallIgnored
+                    out.toFile().delete();
+                }
+                if (err != null) {
+                    String content = new String(Files.readAllBytes(err));
+                    System.out.println(content);
+                    //noinspection ResultOfMethodCallIgnored
+                    err.toFile().delete();
+                }
             }
         }
     }
@@ -244,9 +310,12 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
     @RequiredArgsConstructor
     public static class Accumulator {
         @Getter
+        @Setter
+        int recipeCount;
+        @Getter
         final Path directory;
         @Getter
-        Path solutionFile;
+        List<Path> solutionFiles = new ArrayList<>();
         final Map<Path, Long> beforeModificationTimestamps = new HashMap<>();
         final Set<Path> modified = new LinkedHashSet<>();
         final Map<String, AtomicInteger> extensionCounts = new HashMap<>();
