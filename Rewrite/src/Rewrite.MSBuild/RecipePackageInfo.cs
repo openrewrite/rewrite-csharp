@@ -36,7 +36,7 @@ public class RecipePackageInfo(PackageIdentity packageIdentity, IReadOnlyList<Re
             Description = recipeDescriptor.Description,
             Kind = recipeDescriptor.Kind,
             TypeName = recipeDescriptor.TypeName,
-            NugetPackageId = Package,
+            // NugetPackageId = Package,
             Arguments = recipeDescriptor.Options.Select(x => new RecipeArgument
             {
                 Name = x.Name,

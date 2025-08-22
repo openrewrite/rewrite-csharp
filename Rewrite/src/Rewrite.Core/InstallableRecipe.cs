@@ -1,7 +1,10 @@
 ﻿
 namespace Rewrite.Core;
 
-public record RecipePackage(string NugetPackageName, string NugetPackageVersion);
+public record RecipePackage(string NugetPackageName, string NugetPackageVersion)
+{
+
+}
 /// <summary>
 /// Represents a single recipe inside a nuget package
 /// </summary>

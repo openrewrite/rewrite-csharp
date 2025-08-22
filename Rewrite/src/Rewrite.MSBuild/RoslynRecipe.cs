@@ -23,12 +23,12 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies) : ScanningReci
     internal List<Assembly> RecipeAssemblies { get; set; } = recipeAssemblies.ToList();
     
     [DisplayName("Description")]
-    [Description("A special sign to specifically highlight the class found by the recipe")]
-    public string DiagnosticId { get => DiagnosticsId.First(); set => DiagnosticsId.Add(value); }
+    [Description("A roslyn analyzer id to target for refactoring")]
+    public string DiagnosticId { get => DiagnosticIds.First(); set => DiagnosticIds.Add(value); }
 
     [DisplayName("Description")]
     [Description("A special sign to specifically highlight the class found by the recipe")]
-    public HashSet<string> DiagnosticsId { get; set; } = new();
+    public HashSet<string> DiagnosticIds { get; set; } = new();
 
     [DisplayName("Should Apply Fixer")]
     [Description("If true, a code fix will be applied, otherwise only location of issues will be reported")]
@@ -96,7 +96,7 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies) : ScanningReci
                 .DistinctBy(x => x.Id)
                 .Select(descriptor => (descriptor.Id, Analyzer: analyzer)))
             .Join(fixers, x => x.Id, x => x.Key, (a, b) => (a.Id, a.Analyzer, Fixer: b.Value))
-            .Where(x => DiagnosticsId.Contains(x.Id))
+            .Where(x => DiagnosticIds.Contains(x.Id))
             .GroupBy(x => x.Id)
             .Select(x => (x.Key, x.First().Analyzer, x.FirstOrDefault().Fixer))
             .ToDictionary(x => x.Key, x => (x.Analyzer, x.Fixer));

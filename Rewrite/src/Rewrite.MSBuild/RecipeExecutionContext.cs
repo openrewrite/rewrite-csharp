@@ -47,9 +47,13 @@ public class RecipeExecutionContext : AssemblyLoadContext
             // .ToList();
     }
     
-
-    public Recipe CreateRecipe(RecipeStartInfo recipeStartInfo)
+    
+    public Recipe CreateRecipe(IReadOnlyCollection<RecipeStartInfo> recipeStartInfo)
     {
+        if (recipeStartInfo.Any(x => x.Kind == RecipeKind.OpenRewrite) && recipeStartInfo.Any(x => x.Kind != RecipeKind.OpenRewrite))
+        {
+            throw new InvalidOperationException("Different recipe types cannot be mixed in same execution context");
+        }
         // if (!_recipeAssemblyMap.TryGetValue(descriptor, out var assemblyPath))
         //     throw new InvalidOperationException($"The provided recipe descriptor for recipe {descriptor} is not part of execution context {Name}");
         // var assembly = LoadFromAssemblyPath(assemblyPath);

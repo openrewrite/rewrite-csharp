@@ -34,8 +34,8 @@ public class RunRecipeCommand(RecipeManager recipeManager) : AsyncCommand<RunRec
         public bool DryRun { get; set; } = false;
         
         [CommandOption("-i|--id <VERSION>")]
-        [Description("Recipe ID. For Open Rewrite recipes this is namespace qualified type name. For Roslyn recipies this is the diagnostic ID (ex. CS1123)")]
-        public required string Id { get; set; }
+        [Description("Recipe IDs, comma separated. For Open Rewrite recipes this is namespace qualified type name. For Roslyn recipies this is the diagnostic ID (ex. CS1123)")]
+        public required string[] Ids { get; set; }
         
         public override ValidationResult Validate()
         {
@@ -44,7 +44,7 @@ public class RunRecipeCommand(RecipeManager recipeManager) : AsyncCommand<RunRec
             {
                 return ValidationResult.Error("Solution path must be specified");
             }
-            if (Id == null)
+            if (Ids == null)
             {
                 return ValidationResult.Error("Id must be specified");
             }
@@ -75,7 +75,7 @@ public class RunRecipeCommand(RecipeManager recipeManager) : AsyncCommand<RunRec
         // var recipeManager = new RecipeManager();
         // CA1802: Use Literals Where Appropriate
         // CA1861: Avoid constant arrays as arguments
-        var installableRecipe = new InstallableRecipe(settings.Id, settings.PackageName, settings.PackageVersion);
+        var installableRecipe = new InstallableRecipe(settings.Ids, settings.PackageName, settings.PackageVersion);
         var recipesPackage = await recipeManager.InstallRecipePackage(installableRecipe, packageSources);
         var recipeDescriptor = recipesPackage.GetRecipeDescriptor(installableRecipe.Id);
         var recipeStartInfo = recipesPackage.CreateRecipeStartInfo(recipeDescriptor);
