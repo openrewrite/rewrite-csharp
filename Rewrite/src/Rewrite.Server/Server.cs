@@ -100,157 +100,160 @@ public class Server : BackgroundService
 
     private async Task InstallRecipe(NetworkStream stream, RemotingContext context, CancellationToken cancellationToken)
     {
-        var packageId = CBORObject.Read(stream).AsString();
-        var packageVersion = CBORObject.Read(stream).AsString();
-        var includeDefaultSource = CBORObject.Read(stream).AsBoolean();
-        var sources = CBORObject.Read(stream).Values.Select(rawSource =>
-        {
-            
-            var source = Regex.Replace(rawSource["source"].AsString(), @"^file:(/(?=[a-zA-Z]:)|(?=/))", "");
-            var packageSource = new PackageSource(source);
-
-            var rawCredential = rawSource["credential"];
-            if (rawCredential is { IsNull: false })
-                packageSource.Credentials =
-                    new PackageSourceCredential(source,
-                        rawCredential["username"].AsString(),
-                        rawCredential["password"].AsString(),
-                        true,
-                        null);
-
-            return packageSource;
-        }).ToList();
-        CBORObject.Read(stream); // command end
-
-        var requestDetails = new
-        {
-            PackageId = packageId,
-            PackageVersion = packageVersion,
-            Sources = sources.Select(x => x.Source).ToList(),
-            IncludeDefaultSource = includeDefaultSource
-        };
-        
-        _log.LogInformation("Handling InstallRecipe Request: {@Request}", requestDetails);
-
-        if (sources.Count == 0 && !includeDefaultSource) throw new ArgumentException("No sources provided");
-
-        VersionRange versionRange = packageVersion.ToUpper() switch
-        {
-            "LATEST" => VersionRange.All,
-            "RELEASE" => VersionRange.AllStable,
-            _ => VersionRange.Parse($"[{packageVersion}]")
-        };
-        var includePreRelease = packageVersion.ToUpper() == "LATEST";
-        var libraryRange = new LibraryRange(packageId, versionRange, LibraryDependencyTarget.Package);
-        if (includeDefaultSource)
-        {
-            sources.Add(new PackageSource("https://api.nuget.org/v3/index.json"));
-        }
-
-        // foreach (var source in sources)
+        throw new NotImplementedException();
+        //
+        // var packageId = CBORObject.Read(stream).AsString();
+        // var packageVersion = CBORObject.Read(stream).AsString();
+        // var includeDefaultSource = CBORObject.Read(stream).AsBoolean();
+        // var sources = CBORObject.Read(stream).Values.Select(rawSource =>
         // {
-        //     source.Source = Regex.Replace(source.Source, @"file:\/+", ""); //remove file:/ prefix for local sources
+        //     
+        //     var source = Regex.Replace(rawSource["source"].AsString(), @"^file:(/(?=[a-zA-Z]:)|(?=/))", "");
+        //     var packageSource = new PackageSource(source);
+        //
+        //     var rawCredential = rawSource["credential"];
+        //     if (rawCredential is { IsNull: false })
+        //         packageSource.Credentials =
+        //             new PackageSourceCredential(source,
+        //                 rawCredential["username"].AsString(),
+        //                 rawCredential["password"].AsString(),
+        //                 true,
+        //                 null);
+        //
+        //     return packageSource;
+        // }).ToList();
+        // CBORObject.Read(stream); // command end
+        //
+        // var requestDetails = new
+        // {
+        //     PackageId = packageId,
+        //     PackageVersion = packageVersion,
+        //     Sources = sources.Select(x => x.Source).ToList(),
+        //     IncludeDefaultSource = includeDefaultSource
+        // };
+        //
+        // _log.LogInformation("Handling InstallRecipe Request: {@Request}", requestDetails);
+        //
+        // if (sources.Count == 0 && !includeDefaultSource) throw new ArgumentException("No sources provided");
+        //
+        // VersionRange versionRange = packageVersion.ToUpper() switch
+        // {
+        //     "LATEST" => VersionRange.All,
+        //     "RELEASE" => VersionRange.AllStable,
+        //     _ => VersionRange.Parse($"[{packageVersion}]")
+        // };
+        // var includePreRelease = packageVersion.ToUpper() == "LATEST";
+        // var libraryRange = new LibraryRange(packageId, versionRange, LibraryDependencyTarget.Package);
+        // if (includeDefaultSource)
+        // {
+        //     sources.Add(new PackageSource("https://api.nuget.org/v3/index.json"));
         // }
-        
-
-        var installableRecipes = await _recipeManager.InstallRecipePackage(
-            libraryRange, 
-            includePreRelease,
-            sources,
-            cancellationToken: cancellationToken);
-        var selectedRecipeSource = "https://api.nuget.org/v3/index.json"; // recipe source makes no sense, as it can exist in multiple configured source repos, or even restored from global cache
-
-        CBORObject.Write((int)RemotingMessageType.Response, stream);
-        CBORObject.Write(Ok, stream);
-        
-        CBORObject.Write(new Dictionary<string, object>
-            {
-                {
-                    "recipes",
-                    installableRecipes.Recipes.Select(d => new Dictionary<string, object>
-                    {
-                        { "name", d.TypeName.FullName },
-                        { "source", new InstallableRecipe(d.TypeName, installableRecipes.Package.Id, installableRecipes.Package.Version.ToNormalizedString()).ToUri() },
-                        {
-                            "options", d.Options.Select(od => new Dictionary<string, object>
-                            {
-                                { "name", od.Name },
-                                { "type", od.Type },
-                                { "required", od.Required }
-                            })
-                        }
-                    }).ToList()
-                },
-                { "repository", selectedRecipeSource },
-                { "version", installableRecipes.Package.Version.ToNormalizedString() }
-            },
-            stream
-        );
+        //
+        // // foreach (var source in sources)
+        // // {
+        // //     source.Source = Regex.Replace(source.Source, @"file:\/+", ""); //remove file:/ prefix for local sources
+        // // }
+        //
+        //
+        // var installableRecipes = await _recipeManager.InstallRecipePackage(
+        //     libraryRange, 
+        //     includePreRelease,
+        //     sources,
+        //     cancellationToken: cancellationToken);
+        // var selectedRecipeSource = "https://api.nuget.org/v3/index.json"; // recipe source makes no sense, as it can exist in multiple configured source repos, or even restored from global cache
+        //
+        // CBORObject.Write((int)RemotingMessageType.Response, stream);
+        // CBORObject.Write(Ok, stream);
+        //
+        // CBORObject.Write(new Dictionary<string, object>
+        //     {
+        //         {
+        //             "recipes",
+        //             installableRecipes.Recipes.Select(d => new Dictionary<string, object>
+        //             {
+        //                 { "name", d.TypeName.FullName },
+        //                 { "source", new InstallableRecipe(d.TypeName, installableRecipes.Package.Id, installableRecipes.Package.Version.ToNormalizedString()).ToUri() },
+        //                 {
+        //                     "options", d.Options.Select(od => new Dictionary<string, object>
+        //                     {
+        //                         { "name", od.Name },
+        //                         { "type", od.Type },
+        //                         { "required", od.Required }
+        //                     })
+        //                 }
+        //             }).ToList()
+        //         },
+        //         { "repository", selectedRecipeSource },
+        //         { "version", installableRecipes.Package.Version.ToNormalizedString() }
+        //     },
+        //     stream
+        // );
     }
 
     private Task LoadRecipeAssemblyAndRunVisitor(NetworkStream stream, RemotingContext context, CancellationToken cancellationToken)
     {
-        var recipeName = CBORObject.Read(stream).AsString();
-        var source = CBORObject.Read(stream).AsString();
-        var recipePackage = InstallableRecipe.ParseUri(new Uri(source));
-
-        var options = new Dictionary<string, Func<Type, object>>();
-
-        var optionsObj = CBORObject.Read(stream);
-
-        foreach (var optionsObjEntry in optionsObj.Entries) options.Add(optionsObjEntry.Key.AsString(), optionsObjEntry.Value.ToObject);
-
-        var inputStream = RemoteUtils.ReadToCommandEnd(stream);
-
-        var received = RemotingMessenger.ReceiveTree(context, inputStream, RemotingMessenger._state);
-        var ctx = new InMemoryExecutionContext();
-        RemotingExecutionContextView.View(ctx).RemotingContext = context;
-
-        var requestLog = new
-        {
-            RecipeIdentity = recipePackage.ToString(),
-            Options = options,
-            SourceFilePath = ((SourceFile)received).SourcePath
-        };
-        _log.LogInformation("Handling LoadRecipeAssemblyAndRunVisitor Request: {@Request}", requestLog);
-
-
-        var descriptor = _recipeManager.FindRecipeDescriptor(recipePackage);
-        var recipePackageInfo = new RecipePackageInfo(new PackageIdentity(recipePackage.NugetPackageName, NuGetVersion.Parse(recipePackage.NugetPackageVersion)), [descriptor]);
-        var startInfo = recipePackageInfo.CreateRecipeStartInfo(descriptor);
-        foreach (var item in options)
-        {
-            var prop = startInfo.Arguments[item.Key];
-            var type = Type.GetType(Core.Config.TypeName.Parse(prop.Type)) ?? throw new InvalidOperationException($"Unable to determine type {prop.Type}");
-            var propValue = item.Value(type);
-            startInfo.WithOption(item.Key, propValue);
-        }
-        var loadedRecipe =_recipeManager.CreateRecipe(startInfo);
-        // var loadedRecipe = await
-        //     RecipeManager.LoadRecipeAssemblyAsync(recipeName, packageId, packageVersion, _options.NugetPackagesFolder,
-        //         options,
-        //         cancellationToken);
-
-        _log.LogDebug($"Recipe {loadedRecipe.GetType().FullName} was successfully loaded into the assembly. \nTrying to run it on the SourceFile");
-
-        var treeVisitor = loadedRecipe.GetVisitor();
-
-        if (received is SourceFile sf && treeVisitor.IsAcceptable(sf, ctx))
-        {
-            RemotingMessenger._state = treeVisitor.Visit(sf, ctx);
-        }
-        else
-        {
-            _log.LogWarning($"SourceFile of type [{received.GetType()}] is not acceptable");
-            RemotingMessenger._state = received;
-        }
-
-        if (RemotingMessenger._state == null) throw new InvalidOperationException("_state cannot be null");
-
-        CBORObject.Write((int)RemotingMessageType.Response, stream);
-        CBORObject.Write(Ok, stream);
-        RemotingMessenger.SendTree(context, stream, RemotingMessenger._state, received);
-        return Task.CompletedTask;
+        throw new NotImplementedException();
+        // var recipeName = CBORObject.Read(stream).AsString();
+        // var source = CBORObject.Read(stream).AsString();
+        // var recipePackage = InstallableRecipe.ParseUri(new Uri(source));
+        //
+        // var options = new Dictionary<string, Func<Type, object>>();
+        //
+        // var optionsObj = CBORObject.Read(stream);
+        //
+        // foreach (var optionsObjEntry in optionsObj.Entries) options.Add(optionsObjEntry.Key.AsString(), optionsObjEntry.Value.ToObject);
+        //
+        // var inputStream = RemoteUtils.ReadToCommandEnd(stream);
+        //
+        // var received = RemotingMessenger.ReceiveTree(context, inputStream, RemotingMessenger._state);
+        // var ctx = new InMemoryExecutionContext();
+        // RemotingExecutionContextView.View(ctx).RemotingContext = context;
+        //
+        // var requestLog = new
+        // {
+        //     RecipeIdentity = recipePackage.ToString(),
+        //     Options = options,
+        //     SourceFilePath = ((SourceFile)received).SourcePath
+        // };
+        // _log.LogInformation("Handling LoadRecipeAssemblyAndRunVisitor Request: {@Request}", requestLog);
+        //
+        //
+        // var descriptor = _recipeManager.FindRecipeDescriptor(recipePackage);
+        // var recipePackageInfo = new RecipePackageInfo(new PackageIdentity(recipePackage.NugetPackageName, NuGetVersion.Parse(recipePackage.NugetPackageVersion)), [descriptor]);
+        // var startInfo = recipePackageInfo.CreateRecipeStartInfo(descriptor);
+        // foreach (var item in options)
+        // {
+        //     var prop = startInfo.Arguments[item.Key];
+        //     var type = Type.GetType(Core.Config.TypeName.Parse(prop.Type)) ?? throw new InvalidOperationException($"Unable to determine type {prop.Type}");
+        //     var propValue = item.Value(type);
+        //     startInfo.WithOption(item.Key, propValue);
+        // }
+        // var loadedRecipe =_recipeManager.CreateRecipe(startInfo);
+        // // var loadedRecipe = await
+        // //     RecipeManager.LoadRecipeAssemblyAsync(recipeName, packageId, packageVersion, _options.NugetPackagesFolder,
+        // //         options,
+        // //         cancellationToken);
+        //
+        // _log.LogDebug($"Recipe {loadedRecipe.GetType().FullName} was successfully loaded into the assembly. \nTrying to run it on the SourceFile");
+        //
+        // var treeVisitor = loadedRecipe.GetVisitor();
+        //
+        // if (received is SourceFile sf && treeVisitor.IsAcceptable(sf, ctx))
+        // {
+        //     RemotingMessenger._state = treeVisitor.Visit(sf, ctx);
+        // }
+        // else
+        // {
+        //     _log.LogWarning($"SourceFile of type [{received.GetType()}] is not acceptable");
+        //     RemotingMessenger._state = received;
+        // }
+        //
+        // if (RemotingMessenger._state == null) throw new InvalidOperationException("_state cannot be null");
+        //
+        // CBORObject.Write((int)RemotingMessageType.Response, stream);
+        // CBORObject.Write(Ok, stream);
+        // RemotingMessenger.SendTree(context, stream, RemotingMessenger._state, received);
+        // return Task.CompletedTask;
     }
 
     private Task ParseProjectSources(NetworkStream stream, RemotingContext context,

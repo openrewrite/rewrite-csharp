@@ -182,7 +182,7 @@ public class SolutionTests : RewriteTest
 
     public IEnumerable<Func<(AbsolutePath SolutionOrProject, AbsolutePath RootDir)>> Fixtures()
     {
-        var fixturesDirectory = DirectoryHelper.RepositoryRoot / "Rewrite" / "tests" / "fixtures";
+        var fixturesDirectory = DirectoryHelper.RepositoryRoot / "Rewrite" / "tests" / "external-fixtures";
         if (!fixturesDirectory.Exists())
             yield break;
         foreach (var fixture in fixturesDirectory.GetDirectories())

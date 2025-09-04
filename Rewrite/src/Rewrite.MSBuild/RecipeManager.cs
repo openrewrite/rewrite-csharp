@@ -25,21 +25,25 @@ namespace Rewrite.MSBuild;
 public class RecipeManager
 {
     private ILogger _log;
+    private readonly ILoggerFactory _loggerFactory;
+
     private NuGet.Common.ILogger _nugetLogger;
-    private SortedDictionary<PackageIdentity, RecipeExecutionContext> _loadedRecipes = new();
+    // private SortedDictionary<PackageIdentity, RecipeExecutionContext> _loadedRecipes = new();
     public static string NugetOrgRepository = "https://api.nuget.org/v3/index.json";
 
-    public RecipeManager(ILogger<RecipeManager> log, NuGet.Common.ILogger nugetLogger)
+    public RecipeManager(ILoggerFactory loggerFactory, NuGet.Common.ILogger nugetLogger)
     {
-        _log = log;
+        _log = loggerFactory.CreateLogger<RecipeManager>();
+        _loggerFactory = loggerFactory;
         _nugetLogger = nugetLogger;
     }
-    public RecipeDescriptor FindRecipeDescriptor(InstallableRecipe installableRecipeId)
-    {
-        var context = FindContext(installableRecipeId.GetPackageIdentity());
-        return context.Recipes.FirstOrDefault(x => x.Id == installableRecipeId.Id) 
-               ?? throw new InvalidOperationException($"Recipe {installableRecipeId.Id} not found in loaded package {installableRecipeId.NugetPackageName}:{installableRecipeId.NugetPackageVersion}");
-    }
+    // [Obsolete]
+    // public RecipeDescriptor FindRecipeDescriptor(InstallableRecipe installableRecipeId)
+    // {
+    //     var context = FindContext(installableRecipeId.GetPackageIdentity());
+    //     return context.Recipes.FirstOrDefault(x => x.Id == installableRecipeId.Id) 
+    //            ?? throw new InvalidOperationException($"Recipe {installableRecipeId.Id} not found in loaded package {installableRecipeId.NugetPackageName}:{installableRecipeId.NugetPackageVersion}");
+    // }
 
     // public Recipe CreateRecipe(RecipeStartInfo startInfo)
     // {
@@ -49,60 +53,61 @@ public class RecipeManager
     //     return recipeDescriptor;
     //     
     // }
+    //
+    //
+    // public async Task<RecipePackageInfo> InstallRecipePackage(
+    //     RecipePackage installableRecipeId,
+    //     List<PackageSource>? packageSources = null,
+    //     CancellationToken cancellationToken = default)
+    // {
+    //     return await InstallRecipePackage(
+    //         installableRecipeId.NugetPackageName, 
+    //         installableRecipeId.NugetPackageVersion, 
+    //         packageSources: packageSources, 
+    //         cancellationToken: cancellationToken);
+    // }
+    // public async Task<RecipePackageInfo> InstallRecipePackage(
+    //     string packageId,
+    //     bool includePrerelease = false,
+    //     List<PackageSource>? packageSources = null,
+    //     CancellationToken cancellationToken = default)
+    // {
+    //     return await InstallRecipePackage(
+    //         new LibraryRange(packageId), 
+    //         includePrerelease,
+    //         packageSources, 
+    //         cancellationToken);
+    // }
+    // public async Task<RecipePackageInfo> InstallRecipePackage(
+    //     string packageId,
+    //     string packageVersion,
+    //     bool includePrerelease = false,
+    //     List<PackageSource>? packageSources = null,
+    //     CancellationToken cancellationToken = default)
+    // {
+    //     return await InstallRecipePackage(
+    //         new PackageIdentity(packageId, NuGetVersion.Parse(packageVersion)), 
+    //         includePrerelease,
+    //         packageSources, 
+    //         cancellationToken);
+    // }
+    //
+    // public async Task<RecipePackageInfo> InstallRecipePackage(
+    //     PackageIdentity packageId,
+    //     bool includePrerelease = false,
+    //     List<PackageSource>? packageSources = null,
+    //     CancellationToken cancellationToken = default)
+    // {
+    //     return await InstallRecipePackage(
+    //         new LibraryRange(packageId.Id, 
+    //             VersionRange.Combine([packageId.Version]), 
+    //             LibraryDependencyTarget.Package), 
+    //         includePrerelease, 
+    //         packageSources, 
+    //         cancellationToken);
+    // }
 
 
-    public async Task<RecipePackageInfo> InstallRecipePackage(
-        RecipePackage installableRecipeId,
-        List<PackageSource>? packageSources = null,
-        CancellationToken cancellationToken = default)
-    {
-        return await InstallRecipePackage(
-            installableRecipeId.NugetPackageName, 
-            installableRecipeId.NugetPackageVersion, 
-            packageSources: packageSources, 
-            cancellationToken: cancellationToken);
-    }
-    public async Task<RecipePackageInfo> InstallRecipePackage(
-        string packageId,
-        bool includePrerelease = false,
-        List<PackageSource>? packageSources = null,
-        CancellationToken cancellationToken = default)
-    {
-        return await InstallRecipePackage(
-            new LibraryRange(packageId), 
-            includePrerelease,
-            packageSources, 
-            cancellationToken);
-    }
-    public async Task<RecipePackageInfo> InstallRecipePackage(
-        string packageId,
-        string packageVersion,
-        bool includePrerelease = false,
-        List<PackageSource>? packageSources = null,
-        CancellationToken cancellationToken = default)
-    {
-        return await InstallRecipePackage(
-            new PackageIdentity(packageId, NuGetVersion.Parse(packageVersion)), 
-            includePrerelease,
-            packageSources, 
-            cancellationToken);
-    }
-
-    public async Task<RecipePackageInfo> InstallRecipePackage(
-        PackageIdentity packageId,
-        bool includePrerelease = false,
-        List<PackageSource>? packageSources = null,
-        CancellationToken cancellationToken = default)
-    {
-        return await InstallRecipePackage(
-            new LibraryRange(packageId.Id, 
-                VersionRange.Combine([packageId.Version]), 
-                LibraryDependencyTarget.Package), 
-            includePrerelease, 
-            packageSources, 
-            cancellationToken);
-    }
-    
     /// <summary>
     /// Installs the requested recipe packages that satisfy requested library range and creates an isolated execution context.
     /// This isolation context allows clean separation of all recipe packages that need to run together as a single batch
@@ -114,12 +119,12 @@ public class RecipeManager
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
     public async Task<RecipeExecutionContext> CreateExecutionContext(
-        List<LibraryRange> requestedPackages,
+        IReadOnlyCollection<LibraryRange> requestedPackages,
+        CancellationToken cancellationToken,
         bool includePrerelease = false,
-        List<PackageSource>? packageSources = null,
-        CancellationToken cancellationToken = default)
+        IReadOnlyCollection<PackageSource>? packageSources = null)
     {
-
+        
         requestedPackages = requestedPackages
             .Select(x => x.VersionRange != null ? x : new LibraryRange(x.Name, VersionRange.AllStable, LibraryDependencyTarget.Package))
             .ToList();
@@ -129,52 +134,47 @@ public class RecipeManager
         var settings = NullSettings.Instance;
         var sourceProvider = new PackageSourceProvider(settings, packageSources);
         var cachingSourceProvider = new CachingSourceProvider(sourceProvider);
+
+        var selectedPackages = await Task.WhenAll(requestedPackages
+            .Select(async requestedPackage =>
+            {
+                var bestAvailableVersion = await FindHighestCompatibleVersion(requestedPackage, includePrerelease, cachingSourceProvider, cancellationToken);
+                if (bestAvailableVersion == null || !bestAvailableVersion.HasVersion)
+                {
+                    throw new InvalidOperationException($"Could not find a compatible version for {requestedPackage.Name}");
+                }
+                
+                return new PackageIdentity(requestedPackage.Name, bestAvailableVersion.Version);
+            }));
         
-        foreach (var requestedPackage in requestedPackages)
+        var requestedVsSelected = requestedPackages.Join(selectedPackages, x => x.Name, x => x.Id, (requested, selected) => new
         {
-            var bestAvailableVersion = await FindHighestCompatibleVersion(requestedPackage, includePrerelease, cachingSourceProvider, cancellationToken);
-            if (bestAvailableVersion == null || !bestAvailableVersion.HasVersion)
-            {
-                throw new InvalidOperationException($"Could not find a compatible version for {requestedPackage.Name}");
-            }
+            PackageId = requested.Name,
+            RequestedRange = requested.VersionRange?.ToString(),
+            SelectedVersion = selected.Version
+        });
+        
+        _log.LogDebug("Resolved packages: {@ResolvedPackages}", requestedVsSelected);
 
-            _log.LogInformation("Selected recipe {SelectedPackage} as best matching version for requested {RequestedPackage}", bestAvailableVersion, requestedPackage );
-            var selectedRecipePackage = new PackageIdentity(requestedPackage.Name, bestAvailableVersion.Version);
-            if (_loadedRecipes.TryGetValue(selectedRecipePackage, out var loadedContext))
-            {
-                _log.LogDebug("{SelectedPackage} package is already loaded into memory - reusing", selectedRecipePackage);
-                return new RecipePackageInfo(selectedRecipePackage, loadedContext.Recipes);
-            }
-            // var executionContext = await RecipeExecutionContext.Create(selectedRecipePackage, cachingSourceProvider, cancellationToken);
-            if (!_loadedRecipes.TryGetValue(selectedRecipePackage, out var recipeExecutionContext))
-            {
-                var projectDefinition = CreatePackageRestoreSpec(selectedRecipePackage);
-                var lockFile = await RestoreProject(projectDefinition, cachingSourceProvider, cancellationToken);
-                var requiredAssemblies = GetRequiredAssemblies(lockFile, settings);
-                recipeExecutionContext = new RecipeExecutionContext(selectedRecipePackage, requiredAssemblies.Select(x => x.AssemblyPath).ToList());
-                _loadedRecipes.Add(selectedRecipePackage, recipeExecutionContext);
-                _log.LogDebug("Loaded recipe package {RecipePackage}", selectedRecipePackage);
-            }
-            else
-            {
-                _log.LogDebug("Recipe package {RecipePackage} is already loaded", selectedRecipePackage);
-            }
-            
-            _log.LogInformation("Found {RecipeCount} recipes in {SelectedPackage}:{@RecipeNames}", recipeExecutionContext.Recipes.Count, selectedRecipePackage, recipeExecutionContext.Recipes.Select(x => x.TypeName.FullName) );
-        }
-        return new RecipePackageInfo(selectedRecipePackage, recipeExecutionContext.Recipes);
+        
+        var projectDefinition = CreatePackageRestoreSpec(selectedPackages);
+        var lockFile = await RestoreProject(projectDefinition, cachingSourceProvider, cancellationToken);
+        var requiredAssemblies = GetRequiredAssemblies(lockFile, settings);
+        var recipeExecutionContext = new RecipeExecutionContext(requiredAssemblies.Select(x => x.AssemblyPath).ToList(), _loggerFactory);
+        _log.LogInformation("{@Recipes}", recipeExecutionContext.Recipes.Select(x => new {x.Id, x.TypeName, x.DisplayName}));
+        return recipeExecutionContext;
 
     }
 
-    private RecipeExecutionContext FindContext(PackageIdentity packageIdentity)
-    {
-        if(!_loadedRecipes.TryGetValue(packageIdentity, out var context))
-        {
-            throw new InvalidOperationException($"Recipe package containing recipe {packageIdentity} isn't loaded");
-        }
-
-        return context;
-    }
+    // private RecipeExecutionContext FindContext(PackageIdentity packageIdentity)
+    // {
+    //     if(!_loadedRecipes.TryGetValue(packageIdentity, out var context))
+    //     {
+    //         throw new InvalidOperationException($"Recipe package containing recipe {packageIdentity} isn't loaded");
+    //     }
+    //
+    //     return context;
+    // }
 
 
     private async Task<SourcePackageDependencyInfo> FindHighestCompatibleVersion(LibraryRange libraryRange, bool includePreRelease, CachingSourceProvider cachingSourceProvider, CancellationToken cancellationToken = default)

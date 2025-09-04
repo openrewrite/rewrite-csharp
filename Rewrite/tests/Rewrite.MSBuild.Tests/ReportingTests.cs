@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using NuGet.Configuration;
+using NuGet.LibraryModel;
+using NuGet.Versioning;
 using Rewrite.Core;
 using Serilog;
 using TUnit.Core;
@@ -10,7 +12,7 @@ public class ReportingTests :  BaseTests
 {
     [Test]
     [Explicit]
-    public async Task RecipePackageAnalysisReport()
+    public async Task RecipePackageAnalysisReport(CancellationToken cancellationToken)
     {
         Log.Logger = new LoggerConfiguration().CreateLogger();
 
@@ -35,9 +37,10 @@ public class ReportingTests :  BaseTests
         var totalRecipes = 0;
         foreach (var nugetPackage in packages)
         {
-            var packageInfo = await recipeManager.InstallRecipePackage(nugetPackage, includePrerelease: false);
-            totalRecipes += packageInfo.Recipes.Count;
-            Console.WriteLine($"{packageInfo.Package}: {packageInfo.Recipes.Count}");
+            var executionContext = await recipeManager.CreateExecutionContext([new LibraryRange(nugetPackage, VersionRange.AllStable, LibraryDependencyTarget.Package)], cancellationToken);
+            
+            totalRecipes += executionContext.Recipes.Count;
+            Console.WriteLine($"{nugetPackage}: {executionContext.Recipes.Count}");
         }
         Console.WriteLine($"Total: {totalRecipes}");
 

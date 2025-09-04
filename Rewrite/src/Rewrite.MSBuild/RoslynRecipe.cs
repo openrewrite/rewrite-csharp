@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.MSBuild;
+using Microsoft.Extensions.Logging;
 using NMica.Utils.IO;
 using Rewrite.Core;
 using Rewrite.Core.Config;
@@ -18,7 +19,7 @@ namespace Rewrite.MSBuild;
 
 [DisplayName("Roslyn Fixup Recipe Runner")]
 [Description("Executes Roslyn's Fixups as OpenRewrite Recipes")]
-public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies) : ScanningRecipe<object>
+public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<RoslynRecipe> log) : ScanningRecipe<object>
 {
     internal List<Assembly> RecipeAssemblies { get; set; } = recipeAssemblies.ToList();
     
@@ -28,7 +29,7 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies) : ScanningReci
 
     [DisplayName("Description")]
     [Description("A special sign to specifically highlight the class found by the recipe")]
-    public HashSet<string> DiagnosticIds { get; set; } = new();
+    public HashSet<string> DiagnosticIds { get; init; } = new();
 
     [DisplayName("Should Apply Fixer")]
     [Description("If true, a code fix will be applied, otherwise only location of issues will be reported")]
@@ -100,25 +101,20 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies) : ScanningReci
             .GroupBy(x => x.Id)
             .Select(x => (x.Key, x.First().Analyzer, x.FirstOrDefault().Fixer))
             .ToDictionary(x => x.Key, x => (x.Analyzer, x.Fixer));
-
-        // var analyzersToRun = analyzersWithFixersById
-        //     .Where(x => DiagnosticsId.Contains(x.Key))
-        //     .Select(x => x.Value.Analyzer)
-        //     .Distinct()
-        //     .ToImmutableArray();
-
+        
         if (analyzersWithFixersById.Count == 0)
         {
-            Console.Error.WriteLine($"No analyzers targeting issue {DiagnosticId} has been found");
+            log.LogError("No analyzers targeting issue {DiagnosticId} has been found", DiagnosticId);
             return new RecipeExecutionResult(SolutionFilePath, watch.Elapsed, []);
         }
-        
-        Console.WriteLine($"Solution loaded in {watch.Elapsed}");
-        Console.WriteLine($"Found {analyzersWithFixersById.Count} code fixers");
-        foreach (var fixer in analyzersWithFixersById.Select(x => x.Value.Fixer).Distinct())
+
+        var issuesBeingFixed = analyzersWithFixersById.Select(x =>
         {
-            Console.WriteLine($"- {fixer}");
-        }
+            var diagnostic = x.Value.Analyzer.SupportedDiagnostics.First(y => y.Id == x.Key);
+            return $"{diagnostic.Id}: {diagnostic.Title}";
+        });
+        
+        log.LogDebug("Solution {SolutionFilePath} loaded in {Elapsed}. Fixing {@Issues}", SolutionFilePath, watch.Elapsed, issuesBeingFixed);
         
         var issuesTypesInCodebase = (await GetDiagnostics(solution, analyzersWithFixersById, cancellationToken))
             .Select(x => x.Id)
@@ -140,6 +136,7 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies) : ScanningReci
             var diagnostics = await GetDiagnostics(solution, analyzersToRun, cancellationToken);
             var diagnosticsById = diagnostics.ToLookup(x => x.Id);
             var diagnosticsToProcess = diagnosticsById.ToList();
+            
             foreach (var diagnosticIssue in diagnosticsToProcess)
             {
                 var diagnostic = diagnosticIssue.First();
@@ -158,22 +155,27 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies) : ScanningReci
                 // var codeFixProvider = analyzersWithFixersById[diagnosticIssue.Key].Fixer;
                 var fixAllProvider = codeFixProvider.GetFixAllProvider() ?? throw new InvalidOperationException($"Bulk fix provider not available for {diagnosticIssue.Key}: {diagnosticIssue.First().Descriptor.Title}");
 
-                Console.WriteLine(
-                    $"Fixing {diagnosticIssue.Key}: '{diagnosticIssue.First().Descriptor.Title}' using {codeFixProvider.GetType().Name} in {diagnosticsByDocument.Keys.Count()} documents ({diagnosticsToProcess.SelectMany(x => x).Count()} occuances)");
+                log.LogDebug("Fixing {DiagnosticId}: '{Title}' using {TypeName} in {DocumentCount} documents ({OccurrenceCount} occurrences)",
+                    diagnosticIssue.Key,
+                    diagnosticIssue.First().Descriptor.Title,
+                    codeFixProvider.GetType().Name,
+                    diagnosticsByDocument.Keys.Count(),
+                    diagnosticsToProcess.SelectMany(x => x).Count()
+                    );
 
                 var actions = new List<CodeAction>();
                 var context = new CodeFixContext(document, diagnostic, (a, d) => actions.Add(a), CancellationToken.None);
                 await codeFixProvider.RegisterCodeFixesAsync(context);
                 if (actions.Count == 0)
                 {
-                    Console.WriteLine("No code fixes found");
+                    log.LogDebug("No code fixes found");
                     continue;
                 }
 
                 var codeFixAction = actions[0];
                 if (!codeFixAction.NestedActions.IsEmpty)
                 {
-                    Console.WriteLine("  Skipping refactoring for this recipe because there's multiple variations of refactoring that can be applied");
+                    log.LogWarning("Skipping refactoring of recipe {DiagnosticId} because there's multiple variations of refactoring that can be applied", diagnosticIssue.Key);
                     continue;
                 }
 
@@ -230,6 +232,7 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies) : ScanningReci
         }
 
         watch.Stop();
+        log.LogDebug("Executed recipes in {Elapsed}", watch.Elapsed);
         var recipeExecutionResult = new RecipeExecutionResult(SolutionFilePath, watch.Elapsed, fixedIssues);
         return recipeExecutionResult;
     }

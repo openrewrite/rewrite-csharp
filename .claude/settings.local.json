@@ -3,7 +3,8 @@
     "allow": [
       "Bash(python:*)",
       "Bash(./gradlew:*)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Read(/C:\\projects\\openrewrite\\rewrite-csharp\\rewrite-csharp\\src\\main\\java\\org\\openrewrite\\csharp/**)"
     ],
     "deny": []
   }

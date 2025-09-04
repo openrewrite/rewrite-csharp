@@ -1,4 +1,5 @@
-﻿using NMica.Utils.IO;
+﻿using Microsoft.CodeAnalysis;
+using NMica.Utils.IO;
 using Nuke.Common;
 using Nuke.Common.Tooling;
 using Rewrite.Tests;
@@ -19,6 +20,7 @@ public class IntegrationTests : BaseTests
                 string Test() => string.Join(" ", new[] { "Hello", "world!" });
             }
             """;
+        
         using var testProject = TestProject.CreateTemporaryLibrary(content);
         
         var serverExecutable = DirectoryHelper.RepositoryRoot / "Rewrite" / "src" / "Rewrite.Server" / "bin" / "Debug" / "net9.0" / "Rewrite.Server.dll";

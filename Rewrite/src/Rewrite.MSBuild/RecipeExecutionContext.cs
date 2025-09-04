@@ -7,8 +7,11 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyModel;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NMica.Utils.IO;
 using NuGet.Commands;
 using NuGet.Configuration;
@@ -27,41 +30,86 @@ namespace Rewrite.MSBuild;
 
 public class RecipeExecutionContext : AssemblyLoadContext
 {
+    private readonly ILoggerFactory _loggerFactory;
+    private readonly ILogger<RecipeExecutionContext> _log;
     private Dictionary<AssemblyName, AbsolutePath> _assemblies;
     private readonly HashSet<Assembly> _recipeAssemblies = [];
     public IReadOnlyList<RecipeDescriptor> Recipes { get; private set; }
 
     private static IEqualityComparer<AssemblyName> _assemblyNameEqualityComparer = EqualityComparer<AssemblyName>.Create((a, b) => a?.Name == b?.Name, a => a.Name!.GetHashCode());
 
-    public RecipeExecutionContext(PackageIdentity recipePackageName, List<AbsolutePath> assemblies) : base(recipePackageName.ToString())
+    public RecipeExecutionContext(List<AbsolutePath> assemblies, ILoggerFactory loggerFactory)
     {
+        _loggerFactory = loggerFactory;
+        _log = loggerFactory.CreateLogger<RecipeExecutionContext>();
         SyntaxFactory.CompilationUnit();
         _assemblies = assemblies
             .Where(x => !x.Name.EndsWith(".resources.dll"))
             .ToDictionary(x => AssemblyName.GetAssemblyName(x), x => x, _assemblyNameEqualityComparer);
         Recipes = FindRecipesInAssemblies();
-        // Recipes = recipes
-            // .SelectMany(x => x)
-            // .GroupBy(x => x.Id)
-            // .Select(x => x.First()) // eliminate roslyn recipes where multiple types address same diagnostic id
-            // .ToList();
+        _log.LogDebug("Created execution context with {RecipeCount} available recipes", Recipes.Count);
+
     }
-    
-    
-    public Recipe CreateRecipe(IReadOnlyCollection<RecipeStartInfo> recipeStartInfo)
+
+
+    public Recipe CreateRecipe(params IReadOnlyCollection<RecipeStartInfo> recipeStartInfos)
     {
-        if (recipeStartInfo.Any(x => x.Kind == RecipeKind.OpenRewrite) && recipeStartInfo.Any(x => x.Kind != RecipeKind.OpenRewrite))
+        // if (recipeStartInfos.Count == 1)
+        // {
+        //     return CreateRecipe(recipeStartInfos.First());
+        // }
+
+        if (recipeStartInfos.Count == 0)
+        {
+            throw new InvalidOperationException($"Parameter {nameof(recipeStartInfos)} should not be empty");
+        }
+        if (recipeStartInfos.Any(x => x.Kind == RecipeKind.OpenRewrite) && recipeStartInfos.Any(x => x.Kind != RecipeKind.OpenRewrite))
         {
             throw new InvalidOperationException("Different recipe types cannot be mixed in same execution context");
         }
+
+        var recipeType = recipeStartInfos.First().Kind;
+        
+        
+        
+        if (recipeType == RecipeKind.OpenRewrite)
+        {
+            if (recipeStartInfos.Count > 1)
+            {
+                throw new InvalidOperationException("Bulk execution of OpenRewrite native .net recipes is not currently supported");
+            }
+            return CreateOpenRewriteRecipe(recipeStartInfos.First());
+        }
+        
+        if(recipeType is RecipeKind.RoslynAnalyzer or RecipeKind.RoslynFixer) // roslyn recipe
+        {
+            var solutionPaths = recipeStartInfos
+                .Select(x => x.Arguments.GetValueOrDefault(nameof(RoslynRecipe.SolutionFilePath))?.ToString())
+                .ToList();
+            var distinctSolutionPaths = solutionPaths.Distinct().ToList();
+            if (distinctSolutionPaths.Count > 1)
+            {
+                throw new InvalidOperationException($"All items in {nameof(recipeStartInfos)} must target the same solution file");
+            }
+
+            
+            return CreateRoslynRecipe(recipeStartInfos);
+        }
+        
+        throw new NotSupportedException($"Recipe type {recipeType} is not supported");
+        
+    }
+    private Recipe CreateRecipe(RecipeStartInfo recipeStartInfo)
+    {
+        
         // if (!_recipeAssemblyMap.TryGetValue(descriptor, out var assemblyPath))
         //     throw new InvalidOperationException($"The provided recipe descriptor for recipe {descriptor} is not part of execution context {Name}");
         // var assembly = LoadFromAssemblyPath(assemblyPath);
         var recipe = recipeStartInfo.Kind switch
         {
             RecipeKind.OpenRewrite => CreateOpenRewriteRecipe(recipeStartInfo),
-            RecipeKind.RoslynAnalyzer => CreateRoslynRecipe(recipeStartInfo, fixup: false),
-            RecipeKind.RoslynFixer =>  CreateRoslynRecipe(recipeStartInfo, fixup: true),
+            RecipeKind.RoslynFixer => CreateRoslynRecipe(recipeStartInfo),
+            RecipeKind.RoslynAnalyzer => throw new NotSupportedException("This type of analyzer is not yet supported"),
             _ => throw new ArgumentOutOfRangeException()
         };
         return recipe;
@@ -85,16 +133,17 @@ public class RecipeExecutionContext : AssemblyLoadContext
         return recipe;
     }
 
-    private Recipe CreateRoslynRecipe(RecipeStartInfo recipeStartInfo, bool fixup)
+    private Recipe CreateRoslynRecipe(params IReadOnlyCollection<RecipeStartInfo> recipeStartInfos)
     {
-        if (!recipeStartInfo.Arguments.TryGetValue(nameof(RoslynRecipe.SolutionFilePath), out var solutionFilePath) || solutionFilePath.Value is null)
-            throw new InvalidOperationException($"{nameof(RoslynRecipe)} requires {nameof(RoslynRecipe.SolutionFilePath)} property to be set to valid path");
-        var recipeTypes = GetRecipeType(recipeStartInfo);
-        var roslynRecipe = new RoslynRecipe(_recipeAssemblies)
+        var recipeStartInfo =  recipeStartInfos.First();
+        var solutionFilePath = (string)recipeStartInfo.Arguments[nameof(RoslynRecipe.SolutionFilePath)].Value!;
+        var diagnosticIds = recipeStartInfos.Select(x => x.Id).ToHashSet();
+        
+        var roslynRecipe = new RoslynRecipe(_recipeAssemblies, _loggerFactory.CreateLogger<RoslynRecipe>())
         {
-            DiagnosticId = recipeStartInfo.Id,
-            ApplyFixer = fixup,
-            SolutionFilePath = (string)solutionFilePath.Value
+            DiagnosticIds = diagnosticIds,
+            ApplyFixer = true,
+            SolutionFilePath = solutionFilePath
         };
         return roslynRecipe;
     }
@@ -320,6 +369,53 @@ public class RecipeExecutionContext : AssemblyLoadContext
     }
     
     
-    
-    
+     public RecipeStartInfo CreateRecipeStartInfo(RecipeDescriptor recipeDescriptor)
+    {
+        var startInfo = new RecipeStartInfo()
+        {
+            Id = recipeDescriptor.Id,
+            DisplayName = recipeDescriptor.DisplayName,
+            Description = recipeDescriptor.Description,
+            Kind = recipeDescriptor.Kind,
+            TypeName = recipeDescriptor.TypeName,
+            // NugetPackageId = Package,
+            Arguments = recipeDescriptor.Options.Select(x => new RecipeArgument
+            {
+                Name = x.Name,
+                Description = x.Description,
+                Type = x.Type,
+                DisplayName = x.DisplayName,
+                Example = x.Example,
+                Required = x.Required,
+            }).ToDictionary(x => x.Name, x => x)
+        };
+        return startInfo;
+    }
+
+    public RecipeStartInfo CreateRecipeStartInfo(RecipeDescriptor recipeDescriptor, Dictionary<string, JToken> arguments)
+    {
+        var startInfo = CreateRecipeStartInfo(recipeDescriptor);
+        var requiredOptionNames = startInfo.Arguments.Values.Where(x => x.Required).Select(x => x.Name).ToHashSet();
+        var providedOptionNames = arguments.Keys.ToHashSet();
+        var missingOptions = requiredOptionNames.ToHashSet();
+        missingOptions.ExceptWith(providedOptionNames);
+        if (missingOptions.Count > 0)
+        {
+            throw new ArgumentException($"Missing required options for recipe {recipeDescriptor.Id}: {string.Join(", ", missingOptions)}");
+        }
+        foreach (var (propertyName, propertyValueToken) in arguments)
+        {
+            if (!startInfo.Arguments.TryGetValue(propertyName, out var argument))
+            {
+                throw new ArgumentException($"Recipe option {propertyName} not found as part of recipe {recipeDescriptor.Id} yet was provided as an argument");
+            }
+            argument.Value = propertyValueToken.ToObject(argument.GetArgumentType());
+        }
+        return startInfo;
+    }
+
+    public RecipeDescriptor GetRecipeDescriptor(string id)
+    {
+        return Recipes.FirstOrDefault(x => x.Id == id) ?? throw new Exception("Recipe not loaded");
+    }
 }

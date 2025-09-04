@@ -12,4 +12,9 @@
       <ProjectReference Include="..\..\src\Rewrite.Diagnostics\Rewrite.Diagnostics.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.Test\Rewrite.Test.csproj" />
     </ItemGroup>
+    <ItemGroup>
+        <None Include="..\fixtures\**">
+            <Link>fixtures\%(RecursiveDir)%(Filename)%(Extension)</Link>
+        </None>
+    </ItemGroup>
 </Project>

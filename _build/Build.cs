@@ -97,7 +97,7 @@ partial class Build : NukeBuild
 
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
     AbsolutePath TestResultsDirectory => ArtifactsDirectory /  "test-results";
-    AbsolutePath TestFixturesDirectory => RootDirectory / "Rewrite" / "tests" / "fixtures";
+    AbsolutePath TestFixturesDirectory => RootDirectory / "Rewrite" / "tests" / "external-fixtures";
     AbsolutePath TestFixturesFile => TestFixturesDirectory / "fixtures.txt";
     [Solution(GenerateProjects = true)] Solution Solution;
     [NerdbankGitVersioning] NerdbankGitVersioning Version;

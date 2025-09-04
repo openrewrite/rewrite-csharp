@@ -2,6 +2,7 @@
 
 // You can use attributes at the assembly level to apply to all tests in the assembly
 
+using DiffEngine;
 using NuGet.Configuration;
 using Nuke.Common.IO;
 using Rewrite.CSharp.Tests;
@@ -25,7 +26,15 @@ public class GlobalHooks
         AnsiConsole.Profile.Capabilities.ColorSystem = ColorSystem.TrueColor;
         AnsiConsole.Profile.Capabilities.Ansi = true;
         CommonTestHooks.BeforeTestSession();
+        
     }
+
+    [Before(HookType.Test)]
+    public void BeforeTest()
+    {
+        UseProjectRelativeDirectory(@"verify");
+    }
+
     [Before(HookType.TestDiscovery)]
     public static void CleanNugetDirectory()
     {
