@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace MyProject.Analyzers.Authoring;
+namespace Rewrite.Analyzers.Authoring;
 
 
 internal static class CommonHelpers

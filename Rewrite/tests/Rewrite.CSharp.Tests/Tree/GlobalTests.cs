@@ -1,9 +1,9 @@
-﻿namespace Rewrite.CSharp.Tests.Tree;
+namespace Rewrite.CSharp.Tests.Tree;
 using static Assertions;
 public class GlobalTests : RewriteTest
 {
     [Test]
-    void TopLevelProgram()
+    public void TopLevelProgram()
     {
         RewriteRun(
             CSharp(

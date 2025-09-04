@@ -8,7 +8,7 @@ using static Assertions;
 public class ForEachLoopTests : RewriteTest
 {
     [Test]
-    void SimpleForEachLoop()
+    public void SimpleForEachLoop()
     {
         RewriteRun(
             CSharp(
@@ -34,7 +34,7 @@ public class ForEachLoopTests : RewriteTest
     }
 
     [Test]
-    void CommentsForEachLoop()
+    public void CommentsForEachLoop()
     {
         RewriteRun(
             CSharp(
@@ -49,7 +49,7 @@ public class ForEachLoopTests : RewriteTest
     }
 
     [Test]
-    void MultiVariableForEachLoop()
+    public void MultiVariableForEachLoop()
     {
         RewriteRun(
             CSharp(
@@ -65,7 +65,7 @@ public class ForEachLoopTests : RewriteTest
     }
 
     [Test]
-    void ForEachAwait()
+    public void ForEachAwait()
     {
         RewriteRun(
             CSharp(

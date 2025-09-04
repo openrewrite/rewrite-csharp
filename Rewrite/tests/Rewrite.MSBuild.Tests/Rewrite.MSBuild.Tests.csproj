@@ -1,34 +1,77 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<!--    <PropertyGroup>-->
+<!--        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>-->
+<!--    </PropertyGroup>-->
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <DefineConstants>$(DefineConstants);USE_NUKE</DefineConstants>
     </PropertyGroup>
+    <PropertyGroup>
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+    </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Glob" Version="1.1.9" />
+        <PackageReference Include="Ignore" Version="0.2.1" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
         <PackageReference Include="FluentAssertions" Version="7.2.0" />
         <PackageReference Include="Nerdbank.GitVersioning" Version="3.7.115">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Nuke.Common" Version="9.0.4" />
+        <PackageReference Include="Nuke.Tooling" Version="9.0.4" />
         <PackageReference Include="Spectre.Console" Version="0.50.0" />
-        <PackageReference Include="TUnit" Version="0.19.32" />
+        <PackageReference Include="TUnit" Version="0.56.50" />
         <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.6.3" />
         <PackageReference Include="coverlet.collector" Version="6.0.4">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Verify.TUnit" Version="30.10.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Rewrite.Rpc\Rewrite.Rpc.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.MSBuild\Rewrite.MSBuild.csproj" />
+      <ProjectReference Include="..\..\src\Rewrite.Server\Rewrite.Server.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.Test\Rewrite.Test.csproj" />
+      <ProjectReference Include="..\..\src\Rewrite.Diagnostics\Rewrite.Diagnostics.csproj" />
       <ProjectReference Include="..\Rewrite.Tests\Rewrite.Tests.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+<!--        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />-->
+<!--        <PackageReference Include="FluentAssertions" Version="7.2.0" />-->
+<!--        <PackageReference Include="Nuke.Common" Version="9.0.4" />-->
+<!--        <PackageReference Include="TUnit" Version="0.19.32" />-->
+        <PackageReference Include="Serilog" Version="4.2.0" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Exclude from compilation/build output -->
+        <Compile Remove="verify/**/*.cs" />
+        <Compile Remove="verify/**/bin/**" />
+        <Compile Remove="verify/**/obj/**" />
+        
+        <Content Remove="verify/**/*.cs" />
+        <Content Remove="verify/**/bin/**" />
+        <Content Remove="verify/**/obj/**" />
+
+        <None Remove="verify/**/bin/**" />
+        <None Remove="verify/**/obj/**" />
+<!--        <Compile Remove="verify/**/bin/**;verify/**/obj/**;verify/**/*.cs;" />-->
+<!--        <Content Remove="verify/**/bin/**;verify/**/obj/**;verify/**/*.cs;" />-->
+<!--        <None Remove="verify/**/bin/**;verify/**/obj/**;" />-->
+<!--        <None Remove="**/bin/**;**/obj/**;**/*.received.*;" />-->
+    </ItemGroup> 
+    <ItemGroup>
+        <Compile Include="..\Rewrite.CSharp.Tests\CommonTestHooks.cs">
+            <Link>CommonTestHooks.cs</Link>
+        </Compile>
+    </ItemGroup>
 <!--    <ItemGroup>-->
 <!--        <Compile Include="..\Rewrite.Tests\TestSetup.cs">-->
 <!--            <Link>TestSetup.cs</Link>-->

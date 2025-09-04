@@ -1,8 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-namespace MyProject.Analyzers.Authoring;
+﻿namespace Rewrite.Analyzers.Authoring;
 
 public static class FilenameStrategy
 {

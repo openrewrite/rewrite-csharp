@@ -59,7 +59,7 @@ public class PlayTests : RewriteTest
 
 
     [Test]
-    [Explicit]
+    [Explicit] 
     public void TestCursor()
     {
         var node = CSharpParser.Instance.Parse(

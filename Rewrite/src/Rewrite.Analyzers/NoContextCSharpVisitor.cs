@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using Rewrite.Analyzers.Authoring;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 namespace Rewrite.Analyzers;
 

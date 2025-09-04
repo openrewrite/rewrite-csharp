@@ -8,7 +8,7 @@ using static Assertions;
 public class PointerFieldAccessTests : RewriteTest
 {
     [Test]
-    void Simple()
+    public void Simple()
     {
         RewriteRun(
             CSharp(

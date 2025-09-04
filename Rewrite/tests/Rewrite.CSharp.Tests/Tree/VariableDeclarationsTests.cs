@@ -27,7 +27,7 @@ public class VariableDeclarationsTests : RewriteTest
     }
 
     [Test]
-    void Modifiers()
+    public void Modifiers()
     {
         RewriteRun(
             CSharp(

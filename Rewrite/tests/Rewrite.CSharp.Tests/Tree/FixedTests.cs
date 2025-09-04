@@ -10,7 +10,7 @@ using static Assertions;
 public class FixedTests : RewriteTest
 {
     [Test]
-    private void FixedBlock()
+    public void FixedBlock()
     {
         RewriteRun(
             CSharp(
@@ -25,7 +25,7 @@ public class FixedTests : RewriteTest
     }
 
     [Test]
-    private void FixedStatement()
+    public void FixedStatement()
     {
         RewriteRun(
             CSharp(
@@ -38,7 +38,7 @@ public class FixedTests : RewriteTest
         );
     }
     [Test]
-    private void FixedStatement2()
+    public void FixedStatement2()
     {
         RewriteRun(
             CSharp(
@@ -55,7 +55,7 @@ public class FixedTests : RewriteTest
     }
 
     [Test]
-    private void NestedFixedStatement()
+    public void NestedFixedStatement()
     {
         RewriteRun(
             CSharp(

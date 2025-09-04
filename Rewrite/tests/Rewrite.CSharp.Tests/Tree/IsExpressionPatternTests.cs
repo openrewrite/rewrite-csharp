@@ -9,7 +9,7 @@ public class IsPatternTests : RewriteTest
 {
 
     [Test]
-    private void IsType()
+    public void IsType()
     {
         RewriteRun(
             CSharp(
@@ -21,7 +21,7 @@ public class IsPatternTests : RewriteTest
     }
 
     [Test]
-    private void IsTypeWithVariable()
+    public void IsTypeWithVariable()
     {
         RewriteRun(
             CSharp(
@@ -33,7 +33,7 @@ public class IsPatternTests : RewriteTest
     }
 
     [Test]
-    private void IsTypeWithDiscard()
+    public void IsTypeWithDiscard()
     {
         RewriteRun(
             CSharp(
@@ -45,7 +45,7 @@ public class IsPatternTests : RewriteTest
     }
 
     [Test]
-    private void IsVarWithTupleDeconstruction()
+    public void IsVarWithTupleDeconstruction()
     {
         RewriteRun(
             CSharp(
@@ -57,7 +57,7 @@ public class IsPatternTests : RewriteTest
     }
 
     [Test]
-    private void IsIntConstant()
+    public void IsIntConstant()
     {
         RewriteRun(
             CSharp(
@@ -69,7 +69,7 @@ public class IsPatternTests : RewriteTest
     }
 
     [Test]
-    private void IsStringConstant()
+    public void IsStringConstant()
     {
         RewriteRun(
             CSharp(
@@ -81,7 +81,7 @@ public class IsPatternTests : RewriteTest
     }
 
     [Test]
-    private void IsPropertyPattern()
+    public void IsPropertyPattern()
     {
         RewriteRun(
             CSharp(
@@ -93,7 +93,7 @@ public class IsPatternTests : RewriteTest
     }
 
     [Test]
-    private void IsVarPattern()
+    public void IsVarPattern()
     {
         RewriteRun(
             CSharp(
@@ -105,7 +105,7 @@ public class IsPatternTests : RewriteTest
     }
 
     [Test]
-    private void IsPositional()
+    public void IsPositional()
     {
         RewriteRun(
             CSharp(
@@ -117,7 +117,7 @@ public class IsPatternTests : RewriteTest
     }
 
     [Test]
-    private void IsRelational()
+    public void IsRelational()
     {
         RewriteRun(
             CSharp(
@@ -129,7 +129,7 @@ public class IsPatternTests : RewriteTest
     }
 
     [Test]
-    private void IsArray()
+    public void IsArray()
     {
         RewriteRun(
             CSharp(
@@ -141,7 +141,7 @@ public class IsPatternTests : RewriteTest
     }
 
     [Test]
-    private void PropertyNameNested()
+    public void PropertyNameNested()
     {
         RewriteRun(
             CSharp(

@@ -8,7 +8,7 @@ using static Assertions;
 public class IfTests : RewriteTest
 {
     [Test]
-    void IfElse()
+    public void IfElse()
     {
         RewriteRun(
             CSharp(
@@ -28,7 +28,7 @@ public class IfTests : RewriteTest
 
 
     [Test]
-    void NoElse()
+    public void NoElse()
     {
         RewriteRun(
             CSharp(
@@ -43,7 +43,7 @@ public class IfTests : RewriteTest
     }
 
     [Test]
-    void SingleLineIfElseStatements()
+    public void SingleLineIfElseStatements()
     {
         RewriteRun(
             CSharp(
@@ -58,7 +58,7 @@ public class IfTests : RewriteTest
     }
 
     [Test]
-    void ElseWithTrailingSpace()
+    public void ElseWithTrailingSpace()
     {
         RewriteRun(
             CSharp(

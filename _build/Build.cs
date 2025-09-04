@@ -97,14 +97,15 @@ partial class Build : NukeBuild
 
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
     AbsolutePath TestResultsDirectory => ArtifactsDirectory /  "test-results";
-    AbsolutePath TestFixturesDirectory => RootDirectory / "Rewrite" / "tests" / "fixtures";
+    AbsolutePath TestFixturesDirectory => RootDirectory / "Rewrite" / "tests" / "external-fixtures";
     AbsolutePath TestFixturesFile => TestFixturesDirectory / "fixtures.txt";
     [Solution(GenerateProjects = true)] Solution Solution;
     [NerdbankGitVersioning] NerdbankGitVersioning Version;
     [GitRepositoryExt] LibGit2Sharp.Repository GitRepository;
     AbsolutePath DotnetServerFilePath => ArtifactsDirectory / "DotnetServer.zip";
 
-    const string TargetFramework = "net9.0";
+    readonly string[] TargetFrameworks = ["net8.0", "net9.0"];
+    readonly string TargetFramework = "net9.0";
 
 
     bool IsCurrentBranchCommitted() => !GitRepository.RetrieveStatus().IsDirty;
@@ -209,7 +210,9 @@ partial class Build : NukeBuild
         {
             DotNetPublish(c => c
                 .SetProject(Solution.src.Rewrite_Server)
-                .SetVersion(Version.NuGetPackageVersion));
+                .SetVersion(Version.NuGetPackageVersion)
+                .CombineWith(TargetFrameworks, (settings, targetFramework) => settings
+                    .SetFramework(targetFramework)));
 
             var publishDir = Solution.src.Rewrite_Server.Directory / "bin" / "Release" / TargetFramework / "publish";
             var extension = IsWin ? ".exe" : "";

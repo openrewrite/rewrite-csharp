@@ -1,10 +1,10 @@
-﻿using System.Reflection.Metadata;
-using System.Text.RegularExpressions;
-using Rewrite.Core.Config;
-using TypeName = Rewrite.Core.Config.TypeName;
+﻿
 namespace Rewrite.Core;
 
-public record RecipePackage(string NugetPackageName, string NugetPackageVersion);
+public record RecipePackage(string NugetPackageName, string NugetPackageVersion)
+{
+
+}
 /// <summary>
 /// Represents a single recipe inside a nuget package
 /// </summary>

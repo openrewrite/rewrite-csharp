@@ -1,4 +1,4 @@
-namespace Rewrite.Core;
+namespace Rewrite.Core.Config;
 
 [AttributeUsage(AttributeTargets.Parameter)]
 #if Analyzer

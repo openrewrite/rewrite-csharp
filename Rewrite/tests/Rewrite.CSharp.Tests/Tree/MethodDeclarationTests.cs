@@ -289,7 +289,7 @@ public class MethodDeclarationTests : RewriteTest
     }
 
     [Test]
-    void AnonymousMethodDeclaration()
+    public void AnonymousMethodDeclaration()
     {
         RewriteRun(
             CSharp(
@@ -305,7 +305,7 @@ public class MethodDeclarationTests : RewriteTest
     }
 
     [Test]
-    void GenericMethodDeclarationWithSingleTypeConstraint()
+    public void GenericMethodDeclarationWithSingleTypeConstraint()
     {
         RewriteRun(
             CSharp(

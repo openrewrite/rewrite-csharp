@@ -12,7 +12,7 @@ public class PropertyDeclarationTests : RewriteTest
 {
 
     [Test]
-    void SimpleAutoPropertyDeclaration()
+    public void SimpleAutoPropertyDeclaration()
     {
         RewriteRun(
             CSharp(
@@ -31,7 +31,7 @@ public class PropertyDeclarationTests : RewriteTest
     }
 
     [Test]
-    void AutoPropertyWithInitializerDeclaration()
+    public void AutoPropertyWithInitializerDeclaration()
     {
         RewriteRun(
             CSharp(
@@ -51,7 +51,7 @@ public class PropertyDeclarationTests : RewriteTest
     }
 
     [Test]
-    void SimpleExplicitPropertyDeclaration()
+    public void SimpleExplicitPropertyDeclaration()
     {
         RewriteRun(
             CSharp(
@@ -84,7 +84,7 @@ public class PropertyDeclarationTests : RewriteTest
     }
 
     [Test]
-    void ExpressionBodyAccessorsPropertyDeclaration()
+    public void ExpressionBodyAccessorsPropertyDeclaration()
     {
         RewriteRun(
             CSharp(
@@ -108,7 +108,7 @@ public class PropertyDeclarationTests : RewriteTest
     }
 
     [Test]
-    void ExpressionBodyPropertyDeclaration()
+    public void ExpressionBodyPropertyDeclaration()
     {
         RewriteRun(
             CSharp(
@@ -124,7 +124,7 @@ public class PropertyDeclarationTests : RewriteTest
     }
 
     [Test]
-    void BinaryExpressionProperty()
+    public void BinaryExpressionProperty()
     {
         var sourceSpec = CSharp(
             """
@@ -137,7 +137,7 @@ public class PropertyDeclarationTests : RewriteTest
     }
 
     [Test]
-    void UnaryExpressionProperty()
+    public void UnaryExpressionProperty()
     {
         var sourceSpec = CSharp(
             """
@@ -151,7 +151,7 @@ public class PropertyDeclarationTests : RewriteTest
 
 
     [Test]
-    void AccessorWithAnnotation()
+    public void AccessorWithAnnotation()
     {
         var sourceSpec = CSharp(
             """

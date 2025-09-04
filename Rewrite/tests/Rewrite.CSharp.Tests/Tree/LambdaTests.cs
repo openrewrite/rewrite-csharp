@@ -9,7 +9,7 @@ public class LambdaTests : RewriteTest
 {
 
     [Test]
-    void SimpleLambda()
+    public void SimpleLambda()
     {
         RewriteRun(
             CSharp(
@@ -22,7 +22,7 @@ public class LambdaTests : RewriteTest
         );
     }
     [Test]
-    void SimpleLambdaWithComments()
+    public void SimpleLambdaWithComments()
     {
         RewriteRun(
             CSharp(
@@ -37,7 +37,7 @@ public class LambdaTests : RewriteTest
 
 
     [Test]
-    void SimpleLambdaWithBlockBody()
+    public void SimpleLambdaWithBlockBody()
     {
         RewriteRun(
             CSharp(
@@ -54,7 +54,7 @@ public class LambdaTests : RewriteTest
     }
 
     [Test]
-    void ParenthesizedMultiArgsLambda()
+    public void ParenthesizedMultiArgsLambda()
     {
         RewriteRun(
             CSharp(
@@ -68,7 +68,7 @@ public class LambdaTests : RewriteTest
     }
 
     [Test]
-    void ParenthesizedMultiArgsLambdaWithComments()
+    public void ParenthesizedMultiArgsLambdaWithComments()
     {
         RewriteRun(
             CSharp(
@@ -82,7 +82,7 @@ public class LambdaTests : RewriteTest
     }
 
     [Test]
-    void ParenthesizedMultiArgsLambdaWithBlockBody()
+    public void ParenthesizedMultiArgsLambdaWithBlockBody()
     {
         RewriteRun(
             CSharp(
@@ -99,19 +99,19 @@ public class LambdaTests : RewriteTest
     }
 
     [Test]
-    private void AsyncLambda()
+    public void AsyncLambda()
     {
         RewriteRun(CSharp("Task.Run(async () => {});"));
     }
 
     [Test]
-    private void LambdaWithModifiers()
+    public void LambdaWithModifiers()
     {
         RewriteRun(CSharp("Task.Run( async static () => {});"));
     }
 
     [Test]
-    private void LambdaWithReturnType()
+    public void LambdaWithReturnType()
     {
         RewriteRun(CSharp("Task.Run( async static bool () => {});"));
     }

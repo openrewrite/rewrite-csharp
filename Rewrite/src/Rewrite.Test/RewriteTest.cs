@@ -184,7 +184,7 @@ public class RewriteTest
     {
         var customProperties = TestContext.Parameters.ToDictionary(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase);
         bool shouldRenderLst = !EnvironmentInfo.IsCI;
-        if (customProperties.TryGetValue("RenderLST", out var renderLst) && bool.TryParse(renderLst, out var renderLstValue))
+        if (customProperties.TryGetValue("RenderLST", out var renderLst) && bool.TryParse(renderLst.FirstOrDefault(), out var renderLstValue))
         {
             shouldRenderLst = renderLstValue;
         }

@@ -8,11 +8,16 @@ using NuGet.Packaging.Core;
 using NuGet.Versioning;
 using Nuke.Common;
 using Nuke.Common.IO;
+using Nuke.Common.Utilities.Collections;
 using Rewrite.Core;
+using Rewrite.Server.Commands;
 using Rewrite.Test;
 using Rewrite.Test.CSharp;
+using Rewrite.Tests;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
+using Spectre.Console.Cli;
+using TUnit.Core;
 using AbsolutePath = Nuke.Common.IO.AbsolutePath;
 
 namespace Rewrite.MSBuild.Tests;
@@ -54,33 +59,33 @@ public class RecipeManagerTests : BaseTests
     // }
     //
     [Test]
-    public async Task InstallRecipe()
+    public async Task InstallRecipe(CancellationToken cancellationToken)
     {
-    
-        
         var recipeManager = CreateObject<RecipeManager>();
         
         string[] packageSources =
         [
-            NukeBuild.RootDirectory / "artifacts",
-            NukeBuild.RootDirectory / "artifacts" / "test",
+            DirectoryHelper.RepositoryRoot / "artifacts",
+            DirectoryHelper.RepositoryRoot / "artifacts" / "test",
             "https://api.nuget.org/v3/index.json"
         ];
         
-        // var recipeManager = new RecipeManager();
         var recipeIdentity = new InstallableRecipe("Rewrite.Recipes.FindClass", "Rewrite.Recipes", "0.0.1");
-        var installable = await recipeManager.InstallRecipePackage(recipeIdentity, packageSources: packageSources.Select(x => new PackageSource(x)).ToList());
-        installable.Recipes.Should().NotBeEmpty();
+        var recipeExecutionContext = await recipeManager.CreateExecutionContext(
+            [recipeIdentity.GetLibraryRange()], 
+            cancellationToken, 
+            packageSources: packageSources.Select(x => new PackageSource(x)).ToList());
+
         var lst = Assertions.CSharp(
             """
             public    class Foo;
             """
         ).Parse();
     
-        var recipeDescriptor = recipeManager.FindRecipeDescriptor(recipeIdentity);
-        var recipeStartInfo = installable.CreateRecipeStartInfo(recipeDescriptor)
+        var recipeDescriptor = recipeExecutionContext.GetRecipeDescriptor(recipeIdentity.Id) ?? throw new Exception("Recipe not loaded");
+        var recipeStartInfo = recipeExecutionContext.CreateRecipeStartInfo(recipeDescriptor)
             .WithOption("Description", "!!--->");
-        var recipe = recipeManager.CreateRecipe(recipeStartInfo);
+        var recipe = recipeExecutionContext.CreateRecipe(recipeStartInfo);
         recipe.Should().NotBeNull();
         recipe.GetType().GetProperty("Description")!.GetValue(recipe).Should().Be("!!--->");
         
@@ -93,42 +98,51 @@ public class RecipeManagerTests : BaseTests
     }
 
     
+    /// <summary>
+    /// Verifies that we can act on multiple solutions via one invocation of the command
+    /// </summary>
     [Test]
-    public async Task InstallRoslynRecipe()
+    public async Task<VerifyResult> RoslynRecipeBatchWithTwoSolution()
     {
-        var recipeManager = CreateObject<RecipeManager>();
+        var directory = CreateRecipeInputDirectory(FixturesDir / "TwoSolutions");
         
-        string[] feeds =
-        [
-            "https://api.nuget.org/v3/index.json"
-        ];
+        var settings = new RunRecipeCommand.Settings
+        {
+            Ids = [
+                "CA1861", // Avoid constant arrays as arguments,
+                "CA1311"  // Specify a culture or use an invariant version
+            ], 
+            Packages = ["Microsoft.CodeAnalysis.NetAnalyzers:9.0.0"],
+            Path = directory
+        };
+        var command = CreateObject<RunRecipeCommand>();
+        await command.ExecuteAsync(settings);
         
-        var packageSources = feeds.Select(x => new PackageSource(x)).ToList();
-        // var recipeManager = new RecipeManager();
-        // CA1802: Use Literals Where Appropriate
-        // CA1861: Avoid constant arrays as arguments
-        // CA1866
-        var installableRecipe = new InstallableRecipe("CA1861", "Microsoft.CodeAnalysis.NetAnalyzers", "9.0.0");
-        var recipesPackage = await recipeManager.InstallRecipePackage(installableRecipe, packageSources);
-        recipesPackage.Recipes.Should().NotBeEmpty();
-        var recipeDescriptor = recipesPackage.GetRecipeDescriptor(installableRecipe.Id);
-        var recipeStartInfo = recipesPackage.CreateRecipeStartInfo(recipeDescriptor);
-        var content = """
-            class A
-            {
-                string Test() => string.Join(" ", new[] { "Hello", "world!" });
-            }
-            """;
-        using var testProject = TestProject.CreateTemporaryLibrary(content);
-        
-        
-        recipeStartInfo.WithOption(nameof(RoslynRecipe.SolutionFilePath), (string)testProject.SolutionFile);
-        var recipe = (RoslynRecipe)recipeManager.CreateRecipe(recipeStartInfo);
-        recipe.Should().NotBeNull();
-        var affectedDocuments = await recipe.Execute(CancellationToken.None);
-        affectedDocuments.FixedIssues.Should().NotBeEmpty();
-        affectedDocuments.FixedIssues.SelectMany(x => x.Fixes).Should().NotBeEmpty();
+        return await VerifyDirectory(directory, IncludeTestFile);
     }
     
     
+    /// <summary>
+    /// Verifies that we can act on multiple solutions via one invocation of the command
+    /// </summary>
+    [Test]
+    public async Task MorganStanley()
+    {
+        // var directory = CreateRecipeInputDirectory(FixturesDir / "TwoSolutions");
+        var directory = (AbsolutePath)"C:\\Projects\\morganstanley\\ComposeUI";
+        var settings = new RunRecipeCommand.Settings
+        {
+            // Ids = [
+            //     "CA1861", // Avoid constant arrays as arguments,
+            //     "CA1311"  // Specify a culture or use an invariant version
+            // ], 
+            Packages = ["Microsoft.CodeAnalysis.NetAnalyzers"],
+            Path = directory
+        };
+        var command = CreateObject<RunRecipeCommand>();
+        await command.ExecuteAsync(settings);
+        
+        // return await VerifyDirectory(directory, IncludeTestFile);
+    }
+
 }

@@ -8,7 +8,7 @@ using static Assertions;
 public class DirectiveTests : RewriteTest
 {
     [Test]
-    void ConditionalPragma()
+    public void ConditionalPragma()
     {
         RewriteRun(
           CSharp(
@@ -21,7 +21,7 @@ public class DirectiveTests : RewriteTest
         );
     }
     [Test]
-    void NullableDirective()
+    public void NullableDirective()
     {
         RewriteRun(
             CSharp(

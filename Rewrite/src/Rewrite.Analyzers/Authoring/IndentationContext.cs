@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace MyProject.Analyzers.Authoring
+namespace Rewrite.Analyzers.Authoring
 {
     /// <summary>
     /// Provides a thread-local indentation level tracker.

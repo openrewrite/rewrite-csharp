@@ -9,7 +9,7 @@ public class ForLoopTests : RewriteTest
 {
 
     [Test]
-    void ForLoopMultipleInit()
+    public void ForLoopMultipleInit()
     {
         RewriteRun(
             CSharp(
@@ -28,7 +28,7 @@ public class ForLoopTests : RewriteTest
     }
 
     [Test]
-    void ForLoop()
+    public void ForLoop()
     {
         RewriteRun(
             CSharp(
@@ -45,7 +45,7 @@ public class ForLoopTests : RewriteTest
     }
 
     [Test]
-    void InfiniteLoop()
+    public void InfiniteLoop()
     {
         RewriteRun(
             CSharp(
@@ -62,7 +62,7 @@ public class ForLoopTests : RewriteTest
     }
 
     [Test]
-    void Format()
+    public void Format()
     {
         RewriteRun(
             CSharp(
@@ -79,7 +79,7 @@ public class ForLoopTests : RewriteTest
     }
 
     [Test]
-    void FormatInfiniteLoop()
+    public void FormatInfiniteLoop()
     {
         RewriteRun(
             CSharp(
@@ -95,7 +95,7 @@ public class ForLoopTests : RewriteTest
     }
 
     [Test]
-    void FormatLoopNoInit()
+    public void FormatLoopNoInit()
     {
         RewriteRun(
             CSharp(
@@ -111,7 +111,7 @@ public class ForLoopTests : RewriteTest
     }
 
     [Test]
-    void FormatLoopNoCondition()
+    public void FormatLoopNoCondition()
     {
         RewriteRun(
             CSharp(
@@ -128,7 +128,7 @@ public class ForLoopTests : RewriteTest
     }
 
     [Test]
-    void StatementTerminatorForSingleLineForLoops()
+    public void StatementTerminatorForSingleLineForLoops()
     {
         RewriteRun(
             CSharp(
@@ -144,7 +144,7 @@ public class ForLoopTests : RewriteTest
     }
 
     [Test]
-    void InitializerIsAnAssignment()
+    public void InitializerIsAnAssignment()
     {
         RewriteRun(
             CSharp(
@@ -163,7 +163,7 @@ public class ForLoopTests : RewriteTest
     }
 
     [Test]
-    void MultiVariableInitialization()
+    public void MultiVariableInitialization()
     {
         RewriteRun(
             CSharp(
@@ -179,7 +179,7 @@ public class ForLoopTests : RewriteTest
     }
 
     [Test]
-    void MultiInitExpressions()
+    public void MultiInitExpressions()
     {
         RewriteRun(
             CSharp(

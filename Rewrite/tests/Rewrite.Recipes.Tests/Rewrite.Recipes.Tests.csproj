@@ -1,13 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
+<!--    <PropertyGroup>-->
+<!--        <TargetFramework>net9.0</TargetFramework>-->
+<!--    </PropertyGroup>-->
     <PropertyGroup>
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
     </PropertyGroup>
 
     <ItemGroup>
+        
         <PackageReference Include="Serilog" Version="4.2.0" />
-        <PackageReference Include="TUnit" Version="0.19.32" />
+        <PackageReference Include="TUnit" Version="0.56.50" />
         <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.6.3" />
         <PackageReference Include="coverlet.collector" Version="6.0.4">
             <PrivateAssets>all</PrivateAssets>
@@ -16,13 +19,14 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Rewrite.Recipes\Rewrite.Recipes.csproj" />
+        <ProjectReference Include="..\..\src\Rewrite.Diagnostics\Rewrite.Diagnostics.csproj" />
+
+        <ProjectReference Include="..\..\src\Rewrite.Recipes\Rewrite.Recipes.csproj" />
       <ProjectReference Include="..\..\src\Rewrite.Test\Rewrite.Test.csproj" />
-      <ProjectReference Include="..\\Rewrite.Tests\Rewrite.Tests.csproj" />
     </ItemGroup>
-<!--    <ItemGroup>-->
-<!--        <Compile Include="..\Rewrite.Tests\TestSetup.cs">-->
-<!--            <Link>TestSetup.cs</Link>-->
-<!--        </Compile>-->
-<!--    </ItemGroup>-->
+    <ItemGroup>
+        <Compile Include="..\Rewrite.CSharp.Tests\CommonTestHooks.cs">
+            <Link>CommonTestHooks.cs</Link>
+        </Compile>
+    </ItemGroup>
 </Project>

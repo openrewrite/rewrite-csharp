@@ -8,7 +8,7 @@ using static Assertions;
 public class UnaryTests : RewriteTest
 {
     [Test]
-    void Format()
+    public void Format()
     {
         RewriteRun(
           CSharp(
@@ -32,7 +32,7 @@ public class UnaryTests : RewriteTest
     }
 
     [Test]
-    void Negation()
+    public void Negation()
     {
         RewriteRun(
             CSharp(
@@ -46,7 +46,7 @@ public class UnaryTests : RewriteTest
     }
 
     [Test]
-    void NullWarningSuppress()
+    public void NullWarningSuppress()
     {
         RewriteRun(
             CSharp(
@@ -61,7 +61,7 @@ public class UnaryTests : RewriteTest
 
     [Test]
     [KnownBug]
-    void NullableFunctionProperty()
+    public void NullableFunctionProperty()
     {
         RewriteRun(
             CSharp(
@@ -73,7 +73,7 @@ public class UnaryTests : RewriteTest
     }
 
     [Test]
-    void IndexExpression()
+    public void IndexExpression()
     {
         RewriteRun(
             CSharp(
@@ -85,7 +85,7 @@ public class UnaryTests : RewriteTest
     }
 
     [Test]
-    void AddressOfExpression()
+    public void AddressOfExpression()
     {
         RewriteRun(
             CSharp(
@@ -97,7 +97,7 @@ public class UnaryTests : RewriteTest
     }
 
     [Test]
-    void PointerIndirection()
+    public void PointerIndirection()
     {
         RewriteRun(
             CSharp(
@@ -109,7 +109,7 @@ public class UnaryTests : RewriteTest
     }
 
     [Test]
-    void PointerType()
+    public void PointerType()
     {
         RewriteRun(
             CSharp(

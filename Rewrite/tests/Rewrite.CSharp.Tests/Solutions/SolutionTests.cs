@@ -1,9 +1,12 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Text.RegularExpressions;
+using Nuke.Common.IO;
+// using NMica.Utils.IO;
 using Rewrite.MSBuild;
 using Rewrite.RewriteCSharp.Marker;
 using Rewrite.Test.CSharp;
+using Rewrite.Tests;
 
 namespace Rewrite.CSharp.Tests.Solutions;
 
@@ -179,7 +182,7 @@ public class SolutionTests : RewriteTest
 
     public IEnumerable<Func<(AbsolutePath SolutionOrProject, AbsolutePath RootDir)>> Fixtures()
     {
-        var fixturesDirectory = NukeBuild.RootDirectory / "Rewrite" / "tests" / "fixtures";
+        var fixturesDirectory = DirectoryHelper.RepositoryRoot / "Rewrite" / "tests" / "external-fixtures";
         if (!fixturesDirectory.Exists())
             yield break;
         foreach (var fixture in fixturesDirectory.GetDirectories())

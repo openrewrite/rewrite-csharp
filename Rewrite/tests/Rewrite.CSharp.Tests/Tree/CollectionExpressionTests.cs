@@ -8,7 +8,7 @@ using static Assertions;
 public class CollectionExpressionTests : RewriteTest
 {
     [Test]
-    void Space()
+    public void Space()
     {
         RewriteRun(
             CSharp(
@@ -22,7 +22,7 @@ public class CollectionExpressionTests : RewriteTest
     }
 
     [Test]
-    void Empty()
+    public void Empty()
     {
         RewriteRun(
             CSharp(
@@ -36,7 +36,7 @@ public class CollectionExpressionTests : RewriteTest
     }
 
     [Test]
-    void Multiple()
+    public void Multiple()
     {
         RewriteRun(
             CSharp(
@@ -50,7 +50,7 @@ public class CollectionExpressionTests : RewriteTest
     }
 
     [Test]
-    void TrailingComma()
+    public void TrailingComma()
     {
         RewriteRun(
             CSharp(
@@ -64,7 +64,7 @@ public class CollectionExpressionTests : RewriteTest
     }
 
     [Test]
-    void Spread()
+    public void Spread()
     {
         RewriteRun(
             spec => spec.TypeValidation = new TypeValidation(Unknowns: false),

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 
-namespace MyProject.Analyzers.Authoring;
+namespace Rewrite.Analyzers.Authoring;
 
 internal static class Hash
 {

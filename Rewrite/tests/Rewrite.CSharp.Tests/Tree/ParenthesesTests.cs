@@ -9,7 +9,7 @@ public class ParenthesesTests : RewriteTest
 {
 
     [Test]
-    void Parentheses() {
+    public void Parentheses() {
         RewriteRun(
             CSharp(
                 """
@@ -22,7 +22,7 @@ public class ParenthesesTests : RewriteTest
     }
 
     [Test]
-    void ParenthesesWithComments() {
+    public void ParenthesesWithComments() {
         RewriteRun(
             CSharp(
                 """

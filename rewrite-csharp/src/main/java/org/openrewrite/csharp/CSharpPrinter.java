@@ -1749,6 +1749,11 @@ public class CSharpPrinter<P> extends CSharpVisitor<PrintOutputCapture<P>> {
         }
 
         @Override
+        public J visitEnumValueSet(J.EnumValueSet enums, PrintOutputCapture<P> p) {
+            return super.visitEnumValueSet(enums, p);
+        }
+
+        @Override
         public <M extends Marker> M visitMarker(Marker marker, PrintOutputCapture<P> p) {
             if (marker instanceof Semicolon) {
                 p.append(';');

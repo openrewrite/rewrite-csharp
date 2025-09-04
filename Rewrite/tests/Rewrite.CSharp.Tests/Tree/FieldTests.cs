@@ -8,7 +8,7 @@ using static Assertions;
 public class FieldTests : RewriteTest
 {
     [Test]
-    void Simple()
+    public void Simple()
     {
         RewriteRun(
             CSharp(
@@ -24,7 +24,7 @@ public class FieldTests : RewriteTest
     }
 
     [Test]
-    void Attributed()
+    public void Attributed()
     {
         RewriteRun(
             CSharp(
@@ -40,7 +40,7 @@ public class FieldTests : RewriteTest
     }
 
     [Test]
-    void Modifiers()
+    public void Modifiers()
     {
         RewriteRun(
             CSharp(
@@ -58,7 +58,7 @@ public class FieldTests : RewriteTest
     }
 
     [Test]
-    void Visibility()
+    public void Visibility()
     {
         RewriteRun(
             CSharp(
@@ -78,7 +78,7 @@ public class FieldTests : RewriteTest
     }
 
     [Test]
-    void ComplexNestedAccess()
+    public void ComplexNestedAccess()
     {
         RewriteRun(
             CSharp(

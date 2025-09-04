@@ -1,5 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using NMica.Utils.IO;
+﻿using DiffEngine;
+using DiffPlex;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
+using Microsoft.Extensions.DependencyInjection;
+using Nuke.Common.IO;
+using Rewrite.Tests;
 using Serilog;
 
 namespace Rewrite.MSBuild.Tests;
@@ -7,9 +12,17 @@ namespace Rewrite.MSBuild.Tests;
 public class BaseTests
 {
     private readonly ServiceProvider _serviceProvider;
+    public AbsolutePath RepositoryRoot => DirectoryHelper.RepositoryRoot;
+    protected Ignore.Ignore Ignore { get; }
+    
+    protected AbsolutePath FixturesDir => DirectoryHelper.RepositoryRoot / "Rewrite" / "tests" / "fixtures";
 
+    protected bool IncludeTestFile(string file) => !Ignore.IsIgnored(DirectoryHelper.RepositoryRoot.GetUnixRelativePathTo(file));
+    
     public BaseTests()
     {
+        DiffRunner.Disabled = false;
+        UseProjectRelativeDirectory(@"verify");
         var services = new ServiceCollection();
         services.AddLogging(c => c
             .AddSerilog());
@@ -17,8 +30,20 @@ public class BaseTests
         services.AddSingleton<NuGet.Common.ILogger, NugetLogger>();
         ConfigureServices(services);
         _serviceProvider = services.BuildServiceProvider();
+        
+        var ignore = new Ignore.Ignore();
+        var patterns = (DirectoryHelper.RepositoryRoot / ".gitignore").ReadAllLines();
+        ignore.Add(patterns);
+        Ignore = ignore;
+        
     }
-    
+
+    public AbsolutePath CreateRecipeInputDirectory(AbsolutePath template)
+    {
+        Func<AbsolutePath, bool> exclude = path => Ignore.IsIgnored(DirectoryHelper.RepositoryRoot.GetUnixRelativePathTo(path)); 
+        return template.Copy(Directory.CreateTempSubdirectory().FullName, ExistsPolicy.DirectoryMerge, excludeDirectory: exclude, excludeFile: exclude, createDirectories: false );
+
+    }
 
     /// <summary>
     /// Constructs / gets object from DI container.
@@ -35,6 +60,8 @@ public class BaseTests
     {
         return services;
     }
+    
+    
     
 
     public class TestProject : IDisposable
@@ -55,15 +82,18 @@ public class BaseTests
             {
                 File.WriteAllText(Directory / "Program.cs", programCs);
             }
+
+            AdhocWorkspace f = new AdhocWorkspace();
+            
         }
-        
+
+
 
         /// <summary>
         /// Creates test project & solution file at specified folder
         /// </summary>
         private void WriteTestProject(bool executable)
         {
-            Directory.EnsureCleanDirectory();
             var projectContent = executable ? ProjectContent : ProjectContent.Replace("Exe","Library");
             File.WriteAllText(ProjectFile , projectContent);
             File.WriteAllText(SolutionFile , SolutionContent);

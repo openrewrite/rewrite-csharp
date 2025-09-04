@@ -46,7 +46,7 @@ public class SwitchStatementTests : RewriteTest
     }
 
     [Test]
-    void MultipleLabelsOnSingleArm()
+    public void MultipleLabelsOnSingleArm()
     {
         RewriteRun(
             CSharp(
