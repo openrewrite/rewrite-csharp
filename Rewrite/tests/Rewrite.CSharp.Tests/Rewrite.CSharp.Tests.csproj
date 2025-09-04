@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.6.3" />
+        <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.8.4" />
         <PackageReference Include="Nuke.Utilities.IO.Globbing" Version="9.0.4" />
         <PackageReference Include="Spectre.Console" Version="0.50.0" />
         <PackageReference Include="TUnit" Version="0.56.50" />

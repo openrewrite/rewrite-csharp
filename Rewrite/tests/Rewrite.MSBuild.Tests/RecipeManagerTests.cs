@@ -58,6 +58,7 @@ public class RecipeManagerTests : BaseTests
     //     }
     // }
     //
+#if NET9_0_OR_GREATER
     [Test]
     public async Task InstallRecipe(CancellationToken cancellationToken)
     {
@@ -96,7 +97,7 @@ public class RecipeManagerTests : BaseTests
         var afterLst = visitor.Visit(lst, executionContext);
         afterLst!.ToString().ShouldBeSameAs($"/*~~(!!--->)~~>*/{lst}");
     }
-
+#endif
     
     /// <summary>
     /// Verifies that we can act on multiple solutions via one invocation of the command
@@ -121,28 +122,28 @@ public class RecipeManagerTests : BaseTests
         return await VerifyDirectory(directory, IncludeTestFile);
     }
     
-    
-    /// <summary>
-    /// Verifies that we can act on multiple solutions via one invocation of the command
-    /// </summary>
-    [Test]
-    public async Task MorganStanley()
-    {
-        // var directory = CreateRecipeInputDirectory(FixturesDir / "TwoSolutions");
-        var directory = (AbsolutePath)"C:\\Projects\\morganstanley\\ComposeUI";
-        var settings = new RunRecipeCommand.Settings
-        {
-            // Ids = [
-            //     "CA1861", // Avoid constant arrays as arguments,
-            //     "CA1311"  // Specify a culture or use an invariant version
-            // ], 
-            Packages = ["Microsoft.CodeAnalysis.NetAnalyzers"],
-            Path = directory
-        };
-        var command = CreateObject<RunRecipeCommand>();
-        await command.ExecuteAsync(settings);
-        
-        // return await VerifyDirectory(directory, IncludeTestFile);
-    }
+    //
+    // /// <summary>
+    // /// Verifies that we can act on multiple solutions via one invocation of the command
+    // /// </summary>
+    // [Test]
+    // public async Task MorganStanley()
+    // {
+    //     // var directory = CreateRecipeInputDirectory(FixturesDir / "TwoSolutions");
+    //     var directory = (AbsolutePath)"C:\\Projects\\morganstanley\\ComposeUI";
+    //     var settings = new RunRecipeCommand.Settings
+    //     {
+    //         // Ids = [
+    //         //     "CA1861", // Avoid constant arrays as arguments,
+    //         //     "CA1311"  // Specify a culture or use an invariant version
+    //         // ], 
+    //         Packages = ["Microsoft.CodeAnalysis.NetAnalyzers"],
+    //         Path = directory
+    //     };
+    //     var command = CreateObject<RunRecipeCommand>();
+    //     await command.ExecuteAsync(settings);
+    //     
+    //     // return await VerifyDirectory(directory, IncludeTestFile);
+    // }
 
 }

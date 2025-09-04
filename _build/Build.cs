@@ -261,8 +261,14 @@ partial class Build : NukeBuild
         {
             DotNetTest(x => x
                 .SetResultsDirectory(TestResultsDirectory)
-                .CombineWith([Solution.tests.Rewrite_Recipes_Tests, Solution.tests.Rewrite_CSharp_Tests, Solution.tests.Rewrite_MSBuild_Tests], (c,v) => c
+                .CombineWith([
+                        Solution.tests.Rewrite_Recipes_Tests,
+                        Solution.tests.Rewrite_CSharp_Tests,
+                        Solution.tests.Rewrite_MSBuild_Tests,
+                    ], (c,v) => c
                     .SetProjectFile(v)
+                    // .SetVerbosity(DotNetVerbosity.normal)
+                    // .SetLoggers("console;verbosity=quiet")
                     .AddProcessAdditionalArguments("--",
                         "--test-parameter RenderLST=false",
                         "--test-parameter NoAnsi=true",
@@ -270,14 +276,16 @@ partial class Build : NukeBuild
                         "--no-ansi",
                         "--disable-logo",
                         "--report-trx",
-                        "--output Detailed",
-                        "--hide-test-output",
+                        // "--output Detailed",
+                        // "--hide-test-output",
+                        // "--help",
+                        "--verbosity minimal",
                         $"--report-trx-filename {v.Name}.trx",
                         "--results-directory", TestResultsDirectory
                     )
                 )
             );
-            InjectLogsIntoTrx();
+            // InjectLogsIntoTrx();
         });
 
 
