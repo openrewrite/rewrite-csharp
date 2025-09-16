@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Text.RegularExpressions;
+using Microsoft.Build.Exceptions;
 using Microsoft.Extensions.Logging;
 using NuGet.Configuration;
 using NuGet.LibraryModel;
@@ -121,15 +122,28 @@ public class RunRecipeCommand(RecipeManager recipeManager, ILogger<RunRecipeComm
                 .Where(x => settings.Ids.Length == 0 || settings.Ids.Contains(x.Id))
                 .Select(x => recipeExecutionContext
                     .CreateRecipeStartInfo(x)
-                    .WithOption(nameof(RoslynRecipe.SolutionFilePath), solutionPath))
+                    .WithOption(nameof(RoslynRecipe.SolutionFilePath), solutionPath)
+                    .WithOption(nameof(RoslynRecipe.DryRun), settings.DryRun))
                 .ToList();
             var recipe = (RoslynRecipe)recipeExecutionContext.CreateRecipe(recipeStartInfos);
-
-            var recipeResult = await recipe.Execute(CancellationToken.None);
-            foreach (var issue in recipeResult.FixedIssues)
+            try
             {
-                logger.LogInformation("Issue {IssueId} fixes: @{FileName}", issue.IssueId, issue.Fixes.Select(x => x.FileName));
+                var recipeResult = await recipe.Execute(CancellationToken.None);
+                foreach (var issue in recipeResult.FixedIssues)
+                {
+                    // logger.LogInformation("Issue {IssueId} fixes: {@FileName}", issue.IssueId, issue.Fixes
+                    //     .SelectMany(x => x.LineNumbers.Select(lineNum => $"{x.FileName}:{lineNum}"))
+                    //     .OrderBy(x => x)
+                    // );
+                }
             }
+            catch (InvalidProjectFileException )
+            {
+                //logger.LogWarning(ex, "Solution {Solution} cannot be opened due to error {Error}", solutionPath, ex.Message);
+                continue;
+            }
+            
+            
         }
 
         return 0;

@@ -465,7 +465,6 @@ partial class Build : NukeBuild
         .DependsOn(Pack, PublishServer, Test, GradleAssembleAndTest, GithubRelease, SignalIfTestcaseOutputExists);
 
 
-
     [Category("CI")]
     Target CIRelease => _ => _
         .Description("Creates and publishes release artifacts to maven & nuget")

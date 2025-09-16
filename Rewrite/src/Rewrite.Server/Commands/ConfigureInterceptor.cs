@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Rewrite.Diagnostics;
@@ -16,6 +17,10 @@ public class ConfigureInterceptor(HostApplicationBuilder builder) : ICommandInte
         Logging.ConfigureLogging(commonSettings.LogFilePath);
         builder.Logging.ClearProviders();
         builder.Logging.AddSerilog();
+        builder.Configuration
+            .AddYamlFile("appsettings.yaml")
+            .AddYamlFile($"appsettings.{builder.Environment.EnvironmentName}.yaml", optional: true)
+            .AddEnvironmentVariables();
         builder.Services.AddSingleton<RecipeManager>();
         builder.Services.AddSingleton<NuGet.Common.ILogger, NugetLogger>();
         builder.Services.AddSingleton(commonSettings);

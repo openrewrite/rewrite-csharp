@@ -6,4 +6,4 @@ public record RecipeExecutionResult(string SolutionFile, TimeSpan ExecutionTime,
 
 public record IssueFixResult(string IssueId, TimeSpan ExecutionTime, List<DocumentFixResult> Fixes);
 
-public record DocumentFixResult(string FileName);
+public record DocumentFixResult(string FileName, List<int> LineNumbers);

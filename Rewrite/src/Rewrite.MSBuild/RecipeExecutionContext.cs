@@ -68,7 +68,8 @@ public class RecipeExecutionContext : AssemblyLoadContext
             throw new InvalidOperationException("Different recipe types cannot be mixed in same execution context");
         }
 
-        var recipeType = recipeStartInfos.First().Kind;
+        var recipeStartInfo = recipeStartInfos.First();
+        var recipeType = recipeStartInfo.Kind;
         
         
         
@@ -137,13 +138,15 @@ public class RecipeExecutionContext : AssemblyLoadContext
     {
         var recipeStartInfo =  recipeStartInfos.First();
         var solutionFilePath = (string)recipeStartInfo.Arguments[nameof(RoslynRecipe.SolutionFilePath)].Value!;
+        var dryRun = (bool)recipeStartInfo.Arguments[nameof(RoslynRecipe.DryRun)].Value!;
         var diagnosticIds = recipeStartInfos.Select(x => x.Id).ToHashSet();
         
         var roslynRecipe = new RoslynRecipe(_recipeAssemblies, _loggerFactory.CreateLogger<RoslynRecipe>())
         {
             DiagnosticIds = diagnosticIds,
             ApplyFixer = true,
-            SolutionFilePath = solutionFilePath
+            SolutionFilePath = solutionFilePath,
+            DryRun = dryRun
         };
         return roslynRecipe;
     }

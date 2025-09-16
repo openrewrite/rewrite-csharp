@@ -41,15 +41,3 @@ commandApp.Configure(c =>
     });
 });
 await commandApp.RunAsync(args);
-
-//
-// Logging.ConfigureLogging(options.LogFilePath);
-//
-// builder.Logging.ClearProviders();
-// builder.Logging.AddSerilog();
-// builder.Services.AddHostedService<Server>();
-// builder.Services.AddSingleton<RecipeManager>();
-// builder.Services.AddSingleton<NuGet.Common.ILogger, NugetLogger>();
-// builder.Services.AddSingleton(options);
-// var app = builder.Build();
-// app.Run();
