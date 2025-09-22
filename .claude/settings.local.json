@@ -4,7 +4,12 @@
       "Bash(python:*)",
       "Bash(./gradlew:*)",
       "Bash(powershell:*)",
-      "Read(/C:\\projects\\openrewrite\\rewrite-csharp\\rewrite-csharp\\src\\main\\java\\org\\openrewrite\\csharp/**)"
+      "Read(/C:\\projects\\openrewrite\\rewrite-csharp\\rewrite-csharp\\src\\main\\java\\org\\openrewrite\\csharp/**)",
+      "Bash(dir:*)",
+      "Bash(gradlew clean:*)",
+      "Bash(cmd /c gradlew.bat clean:*)",
+      "Bash(gradlew.bat:*)",
+      "Bash(cmd:*)"
     ],
     "deny": []
   }

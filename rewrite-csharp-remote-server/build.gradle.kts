@@ -45,11 +45,11 @@ dependencies {
 //    include("*/*") //to include contents of a folder present inside Reports directory
 //}
 
-tasks.processResources {
-//    dependsOn("zipDotnetServer")
-//    from(layout.buildDirectory.file("tmp/DotnetServer.zip"))
-    from(layout.buildDirectory.file(rootProject.file("artifacts/DotnetServer.zip").absolutePath))
-}
+//tasks.processResources {
+////    dependsOn("zipDotnetServer")
+////    from(layout.buildDirectory.file("tmp/DotnetServer.zip"))
+//    from(layout.buildDirectory.file(rootProject.file("artifacts/DotnetServer.zip").absolutePath))
+//}
 
 tasks.compileJava {
     options.release = 8

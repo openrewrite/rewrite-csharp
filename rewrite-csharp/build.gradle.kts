@@ -48,3 +48,30 @@ tasks.withType<Javadoc>().configureEach {
         exclude("org/openrewrite/csharp/tree/Cs.java")
     }
 }
+// Copy DotnetServer.zip to both main and test resources
+tasks.processResources {
+    from(rootProject.file("artifacts/DotnetServer.zip"))
+}
+
+tasks.processTestResources {
+    from(rootProject.file("artifacts/DotnetServer.zip"))
+}
+
+// Make sure IntelliJ includes the resources in the runtime classpath
+//sourceSets {
+//    main {
+//        resources {
+//            srcDir("src/main/resources")
+//            // Also include the artifacts directory for IDE runtime
+//            srcDir(rootProject.file("artifacts"))
+//        }
+//    }
+//    test {
+//        resources {
+//            srcDir("src/test/resources")
+//            // Also include the artifacts directory for IDE test runtime
+//            srcDir(rootProject.file("artifacts"))
+//
+//        }
+//    }
+//}

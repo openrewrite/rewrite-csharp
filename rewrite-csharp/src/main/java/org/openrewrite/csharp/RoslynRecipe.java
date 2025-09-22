@@ -39,18 +39,18 @@ import static org.openrewrite.scheduling.WorkingDirectoryExecutionContextView.WO
 
 /**
  * Base class for executing C# Roslyn-based recipes through a hybrid Java-C# architecture.
- * 
+ *
  * This abstract class orchestrates the execution of C# code transformations by:
  * 1. Collecting multiple RoslynRecipe instances in a batch during the scanning phase
  * 2. Writing source files to a temporary working directory
  * 3. Executing a C# process (Rewrite.Server.dll) with all collected recipes at once
  * 4. Reading back the modified files and applying changes to the source tree
- * 
+ *
  * The recipe uses a two-phase execution model:
  * - Scanning phase: Collects all RoslynRecipe instances and writes source files to disk
  * - Generation phase: On the last recipe, executes the C# process with all recipes
  * - Visitor phase: Reads modified files from disk and updates the AST
- * 
+ *
  * The C# process is invoked via command line with NuGet package references and recipe IDs,
  * allowing it to download and execute Roslyn analyzers and code fixes dynamically.
  */
@@ -291,14 +291,18 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
      */
     private String getRoslynRecipeRunnerExecutable() {
         String executable = System.getenv("ROSLYN_RECIPE_EXECUTABLE");
+
+
         if (executable == null) {
             throw new IllegalStateException("ROSLYN_RECIPE_EXECUTABLE environment variable not set");
         }
+
         if(!executable.endsWith(".dll"))
         {
             executable = ensureTrailingSeparator(executable) + "Rewrite.Server.dll";
         }
-
+        var dir = new File(executable).getParentFile();
+        EmbeddedResourceHelper.installDotnetServer(dir);
         return executable;
     }
 

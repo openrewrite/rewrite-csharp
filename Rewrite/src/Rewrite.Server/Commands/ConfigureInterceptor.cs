@@ -12,13 +12,13 @@ namespace Rewrite.Server.Commands;
 public class ConfigureInterceptor(HostApplicationBuilder builder) : ICommandInterceptor
 {
     public void Intercept(CommandContext context, CommandSettings settings)
-    {
+    { 
         var commonSettings = (BaseSettings)settings;
         Logging.ConfigureLogging(commonSettings.LogFilePath);
         builder.Logging.ClearProviders();
         builder.Logging.AddSerilog();
         builder.Configuration
-            .AddYamlFile("appsettings.yaml")
+            .AddYamlFile("appsettings.yaml", optional: true)
             .AddYamlFile($"appsettings.{builder.Environment.EnvironmentName}.yaml", optional: true)
             .AddEnvironmentVariables();
         builder.Services.AddSingleton<RecipeManager>();

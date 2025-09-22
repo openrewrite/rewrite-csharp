@@ -74,6 +74,7 @@ partial class Build : NukeBuild
 
         grid.AddRow(openRewrite);
         AnsiConsole.Write(grid);
+
     }
 
     /// Support plugins are available for:
@@ -107,6 +108,17 @@ partial class Build : NukeBuild
     readonly string[] TargetFrameworks = ["net8.0", "net9.0"];
     readonly string TargetFramework = "net9.0";
 
+
+
+    bool IsOnMainBranch => string.Equals(GitRepository.Head.FriendlyName, "main", StringComparison.OrdinalIgnoreCase) && !GitRepository.Info.IsHeadDetached;
+    bool IsPullRequest => GitHubActions?.EventName == "pull_request";
+    // bool IsPreRelease => GitHubActions?.RefName?.Contains("-rc.") ?? true;
+    bool IsPreRelease => !IsOnMainBranch || GetTagsForCurrentCheckout().Any(x => x.Contains("-rc."));
+    bool IsCurrentCommitReleaseTagged => GetTagsForCurrentCheckout().Any(tag => tag.StartsWith("v") && !tag.Equals("latest", StringComparison.OrdinalIgnoreCase));
+
+    bool IsAllowedToPushToFeed => IsOnMainBranch && !IsPullRequest && IsCurrentBranchCommitted();
+
+    GradleSettings GradleSettings = new();
 
     bool IsCurrentBranchCommitted() => !GitRepository.RetrieveStatus().IsDirty;
 
@@ -160,7 +172,6 @@ partial class Build : NukeBuild
         .Description("Restores nuget packages")
         .Executes(() =>
         {
-
             DotNetRestore(c => c
                 .SetProjectFile(Solution.Path)
                 .SetVersion(Version.NuGetPackageVersion));
@@ -197,7 +208,6 @@ partial class Build : NukeBuild
                 .SetVersion("0.0.1")
                 .SetAssemblyVersion(Version.AssemblyVersion)
                 .SetOutputDirectory(ArtifactsDirectory / "test"));
-
 
         });
 
@@ -437,20 +447,11 @@ partial class Build : NukeBuild
                 }
             });
 
-    Target GradleAssembleAndTest => _ => _
-        .Unlisted()
-        .DependsOn(PublishServer)
-        .Executes(() =>
-        {
-            Gradle(c => c
-                .SetTasks(":rewrite-csharp:assemble", ":rewrite-csharp:test"));
-        });
-
 
     Target SignalIfTestcaseOutputExists => _ => _
         .Unlisted()
         .Description("Sets github actions flags if any java or c# test output files were generated")
-        .After(Test, GradleAssembleAndTest)
+        .After(Test, GradleAssembleAndTestCSharpModule)
         .Executes(() =>
         {
             var hasTrx = TestResultsDirectory.GlobFiles("*.trx").Any();
@@ -459,24 +460,24 @@ partial class Build : NukeBuild
             GitHubActions?.SetVariable("java_tests_found", hasJavaTest);
         });
 
+
+
     [Category("CI")]
     Target CIBuild => _ => _
         .Description("Builds, tests and produces test reports for regular builds on CI")
-        .DependsOn(Pack, PublishServer, Test, GradleAssembleAndTest, GithubRelease, SignalIfTestcaseOutputExists);
+        .DependsOn(Pack, Test, GradleAssembleAndTestCSharpModule, Release, SignalIfTestcaseOutputExists);
 
 
     [Category("CI")]
     Target CIRelease => _ => _
         .Description("Creates and publishes release artifacts to maven & nuget")
-        .DependsOn(Pack, PublishServer, GradlePublish, NugetPush, SignalIfTestcaseOutputExists);
+        .DependsOn(Release);
 
-    Target CreateGithubRelease => _ => _
-        .Unlisted()
-        .DependsOn(PublishServer)
-        .Executes(() =>
-        {
 
-        });
+    Target Release => _ => _
+        .Description("Creates package releases and uploads them to feeds")
+        .After(Pack, Test)
+        .DependsOn(NugetPush, GradlePublish, GithubRelease);
 
     [Category("Test")]
     Target DownloadTestFixtures => _ => _
@@ -505,60 +506,66 @@ partial class Build : NukeBuild
             }
         });
 
-    Target GradlePublish => _ => _
-        .Description("Invokes Gradle to create a Java release")
-        .After(Pack, NugetPush)
+
+    Target GradleAssembleAndTestCSharpModule => _ => _
+        .Unlisted()
+        .DependsOn(PublishServer)
+        .Before(GradleExecute)
+        .Triggers(GradleExecute)
         .Executes(() =>
         {
-            var isPreRelease = GitHubActions?.RefName?.Contains("-rc.") ?? true;
-            var isPullRequest = GitHubActions?.EventName == "pull_request";
-            var gradleSettings = new GradleSettings()
-                .SetJvmOptions("-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError")
-                .SetWarningMode(WarningMode.None)
-                .SetProjectProperty(
+            GradleSettings = GradleSettings.AddTasks(":rewrite-csharp:assemble", ":rewrite-csharp:test");
+        });
+
+    Target GradlePublish => _ => _
+        .Description("Invokes Gradle to create a Java release")
+        .OnlyWhenStatic(() => IsAllowedToPushToFeed)
+        .After(Pack, NugetPush)
+        .Before(GradleExecute)
+        .Triggers(GradleExecute)
+        .Executes(() =>
+        {
+            if (IsCurrentCommitReleaseTagged)
+            {
+                GradleSettings = GradleSettings
+                    .AddTasks(IsPreRelease ? KnownGradleTasks.Candidate : KnownGradleTasks.Final);
+            }
+
+            GradleSettings = GradleSettings
+                .AddProjectProperty(
                     "releasing",
                     "release.disableGitChecks=true",
                     "release.useLastTag=true"
                 )
-                .SetProcessAdditionalArguments("--console=plain", "--info", "--stacktrace", "--no-daemon")
+                .EnableForceSigning()
                 .AddTasks(
+                    KnownGradleTasks.Snapshot,
                     KnownGradleTasks.Publish,
                     KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository);
+        });
 
-            if (isPreRelease)
-            {
-                gradleSettings = gradleSettings
-                    .AddTasks(KnownGradleTasks.Candidate);
+    Target GradleExecute => _ => _
+        .Description("Executes any queued up gradle stuff as a batch")
+        .Unlisted()
+        .Executes(() =>
+        {
+            GradleSettings = GradleSettings
+                .SetJvmOptions("-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError")
+                .SetWarningMode(WarningMode.None)
+                .SetProcessAdditionalArguments("--console=plain", "--info", "--stacktrace", "--no-daemon");
 
-            }
-            else
-            {
-                gradleSettings = gradleSettings
-                    .AddTasks(KnownGradleTasks.Final);
-                    // TODO .SetVerbosity(GradleVerbosity.Info);
-            }
-
-            if (!isPullRequest)
-            {
-                gradleSettings = gradleSettings
-                    .AddTasks(KnownGradleTasks.Snapshot)
-                    .EnableForceSigning();
-            }
-
-            Gradle(gradleSettings);
+            Gradle(GradleSettings);
         });
 
     Target GithubRelease => _ => _
         .Description("Creates a GitHub release (or amends existing)")
         .Requires(() => GitHubToken)
-        .After(Pack, NugetPush, GradlePublish, Test, GradleAssembleAndTest, GradleTest)
+        .OnlyWhenStatic(() => IsAllowedToPushToFeed)
+        .After(Pack, NugetPush, GradlePublish, Test, GradleAssembleAndTestCSharpModule, GradleTest)
         .Executes(async () =>
         {
             await CreateGitHubRelease($"v{Version.SemVer1}");
-            if (string.Equals(GitRepository.Head.FriendlyName, "main", StringComparison.OrdinalIgnoreCase) && !GitRepository.Info.IsHeadDetached)
-            {
-                await CreateGitHubRelease($"latest");
-            }
+            await CreateGitHubRelease($"latest");
         });
 
     public async Task CreateGitHubRelease(string releaseName)
@@ -629,5 +636,6 @@ partial class Build : NukeBuild
             .ToArray();
         return tagsPointingAtHead;
     }
+
 
 }

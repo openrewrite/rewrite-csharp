@@ -54,7 +54,8 @@ public class RunRecipeCommand(RecipeManager recipeManager, ILogger<RunRecipeComm
         public bool DryRun { get; set; } = false;
 
         [CommandOption("-i|--id <VERSION>")]
-        [Description("Recipe IDs. For Open Rewrite recipes this is namespace qualified type name. For Roslyn recipies this is the diagnostic ID (ex. CS1123)")]
+        [Description("Recipe IDs. For Open Rewrite recipes this is namespace qualified type name. For Roslyn recipies this is the diagnostic ID (ex. CS1123). This parameter can be specified multiple times. " +
+                     "If ommited, every fixable issue in the package will be applied.")]
         public string[] Ids { get; set; } = [];
         
         public override ValidationResult Validate()

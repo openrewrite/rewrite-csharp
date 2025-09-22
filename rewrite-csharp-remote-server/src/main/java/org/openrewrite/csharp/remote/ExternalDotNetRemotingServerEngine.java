@@ -16,6 +16,7 @@
 package org.openrewrite.csharp.remote;
 
 import lombok.SneakyThrows;
+import org.openrewrite.csharp.EmbeddedResourceHelper;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class ExternalDotNetRemotingServerEngine extends DotNetRemotingServerEngi
     @SneakyThrows
     public static DotNetRemotingServerEngine create(Config config) {
         try {
-            installExecutable(config.dotnetServerZipLocation, config.extractedDotnetBinaryDir.toFile());
+            EmbeddedResourceHelper.installExecutable(config.dotnetServerZipLocation, config.extractedDotnetBinaryDir.toFile());
         }catch(Exception e){
 
         }
