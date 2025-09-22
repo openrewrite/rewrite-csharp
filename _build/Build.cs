@@ -528,18 +528,23 @@ partial class Build : NukeBuild
             if (IsCurrentCommitReleaseTagged)
             {
                 GradleSettings = GradleSettings
-                    .AddTasks(IsPreRelease ? KnownGradleTasks.Candidate : KnownGradleTasks.Final);
+                    .AddTasks(IsPreRelease ? KnownGradleTasks.Candidate : KnownGradleTasks.Final)
+                    .AddProjectProperty(
+                        "releasing",
+                        "release.disableGitChecks=true",
+                        "release.useLastTag=true"
+                    );
+            }
+            else
+            {
+                GradleSettings = GradleSettings
+                    .AddTasks(KnownGradleTasks.Snapshot);
             }
 
             GradleSettings = GradleSettings
-                .AddProjectProperty(
-                    "releasing",
-                    "release.disableGitChecks=true",
-                    "release.useLastTag=true"
-                )
+
                 .EnableForceSigning()
                 .AddTasks(
-                    KnownGradleTasks.Snapshot,
                     KnownGradleTasks.Publish,
                     KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository);
         });
