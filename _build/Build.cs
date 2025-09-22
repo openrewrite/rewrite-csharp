@@ -233,6 +233,7 @@ partial class Build : NukeBuild
 
 
 
+
     Target StopServer => _ => _
         .Description("Stops any instances of Rewrite.Server that may have not shutdown (such as when they were launched by gradle)")
         .Executes(() =>
@@ -557,7 +558,8 @@ partial class Build : NukeBuild
             GradleSettings = GradleSettings
                 .SetJvmOptions("-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError")
                 .SetWarningMode(WarningMode.None)
-                .SetProcessAdditionalArguments("--console=plain", "--info", "--stacktrace", "--no-daemon");
+                .SetProcessAdditionalArguments("--console=plain", "--info", "--stacktrace", "--no-daemon")
+                .SetProcessEnvironmentVariable("ROSLYN_RECIPE_EXECUTABLE", Environment.GetEnvironmentVariable("ROSLYN_RECIPE_EXECUTABLE"));
 
             Gradle(GradleSettings);
         });
