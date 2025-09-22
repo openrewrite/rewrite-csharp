@@ -534,7 +534,10 @@ partial class Build : NukeBuild
                         "releasing",
                         "release.disableGitChecks=true",
                         "release.useLastTag=true"
-                    );
+                    )
+                    .AddTasks(KnownGradleTasks.Publish,
+                        KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
+                    .EnableForceSigning();
             }
             else
             {
@@ -542,12 +545,6 @@ partial class Build : NukeBuild
                     .AddTasks(KnownGradleTasks.Snapshot);
             }
 
-            GradleSettings = GradleSettings
-
-                .EnableForceSigning()
-                .AddTasks(
-                    KnownGradleTasks.Publish,
-                    KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository);
         });
 
     Target GradleExecute => _ => _
