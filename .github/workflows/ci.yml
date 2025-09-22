@@ -25,6 +25,8 @@ env:
   GRADLE_ENTERPRISE_CACHE_PASSWORD: ${{ secrets.gradle_enterprise_cache_password }}
   MODERNE_ARTIFACTORY_USERNAME: ${{ secrets.MODERNE_ARTIFACTORY_USERNAME }}
   MODERNE_ARTIFACTORY_PASSWORD: ${{ secrets.MODERNE_ARTIFACTORY_PASSWORD }}
+  ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ossrh_signing_key }}
+  ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.ossrh_signing_password }}
   GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN  }}
   NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
   OPS_GITHUB_ACTIONS_WEBHOOK: ${{ secrets.OPS_GITHUB_ACTIONS_WEBHOOK }}
