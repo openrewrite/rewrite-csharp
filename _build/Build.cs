@@ -528,29 +528,26 @@ partial class Build : NukeBuild
                 GitRepository.Branches.Update(releaseBranch,
                     b => b.Remote = "origin",
                     b => b.UpstreamBranch = releaseBranch.CanonicalName);
-                Log.Information("Created release branch from main");
+                Log.Information("Created release branch from main at {Sha}", mainBranch.Tip.Sha.Substring(0, 7));
             }
-
-            // Checkout release branch
-            Commands.Checkout(GitRepository, releaseBranch);
-            Log.Information("Checked out release branch");
-
-            // Merge main into release
-            var signature = new Signature("Build System", "build@openrewrite.org", DateTimeOffset.Now);
-            var mergeOptions = new MergeOptions
+            else
             {
-                FastForwardStrategy = FastForwardStrategy.NoFastForward,
-                CommitOnSuccess = true
-            };
-
-            var mergeResult = GitRepository.Merge(mainBranch, signature, mergeOptions);
-
-            if (mergeResult.Status == MergeStatus.Conflicts)
-            {
-                throw new InvalidOperationException("Merge conflicts detected when merging main into release");
+                // Fast-forward release branch to main's tip without checkout
+                var oldSha = releaseBranch.Tip.Sha.Substring(0, 7);
+                var newSha = mainBranch.Tip.Sha.Substring(0, 7);
+                
+                // Check if fast-forward is possible (release is ancestor of main)
+                var mergeBase = GitRepository.ObjectDatabase.FindMergeBase(releaseBranch.Tip, mainBranch.Tip);
+                if (mergeBase == null || mergeBase.Sha != releaseBranch.Tip.Sha)
+                {
+                    Log.Warning("Cannot fast-forward release branch - it has diverged from main");
+                    throw new InvalidOperationException("Release branch has diverged from main and cannot be fast-forwarded");
+                }
+                
+                // Update release branch reference to point to main's tip
+                GitRepository.Refs.UpdateTarget(releaseBranch.Reference, mainBranch.Tip.Id);
+                Log.Information("Fast-forwarded release branch from {OldSha} to {NewSha}", oldSha, newSha);
             }
-
-            Log.Information("Successfully merged main into release. Merge status: {Status}", mergeResult.Status);
 
         });
 
