@@ -281,7 +281,7 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
 
         }
     }
-
+    private void Test(){}
 
     /**
      * Gets the path to the C# Roslyn recipe runner executable.

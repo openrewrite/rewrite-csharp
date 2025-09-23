@@ -479,7 +479,7 @@ partial class Build : NukeBuild
     Target Release => _ => _
         .Description("Creates package releases and uploads them to feeds")
         .After(Pack, Test)
-        .DependsOn(NugetPush, GradlePublish, GithubRelease);
+        .DependsOn(NugetPush, GradlePush, GithubRelease);
 
     [Category("Test")]
     Target DownloadTestFixtures => _ => _
@@ -535,7 +535,7 @@ partial class Build : NukeBuild
                 // Fast-forward release branch to main's tip without checkout
                 var oldSha = releaseBranch.Tip.Sha.Substring(0, 7);
                 var newSha = mainBranch.Tip.Sha.Substring(0, 7);
-                
+
                 // Check if fast-forward is possible (release is ancestor of main)
                 var mergeBase = GitRepository.ObjectDatabase.FindMergeBase(releaseBranch.Tip, mainBranch.Tip);
                 if (mergeBase == null || mergeBase.Sha != releaseBranch.Tip.Sha)
@@ -543,10 +543,10 @@ partial class Build : NukeBuild
                     Log.Warning("Cannot fast-forward release branch - it has diverged from main");
                     throw new InvalidOperationException("Release branch has diverged from main and cannot be fast-forwarded");
                 }
-                
+
                 // Update release branch reference to point to main's tip
                 GitRepository.Refs.UpdateTarget(releaseBranch.Reference, mainBranch.Tip.Id);
-                Log.Information("Fast-forwarded release branch from {OldSha} to {NewSha}", oldSha, newSha);
+                Log.Information("Fast-forwarded release branch from {OldSha} to {NewSha} on 'main' branch", oldSha, newSha);
             }
 
         });
@@ -561,8 +561,8 @@ partial class Build : NukeBuild
             GradleSettings = GradleSettings.AddTasks(":rewrite-csharp:assemble", ":rewrite-csharp:test");
         });
 
-    Target GradlePublish => _ => _
-        .Description("Invokes Gradle to create a Java release")
+    Target GradlePush => _ => _
+        .Description("Invokes Gradle to create a Java release and push it to maven repositories")
         .OnlyWhenStatic(() => IsAllowedToPushToFeed)
         .After(Pack, NugetPush)
         .Before(GradleExecute)
@@ -629,7 +629,7 @@ partial class Build : NukeBuild
         .Description("Creates a GitHub release (or amends existing)")
         .Requires(() => GitHubToken)
         .OnlyWhenStatic(() => IsAllowedToPushToFeed)
-        .After(Pack, NugetPush, GradlePublish, Test, GradleAssembleAndTestCSharpModule, GradleTest)
+        .After(Pack, NugetPush, GradlePush, Test, GradleAssembleAndTestCSharpModule, GradleTest)
         .Executes(async () =>
         {
             await CreateGitHubRelease($"v{Version.SemVer1}");
