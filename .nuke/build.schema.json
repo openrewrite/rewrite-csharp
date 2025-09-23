@@ -83,7 +83,7 @@
         "GradleProcessTestResources",
         "GradleProjects",
         "GradleProperties",
-        "GradlePublish",
+        "GradlePush",
         "GradleRelease",
         "GradleReleaseCheck",
         "GradleReleaseSonatypeStagingRepository",

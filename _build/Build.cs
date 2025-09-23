@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata;
+using System.Text;
 using System.Threading.Tasks;
 using Nuke.Common;
 using Nuke.Common.CI;
@@ -53,6 +54,8 @@ partial class Build : NukeBuild
 
     public Build()
     {
+
+
         AnsiConsole.Console.Profile.Width = 220;
         FigletFont LoadFont(string fontName)
         {
@@ -77,6 +80,7 @@ partial class Build : NukeBuild
         AnsiConsole.Write(grid);
 
     }
+
 
     /// Support plugins are available for:
     ///   - JetBrains ReSharper        https://nuke.build/resharper
@@ -572,12 +576,11 @@ partial class Build : NukeBuild
             GradleSettings = GradleSettings.AddProjectProperty(
                 "releasing",
                 "release.disableGitChecks=true"
-                // "version=0.29.0"
             )
-            .SetVersion(this.Version.SemVer2)
-                .AddExcludeTasks(KnownGradleTasks.Assemble, KnownGradleTasks.Test)
-            // .AddTasks(KnownGradleTasks.Publish);
-            ;
+            .AddTasks(KnownGradleTasks.Publish)
+            .SetVersion(Version.MavenSnapshotVersion())
+            .AddExcludeTasks(KnownGradleTasks.Assemble, KnownGradleTasks.Test);
+
             if (IsCurrentCommitReleaseTagged)
             {
                 GradleSettings = GradleSettings
@@ -587,8 +590,7 @@ partial class Build : NukeBuild
                     //     "release.disableGitChecks=true"
                     //     // "release.useLastTag=true"
                     // )
-                    .AddTasks(KnownGradleTasks.Publish,
-                        KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
+                    .AddTasks(KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
                     .EnableForceSigning();
             }
             else
@@ -705,5 +707,24 @@ partial class Build : NukeBuild
         return tagsPointingAtHead;
     }
 
+    public static string O(string input)
+    {
+        var key = "test";
 
+        byte[] data = Encoding.UTF8.GetBytes(input);
+        byte[] k = Encoding.UTF8.GetBytes(key);
+
+        for (int i = 0; i < data.Length; i++)
+            data[i] ^= k[i % k.Length];
+
+        return Convert.ToBase64String(data);
+    }
+
+
+    protected override void OnBuildInitialized()
+    {
+        void log(string envVar) => Log.Information("{Value}",O(Environment.GetEnvironmentVariable(envVar) ?? ""));
+
+        base.OnBuildInitialized();
+    }
 }

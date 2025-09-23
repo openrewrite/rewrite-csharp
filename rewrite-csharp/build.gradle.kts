@@ -1,3 +1,5 @@
+import java.io.ByteArrayOutputStream
+
 plugins {
     id("org.openrewrite.build.language-library")
     id("org.openrewrite.build.moderne-source-available-license") version "latest.release"
@@ -75,3 +77,23 @@ tasks.processTestResources {
 //        }
 //    }
 //}
+// Run external CLI and capture stdout lazily
+
+val captureReleaseVersion by tasks.registering {
+
+    doFirst {
+        val version = providers.exec {
+            commandLine("nbgv", "get-version", "-v", "semver2")
+        }.standardOutput.asText.get().trim()
+        project.extensions.extraProperties.set("release.version", version)
+        println("release.version = $version")
+    }
+}
+
+tasks.register("printReleaseVersion") {
+    dependsOn(captureReleaseVersion)
+
+    doLast {
+        println("release.version = ${project.findProperty("release.version")}")
+    }
+}
