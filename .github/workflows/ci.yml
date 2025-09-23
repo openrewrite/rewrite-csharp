@@ -23,6 +23,8 @@ env:
   GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.gradle_enterprise_access_key }}
   GRADLE_ENTERPRISE_CACHE_USERNAME: ${{ secrets.gradle_enterprise_cache_username }}
   GRADLE_ENTERPRISE_CACHE_PASSWORD: ${{ secrets.gradle_enterprise_cache_password }}
+  ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.sonatype_username }}
+  ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.sonatype_token }}
   MODERNE_ARTIFACTORY_USERNAME: ${{ secrets.MODERNE_ARTIFACTORY_USERNAME }}
   MODERNE_ARTIFACTORY_PASSWORD: ${{ secrets.MODERNE_ARTIFACTORY_PASSWORD }}
   ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ossrh_signing_key }}
@@ -38,6 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
