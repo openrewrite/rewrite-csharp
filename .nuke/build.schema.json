@@ -97,6 +97,7 @@
         "GradleTestClasses",
         "GradleUpdateDaemonJvm",
         "GradleWrapper",
+        "MergeMainIntoRelease",
         "NugetPush",
         "Pack",
         "PublishServer",

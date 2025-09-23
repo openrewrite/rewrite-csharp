@@ -38,6 +38,7 @@ using static GradleTasks;
 using Commit = LibGit2Sharp.Commit;
 using Credentials = LibGit2Sharp.Credentials;
 using NotFoundException = LibGit2Sharp.NotFoundException;
+using Signature = LibGit2Sharp.Signature;
 
 // ReSharper disable UnusedMember.Local
 [HandleHelpRequests(Priority = 20)]
@@ -116,11 +117,11 @@ partial class Build : NukeBuild
     bool IsPreRelease => !IsOnMainBranch || GetTagsForCurrentCheckout().Any(x => x.Contains("-rc."));
     bool IsCurrentCommitReleaseTagged => GetTagsForCurrentCheckout().Any(tag => tag.StartsWith("v") && !tag.Equals("latest", StringComparison.OrdinalIgnoreCase));
 
-    bool IsAllowedToPushToFeed => IsOnMainBranch && !IsPullRequest && IsCurrentBranchCommitted();
+    bool IsAllowedToPushToFeed => IsOnMainBranch && !IsPullRequest && IsGitCommitted;
 
     GradleSettings GradleSettings = new();
 
-    bool IsCurrentBranchCommitted() => !GitRepository.RetrieveStatus().IsDirty;
+    bool IsGitCommitted => !GitRepository.RetrieveStatus().IsDirty;
 
     Target Clean => _ => _
         .Description("Clean out artifacts and all the bin/obj directories")
@@ -418,7 +419,7 @@ partial class Build : NukeBuild
     Target NugetPush => _ => _
         .Description("Publishes NuGet packages to Nuget.org")
         .Requires(() => NugetApiKey, () => NugetFeed)
-        .OnlyWhenStatic(IsCurrentBranchCommitted)
+        .OnlyWhenStatic(() => IsAllowedToPushToFeed)
         .DependsOn(Pack)
         .Executes(() =>
         {
@@ -507,6 +508,51 @@ partial class Build : NukeBuild
             }
         });
 
+    Target MergeMainIntoRelease => _ => _
+        .Unlisted()
+        .OnlyWhenStatic(() => IsGitCommitted)
+        .Executes(() =>
+        {
+            var mainBranch = GitRepository.Branches["main"];
+            var releaseBranch = GitRepository.Branches["release"];
+
+            if (mainBranch == null)
+            {
+                throw new InvalidOperationException("Main branch not found");
+            }
+
+            if (releaseBranch == null)
+            {
+                // Create release branch from main if it doesn't exist
+                releaseBranch = GitRepository.CreateBranch("release", mainBranch.Tip);
+                GitRepository.Branches.Update(releaseBranch,
+                    b => b.Remote = "origin",
+                    b => b.UpstreamBranch = releaseBranch.CanonicalName);
+                Log.Information("Created release branch from main");
+            }
+
+            // Checkout release branch
+            Commands.Checkout(GitRepository, releaseBranch);
+            Log.Information("Checked out release branch");
+
+            // Merge main into release
+            var signature = new Signature("Build System", "build@openrewrite.org", DateTimeOffset.Now);
+            var mergeOptions = new MergeOptions
+            {
+                FastForwardStrategy = FastForwardStrategy.NoFastForward,
+                CommitOnSuccess = true
+            };
+
+            var mergeResult = GitRepository.Merge(mainBranch, signature, mergeOptions);
+
+            if (mergeResult.Status == MergeStatus.Conflicts)
+            {
+                throw new InvalidOperationException("Merge conflicts detected when merging main into release");
+            }
+
+            Log.Information("Successfully merged main into release. Merge status: {Status}", mergeResult.Status);
+
+        });
 
     Target GradleAssembleAndTestCSharpModule => _ => _
         .Unlisted()
@@ -526,15 +572,24 @@ partial class Build : NukeBuild
         .Triggers(GradleExecute)
         .Executes(() =>
         {
+            GradleSettings = GradleSettings.AddProjectProperty(
+                "releasing",
+                "release.disableGitChecks=true"
+                // "version=0.29.0"
+            )
+            .SetVersion(this.Version.SemVer2)
+                .AddExcludeTasks(KnownGradleTasks.Assemble, KnownGradleTasks.Test)
+            // .AddTasks(KnownGradleTasks.Publish);
+            ;
             if (IsCurrentCommitReleaseTagged)
             {
                 GradleSettings = GradleSettings
                     .AddTasks(IsPreRelease ? KnownGradleTasks.Candidate : KnownGradleTasks.Final)
-                    .AddProjectProperty(
-                        "releasing",
-                        "release.disableGitChecks=true",
-                        "release.useLastTag=true"
-                    )
+                    // .AddProjectProperty(
+                    //     "releasing",
+                    //     "release.disableGitChecks=true"
+                    //     // "release.useLastTag=true"
+                    // )
                     .AddTasks(KnownGradleTasks.Publish,
                         KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
                     .EnableForceSigning();
@@ -558,6 +613,18 @@ partial class Build : NukeBuild
                 .SetProcessAdditionalArguments("--console=plain", "--info", "--stacktrace", "--no-daemon")
                 .SetProcessEnvironmentVariable("ROSLYN_RECIPE_EXECUTABLE", Environment.GetEnvironmentVariable("ROSLYN_RECIPE_EXECUTABLE"));
 
+            var publishesToMaven = GradleSettings.Tasks.Contains(KnownGradleTasks.Publish) || GradleSettings.Tasks.Contains(KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository);
+            var publishesSnapshot = GradleSettings.Tasks.Contains(KnownGradleTasks.Snapshot);
+            if (publishesToMaven && publishesSnapshot)
+            {
+                // we can't publish snapshots to maven central. if we try to do both publish & snapshot in one gradle run, it will fail
+
+                var snapshotSettings = GradleSettings.SetTasks(GradleSettings.Tasks.Where(x => x != KnownGradleTasks.Publish && x != KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository));
+                var releaseSettings = GradleSettings.SetTasks(GradleSettings.Tasks.Where(x => x != KnownGradleTasks.Snapshot))
+                    .AddExcludeTasks(KnownGradleTasks.Assemble, KnownGradleTasks.Test);
+                Gradle(snapshotSettings);
+                Gradle(releaseSettings);
+            }
             Gradle(GradleSettings);
         });
 
