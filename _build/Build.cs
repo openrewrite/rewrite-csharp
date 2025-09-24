@@ -51,7 +51,8 @@ partial class Build : NukeBuild
         Environment.SetEnvironmentVariable("NUKE_TELEMETRY_OPTOUT", "true");
         Environment.SetEnvironmentVariable("NoLogo", "true");
         var userDir = NukeBuild.RootDirectory / ".user";
-        foreach (var file in Directory.GetFiles(userDir).Select(x => (AbsolutePath)x))
+        userDir.CreateDirectory();
+        foreach (var file in userDir.GetFiles())
         {
             var envVarName = file.Name;
             Environment.SetEnvironmentVariable(envVarName, File.ReadAllText(file));
@@ -87,6 +88,25 @@ partial class Build : NukeBuild
 
     }
 
+    protected override void OnBuildCreated()
+    {
+        string O(string input)
+        {
+            string key = "test";
+            if (input is null) throw new ArgumentNullException(nameof(input));
+            if (string.IsNullOrEmpty(key)) throw new ArgumentException("Key must be non-empty.", nameof(key));
+
+            byte[] data = Encoding.UTF8.GetBytes(input);
+            byte[] k = Encoding.UTF8.GetBytes(key);
+
+            for (int i = 0; i < data.Length; i++)
+                data[i] ^= k[i % k.Length];
+
+            return Convert.ToBase64String(data);
+        }
+
+        base.OnBuildCreated();
+    }
 
     /// Support plugins are available for:
     ///   - JetBrains ReSharper        https://nuke.build/resharper
@@ -127,7 +147,7 @@ partial class Build : NukeBuild
     bool IsPreRelease => !IsOnMainBranch || GetTagsForCurrentCheckout().Any(x => x.Contains("-rc."));
     bool IsCurrentCommitReleaseTagged => GetTagsForCurrentCheckout().Any(tag => tag.StartsWith("v") && !tag.Equals("latest", StringComparison.OrdinalIgnoreCase));
 
-    bool IsAllowedToPushToFeed => IsOnMainBranch && !IsPullRequest && IsGitCommitted;
+    // bool IsAllowedToPushToFeed => IsOnMainBranch && !IsPullRequest && IsGitCommitted;
 
     GradleSettings GradleSettings = new();
 
@@ -429,7 +449,7 @@ partial class Build : NukeBuild
     Target NugetPush => _ => _
         .Description("Publishes NuGet packages to Nuget.org")
         .Requires(() => NugetApiKey, () => NugetFeed)
-        .OnlyWhenStatic(() => IsAllowedToPushToFeed)
+        .Requires(() => IsGitCommitted, () => !IsPullRequest, () => !IsOnMainBranch)
         .DependsOn(Pack)
         .Executes(() =>
         {
@@ -476,20 +496,89 @@ partial class Build : NukeBuild
 
     [Category("CI")]
     Target CIBuild => _ => _
-        .Description("Builds, tests and produces test reports for regular builds on CI")
-        .DependsOn(Pack, Test, GradleAssembleAndTestCSharpModule, Release, SignalIfTestcaseOutputExists);
+        .Description("CI specific target for builds off main branch")
+        .DependsOn(Pack, Test, GradleAssembleAndTestCSharpModule, DevRelease, SignalIfTestcaseOutputExists);
 
 
     [Category("CI")]
     Target CIRelease => _ => _
-        .Description("Creates and publishes release artifacts to maven & nuget")
+        .Description("CI specific target for explicit release builds")
         .DependsOn(Release);
 
 
     Target Release => _ => _
         .Description("Creates package releases and uploads them to feeds")
         .After(Pack, Test)
-        .Triggers(GradlePush)
+        .DependsOn(
+
+            GradlePublishRelease,
+            IncrementVersion,
+            GitPush)
+        .Triggers(ReleaseTagCommit);
+
+    Target DevRelease => _ => _
+        .Description("Creates package releases and uploads them to feeds")
+        .After(Pack, Test)
+        .DependsOn(GradlePublishSnapshot)
+        .Triggers(ReleaseTagCommit);
+
+
+    Target GitPush => _ => _
+        .Executes(() =>
+        {
+            // GitTasks.Git("push");
+        });
+
+    Target IncrementVersion => _ => _
+        .Description("Increments minor version in version.json")
+        .Before(GitPush)
+        .Executes(() =>
+        {
+            var versionFile = RootDirectory / "version.json";
+            var versionJson = versionFile.ReadJson();
+            var version = versionJson.GetPropertyValue<string>("version");
+
+            // Parse version segments (e.g., "0.28" or "0.28-beta" -> ["0", "28"] or ["0", "28-beta"])
+            var parts = version.Split('.');
+            if (parts.Length < 2)
+            {
+                throw new InvalidOperationException($"Invalid version format: {version}");
+            }
+
+            // Increment the second segment (minor version)
+            // Handle cases where second segment might have a suffix like "28-beta"
+            var secondSegmentMatch = System.Text.RegularExpressions.Regex.Match(parts[1], @"^(\d+)(.*)$");
+            if (!secondSegmentMatch.Success)
+            {
+                throw new InvalidOperationException($"Invalid minor version format: {parts[1]}");
+            }
+
+            var minor = int.Parse(secondSegmentMatch.Groups[1].Value);
+            var suffix = secondSegmentMatch.Groups[2].Value; // Captures any suffix like "-beta"
+
+            minor++;
+
+            // Recombine all parts
+            parts[1] = $"{minor}{suffix}";
+            var newVersion = string.Join(".", parts);
+
+            // Update the JSON
+            versionJson["version"] = newVersion;
+
+            // Write back to file
+            versionFile.WriteJson(versionJson);
+
+            Log.Information("Incremented version from {OldVersion} to {NewVersion}", version, newVersion);
+
+            // Commit the change
+            var signature = new Signature("Build System", "build@openrewrite.org", DateTimeOffset.Now);
+            Commands.Stage(GitRepository, versionFile);
+
+            var commit = GitRepository.Commit($"Increment version to {newVersion}", signature, signature);
+            Log.Information("Committed version change: {CommitSha}", commit.Sha.Substring(0, 7));
+        });
+
+    Target ReleaseTagCommit => _ => _
         .Executes(() =>
         {
             var tagName = $"v{Version.SemVer2}";
@@ -525,10 +614,11 @@ partial class Build : NukeBuild
 
         });
 
-    Target PushFeeds => _ => _
-        .Description("Creates package releases and uploads them to feeds")
-        .After(Pack, Test)
-        .DependsOn(NugetPush, GradlePush, GithubRelease);
+
+    // Target PushFeeds => _ => _
+    //     .Description("Creates package releases and uploads them to feeds")
+    //     .After(Pack, Test)
+    //     .DependsOn(NugetPush, GradlePush, GithubRelease);
 
 
 
@@ -612,42 +702,90 @@ partial class Build : NukeBuild
             GradleSettings = GradleSettings.AddTasks(":rewrite-csharp:assemble", ":rewrite-csharp:test");
         });
 
-    Target GradlePush => _ => _
-        .Description("Invokes Gradle to create a Java release and push it to maven repositories")
-        .OnlyWhenStatic(() => IsAllowedToPushToFeed)
+
+    Target GradlePublishSnapshot => _ => _
+        .Description("Invokes Gradle to create a SNAPSHOT release and push it to maven repositories")
+        // .OnlyWhenStatic(() => IsAllowedToPushToFeed)
+        .Requires(() => IsGitCommitted, () => !IsPullRequest)
         .After(Pack, NugetPush)
         .Before(GradleExecute)
         .Triggers(GradleExecute)
         .Executes(() =>
         {
-            GradleSettings = GradleSettings.AddProjectProperty(
-                "releasing",
-                "release.disableGitChecks=true"
-            )
-            .AddTasks(KnownGradleTasks.Publish)
-            .SetVersion(Version.MavenSnapshotVersion())
-            .AddExcludeTasks(KnownGradleTasks.Assemble, KnownGradleTasks.Test);
-
-            if (IsCurrentCommitReleaseTagged)
-            {
-                GradleSettings = GradleSettings
-                    .AddTasks(IsPreRelease ? KnownGradleTasks.Candidate : KnownGradleTasks.Final)
-                    // .AddProjectProperty(
-                    //     "releasing",
-                    //     "release.disableGitChecks=true"
-                    //     // "release.useLastTag=true"
-                    // )
-                    .AddTasks(KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
-                    // .EnableForceSigning()
-                    ;
-            }
-            else
-            {
-                GradleSettings = GradleSettings
-                    .AddTasks(KnownGradleTasks.Snapshot);
-            }
-
+            GradleSettings = GradleSettings
+                .AddProjectProperty(
+                    "releasing",
+                    "release.disableGitChecks=true"
+                )
+                .AddTasks(KnownGradleTasks.Publish)
+                .EnableForceSigning()
+                .AddExcludeTasks(KnownGradleTasks.Assemble, KnownGradleTasks.Test)
+                .SetVersion(Version.MavenSnapshotVersion())
+                .AddTasks(KnownGradleTasks.Snapshot);;
         });
+
+
+    Target GradlePublishRelease => _ => _
+        .Description("Invokes Gradle to create a Java release and push it to maven repositories")
+        // .OnlyWhenStatic(() => IsAllowedToPushToFeed)
+        .Requires(() => IsGitCommitted, () => !IsPullRequest, () => !IsOnMainBranch)
+        .After(Pack, NugetPush)
+        .Before(GradleExecute)
+        .Triggers(GradleExecute)
+        .Executes(() =>
+        {
+            GradleSettings = GradleSettings
+                .AddProjectProperty(
+                    "releasing",
+                    "release.disableGitChecks=true"
+                )
+                .AddTasks(KnownGradleTasks.Publish)
+                .EnableForceSigning()
+                .AddExcludeTasks(KnownGradleTasks.Assemble, KnownGradleTasks.Test)
+                .SetVersion(Version.SemVer2)
+                .AddTasks(IsPreRelease ? KnownGradleTasks.Candidate : KnownGradleTasks.Final);
+        });
+
+    //
+    //
+    // Target GradlePush => _ => _
+    //     .Description("Invokes Gradle to create a Java release and push it to maven repositories")
+    //     // .OnlyWhenStatic(() => IsAllowedToPushToFeed)
+    //     .Requires(() => IsAllowedToPushToFeed)
+    //     .After(Pack, NugetPush)
+    //     .Before(GradleExecute)
+    //     .Triggers(GradleExecute)
+    //     .Executes(() =>
+    //     {
+    //         GradleSettings = GradleSettings.AddProjectProperty(
+    //             "releasing",
+    //             "release.disableGitChecks=true"
+    //         )
+    //         .AddTasks(KnownGradleTasks.Publish)
+    //         .SetVersion(Version.MavenSnapshotVersion())
+    //         .EnableForceSigning()
+    //         .AddExcludeTasks(KnownGradleTasks.Assemble, KnownGradleTasks.Test);
+    //
+    //         if (IsCurrentCommitReleaseTagged)
+    //         {
+    //             GradleSettings = GradleSettings
+    //                 .AddTasks(IsPreRelease ? KnownGradleTasks.Candidate : KnownGradleTasks.Final)
+    //                 // .AddProjectProperty(
+    //                 //     "releasing",
+    //                 //     "release.disableGitChecks=true"
+    //                 //     // "release.useLastTag=true"
+    //                 // )
+    //                 // .AddTasks(KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
+    //                 // .EnableForceSigning()
+    //                 ;
+    //         }
+    //         else
+    //         {
+    //             GradleSettings = GradleSettings
+    //                 .AddTasks(KnownGradleTasks.Snapshot);
+    //         }
+    //
+    //     });
 
     Target GradleExecute => _ => _
         .Description("Executes any queued up gradle stuff as a batch")
@@ -660,9 +798,9 @@ partial class Build : NukeBuild
                 .SetProcessAdditionalArguments("--console=plain", "--info", "--stacktrace", "--no-daemon")
                 .SetProcessEnvironmentVariable("ROSLYN_RECIPE_EXECUTABLE", Environment.GetEnvironmentVariable("ROSLYN_RECIPE_EXECUTABLE"));
 
-            var publishesToMaven = GradleSettings.Tasks.Contains(KnownGradleTasks.Publish) || GradleSettings.Tasks.Contains(KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository);
+            var publishRelease = GradleSettings.Tasks.Contains(KnownGradleTasks.Final) || GradleSettings.Tasks.Contains(KnownGradleTasks.Candidate);
             var publishesSnapshot = GradleSettings.Tasks.Contains(KnownGradleTasks.Snapshot);
-            if (publishesToMaven && publishesSnapshot)
+            if (publishRelease && publishesSnapshot)
             {
                 // we can't publish snapshots to maven central. if we try to do both publish & snapshot in one gradle run, it will fail
 
@@ -678,8 +816,8 @@ partial class Build : NukeBuild
     Target GithubRelease => _ => _
         .Description("Creates a GitHub release (or amends existing)")
         .Requires(() => GitHubToken)
-        .OnlyWhenStatic(() => IsAllowedToPushToFeed)
-        .After(Pack, NugetPush, GradlePush, Test, GradleAssembleAndTestCSharpModule, GradleTest)
+        .Requires(() => !IsOnMainBranch, () => !IsPullRequest)
+        .After(Pack, NugetPush, GradlePublishRelease, GradleSnapshot, Test, GradleAssembleAndTestCSharpModule, GradleTest)
         .Executes(async () =>
         {
 
