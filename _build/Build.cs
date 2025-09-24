@@ -50,6 +50,12 @@ partial class Build : NukeBuild
     {
         Environment.SetEnvironmentVariable("NUKE_TELEMETRY_OPTOUT", "true");
         Environment.SetEnvironmentVariable("NoLogo", "true");
+        var userDir = NukeBuild.RootDirectory / ".user";
+        foreach (var file in Directory.GetFiles(userDir).Select(x => (AbsolutePath)x))
+        {
+            var envVarName = file.Name;
+            Environment.SetEnvironmentVariable(envVarName, File.ReadAllText(file));
+        }
     }
 
     public Build()
@@ -632,7 +638,8 @@ partial class Build : NukeBuild
                     //     // "release.useLastTag=true"
                     // )
                     .AddTasks(KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
-                    .EnableForceSigning();
+                    // .EnableForceSigning()
+                    ;
             }
             else
             {
