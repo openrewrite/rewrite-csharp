@@ -101,6 +101,7 @@
         "NugetPush",
         "Pack",
         "PublishServer",
+        "PushFeeds",
         "Release",
         "Restore",
         "SetDefaultModule",

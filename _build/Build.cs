@@ -483,7 +483,48 @@ partial class Build : NukeBuild
     Target Release => _ => _
         .Description("Creates package releases and uploads them to feeds")
         .After(Pack, Test)
+        .Triggers(GradlePush)
+        .Executes(() =>
+        {
+            var tagName = $"v{Version.SemVer2}";
+            var currentCommit = GitRepository.Head.Tip;
+
+            // Check if tag already exists
+            var existingTag = GitRepository.Tags[tagName];
+
+            if (existingTag != null)
+            {
+                // Get the commit the tag points to
+                var taggedCommit = (existingTag.Target as Commit) ?? (existingTag.Target as TagAnnotation)?.Target as Commit;
+
+                if (taggedCommit != null && taggedCommit.Sha != currentCommit.Sha)
+                {
+                    // Tag exists on different commit - remove it first
+                    GitRepository.Tags.Remove(existingTag);
+                    Log.Information("Removed existing tag {TagName} from commit {OldCommit}", tagName, taggedCommit.Sha.Substring(0, 7));
+                }
+                else if (taggedCommit != null && taggedCommit.Sha == currentCommit.Sha)
+                {
+                    // Tag already on current commit
+                    Log.Information("Tag {TagName} already exists on current commit {Commit}", tagName, currentCommit.Sha.Substring(0, 7));
+                    return;
+                }
+            }
+
+            // Create tag on current commit
+            var signature = new Signature("Build System", "build@openrewrite.org", DateTimeOffset.Now);
+            var tag = GitRepository.Tags.Add(tagName, currentCommit, signature, $"Release {Version.SemVer2}", false);
+            Log.Information("Created tag {TagName} on commit {Commit}", tagName, currentCommit.Sha.Substring(0, 7));
+
+
+        });
+
+    Target PushFeeds => _ => _
+        .Description("Creates package releases and uploads them to feeds")
+        .After(Pack, Test)
         .DependsOn(NugetPush, GradlePush, GithubRelease);
+
+
 
     [Category("Test")]
     Target DownloadTestFixtures => _ => _
@@ -634,9 +675,12 @@ partial class Build : NukeBuild
         .After(Pack, NugetPush, GradlePush, Test, GradleAssembleAndTestCSharpModule, GradleTest)
         .Executes(async () =>
         {
+
             await CreateGitHubRelease($"v{Version.SemVer1}");
             await CreateGitHubRelease($"latest");
         });
+
+
 
     public async Task CreateGitHubRelease(string releaseName)
     {
