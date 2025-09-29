@@ -23,7 +23,8 @@
   </ItemGroup>
     <ItemGroup>
 <!--        <ProjectReference Include="..\Rewrite\src\Rewrite.MSBuild\Rewrite.MSBuild.csproj" Condition="'$(Generator)' == ''" />-->
-        <PackageReference Include="Rewrite.MSBuild" Version="0.27.3" />
+        <ProjectReference Include="..\Rewrite\src\Rewrite.MSBuild\Rewrite.MSBuild.csproj" />
+<!--        <PackageReference Include="Rewrite.MSBuild" Version="0.28.3-SNAPSHOT" />-->
 
         <ProjectReference Include="..\_build.Analyzers\Build.Analyzers.csproj"
                           OutputItemType="Analyzer">

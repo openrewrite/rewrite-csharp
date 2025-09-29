@@ -23,6 +23,10 @@ package org.openrewrite.csharp.recipes.wpfanalyzers;
 
 import org.openrewrite.csharp.RoslynRecipe;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class ConstructorArgumentAttributeArgumentFixWPF0082 extends RoslynRecipe {
 
     @Override
@@ -49,4 +53,9 @@ public class ConstructorArgumentAttributeArgumentFixWPF0082 extends RoslynRecipe
     public String getDescription() {
         return "[ConstructorArgument] must match the name of the constructor parameter.";
     }
-}
+
+    @Override
+    public Set<String> getTags() {
+        return Stream.of("roslyn", "WPF0082", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+    }
+    }

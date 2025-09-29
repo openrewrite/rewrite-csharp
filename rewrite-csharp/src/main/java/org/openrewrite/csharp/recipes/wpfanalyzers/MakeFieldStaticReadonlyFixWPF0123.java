@@ -23,6 +23,10 @@ package org.openrewrite.csharp.recipes.wpfanalyzers;
 
 import org.openrewrite.csharp.RoslynRecipe;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class MakeFieldStaticReadonlyFixWPF0123 extends RoslynRecipe {
 
     @Override
@@ -49,4 +53,9 @@ public class MakeFieldStaticReadonlyFixWPF0123 extends RoslynRecipe {
     public String getDescription() {
         return "Backing field for a RoutedCommand should be static and readonly.";
     }
-}
+
+    @Override
+    public Set<String> getTags() {
+        return Stream.of("roslyn", "WPF0123", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+    }
+    }

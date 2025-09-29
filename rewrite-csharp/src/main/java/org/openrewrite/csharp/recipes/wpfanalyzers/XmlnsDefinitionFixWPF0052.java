@@ -23,6 +23,10 @@ package org.openrewrite.csharp.recipes.wpfanalyzers;
 
 import org.openrewrite.csharp.RoslynRecipe;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class XmlnsDefinitionFixWPF0052 extends RoslynRecipe {
 
     @Override
@@ -49,4 +53,9 @@ public class XmlnsDefinitionFixWPF0052 extends RoslynRecipe {
     public String getDescription() {
         return "XmlnsDefinitions does not map all namespaces with public types.";
     }
-}
+
+    @Override
+    public Set<String> getTags() {
+        return Stream.of("roslyn", "WPF0052", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+    }
+    }

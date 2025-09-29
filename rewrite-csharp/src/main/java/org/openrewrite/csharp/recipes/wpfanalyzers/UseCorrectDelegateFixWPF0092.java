@@ -23,6 +23,10 @@ package org.openrewrite.csharp.recipes.wpfanalyzers;
 
 import org.openrewrite.csharp.RoslynRecipe;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class UseCorrectDelegateFixWPF0092 extends RoslynRecipe {
 
     @Override
@@ -49,4 +53,9 @@ public class UseCorrectDelegateFixWPF0092 extends RoslynRecipe {
     public String getDescription() {
         return "Use correct handler type.";
     }
-}
+
+    @Override
+    public Set<String> getTags() {
+        return Stream.of("roslyn", "WPF0092", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+    }
+    }

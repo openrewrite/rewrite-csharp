@@ -40,6 +40,12 @@ public static partial class Extensions
         return string.Join("\n", lines.Select((x, i) => $"""{ (i > 0 ? ident : "") }{x}"""));
     }
 
+    public static string RenderParameters(
+        this IEnumerable<string> source)
+    {
+        return Render(source, x => x, separator: "\", \"", "(\"", "\")");
+    }
+    
     public static string RenderParameters<T>(
         this IEnumerable<T> source,
         Func<T, string> template)

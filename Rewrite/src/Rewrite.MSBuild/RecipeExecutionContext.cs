@@ -276,7 +276,7 @@ public class RecipeExecutionContext : AssemblyLoadContext
                 DisplayName = x.Descriptor.Title.ToString(),
                 Description = x.Descriptor.Description.ToString(),
                 TypeName = TypeName.Parse(x.Analyzer.GetType().AssemblyQualifiedName!),
-                Tags = ["roslyn"],
+                Tags = ["roslyn", x.Descriptor.Id],
                 Options = OptionDescriptor.FromRecipeType<RoslynRecipe>() 
             })
             .ToList();

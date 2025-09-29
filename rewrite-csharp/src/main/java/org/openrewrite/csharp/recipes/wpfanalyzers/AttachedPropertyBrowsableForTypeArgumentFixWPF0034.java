@@ -23,6 +23,10 @@ package org.openrewrite.csharp.recipes.wpfanalyzers;
 
 import org.openrewrite.csharp.RoslynRecipe;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class AttachedPropertyBrowsableForTypeArgumentFixWPF0034 extends RoslynRecipe {
 
     @Override
@@ -49,4 +53,9 @@ public class AttachedPropertyBrowsableForTypeArgumentFixWPF0034 extends RoslynRe
     public String getDescription() {
         return "Use correct argument for [AttachedPropertyBrowsableForType].";
     }
-}
+
+    @Override
+    public Set<String> getTags() {
+        return Stream.of("roslyn", "WPF0034", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+    }
+    }
