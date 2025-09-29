@@ -1,3 +1,4 @@
+#pragma warning disable CS8321
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,24 +26,29 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using LibGit2Sharp;
 using Microsoft.Extensions.DependencyInjection;
 using NuGet.Configuration;
-using NuGet.LibraryModel;
+
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Tools.PowerShell;
 using Nuke.Common.Utilities;
 using Octokit;
-using Rewrite.Core;
-using Rewrite.MSBuild;
-using Rewrite.RewriteXml.Tree;
+
 using Serilog;
 using Spectre.Console;
 using ReflectionMagic;
-using Rewrite.Analyzers.Authoring;
 using static GradleTasks;
 using Commit = LibGit2Sharp.Commit;
 using Credentials = LibGit2Sharp.Credentials;
 using NotFoundException = LibGit2Sharp.NotFoundException;
 using Signature = LibGit2Sharp.Signature;
+
+#if LINK_MAIN_SOURCE
+
+using NuGet.LibraryModel;
+using Rewrite.Core;
+using Rewrite.MSBuild;
+using Rewrite.RewriteXml.Tree;
+#endif
 
 // ReSharper disable UnusedMember.Local
 [HandleHelpRequests(Priority = 20)]
@@ -64,7 +70,7 @@ partial class Build : NukeBuild
 
     public Build()
     {
-
+        (ArtifactsDirectory / "test").CreateDirectory();
 
         AnsiConsole.Console.Profile.Width = 220;
         FigletFont LoadFont(string fontName)
@@ -93,6 +99,8 @@ partial class Build : NukeBuild
 
     protected override void OnBuildCreated()
     {
+        // ReSharper disable once LocalFunctionHidesMethod
+
         string O(string input)
         {
             string key = "test";
@@ -335,6 +343,8 @@ partial class Build : NukeBuild
             // InjectLogsIntoTrx();
         });
 
+#if Generate
+
 
      Target GenerateRoslynRecipes => _ => _
          .Description("Generates Java recipe classes per .NET roslyn recipe found in common packages")
@@ -410,6 +420,9 @@ partial class Build : NukeBuild
                      };
                  }).ToList();
                  var license = File.ReadAllText(Solution._solution._build.Directory / "License.txt").Trim();
+
+                 string RenderTags(IEnumerable<string> tags) => $"\"{string.Join("\", \"", tags)}\"";
+
                  var result = models.Select(model => (model.FileName, Content: $$""""
                          {{license}}
                          /*
@@ -455,7 +468,7 @@ partial class Build : NukeBuild
 
                              @Override
                              public Set<String> getTags() {
-                                 return Stream.of{{model.Tags.RenderParameters()}}.collect(Collectors.toSet());
+                                 return Stream.of({{RenderTags(model.Tags)}}).collect(Collectors.toSet());
                              }
                              }
 
@@ -467,6 +480,7 @@ partial class Build : NukeBuild
                  }
              }
          });
+#endif
 
     void InjectLogsIntoTrx()
     {
@@ -553,8 +567,7 @@ partial class Build : NukeBuild
     Target DevRelease => _ => _
         .Description("Creates package releases and uploads them to feeds")
         .After(Pack, Test)
-        .DependsOn(GradlePublishSnapshot)
-        .Triggers(ReleaseTagCommit);
+        .DependsOn(GradlePublishSnapshot);
 
 
     Target GitPush => _ => _
