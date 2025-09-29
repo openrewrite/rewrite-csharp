@@ -10,6 +10,11 @@
     <NukeTelemetryVersion>1</NukeTelemetryVersion>
     <IsPackable>false</IsPackable>
     <NukeUpdateReferences Condition="'$(NukeUpdateReferences)' == ''">True</NukeUpdateReferences>
+    <Configurations>Debug;Release;Generate</Configurations>
+    <Platforms>AnyCPU</Platforms>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Generate'">
+    <DefineConstants>$(DefineConstants);LINK_MAIN_SOURCE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,13 +24,16 @@
     <PackageReference Include="LibGit2Sharp" Version="0.31.0" />
     <PackageReference Include="ReflectionMagic" Version="5.0.1" />
     <PackageReference Include="Spectre.Console" Version="0.50.0" />
-      <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
   </ItemGroup>
-    <ItemGroup>
-<!--        <ProjectReference Include="..\Rewrite\src\Rewrite.MSBuild\Rewrite.MSBuild.csproj" Condition="'$(Generator)' == ''" />-->
-        <ProjectReference Include="..\Rewrite\src\Rewrite.MSBuild\Rewrite.MSBuild.csproj" />
-<!--        <PackageReference Include="Rewrite.MSBuild" Version="0.28.3-SNAPSHOT" />-->
+  <ItemGroup Condition="'$(Configuration)' != 'Generate'">
+    <Compile Remove="*.MainSourceLinked.cs"/>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Generate'">
+    <ProjectReference Include="..\Rewrite\src\Rewrite.MSBuild\Rewrite.MSBuild.csproj" />
+  </ItemGroup>
 
+    <ItemGroup>
         <ProjectReference Include="..\_build.Analyzers\Build.Analyzers.csproj"
                           OutputItemType="Analyzer">
             <PrivateAssets>all</PrivateAssets>

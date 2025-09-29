@@ -1,0 +1,1 @@
+This folder contains builds with static version number so they can be referenced in context of unit tests. Since they get cached in user's `.nuget` folder, that needs to be cleaned before unit tests (this is codified and done automatically for all Rewrite* packages).

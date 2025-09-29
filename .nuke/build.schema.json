@@ -32,7 +32,6 @@
         "Compile",
         "DevRelease",
         "DownloadTestFixtures",
-        "GenerateRoslynRecipes",
         "GithubRelease",
         "GitPush",
         "GradleAssemble",
