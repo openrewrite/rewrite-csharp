@@ -56,7 +56,7 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v5
         name: Install Gradle
 
       - uses: actions/setup-java@v5

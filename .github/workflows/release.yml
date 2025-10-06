@@ -39,7 +39,7 @@ jobs:
           distribution: temurin
           java-version: 21
       - name: set-up-gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
 
       - uses: actions/setup-dotnet@v4
         name: Install .NET 8
