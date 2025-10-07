@@ -41,7 +41,7 @@ namespace Rewrite.RoslynRecipe
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-
+            
             // Register for property assignments to detect ActivityListener.Sample
             context.RegisterSyntaxNodeAction(AnalyzeAssignment, SyntaxKind.SimpleAssignmentExpression);
         }
@@ -50,13 +50,8 @@ namespace Rewrite.RoslynRecipe
         {
             var assignment = (AssignmentExpressionSyntax)context.Node;
 
-            // Check if we're assigning to a property named "Sample"
-            if (assignment.Left is not IdentifierNameSyntax identifierName ||
-                identifierName.Identifier.Text != "Sample")
-                return;
-
-            // Verify via semantic model that it's ActivityListener.Sample
-            var symbolInfo = context.SemanticModel.GetSymbolInfo(identifierName);
+            // Get the symbol being assigned to (handles both "Sample" and "listener.Sample")
+            var symbolInfo = context.SemanticModel.GetSymbolInfo(assignment.Left);
             if (symbolInfo.Symbol is not IPropertySymbol propertySymbol)
                 return;
 
@@ -105,7 +100,13 @@ namespace Rewrite.RoslynRecipe
 
         private bool AnalyzeDelegateBody(SyntaxNode body, SemanticModel semanticModel)
         {
-            // Get all return statements in the body
+            // Handle expression-bodied lambdas (no return statement, just an expression)
+            if (body is ExpressionSyntax expression)
+            {
+                return AnalyzeExpression(expression, body, semanticModel);
+            }
+
+            // Get all return statements in the body (for block-bodied lambdas)
             var returnStatements = body.DescendantNodes().OfType<ReturnStatementSyntax>();
 
             foreach (var returnStatement in returnStatements)
@@ -113,51 +114,59 @@ namespace Rewrite.RoslynRecipe
                 if (returnStatement.Expression == null)
                     continue;
 
-                // Approach 1: Direct return of ActivitySamplingResult.PropagationData
-                if (IsPropagationDataLiteral(returnStatement.Expression, semanticModel))
+                if (AnalyzeExpression(returnStatement.Expression, body, semanticModel))
                     return true;
+            }
 
-                // Approach 2: Return of local variable - trace back to see if it's assigned PropagationData
-                if (returnStatement.Expression is IdentifierNameSyntax identifier)
+            return false;
+        }
+
+        private bool AnalyzeExpression(ExpressionSyntax expression, SyntaxNode bodyContext, SemanticModel semanticModel)
+        {
+            // Approach 1: Direct return of ActivitySamplingResult.PropagationData
+            if (IsPropagationDataLiteral(expression, semanticModel))
+                return true;
+
+            // Approach 2: Return of local variable - trace back to see if it's assigned PropagationData
+            if (expression is IdentifierNameSyntax identifier)
+            {
+                var symbol = semanticModel.GetSymbolInfo(identifier).Symbol;
+                if (symbol is ILocalSymbol localSymbol)
                 {
-                    var symbol = semanticModel.GetSymbolInfo(identifier).Symbol;
-                    if (symbol is ILocalSymbol localSymbol)
+                    // Find assignments to this local variable
+                    var declaringSyntax = localSymbol.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax();
+
+                    // Check variable declaration with initializer
+                    if (declaringSyntax is VariableDeclaratorSyntax declarator)
                     {
-                        // Find assignments to this local variable
-                        var declaringSyntax = localSymbol.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax();
+                        if (declarator.Initializer?.Value != null &&
+                            IsPropagationDataLiteral(declarator.Initializer.Value, semanticModel))
+                            return true;
+                    }
 
-                        // Check variable declaration with initializer
-                        if (declaringSyntax is VariableDeclaratorSyntax declarator)
-                        {
-                            if (declarator.Initializer?.Value != null &&
-                                IsPropagationDataLiteral(declarator.Initializer.Value, semanticModel))
-                                return true;
-                        }
+                    // Check for assignments in the body
+                    var assignments = bodyContext.DescendantNodes()
+                        .OfType<AssignmentExpressionSyntax>()
+                        .Where(a => a.Left is IdentifierNameSyntax id &&
+                                   semanticModel.GetSymbolInfo(id).Symbol?.Equals(localSymbol, SymbolEqualityComparer.Default) == true);
 
-                        // Check for assignments in the body
-                        var assignments = body.DescendantNodes()
-                            .OfType<AssignmentExpressionSyntax>()
-                            .Where(a => a.Left is IdentifierNameSyntax id &&
-                                       semanticModel.GetSymbolInfo(id).Symbol?.Equals(localSymbol, SymbolEqualityComparer.Default) == true);
-
-                        foreach (var assignment in assignments)
-                        {
-                            if (IsPropagationDataLiteral(assignment.Right, semanticModel))
-                                return true;
-                        }
+                    foreach (var assignment in assignments)
+                    {
+                        if (IsPropagationDataLiteral(assignment.Right, semanticModel))
+                            return true;
                     }
                 }
+            }
 
-                // Approach 3: Return from method call or any other expression we can't definitively analyze
-                // Treat as potentially returning PropagationData
-                if (returnStatement.Expression is InvocationExpressionSyntax or
-                    ConditionalExpressionSyntax or
-                    BinaryExpressionSyntax or
-                    SwitchExpressionSyntax)
-                {
-                    // For method calls and complex expressions, conservatively flag as potentially affected
-                    return true;
-                }
+            // Approach 3: Return from method call or any other expression we can't definitively analyze
+            // Treat as potentially returning PropagationData
+            if (expression is InvocationExpressionSyntax or
+                ConditionalExpressionSyntax or
+                BinaryExpressionSyntax or
+                SwitchExpressionSyntax)
+            {
+                // For method calls and complex expressions, conservatively flag as potentially affected
+                return true;
             }
 
             return false;

@@ -113,7 +113,7 @@ public class RecipeManagerTests : BaseTests
                 "CA1861", // Avoid constant arrays as arguments,
                 "CA1311"  // Specify a culture or use an invariant version
             ], 
-            Packages = ["Microsoft.CodeAnalysis.NetAnalyzers:9.0.0"],
+            Packages = ["Microsoft.CodeAnalysis.NetAnalyzers:10.0.0"],
             Path = directory
         };
         var command = CreateObject<RunRecipeCommand>();

@@ -9,7 +9,11 @@
       "Bash(gradlew clean:*)",
       "Bash(cmd /c gradlew.bat clean:*)",
       "Bash(gradlew.bat:*)",
-      "Bash(cmd:*)"
+      "Bash(cmd:*)",
+      "Bash(dotnet test)",
+      "Bash(dotnet test:*)",
+      "Bash(dotnet build)",
+      "Bash(dotnet build:*)"
     ],
     "deny": []
   }

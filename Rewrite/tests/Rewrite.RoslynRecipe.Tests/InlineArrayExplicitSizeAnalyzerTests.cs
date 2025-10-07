@@ -1,0 +1,255 @@
+using Microsoft.CodeAnalysis.CSharp.Testing;
+using TUnit.Core;
+using Verifier = Rewrite.RoslynRecipe.Tests.Verifiers.CSharpAnalyzerVerifier<Rewrite.RoslynRecipe.InlineArrayExplicitSizeAnalyzer>;
+
+namespace Rewrite.RoslynRecipe.Tests;
+
+public class InlineArrayExplicitSizeAnalyzerTests
+{
+    [Test]
+    public async Task InlineArrayWithExplicitSize_CreatesErrorDiagnostic()
+    {
+        const string text = """
+            using System.Runtime.CompilerServices;
+            using System.Runtime.InteropServices;
+
+            [InlineArray(8)]
+            [StructLayout(LayoutKind.Explicit, Size = 32)]
+            struct {|ORNETX0004:Int8InlineArray|}
+            {
+                [FieldOffset(0)]
+                private int _value;
+            }
+            """;
+
+        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task InlineArrayWithExplicitSizeAutoLayout_CreatesErrorDiagnostic()
+    {
+        const string text = """
+            using System.Runtime.CompilerServices;
+            using System.Runtime.InteropServices;
+
+            [InlineArray(4)]
+            [StructLayout(LayoutKind.Auto, Size = 16)]
+            struct {|ORNETX0004:MyInlineArray|}
+            {
+                private int _value;
+            }
+            """;
+
+        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task InlineArrayWithExplicitSizeSequentialLayout_CreatesErrorDiagnostic()
+    {
+        const string text = """
+            using System.Runtime.CompilerServices;
+            using System.Runtime.InteropServices;
+
+            [InlineArray(10)]
+            [StructLayout(LayoutKind.Sequential, Size = 40)]
+            struct {|ORNETX0004:SequentialInlineArray|}
+            {
+                private int _value;
+            }
+            """;
+
+        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task InlineArrayWithoutExplicitSize_NoDiagnostic()
+    {
+        const string text = """
+            using System.Runtime.CompilerServices;
+            using System.Runtime.InteropServices;
+
+            [InlineArray(8)]
+            [StructLayout(LayoutKind.Explicit)]
+            struct Int8InlineArray
+            {
+                [FieldOffset(0)]
+                private int _value;
+            }
+            """;
+
+        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task InlineArrayWithoutStructLayout_NoDiagnostic()
+    {
+        const string text = """
+            using System.Runtime.CompilerServices;
+
+            [InlineArray(8)]
+            struct Int8InlineArray
+            {
+                private int _value;
+            }
+            """;
+
+        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task StructWithExplicitSizeButNoInlineArray_NoDiagnostic()
+    {
+        const string text = """
+            using System.Runtime.InteropServices;
+
+            [StructLayout(LayoutKind.Explicit, Size = 32)]
+            struct RegularStruct
+            {
+                [FieldOffset(0)]
+                private int _value;
+            }
+            """;
+
+        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task InlineArrayWithPackButNoSize_NoDiagnostic()
+    {
+        const string text = """
+            using System.Runtime.CompilerServices;
+            using System.Runtime.InteropServices;
+
+            [InlineArray(8)]
+            [StructLayout(LayoutKind.Sequential, Pack = 4)]
+            struct PackedInlineArray
+            {
+                private int _value;
+            }
+            """;
+
+        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task InlineArrayWithCharSetButNoSize_NoDiagnostic()
+    {
+        const string text = """
+            using System.Runtime.CompilerServices;
+            using System.Runtime.InteropServices;
+
+            [InlineArray(8)]
+            [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+            struct CharSetInlineArray
+            {
+                private int _value;
+            }
+            """;
+
+        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task ClassWithInlineArrayAndSize_NoDiagnostic()
+    {
+        const string text = """
+            using System.Runtime.CompilerServices;
+            using System.Runtime.InteropServices;
+
+            [InlineArray(8)]
+            [StructLayout(LayoutKind.Explicit, Size = 32)]
+            class NotAStruct
+            {
+                [FieldOffset(0)]
+                private int _value;
+            }
+            """;
+
+        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task InlineArrayWithSizeZero_CreatesErrorDiagnostic()
+    {
+        const string text = """
+            using System.Runtime.CompilerServices;
+            using System.Runtime.InteropServices;
+
+            [InlineArray(8)]
+            [StructLayout(LayoutKind.Explicit, Size = 0)]
+            struct {|ORNETX0004:ZeroSizeInlineArray|}
+            {
+                [FieldOffset(0)]
+                private int _value;
+            }
+            """;
+
+        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task MultipleInlineArraysWithIssues_CreatesMultipleDiagnostics()
+    {
+        const string text = """
+            using System.Runtime.CompilerServices;
+            using System.Runtime.InteropServices;
+
+            [InlineArray(8)]
+            [StructLayout(LayoutKind.Explicit, Size = 32)]
+            struct {|ORNETX0004:FirstInlineArray|}
+            {
+                [FieldOffset(0)]
+                private int _value;
+            }
+
+            [InlineArray(4)]
+            [StructLayout(LayoutKind.Sequential, Size = 16)]
+            struct {|ORNETX0004:SecondInlineArray|}
+            {
+                private byte _value;
+            }
+            """;
+
+        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task InlineArrayNestedInClass_CreatesErrorDiagnostic()
+    {
+        const string text = """
+            using System.Runtime.CompilerServices;
+            using System.Runtime.InteropServices;
+
+            class Container
+            {
+                [InlineArray(8)]
+                [StructLayout(LayoutKind.Explicit, Size = 32)]
+                struct {|ORNETX0004:NestedInlineArray|}
+                {
+                    [FieldOffset(0)]
+                    private int _value;
+                }
+            }
+            """;
+
+        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task InlineArrayWithLargeSize_CreatesErrorDiagnostic()
+    {
+        const string text = """
+            using System.Runtime.CompilerServices;
+            using System.Runtime.InteropServices;
+
+            [InlineArray(100)]
+            [StructLayout(LayoutKind.Sequential, Size = 1024)]
+            struct {|ORNETX0004:LargeSizeInlineArray|}
+            {
+                private long _value;
+            }
+            """;
+
+        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+    }
+}
