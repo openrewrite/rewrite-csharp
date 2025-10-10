@@ -6,6 +6,9 @@ namespace Rewrite.RoslynRecipe.Tests;
 
 public class InlineArrayExplicitSizeAnalyzerTests
 {
+    /// <summary>
+    /// Verifies that a diagnostic is created when an InlineArray struct has StructLayout with explicit LayoutKind and Size parameter.
+    /// </summary>
     [Test]
     public async Task InlineArrayWithExplicitSize_CreatesErrorDiagnostic()
     {
@@ -25,6 +28,9 @@ public class InlineArrayExplicitSizeAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when an InlineArray struct has StructLayout with Auto LayoutKind and Size parameter.
+    /// </summary>
     [Test]
     public async Task InlineArrayWithExplicitSizeAutoLayout_CreatesErrorDiagnostic()
     {
@@ -43,6 +49,9 @@ public class InlineArrayExplicitSizeAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when an InlineArray struct has StructLayout with Sequential LayoutKind and Size parameter.
+    /// </summary>
     [Test]
     public async Task InlineArrayWithExplicitSizeSequentialLayout_CreatesErrorDiagnostic()
     {
@@ -61,6 +70,9 @@ public class InlineArrayExplicitSizeAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that no diagnostic is created when an InlineArray struct has StructLayout without a Size parameter.
+    /// </summary>
     [Test]
     public async Task InlineArrayWithoutExplicitSize_NoDiagnostic()
     {
@@ -80,6 +92,9 @@ public class InlineArrayExplicitSizeAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that no diagnostic is created when an InlineArray struct has no StructLayout attribute.
+    /// </summary>
     [Test]
     public async Task InlineArrayWithoutStructLayout_NoDiagnostic()
     {
@@ -96,6 +111,9 @@ public class InlineArrayExplicitSizeAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that no diagnostic is created when a struct has StructLayout with Size but no InlineArray attribute.
+    /// </summary>
     [Test]
     public async Task StructWithExplicitSizeButNoInlineArray_NoDiagnostic()
     {
@@ -113,6 +131,9 @@ public class InlineArrayExplicitSizeAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that no diagnostic is created when an InlineArray struct has StructLayout with Pack parameter but no Size.
+    /// </summary>
     [Test]
     public async Task InlineArrayWithPackButNoSize_NoDiagnostic()
     {
@@ -131,6 +152,9 @@ public class InlineArrayExplicitSizeAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that no diagnostic is created when an InlineArray struct has StructLayout with CharSet parameter but no Size.
+    /// </summary>
     [Test]
     public async Task InlineArrayWithCharSetButNoSize_NoDiagnostic()
     {
@@ -149,6 +173,9 @@ public class InlineArrayExplicitSizeAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that no diagnostic is created when InlineArray and StructLayout with Size are applied to a class (not a struct).
+    /// </summary>
     [Test]
     public async Task ClassWithInlineArrayAndSize_NoDiagnostic()
     {
@@ -168,6 +195,9 @@ public class InlineArrayExplicitSizeAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when an InlineArray struct has StructLayout with Size set to zero.
+    /// </summary>
     [Test]
     public async Task InlineArrayWithSizeZero_CreatesErrorDiagnostic()
     {
@@ -187,6 +217,9 @@ public class InlineArrayExplicitSizeAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that multiple diagnostics are created when multiple InlineArray structs have StructLayout with Size parameter.
+    /// </summary>
     [Test]
     public async Task MultipleInlineArraysWithIssues_CreatesMultipleDiagnostics()
     {
@@ -213,6 +246,9 @@ public class InlineArrayExplicitSizeAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when an InlineArray struct nested inside a class has StructLayout with Size parameter.
+    /// </summary>
     [Test]
     public async Task InlineArrayNestedInClass_CreatesErrorDiagnostic()
     {
@@ -235,6 +271,9 @@ public class InlineArrayExplicitSizeAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when an InlineArray struct has StructLayout with a large Size value.
+    /// </summary>
     [Test]
     public async Task InlineArrayWithLargeSize_CreatesErrorDiagnostic()
     {

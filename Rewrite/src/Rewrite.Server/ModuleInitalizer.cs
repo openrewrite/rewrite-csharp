@@ -67,6 +67,6 @@ public static class ModuleInitalizer
             return new Properties.Value(id, prefix!, markers!, text!);
         });
         
-        ProjectParser.Init();
+        // ProjectParser.Init();
     }
 }

@@ -6,6 +6,9 @@ namespace Rewrite.RoslynRecipe.Tests;
 
 public class DistributedContextPropagatorAnalyzerTests
 {
+    /// <summary>
+    /// Verifies that a diagnostic is created when DistributedContextPropagator.CreateDefaultPropagator() is called.
+    /// </summary>
     [Test]
     public async Task CreateDefaultPropagator_CreatesDiagnostic()
     {
@@ -24,6 +27,9 @@ public class DistributedContextPropagatorAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when DistributedContextPropagator.Current property is read.
+    /// </summary>
     [Test]
     public async Task CurrentPropertyRead_CreatesDiagnostic()
     {
@@ -42,6 +48,9 @@ public class DistributedContextPropagatorAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when DistributedContextPropagator.Current property is written.
+    /// </summary>
     [Test]
     public async Task CurrentPropertyWrite_CreatesDiagnostic()
     {
@@ -60,6 +69,9 @@ public class DistributedContextPropagatorAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that no diagnostic is created when DistributedContextPropagator.Current is assigned to CreatePreW3CPropagator().
+    /// </summary>
     [Test]
     public async Task CurrentPropertyAssignedToCreatePreW3CPropagator_NoDiagnostic()
     {
@@ -78,6 +90,9 @@ public class DistributedContextPropagatorAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that diagnostics are created when both CreateDefaultPropagator() and Current property are used in an assignment.
+    /// </summary>
     [Test]
     public async Task CreateDefaultPropagatorUsedInAssignment_CreatesDiagnostic()
     {
@@ -96,6 +111,9 @@ public class DistributedContextPropagatorAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when DistributedContextPropagator.Current is used in a conditional expression.
+    /// </summary>
     [Test]
     public async Task CurrentPropertyInCondition_CreatesDiagnostic()
     {
@@ -117,6 +135,9 @@ public class DistributedContextPropagatorAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when DistributedContextPropagator.Current is passed as a method argument.
+    /// </summary>
     [Test]
     public async Task CurrentPropertyPassedAsArgument_CreatesDiagnostic()
     {
@@ -139,6 +160,9 @@ public class DistributedContextPropagatorAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when DistributedContextPropagator.CreateDefaultPropagator() is used in a field initializer.
+    /// </summary>
     [Test]
     public async Task CreateDefaultPropagatorInFieldInitializer_CreatesDiagnostic()
     {
@@ -154,6 +178,9 @@ public class DistributedContextPropagatorAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when DistributedContextPropagator.Current is used in a field initializer.
+    /// </summary>
     [Test]
     public async Task CurrentPropertyInFieldInitializer_CreatesDiagnostic()
     {
@@ -169,6 +196,9 @@ public class DistributedContextPropagatorAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that multiple diagnostics are created when both CreateDefaultPropagator() and Current are used multiple times.
+    /// </summary>
     [Test]
     public async Task MultipleUsages_CreateMultipleDiagnostics()
     {
@@ -189,6 +219,9 @@ public class DistributedContextPropagatorAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that no diagnostic is created when Current or CreateDefaultPropagator are on a custom type, not DistributedContextPropagator.
+    /// </summary>
     [Test]
     public async Task NonDistributedContextPropagatorType_NoDiagnostic()
     {
@@ -214,6 +247,9 @@ public class DistributedContextPropagatorAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that no diagnostic is created when DistributedContextPropagator.CreatePreW3CPropagator() is called.
+    /// </summary>
     [Test]
     public async Task CreatePreW3CPropagator_NoDiagnostic()
     {
@@ -232,6 +268,9 @@ public class DistributedContextPropagatorAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when DistributedContextPropagator.Current is assigned to a variable.
+    /// </summary>
     [Test]
     public async Task CurrentAssignedToVariable_CreatesDiagnostic()
     {

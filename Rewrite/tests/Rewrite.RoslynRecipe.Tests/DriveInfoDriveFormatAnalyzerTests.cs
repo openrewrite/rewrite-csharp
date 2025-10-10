@@ -7,6 +7,9 @@ namespace Rewrite.RoslynRecipe.Tests;
 
 public class DriveInfoDriveFormatAnalyzerTests
 {
+    /// <summary>
+    /// Verifies that a diagnostic is created when the DriveInfo.DriveFormat property is accessed.
+    /// </summary>
     [Test]
     public async Task DriveFormatMemberAccess_WhenSemanticMatch_CreatesDiagnostic()
     {

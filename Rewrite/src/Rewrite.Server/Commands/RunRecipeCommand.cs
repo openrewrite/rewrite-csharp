@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Text.RegularExpressions;
-using Microsoft.Build.Exceptions;
+// using Microsoft.Build.Exceptions;
 using Microsoft.Extensions.Logging;
 using NuGet.Configuration;
 using NuGet.LibraryModel;
@@ -138,7 +138,7 @@ public class RunRecipeCommand(RecipeManager recipeManager, ILogger<RunRecipeComm
                     // );
                 }
             }
-            catch (InvalidProjectFileException )
+            catch (Exception )
             {
                 //logger.LogWarning(ex, "Solution {Solution} cannot be opened due to error {Error}", solutionPath, ex.Message);
                 continue;

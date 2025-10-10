@@ -25,7 +25,7 @@
 
     <PropertyGroup>
 <!--        <VersionPrefix>0.23.0</VersionPrefix>-->
-        <MicrosoftCodeAnalysisVersion>4.14.0</MicrosoftCodeAnalysisVersion>
+        <MicrosoftCodeAnalysisVersion>5.3.0-1.25506.7</MicrosoftCodeAnalysisVersion>
         <RemotePrinter>False</RemotePrinter>
         <DebugVisitor>False</DebugVisitor>
         <SanitizeStackTrace>True</SanitizeStackTrace>

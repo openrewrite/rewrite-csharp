@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Loader;
-using Microsoft.Build.Exceptions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -11,6 +10,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.Extensions.Logging;
 using NMica.Utils.IO;
+using Nuke.Common.Tooling;
 using Rewrite.Core;
 using Rewrite.Core.Config;
 using Rewrite.RewriteJava.Tree;
@@ -71,7 +71,10 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
         Stopwatch watch = new();
         watch.Start();
         var workspace = MSBuildWorkspace.Create();
-
+        var result = ProcessTasks.StartProcess("dotnet", $"restore {SolutionFilePath}");
+        result.WaitForExit();
+        if(result.ExitCode != 0)
+            Debugger.Break();
         var originalSolution = await workspace.OpenSolutionAsync(SolutionFilePath, cancellationToken: cancellationToken);
         var solution = new SolutionHolder(originalSolution);
         // var analyzerAssembly = RecipeAssemblies;

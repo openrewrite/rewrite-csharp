@@ -4,6 +4,10 @@ using Verifier = Rewrite.RoslynRecipe.Tests.Verifiers.CSharpAnalyzerVerifier<Rew
 
 namespace Rewrite.RoslynRecipe.Tests;
 
+/// <summary>
+/// Tests for the SignalTerminationHandlerAnalyzer that detects registrations of AppDomain.ProcessExit
+/// and AssemblyLoadContext.Unloading event handlers, which have reliability limitations in .NET 10.0+.
+/// </summary>
 public class SignalTerminationHandlerAnalyzerTests
 {
     [Test]

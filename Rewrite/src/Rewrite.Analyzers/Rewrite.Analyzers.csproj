@@ -26,12 +26,12 @@
         </Compile>
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="$(MicrosoftCodeAnalysisVersion)">
+      <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="4.14.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisVersion)" PrivateAssets="all" />
-      <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="$(MicrosoftCodeAnalysisVersion)"  PrivateAssets="all"  />
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" PrivateAssets="all" />
+      <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.14.0"  PrivateAssets="all"  />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" GeneratePathProperty="true" PrivateAssets="all" />
       <PackageReference Include="YamlDotNet" Version="16.0.0" GeneratePathProperty="true" PrivateAssets="all" />
         <PackageReference Include="PolySharp" Version="1.15.0">

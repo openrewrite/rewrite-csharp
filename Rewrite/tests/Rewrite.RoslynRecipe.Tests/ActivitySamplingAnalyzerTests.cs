@@ -6,6 +6,9 @@ namespace Rewrite.RoslynRecipe.Tests;
 
 public class ActivitySamplingAnalyzerTests
 {
+    /// <summary>
+    /// Verifies that a diagnostic is created when ActivitySamplingResult.PropagationData is directly returned from a Sample delegate.
+    /// </summary>
     [Test]
     public async Task DirectReturnPropagationData_CreatesDiagnostic()
     {
@@ -31,6 +34,9 @@ public class ActivitySamplingAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when ActivitySamplingResult.PropagationData is returned conditionally within a Sample delegate.
+    /// </summary>
     [Test]
     public async Task ConditionalReturnWithPropagationData_CreatesDiagnostic()
     {
@@ -59,6 +65,9 @@ public class ActivitySamplingAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when ActivitySamplingResult.PropagationData is assigned to a local variable and then returned.
+    /// </summary>
     [Test]
     public async Task LocalVariableAssignedPropagationData_CreatesDiagnostic()
     {
@@ -85,6 +94,9 @@ public class ActivitySamplingAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when ActivitySamplingResult.PropagationData is used in a local variable initializer and then returned.
+    /// </summary>
     [Test]
     public async Task LocalVariableWithInitializer_CreatesDiagnostic()
     {
@@ -111,6 +123,9 @@ public class ActivitySamplingAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when a method returns ActivitySamplingResult.PropagationData and is called from a Sample delegate.
+    /// </summary>
     [Test]
     public async Task MethodCallReturn_CreatesDiagnostic()
     {
@@ -141,6 +156,9 @@ public class ActivitySamplingAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when ActivitySamplingResult.PropagationData is returned via a ternary expression.
+    /// </summary>
     [Test]
     public async Task TernaryExpressionReturn_CreatesDiagnostic()
     {
@@ -168,6 +186,9 @@ public class ActivitySamplingAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when ActivitySamplingResult.PropagationData is returned via a switch expression.
+    /// </summary>
     [Test]
     public async Task SwitchExpressionReturn_CreatesDiagnostic()
     {
@@ -197,6 +218,9 @@ public class ActivitySamplingAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when a method group returning ActivitySamplingResult is assigned to the Sample property.
+    /// </summary>
     [Test]
     public async Task MethodGroupAssignment_CreatesDiagnostic()
     {
@@ -224,6 +248,9 @@ public class ActivitySamplingAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when an anonymous method returning ActivitySamplingResult.PropagationData is assigned to the Sample property.
+    /// </summary>
     [Test]
     public async Task AnonymousMethod_CreatesDiagnostic()
     {
@@ -249,6 +276,9 @@ public class ActivitySamplingAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that no diagnostic is created when only ActivitySamplingResult.AllDataAndRecorded is returned.
+    /// </summary>
     [Test]
     public async Task OnlyAllDataAndRecorded_NoDiagnostic()
     {
@@ -274,6 +304,9 @@ public class ActivitySamplingAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that no diagnostic is created when only ActivitySamplingResult.None is returned.
+    /// </summary>
     [Test]
     public async Task OnlyNone_NoDiagnostic()
     {
@@ -299,6 +332,9 @@ public class ActivitySamplingAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that no diagnostic is created when the Sample property is on a non-ActivityListener type.
+    /// </summary>
     [Test]
     public async Task NonActivityListenerSampleProperty_NoDiagnostic()
     {
@@ -325,6 +361,9 @@ public class ActivitySamplingAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when the Sample property is assigned outside of an object initializer with PropagationData.
+    /// </summary>
     [Test]
     public async Task AssignmentOutsideObjectInitializer_CreatesDiagnostic()
     {
@@ -351,6 +390,9 @@ public class ActivitySamplingAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when an expression-bodied lambda returns ActivitySamplingResult.PropagationData.
+    /// </summary>
     [Test]
     public async Task ExpressionBodiedLambda_CreatesDiagnostic()
     {

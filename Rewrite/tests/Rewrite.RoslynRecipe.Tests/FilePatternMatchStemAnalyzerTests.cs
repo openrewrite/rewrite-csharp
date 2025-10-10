@@ -17,6 +17,9 @@ public class FilePatternMatchStemAnalyzerTests
         }
         """;
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when FilePatternMatch constructor is called with null as the stem parameter.
+    /// </summary>
     [Test]
     public async Task FilePatternMatchWithNullStem_CreatesErrorDiagnostic()
     {
@@ -35,6 +38,9 @@ public class FilePatternMatchStemAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when FilePatternMatch constructor is called with a null literal as the stem parameter.
+    /// </summary>
     [Test]
     public async Task FilePatternMatchWithNullLiteralStem_CreatesErrorDiagnostic()
     {
@@ -53,6 +59,9 @@ public class FilePatternMatchStemAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when FilePatternMatch constructor is called with default literal as the stem parameter.
+    /// </summary>
     [Test]
     public async Task FilePatternMatchWithDefaultLiteralStem_CreatesErrorDiagnostic()
     {
@@ -71,6 +80,9 @@ public class FilePatternMatchStemAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when FilePatternMatch constructor is called with default(string) as the stem parameter.
+    /// </summary>
     [Test]
     public async Task FilePatternMatchWithDefaultStringStem_CreatesErrorDiagnostic()
     {
@@ -89,6 +101,9 @@ public class FilePatternMatchStemAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that no diagnostic is created when FilePatternMatch constructor is called with a valid string as the stem parameter.
+    /// </summary>
     [Test]
     public async Task FilePatternMatchWithValidStem_NoDiagnostic()
     {
@@ -107,6 +122,9 @@ public class FilePatternMatchStemAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that no diagnostic is created when FilePatternMatch constructor is called with an empty string as the stem parameter.
+    /// </summary>
     [Test]
     public async Task FilePatternMatchWithEmptyStringStem_NoDiagnostic()
     {
@@ -125,6 +143,9 @@ public class FilePatternMatchStemAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that no diagnostic is created when FilePatternMatch constructor is called with a variable as the stem parameter.
+    /// </summary>
     [Test]
     public async Task FilePatternMatchWithVariableStem_NoDiagnostic()
     {
@@ -144,6 +165,9 @@ public class FilePatternMatchStemAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when FilePatternMatch with null stem is used in a field initializer.
+    /// </summary>
     [Test]
     public async Task FilePatternMatchInFieldInitializer_CreatesErrorDiagnostic()
     {
@@ -159,6 +183,9 @@ public class FilePatternMatchStemAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that multiple diagnostics are created when multiple FilePatternMatch instances are created with null stem.
+    /// </summary>
     [Test]
     public async Task MultipleFilePatternMatchWithNull_CreatesMultipleDiagnostics()
     {
@@ -178,6 +205,9 @@ public class FilePatternMatchStemAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when FilePatternMatch with null stem is used in a return statement.
+    /// </summary>
     [Test]
     public async Task FilePatternMatchInReturnStatement_CreatesErrorDiagnostic()
     {
@@ -196,6 +226,9 @@ public class FilePatternMatchStemAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when FilePatternMatch with null stem is passed as a method argument.
+    /// </summary>
     [Test]
     public async Task FilePatternMatchPassedToMethod_CreatesErrorDiagnostic()
     {
@@ -218,6 +251,9 @@ public class FilePatternMatchStemAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that no diagnostic is created when a custom FilePatternMatch type (not from Microsoft.Extensions.FileSystemGlobbing) is used.
+    /// </summary>
     [Test]
     public async Task NonFilePatternMatchType_NoDiagnostic()
     {
@@ -242,6 +278,9 @@ public class FilePatternMatchStemAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when FilePatternMatch with null stem is used in a collection initializer.
+    /// </summary>
     [Test]
     public async Task FilePatternMatchInCollectionInitializer_CreatesErrorDiagnostic()
     {
@@ -266,6 +305,9 @@ public class FilePatternMatchStemAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when FilePatternMatch with null stem is created using named arguments.
+    /// </summary>
     [Test]
     public async Task FilePatternMatchWithNamedArguments_CreatesErrorDiagnostic()
     {
@@ -284,6 +326,9 @@ public class FilePatternMatchStemAnalyzerTests
         await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Verifies that a diagnostic is created when FilePatternMatch with null stem is created in a ternary expression.
+    /// </summary>
     [Test]
     public async Task FilePatternMatchInTernaryExpression_CreatesErrorDiagnostic()
     {
