@@ -12,7 +12,6 @@
     <NukeUpdateReferences Condition="'$(NukeUpdateReferences)' == ''">True</NukeUpdateReferences>
     <Configurations>Debug;Release;Generate</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <SuppressBuildProjectCheck>true</SuppressBuildProjectCheck>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Generate'">
     <DefineConstants>$(DefineConstants);LINK_MAIN_SOURCE</DefineConstants>
