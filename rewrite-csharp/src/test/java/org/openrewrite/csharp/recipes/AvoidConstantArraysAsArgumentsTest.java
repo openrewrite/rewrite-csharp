@@ -15,7 +15,6 @@
  */
 package org.openrewrite.csharp.recipes;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.Recipe;
 import org.openrewrite.config.CompositeRecipe;
@@ -26,7 +25,6 @@ import org.openrewrite.test.TypeValidation;
 
 import java.util.List;
 
-@Disabled
 public class AvoidConstantArraysAsArgumentsTest extends RoslynRecipeTest {
 
     @Override
