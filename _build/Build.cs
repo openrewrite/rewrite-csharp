@@ -753,7 +753,8 @@ partial class Build : NukeBuild
     Target GradlePublishSnapshot => _ => _
         .Description("Invokes Gradle to create a SNAPSHOT release and push it to maven repositories")
         // .OnlyWhenStatic(() => IsAllowedToPushToFeed)
-        .Requires(() => IsGitCommitted, () => !IsPullRequest)
+        .Requires(() => IsGitCommitted)
+        .OnlyWhenStatic(() => !IsPullRequest)
         .After(Pack, NugetPush)
         .Before(GradleExecute)
         .Triggers(GradleExecute)
