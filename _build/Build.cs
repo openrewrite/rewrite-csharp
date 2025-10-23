@@ -536,8 +536,8 @@ partial class Build : NukeBuild
         {
             var hasTrx = TestResultsDirectory.GlobFiles("*.trx").Any();
             var hasJavaTest = (RootDirectory / "rewrite-csharp" / "build" / "test-results" / "test").GlobFiles("*.xml").Any();
-            GitHubActions?.SetVariable("dotnet_tests_found", hasTrx);
-            GitHubActions?.SetVariable("java_tests_found", hasJavaTest);
+            GitHubActions?.SetVariable("dotnet_tests_found", hasTrx ? "true" : "false");
+            GitHubActions?.SetVariable("java_tests_found", hasJavaTest ? "true" : "false");
         });
 
 
