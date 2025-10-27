@@ -23,6 +23,10 @@ package org.openrewrite.csharp.recipes.wpfanalyzers;
 
 import org.openrewrite.csharp.RoslynRecipe;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class RenameMemberFixWPF0001 extends RoslynRecipe {
 
     @Override
@@ -49,4 +53,9 @@ public class RenameMemberFixWPF0001 extends RoslynRecipe {
     public String getDescription() {
         return "A dependency property's backing field should be named with the name it is registered with suffixed by 'Property'.  This is the convention in the framework.";
     }
-}
+
+    @Override
+    public Set<String> getTags() {
+        return Stream.of("roslyn", "WPF0001", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+    }
+    }

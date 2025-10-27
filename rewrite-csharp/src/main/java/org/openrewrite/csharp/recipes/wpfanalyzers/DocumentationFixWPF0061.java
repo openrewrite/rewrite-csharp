@@ -23,6 +23,10 @@ package org.openrewrite.csharp.recipes.wpfanalyzers;
 
 import org.openrewrite.csharp.RoslynRecipe;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class DocumentationFixWPF0061 extends RoslynRecipe {
 
     @Override
@@ -49,4 +53,9 @@ public class DocumentationFixWPF0061 extends RoslynRecipe {
     public String getDescription() {
         return "Accessor method for attached property should have standard documentation text.";
     }
-}
+
+    @Override
+    public Set<String> getTags() {
+        return Stream.of("roslyn", "WPF0061", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+    }
+    }

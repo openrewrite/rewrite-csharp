@@ -23,6 +23,10 @@ package org.openrewrite.csharp.recipes.wpfanalyzers;
 
 import org.openrewrite.csharp.RoslynRecipe;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class UseNameofFixWPF0151 extends RoslynRecipe {
 
     @Override
@@ -49,4 +53,9 @@ public class UseNameofFixWPF0151 extends RoslynRecipe {
     public String getDescription() {
         return "Use nameof() as it is less fragile than constant.";
     }
-}
+
+    @Override
+    public Set<String> getTags() {
+        return Stream.of("roslyn", "WPF0151", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+    }
+    }

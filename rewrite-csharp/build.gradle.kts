@@ -1,3 +1,5 @@
+import java.io.ByteArrayOutputStream
+
 plugins {
     id("org.openrewrite.build.language-library")
     id("org.openrewrite.build.moderne-source-available-license") version "latest.release"
@@ -20,7 +22,7 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
 
     // Need to have a slf4j binding to see any output enabled from the parser.
-    runtimeOnly("ch.qos.logback:logback-classic:1.2.+")
+    runtimeOnly("ch.qos.logback:logback-classic:1.5.+")
     testImplementation("org.openrewrite:rewrite-test")
     testImplementation("org.openrewrite:rewrite-xml")
 
@@ -46,5 +48,52 @@ tasks.withType<JavaCompile>().configureEach {
 tasks.withType<Javadoc>().configureEach {
     (options as StandardJavadocDocletOptions).apply {
         exclude("org/openrewrite/csharp/tree/Cs.java")
+    }
+}
+// Copy DotnetServer.zip to both main and test resources
+tasks.processResources {
+    from(rootProject.file("artifacts/DotnetServer.zip"))
+}
+
+tasks.processTestResources {
+    from(rootProject.file("artifacts/DotnetServer.zip"))
+}
+
+// Make sure IntelliJ includes the resources in the runtime classpath
+//sourceSets {
+//    main {
+//        resources {
+//            srcDir("src/main/resources")
+//            // Also include the artifacts directory for IDE runtime
+//            srcDir(rootProject.file("artifacts"))
+//        }
+//    }
+//    test {
+//        resources {
+//            srcDir("src/test/resources")
+//            // Also include the artifacts directory for IDE test runtime
+//            srcDir(rootProject.file("artifacts"))
+//
+//        }
+//    }
+//}
+// Run external CLI and capture stdout lazily
+
+val captureReleaseVersion by tasks.registering {
+
+    doFirst {
+        val version = providers.exec {
+            commandLine("nbgv", "get-version", "-v", "semver2")
+        }.standardOutput.asText.get().trim()
+        project.extensions.extraProperties.set("release.version", version)
+        println("release.version = $version")
+    }
+}
+
+tasks.register("printReleaseVersion") {
+    dependsOn(captureReleaseVersion)
+
+    doLast {
+        println("release.version = ${project.findProperty("release.version")}")
     }
 }

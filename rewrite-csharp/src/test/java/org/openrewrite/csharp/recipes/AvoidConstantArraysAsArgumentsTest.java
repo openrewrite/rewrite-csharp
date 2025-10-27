@@ -18,15 +18,12 @@ package org.openrewrite.csharp.recipes;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.Recipe;
 import org.openrewrite.config.CompositeRecipe;
-import org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers.AbstractTypesShouldNotHaveConstructorsCA1012;
-import org.openrewrite.csharp.recipes.microsoft.codeanalysis.netanalyzers.AvoidConstArraysCA1861;
+import org.openrewrite.csharp.recipes.microsoft.AbstractTypesShouldNotHaveConstructorsCA1012;
+import org.openrewrite.csharp.recipes.microsoft.AvoidConstArraysCA1861;
 import org.openrewrite.test.RecipeSpec;
-import org.openrewrite.test.SourceSpecs;
 import org.openrewrite.test.TypeValidation;
 
 import java.util.List;
-
-import static java.util.Collections.singletonList;
 
 public class AvoidConstantArraysAsArgumentsTest extends RoslynRecipeTest {
 

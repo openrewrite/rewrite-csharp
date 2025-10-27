@@ -23,6 +23,10 @@ package org.openrewrite.csharp.recipes.wpfanalyzers;
 
 import org.openrewrite.csharp.RoslynRecipe;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class MakeNullableFixWPF0024 extends RoslynRecipe {
 
     @Override
@@ -49,4 +53,9 @@ public class MakeNullableFixWPF0024 extends RoslynRecipe {
     public String getDescription() {
         return "Parameter type should be nullable.";
     }
-}
+
+    @Override
+    public Set<String> getTags() {
+        return Stream.of("roslyn", "WPF0024", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+    }
+    }

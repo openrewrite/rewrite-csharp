@@ -23,6 +23,10 @@ package org.openrewrite.csharp.recipes.wpfanalyzers;
 
 import org.openrewrite.csharp.RoslynRecipe;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class UseSetValueFixWPF0035 extends RoslynRecipe {
 
     @Override
@@ -49,4 +53,9 @@ public class UseSetValueFixWPF0035 extends RoslynRecipe {
     public String getDescription() {
         return "Use SetValue in setter.";
     }
-}
+
+    @Override
+    public Set<String> getTags() {
+        return Stream.of("roslyn", "WPF0035", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+    }
+    }

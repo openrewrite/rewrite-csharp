@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Loader;
+using Microsoft.Build.Exceptions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -89,6 +90,7 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
             .Cast<CodeFixProvider>()
             .Where(x => x.FixableDiagnosticIds.Any())
             .SelectMany(fixer => fixer.FixableDiagnosticIds.Select(id => (Id: id, Fixer: fixer)))
+            .DistinctBy(x => x.Id)
             .ToDictionary(x => x.Id, x => x.Fixer);
 
         var analyzersWithFixersById = allAnalyzers
@@ -108,20 +110,39 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
             return new RecipeExecutionResult(SolutionFilePath, watch.Elapsed, []);
         }
 
-        var issuesBeingFixed = analyzersWithFixersById.Select(x =>
-        {
-            var diagnostic = x.Value.Analyzer.SupportedDiagnostics.First(y => y.Id == x.Key);
-            return $"{diagnostic.Id}: {diagnostic.Title}";
-        });
-        
-        log.LogDebug("Solution {SolutionFilePath} loaded in {Elapsed}. Fixing {@Issues}", SolutionFilePath, watch.Elapsed, issuesBeingFixed);
-        
-        var issuesTypesInCodebase = (await GetDiagnostics(solution, analyzersWithFixersById, cancellationToken))
+        // var issuesBeingFixed = analyzersWithFixersById.Select(x =>
+        // {
+        //     var diagnostic = x.Value.Analyzer.SupportedDiagnostics.First(y => y.Id == x.Key);
+        //     return $"{diagnostic.Id}: {diagnostic.Title}";
+        // });
+
+        var loadedTime = watch.Elapsed;
+
+        var allDiagnostics = await GetDiagnostics(solution, analyzersWithFixersById, cancellationToken);
+        var issuesTypesInCodebase = allDiagnostics
+            .Where(x => this.DiagnosticIds.Contains(x.Id))
             .Select(x => x.Id)
             .ToHashSet();
         var analyzersWithFixersByIdForIssuesInCodebase = analyzersWithFixersById
             .Where(x => issuesTypesInCodebase.Contains(x.Key))
             .ToDictionary(x => x.Key, x => x.Value);
+        
+        log.LogDebug("Solution {SolutionFilePath} loaded in {Elapsed}", SolutionFilePath, loadedTime);
+        if (analyzersWithFixersByIdForIssuesInCodebase.Count == 0)
+        {
+            log.LogDebug("No fixable issues found in solution");
+        }
+        // else
+        // {
+        //     var issueCounts = allDiagnostics
+        //         .GroupBy(x => x.Id)
+        //         .Select(x  => new 
+        //         {
+        //             IssueId = $"{x.Key}: {x.First().Descriptor.Title}",
+        //             Occurances = x.Count()
+        //         });
+        //     log.LogDebug("Fixing {@Issues}", issueCounts);
+        // }
 
         foreach (var (issueId, (analyzer, codeFixProvider)) in analyzersWithFixersByIdForIssuesInCodebase)
         {
@@ -134,96 +155,142 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
                 {issueId, (analyzer, codeFixProvider)}
             };
             var diagnostics = await GetDiagnostics(solution, analyzersToRun, cancellationToken);
-            var diagnosticsById = diagnostics.ToLookup(x => x.Id);
-            var diagnosticsToProcess = diagnosticsById.ToList();
-            
-            foreach (var diagnosticIssue in diagnosticsToProcess)
+            diagnostics = diagnostics
+                .Where(x => x.Id == issueId)
+                .ToList();
+            if (diagnostics.Count == 0)
             {
-                var diagnostic = diagnosticIssue.First();
-                var document = solution.Solution.GetDocument(diagnostic.Location.SourceTree) ?? throw new Exception($"Could not find document associated with {diagnostic.Id} {diagnostic.Descriptor.Title}");
+                continue;
+            }
 
-                var diagnosticsByDocument = diagnosticIssue
-                    .Select(x => (Diagnostic: x, Document: solution.Solution.GetDocument(x.Location.SourceTree)))
-                    .Where(x => x.Document != null)
-                    .GroupBy(x => x.Document!, x => x.Diagnostic)
-                    .Where(x => x.Key is not SourceGeneratedDocument)
-                    .ToImmutableDictionary(x => x.Key, x => x.ToImmutableArray());
+            var diagnosticsByDocument = diagnostics
+                .Select(x => (Diagnostic: x, Document: solution.Solution.GetDocument(x.Location.SourceTree)))
+                .Where(x => x.Document != null)
+                .GroupBy(x => x.Document!, x => x.Diagnostic)
+                .Where(x => x.Key is not SourceGeneratedDocument)
+                .ToImmutableDictionary(x => x.Key, x => x.ToImmutableArray());
 
+            var diagnosticProvider = new FixMultipleDiagnosticProvider(diagnosticsByDocument);
+            // var codeFixProvider = analyzersWithFixersById[diagnosticIssue.Key].Fixer;
+            var fixAllProvider = codeFixProvider.GetFixAllProvider();
 
+            if (fixAllProvider == null)
+            {
+                fixAllProvider = WellKnownFixAllProviders.BatchFixer;
+                // throw new InvalidOperationException($"Bulk fix provider not available for {issueId}: {diagnostic.Descriptor.Title}");
+            }
 
-                var diagnosticProvider = new FixMultipleDiagnosticProvider(diagnosticsByDocument);
-                // var codeFixProvider = analyzersWithFixersById[diagnosticIssue.Key].Fixer;
-                var fixAllProvider = codeFixProvider.GetFixAllProvider() ?? throw new InvalidOperationException($"Bulk fix provider not available for {diagnosticIssue.Key}: {diagnosticIssue.First().Descriptor.Title}");
-
-                log.LogDebug("Fixing {DiagnosticId}: '{Title}' using {TypeName} in {DocumentCount} documents ({OccurrenceCount} occurrences)",
-                    diagnosticIssue.Key,
-                    diagnosticIssue.First().Descriptor.Title,
-                    codeFixProvider.GetType().Name,
-                    diagnosticsByDocument.Keys.Count(),
-                    diagnosticsToProcess.SelectMany(x => x).Count()
-                    );
+            Diagnostic? sampledDiagnostic = null;
+            string? equivalenceKey = null;
+            // try to find first viable fixup type for this issue type
+            foreach(var diagnostic in diagnostics)
+            {
+                var document = solution.Solution.GetDocument(diagnostic.Location.SourceTree);
+                if (document == null)
+                    throw new Exception($"Could not find document associated with {diagnostic.Id} {diagnostic.Descriptor.Title}");
 
                 var actions = new List<CodeAction>();
-                var context = new CodeFixContext(document, diagnostic, (a, d) => actions.Add(a), CancellationToken.None);
-                await codeFixProvider.RegisterCodeFixesAsync(context);
+                
+                var context = new CodeFixContext(document!, diagnostic, (a, d) => actions.Add(a), CancellationToken.None);
+                try
+                {
+                    await codeFixProvider.RegisterCodeFixesAsync(context);
+                }
+                catch (Exception)
+                {
+                    // log.LogError(e, "Code fix up for {IssueId} failed due it its own internal logic", issueId);
+                    continue;
+                }
+
+
                 if (actions.Count == 0)
                 {
-                    log.LogDebug("No code fixes found");
+                    // log.LogDebug("No fixable issues found");
                     continue;
                 }
-
+                
                 var codeFixAction = actions[0];
+                
+                //codeFixAction.
                 if (!codeFixAction.NestedActions.IsEmpty)
                 {
-                    log.LogWarning("Skipping refactoring of recipe {DiagnosticId} because there's multiple variations of refactoring that can be applied", diagnosticIssue.Key);
+                    // log.LogWarning("Skipping refactoring of recipe {DiagnosticId} because there's multiple variations of refactoring that can be applied", issueId);
                     continue;
                 }
+                sampledDiagnostic = diagnostic;
+                equivalenceKey = codeFixAction.EquivalenceKey;
+                break;
+            }
 
-                var fixAllContext = new FixAllContext(
-                    diagnosticsByDocument.Keys.First(),
-                    codeFixProvider,
-                    FixAllScope.Solution,
-                    actions.First().EquivalenceKey,
-                    [diagnosticIssue.Key],
-                    diagnosticProvider,
-                    cancellationToken);
+            if (sampledDiagnostic == null)
+            {
+                // generally we end up here when an analyzer has a fixer associated with it, but fixer determined that it can't actually fix it automatically (didn't register any code actions)
+                log.LogDebug("No fixable issues found in solution");
+                break;
+            }
 
+            log.LogDebug("Fixing {DiagnosticId}: '{Title}' using {TypeName} in {DocumentCount} documents ({OccurrenceCount} occurrences)",
+                issueId,
+                sampledDiagnostic.Descriptor.Title,
+                codeFixProvider.GetType().Name,
+                diagnosticsByDocument.Keys.Count(),
+                diagnostics.Count()
+            );
+            
+            var fixAllContext = new FixAllContext(
+                diagnosticsByDocument.Keys.First(),
+                codeFixProvider,
+                FixAllScope.Solution,
+                equivalenceKey,
+                [issueId],
+                diagnosticProvider,
+                cancellationToken);
+            Solution newSolution;
+            try
+            {
                 var codeAction = await fixAllProvider.GetFixAsync(fixAllContext) ?? throw new Exception("Code action was not found");
-
+            
                 var operations = await codeAction.GetOperationsAsync(cancellationToken);
                 var applyChangesOperation = operations.OfType<ApplyChangesOperation>().First();
-                var newSolution = applyChangesOperation.ChangedSolution;
-                // var affectedDocumentIds = await GetChangedDocumentsAsync(solution.Solution, newSolution, cancellationToken);
-                // var affectedDocuments = affectedDocumentIds
-                //     .Select(docId => solution.Solution.GetDocument(docId)?.FilePath)
-                //     .Where(x => x != null)
-                //     .Select(x => ((AbsolutePath)SolutionFilePath).GetRelativePathTo((AbsolutePath)x));
-                // changedFiles.AddRange(affectedDocuments);
-                // foreach (var docId in affectedDocuments.Take(1))
-                // {
-                //     var before = (await solution.Solution.GetDocument(docId)!.GetTextAsync()).ToString();
-                //     var after = (await newSolution.GetDocument(docId)!.GetTextAsync()).ToString();
-                //
-                //     var diffs = StringDiffer.GetDifferences(before, after);
-                //     Console.WriteLine(solution.Solution.GetDocument(docId).FilePath);
-                //     Console.WriteLine("======");
-                //     Console.WriteLine(diffs);
-                // }
-                
-                solution.Solution = newSolution;
-                var affectedDocumentIds = await GetChangedDocumentsAsync(originalSolution, solution.Solution, cancellationToken);
-                var affectedDocuments = affectedDocumentIds
-                    .Select(docId => solution.Solution.GetDocument(docId)!)
-                    .ToList();
-                var issueFixResult = new IssueFixResult(
-                    IssueId: issueId, 
-                    ExecutionTime: recipeWatch.Elapsed, 
-                    Fixes: affectedDocuments
-                        .Select(x => new DocumentFixResult(x.FilePath!))
-                        .ToList());
-                fixedIssues.Add(issueFixResult);
-                recipeWatch.Stop();
+                newSolution = applyChangesOperation.ChangedSolution;
             }
+            catch (Exception e)
+            {
+                log.LogError(e, "Unable to apply {IssueId} do to internal CodeFixup logic error", issueId);
+                continue;
+            }
+            
+            // var affectedDocumentIds = await GetChangedDocumentsAsync(solution.Solution, newSolution, cancellationToken);
+            // var affectedDocuments = affectedDocumentIds
+            //     .Select(docId => solution.Solution.GetDocument(docId)?.FilePath)
+            //     .Where(x => x != null)
+            //     .Select(x => ((AbsolutePath)SolutionFilePath).GetRelativePathTo((AbsolutePath)x));
+            // changedFiles.AddRange(affectedDocuments);
+            // foreach (var docId in affectedDocuments.Take(1))
+            // {
+            //     var before = (await solution.Solution.GetDocument(docId)!.GetTextAsync()).ToString();
+            //     var after = (await newSolution.GetDocument(docId)!.GetTextAsync()).ToString();
+            //
+            //     var diffs = StringDiffer.GetDifferences(before, after);
+            //     Console.WriteLine(solution.Solution.GetDocument(docId).FilePath);
+            //     Console.WriteLine("======");
+            //     Console.WriteLine(diffs);
+            // }
+            
+            solution.Solution = newSolution;
+            var affectedDocumentIds = await GetChangedDocumentsAsync(originalSolution, solution.Solution, cancellationToken);
+            var affectedDocuments = affectedDocumentIds
+                .Select(x => (Document: solution.Solution.GetDocument(x.DocumentId)!, x.ChangedLineNumbers))
+                .ToList();
+            var issueFixResult = new IssueFixResult(
+                IssueId: issueId, 
+                ExecutionTime: recipeWatch.Elapsed, 
+                Fixes: affectedDocuments
+                    .Select(x => new DocumentFixResult(x.Document.FilePath!, x.ChangedLineNumbers))
+                    .ToList());
+            fixedIssues.Add(issueFixResult);
+            recipeWatch.Stop();
+            
         }
 
         if (!DryRun)
@@ -263,12 +330,12 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
         return diagnostics;
     }
     
-    static async Task<IEnumerable<DocumentId>> GetChangedDocumentsAsync(
+    static async Task<IEnumerable<(DocumentId DocumentId, List<int> ChangedLineNumbers)>> GetChangedDocumentsAsync(
         Solution oldSolution,
         Solution newSolution,
         CancellationToken cancellationToken = default)
     {
-        var changedDocumentIds = new List<DocumentId>();
+        var changedDocumentIds = new List<(DocumentId, List<int> ChangedLineNumbers)>();
 
         foreach (var projectId in newSolution.ProjectIds)
         {
@@ -291,7 +358,9 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
 
                 if (!oldText.ContentEquals(newText))
                 {
-                    changedDocumentIds.Add(documentId);
+                    var diffLineNumbers = DiffHelper.GetDifferentLineNumbers(oldText.ToString(), newText.ToString());
+                    changedDocumentIds.Add((documentId,diffLineNumbers));
+                    
                 }
             }
         }

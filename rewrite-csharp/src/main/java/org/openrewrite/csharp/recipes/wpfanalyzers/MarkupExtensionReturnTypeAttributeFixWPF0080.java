@@ -23,6 +23,10 @@ package org.openrewrite.csharp.recipes.wpfanalyzers;
 
 import org.openrewrite.csharp.RoslynRecipe;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class MarkupExtensionReturnTypeAttributeFixWPF0080 extends RoslynRecipe {
 
     @Override
@@ -49,4 +53,9 @@ public class MarkupExtensionReturnTypeAttributeFixWPF0080 extends RoslynRecipe {
     public String getDescription() {
         return "Add MarkupExtensionReturnType attribute.";
     }
-}
+
+    @Override
+    public Set<String> getTags() {
+        return Stream.of("roslyn", "WPF0080", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+    }
+    }

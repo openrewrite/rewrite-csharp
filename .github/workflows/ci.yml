@@ -23,9 +23,14 @@ env:
   GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.gradle_enterprise_access_key }}
   GRADLE_ENTERPRISE_CACHE_USERNAME: ${{ secrets.gradle_enterprise_cache_username }}
   GRADLE_ENTERPRISE_CACHE_PASSWORD: ${{ secrets.gradle_enterprise_cache_password }}
+  ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.sonatype_username }}
+  ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.sonatype_token }}
   MODERNE_ARTIFACTORY_USERNAME: ${{ secrets.MODERNE_ARTIFACTORY_USERNAME }}
   MODERNE_ARTIFACTORY_PASSWORD: ${{ secrets.MODERNE_ARTIFACTORY_PASSWORD }}
+  ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ossrh_signing_key }}
+  ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.ossrh_signing_password }}
   GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN  }}
+  NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
   OPS_GITHUB_ACTIONS_WEBHOOK: ${{ secrets.OPS_GITHUB_ACTIONS_WEBHOOK }}
   RELEASE_BUILD: "true"
   CI: true
@@ -35,6 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
@@ -50,7 +56,7 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v5
         name: Install Gradle
 
       - uses: actions/setup-java@v5
@@ -93,12 +99,13 @@ jobs:
 
       - name: Upload Test logs
         if: always()  # ensures logs are uploaded even if tests fail
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Test Logs
           path: |
             artifacts/test-results/*.log
             rewrite-csharp-remote-server/build/reports/tests/**
+            rewrite-csharp/build/reports/tests/**
 
       - name: publish-java-snapshots
         if: github.event_name != 'pull_request'

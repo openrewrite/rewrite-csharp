@@ -24,7 +24,7 @@ public partial class GradleTasks : ToolTasks
     /// <summary><p>Gradle build tool for Java</p><p>For more details, visit the <a href="https://gradle.org/">official website</a>.</p></summary>
     public static IReadOnlyCollection<Output> Gradle(ArgumentStringHandler arguments, string workingDirectory = null, IReadOnlyDictionary<string, string> environmentVariables = null, int? timeout = null, bool? logOutput = null, bool? logInvocation = null, Action<OutputType, string> logger = null, Func<IProcess, object> exitHandler = null) => new GradleTasks().Run(arguments, workingDirectory, environmentVariables, timeout, logOutput, logInvocation, logger, exitHandler);
     /// <summary><p>Runs task(s)</p><p>For more details, visit the <a href="https://gradle.org/">official website</a>.</p></summary>
-    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>&lt;tasks&gt;</c> via <see cref="GradleSettings.Tasks"/></li><li><c>--</c> via <see cref="GradleSettings.Verbosity"/></li><li><c>-Dorg.gradle.jvmargs</c> via <see cref="GradleSettings.JvmOptions"/></li><li><c>-Dorg.gradle.warning.mode</c> via <see cref="GradleSettings.WarningMode"/></li><li><c>-P</c> via <see cref="GradleSettings.ProjectProperty"/></li><li><c>-PforceSigning</c> via <see cref="GradleSettings.ForceSigning"/></li><li><c>-x</c> via <see cref="GradleSettings.ExcludeTasks"/></li></ul></remarks>
+    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>&lt;tasks&gt;</c> via <see cref="GradleSettings.Tasks"/></li><li><c>--</c> via <see cref="GradleSettings.Verbosity"/></li><li><c>-Dorg.gradle.jvmargs</c> via <see cref="GradleSettings.JvmOptions"/></li><li><c>-Dorg.gradle.warning.mode</c> via <see cref="GradleSettings.WarningMode"/></li><li><c>-P</c> via <see cref="GradleSettings.ProjectProperty"/></li><li><c>-PforceSigning</c> via <see cref="GradleSettings.ForceSigning"/></li><li><c>-Prelease.version</c> via <see cref="GradleSettings.Version"/></li><li><c>-x</c> via <see cref="GradleSettings.ExcludeTasks"/></li></ul></remarks>
     public static IReadOnlyCollection<Output> Gradle(GradleSettings options = null) => new GradleTasks().Run<GradleSettings>(options);
     /// <inheritdoc cref="GradleTasks.Gradle(.GradleSettings)"/>
     public static IReadOnlyCollection<Output> Gradle(Configure<GradleSettings> configurator) => new GradleTasks().Run<GradleSettings>(configurator.Invoke(new GradleSettings()));
@@ -52,6 +52,8 @@ public partial class GradleSettings : ToolOptions
     [Argument(Format = "-PforceSigning")] public bool? ForceSigning => Get<bool?>(() => ForceSigning);
     /// <summary></summary>
     [Argument(Format = "--{value}")] public GradleVerbosity Verbosity => Get<GradleVerbosity>(() => Verbosity);
+    /// <summary></summary>
+    [Argument(Format = "-Prelease.version={value} -Pversion={value}")] public string Version => Get<string>(() => Version);
 }
 #endregion
 #region GradleSettingsExtensions
@@ -169,6 +171,14 @@ public static partial class GradleSettingsExtensions
     /// <inheritdoc cref="GradleSettings.Verbosity"/>
     [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.Verbosity))]
     public static T ResetVerbosity<T>(this T o) where T : GradleSettings => o.Modify(b => b.Remove(() => o.Verbosity));
+    #endregion
+    #region Version
+    /// <inheritdoc cref="GradleSettings.Version"/>
+    [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.Version))]
+    public static T SetVersion<T>(this T o, string v) where T : GradleSettings => o.Modify(b => b.Set(() => o.Version, v));
+    /// <inheritdoc cref="GradleSettings.Version"/>
+    [Pure] [Builder(Type = typeof(GradleSettings), Property = nameof(GradleSettings.Version))]
+    public static T ResetVersion<T>(this T o) where T : GradleSettings => o.Modify(b => b.Remove(() => o.Version));
     #endregion
 }
 #endregion

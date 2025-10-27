@@ -20,6 +20,7 @@ import lombok.Builder;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.jspecify.annotations.Nullable;
+import org.openrewrite.csharp.EmbeddedResourceHelper;
 import org.openrewrite.remote.AbstractRemotingServerEngine;
 
 import java.io.File;
@@ -40,10 +41,7 @@ import java.util.zip.ZipInputStream;
 public class DotNetRemotingServerEngine extends AbstractRemotingServerEngine {
 
     public static final String REWRITE_SERVER_DLL_NAME = "Rewrite.Server.dll";
-    public static final URL REWRITE_SERVER_DLL_RESOURCE =
-            Objects.requireNonNull(Thread.currentThread()
-                    .getContextClassLoader()
-                    .getResource("DotnetServer.zip"));
+
     public static final int DEFAULT_DEBUG_PORT = 54321;
 
     Config config;
@@ -54,7 +52,7 @@ public class DotNetRemotingServerEngine extends AbstractRemotingServerEngine {
 
     @SneakyThrows
     public static DotNetRemotingServerEngine create(Config config) {
-        installExecutable(config.dotnetServerZipLocation, config.extractedDotnetBinaryDir.toFile());
+        EmbeddedResourceHelper.installExecutable(config.dotnetServerZipLocation, config.extractedDotnetBinaryDir.toFile());
         // FIXME rather than using hardcoded port, read it after starting up server
         return new DotNetRemotingServerEngine(config);
     }
@@ -78,58 +76,14 @@ public class DotNetRemotingServerEngine extends AbstractRemotingServerEngine {
         return processBuilder.command(command);
     }
 
-    @SneakyThrows
-    public static void installExecutable(URL executable, File destDir) {
-//        Files.copy(, destinationDir.resolve("extracted.zip"), StandardCopyOption.REPLACE_EXISTING);
-        byte[] buffer = new byte[1024];
-        try (ZipInputStream zis = new ZipInputStream(executable.openStream())) {
-            ZipEntry zipEntry = zis.getNextEntry();
-            while (zipEntry != null) {
-                File newFile = newFile(destDir, zipEntry);
-                if (zipEntry.isDirectory()) {
-                    if (!newFile.isDirectory() && !newFile.mkdirs()) {
-                        if (!newFile.isDirectory()) {
-                            throw new IOException("Failed to create directory " + newFile);
-                        }
-                    }
-                } else {
-                    // fix for Windows-created archives
-                    File parent = newFile.getParentFile();
-                    if (!parent.isDirectory() && !parent.mkdirs()) {
-                        throw new IOException("Failed to create directory " + parent);
-                    }
 
-                    // write file content
-                    try (FileOutputStream fos = new FileOutputStream(newFile)) {
-                        int len;
-                        while ((len = zis.read(buffer)) > 0) {
-                            fos.write(buffer, 0, len);
-                        }
-                    }
-                }
-                zipEntry = zis.getNextEntry();
-            }
-        }
-
-    }
 
     @Override
     public String getLanguageName() {
         return "CSharp";
     }
 
-    static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
-        File destFile = new File(destinationDir, zipEntry.getName());
 
-        String destDirPath = destinationDir.getCanonicalPath();
-        String destFilePath = destFile.getCanonicalPath();
-
-        if (!destFilePath.startsWith(destDirPath + File.separator)) {
-            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
-        }
-
-        return destFile;
-    }
 
     @Builder
     public static class Config {
@@ -153,7 +107,7 @@ public class DotNetRemotingServerEngine extends AbstractRemotingServerEngine {
         Path extractedDotnetBinaryDir;
 
         @Builder.Default()
-        URL dotnetServerZipLocation = REWRITE_SERVER_DLL_RESOURCE;
+        URL dotnetServerZipLocation = EmbeddedResourceHelper.REWRITE_SERVER_DLL_RESOURCE;
 
         @Builder.Default()
         String dotnetServerDllName = REWRITE_SERVER_DLL_NAME;

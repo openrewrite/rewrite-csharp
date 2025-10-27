@@ -30,7 +30,7 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
 
     // Need to have a slf4j binding to see any output enabled from the parser.
-    runtimeOnly("ch.qos.logback:logback-classic:1.2.+")
+    runtimeOnly("ch.qos.logback:logback-classic:1.5.+")
     testImplementation("org.openrewrite:rewrite-test")
 
     testRuntimeOnly("org.openrewrite:rewrite-java-17")
@@ -45,11 +45,11 @@ dependencies {
 //    include("*/*") //to include contents of a folder present inside Reports directory
 //}
 
-tasks.processResources {
-//    dependsOn("zipDotnetServer")
-//    from(layout.buildDirectory.file("tmp/DotnetServer.zip"))
-    from(layout.buildDirectory.file(rootProject.file("artifacts/DotnetServer.zip").absolutePath))
-}
+//tasks.processResources {
+////    dependsOn("zipDotnetServer")
+////    from(layout.buildDirectory.file("tmp/DotnetServer.zip"))
+//    from(layout.buildDirectory.file(rootProject.file("artifacts/DotnetServer.zip").absolutePath))
+//}
 
 tasks.compileJava {
     options.release = 8

@@ -6,6 +6,8 @@
         <LangVersion>latest</LangVersion>
         <DefineConstants>$(DefineConstants);Analyzer</DefineConstants>
         <RootNamespace>BuildAnalyzers</RootNamespace>
+        <Configurations>Debug;Release;Generate</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
     <PropertyGroup>
         <EnforceExtendedAnalyzerRules>false</EnforceExtendedAnalyzerRules>

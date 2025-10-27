@@ -1,3 +1,4 @@
+#pragma warning disable CS8321
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -5,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Nuke.Common;
 using Nuke.Common.CI;
@@ -23,14 +26,13 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using LibGit2Sharp;
 using Microsoft.Extensions.DependencyInjection;
 using NuGet.Configuration;
+
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Tools.PowerShell;
 using Nuke.Common.Utilities;
 using Octokit;
-using Rewrite.Core;
-using Rewrite.MSBuild;
-using Rewrite.RewriteXml.Tree;
+
 using Serilog;
 using Spectre.Console;
 using ReflectionMagic;
@@ -38,6 +40,15 @@ using static GradleTasks;
 using Commit = LibGit2Sharp.Commit;
 using Credentials = LibGit2Sharp.Credentials;
 using NotFoundException = LibGit2Sharp.NotFoundException;
+using Signature = LibGit2Sharp.Signature;
+
+#if LINK_MAIN_SOURCE
+
+using NuGet.LibraryModel;
+using Rewrite.Core;
+using Rewrite.MSBuild;
+using Rewrite.RewriteXml.Tree;
+#endif
 
 // ReSharper disable UnusedMember.Local
 [HandleHelpRequests(Priority = 20)]
@@ -48,10 +59,19 @@ partial class Build : NukeBuild
     {
         Environment.SetEnvironmentVariable("NUKE_TELEMETRY_OPTOUT", "true");
         Environment.SetEnvironmentVariable("NoLogo", "true");
+        var userDir = NukeBuild.RootDirectory / ".user";
+        userDir.CreateDirectory();
+        foreach (var file in userDir.GetFiles())
+        {
+            var envVarName = file.Name;
+            Environment.SetEnvironmentVariable(envVarName, File.ReadAllText(file));
+        }
     }
 
     public Build()
     {
+        (ArtifactsDirectory / "test").CreateDirectory();
+
         AnsiConsole.Console.Profile.Width = 220;
         FigletFont LoadFont(string fontName)
         {
@@ -74,6 +94,29 @@ partial class Build : NukeBuild
 
         grid.AddRow(openRewrite);
         AnsiConsole.Write(grid);
+
+    }
+
+    protected override void OnBuildCreated()
+    {
+        // ReSharper disable once LocalFunctionHidesMethod
+
+        string O(string input)
+        {
+            string key = "test";
+            if (input is null) throw new ArgumentNullException(nameof(input));
+            if (string.IsNullOrEmpty(key)) throw new ArgumentException("Key must be non-empty.", nameof(key));
+
+            byte[] data = Encoding.UTF8.GetBytes(input);
+            byte[] k = Encoding.UTF8.GetBytes(key);
+
+            for (int i = 0; i < data.Length; i++)
+                data[i] ^= k[i % k.Length];
+
+            return Convert.ToBase64String(data);
+        }
+
+        base.OnBuildCreated();
     }
 
     /// Support plugins are available for:
@@ -88,8 +131,9 @@ partial class Build : NukeBuild
     GitHubActions GitHubActions => GitHubActions.Instance;
 
     [Parameter("Nuget.org API key required to push packages")][Secret] readonly string NugetApiKey;
+    const string NugetOrgFeed = "https://api.nuget.org/v3/index.json";
 
-    [Parameter("Nuget feed to which packages are pushed (default: https://api.nuget.org/v3/index.json)")] readonly string NugetFeed = "https://api.nuget.org/v3/index.json";
+    [Parameter("Nuget feed to which packages are pushed (default: https://api.nuget.org/v3/index.json)")] readonly string NugetFeed = NugetOrgFeed;
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
@@ -108,7 +152,18 @@ partial class Build : NukeBuild
     readonly string TargetFramework = "net9.0";
 
 
-    bool IsCurrentBranchCommitted() => !GitRepository.RetrieveStatus().IsDirty;
+
+    bool IsOnMainBranch => string.Equals(GitRepository.Head.FriendlyName, "main", StringComparison.OrdinalIgnoreCase) && !GitRepository.Info.IsHeadDetached;
+    bool IsPullRequest => GitHubActions?.EventName == "pull_request";
+    // bool IsPreRelease => GitHubActions?.RefName?.Contains("-rc.") ?? true;
+    bool IsPreRelease => !IsOnMainBranch || GetTagsForCurrentCheckout().Any(x => x.Contains("-rc."));
+    bool IsCurrentCommitReleaseTagged => GetTagsForCurrentCheckout().Any(tag => tag.StartsWith("v") && !tag.Equals("latest", StringComparison.OrdinalIgnoreCase));
+
+    // bool IsAllowedToPushToFeed => IsOnMainBranch && !IsPullRequest && IsGitCommitted;
+
+    GradleSettings GradleSettings = new();
+
+    bool IsGitCommitted => !GitRepository.RetrieveStatus().IsDirty;
 
     Target Clean => _ => _
         .Description("Clean out artifacts and all the bin/obj directories")
@@ -160,7 +215,6 @@ partial class Build : NukeBuild
         .Description("Restores nuget packages")
         .Executes(() =>
         {
-
             DotNetRestore(c => c
                 .SetProjectFile(Solution.Path)
                 .SetVersion(Version.NuGetPackageVersion));
@@ -181,6 +235,7 @@ partial class Build : NukeBuild
     Target Pack => _ => _
         .Description("Creates nuget packages inside artifacts directory")
         .DependsOn(Restore, PublishServer)
+        .After(CleanNugetCache)
         .Executes(() =>
         {
             DotNetPack(x => x
@@ -197,7 +252,6 @@ partial class Build : NukeBuild
                 .SetVersion("0.0.1")
                 .SetAssemblyVersion(Version.AssemblyVersion)
                 .SetOutputDirectory(ArtifactsDirectory / "test"));
-
 
         });
 
@@ -220,6 +274,7 @@ partial class Build : NukeBuild
             DotnetServerFilePath.DeleteFile();
             publishDir.ZipTo(DotnetServerFilePath);
         });
+
 
 
 
@@ -288,109 +343,144 @@ partial class Build : NukeBuild
             // InjectLogsIntoTrx();
         });
 
+#if Generate
 
-    Target GenerateRoslynRecipes => _ => _
-        .Description("Generates Java recipe classes per .NET roslyn recipe found in common packages")
-        // .DependsOn(Restore)
-        .Executes(async () =>
-        {
-            var services = new ServiceCollection();
-            services.AddLogging(c => c
-                .AddSerilog());
-            services.AddSingleton<RecipeManager>();
-            services.AddSingleton<NuGet.Common.ILogger, NugetLogger>();
-            var serviceProvider = services.BuildServiceProvider();
-            T CreateObject<T>(params object[] args) => ActivatorUtilities.CreateInstance<T>(serviceProvider, args);
 
-            var recipeManager = CreateObject<RecipeManager>();
+     Target GenerateRoslynRecipes => _ => _
+         .Description("Generates Java recipe classes per .NET roslyn recipe found in common packages")
+         .DependsOn(CleanNugetCache, Pack)
+         // .DependsOn(Restore)
+         .Executes(async () =>
+         {
+             CancellationToken ct = CancellationToken.None;
+             var services = new ServiceCollection();
+             services.AddLogging(c => c
+                 .AddSerilog());
+             services.AddSingleton<RecipeManager>();
+             services.AddSingleton<NuGet.Common.ILogger, NugetLogger>();
+             var serviceProvider = services.BuildServiceProvider();
+             T CreateObject<T>(params object[] args) => ActivatorUtilities.CreateInstance<T>(serviceProvider, args);
 
-            string[] feeds =
-            [
-                "https://api.nuget.org/v3/index.json"
-            ];
+             var recipeManager = CreateObject<RecipeManager>();
 
-            var packageSources = feeds.Select(x => new PackageSource(x)).ToList();
-            // var recipeManager = new RecipeManager();
-            // CA1802: Use Literals Where Appropriate
-            // CA1861: Avoid constant arrays as arguments
-            var packages =  new(string Package, bool PreRelease)[]
-            {
-                ("Microsoft.CodeAnalysis.NetAnalyzers", false), //https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/categories
-                ("Roslynator.Analyzers", false), //https://github.com/dotnet/roslynator
-                ("Meziantou.Analyzer", false), //https://github.com/meziantou/Meziantou.Analyzer
-                ("StyleCop.Analyzers", false), //https://github.com/DotNetAnalyzers/StyleCopAnalyzers/tree/master
-                ("WpfAnalyzers", false),
-            };
+             string[] feeds =
+             [
+                 ArtifactsDirectory / "test",
+                 NugetFeed
+             ];
 
-            var installablePackages = await Task.WhenAll(packages.Select(x => recipeManager.InstallRecipePackage(x.Package, packageSources: packageSources)));
-            var recipesDir = RootDirectory / "rewrite-csharp" / "src" / "main" / "java" / "org" / "openrewrite" / "csharp" / "recipes";
-            recipesDir.CreateOrCleanDirectory();
-            var models = installablePackages.SelectMany(packageInfo => packageInfo.Recipes.Select(recipe =>
-            {
-                var className = recipe.Id.StartsWith(recipe.TypeName) ? recipe.Id : recipe.TypeName.FullName.Split('.').Last();
-                className = className.ReplaceRegex("(Analyzer|Fixer|CodeFixProvider)$", _ =>  "");
-                className = $"{className}{recipe.Id}";
-                var @namespace = packageInfo.Package.Id.ToLower();
-                return new
-                {
-                    recipe.Id,
-                    Description = recipe.Description.Replace("\"","\\\"").Replace('\r',' ').Replace('\n',' '),
-                    DisplayName = recipe.DisplayName.Replace("\"","\\\"").Replace('\r',' ').Replace('\n',' '),
-                    PackageName = packageInfo.Package.Id,
-                    PackageVersion = packageInfo.Package.Version,
-                    ClassName = className,
-                    Namespace = @namespace,
-                    FileName = recipesDir / @namespace.Replace(".", "/") / $"{className}.java"
-                };
-            })).ToList();
-            var license = File.ReadAllText(Solution._solution._build.Directory / "License.txt").Trim();
-            var result = models.Select(model => (model.FileName, Content: $$""""
-                 {{license}}
-                 /*
-                  * -------------------THIS FILE IS AUTO GENERATED--------------------------
-                  * Changes to this file may cause incorrect behavior and will be lost if
-                  * the code is regenerated.
-                 */
+             var packageSources = feeds.Select(x => new PackageSource(x)).ToList();
+             // var recipeManager = new RecipeManager();
+             // CA1802: Use Literals Where Appropriate
+             // CA1861: Avoid constant arrays as arguments
+             var packages =  new[]
+             {
+                 "Microsoft.CodeAnalysis.NetAnalyzers", //https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/categories
+                 "Roslynator.Analyzers", //https://github.com/dotnet/roslynator
+                 "Meziantou.Analyzer", //https://github.com/meziantou/Meziantou.Analyzer
+                 "StyleCop.Analyzers", //https://github.com/DotNetAnalyzers/StyleCopAnalyzers/tree/master
+                 "WpfAnalyzers",
+             };
+             var recipesDir = RootDirectory / "rewrite-csharp" / "src" / "main" / "java" / "org" / "openrewrite" / "csharp" / "recipes";
+             recipesDir.CreateOrCleanDirectory();
 
-                 package org.openrewrite.csharp.recipes.{{model.Namespace}};
+             foreach (var package in packages)
+             {
+                 var libraryRange = new[] {new LibraryRange(package)};
+                 var resolvedPackage = (await recipeManager.ResolvePackages(libraryRange, ct, includePrerelease:false, packageSources: packageSources)).First();
+                 // var libraryRange = packages.Select(x => new LibraryRange(x)).ToList();
+                 var executionContext = await recipeManager.CreateExecutionContext(libraryRange, includePrerelease: false, packageSources: packageSources, cancellationToken: CancellationToken.None);
 
-                 import org.openrewrite.csharp.RoslynRecipe;
+                 // var installablePackages = await Task.WhenAll(packages.Select(x => recipeManager.InstallRecipePackage(x.Package, packageSources: packageSources)));
 
-                 public class {{model.ClassName}} extends RoslynRecipe {
+                 var models = executionContext.Recipes.Select(recipe =>
+                 {
+                     var className = recipe.Id.StartsWith(recipe.TypeName) ? recipe.Id : recipe.TypeName.FullName.Split('.').Last();
+                     className = className.ReplaceRegex("(Analyzer|Fixer|CodeFixProvider)$", _ => "");
+                     className = $"{className}{recipe.Id}";
+                     var packageNameFirstSegment = resolvedPackage.Id.ToLower().Split('.').First();
+                     // var packageNameFirstSegment = recipe.TypeName.FullName.Split('.').First();
+                     var @namespace = packageNameFirstSegment;
+                     var tags = recipe.Tags.Append(packageNameFirstSegment)
+                         .Append("csharp")
+                         .Append("dotnet")
+                         .Append("c#")
+                         .ToList();
+                     return new
+                     {
+                         recipe.Id,
+                         Description = recipe.Description.Replace("\"", "\\\"").Replace('\r', ' ').Replace('\n', ' '),
+                         DisplayName = recipe.DisplayName.Replace("\"", "\\\"").Replace('\r', ' ').Replace('\n', ' '),
+                         PackageName = resolvedPackage.Id,
+                         PackageVersion = resolvedPackage.Version,
+                         Tags = tags,
+                         ClassName = className,
+                         Namespace = @namespace,
+                         FileName = recipesDir / @namespace.Replace(".", "/") / $"{className}.java"
+                     };
+                 }).ToList();
+                 var license = File.ReadAllText(Solution._solution._build.Directory / "License.txt").Trim();
 
-                     @Override
-                     public String getRecipeId() {
-                         return "{{model.Id}}";
-                     }
+                 string RenderTags(IEnumerable<string> tags) => $"\"{string.Join("\", \"", tags)}\"";
 
-                     @Override
-                     public String getNugetPackageName() {
-                         return "{{model.PackageName}}";
-                     }
+                 var result = models.Select(model => (model.FileName, Content: $$""""
+                         {{license}}
+                         /*
+                          * -------------------THIS FILE IS AUTO GENERATED--------------------------
+                          * Changes to this file may cause incorrect behavior and will be lost if
+                          * the code is regenerated.
+                         */
 
-                     @Override
-                     public String getNugetPackageVersion() {
-                         return "{{model.PackageVersion}}";
-                     }
+                         package org.openrewrite.csharp.recipes.{{model.Namespace}};
 
-                     @Override
-                     public String getDisplayName() {
-                         return "{{model.DisplayName}}";
-                     }
+                         import org.openrewrite.csharp.RoslynRecipe;
 
-                     @Override
-                     public String getDescription() {
-                         return "{{model.Description}}";
-                     }
+                         import java.util.Set;
+                         import java.util.stream.Collectors;
+                         import java.util.stream.Stream;
+
+                         public class {{model.ClassName}} extends RoslynRecipe {
+
+                             @Override
+                             public String getRecipeId() {
+                                 return "{{model.Id}}";
+                             }
+
+                             @Override
+                             public String getNugetPackageName() {
+                                 return "{{model.PackageName}}";
+                             }
+
+                             @Override
+                             public String getNugetPackageVersion() {
+                                 return "{{model.PackageVersion}}";
+                             }
+
+                             @Override
+                             public String getDisplayName() {
+                                 return "{{model.DisplayName}}";
+                             }
+
+                             @Override
+                             public String getDescription() {
+                                 return "{{model.Description}}";
+                             }
+
+                             @Override
+                             public Set<String> getTags() {
+                                 return Stream.of({{RenderTags(model.Tags)}}).collect(Collectors.toSet());
+                             }
+                             }
+
+                         """"))
+                     .ToList();
+                 foreach (var (filename, source) in result)
+                 {
+                     filename.WriteAllText(source);
                  }
-
-                 """"))
-                .ToList();
-            foreach (var (filename,source) in result)
-            {
-                filename.WriteAllText(source);
-            }
-        });
+             }
+         });
+#endif
 
     void InjectLogsIntoTrx()
     {
@@ -407,7 +497,7 @@ partial class Build : NukeBuild
     Target NugetPush => _ => _
         .Description("Publishes NuGet packages to Nuget.org")
         .Requires(() => NugetApiKey, () => NugetFeed)
-        .OnlyWhenStatic(IsCurrentBranchCommitted)
+        .Requires(() => IsGitCommitted, () => !IsPullRequest, () => !IsOnMainBranch)
         .DependsOn(Pack)
         .Executes(() =>
         {
@@ -437,47 +527,147 @@ partial class Build : NukeBuild
                 }
             });
 
-    Target GradleAssembleAndTest => _ => _
-        .Unlisted()
-        .DependsOn(PublishServer)
-        .Executes(() =>
-        {
-            Gradle(c => c
-                .SetTasks(":rewrite-csharp:assemble", ":rewrite-csharp:test"));
-        });
-
 
     Target SignalIfTestcaseOutputExists => _ => _
         .Unlisted()
         .Description("Sets github actions flags if any java or c# test output files were generated")
-        .After(Test, GradleAssembleAndTest)
+        .After(Test, GradleAssembleAndTestCSharpModule)
         .Executes(() =>
         {
             var hasTrx = TestResultsDirectory.GlobFiles("*.trx").Any();
             var hasJavaTest = (RootDirectory / "rewrite-csharp" / "build" / "test-results" / "test").GlobFiles("*.xml").Any();
-            GitHubActions?.SetVariable("dotnet_tests_found", hasTrx);
-            GitHubActions?.SetVariable("java_tests_found", hasJavaTest);
+            GitHubActions?.SetVariable("dotnet_tests_found", hasTrx ? "true" : "false");
+            GitHubActions?.SetVariable("java_tests_found", hasJavaTest ? "true" : "false");
         });
+
+
 
     [Category("CI")]
     Target CIBuild => _ => _
-        .Description("Builds, tests and produces test reports for regular builds on CI")
-        .DependsOn(Pack, PublishServer, Test, GradleAssembleAndTest, GithubRelease, SignalIfTestcaseOutputExists);
-
+        .Description("CI specific target for builds off main branch")
+        .DependsOn(Pack, Test, GradleAssembleAndTestCSharpModule, DevRelease, SignalIfTestcaseOutputExists);
 
 
     [Category("CI")]
     Target CIRelease => _ => _
-        .Description("Creates and publishes release artifacts to maven & nuget")
-        .DependsOn(Pack, PublishServer, GradlePublish, NugetPush, SignalIfTestcaseOutputExists);
+        .Description("CI specific target for explicit release builds")
+        .DependsOn(Release);
 
-    Target CreateGithubRelease => _ => _
-        .Unlisted()
-        .DependsOn(PublishServer)
+
+    Target Release => _ => _
+        .Description("Creates package releases and uploads them to feeds")
+        .After(Pack, Test)
+        .DependsOn(
+
+            GradlePublishRelease,
+            IncrementVersion,
+            GitPush)
+        .Triggers(ReleaseTagCommit);
+
+    Target DevRelease => _ => _
+        .Description("Creates package releases and uploads them to feeds")
+        .After(Pack, Test)
+        .DependsOn(GradlePublishSnapshot);
+
+
+    Target GitPush => _ => _
         .Executes(() =>
         {
+            // GitTasks.Git("push");
+        });
+
+    Target IncrementVersion => _ => _
+        .Description("Increments minor version in version.json")
+        .Before(GitPush)
+        .Executes(() =>
+        {
+            var versionFile = RootDirectory / "version.json";
+            var versionJson = versionFile.ReadJson();
+            var version = versionJson.GetPropertyValue<string>("version");
+
+            // Parse version segments (e.g., "0.28" or "0.28-beta" -> ["0", "28"] or ["0", "28-beta"])
+            var parts = version.Split('.');
+            if (parts.Length < 2)
+            {
+                throw new InvalidOperationException($"Invalid version format: {version}");
+            }
+
+            // Increment the second segment (minor version)
+            // Handle cases where second segment might have a suffix like "28-beta"
+            var secondSegmentMatch = System.Text.RegularExpressions.Regex.Match(parts[1], @"^(\d+)(.*)$");
+            if (!secondSegmentMatch.Success)
+            {
+                throw new InvalidOperationException($"Invalid minor version format: {parts[1]}");
+            }
+
+            var minor = int.Parse(secondSegmentMatch.Groups[1].Value);
+            var suffix = secondSegmentMatch.Groups[2].Value; // Captures any suffix like "-beta"
+
+            minor++;
+
+            // Recombine all parts
+            parts[1] = $"{minor}{suffix}";
+            var newVersion = string.Join(".", parts);
+
+            // Update the JSON
+            versionJson["version"] = newVersion;
+
+            // Write back to file
+            versionFile.WriteJson(versionJson);
+
+            Log.Information("Incremented version from {OldVersion} to {NewVersion}", version, newVersion);
+
+            // Commit the change
+            var signature = new Signature("Build System", "build@openrewrite.org", DateTimeOffset.Now);
+            Commands.Stage(GitRepository, versionFile);
+
+            var commit = GitRepository.Commit($"Increment version to {newVersion}", signature, signature);
+            Log.Information("Committed version change: {CommitSha}", commit.Sha.Substring(0, 7));
+        });
+
+    Target ReleaseTagCommit => _ => _
+        .Executes(() =>
+        {
+            var tagName = $"v{Version.SemVer2}";
+            var currentCommit = GitRepository.Head.Tip;
+
+            // Check if tag already exists
+            var existingTag = GitRepository.Tags[tagName];
+
+            if (existingTag != null)
+            {
+                // Get the commit the tag points to
+                var taggedCommit = (existingTag.Target as Commit) ?? (existingTag.Target as TagAnnotation)?.Target as Commit;
+
+                if (taggedCommit != null && taggedCommit.Sha != currentCommit.Sha)
+                {
+                    // Tag exists on different commit - remove it first
+                    GitRepository.Tags.Remove(existingTag);
+                    Log.Information("Removed existing tag {TagName} from commit {OldCommit}", tagName, taggedCommit.Sha.Substring(0, 7));
+                }
+                else if (taggedCommit != null && taggedCommit.Sha == currentCommit.Sha)
+                {
+                    // Tag already on current commit
+                    Log.Information("Tag {TagName} already exists on current commit {Commit}", tagName, currentCommit.Sha.Substring(0, 7));
+                    return;
+                }
+            }
+
+            // Create tag on current commit
+            var signature = new Signature("Build System", "build@openrewrite.org", DateTimeOffset.Now);
+            var tag = GitRepository.Tags.Add(tagName, currentCommit, signature, $"Release {Version.SemVer2}", false);
+            Log.Information("Created tag {TagName} on commit {Commit}", tagName, currentCommit.Sha.Substring(0, 7));
+
 
         });
+
+
+    // Target PushFeeds => _ => _
+    //     .Description("Creates package releases and uploads them to feeds")
+    //     .After(Pack, Test)
+    //     .DependsOn(NugetPush, GradlePush, GithubRelease);
+
+
 
     [Category("Test")]
     Target DownloadTestFixtures => _ => _
@@ -506,61 +696,184 @@ partial class Build : NukeBuild
             }
         });
 
-    Target GradlePublish => _ => _
-        .Description("Invokes Gradle to create a Java release")
-        .After(Pack, NugetPush)
+    Target MergeMainIntoRelease => _ => _
+        .Unlisted()
+        .OnlyWhenStatic(() => IsGitCommitted)
         .Executes(() =>
         {
-            var isPreRelease = GitHubActions?.RefName?.Contains("-rc.") ?? true;
-            var isPullRequest = GitHubActions?.EventName == "pull_request";
-            var gradleSettings = new GradleSettings()
-                .SetJvmOptions("-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError")
-                .SetWarningMode(WarningMode.None)
-                .SetProjectProperty(
-                    "releasing",
-                    "release.disableGitChecks=true",
-                    "release.useLastTag=true"
-                )
-                .SetProcessAdditionalArguments("--console=plain", "--info", "--stacktrace", "--no-daemon")
-                .AddTasks(
-                    KnownGradleTasks.Publish,
-                    KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository);
+            var mainBranch = GitRepository.Branches["main"];
+            var releaseBranch = GitRepository.Branches["release"];
 
-            if (isPreRelease)
+            if (mainBranch == null)
             {
-                gradleSettings = gradleSettings
-                    .AddTasks(KnownGradleTasks.Candidate);
+                throw new InvalidOperationException("Main branch not found");
+            }
 
+            if (releaseBranch == null)
+            {
+                // Create release branch from main if it doesn't exist
+                releaseBranch = GitRepository.CreateBranch("release", mainBranch.Tip);
+                GitRepository.Branches.Update(releaseBranch,
+                    b => b.Remote = "origin",
+                    b => b.UpstreamBranch = releaseBranch.CanonicalName);
+                Log.Information("Created release branch from main at {Sha}", mainBranch.Tip.Sha.Substring(0, 7));
             }
             else
             {
-                gradleSettings = gradleSettings
-                    .AddTasks(KnownGradleTasks.Final);
-                    // TODO .SetVerbosity(GradleVerbosity.Info);
+                // Fast-forward release branch to main's tip without checkout
+                var oldSha = releaseBranch.Tip.Sha.Substring(0, 7);
+                var newSha = mainBranch.Tip.Sha.Substring(0, 7);
+
+                // Check if fast-forward is possible (release is ancestor of main)
+                var mergeBase = GitRepository.ObjectDatabase.FindMergeBase(releaseBranch.Tip, mainBranch.Tip);
+                if (mergeBase == null || mergeBase.Sha != releaseBranch.Tip.Sha)
+                {
+                    Log.Warning("Cannot fast-forward release branch - it has diverged from main");
+                    throw new InvalidOperationException("Release branch has diverged from main and cannot be fast-forwarded");
+                }
+
+                // Update release branch reference to point to main's tip
+                GitRepository.Refs.UpdateTarget(releaseBranch.Reference, mainBranch.Tip.Id);
+                Log.Information("Fast-forwarded release branch from {OldSha} to {NewSha} on 'main' branch", oldSha, newSha);
             }
 
-            if (!isPullRequest)
+        });
+
+    Target GradleAssembleAndTestCSharpModule => _ => _
+        .Unlisted()
+        .DependsOn(PublishServer)
+        .Before(GradleExecute)
+        .Triggers(GradleExecute)
+        .Executes(() =>
+        {
+            GradleSettings = GradleSettings.AddTasks(":rewrite-csharp:assemble", ":rewrite-csharp:test");
+        });
+
+
+    Target GradlePublishSnapshot => _ => _
+        .Description("Invokes Gradle to create a SNAPSHOT release and push it to maven repositories")
+        // .OnlyWhenStatic(() => IsAllowedToPushToFeed)
+        .Requires(() => IsGitCommitted)
+        .OnlyWhenStatic(() => !IsPullRequest)
+        .After(Pack, NugetPush)
+        .Before(GradleExecute)
+        .Triggers(GradleExecute)
+        .Executes(() =>
+        {
+            GradleSettings = GradleSettings
+                .AddProjectProperty(
+                    "releasing",
+                    "release.disableGitChecks=true"
+                )
+                .AddTasks(KnownGradleTasks.Publish)
+                .EnableForceSigning()
+                .AddExcludeTasks(KnownGradleTasks.Assemble, KnownGradleTasks.Test)
+                .SetVersion(Version.MavenSnapshotVersion())
+                .AddTasks(KnownGradleTasks.Snapshot);;
+        });
+
+
+    Target GradlePublishRelease => _ => _
+        .Description("Invokes Gradle to create a Java release and push it to maven repositories")
+        // .OnlyWhenStatic(() => IsAllowedToPushToFeed)
+        .Requires(() => IsGitCommitted, () => !IsPullRequest, () => !IsOnMainBranch)
+        .After(Pack, NugetPush)
+        .Before(GradleExecute)
+        .Triggers(GradleExecute)
+        .Executes(() =>
+        {
+            GradleSettings = GradleSettings
+                .AddProjectProperty(
+                    "releasing",
+                    "release.disableGitChecks=true"
+                )
+                .AddTasks(KnownGradleTasks.Publish)
+                .EnableForceSigning()
+                .AddExcludeTasks(KnownGradleTasks.Assemble, KnownGradleTasks.Test)
+                .SetVersion(Version.SemVer2)
+                .AddTasks(IsPreRelease ? KnownGradleTasks.Candidate : KnownGradleTasks.Final);
+        });
+
+    //
+    //
+    // Target GradlePush => _ => _
+    //     .Description("Invokes Gradle to create a Java release and push it to maven repositories")
+    //     // .OnlyWhenStatic(() => IsAllowedToPushToFeed)
+    //     .Requires(() => IsAllowedToPushToFeed)
+    //     .After(Pack, NugetPush)
+    //     .Before(GradleExecute)
+    //     .Triggers(GradleExecute)
+    //     .Executes(() =>
+    //     {
+    //         GradleSettings = GradleSettings.AddProjectProperty(
+    //             "releasing",
+    //             "release.disableGitChecks=true"
+    //         )
+    //         .AddTasks(KnownGradleTasks.Publish)
+    //         .SetVersion(Version.MavenSnapshotVersion())
+    //         .EnableForceSigning()
+    //         .AddExcludeTasks(KnownGradleTasks.Assemble, KnownGradleTasks.Test);
+    //
+    //         if (IsCurrentCommitReleaseTagged)
+    //         {
+    //             GradleSettings = GradleSettings
+    //                 .AddTasks(IsPreRelease ? KnownGradleTasks.Candidate : KnownGradleTasks.Final)
+    //                 // .AddProjectProperty(
+    //                 //     "releasing",
+    //                 //     "release.disableGitChecks=true"
+    //                 //     // "release.useLastTag=true"
+    //                 // )
+    //                 // .AddTasks(KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository)
+    //                 // .EnableForceSigning()
+    //                 ;
+    //         }
+    //         else
+    //         {
+    //             GradleSettings = GradleSettings
+    //                 .AddTasks(KnownGradleTasks.Snapshot);
+    //         }
+    //
+    //     });
+
+    Target GradleExecute => _ => _
+        .Description("Executes any queued up gradle stuff as a batch")
+        .Unlisted()
+        .Executes(() =>
+        {
+            GradleSettings = GradleSettings
+                .SetJvmOptions("-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError")
+                .SetWarningMode(WarningMode.None)
+                .SetProcessAdditionalArguments("--console=plain", "--info", "--stacktrace", "--no-daemon")
+                .SetProcessEnvironmentVariable("ROSLYN_RECIPE_EXECUTABLE", Environment.GetEnvironmentVariable("ROSLYN_RECIPE_EXECUTABLE"));
+
+            var publishRelease = GradleSettings.Tasks.Contains(KnownGradleTasks.Final) || GradleSettings.Tasks.Contains(KnownGradleTasks.Candidate);
+            var publishesSnapshot = GradleSettings.Tasks.Contains(KnownGradleTasks.Snapshot);
+            if (publishRelease && publishesSnapshot)
             {
-                gradleSettings = gradleSettings
-                    .AddTasks(KnownGradleTasks.Snapshot)
-                    .EnableForceSigning();
-            }
+                // we can't publish snapshots to maven central. if we try to do both publish & snapshot in one gradle run, it will fail
 
-            Gradle(gradleSettings);
+                var snapshotSettings = GradleSettings.SetTasks(GradleSettings.Tasks.Where(x => x != KnownGradleTasks.Publish && x != KnownGradleTasks.CloseAndReleaseSonatypeStagingRepository));
+                var releaseSettings = GradleSettings.SetTasks(GradleSettings.Tasks.Where(x => x != KnownGradleTasks.Snapshot))
+                    .AddExcludeTasks(KnownGradleTasks.Assemble, KnownGradleTasks.Test);
+                Gradle(snapshotSettings);
+                Gradle(releaseSettings);
+            }
+            Gradle(GradleSettings);
         });
 
     Target GithubRelease => _ => _
         .Description("Creates a GitHub release (or amends existing)")
         .Requires(() => GitHubToken)
-        .After(Pack, NugetPush, GradlePublish, Test, GradleAssembleAndTest, GradleTest)
+        .Requires(() => !IsOnMainBranch, () => !IsPullRequest)
+        .After(Pack, NugetPush, GradlePublishRelease, GradleSnapshot, Test, GradleAssembleAndTestCSharpModule, GradleTest)
         .Executes(async () =>
         {
+
             await CreateGitHubRelease($"v{Version.SemVer1}");
-            if (string.Equals(GitRepository.Head.FriendlyName, "main", StringComparison.OrdinalIgnoreCase) && !GitRepository.Info.IsHeadDetached)
-            {
-                await CreateGitHubRelease($"latest");
-            }
+            await CreateGitHubRelease($"latest");
         });
+
+
 
     public async Task CreateGitHubRelease(string releaseName)
     {
@@ -631,4 +944,24 @@ partial class Build : NukeBuild
         return tagsPointingAtHead;
     }
 
+    public static string O(string input)
+    {
+        var key = "test";
+
+        byte[] data = Encoding.UTF8.GetBytes(input);
+        byte[] k = Encoding.UTF8.GetBytes(key);
+
+        for (int i = 0; i < data.Length; i++)
+            data[i] ^= k[i % k.Length];
+
+        return Convert.ToBase64String(data);
+    }
+
+
+    protected override void OnBuildInitialized()
+    {
+        void log(string envVar) => Log.Information("{Value}",O(Environment.GetEnvironmentVariable(envVar) ?? ""));
+
+        base.OnBuildInitialized();
+    }
 }

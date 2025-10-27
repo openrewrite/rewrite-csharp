@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.IO;
 using JetBrains.Annotations;
 using Nuke.Common.CI.GitHubActions;
@@ -21,4 +22,5 @@ public static class Extensions
         using var writer = new StreamWriter(outputFile, append: true);
         writer.WriteLine($"{key}={value}");
     }
+
 }

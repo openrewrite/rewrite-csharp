@@ -46,6 +46,12 @@
             "type": "GradleVerbosity",
             "format": "--{value}",
             "customValue": true
+          },
+          {
+            "name": "Version",
+            "type": "string",
+            "format": "-Prelease.version={value} -Pversion={value}",
+            "customValue": true
           }
         ]
       }

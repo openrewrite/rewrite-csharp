@@ -107,24 +107,20 @@ public class RecipeManager
     //         cancellationToken);
     // }
 
-
     /// <summary>
-    /// Installs the requested recipe packages that satisfy requested library range and creates an isolated execution context.
-    /// This isolation context allows clean separation of all recipe packages that need to run together as a single batch
+    /// Resolves actual packages that will be used from the requested ones as per <param name="requestedPackages"></param>
     /// </summary>
-    /// <param name="requestedPackages"></param>
-    /// <param name="includePrerelease"></param>
-    /// <param name="packageSources"></param>
-    /// <param name="cancellationToken"></param>
+    /// <param name="requestedPackages">Packages that are being requested</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <param name="includePrerelease">Whether to use pre-release packages</param>
+    /// <param name="packageSources">List of nuget sources to use</param>
     /// <returns></returns>
-    /// <exception cref="InvalidOperationException"></exception>
-    public async Task<RecipeExecutionContext> CreateExecutionContext(
+    public async Task<IReadOnlyCollection<PackageIdentity>> ResolvePackages(
         IReadOnlyCollection<LibraryRange> requestedPackages,
         CancellationToken cancellationToken,
         bool includePrerelease = false,
         IReadOnlyCollection<PackageSource>? packageSources = null)
     {
-        
         requestedPackages = requestedPackages
             .Select(x => x.VersionRange != null ? x : new LibraryRange(x.Name, VersionRange.AllStable, LibraryDependencyTarget.Package))
             .ToList();
@@ -147,15 +143,38 @@ public class RecipeManager
                 return new PackageIdentity(requestedPackage.Name, bestAvailableVersion.Version);
             }));
         
+
+        
+        return selectedPackages;
+    }
+
+    /// <summary>
+    /// Installs the requested recipe packages that satisfy requested library range and creates an isolated execution context.
+    /// This isolation context allows clean separation of all recipe packages that need to run together as a single batch
+    /// </summary>
+    /// <param name="requestedPackages"></param>
+    /// <param name="includePrerelease"></param>
+    /// <param name="packageSources"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    public async Task<RecipeExecutionContext> CreateExecutionContext(
+        IReadOnlyCollection<LibraryRange> requestedPackages,
+        CancellationToken cancellationToken,
+        bool includePrerelease = false,
+        IReadOnlyCollection<PackageSource>? packageSources = null)
+    {
+        var settings = GetNugetSettings();
+        var cachingSourceProvider = GetCachingProvider(packageSources);
+        
+        var selectedPackages = await ResolvePackages(requestedPackages, cancellationToken, includePrerelease, packageSources);
         var requestedVsSelected = requestedPackages.Join(selectedPackages, x => x.Name, x => x.Id, (requested, selected) => new
         {
             PackageId = requested.Name,
             RequestedRange = requested.VersionRange?.ToString(),
             SelectedVersion = selected.Version
         });
-        
         _log.LogDebug("Resolved packages: {@ResolvedPackages}", requestedVsSelected);
-
         
         var projectDefinition = CreatePackageRestoreSpec(selectedPackages);
         var lockFile = await RestoreProject(projectDefinition, cachingSourceProvider, cancellationToken);
@@ -164,6 +183,16 @@ public class RecipeManager
         _log.LogInformation("{@Recipes}", recipeExecutionContext.Recipes.Select(x => new {x.Id, x.TypeName, x.DisplayName}));
         return recipeExecutionContext;
 
+    }
+
+    private ISettings GetNugetSettings() => NullSettings.Instance;
+    private CachingSourceProvider GetCachingProvider(IReadOnlyCollection<PackageSource>? packageSources = null)
+    {
+        packageSources ??= [new PackageSource(NugetOrgRepository)];
+        var settings = GetNugetSettings();
+        var sourceProvider = new PackageSourceProvider(settings, packageSources);
+        var cachingSourceProvider = new CachingSourceProvider(sourceProvider);
+        return cachingSourceProvider;
     }
 
     // private RecipeExecutionContext FindContext(PackageIdentity packageIdentity)
