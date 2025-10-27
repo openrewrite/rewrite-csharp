@@ -1,4 +1,5 @@
 using Microsoft.CodeAnalysis.CSharp.Testing;
+using Rewrite.RoslynRecipe.Tests.Verifiers;
 using TUnit.Core;
 using Verifier = Rewrite.RoslynRecipe.Tests.Verifiers.CSharpAnalyzerVerifier<Rewrite.RoslynRecipe.FilePatternMatchStemAnalyzer>;
 
@@ -35,7 +36,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -56,7 +57,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -77,7 +78,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -98,7 +99,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -119,7 +120,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -140,7 +141,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -162,7 +163,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -180,7 +181,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -202,7 +203,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -223,7 +224,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -248,7 +249,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -275,7 +276,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -302,7 +303,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -323,7 +324,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -346,6 +347,6 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 }

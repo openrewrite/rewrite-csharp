@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.CodeAnalysis.CSharp.Testing;
+using Rewrite.RoslynRecipe.Tests.Verifiers;
 using TUnit.Core;
 using Verifier = Rewrite.RoslynRecipe.Tests.Verifiers.CSharpAnalyzerVerifier<Rewrite.RoslynRecipe.DriveInfoDriveFormatAnalyzer>;
 
@@ -24,7 +25,7 @@ public class DriveInfoDriveFormatAnalyzerTests
             }
             """;
         
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
     
 }

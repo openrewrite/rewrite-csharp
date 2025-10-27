@@ -51,3 +51,109 @@ JSONRPC remoting between Java CLI and C# language server with custom serializati
 - The remoting mechanism is critical for cross-runtime communication
 - Source generators require rebuilding analyzer projects when changed
 - Integration with Java side requires both Gradle and .NET builds
+
+## Development Guidelines
+
+### Roslyn Analyzer Development
+
+#### Placement
+- **All Roslyn analyzers and code fixes should be placed in the `Rewrite.RoslynRecipe` project**
+- This project contains the Roslyn-based recipes that leverage Microsoft.CodeAnalysis APIs
+- Analyzers should follow the naming convention: `[Category][Action]Analyzer.cs` (e.g., `NamingConventionAnalyzer.cs`)
+- Associated code fix providers should be named: `[Category][Action]CodeFixProvider.cs`
+
+#### Analyzer / Code fixup implementation
+- Where possible, perform "low cost" syntax elimination first, and confirm correct targeting with semantic analysis
+- Use `GetDocumentationCommentId` on symbols to determine symbol signature equality. See `WithOpenApiDeprecatedAnalyzer` for example on how to write analyzers targeting specific APIs for refactoring.
+
+#### Test Requirements
+- **Always generate comprehensive tests for analyzers unless explicitly instructed otherwise**
+- Tests should be placed in the corresponding test project (`Rewrite.RoslynRecipe.Tests`)
+- Include test cases for:
+  - Positive scenarios (where the analyzer should report diagnostics)
+  - Negative scenarios (where the analyzer should NOT report diagnostics)
+  - Edge cases and boundary conditions
+  - Multiple fix applications when applicable
+- Use the Roslyn testing framework with verify methods for consistent test structure
+- Special pattern for adding test references (such as asp.net core and nuget dependencies). See `WithOpenApiDeprecated` as an example
+- 
+- Test files should follow the naming pattern: `[AnalyzerName]Tests.cs`
+
+### API Documentation Standards
+
+#### IntelliSense XML Documentation
+**All public APIs must include complete XML documentation comments** with the following components:
+
+1. **Summary Section** (`<summary>`):
+   - Provide a clear, concise description of what the member does
+   - Start with an action verb for methods (e.g., "Analyzes...", "Converts...", "Creates...")
+   - Be specific about the purpose and behavior
+
+2. **Parameter Documentation** (`<param>`):
+   - Document every parameter with its purpose and expected values
+   - Specify if null values are acceptable
+   - Mention any constraints or validation rules
+   - Example: `<param name="node">The syntax node to analyze. Must not be null.</param>`
+
+3. **Return Value Documentation** (`<returns>`):
+   - Describe what the method returns and under what conditions
+   - Specify if null can be returned and when
+   - Example: `<returns>A diagnostic descriptor if an issue is found; otherwise, null.</returns>`
+
+4. **Exception Documentation** (`<exception>`):
+   - Document all exceptions that can be thrown by the method
+   - Include the conditions that cause each exception
+   - Example: `<exception cref="ArgumentNullException">Thrown when <paramref name="context"/> is null.</exception>`
+
+5. **Additional Documentation Elements** (when applicable):
+   - `<remarks>` - For additional important information or usage notes
+   - `<example>` - For code examples showing proper usage
+   - `<seealso>` - For related types or members
+   - `<typeparam>` - For generic type parameters
+
+#### Example Documentation Template
+
+```csharp
+/// <summary>
+/// Analyzes C# code for naming convention violations and provides automated fixes.
+/// </summary>
+/// <remarks>
+/// This analyzer checks for PascalCase, camelCase, and UPPER_SNAKE_CASE conventions
+/// based on the member type and accessibility.
+/// </remarks>
+public class NamingConventionAnalyzer : DiagnosticAnalyzer
+{
+    /// <summary>
+    /// Registers analysis actions for the specified compilation context.
+    /// </summary>
+    /// <param name="context">The analysis context to register actions with. Must not be null.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="context"/> is null.</exception>
+    public override void Initialize(AnalysisContext context)
+    {
+        // Implementation
+    }
+
+    /// <summary>
+    /// Analyzes a symbol for naming convention violations.
+    /// </summary>
+    /// <param name="symbol">The symbol to analyze. Must not be null.</param>
+    /// <param name="reportDiagnostic">The delegate to report diagnostics. Must not be null.</param>
+    /// <returns>True if a violation was found and reported; otherwise, false.</returns>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="symbol"/> or <paramref name="reportDiagnostic"/> is null.
+    /// </exception>
+    private bool AnalyzeSymbol(ISymbol symbol, Action<Diagnostic> reportDiagnostic)
+    {
+        // Implementation
+    }
+}
+```
+
+### Code Generation Best Practices
+
+1. **Consistency**: Follow existing patterns in the codebase for similar components
+2. **Error Handling**: Include proper null checks and validation with meaningful error messages
+3. **Performance**: Consider performance implications, especially for analyzers that run frequently
+4. **Immutability**: Prefer immutable data structures where appropriate
+5. **Async/Await**: Use async patterns consistently for I/O operations
+6. **Logging**: Include appropriate logging for debugging and troubleshooting

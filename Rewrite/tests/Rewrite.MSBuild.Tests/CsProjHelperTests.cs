@@ -504,7 +504,6 @@ public class CsProjHelperTests : BaseTests
         packages.Should().Contain(p => p.Id == "Newtonsoft.Json");
     }
 
-#if NET9_0_OR_GREATER
     [Test]
     public async Task GetRequiredAssemblies_ShouldReturnAssembliesFromPackages(CancellationToken cancellationToken)
     {
@@ -645,7 +644,6 @@ public class CsProjHelperTests : BaseTests
             File.Exists(assembly.AssemblyPath).Should().BeTrue($"Assembly file should exist at {assembly.AssemblyPath}");
         }
     }
-#endif
 
     #endregion
 

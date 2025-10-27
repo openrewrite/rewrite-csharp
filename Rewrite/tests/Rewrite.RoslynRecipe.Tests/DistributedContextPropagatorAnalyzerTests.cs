@@ -1,4 +1,5 @@
 using Microsoft.CodeAnalysis.CSharp.Testing;
+using Rewrite.RoslynRecipe.Tests.Verifiers;
 using TUnit.Core;
 using Verifier = Rewrite.RoslynRecipe.Tests.Verifiers.CSharpAnalyzerVerifier<Rewrite.RoslynRecipe.DistributedContextPropagatorAnalyzer>;
 
@@ -24,7 +25,7 @@ public class DistributedContextPropagatorAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -45,7 +46,7 @@ public class DistributedContextPropagatorAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -66,7 +67,7 @@ public class DistributedContextPropagatorAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -87,7 +88,7 @@ public class DistributedContextPropagatorAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -108,7 +109,7 @@ public class DistributedContextPropagatorAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -132,7 +133,7 @@ public class DistributedContextPropagatorAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -157,7 +158,7 @@ public class DistributedContextPropagatorAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -175,7 +176,7 @@ public class DistributedContextPropagatorAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -193,7 +194,7 @@ public class DistributedContextPropagatorAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -216,7 +217,7 @@ public class DistributedContextPropagatorAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -244,7 +245,7 @@ public class DistributedContextPropagatorAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -265,7 +266,7 @@ public class DistributedContextPropagatorAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -287,6 +288,6 @@ public class DistributedContextPropagatorAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 }

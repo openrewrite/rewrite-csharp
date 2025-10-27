@@ -73,9 +73,8 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
         var workspace = MSBuildWorkspace.Create();
         var result = ProcessTasks.StartProcess("dotnet", $"restore {SolutionFilePath}");
         result.WaitForExit();
-        if(result.ExitCode != 0)
-            Debugger.Break();
         var originalSolution = await workspace.OpenSolutionAsync(SolutionFilePath, cancellationToken: cancellationToken);
+        
         var solution = new SolutionHolder(originalSolution);
         // var analyzerAssembly = RecipeAssemblies;
    
@@ -259,7 +258,7 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
             }
             catch (Exception e)
             {
-                log.LogError(e, "Unable to apply {IssueId} do to internal CodeFixup logic error", issueId);
+                log.LogError(e, "Unable to apply {IssueId} due to internal CodeFixup logic error", issueId);
                 continue;
             }
             
@@ -312,9 +311,10 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
         Dictionary<string, (DiagnosticAnalyzer Analyzer, CodeFixProvider CodeFixProvider)> analyzersWithFixers, 
         CancellationToken cancellationToken)
     {
+        
         var compilationTasks = solution.Solution.Projects.Select(p => p.GetCompilationAsync(cancellationToken));
         var compilations = await Task.WhenAll(compilationTasks);
-
+        
         List<Diagnostic> diagnostics = [];
         foreach (var compilation in compilations.Where(x => x != null).Cast<Compilation>())
         {

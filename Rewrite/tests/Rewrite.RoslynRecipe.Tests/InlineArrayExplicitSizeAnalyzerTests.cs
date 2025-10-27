@@ -1,4 +1,5 @@
 using Microsoft.CodeAnalysis.CSharp.Testing;
+using Rewrite.RoslynRecipe.Tests.Verifiers;
 using TUnit.Core;
 using Verifier = Rewrite.RoslynRecipe.Tests.Verifiers.CSharpAnalyzerVerifier<Rewrite.RoslynRecipe.InlineArrayExplicitSizeAnalyzer>;
 
@@ -18,14 +19,14 @@ public class InlineArrayExplicitSizeAnalyzerTests
 
             [InlineArray(8)]
             [StructLayout(LayoutKind.Explicit, Size = 32)]
-            struct {|ORNETX0004:Int8InlineArray|}
+            struct {|CS9168:{|ORNETX0004:Int8InlineArray|}|}
             {
                 [FieldOffset(0)]
                 private int _value;
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -46,7 +47,7 @@ public class InlineArrayExplicitSizeAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -67,7 +68,7 @@ public class InlineArrayExplicitSizeAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -82,14 +83,14 @@ public class InlineArrayExplicitSizeAnalyzerTests
 
             [InlineArray(8)]
             [StructLayout(LayoutKind.Explicit)]
-            struct Int8InlineArray
+            struct {|CS9168:Int8InlineArray|}
             {
                 [FieldOffset(0)]
                 private int _value;
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -108,7 +109,7 @@ public class InlineArrayExplicitSizeAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -128,7 +129,7 @@ public class InlineArrayExplicitSizeAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -149,7 +150,7 @@ public class InlineArrayExplicitSizeAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -170,20 +171,20 @@ public class InlineArrayExplicitSizeAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
     /// Verifies that no diagnostic is created when InlineArray and StructLayout with Size are applied to a class (not a struct).
     /// </summary>
     [Test]
-    public async Task ClassWithInlineArrayAndSize_NoDiagnostic()
+    public async Task ClassWithInlineArrayAndSize_CompilerError()
     {
         const string text = """
             using System.Runtime.CompilerServices;
             using System.Runtime.InteropServices;
 
-            [InlineArray(8)]
+            [{|CS0592:InlineArray|}(8)]
             [StructLayout(LayoutKind.Explicit, Size = 32)]
             class NotAStruct
             {
@@ -192,7 +193,7 @@ public class InlineArrayExplicitSizeAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -207,14 +208,14 @@ public class InlineArrayExplicitSizeAnalyzerTests
 
             [InlineArray(8)]
             [StructLayout(LayoutKind.Explicit, Size = 0)]
-            struct {|ORNETX0004:ZeroSizeInlineArray|}
+            struct {|CS9168:{|ORNETX0004:ZeroSizeInlineArray|}|}
             {
                 [FieldOffset(0)]
                 private int _value;
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -229,7 +230,7 @@ public class InlineArrayExplicitSizeAnalyzerTests
 
             [InlineArray(8)]
             [StructLayout(LayoutKind.Explicit, Size = 32)]
-            struct {|ORNETX0004:FirstInlineArray|}
+            struct {|CS9168:{|ORNETX0004:FirstInlineArray|}|}
             {
                 [FieldOffset(0)]
                 private int _value;
@@ -243,7 +244,7 @@ public class InlineArrayExplicitSizeAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -260,7 +261,7 @@ public class InlineArrayExplicitSizeAnalyzerTests
             {
                 [InlineArray(8)]
                 [StructLayout(LayoutKind.Explicit, Size = 32)]
-                struct {|ORNETX0004:NestedInlineArray|}
+                struct {|CS9168:{|ORNETX0004:NestedInlineArray|}|}
                 {
                     [FieldOffset(0)]
                     private int _value;
@@ -268,7 +269,7 @@ public class InlineArrayExplicitSizeAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -289,6 +290,6 @@ public class InlineArrayExplicitSizeAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 }

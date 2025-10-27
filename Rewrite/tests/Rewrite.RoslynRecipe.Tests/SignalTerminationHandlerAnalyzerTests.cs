@@ -1,4 +1,5 @@
 using Microsoft.CodeAnalysis.CSharp.Testing;
+using Rewrite.RoslynRecipe.Tests.Verifiers;
 using TUnit.Core;
 using Verifier = Rewrite.RoslynRecipe.Tests.Verifiers.CSharpAnalyzerVerifier<Rewrite.RoslynRecipe.SignalTerminationHandlerAnalyzer>;
 
@@ -29,7 +30,7 @@ public class SignalTerminationHandlerAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     [Test]
@@ -50,7 +51,7 @@ public class SignalTerminationHandlerAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     [Test]
@@ -73,7 +74,7 @@ public class SignalTerminationHandlerAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     [Test]
@@ -95,7 +96,7 @@ public class SignalTerminationHandlerAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     [Test]
@@ -113,7 +114,7 @@ public class SignalTerminationHandlerAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     [Test]
@@ -132,7 +133,7 @@ public class SignalTerminationHandlerAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     [Test]
@@ -155,7 +156,7 @@ public class SignalTerminationHandlerAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     [Test]
@@ -175,7 +176,7 @@ public class SignalTerminationHandlerAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     [Test]
@@ -197,7 +198,7 @@ public class SignalTerminationHandlerAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     [Test]
@@ -217,7 +218,7 @@ public class SignalTerminationHandlerAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     [Test]
@@ -238,7 +239,7 @@ public class SignalTerminationHandlerAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     [Test]
@@ -257,7 +258,7 @@ public class SignalTerminationHandlerAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     [Test]
@@ -281,7 +282,7 @@ public class SignalTerminationHandlerAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     [Test]
@@ -301,7 +302,7 @@ public class SignalTerminationHandlerAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     [Test]
@@ -323,6 +324,6 @@ public class SignalTerminationHandlerAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 }

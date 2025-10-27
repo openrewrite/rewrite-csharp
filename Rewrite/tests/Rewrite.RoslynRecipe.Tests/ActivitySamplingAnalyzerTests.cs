@@ -1,4 +1,5 @@
 using Microsoft.CodeAnalysis.CSharp.Testing;
+using Rewrite.RoslynRecipe.Tests.Verifiers;
 using TUnit.Core;
 using Verifier = Rewrite.RoslynRecipe.Tests.Verifiers.CSharpAnalyzerVerifier<Rewrite.RoslynRecipe.ActivitySamplingAnalyzer>;
 
@@ -31,7 +32,7 @@ public class ActivitySamplingAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -62,7 +63,7 @@ public class ActivitySamplingAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -91,7 +92,7 @@ public class ActivitySamplingAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -120,7 +121,7 @@ public class ActivitySamplingAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -153,7 +154,7 @@ public class ActivitySamplingAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -183,7 +184,7 @@ public class ActivitySamplingAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -215,7 +216,7 @@ public class ActivitySamplingAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -245,7 +246,7 @@ public class ActivitySamplingAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -273,7 +274,7 @@ public class ActivitySamplingAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -301,7 +302,7 @@ public class ActivitySamplingAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -329,7 +330,7 @@ public class ActivitySamplingAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -358,7 +359,7 @@ public class ActivitySamplingAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -387,7 +388,7 @@ public class ActivitySamplingAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -412,6 +413,6 @@ public class ActivitySamplingAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerDotnet100Async(text).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
     }
 }
