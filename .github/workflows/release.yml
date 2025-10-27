@@ -41,12 +41,12 @@ jobs:
       - name: set-up-gradle
         uses: gradle/actions/setup-gradle@v5
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v5
         name: Install .NET 8
         with:
           dotnet-version: '8.0.x'
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v5
         name: Install .NET 9
         with:
             dotnet-version: '9.0.x'
