@@ -286,8 +286,6 @@ public class FilePatternMatchStemAnalyzerTests
     public async Task FilePatternMatchInCollectionInitializer_CreatesErrorDiagnostic()
     {
         string text = $$"""
-            {{FilePatternMatchStub}}
-
             using System.Collections.Generic;
 
             class TestClass
@@ -301,6 +299,8 @@ public class FilePatternMatchStemAnalyzerTests
                     };
                 }
             }
+            
+            {{FilePatternMatchStub}}
             """;
 
         await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);

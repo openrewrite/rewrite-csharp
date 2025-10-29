@@ -1,3 +1,4 @@
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Testing;
@@ -24,7 +25,6 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
                 }
 
                 var compilationOptions = project.CompilationOptions;
-
                 if (compilationOptions is null)
                 {
                     return solution;
@@ -33,6 +33,11 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
                 if (project.ParseOptions is not CSharpParseOptions parseOptions)
                 {
                     return solution;
+                }
+
+                if (IsExecutable)
+                {
+                    compilationOptions = compilationOptions.WithOutputKind(OutputKind.ConsoleApplication);
                 }
 
                 compilationOptions = compilationOptions.WithSpecificDiagnosticOptions(
@@ -44,5 +49,7 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
                 return solution;
             });
         }
+
+        public bool IsExecutable { get; set; }
     }
 }

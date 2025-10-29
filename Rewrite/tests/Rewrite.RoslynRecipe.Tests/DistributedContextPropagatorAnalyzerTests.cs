@@ -88,7 +88,7 @@ public class DistributedContextPropagatorAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net100).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -266,7 +266,7 @@ public class DistributedContextPropagatorAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net100).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -288,6 +288,6 @@ public class DistributedContextPropagatorAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net100).ConfigureAwait(false);
     }
 }

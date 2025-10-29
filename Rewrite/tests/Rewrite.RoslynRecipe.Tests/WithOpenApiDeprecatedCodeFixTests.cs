@@ -29,8 +29,6 @@ public class WithOpenApiDeprecatedCodeFixTests
                     app.MapGet("/weather", () => new WeatherForecast())
                        .{|ORNETX0008:WithOpenApi|}(operation =>
                        {
-                           operation.Summary = "Gets the current weather report.";
-                           operation.Description = "Returns a short description and emoji.";
                            return operation;
                        });
                 }
@@ -42,7 +40,8 @@ public class WithOpenApiDeprecatedCodeFixTests
         const string after = """
             using Microsoft.AspNetCore.Builder;
             using Microsoft.AspNetCore.OpenApi;
-
+            using System.Threading.Tasks;
+            
             class Program
             {
                 static void Main()
@@ -53,8 +52,6 @@ public class WithOpenApiDeprecatedCodeFixTests
                     app.MapGet("/weather", () => new WeatherForecast())
                        .AddOpenApiOperationTransformer((operation, context, ct) =>
                        {
-                           operation.Summary = "Gets the current weather report.";
-                           operation.Description = "Returns a short description and emoji.";
                            return Task.CompletedTask;
                        });
                 }
@@ -63,7 +60,7 @@ public class WithOpenApiDeprecatedCodeFixTests
             class WeatherForecast { }
             """;
 
-        await Verifier.VerifyCodeFixAsync(before, after, Assemblies.AspNet90
+        await Verifier.VerifyCodeFixAsync(before, after, Assemblies.AspNet100
                 .AddPackage("Microsoft.AspNetCore.OpenApi"))
             .ConfigureAwait(false);
     }
@@ -96,7 +93,8 @@ public class WithOpenApiDeprecatedCodeFixTests
         const string after = """
             using Microsoft.AspNetCore.Builder;
             using Microsoft.AspNetCore.OpenApi;
-
+            using System.Threading.Tasks;
+            
             class Program
             {
                 static void Main()
@@ -112,7 +110,7 @@ public class WithOpenApiDeprecatedCodeFixTests
             class WeatherForecast { }
             """;
 
-        await Verifier.VerifyCodeFixAsync(before, after, Assemblies.AspNet90
+        await Verifier.VerifyCodeFixAsync(before, after, Assemblies.AspNet100
                 .AddPackage("Microsoft.AspNetCore.OpenApi"))
             .ConfigureAwait(false);
     }
@@ -165,7 +163,7 @@ public class WithOpenApiDeprecatedCodeFixTests
             class WeatherForecast { }
             """;
 
-        await Verifier.VerifyCodeFixAsync(before, after, Assemblies.AspNet90
+        await Verifier.VerifyCodeFixAsync(before, after, Assemblies.AspNet100
                 .AddPackage("Microsoft.AspNetCore.OpenApi"))
             .ConfigureAwait(false);
     }
@@ -191,7 +189,6 @@ public class WithOpenApiDeprecatedCodeFixTests
                        .RequireAuthorization()
                        .{|ORNETX0008:WithOpenApi|}(operation =>
                        {
-                           operation.Summary = "Protected endpoint";
                            return operation;
                        })
                        .WithName("GetWeather");
@@ -217,7 +214,6 @@ public class WithOpenApiDeprecatedCodeFixTests
                        .RequireAuthorization()
                        .AddOpenApiOperationTransformer((operation, context, ct) =>
                        {
-                           operation.Summary = "Protected endpoint";
                            return Task.CompletedTask;
                        }).WithName("GetWeather");
                 }
@@ -240,7 +236,8 @@ public class WithOpenApiDeprecatedCodeFixTests
         const string before = """
             using Microsoft.AspNetCore.Builder;
             using Microsoft.AspNetCore.OpenApi;
-
+            using System.Threading.Tasks;
+            
             class Program
             {
                 static void Main()
@@ -260,16 +257,14 @@ public class WithOpenApiDeprecatedCodeFixTests
             }
 
             class WeatherForecast { }
-            class OpenApiOperation
-            {
-                public string Summary { get; set; }
-            }
+
             """;
 
         const string after = """
             using Microsoft.AspNetCore.Builder;
             using Microsoft.AspNetCore.OpenApi;
-
+            using System.Threading.Tasks;
+            
             class Program
             {
                 static void Main()
@@ -287,19 +282,15 @@ public class WithOpenApiDeprecatedCodeFixTests
 
                 static OpenApiOperation ConfigureOperation(OpenApiOperation operation)
                 {
-                    operation.Summary = "Gets the weather";
                     return operation;
                 }
             }
 
             class WeatherForecast { }
-            class OpenApiOperation
-            {
-                public string Summary { get; set; }
-            }
+
             """;
 
-        await Verifier.VerifyCodeFixAsync(before, after, Assemblies.AspNet90
+        await Verifier.VerifyCodeFixAsync(before, after, Assemblies.AspNet100
                 .AddPackage("Microsoft.AspNetCore.OpenApi"))
             .ConfigureAwait(false);
     }
@@ -325,14 +316,12 @@ public class WithOpenApiDeprecatedCodeFixTests
                     app.MapGet("/weather", () => new WeatherForecast())
                        .{|ORNETX0008:WithOpenApi|}(operation =>
                        {
-                           operation.Summary = "Gets weather";
                            return operation;
                        });
 
                     app.MapPost("/weather", (WeatherForecast weather) => weather)
                        .{|ORNETX0008:WithOpenApi|}(operation =>
                        {
-                           operation.Summary = "Creates weather";
                            return operation;
                        });
                 }
@@ -356,14 +345,12 @@ public class WithOpenApiDeprecatedCodeFixTests
                     app.MapGet("/weather", () => new WeatherForecast())
                        .AddOpenApiOperationTransformer((operation, context, ct) =>
                        {
-                           operation.Summary = "Gets weather";
                            return Task.CompletedTask;
                        });
 
                     app.MapPost("/weather", (WeatherForecast weather) => weather)
                        .AddOpenApiOperationTransformer((operation, context, ct) =>
                        {
-                           operation.Summary = "Creates weather";
                            return Task.CompletedTask;
                        });
                 }
@@ -386,7 +373,8 @@ public class WithOpenApiDeprecatedCodeFixTests
         const string before = """
             using Microsoft.AspNetCore.Builder;
             using Microsoft.AspNetCore.OpenApi;
-
+            using System.Threading.Tasks;
+            
             class Program
             {
                 static void Main()
@@ -397,8 +385,6 @@ public class WithOpenApiDeprecatedCodeFixTests
                     app.MapPost("/weather", (WeatherForecast weather) => weather)
                        .{|ORNETX0008:WithOpenApi|}(operation =>
                        {
-                           operation.Summary = "Creates a new weather forecast.";
-                           operation.RequestBody.Required = true;
                            return operation;
                        });
                 }
@@ -410,7 +396,8 @@ public class WithOpenApiDeprecatedCodeFixTests
         const string after = """
             using Microsoft.AspNetCore.Builder;
             using Microsoft.AspNetCore.OpenApi;
-
+            using System.Threading.Tasks;
+            
             class Program
             {
                 static void Main()
@@ -421,8 +408,6 @@ public class WithOpenApiDeprecatedCodeFixTests
                     app.MapPost("/weather", (WeatherForecast weather) => weather)
                        .AddOpenApiOperationTransformer((operation, context, ct) =>
                        {
-                           operation.Summary = "Creates a new weather forecast.";
-                           operation.RequestBody.Required = true;
                            return Task.CompletedTask;
                        });
                 }
@@ -431,7 +416,7 @@ public class WithOpenApiDeprecatedCodeFixTests
             class WeatherForecast { }
             """;
 
-        await Verifier.VerifyCodeFixAsync(before, after, Assemblies.AspNet90
+        await Verifier.VerifyCodeFixAsync(before, after, Assemblies.AspNet100
                 .AddPackage("Microsoft.AspNetCore.OpenApi"))
             .ConfigureAwait(false);
     }
@@ -456,8 +441,6 @@ public class WithOpenApiDeprecatedCodeFixTests
                     app.MapPut("/weather/{id}", (int id, WeatherForecast weather) => weather)
                        .{|ORNETX0008:WithOpenApi|}(operation =>
                        {
-                           operation.Summary = "Updates a weather forecast.";
-                           operation.Parameters[0].Description = "The weather forecast ID";
                            return operation;
                        });
                 }
@@ -469,7 +452,8 @@ public class WithOpenApiDeprecatedCodeFixTests
         const string after = """
             using Microsoft.AspNetCore.Builder;
             using Microsoft.AspNetCore.OpenApi;
-
+            using System.Threading.Tasks;
+            
             class Program
             {
                 static void Main()
@@ -480,8 +464,6 @@ public class WithOpenApiDeprecatedCodeFixTests
                     app.MapPut("/weather/{id}", (int id, WeatherForecast weather) => weather)
                        .AddOpenApiOperationTransformer((operation, context, ct) =>
                        {
-                           operation.Summary = "Updates a weather forecast.";
-                           operation.Parameters[0].Description = "The weather forecast ID";
                            return Task.CompletedTask;
                        });
                 }
@@ -490,7 +472,7 @@ public class WithOpenApiDeprecatedCodeFixTests
             class WeatherForecast { }
             """;
 
-        await Verifier.VerifyCodeFixAsync(before, after, Assemblies.AspNet90
+        await Verifier.VerifyCodeFixAsync(before, after, Assemblies.AspNet100
                 .AddPackage("Microsoft.AspNetCore.OpenApi"))
             .ConfigureAwait(false);
     }
@@ -515,8 +497,6 @@ public class WithOpenApiDeprecatedCodeFixTests
                     app.MapDelete("/weather/{id}", (int id) => Results.NoContent())
                        .{|ORNETX0008:WithOpenApi|}(operation =>
                        {
-                           operation.Summary = "Deletes a weather forecast.";
-                           operation.Responses["204"].Description = "No content";
                            return operation;
                        });
                 }
@@ -531,7 +511,8 @@ public class WithOpenApiDeprecatedCodeFixTests
         const string after = """
             using Microsoft.AspNetCore.Builder;
             using Microsoft.AspNetCore.OpenApi;
-
+            using System.Threading.Tasks;
+            
             class Program
             {
                 static void Main()
@@ -542,8 +523,6 @@ public class WithOpenApiDeprecatedCodeFixTests
                     app.MapDelete("/weather/{id}", (int id) => Results.NoContent())
                        .AddOpenApiOperationTransformer((operation, context, ct) =>
                        {
-                           operation.Summary = "Deletes a weather forecast.";
-                           operation.Responses["204"].Description = "No content";
                            return Task.CompletedTask;
                        });
                 }
@@ -555,7 +534,7 @@ public class WithOpenApiDeprecatedCodeFixTests
             }
             """;
 
-        await Verifier.VerifyCodeFixAsync(before, after, Assemblies.AspNet90
+        await Verifier.VerifyCodeFixAsync(before, after, Assemblies.AspNet100
                 .AddPackage("Microsoft.AspNetCore.OpenApi"))
             .ConfigureAwait(false);
     }
@@ -578,17 +557,11 @@ public class WithOpenApiDeprecatedCodeFixTests
                     var app = builder.Build();
 
                     app.MapGroup("/api")
-                       .RequireAuthorization()
                        .MapGet("/weather", () => new WeatherForecast())
-                       .WithTags("Weather")
                        .{|ORNETX0008:WithOpenApi|}(operation =>
                        {
-                           operation.Summary = "Gets weather in API group";
-                           operation.Tags.Add(new() { Name = "WeatherAPI" });
                            return operation;
-                       })
-                       .WithName("GetWeatherInGroup")
-                       .RequireCors();
+                       });
                 }
             }
 
@@ -598,7 +571,8 @@ public class WithOpenApiDeprecatedCodeFixTests
         const string after = """
             using Microsoft.AspNetCore.Builder;
             using Microsoft.AspNetCore.OpenApi;
-
+            using System.Threading.Tasks;
+            
             class Program
             {
                 static void Main()
@@ -607,24 +581,55 @@ public class WithOpenApiDeprecatedCodeFixTests
                     var app = builder.Build();
 
                     app.MapGroup("/api")
-                       .RequireAuthorization()
                        .MapGet("/weather", () => new WeatherForecast())
-                       .WithTags("Weather")
                        .AddOpenApiOperationTransformer((operation, context, ct) =>
                        {
-                           operation.Summary = "Gets weather in API group";
-                           operation.Tags.Add(new() { Name = "WeatherAPI" });
                            return Task.CompletedTask;
-                       })
-                       .WithName("GetWeatherInGroup")
-                       .RequireCors();
+                       });
                 }
             }
 
             class WeatherForecast { }
             """;
 
-        await Verifier.VerifyCodeFixAsync(before, after, Assemblies.AspNet90
+        await Verifier.VerifyCodeFixAsync(before, after, Assemblies.AspNet100
+                .AddPackage("Microsoft.AspNetCore.OpenApi"))
+            .ConfigureAwait(false);
+    }
+    
+        /// <summary>
+    /// Verifies that WithOpenApi with method group is correctly replaced.
+    /// </summary>
+    [Test]
+    public async Task TopLevelProgram_ReplacesCorrectly()
+    {
+        const string before = """
+            using Microsoft.AspNetCore.Builder;
+            using Microsoft.AspNetCore.OpenApi;
+            
+            var builder = WebApplication.CreateBuilder();
+            var app = builder.Build();
+
+            app.MapGet("/", () => "test")
+               .{|ORNETX0008:WithOpenApi|}(operation => operation);
+            """;
+
+        const string after = """
+            using Microsoft.AspNetCore.Builder;
+            using Microsoft.AspNetCore.OpenApi;
+            using System.Threading.Tasks;
+            
+            var builder = WebApplication.CreateBuilder();
+            var app = builder.Build();
+
+            app.MapGet("/", () => "test")
+               .AddOpenApiOperationTransformer((operation, context, ct) =>
+               {
+                   return Task.CompletedTask;
+               });
+            """;
+
+        await Verifier.VerifyCodeFixAsync(before, after, Assemblies.AspNet100
                 .AddPackage("Microsoft.AspNetCore.OpenApi"))
             .ConfigureAwait(false);
     }

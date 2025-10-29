@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
@@ -9,6 +10,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
+using Rewrite.RoslynRecipe.Helpers;
 
 namespace Rewrite.RoslynRecipe
 {
@@ -98,8 +100,29 @@ namespace Rewrite.RoslynRecipe
 
             // Replace the old invocation with the new one
             var newRoot = root.ReplaceNode(invocation, newInvocation);
+            var newDocument = document.WithSyntaxRoot(newRoot);
 
-            return document.WithSyntaxRoot(newRoot);
+            // Get the updated invocation node in the new tree
+            var updatedSemanticModel = await newDocument.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
+            if (updatedSemanticModel == null)
+                return newDocument;
+
+            var updatedInvocation = newRoot.DescendantNodes()
+                .OfType<InvocationExpressionSyntax>()
+                .FirstOrDefault(i => i.ToString() == newInvocation.ToString());
+
+            if (updatedInvocation == null)
+                return newDocument;
+
+            // Ensure Task is available since we're using Task.CompletedTask
+            var (finalDocument, finalRoot) = await SymbolImporter.MaybeAddTaskUsingAsync(
+                newDocument,
+                newRoot,
+                updatedSemanticModel,
+                updatedInvocation,
+                cancellationToken);
+
+            return finalDocument;
         }
 
         /// <summary>

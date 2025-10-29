@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
@@ -47,8 +49,11 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
         [StringSyntax("c#-test")] string fixedSource,
         ReferenceAssemblies referenceAssemblies)
     {
+        var cu = (CompilationUnitSyntax)await CSharpSyntaxTree.ParseText(source).GetRootAsync();
+        var hasGlobalStatements = cu.DescendantNodes().OfType<GlobalStatementSyntax>().Any();
         var test = new Test
         {
+            IsExecutable = hasGlobalStatements,
             TestCode = source,
             FixedCode = fixedSource,
             ReferenceAssemblies = referenceAssemblies,
