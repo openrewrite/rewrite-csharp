@@ -16,8 +16,32 @@ using Rewrite.RoslynRecipe.Helpers;
 namespace Rewrite.RoslynRecipe
 {
     /// <summary>
-    /// Code fix provider that replaces the deprecated WithOpenApi method with AddOpenApiOperationTransformer.
+    /// Provides automatic code fixes for the deprecated WithOpenApi method by replacing it with AddOpenApiOperationTransformer.
+    /// This transformation is necessary for ASP.NET Core applications migrating to newer OpenAPI integration patterns.
     /// </summary>
+    /// <remarks>
+    /// The WithOpenApi method was deprecated in favor of AddOpenApiOperationTransformer which provides better async support
+    /// and additional context parameters for more flexible OpenAPI operation transformations.
+    ///
+    /// Example transformation:
+    /// Before:
+    /// <code>
+    /// app.MapGet("/api", () => "test")
+    ///    .WithOpenApi(operation => {
+    ///        operation.Summary = "Test API";
+    ///        return operation;
+    ///    });
+    /// </code>
+    ///
+    /// After:
+    /// <code>
+    /// app.MapGet("/api", () => "test")
+    ///    .AddOpenApiOperationTransformer((operation, context, ct) => {
+    ///        operation.Summary = "Test API";
+    ///        return Task.CompletedTask;
+    ///    });
+    /// </code>
+    /// </remarks>
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(WithOpenApiDeprecatedCodeFixProvider)), Shared]
     public class WithOpenApiDeprecatedCodeFixProvider : CodeFixProvider
     {
@@ -34,16 +58,18 @@ namespace Rewrite.RoslynRecipe
             ImmutableArray.Create(WithOpenApiDeprecatedAnalyzer.DiagnosticId);
 
         /// <summary>
-        /// Gets a value indicating whether the provider can fix multiple diagnostics in a single operation.
+        /// Gets the fix all provider for batch operations, allowing multiple WithOpenApi calls
+        /// to be fixed simultaneously across a document or solution.
         /// </summary>
-        /// <returns>The fix all provider for batch operations.</returns>
+        /// <returns>The well-known batch fixer for applying the same fix to multiple diagnostics.</returns>
         public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
         /// <summary>
-        /// Registers code fixes for the diagnostics reported by the WithOpenApiDeprecatedAnalyzer.
+        /// Registers code fixes for WithOpenApi deprecation warnings by offering to replace them
+        /// with the modern AddOpenApiOperationTransformer method.
         /// </summary>
-        /// <param name="context">The code fix context containing the diagnostics to fix. Must not be null.</param>
-        /// <returns>A task representing the asynchronous operation.</returns>
+        /// <param name="context">The code fix context containing the diagnostics to fix and document information.</param>
+        /// <returns>A task representing the asynchronous registration operation.</returns>
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
@@ -70,13 +96,21 @@ namespace Rewrite.RoslynRecipe
         }
 
         /// <summary>
-        /// Replaces the WithOpenApi method call with AddOpenApiOperationTransformer.
+        /// Performs the actual replacement of WithOpenApi with AddOpenApiOperationTransformer,
+        /// including transforming the lambda signature and body to match the new API requirements.
         /// </summary>
-        /// <param name="document">The document containing the code to fix. Must not be null.</param>
-        /// <param name="invocation">The invocation expression to replace. Must not be null.</param>
+        /// <param name="document">The document containing the code to fix.</param>
+        /// <param name="invocation">The WithOpenApi invocation expression to replace.</param>
         /// <param name="cancellationToken">The cancellation token for the operation.</param>
-        /// <returns>A task that returns the updated document with the fix applied.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when document or invocation is null.</exception>
+        /// <returns>A task that returns the updated document with the transformation applied.</returns>
+        /// <remarks>
+        /// This method handles several transformation scenarios:
+        /// 1. Parameterless calls: WithOpenApi() becomes AddOpenApiOperationTransformer((operation, context, ct) => Task.CompletedTask)
+        /// 2. Simple lambdas: WithOpenApi(op => op) becomes AddOpenApiOperationTransformer((operation, context, ct) => Task.CompletedTask)
+        /// 3. Complex lambdas: WithOpenApi(op => { op.Summary = "X"; return op; }) becomes
+        ///    AddOpenApiOperationTransformer((operation, context, ct) => { operation.Summary = "X"; return Task.CompletedTask; })
+        /// 4. Method groups: WithOpenApi(Configure) becomes AddOpenApiOperationTransformer((operation, context, ct) => { Configure(operation); return Task.CompletedTask; })
+        /// </remarks>
         private async Task<Document> ReplaceWithOpenApiAsync(
             Document document,
             InvocationExpressionSyntax invocation,
@@ -148,11 +182,16 @@ namespace Rewrite.RoslynRecipe
         }
 
         /// <summary>
-        /// Creates a transformed lambda expression for AddOpenApiOperationTransformer.
+        /// Creates a transformed lambda expression compatible with AddOpenApiOperationTransformer's signature,
+        /// converting from the old single-parameter format to the new three-parameter async format.
         /// </summary>
-        /// <param name="argumentList">The original argument list from WithOpenApi.</param>
-        /// <param name="semanticModel">The semantic model for type information.</param>
-        /// <returns>A lambda expression compatible with AddOpenApiOperationTransformer.</returns>
+        /// <param name="argumentList">The original argument list from the WithOpenApi invocation.</param>
+        /// <param name="semanticModel">The semantic model for type information and symbol resolution.</param>
+        /// <returns>A lambda expression with the signature (operation, context, ct) => Task that performs the same operation transformation.</returns>
+        /// <example>
+        /// Input: operation => operation.Summary = "Test"
+        /// Output: (operation, context, ct) => { operation.Summary = "Test"; return Task.CompletedTask; }
+        /// </example>
         private ExpressionSyntax CreateTransformedLambda(ArgumentListSyntax argumentList, SemanticModel semanticModel)
         {
             // Create the new parameter list for AddOpenApiOperationTransformer
@@ -175,8 +214,10 @@ namespace Rewrite.RoslynRecipe
         }
 
         /// <summary>
-        /// Creates the new parameter list for the transformed lambda.
+        /// Creates the standardized parameter list for AddOpenApiOperationTransformer with three parameters:
+        /// operation (OpenApiOperation), context (ApiDescriptionProviderContext), and ct (CancellationToken).
         /// </summary>
+        /// <returns>A parameter list with the three required parameters for the new API.</returns>
         private ParameterListSyntax CreateNewParameterList()
         {
             return SyntaxFactory.ParameterList(
@@ -189,8 +230,11 @@ namespace Rewrite.RoslynRecipe
         }
 
         /// <summary>
-        /// Creates a default lambda expression that returns Task.CompletedTask.
+        /// Creates a default lambda expression for parameterless WithOpenApi() calls that simply
+        /// returns Task.CompletedTask without performing any operation modifications.
         /// </summary>
+        /// <param name="parameters">The new parameter list for the lambda.</param>
+        /// <returns>A lambda expression: (operation, context, ct) => Task.CompletedTask</returns>
         private ExpressionSyntax CreateDefaultLambda(ParameterListSyntax parameters)
         {
             var taskCompletedTask = SyntaxFactory.ParseExpression("Task.CompletedTask")
@@ -202,8 +246,17 @@ namespace Rewrite.RoslynRecipe
         }
 
         /// <summary>
-        /// Transforms a lambda expression to the new format.
+        /// Transforms an existing lambda expression from the old WithOpenApi format to the new
+        /// AddOpenApiOperationTransformer format, updating parameter names and converting return statements.
         /// </summary>
+        /// <param name="lambda">The original lambda expression from WithOpenApi.</param>
+        /// <param name="parameters">The new parameter list with three parameters.</param>
+        /// <param name="semanticModel">The semantic model for analysis.</param>
+        /// <returns>A transformed lambda compatible with AddOpenApiOperationTransformer.</returns>
+        /// <example>
+        /// Input: op => { op.Deprecated = true; return op; }
+        /// Output: (operation, context, ct) => { operation.Deprecated = true; return Task.CompletedTask; }
+        /// </example>
         private ExpressionSyntax TransformLambdaExpression(
             LambdaExpressionSyntax lambda,
             ParameterListSyntax parameters,
@@ -224,8 +277,11 @@ namespace Rewrite.RoslynRecipe
         }
 
         /// <summary>
-        /// Gets the original parameter name from a lambda expression.
+        /// Extracts the parameter name from the original lambda expression to enable proper
+        /// parameter reference replacement in the lambda body.
         /// </summary>
+        /// <param name="lambda">The lambda expression to extract the parameter name from.</param>
+        /// <returns>The original parameter name (e.g., "op", "operation", "x") or "operation" as default.</returns>
         private string GetOriginalParameterName(LambdaExpressionSyntax lambda)
         {
             return lambda switch
@@ -238,13 +294,33 @@ namespace Rewrite.RoslynRecipe
         }
 
         /// <summary>
-        /// Transforms the body of a lambda expression.
+        /// Transforms the body of a lambda expression by replacing parameter references with the new
+        /// parameter name and converting return statements from returning the operation to returning Task.CompletedTask.
         /// </summary>
+        /// <param name="body">The original lambda body to transform.</param>
+        /// <param name="originalParameterName">The original parameter name to replace (e.g., "op").</param>
+        /// <param name="semanticModel">The semantic model for analysis.</param>
+        /// <returns>The transformed lambda body with updated parameter references and return statements.</returns>
+        /// <remarks>
+        /// Special cases handled:
+        /// - Simple identity lambdas (op => op) are converted to just Task.CompletedTask
+        /// - Expression bodies are wrapped in blocks with return Task.CompletedTask
+        /// - Statement blocks have their return statements replaced with return Task.CompletedTask
+        /// </remarks>
         private CSharpSyntaxNode TransformLambdaBody(
             CSharpSyntaxNode body,
             string originalParameterName,
             SemanticModel semanticModel)
         {
+            // For simple expression lambdas that just return the parameter (e.g., op => op),
+            // we don't need to include the expression in the new lambda body
+            if (body is IdentifierNameSyntax id && id.Identifier.Text == originalParameterName)
+            {
+                // Just return Task.CompletedTask without including the operation expression
+                return SyntaxFactory.ParseExpression("Task.CompletedTask")
+                    .DiscardFormatting();
+            }
+
             // Replace parameter references if needed
             var parameterReplacer = new ParameterReplacementRewriter(
                 originalParameterName,
@@ -261,8 +337,15 @@ namespace Rewrite.RoslynRecipe
         }
 
         /// <summary>
-        /// Transforms a block body by replacing return statements.
+        /// Transforms a block body by replacing all return statements that return the operation
+        /// with statements that return Task.CompletedTask, maintaining the operation modifications.
         /// </summary>
+        /// <param name="block">The block syntax to transform.</param>
+        /// <returns>A transformed block with return statements converted to return Task.CompletedTask.</returns>
+        /// <example>
+        /// Input: <code>{ operation.Summary = "Test"; return operation; }</code>
+        /// Output: <code>{ operation.Summary = "Test"; return Task.CompletedTask; }</code>
+        /// </example>
         private BlockSyntax TransformBlockBody(BlockSyntax block)
         {
             var rewriter = new ReturnStatementRewriter();
@@ -280,8 +363,15 @@ namespace Rewrite.RoslynRecipe
         }
 
         /// <summary>
-        /// Creates a block from an expression.
+        /// Converts an expression body lambda into a block body with the expression as a statement
+        /// followed by a return Task.CompletedTask statement.
         /// </summary>
+        /// <param name="expression">The expression to wrap in a block.</param>
+        /// <returns>A block containing the expression as a statement and return Task.CompletedTask.</returns>
+        /// <example>
+        /// Input: operation.Summary = "Test"
+        /// Output: { operation.Summary = "Test"; return Task.CompletedTask; }
+        /// </example>
         private BlockSyntax CreateBlockFromExpression(ExpressionSyntax expression)
         {
             return SyntaxFactory.Block(
@@ -291,8 +381,10 @@ namespace Rewrite.RoslynRecipe
         }
 
         /// <summary>
-        /// Creates a return statement that returns Task.CompletedTask.
+        /// Creates a return statement that returns Task.CompletedTask, used to replace
+        /// the original return statements that returned the modified operation.
         /// </summary>
+        /// <returns>A return statement: return Task.CompletedTask;</returns>
         private ReturnStatementSyntax CreateReturnTaskCompletedStatement()
         {
             return SyntaxFactory.ReturnStatement(
@@ -301,8 +393,16 @@ namespace Rewrite.RoslynRecipe
         }
 
         /// <summary>
-        /// Creates a wrapped lambda for method group expressions.
+        /// Creates a wrapped lambda for method group expressions, converting them into a lambda
+        /// that invokes the method and then returns Task.CompletedTask.
         /// </summary>
+        /// <param name="methodGroup">The method group expression to wrap.</param>
+        /// <param name="parameters">The new parameter list for the lambda.</param>
+        /// <returns>A lambda that invokes the method group and returns Task.CompletedTask.</returns>
+        /// <example>
+        /// Input: ConfigureOperation (where ConfigureOperation is a method)
+        /// Output: (operation, context, ct) => { ConfigureOperation(operation); return Task.CompletedTask; }
+        /// </example>
         private ExpressionSyntax CreateWrappedMethodGroupLambda(
             ExpressionSyntax methodGroup,
             ParameterListSyntax parameters)
@@ -324,8 +424,13 @@ namespace Rewrite.RoslynRecipe
         }
 
         /// <summary>
-        /// Rewriter that replaces parameter references in lambda bodies.
+        /// Rewriter that replaces all references to the old parameter name with the new standardized
+        /// "operation" parameter name throughout the lambda body.
         /// </summary>
+        /// <example>
+        /// Transforms: op.Summary = "Test"
+        /// Into: operation.Summary = "Test"
+        /// </example>
         private sealed class ParameterReplacementRewriter : CSharpSyntaxRewriter
         {
             private readonly string _oldParameterName;
@@ -349,8 +454,13 @@ namespace Rewrite.RoslynRecipe
         }
 
         /// <summary>
-        /// Rewriter that replaces return statements with Task.CompletedTask.
+        /// Rewriter that replaces all return statements in the lambda body to return Task.CompletedTask
+        /// instead of returning the modified operation object.
         /// </summary>
+        /// <example>
+        /// Transforms: return operation;
+        /// Into: return Task.CompletedTask;
+        /// </example>
         private sealed class ReturnStatementRewriter : CSharpSyntaxRewriter
         {
             public override SyntaxNode? VisitReturnStatement(ReturnStatementSyntax node)
