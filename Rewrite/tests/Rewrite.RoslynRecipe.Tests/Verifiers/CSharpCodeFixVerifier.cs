@@ -1,6 +1,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Formatting;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
@@ -15,10 +16,17 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
     {
         public Test()
         {
+            OptionsTransforms.Add(options => options
+                .WithChangedOption(CSharpFormattingOptions.WrappingKeepStatementsOnSingleLine, false)
+                .WithChangedOption(CSharpFormattingOptions.IndentBlock, true)
+                .WithChangedOption(CSharpFormattingOptions.NewLinesForBracesInControlBlocks, true)
+                .WithChangedOption(CSharpFormattingOptions.NewLinesForBracesInMethods, true)
+            );
+            
             SolutionTransforms.Add((solution, projectId) =>
             {
                 var project = solution.GetProject(projectId);
-
+                
                 if (project is null) 
                 {
                     return solution;
@@ -29,6 +37,7 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
                 {
                     return solution;
                 }
+                
 
                 if (project.ParseOptions is not CSharpParseOptions parseOptions)
                 {

@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
+using Microsoft.CodeAnalysis.Formatting;
 using Rewrite.RoslynRecipe.Helpers;
 
 namespace Rewrite.RoslynRecipe
@@ -21,11 +22,16 @@ namespace Rewrite.RoslynRecipe
     public class WithOpenApiDeprecatedCodeFixProvider : CodeFixProvider
     {
         private const string Title = "Replace WithOpenApi with AddOpenApiOperationTransformer";
+        private const string NewMethodName = "AddOpenApiOperationTransformer";
+        private const string OperationParameterName = "operation";
+        private const string ContextParameterName = "context";
+        private const string CancellationTokenParameterName = "ct";
 
         /// <summary>
         /// Gets the diagnostic IDs that this code fix provider can fix.
         /// </summary>
-        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(WithOpenApiDeprecatedAnalyzer.DiagnosticId);
+        public sealed override ImmutableArray<string> FixableDiagnosticIds =>
+            ImmutableArray.Create(WithOpenApiDeprecatedAnalyzer.DiagnosticId);
 
         /// <summary>
         /// Gets a value indicating whether the provider can fix multiple diagnostics in a single operation.
@@ -57,7 +63,8 @@ namespace Rewrite.RoslynRecipe
             context.RegisterCodeFix(
                 CodeAction.Create(
                     title: Title,
-                    createChangedDocument: cancellationToken => ReplaceWithOpenApiAsync(context.Document, invocation, cancellationToken),
+                    createChangedDocument: cancellationToken =>
+                        ReplaceWithOpenApiAsync(context.Document, invocation, cancellationToken),
                     equivalenceKey: Title),
                 diagnostic);
         }
@@ -69,8 +76,11 @@ namespace Rewrite.RoslynRecipe
         /// <param name="invocation">The invocation expression to replace. Must not be null.</param>
         /// <param name="cancellationToken">The cancellation token for the operation.</param>
         /// <returns>A task that returns the updated document with the fix applied.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown when document or invocation is null.</exception>
-        private async Task<Document> ReplaceWithOpenApiAsync(Document document, InvocationExpressionSyntax invocation, CancellationToken cancellationToken)
+        /// <exception cref="ArgumentNullException">Thrown when document or invocation is null.</exception>
+        private async Task<Document> ReplaceWithOpenApiAsync(
+            Document document,
+            InvocationExpressionSyntax invocation,
+            CancellationToken cancellationToken)
         {
             var semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
             if (semanticModel == null)
@@ -80,258 +90,277 @@ namespace Rewrite.RoslynRecipe
             if (root == null)
                 return document;
 
-            // Check if this is a member access expression (e.g., something.WithOpenApi())
+            // Check if this is a member access expression
             if (invocation.Expression is not MemberAccessExpressionSyntax memberAccess)
                 return document;
 
-            // Create the new method name
-            var newMethodName = SyntaxFactory.IdentifierName("AddOpenApiOperationTransformer");
+            // Create the new member access with updated method name
+            var newMemberAccess = memberAccess.WithName(SyntaxFactory.IdentifierName(NewMethodName));
 
-            // Create the new member access expression with the updated method name
-            var newMemberAccess = memberAccess.WithName(newMethodName);
-
-            // Handle the arguments - need to transform the lambda if present
-            var newArguments = TransformArguments(invocation.ArgumentList, semanticModel);
+            // Transform the arguments
+            var transformedLambda = CreateTransformedLambda(invocation.ArgumentList, semanticModel);
 
             // Create the new invocation
             var newInvocation = invocation
                 .WithExpression(newMemberAccess)
-                .WithArgumentList(newArguments);
+                .WithArgumentList(SyntaxFactory.ArgumentList(
+                    SyntaxFactory.SingletonSeparatedList(
+                        SyntaxFactory.Argument(transformedLambda))));
 
             // Replace the old invocation with the new one
             var newRoot = root.ReplaceNode(invocation, newInvocation);
             var newDocument = document.WithSyntaxRoot(newRoot);
 
-            // Get the updated invocation node in the new tree
+            // Ensure Task is available by looking for Task.CompletedTask in the lambda
             var updatedSemanticModel = await newDocument.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
-            if (updatedSemanticModel == null)
-                return newDocument;
-
-            var updatedInvocation = newRoot.DescendantNodes()
-                .OfType<InvocationExpressionSyntax>()
-                .FirstOrDefault(i => i.ToString() == newInvocation.ToString());
-
-            if (updatedInvocation == null)
-                return newDocument;
-
-            // Ensure Task is available since we're using Task.CompletedTask
-            var (finalDocument, finalRoot) = await SymbolImporter.MaybeAddTaskUsingAsync(
-                newDocument,
-                newRoot,
-                updatedSemanticModel,
-                updatedInvocation,
-                cancellationToken);
-
-            return finalDocument;
-        }
-
-        /// <summary>
-        /// Transforms the arguments from WithOpenApi format to AddOpenApiOperationTransformer format.
-        /// </summary>
-        /// <param name="argumentList">The original argument list from WithOpenApi. Must not be null.</param>
-        /// <param name="semanticModel">The semantic model for type information. Must not be null.</param>
-        /// <returns>The transformed argument list for AddOpenApiOperationTransformer.</returns>
-        private ArgumentListSyntax TransformArguments(ArgumentListSyntax argumentList, SemanticModel semanticModel)
-        {
-            if (argumentList.Arguments.Count == 0)
+            if (updatedSemanticModel != null)
             {
-                // If there are no arguments, return an empty argument list
-                // AddOpenApiOperationTransformer requires a lambda, so we'll create a default one
-                var defaultLambda = SyntaxFactory.ParseExpression("(operation, context, ct) => Task.CompletedTask");
-                return SyntaxFactory.ArgumentList(
-                    SyntaxFactory.SingletonSeparatedList(
-                        SyntaxFactory.Argument(defaultLambda)));
-            }
+                // Find any Task.CompletedTask references in the new tree
+                var taskReferences = newRoot.DescendantNodes()
+                    .OfType<MemberAccessExpressionSyntax>()
+                    .Where(m => m.Name.Identifier.Text == "CompletedTask" &&
+                               m.Expression is IdentifierNameSyntax id &&
+                               id.Identifier.Text == "Task");
 
-            var firstArgument = argumentList.Arguments[0];
-            var expression = firstArgument.Expression;
-
-            // Check if the argument is a lambda expression
-            if (expression is ParenthesizedLambdaExpressionSyntax lambda)
-            {
-                var transformedLambda = TransformLambda(lambda);
-                return SyntaxFactory.ArgumentList(
-                    SyntaxFactory.SingletonSeparatedList(
-                        SyntaxFactory.Argument(transformedLambda)));
-            }
-            else if (expression is SimpleLambdaExpressionSyntax simpleLambda)
-            {
-                var transformedLambda = TransformSimpleLambda(simpleLambda);
-                return SyntaxFactory.ArgumentList(
-                    SyntaxFactory.SingletonSeparatedList(
-                        SyntaxFactory.Argument(transformedLambda)));
-            }
-
-            // For other expression types (method groups, etc.), wrap in a lambda
-            var wrappedLambda = CreateWrappedLambda(expression);
-            return SyntaxFactory.ArgumentList(
-                SyntaxFactory.SingletonSeparatedList(
-                    SyntaxFactory.Argument(wrappedLambda)));
-        }
-
-        /// <summary>
-        /// Transforms a parenthesized lambda expression from WithOpenApi format to AddOpenApiOperationTransformer format.
-        /// </summary>
-        /// <param name="lambda">The original lambda expression. Must not be null.</param>
-        /// <returns>The transformed lambda expression with async Task signature.</returns>
-        private ExpressionSyntax TransformLambda(ParenthesizedLambdaExpressionSyntax lambda)
-        {
-            // WithOpenApi: (operation) => { operation.Summary = "..."; return operation; }
-            // AddOpenApiOperationTransformer: (operation, context, ct) => { operation.Summary = "..."; return Task.CompletedTask; }
-
-            // Create new parameter list with three parameters
-            var parameters = SyntaxFactory.ParameterList(
-                SyntaxFactory.SeparatedList(new[]
+                if (taskReferences.Any())
                 {
-                    SyntaxFactory.Parameter(SyntaxFactory.Identifier("operation")),
-                    SyntaxFactory.Parameter(SyntaxFactory.Identifier("context")),
-                    SyntaxFactory.Parameter(SyntaxFactory.Identifier("ct"))
-                }));
+                    var firstTaskRef = taskReferences.First();
+                    var (finalDocument, finalRoot) = await SymbolImporter.MaybeAddTaskUsingAsync(
+                        newDocument,
+                        newRoot,
+                        updatedSemanticModel,
+                        firstTaskRef,
+                        cancellationToken);
 
-            // Transform the body
-            if (lambda.Body is BlockSyntax block)
-            {
-                var transformedBlock = TransformLambdaBlock(block);
-                return SyntaxFactory.ParenthesizedLambdaExpression(
-                    parameters,
-                    transformedBlock);
-            }
-            else if (lambda.Body is ExpressionSyntax expr)
-            {
-                // For expression-bodied lambdas, wrap in a block that returns Task.CompletedTask
-                var statements = new StatementSyntax[]
-                {
-                    SyntaxFactory.ExpressionStatement(expr),
-                    SyntaxFactory.ReturnStatement(
-                        SyntaxFactory.ParseExpression("Task.CompletedTask"))
-                };
-
-                var newBlock = SyntaxFactory.Block(statements);
-                return SyntaxFactory.ParenthesizedLambdaExpression(
-                    parameters,
-                    newBlock);
-            }
-
-            return lambda;
-        }
-
-        /// <summary>
-        /// Transforms a simple lambda expression from WithOpenApi format to AddOpenApiOperationTransformer format.
-        /// </summary>
-        /// <param name="lambda">The original simple lambda expression. Must not be null.</param>
-        /// <returns>The transformed lambda expression with async Task signature.</returns>
-        private ExpressionSyntax TransformSimpleLambda(SimpleLambdaExpressionSyntax lambda)
-        {
-            // Create new parameter list with three parameters
-            var parameters = SyntaxFactory.ParameterList(
-                SyntaxFactory.SeparatedList(new[]
-                {
-                    SyntaxFactory.Parameter(SyntaxFactory.Identifier("operation")),
-                    SyntaxFactory.Parameter(SyntaxFactory.Identifier("context")),
-                    SyntaxFactory.Parameter(SyntaxFactory.Identifier("ct"))
-                }));
-
-            // Transform the body
-            if (lambda.Body is BlockSyntax block)
-            {
-                var transformedBlock = TransformLambdaBlock(block);
-                return SyntaxFactory.ParenthesizedLambdaExpression(
-                    parameters,
-                    transformedBlock);
-            }
-            else if (lambda.Body is ExpressionSyntax expr)
-            {
-                // For expression-bodied lambdas, wrap in a block that returns Task.CompletedTask
-                var statements = new StatementSyntax[]
-                {
-                    SyntaxFactory.ExpressionStatement(expr),
-                    SyntaxFactory.ReturnStatement(
-                        SyntaxFactory.ParseExpression("Task.CompletedTask"))
-                };
-
-                var newBlock = SyntaxFactory.Block(statements);
-                return SyntaxFactory.ParenthesizedLambdaExpression(
-                    parameters,
-                    newBlock);
-            }
-
-            // Fallback: convert to parenthesized lambda
-            return SyntaxFactory.ParenthesizedLambdaExpression(
-                parameters,
-                lambda.Body);
-        }
-
-        /// <summary>
-        /// Transforms a lambda block by replacing return statements that return the operation with Task.CompletedTask.
-        /// </summary>
-        /// <param name="block">The original block syntax. Must not be null.</param>
-        /// <returns>The transformed block with updated return statements.</returns>
-        private BlockSyntax TransformLambdaBlock(BlockSyntax block)
-        {
-            var statements = block.Statements.ToList();
-
-            for (int i = 0; i < statements.Count; i++)
-            {
-                if (statements[i] is ReturnStatementSyntax returnStatement)
-                {
-                    // Replace 'return operation;' with 'return Task.CompletedTask;'
-                    if (returnStatement.Expression != null)
-                    {
-                        var newReturn = SyntaxFactory.ReturnStatement(
-                            SyntaxFactory.ParseExpression("Task.CompletedTask"))
-                            .WithLeadingTrivia(returnStatement.GetLeadingTrivia())
-                            .WithTrailingTrivia(returnStatement.GetTrailingTrivia());
-
-                        statements[i] = newReturn;
-                    }
+                    // Update document and root after adding using
+                    newDocument = finalDocument;
+                    newRoot = finalRoot;
                 }
             }
 
-            // If there's no return statement, add one at the end
-            bool hasReturn = statements.Any(s => s is ReturnStatementSyntax);
-            if (!hasReturn)
-            {
-                statements.Add(SyntaxFactory.ReturnStatement(
-                    SyntaxFactory.ParseExpression("Task.CompletedTask")));
-            }
+            // Format the document
+            var formattedDocument = await Formatter.FormatAsync(
+                newDocument,
+                Formatter.Annotation,
+                cancellationToken: cancellationToken);
 
-            return block.WithStatements(SyntaxFactory.List(statements));
+            return formattedDocument;
         }
 
         /// <summary>
-        /// Creates a wrapped lambda expression for non-lambda arguments.
+        /// Creates a transformed lambda expression for AddOpenApiOperationTransformer.
         /// </summary>
-        /// <param name="expression">The expression to wrap. Must not be null.</param>
-        /// <returns>A lambda expression that wraps the original expression.</returns>
-        private ExpressionSyntax CreateWrappedLambda(ExpressionSyntax expression)
+        /// <param name="argumentList">The original argument list from WithOpenApi.</param>
+        /// <param name="semanticModel">The semantic model for type information.</param>
+        /// <returns>A lambda expression compatible with AddOpenApiOperationTransformer.</returns>
+        private ExpressionSyntax CreateTransformedLambda(ArgumentListSyntax argumentList, SemanticModel semanticModel)
         {
-            // Create: (operation, context, ct) => { originalExpression(operation); return Task.CompletedTask; }
-            var parameters = SyntaxFactory.ParameterList(
+            // Create the new parameter list for AddOpenApiOperationTransformer
+            var parameters = CreateNewParameterList();
+
+            // If no arguments, create default lambda
+            if (argumentList.Arguments.Count == 0)
+            {
+                return CreateDefaultLambda(parameters);
+            }
+
+            var firstArgument = argumentList.Arguments[0].Expression;
+
+            // Handle different expression types
+            return firstArgument switch
+            {
+                LambdaExpressionSyntax lambda => TransformLambdaExpression(lambda, parameters, semanticModel),
+                _ => CreateWrappedMethodGroupLambda(firstArgument, parameters)
+            };
+        }
+
+        /// <summary>
+        /// Creates the new parameter list for the transformed lambda.
+        /// </summary>
+        private ParameterListSyntax CreateNewParameterList()
+        {
+            return SyntaxFactory.ParameterList(
                 SyntaxFactory.SeparatedList(new[]
                 {
-                    SyntaxFactory.Parameter(SyntaxFactory.Identifier("operation")),
-                    SyntaxFactory.Parameter(SyntaxFactory.Identifier("context")),
-                    SyntaxFactory.Parameter(SyntaxFactory.Identifier("ct"))
+                    SyntaxFactory.Parameter(SyntaxFactory.Identifier(OperationParameterName)),
+                    SyntaxFactory.Parameter(SyntaxFactory.Identifier(ContextParameterName)),
+                    SyntaxFactory.Parameter(SyntaxFactory.Identifier(CancellationTokenParameterName))
                 }));
+        }
 
-            var invocation = SyntaxFactory.InvocationExpression(
-                expression,
-                SyntaxFactory.ArgumentList(
-                    SyntaxFactory.SingletonSeparatedList(
-                        SyntaxFactory.Argument(SyntaxFactory.IdentifierName("operation")))));
-
-            var statements = new StatementSyntax[]
-            {
-                SyntaxFactory.ExpressionStatement(invocation),
-                SyntaxFactory.ReturnStatement(
-                    SyntaxFactory.ParseExpression("Task.CompletedTask"))
-            };
-
-            var block = SyntaxFactory.Block(statements);
+        /// <summary>
+        /// Creates a default lambda expression that returns Task.CompletedTask.
+        /// </summary>
+        private ExpressionSyntax CreateDefaultLambda(ParameterListSyntax parameters)
+        {
+            var taskCompletedTask = SyntaxFactory.ParseExpression("Task.CompletedTask")
+                .DiscardFormatting();
 
             return SyntaxFactory.ParenthesizedLambdaExpression(
                 parameters,
-                block);
+                taskCompletedTask);
+        }
+
+        /// <summary>
+        /// Transforms a lambda expression to the new format.
+        /// </summary>
+        private ExpressionSyntax TransformLambdaExpression(
+            LambdaExpressionSyntax lambda,
+            ParameterListSyntax parameters,
+            SemanticModel semanticModel)
+        {
+            // Get the original parameter name
+            string originalParameterName = GetOriginalParameterName(lambda);
+
+            // Transform the body
+            CSharpSyntaxNode transformedBody = TransformLambdaBody(
+                lambda.Body,
+                originalParameterName,
+                semanticModel);
+
+            return SyntaxFactory.ParenthesizedLambdaExpression(
+                parameters,
+                transformedBody);
+        }
+
+        /// <summary>
+        /// Gets the original parameter name from a lambda expression.
+        /// </summary>
+        private string GetOriginalParameterName(LambdaExpressionSyntax lambda)
+        {
+            return lambda switch
+            {
+                SimpleLambdaExpressionSyntax simple => simple.Parameter.Identifier.Text,
+                ParenthesizedLambdaExpressionSyntax parenthesized when parenthesized.ParameterList.Parameters.Count > 0
+                    => parenthesized.ParameterList.Parameters[0].Identifier.Text,
+                _ => "operation"
+            };
+        }
+
+        /// <summary>
+        /// Transforms the body of a lambda expression.
+        /// </summary>
+        private CSharpSyntaxNode TransformLambdaBody(
+            CSharpSyntaxNode body,
+            string originalParameterName,
+            SemanticModel semanticModel)
+        {
+            // Replace parameter references if needed
+            var parameterReplacer = new ParameterReplacementRewriter(
+                originalParameterName,
+                OperationParameterName);
+
+            var updatedBody = (CSharpSyntaxNode)parameterReplacer.Visit(body);
+
+            return updatedBody switch
+            {
+                BlockSyntax block => TransformBlockBody(block),
+                ExpressionSyntax expr => CreateBlockFromExpression(expr),
+                _ => updatedBody
+            };
+        }
+
+        /// <summary>
+        /// Transforms a block body by replacing return statements.
+        /// </summary>
+        private BlockSyntax TransformBlockBody(BlockSyntax block)
+        {
+            var rewriter = new ReturnStatementRewriter();
+            var transformedBlock = (BlockSyntax)rewriter.Visit(block);
+
+            // Ensure there's a return statement
+            if (!transformedBlock.Statements.Any(s => s is ReturnStatementSyntax))
+            {
+                var statements = transformedBlock.Statements.Add(
+                    CreateReturnTaskCompletedStatement());
+                transformedBlock = transformedBlock.WithStatements(statements);
+            }
+
+            return transformedBlock.WithAdditionalAnnotations(Formatter.Annotation);
+        }
+
+        /// <summary>
+        /// Creates a block from an expression.
+        /// </summary>
+        private BlockSyntax CreateBlockFromExpression(ExpressionSyntax expression)
+        {
+            return SyntaxFactory.Block(
+                SyntaxFactory.ExpressionStatement(expression),
+                CreateReturnTaskCompletedStatement())
+                .WithAdditionalAnnotations(Formatter.Annotation);
+        }
+
+        /// <summary>
+        /// Creates a return statement that returns Task.CompletedTask.
+        /// </summary>
+        private ReturnStatementSyntax CreateReturnTaskCompletedStatement()
+        {
+            return SyntaxFactory.ReturnStatement(
+                SyntaxFactory.ParseExpression("Task.CompletedTask")
+                    .DiscardFormatting());
+        }
+
+        /// <summary>
+        /// Creates a wrapped lambda for method group expressions.
+        /// </summary>
+        private ExpressionSyntax CreateWrappedMethodGroupLambda(
+            ExpressionSyntax methodGroup,
+            ParameterListSyntax parameters)
+        {
+            // Create: methodGroup(operation);
+            var invocation = SyntaxFactory.InvocationExpression(
+                methodGroup,
+                SyntaxFactory.ArgumentList(
+                    SyntaxFactory.SingletonSeparatedList(
+                        SyntaxFactory.Argument(
+                            SyntaxFactory.IdentifierName(OperationParameterName)))));
+
+            var block = SyntaxFactory.Block(
+                SyntaxFactory.ExpressionStatement(invocation),
+                CreateReturnTaskCompletedStatement())
+                .WithAdditionalAnnotations(Formatter.Annotation);
+
+            return SyntaxFactory.ParenthesizedLambdaExpression(parameters, block);
+        }
+
+        /// <summary>
+        /// Rewriter that replaces parameter references in lambda bodies.
+        /// </summary>
+        private sealed class ParameterReplacementRewriter : CSharpSyntaxRewriter
+        {
+            private readonly string _oldParameterName;
+            private readonly string _newParameterName;
+
+            public ParameterReplacementRewriter(string oldParameterName, string newParameterName)
+            {
+                _oldParameterName = oldParameterName;
+                _newParameterName = newParameterName;
+            }
+
+            public override SyntaxNode? VisitIdentifierName(IdentifierNameSyntax node)
+            {
+                if (node.Identifier.Text == _oldParameterName)
+                {
+                    return SyntaxFactory.IdentifierName(_newParameterName)
+                        .WithTriviaFrom(node);
+                }
+                return base.VisitIdentifierName(node);
+            }
+        }
+
+        /// <summary>
+        /// Rewriter that replaces return statements with Task.CompletedTask.
+        /// </summary>
+        private sealed class ReturnStatementRewriter : CSharpSyntaxRewriter
+        {
+            public override SyntaxNode? VisitReturnStatement(ReturnStatementSyntax node)
+            {
+                // Replace any return statement with return Task.CompletedTask
+                return SyntaxFactory.ReturnStatement(
+                    SyntaxFactory.ParseExpression("Task.CompletedTask")
+                        .DiscardFormatting())
+                    .WithTriviaFrom(node);
+            }
         }
     }
 }
