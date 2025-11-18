@@ -57,21 +57,22 @@ public static partial class CSharpAnalyzerVerifier<TAnalyzer>
     /// <inheritdoc cref="AnalyzerVerifier{TAnalyzer, TTest, TVerifier}.VerifyAnalyzerAsync(string, DiagnosticResult[])"/>
     public static async Task VerifyAnalyzerAsync([StringSyntax("c#-test")] string source, ReferenceAssemblies referenceAssemblies, params DiagnosticResult[] expected)
     {
+        // referenceAssemblies = referenceAssemblies.AddPackage("TUnit.Core")
         var test = new Test
         {
             TestCode = source,
             ReferenceAssemblies = referenceAssemblies,
             TestState =
             {
-                AdditionalReferences =
-                {
-                    typeof(TUnitAttribute).Assembly.Location,
-                    typeof(AssertionBuilder).Assembly.Location,
-                },
+                // AdditionalReferences =
+                // {
+                //     typeof(TUnitAttribute).Assembly.Location,
+                //     typeof(AssertionBuilder).Assembly.Location,
+                // },
             },
-            CompilerDiagnostics = CompilerDiagnostics.Errors
+            CompilerDiagnostics = CompilerDiagnostics.Warnings
         };
-
+        test.DisabledDiagnostics.AddRange(["CS1701","CS1591","CS0067","CS0169"]);
         test.ExpectedDiagnostics.AddRange(expected);
         await test.RunAsync(CancellationToken.None);
     }

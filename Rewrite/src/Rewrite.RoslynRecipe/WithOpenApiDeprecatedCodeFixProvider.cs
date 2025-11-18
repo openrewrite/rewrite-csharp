@@ -72,6 +72,8 @@ namespace Rewrite.RoslynRecipe
         /// <returns>A task representing the asynchronous registration operation.</returns>
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
+            var documentEditor = await DocumentEditor.CreateAsync(context.Document);
+            
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
             if (root == null)
                 return;
@@ -159,11 +161,12 @@ namespace Rewrite.RoslynRecipe
                 if (taskReferences.Any())
                 {
                     var firstTaskRef = taskReferences.First();
-                    var (finalDocument, finalRoot) = await SymbolImporter.MaybeAddTaskUsingAsync(
+                    var (finalDocument, finalRoot) = await UsingsUtil.MaybeAddUsingAsync(
                         newDocument,
                         newRoot,
                         updatedSemanticModel,
                         firstTaskRef,
+                        "System.Threading.Tasks.Task",
                         cancellationToken);
 
                     // Update document and root after adding using

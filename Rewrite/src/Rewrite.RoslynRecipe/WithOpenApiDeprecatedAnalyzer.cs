@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Rewrite.RoslynRecipe.Helpers;
 
 namespace Rewrite.RoslynRecipe
 {
@@ -69,30 +70,17 @@ namespace Rewrite.RoslynRecipe
             if (memberAccess.Name.Identifier.Text != "WithOpenApi")
                 return;
 
-            // Get the symbol info for the invoked method
-            var symbolInfo = context.SemanticModel.GetSymbolInfo(invocation);
-            if (symbolInfo.Symbol is not IMethodSymbol methodSymbol)
-            {
-                return;
-            }
-            
 
-            // Use GetDocumentationCommentId for precise identification when available
-            var symbolKey = methodSymbol.GetDocumentationCommentId();
-            if(symbolKey == null)
+            if (!invocation.Expression.IsSymbolOneOf(context.SemanticModel,
+                    "M:Microsoft.AspNetCore.Builder.OpenApiEndpointConventionBuilderExtensions.WithOpenApi``1",
+                    "M:Microsoft.AspNetCore.Builder.OpenApiEndpointConventionBuilderExtensions.WithOpenApi``1(System.Func{Microsoft.OpenApi.OpenApiOperation,Microsoft.OpenApi.OpenApiOperation})",
+                    "M:Microsoft.AspNetCore.Builder.OpenApiEndpointConventionBuilderExtensions.WithOpenApi``1(System.Func{Microsoft.OpenApi.Models.OpenApiOperation,Microsoft.OpenApi.Models.OpenApiOperation})"
+                ))
                 return;
-            
-            HashSet<string> targets = [
-                "M:Microsoft.AspNetCore.Builder.OpenApiEndpointConventionBuilderExtensions.WithOpenApi``1",
-                "M:Microsoft.AspNetCore.Builder.OpenApiEndpointConventionBuilderExtensions.WithOpenApi``1(System.Func{Microsoft.OpenApi.OpenApiOperation,Microsoft.OpenApi.OpenApiOperation})",
-                "M:Microsoft.AspNetCore.Builder.OpenApiEndpointConventionBuilderExtensions.WithOpenApi``1(System.Func{Microsoft.OpenApi.Models.OpenApiOperation,Microsoft.OpenApi.Models.OpenApiOperation})"
-            ]; 
-            if (targets.Contains(symbolKey) )
-            {
-                var diagnosticLocation = memberAccess.Name.GetLocation();
+
+            var diagnosticLocation = memberAccess.Name.GetLocation();
                 var diagnosticToReport = Diagnostic.Create(Rule, diagnosticLocation);
                 context.ReportDiagnostic(diagnosticToReport);
-            }
             
         }
     }

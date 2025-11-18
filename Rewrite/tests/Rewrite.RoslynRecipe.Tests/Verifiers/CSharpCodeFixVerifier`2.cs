@@ -49,7 +49,7 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
         [StringSyntax("c#-test")] string fixedSource,
         ReferenceAssemblies referenceAssemblies)
     {
-        var cu = (CompilationUnitSyntax)await CSharpSyntaxTree.ParseText(source).GetRootAsync();
+        var cu = (CompilationUnitSyntax)await CSharpSyntaxTree.ParseText(CSharpVerifierHelper.StripAnalyzerBoundaryMarkers(source)).GetRootAsync();
         var hasGlobalStatements = cu.DescendantNodes().OfType<GlobalStatementSyntax>().Any();
         var test = new Test
         {

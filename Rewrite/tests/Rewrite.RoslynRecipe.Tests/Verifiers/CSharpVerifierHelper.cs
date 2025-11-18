@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -28,5 +29,38 @@ internal static class CSharpVerifierHelper
             .SetItem("CS8652", ReportDiagnostic.Suppress);
 
         return nullableWarnings;
+    }
+
+    /// <summary>
+    /// Strips analyzer boundary markers from C# code strings to produce valid C# code.
+    /// </summary>
+    /// <param name="code">The C# code containing analyzer boundary markers.</param>
+    /// <returns>The C# code with all analyzer boundary markers removed.</returns>
+    /// <remarks>
+    /// This method removes diagnostic markers like {|DiagnosticId:code|} used in analyzer tests,
+    /// leaving only the code portion. For example:
+    /// - Input: "{|ORNETX0009:IActionContextAccessor|}"
+    /// - Output: "IActionContextAccessor"
+    ///
+    /// The pattern matches:
+    /// - Opening: {|
+    /// - Diagnostic ID: Any characters except : and |
+    /// - Separator: :
+    /// - Code: Any characters except |
+    /// - Closing: |}
+    /// </remarks>
+    public static string StripAnalyzerBoundaryMarkers(string code)
+    {
+
+        // Pattern explanation:
+        // \{\|      - Matches the opening {|
+        // [^:|]+    - Matches the diagnostic ID (one or more characters that are not : or |)
+        // :         - Matches the colon separator
+        // ([^|]+)   - Captures the code content (one or more characters that are not |)
+        // \|\}      - Matches the closing |}
+        //
+        // The captured group (1) contains the code we want to keep
+        var pattern = @"\{\|[^:|]+:([^|]+)\|\}";
+        return Regex.Replace(code, pattern, "$1");
     }
 }

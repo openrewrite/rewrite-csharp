@@ -12,8 +12,9 @@ namespace Rewrite.RoslynRecipe.Helpers
     /// <summary>
     /// Helper class for managing using directives and ensuring symbols are available at usage sites.
     /// </summary>
-    public static class SymbolImporter
+    public static class UsingsUtil
     {
+        
         /// <summary>
         /// Adds a using directive for the specified type if it's not already available at the usage site.
         /// </summary>
@@ -21,7 +22,6 @@ namespace Rewrite.RoslynRecipe.Helpers
         /// <param name="root">The syntax root of the document.</param>
         /// <param name="semanticModel">The semantic model for the document.</param>
         /// <param name="usageSite">The syntax node where the type will be used.</param>
-        /// <param name="typeName">The simple name of the type (e.g., "Task").</param>
         /// <param name="fullTypeName">The fully qualified type name (e.g., "System.Threading.Tasks.Task").</param>
         /// <param name="cancellationToken">The cancellation token for the operation.</param>
         /// <returns>A tuple containing the potentially updated document and root.</returns>
@@ -30,28 +30,63 @@ namespace Rewrite.RoslynRecipe.Helpers
             SyntaxNode root,
             SemanticModel semanticModel,
             SyntaxNode usageSite,
-            string typeName,
             string fullTypeName,
             CancellationToken cancellationToken)
         {
+            // Extract the simple type name from the full type name
+            var lastDotIndex = fullTypeName.LastIndexOf('.');
+            if (lastDotIndex <= 0)
+            {
+                // No namespace, nothing to add
+                return (document, root);
+            }
+
+            var typeName = fullTypeName.Substring(lastDotIndex + 1);
+            var namespaceName = fullTypeName.Substring(0, lastDotIndex);
+
             // Check if the type is already available at the usage site
             if (IsTypeAvailable(semanticModel, usageSite, typeName, fullTypeName))
             {
                 return (document, root);
             }
 
-            // Extract namespace from the full type name
-            var lastDotIndex = fullTypeName.LastIndexOf('.');
-            if (lastDotIndex <= 0)
-            {
-                // No namespace to add
-                return (document, root);
-            }
-
-            var namespaceName = fullTypeName.Substring(0, lastDotIndex);
-
             // Add the using directive
             return await AddUsingDirectiveAsync(document, root, namespaceName, cancellationToken);
+        }
+
+        /// <summary>
+        /// Removes a using directive for the specified namespace if it exists in the document.
+        /// </summary>
+        /// <param name="document">The document to potentially remove the using directive from.</param>
+        /// <param name="namespaceName">The namespace to remove (e.g., "System.Threading.Tasks").</param>
+        /// <param name="cancellationToken">The cancellation token for the operation.</param>
+        /// <returns>The document with the using directive removed if it was present.</returns>
+        public static async Task<Document> MaybeRemoveUsingAsync(
+            Document document,
+            string namespaceName,
+            CancellationToken cancellationToken)
+        {
+            var root = await document.GetSyntaxRootAsync(cancellationToken);
+            if (root == null)
+                return document;
+
+            var compilationUnit = root as CompilationUnitSyntax;
+            if (compilationUnit == null)
+                return document;
+
+            // Find and remove the using directive if it exists
+            var usingToRemove = compilationUnit.Usings
+                .FirstOrDefault(u => u.Name?.ToString() == namespaceName);
+
+            if (usingToRemove == null)
+                return document;
+
+            // Remove the using directive
+            var newUsings = compilationUnit.Usings.Remove(usingToRemove);
+            var newCompilationUnit = compilationUnit.WithUsings(newUsings);
+
+            // Return the updated document
+            return document.WithSyntaxRoot(newCompilationUnit);
         }
 
         /// <summary>
@@ -166,56 +201,5 @@ namespace Rewrite.RoslynRecipe.Helpers
             return (newDocument, newRoot!);
         }
 
-        /// <summary>
-        /// Helper method specifically for System.Threading.Tasks.Task.
-        /// </summary>
-        /// <param name="document">The document to potentially add the using directive to.</param>
-        /// <param name="root">The syntax root of the document.</param>
-        /// <param name="semanticModel">The semantic model for the document.</param>
-        /// <param name="usageSite">The syntax node where Task will be used.</param>
-        /// <param name="cancellationToken">The cancellation token for the operation.</param>
-        /// <returns>A tuple containing the potentially updated document and root.</returns>
-        public static async Task<(Document document, SyntaxNode root)> MaybeAddTaskUsingAsync(
-            Document document,
-            SyntaxNode root,
-            SemanticModel semanticModel,
-            SyntaxNode usageSite,
-            CancellationToken cancellationToken)
-        {
-            return await MaybeAddUsingAsync(
-                document,
-                root,
-                semanticModel,
-                usageSite,
-                "Task",
-                "System.Threading.Tasks.Task",
-                cancellationToken);
-        }
-
-        /// <summary>
-        /// Helper method specifically for Microsoft.AspNetCore.Builder.ExceptionHandlerOptions.
-        /// </summary>
-        /// <param name="document">The document to potentially add the using directive to.</param>
-        /// <param name="root">The syntax root of the document.</param>
-        /// <param name="semanticModel">The semantic model for the document.</param>
-        /// <param name="usageSite">The syntax node where ExceptionHandlerOptions will be used.</param>
-        /// <param name="cancellationToken">The cancellation token for the operation.</param>
-        /// <returns>A tuple containing the potentially updated document and root.</returns>
-        public static async Task<(Document document, SyntaxNode root)> MaybeAddExceptionHandlerOptionsUsingAsync(
-            Document document,
-            SyntaxNode root,
-            SemanticModel semanticModel,
-            SyntaxNode usageSite,
-            CancellationToken cancellationToken)
-        {
-            return await MaybeAddUsingAsync(
-                document,
-                root,
-                semanticModel,
-                usageSite,
-                "ExceptionHandlerOptions",
-                "Microsoft.AspNetCore.Builder.ExceptionHandlerOptions",
-                cancellationToken);
-        }
     }
 }

@@ -40,7 +40,9 @@ public class WithOpenApiDeprecatedAnalyzerTests
             """;
 
         await Verifier.VerifyAnalyzerAsync(text, Assemblies.AspNet90
-               .AddPackage("Microsoft.AspNetCore.OpenApi"))
+               .AddPackage("Microsoft.AspNetCore.OpenApi")
+               .AddPackage("Microsoft.CodeAnalysis.NetAnalyzers", "10.0.100-rc.2.25502.107")
+            )
             .ConfigureAwait(false);
     }
 

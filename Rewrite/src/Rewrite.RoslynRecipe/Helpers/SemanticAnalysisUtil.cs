@@ -12,11 +12,33 @@ using Microsoft.CodeAnalysis.Operations;
 namespace Rewrite.RoslynRecipe.Helpers
 {
     /// <summary>
-    /// Provides utilities for semantic analysis including data flow and control flow tracking
-    /// to determine member access patterns across method boundaries and reassignments.
+    /// Provides utilities for semantic analysis
     /// </summary>
     public static class SemanticAnalysisUtil
     {
+        
+        public static bool IsSymbolOneOf(this SyntaxNode node, SemanticModel semanticModel, params IEnumerable<string> symbolNames)
+        {
+            var symbolInfo = semanticModel.GetSymbolInfo(node);
+            var symbol = symbolInfo.Symbol;
+            if (symbol == null)
+            {
+                return false;
+            }
+
+            // Use GetDocumentationCommentId for precise identification when available
+            var symbolKey = symbol.GetDocumentationCommentId();
+            if(symbolKey == null)
+                return false;
+
+            if (symbolNames.Contains(symbolKey))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        
         /// <summary>
         /// Determines if a specific member of a type is accessed from a given location,
         /// tracking the object through control flow, data flow, reassignments, and method calls.

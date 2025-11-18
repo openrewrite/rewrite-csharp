@@ -39,7 +39,24 @@ The Java side communicates with the C# language server via JSON RPC over STDIO f
 
 #### Analyzer / Code fixup implementation
 - Where possible, perform "low cost" syntax elimination first, and confirm correct targeting with semantic analysis
-- Use `GetDocumentationCommentId` on symbols to determine symbol signature equality. See `WithOpenApiDeprecatedAnalyzer` for example on how to write analyzers targeting specific APIs for refactoring.
+- ALWAYS confirm correct targeting of nodes from semanitc model. Use `GetDocumentationCommentId()` on symbols as a way to establish fully qualified unique name for a symbol. Use pattern like this to do semantic confirmation:
+  ```
+  var symbolKey = methodSymbol.GetDocumentationCommentId();
+  if(symbolKey == null)
+      return;
+  
+  HashSet<string> targets = [
+      "M:Microsoft.AspNetCore.Builder.OpenApiEndpointConventionBuilderExtensions.WithOpenApi``1",
+      "M:Microsoft.AspNetCore.Builder.OpenApiEndpointConventionBuilderExtensions.WithOpenApi``1(System.Func{Microsoft.OpenApi.OpenApiOperation,Microsoft.OpenApi.OpenApiOperation})",
+      "M:Microsoft.AspNetCore.Builder.OpenApiEndpointConventionBuilderExtensions.WithOpenApi``1(System.Func{Microsoft.OpenApi.Models.OpenApiOperation,Microsoft.OpenApi.Models.OpenApiOperation})"
+  ]; 
+  if (targets.Contains(symbolKey) )
+  {
+      // logic to apply
+  }
+  ```
+
+  
 
 #### Test Requirements
 - **Always generate comprehensive tests for analyzers unless explicitly instructed otherwise**
