@@ -32,8 +32,7 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
                     return solution;
                 }
 
-                var compilationOptions = project.CompilationOptions;
-                if (compilationOptions is null)
+                if (project.CompilationOptions is not CSharpCompilationOptions compilationOptions)
                 {
                     return solution;
                 }
@@ -49,8 +48,9 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
                     compilationOptions = compilationOptions.WithOutputKind(OutputKind.ConsoleApplication);
                 }
 
-                compilationOptions = compilationOptions.WithSpecificDiagnosticOptions(
-                    compilationOptions.SpecificDiagnosticOptions.SetItems(CSharpVerifierHelper.NullableWarnings));
+                compilationOptions = compilationOptions
+                    .WithNullableContextOptions(NullableContextOptions.Enable)
+                    .WithSpecificDiagnosticOptions(compilationOptions.SpecificDiagnosticOptions.SetItems(CSharpVerifierHelper.NullableWarnings));
 
                 solution = solution.WithProjectCompilationOptions(projectId, compilationOptions)
                     .WithProjectParseOptions(projectId, parseOptions.WithLanguageVersion(LanguageVersion.Preview));

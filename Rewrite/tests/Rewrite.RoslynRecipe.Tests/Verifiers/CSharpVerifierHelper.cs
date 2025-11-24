@@ -24,6 +24,7 @@ internal static class CSharpVerifierHelper
 
         // Workaround for https://github.com/dotnet/roslyn/issues/41610
         nullableWarnings = nullableWarnings
+            .SetItem("CS8602", ReportDiagnostic.Suppress)
             .SetItem("CS8632", ReportDiagnostic.Error)
             .SetItem("CS8669", ReportDiagnostic.Error)
             .SetItem("CS8652", ReportDiagnostic.Suppress);

@@ -144,7 +144,7 @@ namespace Rewrite.RoslynRecipe.Helpers
             Document document,
             SyntaxNode root,
             string namespaceName,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken, SyntaxAnnotation? formatAnnotation = null)
         {
             var compilationUnit = root as CompilationUnitSyntax;
             if (compilationUnit == null)
@@ -165,6 +165,11 @@ namespace Rewrite.RoslynRecipe.Helpers
             var newUsing = SyntaxFactory.UsingDirective(
                 SyntaxFactory.ParseName(namespaceName))
                 .WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed);
+
+            if (formatAnnotation != null)
+            {
+                newUsing = newUsing.WithAdditionalAnnotations(formatAnnotation);
+            }
 
             // Find the right place to insert the using directive
             CompilationUnitSyntax newCompilationUnit;
@@ -189,6 +194,7 @@ namespace Rewrite.RoslynRecipe.Helpers
             }
             else
             {
+                newUsing = newUsing.WithTrailingTrivia(newUsing.GetTrailingTrivia().Add(SyntaxFactory.CarriageReturnLineFeed)); // extra line break if we're adding first using 
                 // No existing usings, add as the first using
                 newCompilationUnit = compilationUnit.WithUsings(
                     SyntaxFactory.SingletonList(newUsing));
