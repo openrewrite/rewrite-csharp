@@ -302,8 +302,9 @@ public class CsModelGeneratorTest {
 
             var visitor = new JavaVisitor<>(){
                 public boolean isNullable;
+
                 @Override
-                public J visitAnnotation(J.Annotation annotation, Object o) {
+                public @Nullable J visitAnnotation(J.Annotation annotation, Object o) {
 
                     var name = annotation.getSimpleName();
                     if(name.equals("Implements")){
