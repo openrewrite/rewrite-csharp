@@ -134,17 +134,21 @@ public sealed class ActionContextAccessorObsoleteCodeFixProvider : CodeFixProvid
         // var replacements = new Dictionary<SyntaxNode, SyntaxNode>();
         var nodesToRemove = new HashSet<SyntaxNode>();
 
-        
-
-        
-        // 1. Find the constructor and containing type
-        var constructor = parameter.FirstAncestorOrSelf<ConstructorDeclarationSyntax>();
+        // 1. Find the containing type declaration
         var containingType = parameter.FirstAncestorOrSelf<TypeDeclarationSyntax>();
-        if (constructor == null || containingType == null) return document;
-       
+        if (containingType == null) return document;
 
-        // 2. Find the field or property that stores the injected value
-        var storageSymbol = FindStorageFieldOrProperty(constructor, parameterSymbol, semanticModel, cancellationToken);
+        // For primary constructors (records/classes), the parameter is directly in the type declaration
+        // For regular constructors, we have a ConstructorDeclarationSyntax
+        var constructor = parameter.FirstAncestorOrSelf<ConstructorDeclarationSyntax>();
+        var isPrimaryConstructor = constructor == null;
+
+        // 2. Find the field or property that stores the injected value (only for regular constructors)
+        ISymbol? storageSymbol = null;
+        if (!isPrimaryConstructor && constructor != null)
+        {
+            storageSymbol = FindStorageFieldOrProperty(constructor, parameterSymbol, semanticModel, cancellationToken);
+        }
 
         
          
@@ -178,8 +182,11 @@ public sealed class ActionContextAccessorObsoleteCodeFixProvider : CodeFixProvid
         //     newParameter = newParameter.WithType(httpContextAccessorType.WithTriviaFrom(parameter.Type));
         // }
         editor.ReplaceType(semanticModel, actionContextAccessorType, httpContextAccessorType);
-        
-        editor.RenameSymbol(semanticModel, parameterSymbol, "httpContextAccessor");
+
+        // For primary constructors in records/classes, parameters use PascalCase (they become properties)
+        // For regular constructor parameters, use camelCase
+        var newParameterName = isPrimaryConstructor ? "HttpContextAccessor" : "httpContextAccessor";
+        editor.RenameSymbol(semanticModel, parameterSymbol, newParameterName);
         
         
 
@@ -371,8 +378,11 @@ public sealed class ActionContextAccessorObsoleteCodeFixProvider : CodeFixProvid
         // Add required using directives
         // changedDocument = await AddRequiredUsingsAsync(changedDocument, cancellationToken);
 
-        // Remove unused using directives
-        // changedDocument = await RemoveUnusedUsingsAsync(changedDocument, cancellationToken);
+        // Remove unused using directives (only for simple cases like primary constructors with no body)
+        if (isPrimaryConstructor)
+        {
+            changedDocument = await RemoveUnusedUsingsAsync(changedDocument, cancellationToken);
+        }
 
         // Format the document
         changedDocument = await Formatter.FormatAsync(

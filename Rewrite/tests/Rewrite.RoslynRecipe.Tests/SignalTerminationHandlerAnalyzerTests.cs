@@ -24,7 +24,7 @@ public class SignalTerminationHandlerAnalyzerTests
                     AppDomain.CurrentDomain.{|ORNETX0006:ProcessExit|} += OnProcessExit;
                 }
 
-                void OnProcessExit(object sender, EventArgs e)
+                void OnProcessExit(object? sender, EventArgs e)
                 {
                 }
             }
@@ -151,7 +151,7 @@ public class SignalTerminationHandlerAnalyzerTests
                     AssemblyLoadContext.Default.{|ORNETX0007:Unloading|} += OnUnloading;
                 }
 
-                void OnProcessExit(object sender, EventArgs e) { }
+                void OnProcessExit(object? sender, EventArgs e) { }
                 void OnUnloading(AssemblyLoadContext context) { }
             }
             """;
@@ -172,7 +172,7 @@ public class SignalTerminationHandlerAnalyzerTests
                     AppDomain.CurrentDomain.{|ORNETX0006:ProcessExit|} += OnExit;
                 }
 
-                static void OnExit(object sender, EventArgs e) { }
+                static void OnExit(object? sender, EventArgs e) { }
             }
             """;
 
@@ -214,7 +214,7 @@ public class SignalTerminationHandlerAnalyzerTests
                     AppDomain.CurrentDomain.ProcessExit -= OnProcessExit;
                 }
 
-                void OnProcessExit(object sender, EventArgs e) { }
+                void OnProcessExit(object? sender, EventArgs e) { }
             }
             """;
 
@@ -269,7 +269,7 @@ public class SignalTerminationHandlerAnalyzerTests
 
             class MyDomain
             {
-                public event EventHandler ProcessExit;
+                public event EventHandler ProcessExit = null!;
             }
 
             class TestClass
@@ -319,8 +319,8 @@ public class SignalTerminationHandlerAnalyzerTests
                     AppDomain.CurrentDomain.{|ORNETX0006:ProcessExit|} += Handler2;
                 }
 
-                void Handler1(object s, EventArgs e) { }
-                void Handler2(object s, EventArgs e) { }
+                void Handler1(object? s, EventArgs e) { }
+                void Handler2(object? s, EventArgs e) { }
             }
             """;
 

@@ -7,16 +7,6 @@ namespace Rewrite.RoslynRecipe.Tests;
 
 public class FilePatternMatchStemAnalyzerTests
 {
-    private const string FilePatternMatchStub = """
-        namespace Microsoft.Extensions.FileSystemGlobbing
-        {
-            public struct FilePatternMatch
-            {
-                public FilePatternMatch(string path, string stem) { }
-                public string Stem { get; }
-            }
-        }
-        """;
 
     /// <summary>
     /// Verifies that a diagnostic is created when FilePatternMatch constructor is called with null as the stem parameter.
@@ -25,7 +15,7 @@ public class FilePatternMatchStemAnalyzerTests
     public async Task FilePatternMatchWithNullStem_CreatesErrorDiagnostic()
     {
         string text = $$"""
-            {{FilePatternMatchStub}}
+
 
             class TestClass
             {
@@ -36,7 +26,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90.AddPackage("Microsoft.Extensions.FileSystemGlobbing")).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -46,7 +36,6 @@ public class FilePatternMatchStemAnalyzerTests
     public async Task FilePatternMatchWithNullLiteralStem_CreatesErrorDiagnostic()
     {
         string text = $$"""
-            {{FilePatternMatchStub}}
 
             class TestClass
             {
@@ -57,7 +46,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90.AddPackage("Microsoft.Extensions.FileSystemGlobbing")).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -67,7 +56,6 @@ public class FilePatternMatchStemAnalyzerTests
     public async Task FilePatternMatchWithDefaultLiteralStem_CreatesErrorDiagnostic()
     {
         string text = $$"""
-            {{FilePatternMatchStub}}
 
             class TestClass
             {
@@ -78,7 +66,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90.AddPackage("Microsoft.Extensions.FileSystemGlobbing")).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -88,7 +76,6 @@ public class FilePatternMatchStemAnalyzerTests
     public async Task FilePatternMatchWithDefaultStringStem_CreatesErrorDiagnostic()
     {
         string text = $$"""
-            {{FilePatternMatchStub}}
 
             class TestClass
             {
@@ -99,7 +86,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90.AddPackage("Microsoft.Extensions.FileSystemGlobbing")).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -109,7 +96,6 @@ public class FilePatternMatchStemAnalyzerTests
     public async Task FilePatternMatchWithValidStem_NoDiagnostic()
     {
         string text = $$"""
-            {{FilePatternMatchStub}}
 
             class TestClass
             {
@@ -120,7 +106,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90.AddPackage("Microsoft.Extensions.FileSystemGlobbing")).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -130,7 +116,6 @@ public class FilePatternMatchStemAnalyzerTests
     public async Task FilePatternMatchWithEmptyStringStem_NoDiagnostic()
     {
         string text = $$"""
-            {{FilePatternMatchStub}}
 
             class TestClass
             {
@@ -141,7 +126,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90.AddPackage("Microsoft.Extensions.FileSystemGlobbing")).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -151,7 +136,6 @@ public class FilePatternMatchStemAnalyzerTests
     public async Task FilePatternMatchWithVariableStem_NoDiagnostic()
     {
         string text = $$"""
-            {{FilePatternMatchStub}}
 
             class TestClass
             {
@@ -163,7 +147,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90.AddPackage("Microsoft.Extensions.FileSystemGlobbing")).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -173,7 +157,6 @@ public class FilePatternMatchStemAnalyzerTests
     public async Task FilePatternMatchInFieldInitializer_CreatesErrorDiagnostic()
     {
         string text = $$"""
-            {{FilePatternMatchStub}}
 
             class TestClass
             {
@@ -181,7 +164,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90.AddPackage("Microsoft.Extensions.FileSystemGlobbing")).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -191,7 +174,6 @@ public class FilePatternMatchStemAnalyzerTests
     public async Task MultipleFilePatternMatchWithNull_CreatesMultipleDiagnostics()
     {
         string text = $$"""
-            {{FilePatternMatchStub}}
 
             class TestClass
             {
@@ -203,7 +185,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90.AddPackage("Microsoft.Extensions.FileSystemGlobbing")).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -213,7 +195,6 @@ public class FilePatternMatchStemAnalyzerTests
     public async Task FilePatternMatchInReturnStatement_CreatesErrorDiagnostic()
     {
         string text = $$"""
-            {{FilePatternMatchStub}}
 
             class TestClass
             {
@@ -224,7 +205,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90.AddPackage("Microsoft.Extensions.FileSystemGlobbing")).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -234,7 +215,6 @@ public class FilePatternMatchStemAnalyzerTests
     public async Task FilePatternMatchPassedToMethod_CreatesErrorDiagnostic()
     {
         string text = $$"""
-            {{FilePatternMatchStub}}
 
             class TestClass
             {
@@ -249,7 +229,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90.AddPackage("Microsoft.Extensions.FileSystemGlobbing")).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -263,7 +243,7 @@ public class FilePatternMatchStemAnalyzerTests
             {
                 class FilePatternMatch
                 {
-                    public FilePatternMatch(string path, string stem) { }
+                    public FilePatternMatch(string path, string? stem) { }
                 }
             }
 
@@ -276,7 +256,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90.AddPackage("Microsoft.Extensions.FileSystemGlobbing")).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -300,10 +280,9 @@ public class FilePatternMatchStemAnalyzerTests
                 }
             }
             
-            {{FilePatternMatchStub}}
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90.AddPackage("Microsoft.Extensions.FileSystemGlobbing")).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -313,7 +292,6 @@ public class FilePatternMatchStemAnalyzerTests
     public async Task FilePatternMatchWithNamedArguments_CreatesErrorDiagnostic()
     {
         string text = $$"""
-            {{FilePatternMatchStub}}
 
             class TestClass
             {
@@ -324,7 +302,7 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90.AddPackage("Microsoft.Extensions.FileSystemGlobbing")).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -334,7 +312,6 @@ public class FilePatternMatchStemAnalyzerTests
     public async Task FilePatternMatchInTernaryExpression_CreatesErrorDiagnostic()
     {
         string text = $$"""
-            {{FilePatternMatchStub}}
 
             class TestClass
             {
@@ -347,6 +324,6 @@ public class FilePatternMatchStemAnalyzerTests
             }
             """;
 
-        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90).ConfigureAwait(false);
+        await Verifier.VerifyAnalyzerAsync(text, Assemblies.Net90.AddPackage("Microsoft.Extensions.FileSystemGlobbing")).ConfigureAwait(false);
     }
 }

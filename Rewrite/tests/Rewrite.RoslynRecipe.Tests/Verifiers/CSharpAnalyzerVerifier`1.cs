@@ -72,7 +72,7 @@ public static partial class CSharpAnalyzerVerifier<TAnalyzer>
             },
             CompilerDiagnostics = CompilerDiagnostics.Warnings
         };
-        test.DisabledDiagnostics.AddRange(["CS1701","CS1591","CS0067","CS0169"]);
+        test.DisabledDiagnostics.AddRange(["CS1701","CS1591","CS0067","CS0169","CS0414"]);
         test.ExpectedDiagnostics.AddRange(expected);
         await test.RunAsync(CancellationToken.None);
     }

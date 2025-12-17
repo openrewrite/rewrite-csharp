@@ -76,8 +76,17 @@ public sealed class ActionContextAccessorObsoleteAnalyzer : DiagnosticAnalyzer
     {
         var parameter = (ParameterSyntax)context.Node;
 
-        // Check if this parameter is in a constructor
-        if (parameter.Parent?.Parent is not ConstructorDeclarationSyntax)
+        // Check if this parameter is in a constructor or primary constructor
+        // Parent is ParameterListSyntax, Parent.Parent can be:
+        // - ConstructorDeclarationSyntax for regular constructors
+        // - RecordDeclarationSyntax for record primary constructors
+        // - ClassDeclarationSyntax for C# 12 primary constructors
+        // - StructDeclarationSyntax for C# 12 struct primary constructors
+        var grandParent = parameter.Parent?.Parent;
+        if (grandParent is not (ConstructorDeclarationSyntax or
+            RecordDeclarationSyntax or
+            ClassDeclarationSyntax or
+            StructDeclarationSyntax))
             return;
 
         // Check if the parameter has a type

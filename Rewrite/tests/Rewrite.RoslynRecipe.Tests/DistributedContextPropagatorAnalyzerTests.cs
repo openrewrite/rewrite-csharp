@@ -231,7 +231,7 @@ public class DistributedContextPropagatorAnalyzerTests
 
             class MyPropagator
             {
-                public static MyPropagator Current { get; set; }
+                public static MyPropagator Current { get; set; } = null!;
                 public static MyPropagator CreateDefaultPropagator() => new MyPropagator();
             }
 

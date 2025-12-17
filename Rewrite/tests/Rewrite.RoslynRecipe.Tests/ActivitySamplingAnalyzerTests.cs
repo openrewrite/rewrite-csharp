@@ -344,7 +344,7 @@ public class ActivitySamplingAnalyzerTests
 
             class MyClass
             {
-                public object Sample { get; set; }
+                public object Sample { get; set; } = null!;
             }
 
             class TestClass
