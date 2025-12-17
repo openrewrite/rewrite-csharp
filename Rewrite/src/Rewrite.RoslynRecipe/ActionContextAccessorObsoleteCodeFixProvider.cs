@@ -49,7 +49,7 @@ public sealed class ActionContextAccessorObsoleteCodeFixProvider : CodeFixProvid
         var document = context.Document;
         var root = await document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
         if (root == null) return;
-
+        // context.Document.Project.Solution
         var diagnostic = context.Diagnostics.First();
         var diagnosticSpan = diagnostic.Location.SourceSpan;
 
@@ -81,6 +81,7 @@ public sealed class ActionContextAccessorObsoleteCodeFixProvider : CodeFixProvid
         }
         else
         {
+            
             // Normal case: perform full refactoring
             context.RegisterCodeFix(
                 CodeAction.Create(
@@ -133,173 +134,245 @@ public sealed class ActionContextAccessorObsoleteCodeFixProvider : CodeFixProvid
         // var replacements = new Dictionary<SyntaxNode, SyntaxNode>();
         var nodesToRemove = new HashSet<SyntaxNode>();
 
+        
+
+        
         // 1. Find the constructor and containing type
         var constructor = parameter.FirstAncestorOrSelf<ConstructorDeclarationSyntax>();
         var containingType = parameter.FirstAncestorOrSelf<TypeDeclarationSyntax>();
         if (constructor == null || containingType == null) return document;
+       
 
         // 2. Find the field or property that stores the injected value
         var storageSymbol = FindStorageFieldOrProperty(constructor, parameterSymbol, semanticModel, cancellationToken);
 
-        // 3. Determine the new names
-        var oldParameterName = parameterSymbol.Name;
-        var newParameterName = ConvertToHttpContextAccessorName(oldParameterName);
-        var newFieldName = storageSymbol != null
-            ? ConvertToHttpContextAccessorName(storageSymbol.Name)
-            : "_httpContextAccessor";
-
-        var httpContextAccessorType = SyntaxFactory.IdentifierName("IHttpContextAccessor");
-        // 4. Collect all replacements for parameter type
-
-        var newParameter = parameter;
-        if (parameter.Type != null)
-        {
-            newParameter = newParameter.WithType(httpContextAccessorType.WithTriviaFrom(parameter.Type));
-        }
         
-        
-        
-        // 5. Collect all replacements for parameter name
-        if (oldParameterName != newParameterName)
-        {
-            newParameter = newParameter.WithIdentifier(SyntaxFactory.Identifier(newParameterName)
-                .WithTriviaFrom(parameter.Identifier));
-            
-        }
-        editor.ReplaceNode(parameter, newParameter.WithAdditionalAnnotations(Formatter.Annotation));
-        
-        // 6. Find and collect replacements for field/property declaration
-        if (storageSymbol != null)
-        {
-            var storageDeclaration = FindSymbolDeclarationNode(containingType, storageSymbol);
-            if (storageDeclaration != null)
-            {
-                if (storageDeclaration is FieldDeclarationSyntax fieldDecl)
-                {
-                    var newType = httpContextAccessorType
-                        .WithTriviaFrom(fieldDecl.Declaration.Type)
-                        .WithAdditionalAnnotations(Formatter.Annotation);
-        
-                    var variable = fieldDecl.Declaration.Variables.First();
-                    var newVariable = variable.WithIdentifier(
-                        SyntaxFactory.Identifier(newFieldName).WithTriviaFrom(variable.Identifier));
-        
-                    var newDeclaration = fieldDecl.Declaration
-                        .WithType(newType)
-                        .WithVariables(SyntaxFactory.SingletonSeparatedList(newVariable));
-        
-                    // replacements[fieldDecl] = fieldDecl.WithDeclaration(newDeclaration)
-                    //     .WithAdditionalAnnotations(Formatter.Annotation);
-
-                    editor.ReplaceNode(fieldDecl, fieldDecl.WithDeclaration(newDeclaration).WithAdditionalAnnotations(Formatter.Annotation));
-                }
-                else if (storageDeclaration is PropertyDeclarationSyntax propDecl)
-                {
-                    var newType = httpContextAccessorType
-                        .WithTriviaFrom(propDecl.Type)
-                        .WithAdditionalAnnotations(Formatter.Annotation);
-        
-                    var newVal = propDecl
-                        .WithType(newType)
-                        .WithIdentifier(SyntaxFactory.Identifier(newFieldName).WithTriviaFrom(propDecl.Identifier))
-                        .WithAdditionalAnnotations(Formatter.Annotation);
-                    // replacements[propDecl] = newVal;
-                    editor.ReplaceNode(propDecl, newVal);
-                }
-            }
-        }
-        
-        // 7. Find ActionContext variable assignments to remove
+         
         var actionContextAssignments = containingType.DescendantNodes()
             .OfType<LocalDeclarationStatementSyntax>()
             .Where(ld => IsActionContextAssignment(ld, storageSymbol, semanticModel, cancellationToken))
             .ToList();
         
-        foreach (var assignment in actionContextAssignments)
+
+
+        
+        // 3. Determine the new names
+        // var oldParameterName = parameterSymbol.Name;
+        // var newParameterName = ConvertToHttpContextAccessorName(oldParameterName);
+        // var newFieldName = storageSymbol != null
+        //     ? ConvertToHttpContextAccessorName(storageSymbol.Name)
+        //     : "_httpContextAccessor";
+
+        // var httpContextAccessorType = SyntaxFactory.IdentifierName("IHttpContextAccessor");
+        var actionContextAccessorType = semanticModel.Compilation.GetTypeByMetadataName("Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor") 
+                                    ?? throw new InvalidOperationException($"Can't resolve type Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor");
+        var httpContextAccessorType = semanticModel.Compilation.GetTypeByMetadataName("Microsoft.AspNetCore.Http.IHttpContextAccessor")
+                                      ?? throw new InvalidOperationException($"Can't resolve type Microsoft.AspNetCore.Http.IHttpContextAccessor");;
+        
+            
+        // 4. Collect all replacements for parameter type
+
+        // var newParameter = parameter;
+        // if (parameter.Type != null)
+        // {
+        //     newParameter = newParameter.WithType(httpContextAccessorType.WithTriviaFrom(parameter.Type));
+        // }
+        editor.ReplaceType(semanticModel, actionContextAccessorType, httpContextAccessorType);
+        
+        editor.RenameSymbol(semanticModel, parameterSymbol, "httpContextAccessor");
+        
+        
+
+        if (storageSymbol != null)
         {
-            nodesToRemove.Add(assignment);
-            // editor.RemoveNode(assignment);
-        }
-        
-        // 8. Find and replace ActionContext property accesses
+            var httpContextAccessorMemberName = storageSymbol.Kind == SymbolKind.Property ? "HttpContextAccessor" : "_httpContextAccessor";
+            editor.RenameSymbol(semanticModel, storageSymbol, httpContextAccessorMemberName);
+            
+            
+            
         var memberAccesses = containingType.DescendantNodes()
-            .OfType<MemberAccessExpressionSyntax>()
-            .Where(m => IsActionContextPropertyAccess(m, semanticModel, cancellationToken))
+            .Where(x => x is MemberAccessExpressionSyntax or MemberBindingExpressionSyntax )
+            .Select(x =>
+            {
+                return (Node: x, Name: x switch
+                {
+                    MemberAccessExpressionSyntax ma => ma.Name,
+                    MemberBindingExpressionSyntax mb => mb.Name,
+                    _ => null!
+                });
+            })
+            .Where(m => m.Name.IsSymbolOneOf(semanticModel, 
+                    "P:Microsoft.AspNetCore.Mvc.ActionContext.ActionDescriptor",
+                    "P:Microsoft.AspNetCore.Mvc.ActionContext.RouteData",
+                    "P:Microsoft.AspNetCore.Mvc.ActionContext.HttpContext"
+                    ))
             .ToList();
-        
-        foreach (var memberAccess in memberAccesses)
+        foreach (var memberAccess in memberAccesses) // ActionContext.
         {
             var propertyName = memberAccess.Name.Identifier.Text;
-            ExpressionSyntax? replacement = null;
-        
+
             switch (propertyName)
             {
                 case "ActionDescriptor":
-                    replacement = SyntaxFactory.ParseExpression($"{newFieldName}.HttpContext?.GetEndpoint()?.Metadata.GetMetadata<ActionDescriptor>()")
-                        .WithAdditionalAnnotations(Formatter.Annotation)
-                        .DiscardFormatting();
+                    editor.ReplaceNode(memberAccess.Node, (current, gen) =>
+                        SyntaxFactory.ParseExpression($"{httpContextAccessorMemberName}.HttpContext?.GetEndpoint()?.Metadata.GetMetadata<ActionDescriptor>()")
+                            .WithRequiredNamespace("Microsoft.AspNetCore.Http")
+                            .FormatterAnnotated());
                     break;
-        
                 case "RouteData":
-                    replacement = SyntaxFactory.ParseExpression($"{newFieldName}.HttpContext?.GetRouteData()")
-                        .WithAdditionalAnnotations(Formatter.Annotation)
-                        .DiscardFormatting();
+                    editor.ReplaceNode(memberAccess.Node, (current, gen) =>
+                        SyntaxFactory.ParseExpression($"{httpContextAccessorMemberName}.HttpContext?.GetRouteData()")
+                            .WithRequiredNamespace("Microsoft.AspNetCore.Routing")
+                            .FormatterAnnotated());
                     break;
-        
                 case "HttpContext":
-                    replacement = SyntaxFactory.ParseExpression($"{newFieldName}.HttpContext")
-                        .WithAdditionalAnnotations(Formatter.Annotation)
-                        .DiscardFormatting();
+                    SyntaxNode nodeToReplace;
+
+                    if (memberAccess.Node is MemberBindingExpressionSyntax)
+                    {
+                        var actionContextIdentifierNode = containingType.FindNode(memberAccess.Node.GetFirstToken().GetPreviousToken().Span);
+                        var ancestorConditionalAccess = actionContextIdentifierNode.AncestorsAndSelf().OfType<ConditionalAccessExpressionSyntax>().First();
+                        nodeToReplace = ancestorConditionalAccess;
+                        var rightSideParent = memberAccess.Node.Parent!;
+                        var newNode = rightSideParent.ReplaceNode(memberAccess.Node, SyntaxFactory.ParseExpression($"{httpContextAccessorMemberName}.HttpContext")
+                            .FormatterAnnotated());
+                        editor.ReplaceNode(nodeToReplace, newNode);
+                    }
+                    else
+                    {
+                        nodeToReplace = memberAccess.Node;
+                        editor.ReplaceNode(nodeToReplace, (current, gen) =>
+                            SyntaxFactory.ParseExpression($"{httpContextAccessorMemberName}.HttpContext")
+                                .FormatterAnnotated());
+                    }
+
                     break;
             }
-        
-            if (replacement != null)
-            {
-                // replacements[memberAccess] = replacement;
-                editor.ReplaceNode(memberAccess, replacement);
-            }
-        }
-        
-        // 9. Find and replace all identifier references
-        var identifierReferences = containingType.DescendantNodes()
-            .OfType<IdentifierNameSyntax>()
-            .Where(id => IsReferenceToReplace(id, parameterSymbol, storageSymbol, semanticModel, cancellationToken))
-            .ToList();
-        var currentDoc = editor.GetChangedRoot().GetText().ToString();
-        foreach (var identifier in identifierReferences)
-        {
-            var newName = ConvertToHttpContextAccessorName(identifier.Identifier.Text);
-            if (newName != identifier.Identifier.Text)
-            {
-                var newValue =SyntaxFactory.IdentifierName(newName)
-                    .WithTriviaFrom(identifier)
-                    .WithAdditionalAnnotations(Formatter.Annotation);
-                // replacements[identifier] = newValue;
-                editor.ReplaceNode(identifier, newValue);
-            }
+
         }
 
-        // 10. Apply all replacements using DocumentEditor
-        // First remove nodes
-        foreach (var node in nodesToRemove)
-        {
-            editor.RemoveNode(node);
-        }
 
-        // Then apply replacements
-        // foreach (var kvp in replacements)
+        // 5. Collect all replacements for parameter name
+        // if (oldParameterName != newParameterName)
         // {
-        //     editor.ReplaceNode(kvp.Key, kvp.Value);
+        //     newParameter = newParameter.WithIdentifier(SyntaxFactory.Identifier(newParameterName)
+        //         .WithTriviaFrom(parameter.Identifier));
+        //     
         // }
-
+        // editor.ReplaceNode(parameter, newParameter.WithAdditionalAnnotations(Formatter.Annotation));
+        
+        // 6. Find and collect replacements for field/property declaration
+        // if (storageSymbol != null)
+        // {
+        //     var storageDeclaration = FindSymbolDeclarationNode(containingType, storageSymbol);
+        //     if (storageDeclaration != null)
+        //     {
+        //         if (storageDeclaration is FieldDeclarationSyntax fieldDecl)
+        //         {
+        //             var newType = httpContextAccessorType
+        //                 .WithTriviaFrom(fieldDecl.Declaration.Type)
+        //                 .WithAdditionalAnnotations(Formatter.Annotation);
+        //
+        //             var variable = fieldDecl.Declaration.Variables.First();
+        //             var newVariable = variable.WithIdentifier(
+        //                 SyntaxFactory.Identifier(newFieldName).WithTriviaFrom(variable.Identifier));
+        //
+        //             var newDeclaration = fieldDecl.Declaration
+        //                 .WithType(newType)
+        //                 .WithVariables(SyntaxFactory.SingletonSeparatedList(newVariable));
+        //
+        //             // replacements[fieldDecl] = fieldDecl.WithDeclaration(newDeclaration)
+        //             //     .WithAdditionalAnnotations(Formatter.Annotation);
+        //
+        //             editor.ReplaceNode(fieldDecl, fieldDecl.WithDeclaration(newDeclaration).WithAdditionalAnnotations(Formatter.Annotation));
+        //         }
+        //         else if (storageDeclaration is PropertyDeclarationSyntax propDecl)
+        //         {
+        //             var newType = httpContextAccessorType
+        //                 .WithTriviaFrom(propDecl.Type)
+        //                 .WithAdditionalAnnotations(Formatter.Annotation);
+        //
+        //             var newVal = propDecl
+        //                 .WithType(newType)
+        //                 .WithIdentifier(SyntaxFactory.Identifier(newFieldName).WithTriviaFrom(propDecl.Identifier))
+        //                 .WithAdditionalAnnotations(Formatter.Annotation);
+        //             // replacements[propDecl] = newVal;
+        //             editor.ReplaceNode(propDecl, newVal);
+        //         }
+        //     }
+        // }
+        
+        // 7. Find ActionContext variable assignments to remove
+  
+        // 8. Find and replace ActionContext property accesses
+        
+        
+        
+            // var replacement = propertyName switch
+            // {
+            //     "ActionDescriptor" => SyntaxFactory.ParseExpression($"{httpContextAccessorFieldName}.HttpContext?.GetEndpoint()?.Metadata.GetMetadata<ActionDescriptor>()")
+            //         .WithRequiredNamespace("Microsoft.AspNetCore.Http"),
+            //     "RouteData" => SyntaxFactory.ParseExpression($"{httpContextAccessorFieldName}.HttpContext?.GetRouteData()")
+            //         .WithRequiredNamespace("Microsoft.AspNetCore.Routing"),
+            //     "HttpContext" => SyntaxFactory.ParseExpression($"{httpContextAccessorFieldName}.HttpContext"),
+            //     _ => null
+            // };
+            //
+            // if (replacement == null) continue;
+            // replacement = replacement.FormatterAnnotated();
+            // editor.ReplaceNode(memberAccess.Node, (current, gen) => replacement);
+        }
+        
+        foreach (var assignment in actionContextAssignments)
+        {
+            // nodesToRemove.Add(assignment);
+            editor.RemoveNode(assignment);
+        }
+        
         // 11. Get the changed document and manage using directives
         var changedDocument = editor.GetChangedDocument();
+        
+        
+        var originalTree = (await editor.OriginalDocument.GetSyntaxTreeAsync(cancellationToken))!;
+        var newTree = (await changedDocument.GetSyntaxTreeAsync(cancellationToken))!;
+        var newCompilationUnit = newTree.GetCompilationUnitRoot();
 
+        var requiredNamespaces = newCompilationUnit.GetRequiredNamespaces()
+            .SelectMany(x => x.RequiredNamespaces)
+            .Distinct()
+            .ToList();
+        foreach (var requiredNamespace in requiredNamespaces)
+        {
+            UsingsUtil.MaybeAddUsingAsync(editor, semanticModel, requiredNamespace, cancellationToken);
+        }
+        changedDocument = editor.GetChangedDocument();
+        // var availableNamespaces = newCompilationUnit.Usings
+        //     .Where(x => x.StaticKeyword.IsKind(SyntaxKind.StaticKeyword))
+        //     .Select(x => x.Name?.ToString())
+        //     .Where(x => x != null)
+        //     .Select(x => x!)
+        //     .ToImmutableHashSet();
+        //     
+        // // eliminate those that are guaranteed to be available based on file level usings
+        // nodesRequiringUsings = nodesRequiringUsings
+        //     .Select(x => (x.Node, Missing: x.RequiredNamespaces.Where(ns => !availableNamespaces.Contains(ns))))
+        //     .Where(x => x.Missing.Any()); 
+        // foreach (var (node, requiredNamespaces) in nodesRequiringUsings)
+        // {
+        //     foreach (var requiredNamespace in requiredNamespaces)
+        //     {
+        //         UsingsUtil.MaybeAddUsingAsync(newCompilationUnit, semanticModel, node, requiredNamespace, cancellationToken);
+        //     }
+        // }
+
+        var newCompilation = semanticModel.Compilation.ReplaceSyntaxTree(originalTree, newTree);
+        var newModel = newCompilation.GetSemanticModel(newTree!);
+        var diagnostics = newModel.GetDiagnostics();
         // Add required using directives
-        changedDocument = await AddRequiredUsingsAsync(changedDocument, cancellationToken);
+        // changedDocument = await AddRequiredUsingsAsync(changedDocument, cancellationToken);
 
         // Remove unused using directives
-        changedDocument = await RemoveUnusedUsingsAsync(changedDocument, cancellationToken);
+        // changedDocument = await RemoveUnusedUsingsAsync(changedDocument, cancellationToken);
 
         // Format the document
         changedDocument = await Formatter.FormatAsync(
@@ -307,6 +380,9 @@ public sealed class ActionContextAccessorObsoleteCodeFixProvider : CodeFixProvid
             Formatter.Annotation,
             cancellationToken: cancellationToken).ConfigureAwait(false);
 
+        
+
+        
         return changedDocument;
     }
 
@@ -467,10 +543,10 @@ public sealed class ActionContextAccessorObsoleteCodeFixProvider : CodeFixProvid
         if (root == null || semanticModel == null) return document;
 
         // Add Microsoft.AspNetCore.Http for IHttpContextAccessor
-        var (doc1, root1) = await UsingsUtil.MaybeAddUsingAsync(
-            document, root, semanticModel, root,
+        var doc1 = await UsingsUtil.MaybeAddUsingAsync(
+            document, semanticModel, root,
             "Microsoft.AspNetCore.Http.IHttpContextAccessor", cancellationToken).ConfigureAwait(false);
-
+        var root1 = (await doc1.GetSyntaxRootAsync(cancellationToken))!;
         // Check if we need Microsoft.AspNetCore.Routing for GetRouteData
         var hasRouteDataUsage = root1.DescendantNodes()
             .OfType<InvocationExpressionSyntax>()
@@ -482,11 +558,11 @@ public sealed class ActionContextAccessorObsoleteCodeFixProvider : CodeFixProvid
             var sem1 = await doc1.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
             if (sem1 != null)
             {
-                var (doc2, root2) = await UsingsUtil.MaybeAddUsingAsync(
-                    doc1, root1, sem1, root1,
+                var doc2 = await UsingsUtil.MaybeAddUsingAsync(
+                    doc1,  sem1, root1,
                     "Microsoft.AspNetCore.Routing.RouteData", cancellationToken).ConfigureAwait(false);
                 doc1 = doc2;
-                root1 = root2;
+                root1 = (await doc2.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false))!;
             }
         }
 
@@ -502,8 +578,8 @@ public sealed class ActionContextAccessorObsoleteCodeFixProvider : CodeFixProvid
             var sem2 = await doc1.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
             if (sem2 != null)
             {
-                var (doc3, root3) = await UsingsUtil.MaybeAddUsingAsync(
-                    doc1, root1, sem2, root1,
+                var doc3 = await UsingsUtil.MaybeAddUsingAsync(
+                    doc1,  sem2, root1,
                     "Microsoft.AspNetCore.Mvc.Abstractions.ActionDescriptor", cancellationToken).ConfigureAwait(false);
                 doc1 = doc3;
             }

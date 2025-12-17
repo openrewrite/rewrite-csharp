@@ -29,6 +29,8 @@ The Java side communicates with the C# language server via JSON RPC over STDIO f
 
 ## Development Guidelines
 
+**WHEN DEALING WITH ANY TASK INVOLVING ROSLYN ANALYZERS OR CODE FIXUP PROVIDERS, YOU MUST LOAD AND CONSULT THE RELEVANT SKILL**
+
 ### Roslyn Analyzer Development
 
 #### Placement

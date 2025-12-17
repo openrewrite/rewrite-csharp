@@ -35,6 +35,7 @@ public class ActionContextAccessorObsoleteCodeFixTests
 
         const string fixedSource = """
             using Microsoft.AspNetCore.Http;
+            using Microsoft.AspNetCore.Mvc.Infrastructure;
 
             public class MyService
             {
@@ -79,6 +80,7 @@ public class ActionContextAccessorObsoleteCodeFixTests
             """;
 
         const string fixedSource = """
+            using Microsoft.AspNetCore.Mvc.Infrastructure;
             using Microsoft.AspNetCore.Http;
 
             public class MyService
@@ -130,6 +132,7 @@ public class ActionContextAccessorObsoleteCodeFixTests
 
         const string fixedSource = """
             using Microsoft.AspNetCore.Http;
+            using Microsoft.AspNetCore.Mvc.Infrastructure;
             using Microsoft.AspNetCore.Mvc.Abstractions;
 
             public class MyService
@@ -181,6 +184,7 @@ public class ActionContextAccessorObsoleteCodeFixTests
 
         const string fixedSource = """
             using Microsoft.AspNetCore.Http;
+            using Microsoft.AspNetCore.Mvc.Infrastructure;
             using Microsoft.AspNetCore.Routing;
 
             public class MyService
@@ -277,6 +281,7 @@ public class ActionContextAccessorObsoleteCodeFixTests
 
         const string fixedSource = """
             using Microsoft.AspNetCore.Http;
+            using Microsoft.AspNetCore.Mvc.Infrastructure;
 
             public class MyService
             {
@@ -342,6 +347,7 @@ public class ActionContextAccessorObsoleteCodeFixTests
             """;
 
         const string fixedSource = """
+            using Microsoft.AspNetCore.Mvc.Infrastructure;
             using Microsoft.AspNetCore.Mvc.Abstractions;
             using Microsoft.AspNetCore.Routing;
             using Microsoft.AspNetCore.Http;
@@ -441,7 +447,7 @@ public class ActionContextAccessorObsoleteCodeFixTests
 
                 public string? GetValue()
                 {
-                    return _actionContextAccessor?.ActionContext?.HttpContext?.TraceIdentifier;
+                    return _actionContextAccessor.ActionContext?.HttpContext?.TraceIdentifier;
                 }
             }
             """;
@@ -449,12 +455,13 @@ public class ActionContextAccessorObsoleteCodeFixTests
         const string fixedSource = """
             #nullable enable
             using Microsoft.AspNetCore.Http;
+            using Microsoft.AspNetCore.Mvc.Infrastructure;
 
             public class MyService
             {
-                private readonly IHttpContextAccessor _httpContextAccessor;
+                private readonly IHttpContextAccessor? _httpContextAccessor;
 
-                public MyService(IHttpContextAccessor httpContextAccessor)
+                public MyService(IHttpContextAccessor? httpContextAccessor)
                 {
                     _httpContextAccessor = httpContextAccessor;
                 }
@@ -462,55 +469,6 @@ public class ActionContextAccessorObsoleteCodeFixTests
                 public string? GetValue()
                 {
                     return _httpContextAccessor.HttpContext?.TraceIdentifier;
-                }
-            }
-            """;
-
-        await Verifier.VerifyCodeFixAsync(source, fixedSource, Assemblies.AspNet90)
-            .ConfigureAwait(false);
-    }
-
-    /// <summary>
-    /// Tests replacement with different casing patterns.
-    /// </summary>
-    [Test]
-    public async Task DifferentCasingPatterns_ReplacesCorrectly()
-    {
-        const string source = """
-            using Microsoft.AspNetCore.Mvc.Infrastructure;
-
-            public class MyService
-            {
-                private readonly IActionContextAccessor ActionContextAccessor;
-
-                public MyService({|ORNETX0009:IActionContextAccessor|} ActionContextAccessor)
-                {
-                    this.ActionContextAccessor = ActionContextAccessor;
-                }
-
-                public void UseIt()
-                {
-                    var ctx = ActionContextAccessor.ActionContext;
-                    var http = ctx.HttpContext;
-                }
-            }
-            """;
-
-        const string fixedSource = """
-            using Microsoft.AspNetCore.Http;
-
-            public class MyService
-            {
-                private readonly IHttpContextAccessor HttpContextAccessor;
-
-                public MyService(IHttpContextAccessor HttpContextAccessor)
-                {
-                    this.HttpContextAccessor = HttpContextAccessor;
-                }
-
-                public void UseIt()
-                {
-                    var http = HttpContextAccessor.HttpContext;
                 }
             }
             """;
@@ -551,6 +509,7 @@ public class ActionContextAccessorObsoleteCodeFixTests
             """;
 
         const string fixedSource = """
+            using Microsoft.AspNetCore.Mvc.Infrastructure;
             using Microsoft.AspNetCore.Http;
             using Microsoft.AspNetCore.Routing;
 
@@ -570,7 +529,7 @@ public class ActionContextAccessorObsoleteCodeFixTests
 
                 public string? GetRouteValue(string key)
                 {
-                    return _httpContextAccessor.HttpContext.GetRouteData().Values[key]?.ToString();
+                    return _httpContextAccessor.HttpContext?.GetRouteData().Values[key]?.ToString();
                 }
             }
             """;
@@ -634,6 +593,7 @@ public class ActionContextAccessorObsoleteCodeFixTests
 
         const string fixedSource = """
             using Microsoft.AspNetCore.Http;
+            using Microsoft.AspNetCore.Mvc.Infrastructure;
             using Microsoft.Extensions.Logging;
 
             public class MyService

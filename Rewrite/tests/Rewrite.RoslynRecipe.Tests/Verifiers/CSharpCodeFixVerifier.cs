@@ -52,7 +52,8 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
                     .WithNullableContextOptions(NullableContextOptions.Enable)
                     .WithSpecificDiagnosticOptions(compilationOptions.SpecificDiagnosticOptions.SetItems(CSharpVerifierHelper.NullableWarnings));
 
-                solution = solution.WithProjectCompilationOptions(projectId, compilationOptions)
+                solution = solution
+                    .WithProjectCompilationOptions(projectId, compilationOptions)
                     .WithProjectParseOptions(projectId, parseOptions.WithLanguageVersion(LanguageVersion.Preview));
 
                 return solution;

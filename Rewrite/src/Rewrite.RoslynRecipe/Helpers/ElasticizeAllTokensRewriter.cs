@@ -74,20 +74,3 @@ internal sealed class ElasticizeAllTokensRewriter : CSharpSyntaxRewriter
         => trivia.Kind() is SyntaxKind.WhitespaceTrivia
             or SyntaxKind.EndOfLineTrivia;
 }
-
-public static class SyntaxExtensions
-{
-    /// <summary>
-    /// Returns a copy of this node tree with all whitespace and newline trivia
-    /// replaced by elastic markers (<see cref="SyntaxFactory.ElasticMarker"/>).
-    /// Guarantees that every token has one elastic marker on both leading and trailing sides.
-    /// This allows the code formatter to fully format the code to standards without trying to preserve
-    /// any existing formatting
-    /// </summary>
-    public static TNode DiscardFormatting<TNode>(this TNode node)
-        where TNode : SyntaxNode
-    {
-        var rewriter = new ElasticizeAllTokensRewriter();
-        return (TNode)rewriter.Visit(node)!;
-    }
-}

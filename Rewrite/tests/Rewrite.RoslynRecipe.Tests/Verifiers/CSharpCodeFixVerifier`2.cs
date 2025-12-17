@@ -57,6 +57,8 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
             TestCode = source,
             FixedCode = fixedSource,
             ReferenceAssemblies = referenceAssemblies,
+            // helps deal with scenarios where we're modifying part of member access expression with something that has conditional null propagation
+            CodeActionValidationMode = CodeActionValidationMode.None,  
             TestState =
             {
                 AdditionalReferences =

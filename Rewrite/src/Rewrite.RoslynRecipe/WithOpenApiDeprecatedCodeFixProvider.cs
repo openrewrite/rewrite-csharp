@@ -156,14 +156,14 @@ namespace Rewrite.RoslynRecipe
                     .OfType<MemberAccessExpressionSyntax>()
                     .Where(m => m.Name.Identifier.Text == "CompletedTask" &&
                                m.Expression is IdentifierNameSyntax id &&
-                               id.Identifier.Text == "Task");
+                               id.Identifier.Text == "Task")
+                    .ToArray();
 
                 if (taskReferences.Any())
                 {
                     var firstTaskRef = taskReferences.First();
-                    var (finalDocument, finalRoot) = await UsingsUtil.MaybeAddUsingAsync(
+                    var finalDocument = await UsingsUtil.MaybeAddUsingAsync(
                         newDocument,
-                        newRoot,
                         updatedSemanticModel,
                         firstTaskRef,
                         "System.Threading.Tasks.Task",
@@ -171,7 +171,6 @@ namespace Rewrite.RoslynRecipe
 
                     // Update document and root after adding using
                     newDocument = finalDocument;
-                    newRoot = finalRoot;
                 }
             }
 

@@ -16,7 +16,7 @@ namespace Rewrite.RoslynRecipe.Helpers
     /// </summary>
     public static class SemanticAnalysisUtil
     {
-        
+
         public static bool IsSymbolOneOf(this SyntaxNode node, SemanticModel semanticModel, params IEnumerable<string> symbolNames)
         {
             var symbolInfo = semanticModel.GetSymbolInfo(node);

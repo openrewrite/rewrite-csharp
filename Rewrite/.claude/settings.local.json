@@ -5,7 +5,9 @@
       "Bash(dotnet test:*)",
       "Bash(dotnet build:*)",
       "WebFetch(domain:code.claude.com)",
-      "Skill(csharp-analyzer-developer)"
+      "Skill(csharp-analyzer-developer)",
+      "Bash(dotnet run:*)",
+      "Bash(dotnet script:*)"
     ],
     "deny": []
   }
