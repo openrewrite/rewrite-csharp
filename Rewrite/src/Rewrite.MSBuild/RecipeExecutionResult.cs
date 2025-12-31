@@ -2,7 +2,7 @@
 
 namespace Rewrite.MSBuild;
 
-public record RecipeExecutionResult(string SolutionFile, TimeSpan ExecutionTime, List<IssueFixResult> FixedIssues);
+public record RecipeExecutionResult(string SolutionFile, TimeSpan SolutionLoadTime, TimeSpan ExecutionTime, List<IssueFixResult> FixedIssues);
 
 public record IssueFixResult(string IssueId, TimeSpan ExecutionTime, List<DocumentFixResult> Fixes);
 

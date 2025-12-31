@@ -54,10 +54,6 @@ public class RecipeExecutionContext : AssemblyLoadContext
 
     public Recipe CreateRecipe(params IReadOnlyCollection<RecipeStartInfo> recipeStartInfos)
     {
-        // if (recipeStartInfos.Count == 1)
-        // {
-        //     return CreateRecipe(recipeStartInfos.First());
-        // }
 
         if (recipeStartInfos.Count == 0)
         {
@@ -139,12 +135,20 @@ public class RecipeExecutionContext : AssemblyLoadContext
         var recipeStartInfo =  recipeStartInfos.First();
         var solutionFilePath = (string)recipeStartInfo.Arguments[nameof(RoslynRecipe.SolutionFilePath)].Value!;
         var dryRun = (bool)recipeStartInfo.Arguments[nameof(RoslynRecipe.DryRun)].Value!;
-        var diagnosticIds = recipeStartInfos.Select(x => x.Id).ToHashSet();
+        var fixableDiagnosticIds = recipeStartInfos
+            .Where(x => x.Kind == RecipeKind.RoslynFixer)
+            .Select(x => x.Id)
+            .ToHashSet();
+        
+        var reportOnlyDiagnosticIds = recipeStartInfos
+            .Where(x => x.Kind == RecipeKind.RoslynAnalyzer)
+            .Select(x => x.Id)
+            .ToHashSet();
         
         var roslynRecipe = new RoslynRecipe(_recipeAssemblies, _loggerFactory.CreateLogger<RoslynRecipe>())
         {
-            DiagnosticIds = diagnosticIds,
-            ApplyFixer = true,
+            DiagnosticIdsToFix = fixableDiagnosticIds,
+            DiagnosticIdsToReport = reportOnlyDiagnosticIds,
             SolutionFilePath = solutionFilePath,
             DryRun = dryRun
         };
@@ -158,30 +162,6 @@ public class RecipeExecutionContext : AssemblyLoadContext
         return recipeType;
     }
 
-    // private List<Recipe> FindAllRecipes(Assembly assembly)
-    // {
-    //     var recipes = new List<Recipe>();
-    //     foreach (var type in assembly.GetExportedTypes())
-    //     {
-    //         if (!typeof(Recipe).IsAssignableFrom(type)) continue;
-    //
-    //         var constructorInfo = type.GetConstructors()[0];
-    //         var parameters = new object?[constructorInfo.GetParameters().Length];
-    //         for (var index = 0; index < constructorInfo.GetParameters().Length; index++)
-    //         {
-    //             var parameterInfo = constructorInfo.GetParameters()[index];
-    //             var parameterInfoParameterType = parameterInfo.ParameterType;
-    //
-    //             parameters[index] = parameterInfoParameterType.IsValueType
-    //                 ? Activator.CreateInstance(parameterInfoParameterType)
-    //                 : null;
-    //         }
-    //
-    //         recipes.Add((Recipe)constructorInfo.Invoke(parameters));
-    //     }
-    //
-    //     return recipes;
-    // }
 
     protected override Assembly? Load(AssemblyName assemblyName)
     {
@@ -196,27 +176,13 @@ public class RecipeExecutionContext : AssemblyLoadContext
             return LoadFromAssemblyPath(assembly);
         }
 
-        // var candidateAssembly = AppDomain.CurrentDomain.GetAssemblies()
-        //     .FirstOrDefault(x => 
-        //         // x.GetName().Name!.StartsWith("Microsoft.CodeAnalysis") && 
-        //                          x.GetName().Name == assemblyName.Name);
-        // if (candidateAssembly != null)
-        // {
-        //     return candidateAssembly;
-        // }
         return null;
     }
 
     
     private List<RecipeDescriptor> FindRecipesInAssemblies()
     {
-        // var results = new List<(AbsolutePath Path, RecipeDescriptor Recipie)>();
-        var results = new List<RecipeDescriptor>();
-        // var resolver = new PathAssemblyResolver(assembliesInRecipePackage.Select(x => x.Name.ToString()));
-        // var runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
-        // var currentDirAssemblies = Directory.EnumerateFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "*.dll");
-        // var allAssemblies = runtimeAssemblies.Union(currentDirAssemblies);
-        // var resolver = new PathAssemblyResolver(runtimeAssemblies);
+
         var resolver = new RecipeAssemblyResolver(_assemblies.Values);
         using var mlc = new MetadataLoadContext(resolver);
         var mlcRecipeAttributeAssembly = mlc.LoadFromAssemblyPath(typeof(RecipesAttribute).Assembly.Location);
@@ -225,7 +191,6 @@ public class RecipeExecutionContext : AssemblyLoadContext
         var mlcDiagnosticAnalyzerAttributeType = mlcDiagnosticAnalyzerAssembly.GetType(typeof(DiagnosticAnalyzerAttribute).FullName!)!;
         var mlcCodeFixupAssembly = mlc.LoadFromAssemblyPath(typeof(ExportCodeFixProviderAttribute).Assembly.Location);
         var mlcCodeFixupAttributeType = mlcCodeFixupAssembly.GetType(typeof(ExportCodeFixProviderAttribute).FullName!)!;
-        // var loadedDiagnosticAnalyzerType = LoadFromAssemblyPath(typeof(DiagnosticAnalyzerAttribute).Assembly.Location);
         // Load assembly into MetadataLoadContext.
 
         var metadataAssemblies = _assemblies.Values.Select(x => mlc.LoadFromAssemblyPath(x)).ToList();

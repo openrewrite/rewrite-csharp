@@ -24,17 +24,14 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
 {
     internal List<Assembly> RecipeAssemblies { get; set; } = recipeAssemblies.ToList();
     
+    [DisplayName("Diagnostic Ids")]
+    [Description("List of unique diagnostic IDs reported by roslyn analyzers that should have code fixup applied")]
+    public HashSet<string> DiagnosticIdsToFix { get; init; } = new();
+    
     [DisplayName("Description")]
-    [Description("A roslyn analyzer id to target for refactoring")]
-    public string DiagnosticId { get => DiagnosticIds.First(); set => DiagnosticIds.Add(value); }
-
-    [DisplayName("Description")]
-    [Description("A special sign to specifically highlight the class found by the recipe")]
-    public HashSet<string> DiagnosticIds { get; init; } = new();
-
-    [DisplayName("Should Apply Fixer")]
-    [Description("If true, a code fix will be applied, otherwise only location of issues will be reported")]
-    public bool ApplyFixer { get; set; } = true;
+    [Description("List of unique diagnostic IDs reported by roslyn analyzers that should be reported but no fixup applied")]
+    public HashSet<string> DiagnosticIdsToReport { get; init; } = new();
+    
     
     [DisplayName("Solution File Path")]
     [Description("The path to solution on which recipe is to be run")]
@@ -68,15 +65,6 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
     public async Task<RecipeExecutionResult> Execute(CancellationToken cancellationToken)
     {
         List<IssueFixResult> fixedIssues = new();
-        Stopwatch watch = new();
-        watch.Start();
-        var workspace = MSBuildWorkspace.Create();
-        var result = ProcessTasks.StartProcess("dotnet", $"restore {SolutionFilePath}");
-        result.WaitForExit();
-        var originalSolution = await workspace.OpenSolutionAsync(SolutionFilePath, cancellationToken: cancellationToken);
-        
-        var solution = new SolutionHolder(originalSolution);
-        // var analyzerAssembly = RecipeAssemblies;
    
         var allAnalyzers = RecipeAssemblies
             .SelectMany(x => x.ExportedTypes)
@@ -101,57 +89,46 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
                 .DistinctBy(x => x.Id)
                 .Select(descriptor => (descriptor.Id, Analyzer: analyzer)))
             .Join(fixers, x => x.Id, x => x.Key, (a, b) => (a.Id, a.Analyzer, Fixer: b.Value))
-            .Where(x => DiagnosticIds.Contains(x.Id))
+            .Where(x => DiagnosticIdsToFix.Contains(x.Id))
             .GroupBy(x => x.Id)
             .Select(x => (x.Key, x.First().Analyzer, x.FirstOrDefault().Fixer))
             .ToDictionary(x => x.Key, x => (x.Analyzer, x.Fixer));
         
         if (analyzersWithFixersById.Count == 0)
         {
-            log.LogError("No analyzers targeting issue {DiagnosticId} has been found", DiagnosticId);
-            return new RecipeExecutionResult(SolutionFilePath, watch.Elapsed, []);
+            log.LogError("No analyzers targeting issue {DiagnosticIds} has been found", DiagnosticIdsToFix);
+            return new RecipeExecutionResult(SolutionFilePath, TimeSpan.Zero, TimeSpan.Zero, []);
         }
-
-        // var issuesBeingFixed = analyzersWithFixersById.Select(x =>
-        // {
-        //     var diagnostic = x.Value.Analyzer.SupportedDiagnostics.First(y => y.Id == x.Key);
-        //     return $"{diagnostic.Id}: {diagnostic.Title}";
-        // });
-
-        var loadedTime = watch.Elapsed;
-
+        
+        Stopwatch watch = new();
+        watch.Start();
+        var workspace = MSBuildWorkspace.Create();
+        var result = ProcessTasks.StartProcess("dotnet", $"restore {SolutionFilePath}");
+        result.WaitForExit();
+        var originalSolution = await workspace.OpenSolutionAsync(SolutionFilePath, cancellationToken: cancellationToken);
+        var solutionLoadTime = watch.Elapsed;
+        log.LogDebug("Solution {SolutionFilePath} loaded in {Elapsed}", SolutionFilePath, solutionLoadTime);
+        var solution = new SolutionEditor(originalSolution);
+        
         var allDiagnostics = await GetDiagnostics(solution, analyzersWithFixersById, cancellationToken);
         var issuesTypesInCodebase = allDiagnostics
-            .Where(x => this.DiagnosticIds.Contains(x.Id))
+            .Where(x => DiagnosticIdsToFix.Contains(x.Id))
             .Select(x => x.Id)
             .ToHashSet();
+        
         var analyzersWithFixersByIdForIssuesInCodebase = analyzersWithFixersById
             .Where(x => issuesTypesInCodebase.Contains(x.Key))
             .ToDictionary(x => x.Key, x => x.Value);
         
-        log.LogDebug("Solution {SolutionFilePath} loaded in {Elapsed}", SolutionFilePath, loadedTime);
+        
         if (analyzersWithFixersByIdForIssuesInCodebase.Count == 0)
         {
             log.LogDebug("No fixable issues found in solution");
         }
-        // else
-        // {
-        //     var issueCounts = allDiagnostics
-        //         .GroupBy(x => x.Id)
-        //         .Select(x  => new 
-        //         {
-        //             IssueId = $"{x.Key}: {x.First().Descriptor.Title}",
-        //             Occurances = x.Count()
-        //         });
-        //     log.LogDebug("Fixing {@Issues}", issueCounts);
-        // }
 
         foreach (var (issueId, (analyzer, codeFixProvider)) in analyzersWithFixersByIdForIssuesInCodebase)
         {
             var recipeWatch = Stopwatch.StartNew();
-            // var compilationTasks = solution.Solution.Projects.Select(p => p.GetCompilationAsync(cancellationToken));
-            // var compilations = await Task.WhenAll(compilationTasks);
-
             var analyzersToRun = new Dictionary<string, (DiagnosticAnalyzer, CodeFixProvider)>()
             {
                 {issueId, (analyzer, codeFixProvider)}
@@ -166,7 +143,7 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
             }
 
             var diagnosticsByDocument = diagnostics
-                .Select(x => (Diagnostic: x, Document: solution.Solution.GetDocument(x.Location.SourceTree)))
+                .Select(x => (Diagnostic: x, Document: solution.CurrentSolution.GetDocument(x.Location.SourceTree)))
                 .Where(x => x.Document != null)
                 .GroupBy(x => x.Document!, x => x.Diagnostic)
                 .Where(x => x.Key is not SourceGeneratedDocument)
@@ -174,25 +151,18 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
 
             var diagnosticProvider = new FixMultipleDiagnosticProvider(diagnosticsByDocument);
             // var codeFixProvider = analyzersWithFixersById[diagnosticIssue.Key].Fixer;
-            var fixAllProvider = codeFixProvider.GetFixAllProvider();
-
-            if (fixAllProvider == null)
-            {
-                fixAllProvider = WellKnownFixAllProviders.BatchFixer;
-                // throw new InvalidOperationException($"Bulk fix provider not available for {issueId}: {diagnostic.Descriptor.Title}");
-            }
+            var fixAllProvider = codeFixProvider.GetFixAllProvider() ?? WellKnownFixAllProviders.BatchFixer;
 
             Diagnostic? sampledDiagnostic = null;
             string? equivalenceKey = null;
             // try to find first viable fixup type for this issue type
             foreach(var diagnostic in diagnostics)
             {
-                var document = solution.Solution.GetDocument(diagnostic.Location.SourceTree);
+                var document = solution.CurrentSolution.GetDocument(diagnostic.Location.SourceTree);
                 if (document == null)
                     throw new Exception($"Could not find document associated with {diagnostic.Id} {diagnostic.Descriptor.Title}");
 
                 var actions = new List<CodeAction>();
-                
                 var context = new CodeFixContext(document!, diagnostic, (a, d) => actions.Add(a), CancellationToken.None);
                 try
                 {
@@ -200,23 +170,18 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
                 }
                 catch (Exception)
                 {
-                    // log.LogError(e, "Code fix up for {IssueId} failed due it its own internal logic", issueId);
                     continue;
                 }
 
-
                 if (actions.Count == 0)
                 {
-                    // log.LogDebug("No fixable issues found");
                     continue;
                 }
                 
                 var codeFixAction = actions[0];
                 
-                //codeFixAction.
                 if (!codeFixAction.NestedActions.IsEmpty)
                 {
-                    // log.LogWarning("Skipping refactoring of recipe {DiagnosticId} because there's multiple variations of refactoring that can be applied", issueId);
                     continue;
                 }
                 sampledDiagnostic = diagnostic;
@@ -251,12 +216,11 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
             try
             {
                 var codeAction = await fixAllProvider.GetFixAsync(fixAllContext) ?? throw new Exception("Code action was not found");
-            
                 var operations = await codeAction.GetOperationsAsync(cancellationToken);
                 var applyChangesOperation = operations.OfType<ApplyChangesOperation>().First();
                 newSolution = applyChangesOperation.ChangedSolution;
             }
-            catch (Exception e)
+            catch (Exception e) 
             {
                 log.LogError(e, "Unable to apply {IssueId} due to internal CodeFixup logic error", issueId);
                 continue;
@@ -279,10 +243,10 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
             //     Console.WriteLine(diffs);
             // }
             
-            solution.Solution = newSolution;
-            var affectedDocumentIds = await GetChangedDocumentsAsync(originalSolution, solution.Solution, cancellationToken);
+            solution.CurrentSolution = newSolution;
+            var affectedDocumentIds = await GetChangedDocumentsAsync(solution, cancellationToken);
             var affectedDocuments = affectedDocumentIds
-                .Select(x => (Document: solution.Solution.GetDocument(x.DocumentId)!, x.ChangedLineNumbers))
+                .Select(x => (Document: solution.CurrentSolution.GetDocument(x.DocumentId)!, x.ChangedLineNumbers))
                 .ToList();
             var issueFixResult = new IssueFixResult(
                 IssueId: issueId, 
@@ -297,22 +261,22 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
 
         if (!DryRun)
         {
-            workspace.TryApplyChanges(solution.Solution);
+            workspace.TryApplyChanges(solution.CurrentSolution);
         }
 
         watch.Stop();
         log.LogDebug("Executed recipes in {Elapsed}", watch.Elapsed);
-        var recipeExecutionResult = new RecipeExecutionResult(SolutionFilePath, watch.Elapsed, fixedIssues);
+        var recipeExecutionResult = new RecipeExecutionResult(SolutionFilePath, solutionLoadTime,watch.Elapsed, fixedIssues);
         return recipeExecutionResult;
     }
 
     private async Task<List<Diagnostic>> GetDiagnostics(
-        SolutionHolder solution, 
+        SolutionEditor solution, 
         Dictionary<string, (DiagnosticAnalyzer Analyzer, CodeFixProvider CodeFixProvider)> analyzersWithFixers, 
         CancellationToken cancellationToken)
     {
         
-        var compilationTasks = solution.Solution.Projects.Select(p => p.GetCompilationAsync(cancellationToken));
+        var compilationTasks = solution.CurrentSolution.Projects.Select(p => p.GetCompilationAsync(cancellationToken));
         var compilations = await Task.WhenAll(compilationTasks);
         
         List<Diagnostic> diagnostics = [];
@@ -325,7 +289,7 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
                 .ToImmutableArray());
             var diags = await withAnalyzers.GetAnalyzerDiagnosticsAsync(cancellationToken);
             diags = diags
-                .Where(x => solution.Solution.GetDocument(x.Location.SourceTree) is not SourceGeneratedDocument)
+                .Where(x => solution.CurrentSolution.GetDocument(x.Location.SourceTree) is not SourceGeneratedDocument)
                 .ToImmutableArray();
             diagnostics.AddRange(diags);
         }
@@ -334,16 +298,15 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
     }
     
     static async Task<IEnumerable<(DocumentId DocumentId, List<int> ChangedLineNumbers)>> GetChangedDocumentsAsync(
-        Solution oldSolution,
-        Solution newSolution,
+        SolutionEditor solution,
         CancellationToken cancellationToken = default)
     {
         var changedDocumentIds = new List<(DocumentId, List<int> ChangedLineNumbers)>();
 
-        foreach (var projectId in newSolution.ProjectIds)
+        foreach (var projectId in solution.CurrentSolution.ProjectIds)
         {
-            var oldProject = oldSolution.GetProject(projectId);
-            var newProject = newSolution.GetProject(projectId);
+            var oldProject = solution.OriginalSolution.GetProject(projectId);
+            var newProject = solution.CurrentSolution.GetProject(projectId);
 
             if (oldProject == null || newProject == null)
                 continue;
@@ -371,9 +334,14 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
         return changedDocumentIds;
     }
     
-    class SolutionHolder(Solution solution)
+    /// <summary>
+    /// Used to track solution changes as it's updated between recipe executions.
+    /// Doing it this way allows us to use it cleanly in lambdas so closures point to the most recent state, not when closure was made
+    /// </summary>
+    class SolutionEditor(Solution solution)
     {
-        public Solution Solution { get; set; } = solution;
+        public Solution OriginalSolution { get; } = solution;
+        public Solution CurrentSolution { get; set; } = solution;
     }
 
 }

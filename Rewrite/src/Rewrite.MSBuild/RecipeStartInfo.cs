@@ -11,7 +11,6 @@ public class RecipeStartInfo
     public required RecipeKind Kind { get; init; }
     public required string DisplayName { get; init; }
     public required string Description { get; init; }
-    // public required PackageIdentity NugetPackageId { get; init; }
     
     private readonly Dictionary<string,RecipeArgument> _arguments = new();
 
