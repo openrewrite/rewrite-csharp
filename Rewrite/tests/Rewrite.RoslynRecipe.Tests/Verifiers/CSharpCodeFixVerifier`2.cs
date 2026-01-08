@@ -6,7 +6,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
-using TUnit.Assertions.AssertionBuilders;
 
 namespace Rewrite.RoslynRecipe.Tests.Verifiers;
 
@@ -64,7 +63,6 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
                 AdditionalReferences =
                 {
                     typeof(TUnitAttribute).Assembly.Location,
-                    typeof(AssertionBuilder).Assembly.Location,
                 },
             },
             CompilerDiagnostics = CompilerDiagnostics.Errors

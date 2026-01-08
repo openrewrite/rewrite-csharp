@@ -103,7 +103,7 @@ public class RecipeManagerTests : BaseTests
     /// Verifies that we can act on multiple solutions via one invocation of the command
     /// </summary>
     [Test]
-    public async Task<VerifyResult> RoslynRecipeBatchWithTwoSolution()
+    public async Task<VerifyResult> RoslynRecipeBatchWithTwoSolution(CancellationToken cancellationToken)
     {
         var directory = CreateRecipeInputDirectory(FixturesDir / "TwoSolutions");
         
@@ -117,7 +117,7 @@ public class RecipeManagerTests : BaseTests
             Path = directory
         };
         var command = CreateObject<RunRecipeCommand>();
-        await command.ExecuteAsync(settings);
+        await command.ExecuteAsync(settings, cancellationToken);
         
         return await VerifyDirectory(directory, IncludeTestFile);
     }

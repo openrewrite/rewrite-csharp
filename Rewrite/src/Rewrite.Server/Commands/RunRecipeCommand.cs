@@ -91,10 +91,9 @@ public class RunRecipeCommand(RecipeManager recipeManager, ILogger<RunRecipeComm
         }
     }
     
-    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
+    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         logger.LogInformation("Executing {CommandName} with settings {@Settings}", nameof(RunRecipeCommand), settings);
-        var cancellationToken = CancellationToken.None;
         var packageSources = settings.FeedUrls.Select(x => new PackageSource(x)).ToList();
         // var recipeManager = new RecipeManager();
         // CA1802: Use Literals Where Appropriate

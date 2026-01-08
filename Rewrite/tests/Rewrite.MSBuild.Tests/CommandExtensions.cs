@@ -7,10 +7,10 @@ namespace Rewrite.MSBuild.Tests;
 public static class CommandExtensions
 {
 
-    public static async Task<int> ExecuteAsync<TSettings>(this AsyncCommand<TSettings> command, TSettings settings) where TSettings : CommandSettings
+    public static async Task<int> ExecuteAsync<TSettings>(this AsyncCommand<TSettings> command, TSettings settings, CancellationToken cancellationToken) where TSettings : CommandSettings
     {
         command.Validate(CreateContext(), settings);
-        return await command.ExecuteAsync(CreateContext(), settings);
+        return await command.ExecuteAsync(CreateContext(), settings, cancellationToken);
     }
 
     private static CommandContext CreateContext()

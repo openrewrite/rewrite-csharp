@@ -2,7 +2,8 @@
     <PropertyGroup>
 <!--        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>-->
 <!--        <TargetFramework>net9.0</TargetFramework>-->
-        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+<!--        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>-->
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <Configurations>Debug;Release;Generate</Configurations>
@@ -25,7 +26,9 @@
 
     <PropertyGroup>
 <!--        <VersionPrefix>0.23.0</VersionPrefix>-->
-        <MicrosoftCodeAnalysisVersion>5.3.0-1.25506.7</MicrosoftCodeAnalysisVersion>
+<!--        <MicrosoftCodeAnalysisVersion>5.3.0-1.25506.7</MicrosoftCodeAnalysisVersion>-->
+        <MicrosoftCodeAnalysisVersion>5.0.0</MicrosoftCodeAnalysisVersion>
+        <MicrosoftCodeAnalysisAnalyzersVersion>5.3.0-2.25630.4</MicrosoftCodeAnalysisAnalyzersVersion>
         <RemotePrinter>False</RemotePrinter>
         <DebugVisitor>False</DebugVisitor>
         <SanitizeStackTrace>True</SanitizeStackTrace>

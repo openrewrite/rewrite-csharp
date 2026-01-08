@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.Extensions.Logging;
 using NMica.Utils.IO;
@@ -64,7 +65,7 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
     /// <returns>Documents that have been changed, grouped by issue ID</returns>
     public async Task<RecipeExecutionResult> Execute(CancellationToken cancellationToken)
     {
-        List<IssueFixResult> fixedIssues = new();
+        
    
         var allAnalyzers = RecipeAssemblies
             .SelectMany(x => x.ExportedTypes)
@@ -72,6 +73,8 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
             .Select(Activator.CreateInstance)
             .Cast<DiagnosticAnalyzer>()
             .ToImmutableArray();
+        
+        var userSelectedDiagnosticIds = DiagnosticIdsToFix.Union(DiagnosticIdsToReport).ToHashSet();
         
         var fixers = RecipeAssemblies
             .SelectMany(x => x.ExportedTypes)
@@ -82,14 +85,15 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
             .SelectMany(fixer => fixer.FixableDiagnosticIds.Select(id => (Id: id, Fixer: fixer)))
             .DistinctBy(x => x.Id)
             .ToDictionary(x => x.Id, x => x.Fixer);
-
+        
+        
         var analyzersWithFixersById = allAnalyzers
             .SelectMany(analyzer => analyzer
                 .SupportedDiagnostics
                 .DistinctBy(x => x.Id)
                 .Select(descriptor => (descriptor.Id, Analyzer: analyzer)))
-            .Join(fixers, x => x.Id, x => x.Key, (a, b) => (a.Id, a.Analyzer, Fixer: b.Value))
-            .Where(x => DiagnosticIdsToFix.Contains(x.Id))
+            .LeftJoin(fixers, x => x.Id, x => x.Key, (a, b) => (a.Id, a.Analyzer, Fixer: b.Value))
+            .Where(x => userSelectedDiagnosticIds.Contains(x.Id))
             .GroupBy(x => x.Id)
             .Select(x => (x.Key, x.First().Analyzer, x.FirstOrDefault().Fixer))
             .ToDictionary(x => x.Key, x => (x.Analyzer, x.Fixer));
@@ -109,31 +113,87 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
         var solutionLoadTime = watch.Elapsed;
         log.LogDebug("Solution {SolutionFilePath} loaded in {Elapsed}", SolutionFilePath, solutionLoadTime);
         var solution = new SolutionEditor(originalSolution);
+
+        var analyzersToApply = analyzersWithFixersById
+            .Select(x => x.Value.Analyzer)
+            .Distinct()
+            .ToImmutableArray();
         
-        var allDiagnostics = await GetDiagnostics(solution, analyzersWithFixersById, cancellationToken);
-        var issuesTypesInCodebase = allDiagnostics
+        var allDiagnostics = await GetDiagnostics(solution, analyzersToApply, cancellationToken);
+        var diagnosticsForSelectedIds = allDiagnostics
+            .Where(x => userSelectedDiagnosticIds.Contains(x.Id)).
+            ToList();
+        
+        if (diagnosticsForSelectedIds.Count == 0)
+        {
+            log.LogDebug("No issues found in solution");
+            return new RecipeExecutionResult(SolutionFilePath, TimeSpan.MinValue,TimeSpan.MinValue, []);
+        }
+        
+
+        var fixableDiagnosticsIds = diagnosticsForSelectedIds
             .Where(x => DiagnosticIdsToFix.Contains(x.Id))
             .Select(x => x.Id)
             .ToHashSet();
-        
-        var analyzersWithFixersByIdForIssuesInCodebase = analyzersWithFixersById
-            .Where(x => issuesTypesInCodebase.Contains(x.Key))
+
+        var codeFixProvidersToApply = analyzersWithFixersById
+            .Where(x => x.Value.Fixer != null && fixableDiagnosticsIds.Contains(x.Key))
             .ToDictionary(x => x.Key, x => x.Value);
         
+        var fixedIssues = await ApplyCodeFixers(codeFixProvidersToApply, solution, cancellationToken);
+
+        var reportableDiagnosticsIds = diagnosticsForSelectedIds
+            .Where(x => DiagnosticIdsToReport.Contains(x.Id) && !fixableDiagnosticsIds.Contains(x.Id))
+            .Select(x => x.Id)
+            .ToList();
+
+        var analyzersToHighlight = analyzersWithFixersById
+            .Where(x => x.Value.Fixer == null && reportableDiagnosticsIds.Contains(x.Key))
+            
+            .ToDictionary(x => x.Key, x => x.Value.Analyzer);
         
-        if (analyzersWithFixersByIdForIssuesInCodebase.Count == 0)
+        await ApplyAnalyzerHighlights(analyzersToHighlight, solution, cancellationToken);
+        
+        if (!DryRun)
         {
-            log.LogDebug("No fixable issues found in solution");
+            workspace.TryApplyChanges(solution.CurrentSolution);
         }
 
-        foreach (var (issueId, (analyzer, codeFixProvider)) in analyzersWithFixersByIdForIssuesInCodebase)
+        watch.Stop();
+        log.LogDebug("Executed recipes in {Elapsed}", watch.Elapsed);
+        var recipeExecutionResult = new RecipeExecutionResult(SolutionFilePath, solutionLoadTime,watch.Elapsed, fixedIssues);
+        return recipeExecutionResult;
+    }
+
+    private async Task ApplyAnalyzerHighlights(Dictionary<string, DiagnosticAnalyzer> analyzersToHighlight, SolutionEditor solution, CancellationToken cancellationToken)
+    {
+        var diagnostics = await GetDiagnostics(solution, analyzersToHighlight.Values.ToImmutableArray(), cancellationToken);
+        var diagnosticsByDocument = diagnostics
+            .Select(x => (Diagnostic: x, Document: solution.CurrentSolution.GetDocument(x.Location.SourceTree)))
+            .Where(x => x.Document != null)
+            .GroupBy(x => x.Document!, x => x.Diagnostic)
+            .Where(x => x.Key is not SourceGeneratedDocument)
+            .ToImmutableDictionary(x => x.Key, x => x.ToImmutableArray());
+        foreach (var (document, currentDocumentDiagnostics) in diagnosticsByDocument)
+        {
+            var editor = await DocumentEditor.CreateAsync(document, cancellationToken);
+            foreach (var diagnostic in currentDocumentDiagnostics)
+            {
+                var node = diagnostic
+            }
+        }
+    }
+
+    private async Task<List<IssueFixResult>> ApplyCodeFixers(
+        Dictionary<string, (DiagnosticAnalyzer Analyzer, CodeFixProvider Fixer)> fixesToApply, 
+        SolutionEditor solution,
+         CancellationToken cancellationToken)
+    {
+        List<IssueFixResult> fixedIssues = new();
+        foreach (var (issueId, (analyzer, codeFixProvider)) in fixesToApply)
         {
             var recipeWatch = Stopwatch.StartNew();
-            var analyzersToRun = new Dictionary<string, (DiagnosticAnalyzer, CodeFixProvider)>()
-            {
-                {issueId, (analyzer, codeFixProvider)}
-            };
-            var diagnostics = await GetDiagnostics(solution, analyzersToRun, cancellationToken);
+            var diagnostics = await GetDiagnostics(solution, [analyzer], cancellationToken);
             diagnostics = diagnostics
                 .Where(x => x.Id == issueId)
                 .ToList();
@@ -259,20 +319,12 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
             
         }
 
-        if (!DryRun)
-        {
-            workspace.TryApplyChanges(solution.CurrentSolution);
-        }
-
-        watch.Stop();
-        log.LogDebug("Executed recipes in {Elapsed}", watch.Elapsed);
-        var recipeExecutionResult = new RecipeExecutionResult(SolutionFilePath, solutionLoadTime,watch.Elapsed, fixedIssues);
-        return recipeExecutionResult;
+        return fixedIssues;
     }
 
     private async Task<List<Diagnostic>> GetDiagnostics(
         SolutionEditor solution, 
-        Dictionary<string, (DiagnosticAnalyzer Analyzer, CodeFixProvider CodeFixProvider)> analyzersWithFixers, 
+        ImmutableArray<DiagnosticAnalyzer> analyzers, 
         CancellationToken cancellationToken)
     {
         
@@ -282,11 +334,7 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
         List<Diagnostic> diagnostics = [];
         foreach (var compilation in compilations.Where(x => x != null).Cast<Compilation>())
         {
-            var withAnalyzers = compilation.WithAnalyzers(analyzersWithFixers
-                .Values
-                .Select(x => x.Analyzer)
-                .Distinct()
-                .ToImmutableArray());
+            var withAnalyzers = compilation.WithAnalyzers(analyzers);
             var diags = await withAnalyzers.GetAnalyzerDiagnosticsAsync(cancellationToken);
             diags = diags
                 .Where(x => solution.CurrentSolution.GetDocument(x.Location.SourceTree) is not SourceGeneratedDocument)

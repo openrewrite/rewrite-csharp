@@ -27,7 +27,7 @@ public class LanguageServerCommand(IHost host) : AsyncCommand<LanguageServerComm
     //     protected override void ConfigureHost(ServiceCollection services) => services.AddHostedService<Server>();
     // }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
+    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         await _host.RunAsync();
         return 0;
