@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using NuGet.Configuration;
 using NuGet.LibraryModel;
 using Rewrite.Core;
+using Rewrite.Core.Config;
 using Rewrite.MSBuild;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -116,10 +117,24 @@ public class RunRecipeCommand(RecipeManager recipeManager, ILogger<RunRecipeComm
             solutionPaths = Directory.EnumerateFiles(settings.Path, "*.sln", SearchOption.AllDirectories).ToList();
         }
 
+        var analyzerIds = settings.Ids.Where(x => x.EndsWith(":A")).Select(x => Regex.Replace(x,":A$", "")).ToHashSet();
+        var allOtherIds = settings.Ids.Where(x => !x.EndsWith(":A")).Select(x => Regex.Replace(x,":A$", "")).ToHashSet();
+
         foreach (var solutionPath in solutionPaths)
         {
             var recipeStartInfos = recipeExecutionContext.Recipes
-                .Where(x => settings.Ids.Length == 0 || settings.Ids.Contains(x.Id))
+                .Where(x =>
+                {
+                    if(settings.Ids.Length == 0)
+                        return false;
+                    if (analyzerIds.Contains(x.Id))
+                        return x.Kind == RecipeKind.RoslynAnalyzer;
+                    return allOtherIds.Contains(x.Id);
+                })
+                .GroupBy(x => x.Id)
+                .Select(g => g.Any(x => x.Kind == RecipeKind.RoslynFixer) // we're either analyzer or fixing - not both
+                    ? g.First(x => x.Kind == RecipeKind.RoslynFixer)
+                    : g.First())
                 .Select(x => recipeExecutionContext
                     .CreateRecipeStartInfo(x)
                     .WithOption(nameof(RoslynRecipe.SolutionFilePath), solutionPath)

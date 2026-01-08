@@ -356,7 +356,8 @@ public class RecipeManager
                 .Select(assembly => (Folder: libsToPath[(targetLib.Name!, targetLib.Version!)], File: assembly.Path, PackageIdentity: new PackageIdentity(targetLib.Name, targetLib.Version))))
             
             .ToList();
-        var targetFolderRegex = new Regex(@"^analyzers/dotnet/(roslyn[0-9]\.[0-9]/)?cs/");
+        // var targetFolderRegex = new Regex(@"^analyzers/dotnet/(roslyn[0-9]\.[0-9]/)?(cs/)?");
+        var dllRegex = new Regex(@"^analyzers/dotnet/(roslyn[0-9]\.[0-9]/)?(cs/)?.+\.dll$");
         
         var analyzerDlls = lockFile.Libraries.SelectMany(lib =>
             {
@@ -365,16 +366,16 @@ public class RecipeManager
                 // "analyzers/dotnet/roslyn4.7/cs/test2.dll",
                 // "analyzers/dotnet/roslyn4.3/cs/test.dll",
                 // "analyzers/dotnet/cs/test.dll"
-                var targetFolder = lib.Files
-                    .Select(x => targetFolderRegex.Match(x).Value)
-                    .Distinct()
-                    .Where(x => x != "")
-                    .OrderBy(x => x)
-                    .LastOrDefault();
-                if(targetFolder is null)
-                    return [];
-                var targetFilesRegex = new Regex($"^{targetFolder}.+");
-                var files =  lib.Files.Where(x => targetFilesRegex.IsMatch(x) & x.EndsWith(".dll"));
+                // var targetFolder = lib.Files
+                //     .Select(x => dllRegex.Match(x).Value)
+                //     .Distinct()
+                //     .Where(x => x != "")
+                //     .OrderBy(x => x)
+                //     .LastOrDefault();
+                // if(targetFolder is null)
+                //     return [];
+                // var targetFilesRegex = new Regex($"^{targetFolder}.+");
+                var files =  lib.Files.Where(x => dllRegex.IsMatch(x) & x.EndsWith(".dll")).ToList();
                 
                 return files.Select(file => (Folder: lib.Path, File: file, PackageIdentity: new PackageIdentity(lib.Name, lib.Version)));
             })

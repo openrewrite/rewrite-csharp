@@ -149,8 +149,8 @@ partial class Build : NukeBuild
     [GitRepositoryExt] LibGit2Sharp.Repository GitRepository;
     AbsolutePath DotnetServerFilePath => ArtifactsDirectory / "DotnetServer.zip";
 
-    readonly string[] TargetFrameworks = ["net8.0", "net9.0"];
-    readonly string TargetFramework = "net9.0";
+    readonly string[] TargetFrameworks = ["net10.0"];
+    readonly string TargetFramework = "net10.0";
 
 
 

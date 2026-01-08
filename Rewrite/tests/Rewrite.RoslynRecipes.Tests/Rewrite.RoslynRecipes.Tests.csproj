@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <NoWarn>NU1701</NoWarn>
+    </PropertyGroup>
+    <PropertyGroup>
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+    </PropertyGroup>
+
+    <ItemGroup>
+
+        <PackageReference Include="TUnit" Version="1.9.2" />
+        <PackageReference Include="Microsoft.CodeAnalysis" Version="$(MicrosoftCodeAnalysisVersion)" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisVersion)" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" Version="1.1.3-beta1.25564.1" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing" Version="1.1.3-beta1.25564.1" />
+        <PackageReference Include="FluentAssertions" Version="7.2.0" />
+        <ProjectReference Include="..\..\src\Rewrite.Test\Rewrite.Test.csproj" />
+        <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="2.0.2" />
+        <PackageReference Include="coverlet.collector" Version="6.0.4">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <ProjectReference Include="..\..\src\Rewrite.Diagnostics\Rewrite.Diagnostics.csproj" />
+        <ProjectReference Include="..\..\src\Rewrite.RoslynRecipes\Rewrite.RoslynRecipes.csproj" />
+
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="..\Rewrite.CSharp.Tests\CommonTestHooks.cs">
+            <Link>CommonTestHooks.cs</Link>
+        </Compile>
+    </ItemGroup>
+
+</Project>

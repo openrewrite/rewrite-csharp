@@ -113,7 +113,7 @@ public class RecipeManagerTests : BaseTests
                 "CA1861", // Avoid constant arrays as arguments,
                 "CA1311"  // Specify a culture or use an invariant version
             ], 
-            Packages = ["Microsoft.CodeAnalysis.NetAnalyzers:10.0.0"],
+            Packages = ["Microsoft.CodeAnalysis.NetAnalyzers:10.0.101"],
             Path = directory
         };
         var command = CreateObject<RunRecipeCommand>();
@@ -122,6 +122,29 @@ public class RecipeManagerTests : BaseTests
         return await VerifyDirectory(directory, IncludeTestFile);
     }
     
+    /// <summary>
+    /// Verifies that we can act on multiple solutions via one invocation of the command
+    /// </summary>
+    [Test]
+    public async Task<VerifyResult> RoslynAnalyzerHighlight(CancellationToken cancellationToken)
+    {
+        var directory = CreateRecipeInputDirectory(FixturesDir / "TwoSolutions");
+        
+        var settings = new RunRecipeCommand.Settings
+        {
+            Ids = [
+                "CA1861:A", // Avoid constant arrays as arguments,
+                "CA1311"  // Specify a culture or use an invariant version
+            ], 
+            Packages = ["Microsoft.CodeAnalysis.NetAnalyzers:10.0.101"],
+            Path = directory
+        };
+        var command = CreateObject<RunRecipeCommand>();
+        await command.ExecuteAsync(settings, cancellationToken);
+        
+        return await VerifyDirectory(directory, IncludeTestFile);
+    }
+
     //
     // /// <summary>
     // /// Verifies that we can act on multiple solutions via one invocation of the command

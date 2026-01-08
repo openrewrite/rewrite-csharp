@@ -271,7 +271,7 @@ public class RecipeExecutionContext : AssemblyLoadContext
             })
             .ToList();
 
-        return openRewriteRecipes.Union(fixupRecipes).ToList();
+        return openRewriteRecipes.Union(analyzerRecipes).Union(fixupRecipes).ToList();
         //
         // foreach (var assemblyPath in _assemblies.Values)
         // {

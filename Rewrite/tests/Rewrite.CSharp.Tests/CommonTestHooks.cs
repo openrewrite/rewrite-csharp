@@ -1,10 +1,8 @@
 ﻿using Rewrite.Core;
-using Rewrite.CSharp.Tests;
 using Rewrite.Diagnostics;
 using Rewrite.Test;
-using TUnit.Core;
 
-namespace Rewrite.Tests;
+namespace Rewrite.CSharp.Tests;
 
 public static class CommonTestHooks
 {

@@ -6,6 +6,7 @@ using System.Runtime.Loader;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.MSBuild;
@@ -113,7 +114,7 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
         var solutionLoadTime = watch.Elapsed;
         log.LogDebug("Solution {SolutionFilePath} loaded in {Elapsed}", SolutionFilePath, solutionLoadTime);
         var solution = new SolutionEditor(originalSolution);
-
+        
         var analyzersToApply = analyzersWithFixersById
             .Select(x => x.Value.Analyzer)
             .Distinct()
@@ -148,7 +149,7 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
             .ToList();
 
         var analyzersToHighlight = analyzersWithFixersById
-            .Where(x => x.Value.Fixer == null && reportableDiagnosticsIds.Contains(x.Key))
+            .Where(x => reportableDiagnosticsIds.Contains(x.Key))
             
             .ToDictionary(x => x.Key, x => x.Value.Analyzer);
         
@@ -174,13 +175,35 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
             .GroupBy(x => x.Document!, x => x.Diagnostic)
             .Where(x => x.Key is not SourceGeneratedDocument)
             .ToImmutableDictionary(x => x.Key, x => x.ToImmutableArray());
+
         foreach (var (document, currentDocumentDiagnostics) in diagnosticsByDocument)
         {
             var editor = await DocumentEditor.CreateAsync(document, cancellationToken);
-            foreach (var diagnostic in currentDocumentDiagnostics)
+            var root = editor.OriginalRoot;
+
+            // Group diagnostics by their target node to handle multiple diagnostics on the same node
+            var diagnosticsByNode = currentDocumentDiagnostics
+                .Select(d => (Diagnostic: d, Node: root.FindNode(d.Location.SourceSpan)))
+                .GroupBy(x => x.Node, x => x.Diagnostic)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            foreach (var (node, nodeDiagnostics) in diagnosticsByNode)
             {
-                var node = diagnostic
+                // Build the highlight comments for all diagnostics on this node
+                var highlightComments = nodeDiagnostics
+                    .Select(d => SyntaxFactory.Comment($"/* >> {d.Id} */"))
+                    .Concat([SyntaxFactory.Space])
+                    .ToList();
+
+                // Prepend the highlight comments to the node's existing leading trivia
+                var existingTrivia = node.GetLeadingTrivia();
+                var newTrivia = SyntaxFactory.TriviaList(highlightComments.Concat(existingTrivia));
+                var newNode = node.WithLeadingTrivia(newTrivia);
+
+                editor.ReplaceNode(node, newNode);
             }
+
+            solution.CurrentSolution = editor.GetChangedDocument().Project.Solution;
         }
     }
 
