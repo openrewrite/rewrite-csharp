@@ -25,74 +25,89 @@ This skill provides comprehensive guidance for developing Roslyn analyzers and c
 
 ## Analyzer Implementation Pattern
 
-### Semantic Analysis Best Practices
+When targeting specific APIs, semantic analysis must ALWAYS be performed to determine if the targeted node correctly corresponds to fully qualified semantic target. Use helper method `Rewrite.RoslynRecipes.Helpers.SemanticAnalysisUtil.IsSymbolOneOf` for this purpose (`public static bool IsSymbolOneOf(this SyntaxNode node, SemanticModel semanticModel, params IEnumerable<string> symbolNames)`). This method operates on strings that are mapped to `symbol.GetDocumentationCommentId()` and will have one of the corresponding prefixes (ex: `T:Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor`)
 
-Use Two-Phase Analysis to first eliminate anything that doesn't match on pure syntax, and ALWAYS confirm any potential matches via semantic analysis to remove any potential ambiguity (confirm namespace / type, etc). Use extension method `IsSymbolOneOf` (provided by `Rewrite.RoslynRecipe.Helpers.SemanticAnalysisUtil` class) to confirm semantic identity. The semantic identity uses string returned by `GetDocumentationCommentId()` on `ISymbol` to do the underlying symbol comparison. The extension method takes this signature: `public static bool IsSymbolOneOf(this SyntaxNode node, SemanticModel semanticModel, params IEnumerable<string> symbolNames)`. Example which targets method invocation `WithOpenApi` and it's 3 potential overloads:
+| Prefix | Symbol kind                                     | Roslyn symbol type |
+| ------ | ----------------------------------------------- | ------------------ |
+| **N:** | Namespace                                       | `INamespaceSymbol` |
+| **T:** | Type (class, struct, interface, enum, delegate) | `INamedTypeSymbol` |
+| **M:** | Method (includes constructors, operators)       | `IMethodSymbol`    |
+| **P:** | Property (includes indexers)                    | `IPropertySymbol`  |
+| **F:** | Field (includes enum members)                   | `IFieldSymbol`     |
+| **E:** | Event                                           | `IEventSymbol`     |
+| **A:** | Assembly                                        | `IAssemblySymbol`  |
 
-```csharp
-private void AnalyzeNode(SyntaxNodeAnalysisContext context)
-{
-    // Phase 1: Low-cost syntax elimination
-    var invocation = (InvocationExpressionSyntax)context.Node;
-    
-    if (invocation.Expression is not MemberAccessExpressionSyntax memberAccess)
-        return;
-    
-    if (memberAccess.Name.Identifier.Text != "WithOpenApi")
-        return;
 
-    // Phase 2: Semantic confirmation
-    if (!invocation.Expression.IsSymbolOneOf(context.SemanticModel,
-            "M:Microsoft.AspNetCore.Builder.OpenApiEndpointConventionBuilderExtensions.WithOpenApi``1",
-            "M:Microsoft.AspNetCore.Builder.OpenApiEndpointConventionBuilderExtensions.WithOpenApi``1(System.Func{Microsoft.OpenApi.OpenApiOperation,Microsoft.OpenApi.OpenApiOperation})",
-            "M:Microsoft.AspNetCore.Builder.OpenApiEndpointConventionBuilderExtensions.WithOpenApi``1(System.Func{Microsoft.OpenApi.Models.OpenApiOperation,Microsoft.OpenApi.Models.OpenApiOperation})"
-        ))
-        return;
-
-    // Report diagnostic
-    var diagnostic = Diagnostic.Create(Rule, node.GetLocation());
-    context.ReportDiagnostic(diagnostic);
-}
-```
 
 ## Code Fix Provider Implementation Pattern
 
-1. All editing of the syntax tree is to be done using `DocumentEditor`, which provides a simplified and robust way to make multiple edits to the document and access to the original semantic model. Remember that semantic model is tied to the original syntax, so all decision need to be made on the original nodes, not any subsequent mutations.
+1. All editing of the syntax tree MUST be done using `DocumentEditor`, which provides a simplified and robust way to make multiple edits to the document and access to the original semantic model. Remember that semantic model is tied to the original syntax, so all decision need to be made on the original nodes, not any subsequent mutations.
 
 1. If the codefix only targets the immediate code marked by the analyzer, semantic confirmation is not required since it's already guaranteed to have been done in the analyzer. However, if the refactoring requires nodes outside of what was selected by the diagnostic (other areas of the document), semantic model should always be used to ensure accurate targeting.
 
-1. When introducing new types from namespaces that have potential to not be imported in the current scope (normally via a `using Some.Namespace` statement), you must call `Rewrite.RoslynRecipe.Helpers.UsingsUtil.MaybeAddUsingAsync` to ensure that the correct using statement is added to the document if necessary.
+1. When introducing symbol usages from other namespaces that are not guaranteed to be in the document, they an annotation must be placed on the node to indicate which namespace(s) must be imported. Use `WithRequiredNamespace` extension method for this. Example
 
+   ```csharp
+   editor.ReplaceNode(memberAccess.Node, (current, gen) =>
+   	SyntaxFactory.ParseExpression($"HttpContext?.GetRouteData()")
+       .WithRequiredNamespace("Microsoft.AspNetCore.Routing")
+       .FormatterAnnotated());
    ```
-   /// <summary>
-   /// Adds a using directive for the specified type if it's not already available at the usage site.
-   /// </summary>
-   /// <param name="document">The document to potentially add the using directive to.</param>
-   /// <param name="root">The syntax root of the document.</param>
-   /// <param name="semanticModel">The semantic model for the document.</param>
-   /// <param name="usageSite">The syntax node where the type will be used.</param>
-   /// <param name="fullTypeName">The fully qualified type name (e.g., "System.Threading.Tasks.Task").</param>
-   /// <param name="cancellationToken">The cancellation token for the operation.</param>
-   /// <returns>A tuple containing the potentially updated document and root.</returns>
-   public static async Task<(Document document, SyntaxNode root)> MaybeAddUsingAsync(
-       Document document,
-       SyntaxNode root,
-       SemanticModel semanticModel,
-       SyntaxNode usageSite,
-       string fullTypeName,
-       CancellationToken cancellationToken)
-   ```
-
-   When a type is being removed from usage, call `MaybeRemoveUsingAsync` to clean up any potential unused `using` statements.
-
-1. Except for very simple scenarios, when creating new syntax elements, prefer usage of SyntaxFactory.ParseXXXX methods vs constructing complex trees using object API. If a new fragment was created using Parse, ensure to call  `DiscardFormatting()` extension method (from `Rewrite.RoslynRecipe.Helpers.ElasticizeAllTokensRewriter` class) to ensure that it's all replaced with elastic trivia. 
-
-1. We need to ensure new code is properly formatted but not try to format existing user code. To do this, whenever doing any operation on the `DocumentEditor` (ex. replace/insert), mark the new node with `.WithAdditionalAnnotations(Formatter.Annotation)`. After all edits are done, format only edited blocks via call like this: 
-```
-await Formatter.FormatAsync(newDocument, Formatter.Annotation,                  cancellationToken: cancellationToken);
+   
+1. We need to ensure new code is properly formatted but not try to format existing user code. To do this, whenever doing any operation on the `DocumentEditor` (ex. replace/insert), call `.FormatterAnnotated()` on the new node. After all edits are done, format only edited blocks via call like this when obtaining the final document: 
+```csharp
+editor.ReplaceNode(oldNode, (current, gen) =>
+                        SyntaxFactory.ParseExpression($"HttpContext?.GetRouteData()")
+                            .WithRequiredNamespace("Microsoft.AspNetCore.Http")
+                            .FormatterAnnotated());
+var changedDocument = await editor.GetChangedDocumentFormatted(cancellationToken);
 ```
 
-1. If the formatter is invoked on the document and the test case fails due to formatting issues, adjust the "expected" code to match what the formatter produces. 
+5. When removing nodes from the syntax tree, these operations MUST be done after all other edits are complete (exception formatting). This is to ensure that any edits do not try to operate on nodes that have been subsequently removed.
+
+6. When calling `editor.ReplaceNode`, use ONLY overload that uses a delegate for `computeReplacement`:
+
+   ```
+   editor.ReplaceNode(memberAccess.Node, (current, gen) => MutateMyNode(current));
+   // or
+   editor.ReplaceNode(memberAccess.Node, (current, gen) => replacementNode);
+   ```
+
+   
+
+### Common refactoring scenarios and helper methods
+
+#### Replace type in document
+
+```csharp
+var actionContextAccessorType = semanticModel.Compilation.GetTypeByMetadataName("Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor") 
+                            ?? throw new InvalidOperationException($"Can't resolve type Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor");
+var httpContextAccessorType = semanticModel.Compilation.GetTypeByMetadataName("Microsoft.AspNetCore.Http.IHttpContextAccessor")
+                              ?? throw new InvalidOperationException($"Can't resolve type Microsoft.AspNetCore.Http.IHttpContextAccessor");
+editor.ReplaceType(semanticModel, actionContextAccessorType, httpContextAccessorType);
+```
+
+#### Rename symbol
+
+Accurately renames a symbol using semantic model
+
+```csharp
+var nodeSymbol = semanticModel.GetDeclaredSymbol(someNode, cancellationToken);
+editor.RenameSymbol(semanticModel, nodeSymbol, "NewName");
+```
+
+#### Semantic type matching for syntax node
+
+Ensures that symbol is of a particular semantic type. Ideally 
+
+```csharp
+var propertiesOfTypeActionDescriptor = containingType.DescendantNodes()
+    .OfType<PropertyDeclarationSyntax>()
+    .Where(x => x.IsSymbolOneOf(semanticModel, "P:Microsoft.AspNetCore.Mvc.ActionContext.ActionDescriptor"))
+    .ToList();
+```
+
+
 
 ## Testing Requirements
 
@@ -279,7 +294,7 @@ public class [Name]Analyzer : DiagnosticAnalyzer
 }
 ```
 
-
+When creating analyzer / codefix from a URL article, link URL must appear in the xml comments
 
 ## Checklist for New Analyzer/Code Fix
 
@@ -287,7 +302,6 @@ public class [Name]Analyzer : DiagnosticAnalyzer
 - [ ] Code fix provider in same project
 - [ ] Follows naming conventions
 - [ ] Uses semantic model when targeting types and their members
-- [ ] Two-phase analysis (syntax then semantic)
 - [ ] Uses IsSymbolOneOf extension method which uses `symbol.GetDocumentationCommentId` to determine symbol match
 - [ ] Comprehensive test suite created
 - [ ] Tests cover positive and negative cases

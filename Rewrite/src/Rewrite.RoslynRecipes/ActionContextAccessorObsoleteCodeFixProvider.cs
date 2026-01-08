@@ -185,11 +185,6 @@ public sealed class ActionContextAccessorObsoleteCodeFixProvider : CodeFixProvid
             var httpContextAccessorMemberName = storageSymbol.Kind == SymbolKind.Property ? "HttpContextAccessor" : "_httpContextAccessor";
             editor.RenameSymbol(semanticModel, storageSymbol, httpContextAccessorMemberName);
 
-
-
-        var propertiesOfTypeActionDescriptor = containingType.DescendantNodes()
-                .Where(x => x.IsSymbolOneOf(semanticModel, "P:Microsoft.AspNetCore.Mvc.ActionContext.ActionDescriptor"))
-                .ToList();
             
         var memberAccesses = containingType.DescendantNodes()
             .Where(x => x is MemberAccessExpressionSyntax or MemberBindingExpressionSyntax )
@@ -331,23 +326,14 @@ public sealed class ActionContextAccessorObsoleteCodeFixProvider : CodeFixProvid
         }
 
         await editor.EnsureNamespaces(semanticModel, cancellationToken);
-        var changedDocument = editor.GetChangedDocument();
-       
 
         // Remove unused using directives (only for simple cases like primary constructors with no body)
         if (isPrimaryConstructor)
         {
-            changedDocument = await RemoveUnusedUsingsAsync(changedDocument, cancellationToken);
+            RemoveUnusedUsings(editor);
         }
 
-        // Format the document
-        changedDocument = await Formatter.FormatAsync(
-            changedDocument,
-            Formatter.Annotation,
-            cancellationToken: cancellationToken).ConfigureAwait(false);
-
-        
-
+        var changedDocument = await editor.GetChangedDocumentFormatted(cancellationToken);
         
         return changedDocument;
     }
@@ -557,11 +543,10 @@ public sealed class ActionContextAccessorObsoleteCodeFixProvider : CodeFixProvid
     /// <summary>
     /// Removes unused using directives after the refactoring.
     /// </summary>
-    private async Task<Document> RemoveUnusedUsingsAsync(Document document, CancellationToken cancellationToken)
+    /// <param name="editor">The document editor to use for modifications.</param>
+    private void RemoveUnusedUsings(DocumentEditor editor)
     {
-        var root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-
-        if (root == null) return document;
+        var root = editor.GetChangedRoot();
 
         // Check if Microsoft.AspNetCore.Mvc.Infrastructure is still needed
         var hasActionContextAccessorUsage = root.DescendantNodes()
@@ -570,12 +555,7 @@ public sealed class ActionContextAccessorObsoleteCodeFixProvider : CodeFixProvid
 
         if (!hasActionContextAccessorUsage)
         {
-            document = await UsingsUtil.MaybeRemoveUsingAsync(
-                document,
-                "Microsoft.AspNetCore.Mvc.Infrastructure",
-                cancellationToken).ConfigureAwait(false);
+            editor.MaybeRemoveUsing("Microsoft.AspNetCore.Mvc.Infrastructure");
         }
-
-        return document;
     }
 }

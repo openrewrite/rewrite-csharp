@@ -205,6 +205,29 @@ public static class UsingsUtil
     }
 
     /// <summary>
+    /// Removes a using directive for the specified namespace using a DocumentEditor.
+    /// </summary>
+    /// <param name="editor">The document editor to use for the modification.</param>
+    /// <param name="namespaceName">The namespace to remove (e.g., "System.Threading.Tasks").</param>
+    public static void MaybeRemoveUsing(
+        this DocumentEditor editor,
+        string namespaceName)
+    {
+        var compilationUnit = editor.OriginalRoot as CompilationUnitSyntax;
+        if (compilationUnit == null)
+            return;
+
+        // Find the using directive to remove
+        var usingToRemove = compilationUnit.Usings
+            .FirstOrDefault(u => u.Name?.ToString() == namespaceName);
+
+        if (usingToRemove == null)
+            return;
+
+        editor.RemoveNode(usingToRemove);
+    }
+
+    /// <summary>
     /// Checks if a type is available (accessible) at a given usage site.
     /// </summary>
     /// <param name="semanticModel">The semantic model for the document.</param>
