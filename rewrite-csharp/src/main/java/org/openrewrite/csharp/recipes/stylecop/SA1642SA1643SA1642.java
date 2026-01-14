@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1642SA1643SA1642 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Constructor summary documentation should begin with standard text";
-    }
+    @Getter
+    final String displayName = "Constructor summary documentation should begin with standard text";
 
-    @Override
-    public String getDescription() {
-        return "The XML documentation header for a C# constructor does not contain the appropriate summary text.";
-    }
+    @Getter
+    final String description = "The XML documentation header for a C# constructor does not contain the appropriate summary text.";
 
     @Override
     public Set<String> getTags() {

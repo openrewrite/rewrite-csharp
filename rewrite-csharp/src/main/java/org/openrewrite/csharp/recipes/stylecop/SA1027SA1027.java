@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1027SA1027 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use tabs correctly";
-    }
+    @Getter
+    final String displayName = "Use tabs correctly";
 
-    @Override
-    public String getDescription() {
-        return "The code contains a tab or space character which is not consistent with the current project settings.";
-    }
+    @Getter
+    final String description = "The code contains a tab or space character which is not consistent with the current project settings.";
 
     @Override
     public Set<String> getTags() {

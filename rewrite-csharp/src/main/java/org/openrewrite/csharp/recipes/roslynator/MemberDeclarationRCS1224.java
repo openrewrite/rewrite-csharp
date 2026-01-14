@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.roslynator;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class MemberDeclarationRCS1224 extends RoslynRecipe {
         return "4.14.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Make method an extension method";
-    }
+    @Getter
+    final String displayName = "Make method an extension method";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final String description = "";
 
     @Override
     public Set<String> getTags() {

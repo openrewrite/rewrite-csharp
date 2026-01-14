@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class ValueConversionAttributeArgumentFixWPF0072 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "ValueConversion must use correct types";
-    }
+    @Getter
+    final String displayName = "ValueConversion must use correct types";
 
-    @Override
-    public String getDescription() {
-        return "ValueConversion must use correct types.";
-    }
+    @Getter
+    final String description = "ValueConversion must use correct types.";
 
     @Override
     public Set<String> getTags() {

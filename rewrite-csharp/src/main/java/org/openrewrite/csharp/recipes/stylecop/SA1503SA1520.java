@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1503SA1520 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use braces consistently";
-    }
+    @Getter
+    final String displayName = "Use braces consistently";
 
-    @Override
-    public String getDescription() {
-        return "The opening and closing braces of a chained if/else if/else construct were included for some clauses, but omitted for others.";
-    }
+    @Getter
+    final String description = "The opening and closing braces of a chained if/else if/else construct were included for some clauses, but omitted for others.";
 
     @Override
     public Set<String> getTags() {

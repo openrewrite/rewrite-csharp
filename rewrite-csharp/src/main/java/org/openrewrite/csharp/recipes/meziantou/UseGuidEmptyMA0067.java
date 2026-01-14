@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.meziantou;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UseGuidEmptyMA0067 extends RoslynRecipe {
         return "2.0.221";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use Guid.Empty";
-    }
+    @Getter
+    final String displayName = "Use Guid.Empty";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final String description = "";
 
     @Override
     public Set<String> getTags() {

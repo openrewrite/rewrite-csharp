@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1402SA1402 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "File may only contain a single type";
-    }
+    @Getter
+    final String displayName = "File may only contain a single type";
 
-    @Override
-    public String getDescription() {
-        return "A C# code file contains more than one unique type.";
-    }
+    @Getter
+    final String description = "A C# code file contains more than one unique type.";
 
     @Override
     public Set<String> getTags() {

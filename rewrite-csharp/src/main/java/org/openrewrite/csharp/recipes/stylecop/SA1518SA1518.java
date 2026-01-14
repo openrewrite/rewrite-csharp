@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1518SA1518 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use line endings correctly at end of file";
-    }
+    @Getter
+    final String displayName = "Use line endings correctly at end of file";
 
-    @Override
-    public String getDescription() {
-        return "Code should not contain blank lines at the end of the file";
-    }
+    @Getter
+    final String description = "Code should not contain blank lines at the end of the file";
 
     @Override
     public Set<String> getTags() {

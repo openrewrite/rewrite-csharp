@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class ConvertToLambdaFixWPF0023 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "The callback is trivial, convert to lambda";
-    }
+    @Getter
+    final String displayName = "The callback is trivial, convert to lambda";
 
-    @Override
-    public String getDescription() {
-        return "The callback is trivial, convert to lambda for better locality.";
-    }
+    @Getter
+    final String description = "The callback is trivial, convert to lambda for better locality.";
 
     @Override
     public Set<String> getTags() {

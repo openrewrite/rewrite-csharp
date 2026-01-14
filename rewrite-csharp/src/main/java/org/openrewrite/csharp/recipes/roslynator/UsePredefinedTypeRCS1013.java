@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.roslynator;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UsePredefinedTypeRCS1013 extends RoslynRecipe {
         return "4.14.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use predefined type";
-    }
+    @Getter
+    final String displayName = "Use predefined type";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final String description = "";
 
     @Override
     public Set<String> getTags() {

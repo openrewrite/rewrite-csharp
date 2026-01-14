@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class TokenSpacingSA1006 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Preprocessor keywords should not be preceded by space";
-    }
+    @Getter
+    final String displayName = "Preprocessor keywords should not be preceded by space";
 
-    @Override
-    public String getDescription() {
-        return "A C# preprocessor-type keyword is preceded by space.";
-    }
+    @Getter
+    final String description = "A C# preprocessor-type keyword is preceded by space.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1120SA1120 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Comments should contain text";
-    }
+    @Getter
+    final String displayName = "Comments should contain text";
 
-    @Override
-    public String getDescription() {
-        return "The C# comment does not contain any comment text.";
-    }
+    @Getter
+    final String description = "The C# comment does not contain any comment text.";
 
     @Override
     public Set<String> getTags() {

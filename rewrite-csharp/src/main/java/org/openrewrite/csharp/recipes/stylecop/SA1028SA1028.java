@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1028SA1028 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Code should not contain trailing whitespace";
-    }
+    @Getter
+    final String displayName = "Code should not contain trailing whitespace";
 
-    @Override
-    public String getDescription() {
-        return "There should not be any whitespace at the end of a line of code.";
-    }
+    @Getter
+    final String description = "There should not be any whitespace at the end of a line of code.";
 
     @Override
     public Set<String> getTags() {

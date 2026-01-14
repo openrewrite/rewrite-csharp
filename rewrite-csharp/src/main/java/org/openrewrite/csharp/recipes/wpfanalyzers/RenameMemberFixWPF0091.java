@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class RenameMemberFixWPF0091 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Name the invoked method OnEventName";
-    }
+    @Getter
+    final String displayName = "Name the invoked method OnEventName";
 
-    @Override
-    public String getDescription() {
-        return "Name the invoked method OnEventName.";
-    }
+    @Getter
+    final String description = "Name the invoked method OnEventName.";
 
     @Override
     public Set<String> getTags() {

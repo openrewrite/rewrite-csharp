@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.roslynator;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class RawStringLiteralRCS1262 extends RoslynRecipe {
         return "4.14.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Unnecessary raw string literal";
-    }
+    @Getter
+    final String displayName = "Unnecessary raw string literal";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final String description = "";
 
     @Override
     public Set<String> getTags() {

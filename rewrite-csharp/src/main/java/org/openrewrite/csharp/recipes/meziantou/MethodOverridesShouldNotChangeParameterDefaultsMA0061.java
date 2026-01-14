@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.meziantou;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class MethodOverridesShouldNotChangeParameterDefaultsMA0061 extends Rosly
         return "2.0.221";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Method overrides should not change default values";
-    }
+    @Getter
+    final String displayName = "Method overrides should not change default values";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final String description = "";
 
     @Override
     public Set<String> getTags() {

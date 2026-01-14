@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.meziantou;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class RemoveEmptyStatementMA0037 extends RoslynRecipe {
         return "2.0.221";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Remove empty statement";
-    }
+    @Getter
+    final String displayName = "Remove empty statement";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final String description = "";
 
     @Override
     public Set<String> getTags() {

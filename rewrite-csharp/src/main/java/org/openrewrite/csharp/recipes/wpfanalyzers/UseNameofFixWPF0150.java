@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UseNameofFixWPF0150 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use nameof() instead of literal";
-    }
+    @Getter
+    final String displayName = "Use nameof() instead of literal";
 
-    @Override
-    public String getDescription() {
-        return "Use nameof() as it is less fragile than string literal.";
-    }
+    @Getter
+    final String description = "Use nameof() as it is less fragile than string literal.";
 
     @Override
     public Set<String> getTags() {

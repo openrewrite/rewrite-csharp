@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpMakeTypesInternalCA1515 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Consider making public types internal";
-    }
+    @Getter
+    final String displayName = "Consider making public types internal";
 
-    @Override
-    public String getDescription() {
-        return "Unlike a class library, an application's API isn't typically referenced publicly, so types can be marked internal.";
-    }
+    @Getter
+    final String description = "Unlike a class library, an application's API isn't typically referenced publicly, so types can be marked internal.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class TokenSpacingSA1007 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Operator keyword should be followed by space";
-    }
+    @Getter
+    final String displayName = "Operator keyword should be followed by space";
 
-    @Override
-    public String getDescription() {
-        return "The operator keyword within a C# operator overload method is not followed by any whitespace.";
-    }
+    @Getter
+    final String description = "The operator keyword within a C# operator overload method is not followed by any whitespace.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpUseStringContainsCharOverloadWithSingleCharactersCA1847 exten
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use char literal for a single character lookup";
-    }
+    @Getter
+    final String displayName = "Use char literal for a single character lookup";
 
-    @Override
-    public String getDescription() {
-        return "'string.Contains(char)' is available as a better performing overload for single char lookup.";
-    }
+    @Getter
+    final String description = "'string.Contains(char)' is available as a better performing overload for single char lookup.";
 
     @Override
     public Set<String> getTags() {

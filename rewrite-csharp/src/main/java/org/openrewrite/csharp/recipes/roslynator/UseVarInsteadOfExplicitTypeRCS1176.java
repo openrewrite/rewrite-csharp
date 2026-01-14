@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.roslynator;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UseVarInsteadOfExplicitTypeRCS1176 extends RoslynRecipe {
         return "4.14.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "[deprecated] Use 'var' instead of explicit type (when the type is not obvious)";
-    }
+    @Getter
+    final String displayName = "[deprecated] Use 'var' instead of explicit type (when the type is not obvious)";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final String description = "";
 
     @Override
     public Set<String> getTags() {

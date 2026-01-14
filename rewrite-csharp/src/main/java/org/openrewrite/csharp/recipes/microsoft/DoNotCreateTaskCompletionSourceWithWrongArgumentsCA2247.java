@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class DoNotCreateTaskCompletionSourceWithWrongArgumentsCA2247 extends Ros
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Argument passed to TaskCompletionSource constructor should be TaskCreationOptions enum instead of TaskContinuationOptions enum";
-    }
+    @Getter
+    final String displayName = "Argument passed to TaskCompletionSource constructor should be TaskCreationOptions enum instead of TaskContinuationOptions enum";
 
-    @Override
-    public String getDescription() {
-        return "TaskCompletionSource has constructors that take TaskCreationOptions that control the underlying Task, and constructors that take object state that's stored in the task.  Accidentally passing a TaskContinuationOptions instead of a TaskCreationOptions will result in the call treating the options as state.";
-    }
+    @Getter
+    final String description = "TaskCompletionSource has constructors that take TaskCreationOptions that control the underlying Task, and constructors that take object state that's stored in the task.  Accidentally passing a TaskContinuationOptions instead of a TaskCreationOptions will result in the call treating the options as state.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.roslynator;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class OptimizeMethodCallRCS1235 extends RoslynRecipe {
         return "4.14.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Optimize method call";
-    }
+    @Getter
+    final String displayName = "Optimize method call";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final String description = "";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpOverrideEqualsAndOperatorEqualsOnValueTypesCA1815 extends Ros
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Override equals and operator equals on value types";
-    }
+    @Getter
+    final String displayName = "Override equals and operator equals on value types";
 
-    @Override
-    public String getDescription() {
-        return "For value types, the inherited implementation of Equals uses the Reflection library and compares the contents of all fields. Reflection is computationally expensive, and comparing every field for equality might be unnecessary. If you expect users to compare or sort instances, or to use instances as hash table keys, your value type should implement Equals.";
-    }
+    @Getter
+    final String description = "For value types, the inherited implementation of Equals uses the Reflection library and compares the contents of all fields. Reflection is computationally expensive, and comparing every field for equality might be unnecessary. If you expect users to compare or sort instances, or to use instances as hash table keys, your value type should implement Equals.";
 
     @Override
     public Set<String> getTags() {

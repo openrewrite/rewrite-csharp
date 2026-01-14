@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.meziantou;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class DoNotUseBlockingCallInAsyncContextMA0042 extends RoslynRecipe {
         return "2.0.221";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Do not use blocking calls in an async method";
-    }
+    @Getter
+    final String displayName = "Do not use blocking calls in an async method";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final String description = "";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpStaticHolderTypesCA1052 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Static holder types should be Static or NotInheritable";
-    }
+    @Getter
+    final String displayName = "Static holder types should be Static or NotInheritable";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final String description = "";
 
     @Override
     public Set<String> getTags() {

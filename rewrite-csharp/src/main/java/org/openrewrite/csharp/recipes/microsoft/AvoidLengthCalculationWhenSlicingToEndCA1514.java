@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class AvoidLengthCalculationWhenSlicingToEndCA1514 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Avoid redundant length argument";
-    }
+    @Getter
+    final String displayName = "Avoid redundant length argument";
 
-    @Override
-    public String getDescription() {
-        return "An explicit length calculation can be error-prone and can be avoided when slicing to end of the buffer.";
-    }
+    @Getter
+    final String description = "An explicit length calculation can be error-prone and can be avoided when slicing to end of the buffer.";
 
     @Override
     public Set<String> getTags() {

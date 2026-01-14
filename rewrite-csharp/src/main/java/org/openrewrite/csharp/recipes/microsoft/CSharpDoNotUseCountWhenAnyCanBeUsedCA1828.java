@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpDoNotUseCountWhenAnyCanBeUsedCA1828 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Do not use CountAsync() or LongCountAsync() when AnyAsync() can be used";
-    }
+    @Getter
+    final String displayName = "Do not use CountAsync() or LongCountAsync() when AnyAsync() can be used";
 
-    @Override
-    public String getDescription() {
-        return "For non-empty collections, CountAsync() and LongCountAsync() enumerate the entire sequence, while AnyAsync() stops at the first item or the first item that satisfies a condition.";
-    }
+    @Getter
+    final String description = "For non-empty collections, CountAsync() and LongCountAsync() enumerate the entire sequence, while AnyAsync() stops at the first item or the first item that satisfies a condition.";
 
     @Override
     public Set<String> getTags() {

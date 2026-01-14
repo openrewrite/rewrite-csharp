@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class TokenSpacingSA1026 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Code should not contain space after new or stackalloc keyword in implicitly typed array allocation";
-    }
+    @Getter
+    final String displayName = "Code should not contain space after new or stackalloc keyword in implicitly typed array allocation";
 
-    @Override
-    public String getDescription() {
-        return "An implicitly typed array allocation within a C# code file is not spaced correctly.";
-    }
+    @Getter
+    final String description = "An implicitly typed array allocation within a C# code file is not spaced correctly.";
 
     @Override
     public Set<String> getTags() {

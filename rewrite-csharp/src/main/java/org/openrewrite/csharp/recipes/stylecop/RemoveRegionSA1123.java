@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class RemoveRegionSA1123 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Do not place regions within elements";
-    }
+    @Getter
+    final String displayName = "Do not place regions within elements";
 
-    @Override
-    public String getDescription() {
-        return "The C# code contains a region within the body of a code element.";
-    }
+    @Getter
+    final String description = "The C# code contains a region within the body of a code element.";
 
     @Override
     public Set<String> getTags() {

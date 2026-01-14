@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpUseSearchValuesCA1870 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use a cached 'SearchValues' instance";
-    }
+    @Getter
+    final String displayName = "Use a cached 'SearchValues' instance";
 
-    @Override
-    public String getDescription() {
-        return "Using a cached 'SearchValues' instance is more efficient than passing values to 'IndexOfAny'/'ContainsAny' directly.";
-    }
+    @Getter
+    final String description = "Using a cached 'SearchValues' instance is more efficient than passing values to 'IndexOfAny'/'ContainsAny' directly.";
 
     @Override
     public Set<String> getTags() {

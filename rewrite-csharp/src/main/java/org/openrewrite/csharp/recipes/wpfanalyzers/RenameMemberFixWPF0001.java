@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class RenameMemberFixWPF0001 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Backing field for a DependencyProperty should match registered name";
-    }
+    @Getter
+    final String displayName = "Backing field for a DependencyProperty should match registered name";
 
-    @Override
-    public String getDescription() {
-        return "A dependency property's backing field should be named with the name it is registered with suffixed by 'Property'.  This is the convention in the framework.";
-    }
+    @Getter
+    final String description = "A dependency property's backing field should be named with the name it is registered with suffixed by 'Property'.  This is the convention in the framework.";
 
     @Override
     public Set<String> getTags() {

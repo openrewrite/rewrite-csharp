@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpPreferDictionaryContainsMethodsCA1841 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Prefer Dictionary.Contains methods";
-    }
+    @Getter
+    final String displayName = "Prefer Dictionary.Contains methods";
 
-    @Override
-    public String getDescription() {
-        return "'ContainsKey' is usually O(1), while 'Keys.Contains' may be O(n) in some cases. Additionally, many dictionary implementations lazily initialize the Keys collection to cut back on allocations.";
-    }
+    @Getter
+    final String description = "'ContainsKey' is usually O(1), while 'Keys.Contains' may be O(n) in some cases. Additionally, many dictionary implementations lazily initialize the Keys collection to cut back on allocations.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1106SA1106 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Code should not contain empty statements";
-    }
+    @Getter
+    final String displayName = "Code should not contain empty statements";
 
-    @Override
-    public String getDescription() {
-        return "The C# code contains an extra semicolon.";
-    }
+    @Getter
+    final String description = "The C# code contains an extra semicolon.";
 
     @Override
     public Set<String> getTags() {

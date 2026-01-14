@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpIdentifiersShouldNotContainUnderscoresCA1707 extends RoslynRe
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Identifiers should not contain underscores";
-    }
+    @Getter
+    final String displayName = "Identifiers should not contain underscores";
 
-    @Override
-    public String getDescription() {
-        return "By convention, identifier names do not contain the underscore (_) character. This rule checks namespaces, types, members, and parameters.";
-    }
+    @Getter
+    final String description = "By convention, identifier names do not contain the underscore (_) character. This rule checks namespaces, types, members, and parameters.";
 
     @Override
     public Set<String> getTags() {

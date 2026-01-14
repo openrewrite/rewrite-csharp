@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1206SA1206 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Declaration keywords should follow order";
-    }
+    @Getter
+    final String displayName = "Declaration keywords should follow order";
 
-    @Override
-    public String getDescription() {
-        return "The keywords within the declaration of an element do not follow a standard ordering scheme.";
-    }
+    @Getter
+    final String description = "The keywords within the declaration of an element do not follow a standard ordering scheme.";
 
     @Override
     public Set<String> getTags() {

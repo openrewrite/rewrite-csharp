@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SettingsFileSA1640 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "File header should have valid company text";
-    }
+    @Getter
+    final String displayName = "File header should have valid company text";
 
-    @Override
-    public String getDescription() {
-        return "The file header at the top of a C# code file does not contain company name text.";
-    }
+    @Getter
+    final String description = "The file header at the top of a C# code file does not contain company name text.";
 
     @Override
     public Set<String> getTags() {

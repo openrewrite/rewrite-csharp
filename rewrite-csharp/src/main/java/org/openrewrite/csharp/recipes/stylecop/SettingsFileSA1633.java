@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SettingsFileSA1633 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "File should have header";
-    }
+    @Getter
+    final String displayName = "File should have header";
 
-    @Override
-    public String getDescription() {
-        return "A C# code file is missing a standard file header.";
-    }
+    @Getter
+    final String description = "A C# code file is missing a standard file header.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class XmlnsDefinitionFixWPF0052 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "XmlnsDefinitions does not map all namespaces with public types";
-    }
+    @Getter
+    final String displayName = "XmlnsDefinitions does not map all namespaces with public types";
 
-    @Override
-    public String getDescription() {
-        return "XmlnsDefinitions does not map all namespaces with public types.";
-    }
+    @Getter
+    final String description = "XmlnsDefinitions does not map all namespaces with public types.";
 
     @Override
     public Set<String> getTags() {

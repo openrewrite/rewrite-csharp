@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UseSetCurrentValueFixWPF0041 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Set mutable dependency properties using SetCurrentValue";
-    }
+    @Getter
+    final String displayName = "Set mutable dependency properties using SetCurrentValue";
 
-    @Override
-    public String getDescription() {
-        return "Prefer setting mutable dependency properties using SetCurrentValue.";
-    }
+    @Getter
+    final String description = "Prefer setting mutable dependency properties using SetCurrentValue.";
 
     @Override
     public Set<String> getTags() {

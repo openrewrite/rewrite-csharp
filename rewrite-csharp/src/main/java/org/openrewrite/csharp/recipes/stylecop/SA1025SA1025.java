@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1025SA1025 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Code should not contain multiple whitespace in a row";
-    }
+    @Getter
+    final String displayName = "Code should not contain multiple whitespace in a row";
 
-    @Override
-    public String getDescription() {
-        return "The code contains multiple whitespace characters in a row.";
-    }
+    @Getter
+    final String description = "The code contains multiple whitespace characters in a row.";
 
     @Override
     public Set<String> getTags() {

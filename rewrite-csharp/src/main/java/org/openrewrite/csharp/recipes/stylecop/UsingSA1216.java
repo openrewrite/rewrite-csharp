@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UsingSA1216 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Using static directives should be placed at the correct location.";
-    }
+    @Getter
+    final String displayName = "Using static directives should be placed at the correct location.";
 
-    @Override
-    public String getDescription() {
-        return "A using static directive is positioned before a regular or after an alias using directive.";
-    }
+    @Getter
+    final String description = "A using static directive is positioned before a regular or after an alias using directive.";
 
     @Override
     public Set<String> getTags() {

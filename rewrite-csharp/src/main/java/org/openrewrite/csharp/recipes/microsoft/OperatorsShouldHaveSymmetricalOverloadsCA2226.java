@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class OperatorsShouldHaveSymmetricalOverloadsCA2226 extends RoslynRecipe 
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Operators should have symmetrical overloads";
-    }
+    @Getter
+    final String displayName = "Operators should have symmetrical overloads";
 
-    @Override
-    public String getDescription() {
-        return "A type implements the equality or inequality operator and does not implement the opposite operator.";
-    }
+    @Getter
+    final String description = "A type implements the equality or inequality operator and does not implement the opposite operator.";
 
     @Override
     public Set<String> getTags() {

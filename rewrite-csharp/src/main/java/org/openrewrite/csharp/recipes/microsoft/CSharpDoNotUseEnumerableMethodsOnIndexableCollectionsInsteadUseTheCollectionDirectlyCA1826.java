@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpDoNotUseEnumerableMethodsOnIndexableCollectionsInsteadUseTheC
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Do not use Enumerable methods on indexable collections";
-    }
+    @Getter
+    final String displayName = "Do not use Enumerable methods on indexable collections";
 
-    @Override
-    public String getDescription() {
-        return "This collection is directly indexable. Going through LINQ here causes unnecessary allocations and CPU work.";
-    }
+    @Getter
+    final String description = "This collection is directly indexable. Going through LINQ here causes unnecessary allocations and CPU work.";
 
     @Override
     public Set<String> getTags() {

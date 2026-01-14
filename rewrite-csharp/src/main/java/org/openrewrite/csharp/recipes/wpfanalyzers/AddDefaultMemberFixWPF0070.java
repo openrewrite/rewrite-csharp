@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class AddDefaultMemberFixWPF0070 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Add default field to converter";
-    }
+    @Getter
+    final String displayName = "Add default field to converter";
 
-    @Override
-    public String getDescription() {
-        return "Add default field to converter.";
-    }
+    @Getter
+    final String description = "Add default field to converter.";
 
     @Override
     public Set<String> getTags() {

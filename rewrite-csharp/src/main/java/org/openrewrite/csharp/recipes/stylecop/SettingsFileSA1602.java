@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SettingsFileSA1602 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Enumeration items should be documented";
-    }
+    @Getter
+    final String displayName = "Enumeration items should be documented";
 
-    @Override
-    public String getDescription() {
-        return "An item within a C# enumeration is missing an Xml documentation header.";
-    }
+    @Getter
+    final String description = "An item within a C# enumeration is missing an Xml documentation header.";
 
     @Override
     public Set<String> getTags() {

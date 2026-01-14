@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class EnumWithFlagsAttributeCA2217 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Do not mark enums with FlagsAttribute";
-    }
+    @Getter
+    final String displayName = "Do not mark enums with FlagsAttribute";
 
-    @Override
-    public String getDescription() {
-        return "An externally visible enumeration is marked by using FlagsAttribute, and it has one or more values that are not powers of two or a combination of the other defined values on the enumeration.";
-    }
+    @Getter
+    final String description = "An externally visible enumeration is marked by using FlagsAttribute, and it has one or more values that are not powers of two or a combination of the other defined values on the enumeration.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1626SA1626 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Single-line comments should not use documentation style slashes";
-    }
+    @Getter
+    final String displayName = "Single-line comments should not use documentation style slashes";
 
-    @Override
-    public String getDescription() {
-        return "The C# code contains a single-line comment which begins with three forward slashes in a row.";
-    }
+    @Getter
+    final String description = "The C# code contains a single-line comment which begins with three forward slashes in a row.";
 
     @Override
     public Set<String> getTags() {

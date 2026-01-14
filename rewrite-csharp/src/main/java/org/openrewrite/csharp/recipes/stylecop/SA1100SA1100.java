@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1100SA1100 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Do not prefix calls with base unless local implementation exists";
-    }
+    @Getter
+    final String displayName = "Do not prefix calls with base unless local implementation exists";
 
-    @Override
-    public String getDescription() {
-        return "A call to a member from an inherited class begins with 'base.', and the local class does not contain an override or implementation of the member.";
-    }
+    @Getter
+    final String description = "A call to a member from an inherited class begins with 'base.', and the local class does not contain an override or implementation of the member.";
 
     @Override
     public Set<String> getTags() {

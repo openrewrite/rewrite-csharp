@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class AttachedPropertyBrowsableForTypeArgumentFixWPF0034 extends RoslynRe
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use correct argument for [AttachedPropertyBrowsableForType]";
-    }
+    @Getter
+    final String displayName = "Use correct argument for [AttachedPropertyBrowsableForType]";
 
-    @Override
-    public String getDescription() {
-        return "Use correct argument for [AttachedPropertyBrowsableForType].";
-    }
+    @Getter
+    final String description = "Use correct argument for [AttachedPropertyBrowsableForType].";
 
     @Override
     public Set<String> getTags() {

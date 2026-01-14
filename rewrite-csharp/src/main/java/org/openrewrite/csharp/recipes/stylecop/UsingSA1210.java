@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UsingSA1210 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Using directives should be ordered alphabetically by namespace";
-    }
+    @Getter
+    final String displayName = "Using directives should be ordered alphabetically by namespace";
 
-    @Override
-    public String getDescription() {
-        return "The using directives within a C# code file are not sorted alphabetically by namespace.";
-    }
+    @Getter
+    final String description = "The using directives within a C# code file are not sorted alphabetically by namespace.";
 
     @Override
     public Set<String> getTags() {

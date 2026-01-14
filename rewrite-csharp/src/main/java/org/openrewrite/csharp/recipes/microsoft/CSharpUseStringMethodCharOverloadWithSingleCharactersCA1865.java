@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpUseStringMethodCharOverloadWithSingleCharactersCA1865 extends
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use char overload";
-    }
+    @Getter
+    final String displayName = "Use char overload";
 
-    @Override
-    public String getDescription() {
-        return "The char overload is a better performing overload than a string with a single char.";
-    }
+    @Getter
+    final String description = "The char overload is a better performing overload than a string with a single char.";
 
     @Override
     public Set<String> getTags() {

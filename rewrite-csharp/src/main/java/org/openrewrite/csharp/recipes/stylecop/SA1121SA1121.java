@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1121SA1121 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use built-in type alias";
-    }
+    @Getter
+    final String displayName = "Use built-in type alias";
 
-    @Override
-    public String getDescription() {
-        return "The code uses one of the basic C# types, but does not use the built-in alias for the type.";
-    }
+    @Getter
+    final String description = "The code uses one of the basic C# types, but does not use the built-in alias for the type.";
 
     @Override
     public Set<String> getTags() {

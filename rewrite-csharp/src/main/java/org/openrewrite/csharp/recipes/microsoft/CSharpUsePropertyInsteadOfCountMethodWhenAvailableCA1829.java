@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpUsePropertyInsteadOfCountMethodWhenAvailableCA1829 extends Ro
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use Length/Count property instead of Count() when available";
-    }
+    @Getter
+    final String displayName = "Use Length/Count property instead of Count() when available";
 
-    @Override
-    public String getDescription() {
-        return "Enumerable.Count() potentially enumerates the sequence while a Length/Count property is a direct access.";
-    }
+    @Getter
+    final String description = "Enumerable.Count() potentially enumerates the sequence while a Length/Count property is a direct access.";
 
     @Override
     public Set<String> getTags() {

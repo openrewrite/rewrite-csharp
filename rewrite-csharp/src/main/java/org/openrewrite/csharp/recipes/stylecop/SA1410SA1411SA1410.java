@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1410SA1411SA1410 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Remove delegate parenthesis when possible";
-    }
+    @Getter
+    final String displayName = "Remove delegate parenthesis when possible";
 
-    @Override
-    public String getDescription() {
-        return "A call to a C# anonymous method does not contain any method parameters, yet the statement still includes parenthesis.";
-    }
+    @Getter
+    final String description = "A call to a C# anonymous method does not contain any method parameters, yet the statement still includes parenthesis.";
 
     @Override
     public Set<String> getTags() {

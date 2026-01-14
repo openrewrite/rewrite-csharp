@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1517SA1517 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Code should not contain blank lines at start of file";
-    }
+    @Getter
+    final String displayName = "Code should not contain blank lines at start of file";
 
-    @Override
-    public String getDescription() {
-        return "The code file has blank lines at the start.";
-    }
+    @Getter
+    final String description = "The code file has blank lines at the start.";
 
     @Override
     public Set<String> getTags() {

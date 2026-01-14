@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class RenameMemberFixWPF0004 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "CLR method for a DependencyProperty must match registered name";
-    }
+    @Getter
+    final String displayName = "CLR method for a DependencyProperty must match registered name";
 
-    @Override
-    public String getDescription() {
-        return "CLR methods for accessing a DependencyProperty must have names matching the name the DependencyProperty is registered with.";
-    }
+    @Getter
+    final String description = "CLR methods for accessing a DependencyProperty must have names matching the name the DependencyProperty is registered with.";
 
     @Override
     public Set<String> getTags() {

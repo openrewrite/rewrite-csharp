@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class AvoidUnreliableStreamReadCA2022 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Avoid inexact read with 'Stream.Read'";
-    }
+    @Getter
+    final String displayName = "Avoid inexact read with 'Stream.Read'";
 
-    @Override
-    public String getDescription() {
-        return "A call to 'Stream.Read' may return fewer bytes than requested, resulting in unreliable code if the return value is not checked.";
-    }
+    @Getter
+    final String description = "A call to 'Stream.Read' may return fewer bytes than requested, resulting in unreliable code if the return value is not checked.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1514SA1514 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Element documentation header should be preceded by blank line";
-    }
+    @Getter
+    final String displayName = "Element documentation header should be preceded by blank line";
 
-    @Override
-    public String getDescription() {
-        return "An element documentation header above a C# element is not preceded by a blank line.";
-    }
+    @Getter
+    final String description = "An element documentation header above a C# element is not preceded by a blank line.";
 
     @Override
     public Set<String> getTags() {

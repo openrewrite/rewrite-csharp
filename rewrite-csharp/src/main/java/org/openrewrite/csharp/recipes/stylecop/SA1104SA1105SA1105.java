@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1104SA1105SA1105 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Query clauses spanning multiple lines should begin on own line";
-    }
+    @Getter
+    final String displayName = "Query clauses spanning multiple lines should begin on own line";
 
-    @Override
-    public String getDescription() {
-        return "A clause within a C# query expression spans across multiple lines, and does not begin on its own line.";
-    }
+    @Getter
+    final String description = "A clause within a C# query expression spans across multiple lines, and does not begin on its own line.";
 
     @Override
     public Set<String> getTags() {

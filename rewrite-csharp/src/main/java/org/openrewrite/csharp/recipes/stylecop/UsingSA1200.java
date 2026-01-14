@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UsingSA1200 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Using directives should be placed correctly";
-    }
+    @Getter
+    final String displayName = "Using directives should be placed correctly";
 
-    @Override
-    public String getDescription() {
-        return "A C# using directive is placed outside of a namespace element.";
-    }
+    @Getter
+    final String description = "A C# using directive is placed outside of a namespace element.";
 
     @Override
     public Set<String> getTags() {

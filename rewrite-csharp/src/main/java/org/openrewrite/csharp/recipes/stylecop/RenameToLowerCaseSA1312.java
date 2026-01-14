@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class RenameToLowerCaseSA1312 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Variable names should begin with lower-case letter";
-    }
+    @Getter
+    final String displayName = "Variable names should begin with lower-case letter";
 
-    @Override
-    public String getDescription() {
-        return "The name of a variable in C# does not begin with a lower-case letter.";
-    }
+    @Getter
+    final String description = "The name of a variable in C# does not begin with a lower-case letter.";
 
     @Override
     public Set<String> getTags() {

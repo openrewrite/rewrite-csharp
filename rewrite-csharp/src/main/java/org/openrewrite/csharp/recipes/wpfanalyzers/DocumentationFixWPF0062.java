@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class DocumentationFixWPF0062 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Property changed callback should have standard documentation text";
-    }
+    @Getter
+    final String displayName = "Property changed callback should have standard documentation text";
 
-    @Override
-    public String getDescription() {
-        return "Property changed callback should have standard documentation text.";
-    }
+    @Getter
+    final String description = "Property changed callback should have standard documentation text.";
 
     @Override
     public Set<String> getTags() {

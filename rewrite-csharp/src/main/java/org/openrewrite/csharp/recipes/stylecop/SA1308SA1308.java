@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1308SA1308 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Variable names should not be prefixed";
-    }
+    @Getter
+    final String displayName = "Variable names should not be prefixed";
 
-    @Override
-    public String getDescription() {
-        return "A field name in C# is prefixed with 'm_', 's_', or 't_'.";
-    }
+    @Getter
+    final String description = "A field name in C# is prefixed with 'm_', 's_', or 't_'.";
 
     @Override
     public Set<String> getTags() {

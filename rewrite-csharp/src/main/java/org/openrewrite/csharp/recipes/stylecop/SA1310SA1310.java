@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1310SA1310 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Field names should not contain underscore";
-    }
+    @Getter
+    final String displayName = "Field names should not contain underscore";
 
-    @Override
-    public String getDescription() {
-        return "A field name in C# contains an underscore.";
-    }
+    @Getter
+    final String description = "A field name in C# contains an underscore.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class AbstractTypesShouldNotHaveConstructorsCA1012 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Abstract types should not have public constructors";
-    }
+    @Getter
+    final String displayName = "Abstract types should not have public constructors";
 
-    @Override
-    public String getDescription() {
-        return "Constructors on abstract types can be called only by derived types. Because public constructors create instances of a type, and you cannot create instances of an abstract type, an abstract type that has a public constructor is incorrectly designed.";
-    }
+    @Getter
+    final String description = "Constructors on abstract types can be called only by derived types. Because public constructors create instances of a type, and you cannot create instances of an abstract type, an abstract type that has a public constructor is incorrectly designed.";
 
     @Override
     public Set<String> getTags() {

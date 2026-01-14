@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class TypesThatOwnDisposableFieldsShouldBeDisposableCA1001 extends Roslyn
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Types that own disposable fields should be disposable";
-    }
+    @Getter
+    final String displayName = "Types that own disposable fields should be disposable";
 
-    @Override
-    public String getDescription() {
-        return "A class declares and implements an instance field that is a System.IDisposable type, and the class does not implement IDisposable. A class that declares an IDisposable field indirectly owns an unmanaged resource and should implement the IDisposable interface.";
-    }
+    @Getter
+    final String description = "A class declares and implements an instance field that is a System.IDisposable type, and the class does not implement IDisposable. A class that declares an IDisposable field indirectly owns an unmanaged resource and should implement the IDisposable interface.";
 
     @Override
     public Set<String> getTags() {

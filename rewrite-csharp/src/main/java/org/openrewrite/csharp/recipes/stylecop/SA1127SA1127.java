@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1127SA1127 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Generic type constraints should be on their own line";
-    }
+    @Getter
+    final String displayName = "Generic type constraints should be on their own line";
 
-    @Override
-    public String getDescription() {
-        return "Each type constraint clause for a generic type parameter should be listed on a line of code by itself.";
-    }
+    @Getter
+    final String description = "Each type constraint clause for a generic type parameter should be listed on a line of code by itself.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1003SA1003 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Symbols should be spaced correctly";
-    }
+    @Getter
+    final String displayName = "Symbols should be spaced correctly";
 
-    @Override
-    public String getDescription() {
-        return "The spacing around an operator symbol is incorrect, within a C# code file.";
-    }
+    @Getter
+    final String description = "The spacing around an operator symbol is incorrect, within a C# code file.";
 
     @Override
     public Set<String> getTags() {

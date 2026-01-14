@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class ConstructorArgumentAttributeFixWPF0083 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Add [ConstructorArgument]";
-    }
+    @Getter
+    final String displayName = "Add [ConstructorArgument]";
 
-    @Override
-    public String getDescription() {
-        return "Add [ConstructorArgument] for the property.";
-    }
+    @Getter
+    final String description = "Add [ConstructorArgument] for the property.";
 
     @Override
     public Set<String> getTags() {

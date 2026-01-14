@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class RemoveEmptyFinalizersCA1821 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Remove empty Finalizers";
-    }
+    @Getter
+    final String displayName = "Remove empty Finalizers";
 
-    @Override
-    public String getDescription() {
-        return "Finalizers should be avoided where possible, to avoid the additional performance overhead involved in tracking object lifetime.";
-    }
+    @Getter
+    final String description = "Finalizers should be avoided where possible, to avoid the additional performance overhead involved in tracking object lifetime.";
 
     @Override
     public Set<String> getTags() {

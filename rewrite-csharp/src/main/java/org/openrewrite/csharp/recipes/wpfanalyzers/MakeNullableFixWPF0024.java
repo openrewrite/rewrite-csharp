@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class MakeNullableFixWPF0024 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Parameter type should be nullable";
-    }
+    @Getter
+    final String displayName = "Parameter type should be nullable";
 
-    @Override
-    public String getDescription() {
-        return "Parameter type should be nullable.";
-    }
+    @Getter
+    final String description = "Parameter type should be nullable.";
 
     @Override
     public Set<String> getTags() {

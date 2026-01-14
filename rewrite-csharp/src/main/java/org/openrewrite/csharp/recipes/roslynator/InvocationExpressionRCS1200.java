@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.roslynator;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class InvocationExpressionRCS1200 extends RoslynRecipe {
         return "4.14.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Call 'Enumerable.ThenBy' instead of 'Enumerable.OrderBy'";
-    }
+    @Getter
+    final String displayName = "Call 'Enumerable.ThenBy' instead of 'Enumerable.OrderBy'";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final String description = "";
 
     @Override
     public Set<String> getTags() {

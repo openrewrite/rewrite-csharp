@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1503SA1519 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Braces should not be omitted from multi-line child statement";
-    }
+    @Getter
+    final String displayName = "Braces should not be omitted from multi-line child statement";
 
-    @Override
-    public String getDescription() {
-        return "The opening and closing braces for a multi-line C# statement have been omitted.";
-    }
+    @Getter
+    final String description = "The opening and closing braces for a multi-line C# statement have been omitted.";
 
     @Override
     public Set<String> getTags() {

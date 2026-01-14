@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpDoNotGuardCallCA1868 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Unnecessary call to 'Contains(item)'";
-    }
+    @Getter
+    final String displayName = "Unnecessary call to 'Contains(item)'";
 
-    @Override
-    public String getDescription() {
-        return "Do not guard 'Add(item)' or 'Remove(item)' with 'Contains(item)' for the set. The former two already check whether the item exists and will return if it was added or removed.";
-    }
+    @Getter
+    final String description = "Do not guard 'Add(item)' or 'Remove(item)' with 'Contains(item)' for the set. The former two already check whether the item exists and will return if it was added or removed.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpSpecifyMarshalingForPInvokeStringArgumentsCA2101 extends Rosl
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Specify marshaling for P/Invoke string arguments";
-    }
+    @Getter
+    final String displayName = "Specify marshaling for P/Invoke string arguments";
 
-    @Override
-    public String getDescription() {
-        return "A platform invoke member allows partially trusted callers, has a string parameter, and does not explicitly marshal the string. This can cause a potential security vulnerability.";
-    }
+    @Getter
+    final String description = "A platform invoke member allows partially trusted callers, has a string parameter, and does not explicitly marshal the string. This can cause a potential security vulnerability.";
 
     @Override
     public Set<String> getTags() {

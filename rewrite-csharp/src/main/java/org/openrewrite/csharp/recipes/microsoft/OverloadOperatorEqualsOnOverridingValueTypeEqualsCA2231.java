@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class OverloadOperatorEqualsOnOverridingValueTypeEqualsCA2231 extends Ros
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Overload operator equals on overriding value type Equals";
-    }
+    @Getter
+    final String displayName = "Overload operator equals on overriding value type Equals";
 
-    @Override
-    public String getDescription() {
-        return "In most programming languages there is no default implementation of the equality operator (==) for value types. If your programming language supports operator overloads, you should consider implementing the equality operator. Its behavior should be identical to that of Equals.";
-    }
+    @Getter
+    final String description = "In most programming languages there is no default implementation of the equality operator (==) for value types. If your programming language supports operator overloads, you should consider implementing the equality operator. Its behavior should be identical to that of Equals.";
 
     @Override
     public Set<String> getTags() {

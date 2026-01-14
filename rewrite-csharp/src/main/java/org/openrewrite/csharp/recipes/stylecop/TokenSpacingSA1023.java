@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class TokenSpacingSA1023 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Dereference and access of symbols should be spaced correctly";
-    }
+    @Getter
+    final String displayName = "Dereference and access of symbols should be spaced correctly";
 
-    @Override
-    public String getDescription() {
-        return "A dereference symbol or an access-of symbol within a C# element is not spaced correctly.";
-    }
+    @Getter
+    final String description = "A dereference symbol or an access-of symbol within a C# element is not spaced correctly.";
 
     @Override
     public Set<String> getTags() {

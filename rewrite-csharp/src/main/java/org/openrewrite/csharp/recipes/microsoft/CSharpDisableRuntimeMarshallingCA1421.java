@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpDisableRuntimeMarshallingCA1421 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "This method uses runtime marshalling even when the 'DisableRuntimeMarshallingAttribute' is applied";
-    }
+    @Getter
+    final String displayName = "This method uses runtime marshalling even when the 'DisableRuntimeMarshallingAttribute' is applied";
 
-    @Override
-    public String getDescription() {
-        return "This method uses runtime marshalling even when runtime marshalling is disabled, which can cause unexpected behavior differences at runtime due to different expectations of a type's native layout.";
-    }
+    @Getter
+    final String description = "This method uses runtime marshalling even when runtime marshalling is disabled, which can cause unexpected behavior differences at runtime due to different expectations of a type's native layout.";
 
     @Override
     public Set<String> getTags() {

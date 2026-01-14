@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpSpecifyCultureForToLowerAndToUpperCA1311 extends RoslynRecipe
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Specify a culture or use an invariant version";
-    }
+    @Getter
+    final String displayName = "Specify a culture or use an invariant version";
 
-    @Override
-    public String getDescription() {
-        return "Specify culture to help avoid accidental implicit dependency on current culture. Using an invariant version yields consistent results regardless of the culture of an application.";
-    }
+    @Getter
+    final String description = "Specify culture to help avoid accidental implicit dependency on current culture. Using an invariant version yields consistent results regardless of the culture of an application.";
 
     @Override
     public Set<String> getTags() {

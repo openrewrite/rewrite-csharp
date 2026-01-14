@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UseDependencyPropertyKeyFixWPF0040 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "A readonly DependencyProperty must be set with DependencyPropertyKey";
-    }
+    @Getter
+    final String displayName = "A readonly DependencyProperty must be set with DependencyPropertyKey";
 
-    @Override
-    public String getDescription() {
-        return "A readonly DependencyProperty must be set with DependencyPropertyKey.";
-    }
+    @Getter
+    final String description = "A readonly DependencyProperty must be set with DependencyPropertyKey.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpPreferDictionaryTryMethodsOverContainsKeyGuardCA1854 extends 
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Prefer the 'IDictionary.TryGetValue(TKey, out TValue)' method";
-    }
+    @Getter
+    final String displayName = "Prefer the 'IDictionary.TryGetValue(TKey, out TValue)' method";
 
-    @Override
-    public String getDescription() {
-        return "Prefer a 'TryGetValue' call over a Dictionary indexer access guarded by a 'ContainsKey' check. 'ContainsKey' and the indexer both would lookup the key under the hood, so using 'TryGetValue' removes the extra lookup.";
-    }
+    @Getter
+    final String description = "Prefer a 'TryGetValue' call over a Dictionary indexer access guarded by a 'ContainsKey' check. 'ContainsKey' and the indexer both would lookup the key under the hood, so using 'TryGetValue' removes the extra lookup.";
 
     @Override
     public Set<String> getTags() {

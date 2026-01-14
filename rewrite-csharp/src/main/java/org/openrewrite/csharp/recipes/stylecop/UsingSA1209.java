@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UsingSA1209 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Using alias directives should be placed after other using directives";
-    }
+    @Getter
+    final String displayName = "Using alias directives should be placed after other using directives";
 
-    @Override
-    public String getDescription() {
-        return "A using-alias directive is positioned before a regular using directive.";
-    }
+    @Getter
+    final String description = "A using-alias directive is positioned before a regular using directive.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.meziantou;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class StringShouldNotContainsNonDeterministicEndOfLineMA0101 extends Rosl
         return "2.0.221";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "String contains an implicit end of line character";
-    }
+    @Getter
+    final String displayName = "String contains an implicit end of line character";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final String description = "";
 
     @Override
     public Set<String> getTags() {

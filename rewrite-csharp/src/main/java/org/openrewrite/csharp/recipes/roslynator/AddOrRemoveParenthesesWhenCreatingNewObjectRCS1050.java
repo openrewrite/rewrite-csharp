@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.roslynator;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class AddOrRemoveParenthesesWhenCreatingNewObjectRCS1050 extends RoslynRe
         return "4.14.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Include/omit parentheses when creating new object";
-    }
+    @Getter
+    final String displayName = "Include/omit parentheses when creating new object";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final String description = "";
 
     @Override
     public Set<String> getTags() {

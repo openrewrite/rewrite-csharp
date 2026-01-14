@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1512SA1512 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Single-line comments should not be followed by blank line";
-    }
+    @Getter
+    final String displayName = "Single-line comments should not be followed by blank line";
 
-    @Override
-    public String getDescription() {
-        return "A single-line comment within C# code is followed by a blank line.";
-    }
+    @Getter
+    final String description = "A single-line comment within C# code is followed by a blank line.";
 
     @Override
     public Set<String> getTags() {

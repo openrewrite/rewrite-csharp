@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class EnumWithFlagsAttributeCA1027 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Mark enums with FlagsAttribute";
-    }
+    @Getter
+    final String displayName = "Mark enums with FlagsAttribute";
 
-    @Override
-    public String getDescription() {
-        return "An enumeration is a value type that defines a set of related named constants. Apply FlagsAttribute to an enumeration when its named constants can be meaningfully combined.";
-    }
+    @Getter
+    final String description = "An enumeration is a value type that defines a set of related named constants. Apply FlagsAttribute to an enumeration when its named constants can be meaningfully combined.";
 
     @Override
     public Set<String> getTags() {

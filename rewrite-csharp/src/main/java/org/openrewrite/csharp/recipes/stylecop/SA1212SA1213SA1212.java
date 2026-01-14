@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1212SA1213SA1212 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Property accessors should follow order";
-    }
+    @Getter
+    final String displayName = "Property accessors should follow order";
 
-    @Override
-    public String getDescription() {
-        return "A get accessor appears after a set accessor within a property or indexer.";
-    }
+    @Getter
+    final String description = "A get accessor appears after a set accessor within a property or indexer.";
 
     @Override
     public Set<String> getTags() {

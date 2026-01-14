@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpAvoidDuplicateElementInitializationCA2244 extends RoslynRecip
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Do not duplicate indexed element initializations";
-    }
+    @Getter
+    final String displayName = "Do not duplicate indexed element initializations";
 
-    @Override
-    public String getDescription() {
-        return "Indexed elements in objects initializers must initialize unique elements. A duplicate index might overwrite a previous element initialization.";
-    }
+    @Getter
+    final String description = "Indexed elements in objects initializers must initialize unique elements. A duplicate index might overwrite a previous element initialization.";
 
     @Override
     public Set<String> getTags() {

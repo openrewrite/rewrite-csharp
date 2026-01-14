@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpPreferStreamAsyncMemoryOverloadsCA1835 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Prefer the 'Memory'-based overloads for 'ReadAsync' and 'WriteAsync'";
-    }
+    @Getter
+    final String displayName = "Prefer the 'Memory'-based overloads for 'ReadAsync' and 'WriteAsync'";
 
-    @Override
-    public String getDescription() {
-        return "'Stream' has a 'ReadAsync' overload that takes a 'Memory<Byte>' as the first argument, and a 'WriteAsync' overload that takes a 'ReadOnlyMemory<Byte>' as the first argument. Prefer calling the memory based overloads, which are more efficient.";
-    }
+    @Getter
+    final String description = "'Stream' has a 'ReadAsync' overload that takes a 'Memory<Byte>' as the first argument, and a 'WriteAsync' overload that takes a 'ReadOnlyMemory<Byte>' as the first argument. Prefer calling the memory based overloads, which are more efficient.";
 
     @Override
     public Set<String> getTags() {

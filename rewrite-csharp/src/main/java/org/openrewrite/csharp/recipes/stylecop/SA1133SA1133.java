@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1133SA1133 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Do not combine attributes";
-    }
+    @Getter
+    final String displayName = "Do not combine attributes";
 
-    @Override
-    public String getDescription() {
-        return "Each attribute usage should be placed in its own set of square brackets for maximum readability.";
-    }
+    @Getter
+    final String description = "Each attribute usage should be placed in its own set of square brackets for maximum readability.";
 
     @Override
     public Set<String> getTags() {
