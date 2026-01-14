@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1651SA1651 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Do not use placeholder elements";
-    }
+    @Getter
+    final String displayName = "Do not use placeholder elements";
 
-    @Override
-    public String getDescription() {
-        return "The element documentation contains a <placeholder> element.";
-    }
+    @Getter
+    final String description = "The element documentation contains a <placeholder> element.";
 
     @Override
     public Set<String> getTags() {

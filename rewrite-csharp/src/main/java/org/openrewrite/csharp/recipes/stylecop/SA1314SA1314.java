@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1314SA1314 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Type parameter names should begin with T";
-    }
+    @Getter
+    final String displayName = "Type parameter names should begin with T";
 
-    @Override
-    public String getDescription() {
-        return "The name of a C# type parameter does not begin with the capital letter T.";
-    }
+    @Getter
+    final String description = "The name of a C# type parameter does not begin with the capital letter T.";
 
     @Override
     public Set<String> getTags() {

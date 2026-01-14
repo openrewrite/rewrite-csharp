@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class ComponentResourceKeyFixWPF0141 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use containing member as key when creating a ComponentResourceKey";
-    }
+    @Getter
+    final String displayName = "Use containing member as key when creating a ComponentResourceKey";
 
-    @Override
-    public String getDescription() {
-        return "Use containing member as key when creating a ComponentResourceKey.";
-    }
+    @Getter
+    final String description = "Use containing member as key when creating a ComponentResourceKey.";
 
     @Override
     public Set<String> getTags() {

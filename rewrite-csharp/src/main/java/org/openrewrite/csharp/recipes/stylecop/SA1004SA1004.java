@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1004SA1004 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Documentation lines should begin with single space";
-    }
+    @Getter
+    final String displayName = "Documentation lines should begin with single space";
 
-    @Override
-    public String getDescription() {
-        return "A line within a documentation header above a C# element does not begin with a single space.";
-    }
+    @Getter
+    final String description = "A line within a documentation header above a C# element does not begin with a single space.";
 
     @Override
     public Set<String> getTags() {

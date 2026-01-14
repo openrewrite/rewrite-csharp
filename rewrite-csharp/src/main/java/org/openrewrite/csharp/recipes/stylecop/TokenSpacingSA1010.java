@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class TokenSpacingSA1010 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Opening square brackets should be spaced correctly";
-    }
+    @Getter
+    final String displayName = "Opening square brackets should be spaced correctly";
 
-    @Override
-    public String getDescription() {
-        return "An opening square bracket within a C# statement is not spaced correctly.";
-    }
+    @Getter
+    final String description = "An opening square bracket within a C# statement is not spaced correctly.";
 
     @Override
     public Set<String> getTags() {

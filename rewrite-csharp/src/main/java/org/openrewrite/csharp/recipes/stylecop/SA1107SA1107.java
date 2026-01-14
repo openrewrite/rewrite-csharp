@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1107SA1107 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Code should not contain multiple statements on one line";
-    }
+    @Getter
+    final String displayName = "Code should not contain multiple statements on one line";
 
-    @Override
-    public String getDescription() {
-        return "The C# code contains more than one statement on a single line.";
-    }
+    @Getter
+    final String description = "The C# code contains more than one statement on a single line.";
 
     @Override
     public Set<String> getTags() {

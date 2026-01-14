@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UseCancellationTokenThrowIfCancellationRequestedCA2250 extends Rosl
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use 'ThrowIfCancellationRequested'";
-    }
+    @Getter
+    final String displayName = "Use 'ThrowIfCancellationRequested'";
 
-    @Override
-    public String getDescription() {
-        return "'ThrowIfCancellationRequested' automatically checks whether the token has been canceled, and throws an 'OperationCanceledException' if it has.";
-    }
+    @Getter
+    final String description = "'ThrowIfCancellationRequested' automatically checks whether the token has been canceled, and throws an 'OperationCanceledException' if it has.";
 
     @Override
     public Set<String> getTags() {

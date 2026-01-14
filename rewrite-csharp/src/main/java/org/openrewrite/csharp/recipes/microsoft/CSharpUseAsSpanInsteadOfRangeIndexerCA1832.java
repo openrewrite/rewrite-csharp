@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpUseAsSpanInsteadOfRangeIndexerCA1832 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use AsSpan or AsMemory instead of Range-based indexers when appropriate";
-    }
+    @Getter
+    final String displayName = "Use AsSpan or AsMemory instead of Range-based indexers when appropriate";
 
-    @Override
-    public String getDescription() {
-        return "The Range-based indexer on array values produces a copy of requested portion of the array. This copy is usually unnecessary when it is implicitly used as a ReadOnlySpan or ReadOnlyMemory value. Use the AsSpan method to avoid the unnecessary copy.";
-    }
+    @Getter
+    final String description = "The Range-based indexer on array values produces a copy of requested portion of the array. This copy is usually unnecessary when it is implicitly used as a ReadOnlySpan or ReadOnlyMemory value. Use the AsSpan method to avoid the unnecessary copy.";
 
     @Override
     public Set<String> getTags() {

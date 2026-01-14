@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1104SA1105SA1104 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Query clause should begin on new line when previous clause spans multiple lines";
-    }
+    @Getter
+    final String displayName = "Query clause should begin on new line when previous clause spans multiple lines";
 
-    @Override
-    public String getDescription() {
-        return "A clause within a C# query expression begins on the same line as the previous clause, when the previous clause spans across multiple lines.";
-    }
+    @Getter
+    final String description = "A clause within a C# query expression begins on the same line as the previous clause, when the previous clause spans across multiple lines.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1505SA1505 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Opening braces should not be followed by blank line";
-    }
+    @Getter
+    final String displayName = "Opening braces should not be followed by blank line";
 
-    @Override
-    public String getDescription() {
-        return "An opening brace within a C# element, statement, or expression is followed by a blank line.";
-    }
+    @Getter
+    final String description = "An opening brace within a C# element, statement, or expression is followed by a blank line.";
 
     @Override
     public Set<String> getTags() {

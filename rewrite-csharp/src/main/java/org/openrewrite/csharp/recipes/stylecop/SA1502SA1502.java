@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1502SA1502 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Element should not be on a single line";
-    }
+    @Getter
+    final String displayName = "Element should not be on a single line";
 
-    @Override
-    public String getDescription() {
-        return "A C# element containing opening and closing braces is written completely on a single line.";
-    }
+    @Getter
+    final String description = "A C# element containing opening and closing braces is written completely on a single line.";
 
     @Override
     public Set<String> getTags() {

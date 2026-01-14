@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class TokenSpacingSA1024 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Colons Should Be Spaced Correctly";
-    }
+    @Getter
+    final String displayName = "Colons Should Be Spaced Correctly";
 
-    @Override
-    public String getDescription() {
-        return "A colon within a C# element is not spaced correctly.";
-    }
+    @Getter
+    final String description = "A colon within a C# element is not spaced correctly.";
 
     @Override
     public Set<String> getTags() {

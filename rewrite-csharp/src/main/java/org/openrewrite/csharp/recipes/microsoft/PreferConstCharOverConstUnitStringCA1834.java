@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class PreferConstCharOverConstUnitStringCA1834 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Consider using 'StringBuilder.Append(char)' when applicable";
-    }
+    @Getter
+    final String displayName = "Consider using 'StringBuilder.Append(char)' when applicable";
 
-    @Override
-    public String getDescription() {
-        return "'StringBuilder.Append(char)' is more efficient than 'StringBuilder.Append(string)' when the string is a single character. When calling 'Append' with a constant, prefer using a constant char rather than a constant string containing one character.";
-    }
+    @Getter
+    final String description = "'StringBuilder.Append(char)' is more efficient than 'StringBuilder.Append(string)' when the string is a single character. When calling 'Append' with a constant, prefer using a constant char rather than a constant string containing one character.";
 
     @Override
     public Set<String> getTags() {

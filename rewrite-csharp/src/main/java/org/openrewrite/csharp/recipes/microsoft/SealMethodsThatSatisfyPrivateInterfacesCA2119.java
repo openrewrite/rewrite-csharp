@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SealMethodsThatSatisfyPrivateInterfacesCA2119 extends RoslynRecipe 
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Seal methods that satisfy private interfaces";
-    }
+    @Getter
+    final String displayName = "Seal methods that satisfy private interfaces";
 
-    @Override
-    public String getDescription() {
-        return "An inheritable public type provides an overridable method implementation of an internal (Friend in Visual Basic) interface. To fix a violation of this rule, prevent the method from being overridden outside the assembly.";
-    }
+    @Getter
+    final String description = "An inheritable public type provides an overridable method implementation of an internal (Friend in Visual Basic) interface. To fix a violation of this rule, prevent the method from being overridden outside the assembly.";
 
     @Override
     public Set<String> getTags() {

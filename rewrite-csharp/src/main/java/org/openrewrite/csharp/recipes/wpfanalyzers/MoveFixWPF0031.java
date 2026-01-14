@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class MoveFixWPF0031 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "DependencyPropertyKey member must be declared before DependencyProperty member";
-    }
+    @Getter
+    final String displayName = "DependencyPropertyKey member must be declared before DependencyProperty member";
 
-    @Override
-    public String getDescription() {
-        return "DependencyPropertyKey member must be declared before DependencyProperty member.";
-    }
+    @Getter
+    final String description = "DependencyPropertyKey member must be declared before DependencyProperty member.";
 
     @Override
     public Set<String> getTags() {

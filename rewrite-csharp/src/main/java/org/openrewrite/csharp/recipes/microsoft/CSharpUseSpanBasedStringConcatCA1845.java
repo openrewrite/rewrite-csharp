@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpUseSpanBasedStringConcatCA1845 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use span-based 'string.Concat'";
-    }
+    @Getter
+    final String displayName = "Use span-based 'string.Concat'";
 
-    @Override
-    public String getDescription() {
-        return "It is more efficient to use 'AsSpan' and 'string.Concat', instead of 'Substring' and a concatenation operator.";
-    }
+    @Getter
+    final String description = "It is more efficient to use 'AsSpan' and 'string.Concat', instead of 'Substring' and a concatenation operator.";
 
     @Override
     public Set<String> getTags() {

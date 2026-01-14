@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UseStringEqualsOverStringCompareCA2251 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use 'string.Equals'";
-    }
+    @Getter
+    final String displayName = "Use 'string.Equals'";
 
-    @Override
-    public String getDescription() {
-        return "It is both clearer and likely faster to use 'string.Equals' instead of comparing the result of 'string.Compare' to zero.";
-    }
+    @Getter
+    final String description = "It is both clearer and likely faster to use 'string.Equals' instead of comparing the result of 'string.Compare' to zero.";
 
     @Override
     public Set<String> getTags() {

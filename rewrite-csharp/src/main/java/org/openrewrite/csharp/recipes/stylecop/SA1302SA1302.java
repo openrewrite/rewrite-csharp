@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1302SA1302 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Interface names should begin with I";
-    }
+    @Getter
+    final String displayName = "Interface names should begin with I";
 
-    @Override
-    public String getDescription() {
-        return "The name of a C# interface does not begin with the capital letter I.";
-    }
+    @Getter
+    final String description = "The name of a C# interface does not begin with the capital letter I.";
 
     @Override
     public Set<String> getTags() {

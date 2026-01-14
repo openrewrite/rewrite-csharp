@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UseExceptionThrowHelpersCA1513 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use ObjectDisposedException throw helper";
-    }
+    @Getter
+    final String displayName = "Use ObjectDisposedException throw helper";
 
-    @Override
-    public String getDescription() {
-        return "Throw helpers are simpler and more efficient than an if block constructing a new exception instance.";
-    }
+    @Getter
+    final String description = "Throw helpers are simpler and more efficient than an if block constructing a new exception instance.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class RenameMemberFixWPF0006 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Name of CoerceValueCallback should match registered name";
-    }
+    @Getter
+    final String displayName = "Name of CoerceValueCallback should match registered name";
 
-    @Override
-    public String getDescription() {
-        return "Name of CoerceValueCallback should match registered name.";
-    }
+    @Getter
+    final String description = "Name of CoerceValueCallback should match registered name.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CastFixWPF0020 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Cast value to correct type";
-    }
+    @Getter
+    final String displayName = "Cast value to correct type";
 
-    @Override
-    public String getDescription() {
-        return "Cast value to correct type.";
-    }
+    @Getter
+    final String description = "Cast value to correct type.";
 
     @Override
     public Set<String> getTags() {

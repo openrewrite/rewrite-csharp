@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1516SA1516 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Elements should be separated by blank line";
-    }
+    @Getter
+    final String displayName = "Elements should be separated by blank line";
 
-    @Override
-    public String getDescription() {
-        return "Adjacent C# elements are not separated by a blank line.";
-    }
+    @Getter
+    final String description = "Adjacent C# elements are not separated by a blank line.";
 
     @Override
     public Set<String> getTags() {

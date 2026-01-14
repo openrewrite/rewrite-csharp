@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpPreferHashDataOverComputeHashCA1850 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Prefer static 'HashData' method over 'ComputeHash'";
-    }
+    @Getter
+    final String displayName = "Prefer static 'HashData' method over 'ComputeHash'";
 
-    @Override
-    public String getDescription() {
-        return "It is more efficient to use the static 'HashData' method over creating and managing a HashAlgorithm instance to call 'ComputeHash'.";
-    }
+    @Getter
+    final String description = "It is more efficient to use the static 'HashData' method over creating and managing a HashAlgorithm instance to call 'ComputeHash'.";
 
     @Override
     public Set<String> getTags() {

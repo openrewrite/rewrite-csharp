@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1128SA1128 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Put constructor initializers on their own line";
-    }
+    @Getter
+    final String displayName = "Put constructor initializers on their own line";
 
-    @Override
-    public String getDescription() {
-        return "A constructor initializer, including the colon character, should be on its own line.";
-    }
+    @Getter
+    final String description = "A constructor initializer, including the colon character, should be on its own line.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SettingsFileSA1649 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "File name should match first type name";
-    }
+    @Getter
+    final String displayName = "File name should match first type name";
 
-    @Override
-    public String getDescription() {
-        return "The file name of a C# code file does not match the first type declared in the file.";
-    }
+    @Getter
+    final String description = "The file name of a C# code file does not match the first type declared in the file.";
 
     @Override
     public Set<String> getTags() {

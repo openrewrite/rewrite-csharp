@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class PreferStringContainsOverIndexOfCA2249 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Consider using 'string.Contains' instead of 'string.IndexOf'";
-    }
+    @Getter
+    final String displayName = "Consider using 'string.Contains' instead of 'string.IndexOf'";
 
-    @Override
-    public String getDescription() {
-        return "Calls to 'string.IndexOf' where the result is used to check for the presence/absence of a substring can be replaced by 'string.Contains'.";
-    }
+    @Getter
+    final String description = "Calls to 'string.IndexOf' where the result is used to check for the presence/absence of a substring can be replaced by 'string.Contains'.";
 
     @Override
     public Set<String> getTags() {

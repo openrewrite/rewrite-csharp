@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class InterfaceMethodsShouldBeCallableByChildTypesCA1033 extends RoslynRe
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Interface methods should be callable by child types";
-    }
+    @Getter
+    final String displayName = "Interface methods should be callable by child types";
 
-    @Override
-    public String getDescription() {
-        return "An unsealed externally visible type provides an explicit method implementation of a public interface and does not provide an alternative externally visible method that has the same name.";
-    }
+    @Getter
+    final String description = "An unsealed externally visible type provides an explicit method implementation of a public interface and does not provide an alternative externally visible method that has the same name.";
 
     @Override
     public Set<String> getTags() {

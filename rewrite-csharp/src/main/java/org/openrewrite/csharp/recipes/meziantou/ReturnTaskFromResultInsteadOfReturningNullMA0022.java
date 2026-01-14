@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.meziantou;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class ReturnTaskFromResultInsteadOfReturningNullMA0022 extends RoslynReci
         return "2.0.221";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Return Task.FromResult instead of returning null";
-    }
+    @Getter
+    final String displayName = "Return Task.FromResult instead of returning null";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final String description = "";
 
     @Override
     public Set<String> getTags() {

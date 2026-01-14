@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1617SA1617 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Void return value should not be documented";
-    }
+    @Getter
+    final String displayName = "Void return value should not be documented";
 
-    @Override
-    public String getDescription() {
-        return "A C# code element does not contain a return value, or returns void, but the documentation header for the element contains a <returns> tag.";
-    }
+    @Getter
+    final String description = "A C# code element does not contain a return value, or returns void, but the documentation header for the element contains a <returns> tag.";
 
     @Override
     public Set<String> getTags() {

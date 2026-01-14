@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpTestForEmptyStringsUsingStringLengthCA1820 extends RoslynReci
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Test for empty strings using string length";
-    }
+    @Getter
+    final String displayName = "Test for empty strings using string length";
 
-    @Override
-    public String getDescription() {
-        return "Comparing strings by using the String.Length property or the String.IsNullOrEmpty method is significantly faster than using Equals.";
-    }
+    @Getter
+    final String description = "Comparing strings by using the String.Length property or the String.IsNullOrEmpty method is significantly faster than using Equals.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.meziantou;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UseAnOverloadThatHasCancellationTokenFixer_ArgumentMA0040 extends R
         return "2.0.221";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Forward the CancellationToken parameter to methods that take one";
-    }
+    @Getter
+    final String displayName = "Forward the CancellationToken parameter to methods that take one";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final String description = "";
 
     @Override
     public Set<String> getTags() {

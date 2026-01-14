@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class AddAttributeListFixWPF0130 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Add [TemplatePart] to the type";
-    }
+    @Getter
+    final String displayName = "Add [TemplatePart] to the type";
 
-    @Override
-    public String getDescription() {
-        return "Add [TemplatePart] to the type.";
-    }
+    @Getter
+    final String description = "Add [TemplatePart] to the type.";
 
     @Override
     public Set<String> getTags() {

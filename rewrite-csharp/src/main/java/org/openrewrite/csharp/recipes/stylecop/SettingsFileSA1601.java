@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SettingsFileSA1601 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Partial elements should be documented";
-    }
+    @Getter
+    final String displayName = "Partial elements should be documented";
 
-    @Override
-    public String getDescription() {
-        return "A C# partial element is missing a documentation header.";
-    }
+    @Getter
+    final String description = "A C# partial element is missing a documentation header.";
 
     @Override
     public Set<String> getTags() {

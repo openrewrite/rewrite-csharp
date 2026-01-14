@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class AvoidUnusedPrivateFieldsCA1823 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Avoid unused private fields";
-    }
+    @Getter
+    final String displayName = "Avoid unused private fields";
 
-    @Override
-    public String getDescription() {
-        return "Private fields were detected that do not appear to be accessed in the assembly.";
-    }
+    @Getter
+    final String description = "Private fields were detected that do not appear to be accessed in the assembly.";
 
     @Override
     public Set<String> getTags() {

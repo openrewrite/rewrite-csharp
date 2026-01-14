@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1018SA1018 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Nullable type symbols should be spaced correctly";
-    }
+    @Getter
+    final String displayName = "Nullable type symbols should be spaced correctly";
 
-    @Override
-    public String getDescription() {
-        return "A nullable type symbol within a C# element is not spaced correctly.";
-    }
+    @Getter
+    final String description = "A nullable type symbol within a C# element is not spaced correctly.";
 
     @Override
     public Set<String> getTags() {

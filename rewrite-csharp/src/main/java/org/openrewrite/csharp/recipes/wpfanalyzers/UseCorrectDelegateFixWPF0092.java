@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UseCorrectDelegateFixWPF0092 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use correct handler type";
-    }
+    @Getter
+    final String displayName = "Use correct handler type";
 
-    @Override
-    public String getDescription() {
-        return "Use correct handler type.";
-    }
+    @Getter
+    final String description = "Use correct handler type.";
 
     @Override
     public Set<String> getTags() {

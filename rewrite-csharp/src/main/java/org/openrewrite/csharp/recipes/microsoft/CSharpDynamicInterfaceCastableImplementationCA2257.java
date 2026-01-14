@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpDynamicInterfaceCastableImplementationCA2257 extends RoslynRe
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Members defined on an interface with the 'DynamicInterfaceCastableImplementationAttribute' should be 'static'";
-    }
+    @Getter
+    final String displayName = "Members defined on an interface with the 'DynamicInterfaceCastableImplementationAttribute' should be 'static'";
 
-    @Override
-    public String getDescription() {
-        return "Since a type that implements 'IDynamicInterfaceCastable' may not implement a dynamic interface in metadata, calls to an instance interface member that is not an explicit implementation defined on this type are likely to fail at runtime. Mark new interface members 'static' to avoid runtime errors.";
-    }
+    @Getter
+    final String description = "Since a type that implements 'IDynamicInterfaceCastable' may not implement a dynamic interface in metadata, calls to an instance interface member that is not an explicit implementation defined on this type are likely to fail at runtime. Mark new interface members 'static' to avoid runtime errors.";
 
     @Override
     public Set<String> getTags() {

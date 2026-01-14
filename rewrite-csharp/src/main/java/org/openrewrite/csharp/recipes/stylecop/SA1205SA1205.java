@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1205SA1205 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Partial elements should declare access";
-    }
+    @Getter
+    final String displayName = "Partial elements should declare access";
 
-    @Override
-    public String getDescription() {
-        return "The partial element does not have an access modifier defined.";
-    }
+    @Getter
+    final String description = "The partial element does not have an access modifier defined.";
 
     @Override
     public Set<String> getTags() {

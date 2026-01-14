@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UseNameOfInPlaceOfStringCA1507 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use nameof to express symbol names";
-    }
+    @Getter
+    final String displayName = "Use nameof to express symbol names";
 
-    @Override
-    public String getDescription() {
-        return "Using nameof helps keep your code valid when refactoring.";
-    }
+    @Getter
+    final String description = "Using nameof helps keep your code valid when refactoring.";
 
     @Override
     public Set<String> getTags() {

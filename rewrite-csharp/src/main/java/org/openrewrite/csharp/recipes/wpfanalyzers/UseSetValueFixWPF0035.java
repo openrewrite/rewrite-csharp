@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UseSetValueFixWPF0035 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use SetValue in setter";
-    }
+    @Getter
+    final String displayName = "Use SetValue in setter";
 
-    @Override
-    public String getDescription() {
-        return "Use SetValue in setter.";
-    }
+    @Getter
+    final String description = "Use SetValue in setter.";
 
     @Override
     public Set<String> getTags() {

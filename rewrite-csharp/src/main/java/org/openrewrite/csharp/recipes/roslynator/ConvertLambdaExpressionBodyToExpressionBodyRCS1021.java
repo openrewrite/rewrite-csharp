@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.roslynator;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class ConvertLambdaExpressionBodyToExpressionBodyRCS1021 extends RoslynRe
         return "4.14.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Convert lambda expression body to expression body";
-    }
+    @Getter
+    final String displayName = "Convert lambda expression body to expression body";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final String description = "";
 
     @Override
     public Set<String> getTags() {

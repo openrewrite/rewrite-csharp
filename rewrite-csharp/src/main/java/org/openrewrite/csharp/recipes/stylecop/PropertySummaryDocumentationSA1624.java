@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class PropertySummaryDocumentationSA1624 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Property summary documentation should omit accessor with restricted access";
-    }
+    @Getter
+    final String displayName = "Property summary documentation should omit accessor with restricted access";
 
-    @Override
-    public String getDescription() {
-        return "The documentation text within a C# property’s <summary> tag takes into account all of the accessors within the property, but one of the accessors has limited access.";
-    }
+    @Getter
+    final String description = "The documentation text within a C# property’s <summary> tag takes into account all of the accessors within the property, but one of the accessors has limited access.";
 
     @Override
     public Set<String> getTags() {

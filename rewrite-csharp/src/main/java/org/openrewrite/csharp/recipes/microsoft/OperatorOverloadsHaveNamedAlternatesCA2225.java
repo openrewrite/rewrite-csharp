@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class OperatorOverloadsHaveNamedAlternatesCA2225 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Operator overloads have named alternates";
-    }
+    @Getter
+    final String displayName = "Operator overloads have named alternates";
 
-    @Override
-    public String getDescription() {
-        return "An operator overload was detected, and the expected named alternative method was not found. The named alternative member provides access to the same functionality as the operator and is provided for developers who program in languages that do not support overloaded operators.";
-    }
+    @Getter
+    final String description = "An operator overload was detected, and the expected named alternative method was not found. The named alternative member provides access to the same functionality as the operator and is provided for developers who program in languages that do not support overloaded operators.";
 
     @Override
     public Set<String> getTags() {

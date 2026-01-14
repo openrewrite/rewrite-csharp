@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpPreferDictionaryTryMethodsOverContainsKeyGuardCA1864 extends 
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Prefer the 'IDictionary.TryAdd(TKey, TValue)' method";
-    }
+    @Getter
+    final String displayName = "Prefer the 'IDictionary.TryAdd(TKey, TValue)' method";
 
-    @Override
-    public String getDescription() {
-        return "Prefer a 'TryAdd' call over an 'Add' call guarded by a 'ContainsKey' check. 'TryAdd' behaves the same as 'Add', except that when the specified key already exists, it returns 'false' instead of throwing an exception.";
-    }
+    @Getter
+    final String description = "Prefer a 'TryAdd' call over an 'Add' call guarded by a 'ContainsKey' check. 'TryAdd' behaves the same as 'Add', except that when the specified key already exists, it returns 'false' instead of throwing an exception.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class ImplementStandardExceptionConstructorsCA1032 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Implement standard exception constructors";
-    }
+    @Getter
+    final String displayName = "Implement standard exception constructors";
 
-    @Override
-    public String getDescription() {
-        return "Failure to provide the full set of constructors can make it difficult to correctly handle exceptions.";
-    }
+    @Getter
+    final String description = "Failure to provide the full set of constructors can make it difficult to correctly handle exceptions.";
 
     @Override
     public Set<String> getTags() {

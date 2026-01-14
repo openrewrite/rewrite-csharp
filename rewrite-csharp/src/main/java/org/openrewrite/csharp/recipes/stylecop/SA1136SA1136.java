@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1136SA1136 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Enum values should be on separate lines";
-    }
+    @Getter
+    final String displayName = "Enum values should be on separate lines";
 
-    @Override
-    public String getDescription() {
-        return "Enum values should be placed on their own lines for maximum readability.";
-    }
+    @Getter
+    final String description = "Enum values should be placed on their own lines for maximum readability.";
 
     @Override
     public Set<String> getTags() {

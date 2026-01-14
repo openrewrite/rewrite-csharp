@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class AddAttributeListFixWPF0176 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "StyleTypedProperty is missing";
-    }
+    @Getter
+    final String displayName = "StyleTypedProperty is missing";
 
-    @Override
-    public String getDescription() {
-        return "StyleTypedProperty is missing.";
-    }
+    @Getter
+    final String description = "StyleTypedProperty is missing.";
 
     @Override
     public Set<String> getTags() {

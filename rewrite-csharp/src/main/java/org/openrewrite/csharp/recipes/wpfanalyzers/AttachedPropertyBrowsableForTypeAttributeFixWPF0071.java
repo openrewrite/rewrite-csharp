@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class AttachedPropertyBrowsableForTypeAttributeFixWPF0071 extends RoslynR
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Add ValueConversion attribute";
-    }
+    @Getter
+    final String displayName = "Add ValueConversion attribute";
 
-    @Override
-    public String getDescription() {
-        return "Add ValueConversion attribute.";
-    }
+    @Getter
+    final String description = "Add ValueConversion attribute.";
 
     @Override
     public Set<String> getTags() {

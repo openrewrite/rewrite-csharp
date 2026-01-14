@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1131SA1131 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use readable conditions";
-    }
+    @Getter
+    final String displayName = "Use readable conditions";
 
-    @Override
-    public String getDescription() {
-        return "When a comparison is made between a variable and a literal, the variable should be placed on the left-hand-side to maximize readability.";
-    }
+    @Getter
+    final String description = "When a comparison is made between a variable and a literal, the variable should be placed on the left-hand-side to maximize readability.";
 
     @Override
     public Set<String> getTags() {

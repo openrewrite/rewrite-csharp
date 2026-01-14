@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UseEnvironmentMembersCA1837 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use 'Environment.ProcessId'";
-    }
+    @Getter
+    final String displayName = "Use 'Environment.ProcessId'";
 
-    @Override
-    public String getDescription() {
-        return "'Environment.ProcessId' is simpler and faster than 'Process.GetCurrentProcess().Id'.";
-    }
+    @Getter
+    final String description = "'Environment.ProcessId' is simpler and faster than 'Process.GetCurrentProcess().Id'.";
 
     @Override
     public Set<String> getTags() {

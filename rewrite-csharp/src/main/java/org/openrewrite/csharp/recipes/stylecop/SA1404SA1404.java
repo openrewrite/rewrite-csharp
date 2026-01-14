@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1404SA1404 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Code analysis suppression should have justification";
-    }
+    @Getter
+    final String displayName = "Code analysis suppression should have justification";
 
-    @Override
-    public String getDescription() {
-        return "A Code Analysis SuppressMessage attribute does not include a justification.";
-    }
+    @Getter
+    final String description = "A Code Analysis SuppressMessage attribute does not include a justification.";
 
     @Override
     public Set<String> getTags() {

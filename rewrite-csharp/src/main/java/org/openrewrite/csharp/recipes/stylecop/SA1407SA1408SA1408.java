@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1407SA1408SA1408 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Conditional expressions should declare precedence";
-    }
+    @Getter
+    final String displayName = "Conditional expressions should declare precedence";
 
-    @Override
-    public String getDescription() {
-        return "A C# statement contains a complex conditional expression which omits parenthesis around operators.";
-    }
+    @Getter
+    final String description = "A C# statement contains a complex conditional expression which omits parenthesis around operators.";
 
     @Override
     public Set<String> getTags() {

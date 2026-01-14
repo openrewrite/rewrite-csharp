@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpDisposeMethodsShouldCallBaseClassDisposeCA2215 extends Roslyn
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Dispose methods should call base class dispose";
-    }
+    @Getter
+    final String displayName = "Dispose methods should call base class dispose";
 
-    @Override
-    public String getDescription() {
-        return "A type that implements System.IDisposable inherits from a type that also implements IDisposable. The Dispose method of the inheriting type does not call the Dispose method of the parent type. To fix a violation of this rule, call base.Dispose in your Dispose method.";
-    }
+    @Getter
+    final String description = "A type that implements System.IDisposable inherits from a type that also implements IDisposable. The Dispose method of the inheriting type does not call the Dispose method of the parent type. To fix a violation of this rule, call base.Dispose in your Dispose method.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpForwardCancellationTokenToInvocationsCA2016 extends RoslynRec
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Forward the 'CancellationToken' parameter to methods";
-    }
+    @Getter
+    final String displayName = "Forward the 'CancellationToken' parameter to methods";
 
-    @Override
-    public String getDescription() {
-        return "Forward the 'CancellationToken' parameter to methods to ensure the operation cancellation notifications gets properly propagated, or pass in 'CancellationToken.None' explicitly to indicate intentionally not propagating the token.";
-    }
+    @Getter
+    final String description = "Forward the 'CancellationToken' parameter to methods to ensure the operation cancellation notifications gets properly propagated, or pass in 'CancellationToken.None' explicitly to indicate intentionally not propagating the token.";
 
     @Override
     public Set<String> getTags() {

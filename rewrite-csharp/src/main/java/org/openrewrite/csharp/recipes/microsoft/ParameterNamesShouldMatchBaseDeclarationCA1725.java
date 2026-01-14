@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class ParameterNamesShouldMatchBaseDeclarationCA1725 extends RoslynRecipe
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Parameter names should match base declaration";
-    }
+    @Getter
+    final String displayName = "Parameter names should match base declaration";
 
-    @Override
-    public String getDescription() {
-        return "Consistent naming of parameters in an override hierarchy increases the usability of the method overrides. A parameter name in a derived method that differs from the name in the base declaration can cause confusion about whether the method is an override of the base method or a new overload of the method.";
-    }
+    @Getter
+    final String description = "Consistent naming of parameters in an override hierarchy increases the usability of the method overrides. A parameter name in a derived method that differs from the name in the base declaration can cause confusion about whether the method is an override of the base method or a new overload of the method.";
 
     @Override
     public Set<String> getTags() {

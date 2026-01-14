@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1609SA1610SA1609 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Property documentation should have value";
-    }
+    @Getter
+    final String displayName = "Property documentation should have value";
 
-    @Override
-    public String getDescription() {
-        return "The XML header documentation for a C# property does not contain a <value> tag.";
-    }
+    @Getter
+    final String description = "The XML header documentation for a C# property does not contain a <value> tag.";
 
     @Override
     public Set<String> getTags() {

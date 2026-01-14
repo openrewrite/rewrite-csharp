@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1132SA1132 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Do not combine fields";
-    }
+    @Getter
+    final String displayName = "Do not combine fields";
 
-    @Override
-    public String getDescription() {
-        return "Each field should be declared on its own line, in order to clearly see each field of a type and allow for proper documentation of the behavior of each field.";
-    }
+    @Getter
+    final String description = "Each field should be declared on its own line, in order to clearly see each field of a type and allow for proper documentation of the behavior of each field.";
 
     @Override
     public Set<String> getTags() {

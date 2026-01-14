@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SX1101SX1101 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Do not prefix local calls with 'this.'";
-    }
+    @Getter
+    final String displayName = "Do not prefix local calls with 'this.'";
 
-    @Override
-    public String getDescription() {
-        return "A call to an instance member of the local class or a base class is prefixed with `this.`.";
-    }
+    @Getter
+    final String description = "A call to an instance member of the local class or a base class is prefixed with `this.`.";
 
     @Override
     public Set<String> getTags() {

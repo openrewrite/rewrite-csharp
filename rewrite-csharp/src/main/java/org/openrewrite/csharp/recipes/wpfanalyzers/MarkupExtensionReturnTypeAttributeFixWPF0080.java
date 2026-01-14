@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class MarkupExtensionReturnTypeAttributeFixWPF0080 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Add MarkupExtensionReturnType attribute";
-    }
+    @Getter
+    final String displayName = "Add MarkupExtensionReturnType attribute";
 
-    @Override
-    public String getDescription() {
-        return "Add MarkupExtensionReturnType attribute.";
-    }
+    @Getter
+    final String description = "Add MarkupExtensionReturnType attribute.";
 
     @Override
     public Set<String> getTags() {

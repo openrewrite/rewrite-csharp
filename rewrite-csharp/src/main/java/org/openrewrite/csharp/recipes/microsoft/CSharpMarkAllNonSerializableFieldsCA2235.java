@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpMarkAllNonSerializableFieldsCA2235 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Mark all non-serializable fields";
-    }
+    @Getter
+    final String displayName = "Mark all non-serializable fields";
 
-    @Override
-    public String getDescription() {
-        return "An instance field of a type that is not serializable is declared in a type that is serializable.";
-    }
+    @Getter
+    final String description = "An instance field of a type that is not serializable is declared in a type that is serializable.";
 
     @Override
     public Set<String> getTags() {

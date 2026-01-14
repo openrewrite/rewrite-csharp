@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UsingSA1217 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Using static directives should be ordered alphabetically";
-    }
+    @Getter
+    final String displayName = "Using static directives should be ordered alphabetically";
 
-    @Override
-    public String getDescription() {
-        return "All using static directives should be ordered alphabetically.";
-    }
+    @Getter
+    final String description = "All using static directives should be ordered alphabetically.";
 
     @Override
     public Set<String> getTags() {

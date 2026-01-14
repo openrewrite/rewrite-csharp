@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class RenameToUpperCaseSA1311 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Static readonly fields should begin with upper-case letter";
-    }
+    @Getter
+    final String displayName = "Static readonly fields should begin with upper-case letter";
 
-    @Override
-    public String getDescription() {
-        return "The name of a static readonly field does not begin with an upper-case letter.";
-    }
+    @Getter
+    final String description = "The name of a static readonly field does not begin with an upper-case letter.";
 
     @Override
     public Set<String> getTags() {

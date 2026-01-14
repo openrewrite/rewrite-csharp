@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UsingSA1211 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Using alias directives should be ordered alphabetically by alias name";
-    }
+    @Getter
+    final String displayName = "Using alias directives should be ordered alphabetically by alias name";
 
-    @Override
-    public String getDescription() {
-        return "The using-alias directives within a C# code file are not sorted alphabetically by alias name.";
-    }
+    @Getter
+    final String description = "The using-alias directives within a C# code file are not sorted alphabetically by alias name.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UseRegisteredTypeFixWPF0013 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "CLR accessor for attached property must match registered type";
-    }
+    @Getter
+    final String displayName = "CLR accessor for attached property must match registered type";
 
-    @Override
-    public String getDescription() {
-        return "CLR accessor for attached property must match registered type.";
-    }
+    @Getter
+    final String description = "CLR accessor for attached property must match registered type.";
 
     @Override
     public Set<String> getTags() {

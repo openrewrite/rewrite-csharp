@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1629SA1629 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Documentation text should end with a period";
-    }
+    @Getter
+    final String displayName = "Documentation text should end with a period";
 
-    @Override
-    public String getDescription() {
-        return "A section of the XML header documentation for a C# element does not end with a period.";
-    }
+    @Getter
+    final String description = "A section of the XML header documentation for a C# element does not end with a period.";
 
     @Override
     public Set<String> getTags() {

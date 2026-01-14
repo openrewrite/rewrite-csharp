@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1134SA1134 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Attributes should not share line";
-    }
+    @Getter
+    final String displayName = "Attributes should not share line";
 
-    @Override
-    public String getDescription() {
-        return "Each attribute should be placed on its own line of code.";
-    }
+    @Getter
+    final String description = "Each attribute should be placed on its own line of code.";
 
     @Override
     public Set<String> getTags() {

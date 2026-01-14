@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1400SA1400 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Access modifier should be declared";
-    }
+    @Getter
+    final String displayName = "Access modifier should be declared";
 
-    @Override
-    public String getDescription() {
-        return "The access modifier for a C# element has not been explicitly defined.";
-    }
+    @Getter
+    final String description = "The access modifier for a C# element has not been explicitly defined.";
 
     @Override
     public Set<String> getTags() {

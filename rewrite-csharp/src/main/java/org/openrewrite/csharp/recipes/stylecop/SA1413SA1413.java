@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1413SA1413 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use trailing comma in multi-line initializers";
-    }
+    @Getter
+    final String displayName = "Use trailing comma in multi-line initializers";
 
-    @Override
-    public String getDescription() {
-        return "A multi-line initializer in a C# code file should use a comma on the last line.";
-    }
+    @Getter
+    final String description = "A multi-line initializer in a C# code file should use a comma on the last line.";
 
     @Override
     public Set<String> getTags() {

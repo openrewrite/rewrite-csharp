@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class DoNotUseWhenAllOrWaitAllWithSingleArgumentCA1842 extends RoslynReci
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Do not use 'WhenAll' with a single task";
-    }
+    @Getter
+    final String displayName = "Do not use 'WhenAll' with a single task";
 
-    @Override
-    public String getDescription() {
-        return "Using 'WhenAll' with a single task may result in performance loss, await or return the task instead.";
-    }
+    @Getter
+    final String description = "Using 'WhenAll' with a single task may result in performance loss, await or return the task instead.";
 
     @Override
     public Set<String> getTags() {

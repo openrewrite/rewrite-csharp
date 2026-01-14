@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1507SA1507 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Code should not contain multiple blank lines in a row";
-    }
+    @Getter
+    final String displayName = "Code should not contain multiple blank lines in a row";
 
-    @Override
-    public String getDescription() {
-        return "The C# code contains multiple blank lines in a row.";
-    }
+    @Getter
+    final String description = "The C# code contains multiple blank lines in a row.";
 
     @Override
     public Set<String> getTags() {

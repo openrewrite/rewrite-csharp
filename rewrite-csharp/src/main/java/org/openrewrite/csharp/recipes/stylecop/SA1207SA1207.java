@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1207SA1207 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Protected should come before internal";
-    }
+    @Getter
+    final String displayName = "Protected should come before internal";
 
-    @Override
-    public String getDescription() {
-        return "The keyword '{0}' is positioned after the keyword '{1}' within the declaration of a {0} {1} C# element.";
-    }
+    @Getter
+    final String description = "The keyword '{0}' is positioned after the keyword '{1}' within the declaration of a {0} {1} C# element.";
 
     @Override
     public Set<String> getTags() {

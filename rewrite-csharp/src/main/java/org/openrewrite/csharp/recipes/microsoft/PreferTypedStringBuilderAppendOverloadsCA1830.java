@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class PreferTypedStringBuilderAppendOverloadsCA1830 extends RoslynRecipe 
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Prefer strongly-typed Append and Insert method overloads on StringBuilder";
-    }
+    @Getter
+    final String displayName = "Prefer strongly-typed Append and Insert method overloads on StringBuilder";
 
-    @Override
-    public String getDescription() {
-        return "StringBuilder.Append and StringBuilder.Insert provide overloads for multiple types beyond System.String.  When possible, prefer the strongly-typed overloads over using ToString() and the string-based overload.";
-    }
+    @Getter
+    final String description = "StringBuilder.Append and StringBuilder.Insert provide overloads for multiple types beyond System.String.  When possible, prefer the strongly-typed overloads over using ToString() and the string-based overload.";
 
     @Override
     public Set<String> getTags() {

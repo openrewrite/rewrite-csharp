@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1412SA1412 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Store files as UTF-8 with byte order mark";
-    }
+    @Getter
+    final String displayName = "Store files as UTF-8 with byte order mark";
 
-    @Override
-    public String getDescription() {
-        return "Source files should be saved using the UTF-8 encoding with a byte order mark";
-    }
+    @Getter
+    final String description = "Source files should be saved using the UTF-8 encoding with a byte order mark";
 
     @Override
     public Set<String> getTags() {

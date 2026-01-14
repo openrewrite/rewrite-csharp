@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1139SA1139 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Use literal suffix notation instead of casting";
-    }
+    @Getter
+    final String displayName = "Use literal suffix notation instead of casting";
 
-    @Override
-    public String getDescription() {
-        return "Use literal suffix notation instead of casting, in order to improve readability, avoid bugs related to illegal casts and ensure that optimal IL is produced.";
-    }
+    @Getter
+    final String description = "Use literal suffix notation instead of casting, in order to improve readability, avoid bugs related to illegal casts and ensure that optimal IL is produced.";
 
     @Override
     public Set<String> getTags() {

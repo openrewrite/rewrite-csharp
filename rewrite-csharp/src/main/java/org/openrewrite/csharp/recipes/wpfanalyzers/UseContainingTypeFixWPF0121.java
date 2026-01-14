@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.wpfanalyzers;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class UseContainingTypeFixWPF0121 extends RoslynRecipe {
         return "4.1.1";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Register containing type as owner for routed command";
-    }
+    @Getter
+    final String displayName = "Register containing type as owner for routed command";
 
-    @Override
-    public String getDescription() {
-        return "Register containing type as owner for routed command.";
-    }
+    @Getter
+    final String description = "Register containing type as owner for routed command.";
 
     @Override
     public Set<String> getTags() {

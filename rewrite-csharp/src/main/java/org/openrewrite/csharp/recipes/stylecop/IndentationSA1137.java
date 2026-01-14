@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class IndentationSA1137 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Elements should have the same indentation";
-    }
+    @Getter
+    final String displayName = "Elements should have the same indentation";
 
-    @Override
-    public String getDescription() {
-        return "Elements at the same level in the syntax tree should have the same indentation.";
-    }
+    @Getter
+    final String description = "Elements at the same level in the syntax tree should have the same indentation.";
 
     @Override
     public Set<String> getTags() {

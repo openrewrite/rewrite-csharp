@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpPreferAsSpanOverSubstringCA1846 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Prefer 'AsSpan' over 'Substring'";
-    }
+    @Getter
+    final String displayName = "Prefer 'AsSpan' over 'Substring'";
 
-    @Override
-    public String getDescription() {
-        return "'AsSpan' is more efficient than 'Substring'. 'Substring' performs an O(n) string copy, while 'AsSpan' does not and has a constant cost.";
-    }
+    @Getter
+    final String description = "'AsSpan' is more efficient than 'Substring'. 'Substring' performs an O(n) string copy, while 'AsSpan' does not and has a constant cost.";
 
     @Override
     public Set<String> getTags() {

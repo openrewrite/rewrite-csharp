@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class CSharpUseSpanClearInsteadOfFillCA1855 extends RoslynRecipe {
         return "9.0.0";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Prefer 'Clear' over 'Fill'";
-    }
+    @Getter
+    final String displayName = "Prefer 'Clear' over 'Fill'";
 
-    @Override
-    public String getDescription() {
-        return "It is more efficient to use 'Clear', instead of 'Fill' with default value.";
-    }
+    @Getter
+    final String description = "It is more efficient to use 'Clear', instead of 'Fill' with default value.";
 
     @Override
     public Set<String> getTags() {

@@ -21,6 +21,7 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
@@ -44,15 +45,11 @@ public class SA1510SA1510 extends RoslynRecipe {
         return "1.1.118";
     }
 
-    @Override
-    public String getDisplayName() {
-        return "Chained statement blocks should not be preceded by blank line";
-    }
+    @Getter
+    final String displayName = "Chained statement blocks should not be preceded by blank line";
 
-    @Override
-    public String getDescription() {
-        return "Chained C# statements are separated by a blank line.";
-    }
+    @Getter
+    final String description = "Chained C# statements are separated by a blank line.";
 
     @Override
     public Set<String> getTags() {
