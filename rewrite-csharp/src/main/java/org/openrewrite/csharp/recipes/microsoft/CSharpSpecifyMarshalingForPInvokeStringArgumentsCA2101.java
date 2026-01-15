@@ -25,8 +25,9 @@ import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toSet;
 
 public class CSharpSpecifyMarshalingForPInvokeStringArgumentsCA2101 extends RoslynRecipe {
 
@@ -53,6 +54,6 @@ public class CSharpSpecifyMarshalingForPInvokeStringArgumentsCA2101 extends Rosl
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2101", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "CA2101", "microsoft", "csharp", "dotnet", "c#").collect(toSet());
     }
     }

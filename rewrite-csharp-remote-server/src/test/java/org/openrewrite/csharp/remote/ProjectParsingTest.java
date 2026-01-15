@@ -25,7 +25,6 @@ import org.openrewrite.scheduling.WatchableExecutionContext;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -40,9 +39,9 @@ public class ProjectParsingTest {
 
         int port = ThreadLocalRandom.current().nextInt(50000, 65535);
         try (DotNetRemotingServerEngine server = DotNetRemotingServerEngine.create(DotNetRemotingServerEngine.Config.builder()
-          .extractedDotnetBinaryDir(Paths.get(System.getProperty("java.io.tmpdir")))
+          .extractedDotnetBinaryDir(Path.of(System.getProperty("java.io.tmpdir")))
           .port(port)
-          .logFilePath(Paths.get("./build/test.log").toAbsolutePath().toString())
+          .logFilePath(Path.of("./build/test.log").toAbsolutePath().toString())
           .build())) {
 
             server.start();
@@ -69,7 +68,7 @@ public class ProjectParsingTest {
     public void testThrowExceptionOnIncorrectDotnetPath() {
         int port = ThreadLocalRandom.current().nextInt(50000, 65535);
         try (DotNetRemotingServerEngine server = DotNetRemotingServerEngine.create(DotNetRemotingServerEngine.Config.builder().dotnetExecutable("dotnet1").extractedDotnetBinaryDir(
-          Paths.get(System.getProperty("java.io.tmpdir"))).port(port).build())) {
+          Path.of(System.getProperty("java.io.tmpdir"))).port(port).build())) {
             assertThatThrownBy(server::start)
               .isInstanceOf(IOException.class);
         }
@@ -79,7 +78,7 @@ public class ProjectParsingTest {
     public void testThrowExceptionOnIncorrectRunnable() {
         int port = ThreadLocalRandom.current().nextInt(50000, 65535);
         try (DotNetRemotingServerEngine server = DotNetRemotingServerEngine.create(DotNetRemotingServerEngine.Config.builder()
-          .extractedDotnetBinaryDir(Paths.get(System.getProperty("java.io.tmpdir")))
+          .extractedDotnetBinaryDir(Path.of(System.getProperty("java.io.tmpdir")))
           .dotnetServerDllName("Rewrite.Server1.dll")
           .port(port)
           .build())) {

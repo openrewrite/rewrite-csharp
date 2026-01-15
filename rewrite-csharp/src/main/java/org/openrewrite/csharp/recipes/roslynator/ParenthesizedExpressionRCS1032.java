@@ -25,8 +25,9 @@ import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toSet;
 
 public class ParenthesizedExpressionRCS1032 extends RoslynRecipe {
 
@@ -53,6 +54,6 @@ public class ParenthesizedExpressionRCS1032 extends RoslynRecipe {
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "RCS1032", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "RCS1032", "roslynator", "csharp", "dotnet", "c#").collect(toSet());
     }
     }

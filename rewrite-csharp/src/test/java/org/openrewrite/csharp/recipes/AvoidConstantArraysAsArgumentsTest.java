@@ -25,7 +25,7 @@ import org.openrewrite.test.TypeValidation;
 
 import java.util.List;
 
-public class AvoidConstantArraysAsArgumentsTest extends RoslynRecipeTest {
+class AvoidConstantArraysAsArgumentsTest extends RoslynRecipeTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
@@ -36,7 +36,7 @@ public class AvoidConstantArraysAsArgumentsTest extends RoslynRecipeTest {
     }
 
     @Test
-    public void runRecipe() {
+    void runRecipe() {
         Solution solution = createSolution()
             .addProject(new Project("RoslynSample.csproj")
                 .addSourceFile("Sample.cs",
@@ -65,7 +65,7 @@ public class AvoidConstantArraysAsArgumentsTest extends RoslynRecipeTest {
     }
 
     @Test
-    public void multipleSolutions() {
+    void multipleSolutions() {
         Solution solution1 = createSolution("Solution1.sln")
             .addProject(new Project("Project1/Project1.csproj")
                 .addSourceFile("Class1.cs",
@@ -117,7 +117,7 @@ public class AvoidConstantArraysAsArgumentsTest extends RoslynRecipeTest {
     }
 
     @Test
-    public void compositeRecipe(){
+    void compositeRecipe(){
         Solution solution1 = createSolution("Solution1.sln")
           .addProject(new Project("Project1/Project1.csproj")
             .addSourceFile("Class1.cs",

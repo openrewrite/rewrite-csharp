@@ -25,8 +25,9 @@ import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toSet;
 
 public class DoNotCreateTaskCompletionSourceWithWrongArgumentsCA2247 extends RoslynRecipe {
 
@@ -53,6 +54,6 @@ public class DoNotCreateTaskCompletionSourceWithWrongArgumentsCA2247 extends Ros
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2247", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "CA2247", "microsoft", "csharp", "dotnet", "c#").collect(toSet());
     }
     }

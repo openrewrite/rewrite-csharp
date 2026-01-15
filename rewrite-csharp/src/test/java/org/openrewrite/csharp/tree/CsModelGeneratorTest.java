@@ -16,39 +16,49 @@
 package org.openrewrite.csharp.tree;
 
 import org.jspecify.annotations.Nullable;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
-import org.openrewrite.*;
+import org.openrewrite.Cursor;
+import org.openrewrite.ExecutionContext;
+import org.openrewrite.InMemoryExecutionContext;
+import org.openrewrite.PrintOutputCapture;
+import org.openrewrite.Tree;
 import org.openrewrite.csharp.CSharpPrinter;
-import org.openrewrite.internal.ListUtils;
 import org.openrewrite.java.JavaParser;
-import org.openrewrite.java.JavaTemplate;
 import org.openrewrite.java.JavaVisitor;
 import org.openrewrite.java.format.AutoFormatVisitor;
 import org.openrewrite.java.format.MinimumViableSpacingVisitor;
 import org.openrewrite.java.format.NormalizeFormatVisitor;
-import org.openrewrite.java.tree.*;
+import org.openrewrite.java.tree.J;
+import org.openrewrite.java.tree.JContainer;
+import org.openrewrite.java.tree.JRightPadded;
+import org.openrewrite.java.tree.JavaType;
+import org.openrewrite.java.tree.NameTree;
+import org.openrewrite.java.tree.Space;
+import org.openrewrite.java.tree.Statement;
+import org.openrewrite.java.tree.TypeTree;
 import org.openrewrite.marker.Markers;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 @EnabledIfSystemProperty(named = "runManualTests", matches = "true")
 public class CsModelGeneratorTest {
 
     @Test
     public void generateCsModel() throws IOException {
-        Path csJavaPath = Paths.get("src/main/java/org/openrewrite/csharp/tree/Cs.java");
-        Path csModelPath = Paths.get("src/main/java/org/openrewrite/csharp/tree/CsModel.java");
-        Path csModel2Path = Paths.get("../Rewrite/src/Rewrite.CSharp/CSharp/CsModel.g.cs");
+        Path csJavaPath = Path.of("src/main/java/org/openrewrite/csharp/tree/Cs.java");
+        Path csModelPath = Path.of("src/main/java/org/openrewrite/csharp/tree/CsModel.java");
+        Path csModel2Path = Path.of("../Rewrite/src/Rewrite.CSharp/CSharp/CsModel.g.cs");
 
         String csJavaSource = Files.readString(csJavaPath);
 
@@ -147,8 +157,7 @@ public class CsModelGeneratorTest {
                       if (stmt instanceof J.MethodDeclaration) {
                           return false;
                       }
-                      if (stmt instanceof J.ClassDeclaration) {
-                          J.ClassDeclaration innerClass = (J.ClassDeclaration) stmt;
+                      if (stmt instanceof J.ClassDeclaration innerClass) {
                           // Keep non-Padding classes
                           return !"Padding".equals(innerClass.getSimpleName());
                       }
@@ -156,7 +165,7 @@ public class CsModelGeneratorTest {
                   })
                   .map(stmt -> (Statement) stmt.accept(this, ctx))
                   .filter(Objects::nonNull)
-                  .collect(Collectors.toList());
+                  .collect(toList());
 
                 classDecl = classDecl.withBody(classDecl.getBody().withStatements(filteredStatements));
             }
@@ -187,10 +196,10 @@ public class CsModelGeneratorTest {
             if (!otherInterfaces.isEmpty()) {
                 String annotationValue = otherInterfaces.stream()
                   .map(i -> "\"" + i + "\"")
-                  .collect(Collectors.joining(", "));
+                  .collect(joining(", "));
 
                 if (otherInterfaces.size() == 1) {
-                    annotationValue = "\"" + otherInterfaces.get(0) + "\"";
+                    annotationValue = "\"" + otherInterfaces.getFirst() + "\"";
                 } else {
                     annotationValue = "{" + annotationValue + "}";
                 }
@@ -200,10 +209,10 @@ public class CsModelGeneratorTest {
                   Space.format("\n    "),
                   Markers.EMPTY,
                   new J.Identifier(Tree.randomId(), Space.EMPTY, Markers.EMPTY,
-                    Collections.emptyList(), "Implements", null, null),
+                    emptyList(), "Implements", null, null),
                   JContainer.build(
                     Space.EMPTY,
-                    Collections.singletonList(JRightPadded.build(
+                    singletonList(JRightPadded.build(
                       new J.Literal(Tree.randomId(), Space.EMPTY, Markers.EMPTY,
                         annotationValue, annotationValue, null,
                         JavaType.Primitive.String)
@@ -221,16 +230,16 @@ public class CsModelGeneratorTest {
         }
 
         private String getTypeName(TypeTree type) {
-            if (type instanceof J.Identifier) {
-                return ((J.Identifier)type).getSimpleName();
+            if (type instanceof J.Identifier identifier) {
+                return identifier.getSimpleName();
             }
-            if (type instanceof J.FieldAccess) {
-                return ((J.FieldAccess)type).getSimpleName();
+            if (type instanceof J.FieldAccess access) {
+                return access.getSimpleName();
             }
-            if (type instanceof J.ParameterizedType) {
-                NameTree clazz = ((J.ParameterizedType)type).getClazz();
-                if (clazz instanceof TypeTree) {
-                    return getTypeName((TypeTree)clazz);
+            if (type instanceof J.ParameterizedType parameterizedType) {
+                NameTree clazz = parameterizedType.getClazz();
+                if (clazz instanceof TypeTree tree) {
+                    return getTypeName(tree);
                 }
                 return clazz.toString();
             }
@@ -247,7 +256,7 @@ public class CsModelGeneratorTest {
 
             multiVariable = multiVariable.withLeadingAnnotations(annotations.stream().filter(x -> x.getSimpleName().contains("Nullable")).toList());
             // Remove all modifiers (private, final, etc.)
-            return multiVariable.withModifiers(Collections.emptyList());
+            return multiVariable.withModifiers(emptyList());
         }
 
         private boolean shouldExcludeField(J.VariableDeclarations field) {
@@ -283,18 +292,18 @@ public class CsModelGeneratorTest {
         @Override
         public J.VariableDeclarations visitVariableDeclarations(J.VariableDeclarations multiVariable, ExecutionContext ctx) {
 
-            if(multiVariable.getVariables().getFirst().getSimpleName().equals("operatorKeyword")){
+            if("operatorKeyword".equals(multiVariable.getVariables().getFirst().getSimpleName())){
                 System.out.println(multiVariable.getVariables().getFirst().getName());
             }
 
             var varName = multiVariable.getVariables().getFirst();
             varName = varName.withName(varName.getName().withSimpleName("_" + varName.getSimpleName()));
-            multiVariable = multiVariable.withVariables(Collections.singletonList(varName));
+            multiVariable = multiVariable.withVariables(singletonList(varName));
 
             boolean isNullable = false;
             var type = multiVariable.getTypeExpression();
-            if (type instanceof J.AnnotatedType) {
-                type = ((J.AnnotatedType) type).getTypeExpression();
+            if (type instanceof J.AnnotatedType annotatedType) {
+                type = annotatedType.getTypeExpression();
             }
             // Handle J.AnnotatedType to extract the innermost identifier
 
@@ -307,10 +316,10 @@ public class CsModelGeneratorTest {
                 public @Nullable J visitAnnotation(J.Annotation annotation, Object o) {
 
                     var name = annotation.getSimpleName();
-                    if(name.equals("Implements")){
+                    if("Implements".equals(name)){
                         return super.visitAnnotation(annotation, o);
                     }
-                    if(name.equals("Nullable")){
+                    if("Nullable".equals(name)){
                         isNullable = true;
                     }
                     return null;
@@ -344,7 +353,7 @@ public class CsModelGeneratorTest {
                   JRightPadded.build(multiVariable.getTypeExpression())));
             }
 
-            if(varName.getSimpleName().equals("_interfaceSpecifier"))
+            if("_interfaceSpecifier".equals(varName.getSimpleName()))
             {
                 System.out.println(varName.getSimpleName());
             }
@@ -365,19 +374,19 @@ public class CsModelGeneratorTest {
         }
 
         TypeTree remapType(TypeTree type, String fromType, String toType){
-            if (type instanceof J.Identifier &&  ((J.Identifier)type).getSimpleName().equals(fromType)) {
-                type = ((J.Identifier) type).withSimpleName(toType);
+            if (type instanceof J.Identifier identifier &&  identifier.getSimpleName().equals(fromType)) {
+                type = identifier.withSimpleName(toType);
             }
             return type;
         }
 
         @Override
         public J visitIdentifier(J.Identifier ident, ExecutionContext executionContext) {
-            if (ident.getSimpleName().equals("java.nio.file.Path")) {
+            if ("java.nio.file.Path".equals(ident.getSimpleName())) {
                 return new J.Identifier(Tree.randomId(),
                   Space.SINGLE_SPACE,
                   Markers.EMPTY,
-                  Collections.emptyList(),
+                  emptyList(),
                   "string",
                   null,
                   null);
@@ -398,7 +407,7 @@ public class CsModelGeneratorTest {
             );
             var modifiers = new ArrayList<J.Modifier>();
             modifiers.add(publicModifier);
-            if(!classDecl.getKind().equals(J.ClassDeclaration.Kind.Type.Enum)) {
+            if(classDecl.getKind() != J.ClassDeclaration.Kind.Type.Enum) {
                 modifiers.add(new J.Modifier(
                   Tree.randomId(),
                   Space.SINGLE_SPACE,
@@ -412,16 +421,16 @@ public class CsModelGeneratorTest {
             classDecl = classDecl.withModifiers(modifiers);
 
 
-            if(classDecl.getKind().equals(J.ClassDeclaration.Kind.Type.Class)) {
+            if(classDecl.getKind() == J.ClassDeclaration.Kind.Type.Class) {
                 J.Annotation allArgsAnnotation = new J.Annotation(
                   Tree.randomId(),
                   Space.format("\n    "),
                   Markers.EMPTY,
                   new J.Identifier(Tree.randomId(), Space.EMPTY, Markers.EMPTY,
-                    Collections.emptyList(), "AllArgsConstructor", null, null),
+                    emptyList(), "AllArgsConstructor", null, null),
                   null
                 );
-                classDecl = classDecl.withLeadingAnnotations(Collections.singletonList(allArgsAnnotation));
+                classDecl = classDecl.withLeadingAnnotations(singletonList(allArgsAnnotation));
             }
             return super.visitClassDeclaration(classDecl, executionContext);
         }

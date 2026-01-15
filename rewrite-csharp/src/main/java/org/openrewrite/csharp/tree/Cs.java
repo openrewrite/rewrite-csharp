@@ -15,11 +15,25 @@
  */
 package org.openrewrite.csharp.tree;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+import lombok.With;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.jspecify.annotations.Nullable;
-import org.openrewrite.*;
+import org.openrewrite.Checksum;
+import org.openrewrite.Cursor;
+import org.openrewrite.FileAttributes;
+import org.openrewrite.Incubating;
+import org.openrewrite.PrintOutputCapture;
+import org.openrewrite.SourceFile;
+import org.openrewrite.Tree;
+import org.openrewrite.TreeVisitor;
 import org.openrewrite.csharp.CSharpPrinter;
 import org.openrewrite.csharp.CSharpVisitor;
 import org.openrewrite.csharp.service.CSharpNamingService;
@@ -28,7 +42,20 @@ import org.openrewrite.internal.NamingService;
 import org.openrewrite.java.JavaPrinter;
 import org.openrewrite.java.JavaTypeVisitor;
 import org.openrewrite.java.internal.TypesInUse;
-import org.openrewrite.java.tree.*;
+import org.openrewrite.java.tree.CoordinateBuilder;
+import org.openrewrite.java.tree.Expression;
+import org.openrewrite.java.tree.J;
+import org.openrewrite.java.tree.JContainer;
+import org.openrewrite.java.tree.JLeftPadded;
+import org.openrewrite.java.tree.JRightPadded;
+import org.openrewrite.java.tree.JavaSourceFile;
+import org.openrewrite.java.tree.JavaType;
+import org.openrewrite.java.tree.Loop;
+import org.openrewrite.java.tree.NameTree;
+import org.openrewrite.java.tree.Space;
+import org.openrewrite.java.tree.Statement;
+import org.openrewrite.java.tree.TypeTree;
+import org.openrewrite.java.tree.TypedTree;
 import org.openrewrite.marker.Marker;
 import org.openrewrite.marker.Markers;
 
@@ -39,12 +66,12 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
 public interface Cs extends J {
@@ -171,7 +198,7 @@ public interface Cs extends J {
         @Override
         @Transient
         public List<Import> getImports() {
-            return Collections.emptyList();
+            return emptyList();
         }
 
         @Override
@@ -182,7 +209,7 @@ public interface Cs extends J {
         @Override
         @Transient
         public List<J.ClassDeclaration> getClasses() {
-            return Collections.emptyList();
+            return emptyList();
         }
 
         @Override
@@ -282,7 +309,7 @@ public interface Cs extends J {
 
             @Override
             public List<JRightPadded<Import>> getImports() {
-                return Collections.emptyList();
+                return emptyList();
             }
 
             @Override
@@ -1814,7 +1841,7 @@ public interface Cs extends J {
         JContainer<Statement> accessors;
 
         public List<Statement> getAccessors() {
-            return accessors == null ? Collections.emptyList() : accessors.getElements();
+            return accessors == null ? emptyList() : accessors.getElements();
         }
 
         public EventDeclaration withAccessors(@Nullable List<Statement> accessors) {
@@ -5246,7 +5273,7 @@ public interface Cs extends J {
         JContainer<TypeTree> typeOperator;
 
         public List<TypeTree> getTypeOperator() {
-            return typeOperator == null ? Collections.emptyList() : typeOperator.getElements();
+            return typeOperator == null ? emptyList() : typeOperator.getElements();
         }
 
         public DefaultExpression withTypeOperator(@Nullable List<TypeTree> typeOperator) {
@@ -9425,7 +9452,7 @@ public interface Cs extends J {
         JContainer<TypeParameterConstraintClause> typeParameterConstraintClauses;
 
         public List<Cs.TypeParameter> getTypeParameters() {
-            return typeParameters == null ? Collections.emptyList() : typeParameters.getElements();
+            return typeParameters == null ? emptyList() : typeParameters.getElements();
         }
 
         public DelegateDeclaration withTypeParameters(@Nullable List<Cs.TypeParameter> typeParameters) {
@@ -9441,7 +9468,7 @@ public interface Cs extends J {
         }
 
         public List<TypeParameterConstraintClause> getTypeParameterConstraintClauses() {
-            return typeParameterConstraintClauses == null ? Collections.emptyList() : typeParameterConstraintClauses.getElements();
+            return typeParameterConstraintClauses == null ? emptyList() : typeParameterConstraintClauses.getElements();
         }
 
         public DelegateDeclaration withTypeParameterConstraintClauses(@Nullable List<TypeParameterConstraintClause> clauses) {
