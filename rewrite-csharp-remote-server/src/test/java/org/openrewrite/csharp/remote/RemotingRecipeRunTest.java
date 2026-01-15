@@ -17,25 +17,34 @@ package org.openrewrite.csharp.remote;
 
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
-import org.openrewrite.*;
+import org.openrewrite.InMemoryExecutionContext;
+import org.openrewrite.Recipe;
+import org.openrewrite.RecipeRun;
+import org.openrewrite.SourceFile;
+import org.openrewrite.Tree;
 import org.openrewrite.csharp.tree.Cs;
 import org.openrewrite.internal.InMemoryLargeSourceSet;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JRightPadded;
 import org.openrewrite.java.tree.Space;
 import org.openrewrite.marker.Markers;
-import org.openrewrite.remote.*;
+import org.openrewrite.remote.InstallableRemotingRecipe;
+import org.openrewrite.remote.PackageSource;
+import org.openrewrite.remote.RemotingContext;
+import org.openrewrite.remote.RemotingExecutionContextView;
+import org.openrewrite.remote.RemotingRecipe;
+import org.openrewrite.remote.RemotingRecipeManager;
+import org.openrewrite.remote.TcpUtils;
 
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
@@ -48,7 +57,7 @@ public class RemotingRecipeRunTest {
         nuPkgLocation.mkdir();
         int port = TcpUtils.findAvailableTcpPortInternal();
         port = 54321;
-        Path extractedDotnetBinaryDir = Paths.get("./build/dotnet-servet-archive");
+        Path extractedDotnetBinaryDir = Path.of("./build/dotnet-servet-archive");
         extractedDotnetBinaryDir.toFile().mkdirs();
         Path artifactsFolder = GitRootFinder.getGitRoot().resolve("artifacts").toAbsolutePath();
         URL test = Thread.currentThread()
@@ -136,9 +145,9 @@ public class RemotingRecipeRunTest {
 //              .findFirst()
 //              .orElseThrow();
 
-            RecipeRun run = remotingRecipe.run(new InMemoryLargeSourceSet(Collections.singletonList(tree)), ctx);
+            RecipeRun run = remotingRecipe.run(new InMemoryLargeSourceSet(singletonList(tree)), ctx);
             assertThat(run.getChangeset().getAllResults()).hasSize(1);
-            run.getChangeset().getAllResults().forEach(r -> System.out.println(r.diff()));
+            run.getChangeset().getAllResults().forEach(r ->{});
         } catch (Exception e) {
             server.close();
             fail(e);

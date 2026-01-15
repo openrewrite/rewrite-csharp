@@ -23,9 +23,6 @@ import org.jspecify.annotations.Nullable;
 import org.openrewrite.csharp.EmbeddedResourceHelper;
 import org.openrewrite.remote.AbstractRemotingServerEngine;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URL;
@@ -33,9 +30,6 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 @Log
 public class DotNetRemotingServerEngine extends AbstractRemotingServerEngine {

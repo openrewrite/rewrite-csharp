@@ -19,14 +19,12 @@ import org.openrewrite.test.RewriteTest;
 import org.openrewrite.test.SourceSpec;
 import org.openrewrite.test.SourceSpecs;
 
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import static org.openrewrite.test.SourceSpecs.text;
-import static org.openrewrite.xml.Assertions.xml;
 
 public abstract class RoslynRecipeTest implements RewriteTest {
 
@@ -100,9 +98,8 @@ public abstract class RoslynRecipeTest implements RewriteTest {
                 String projectName = project.getName();
                 String projectPath = project.getPath();
 
-                sb.append(String.format(
-                    "Project(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"%s\", \"%s\", \"{%s}\"\n",
-                    projectName, projectPath, projectGuid
+                sb.append("Project(\"{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}\") = \"%s\", \"%s\", \"{%s}\"\n".formatted(
+                        projectName, projectPath, projectGuid
                 ));
                 sb.append("EndProject\n");
             }
@@ -117,10 +114,10 @@ public abstract class RoslynRecipeTest implements RewriteTest {
                 sb.append("    GlobalSection(ProjectConfigurationPlatforms) = postSolution\n");
                 for (Project project : projects) {
                     String projectGuid = project.getGuid();
-                    sb.append(String.format("        {%s}.Debug|Any CPU.ActiveCfg = Debug|Any CPU\n", projectGuid));
-                    sb.append(String.format("        {%s}.Debug|Any CPU.Build.0 = Debug|Any CPU\n", projectGuid));
-                    sb.append(String.format("        {%s}.Release|Any CPU.ActiveCfg = Release|Any CPU\n", projectGuid));
-                    sb.append(String.format("        {%s}.Release|Any CPU.Build.0 = Release|Any CPU\n", projectGuid));
+                    sb.append("        {%s}.Debug|Any CPU.ActiveCfg = Debug|Any CPU\n".formatted(projectGuid));
+                    sb.append("        {%s}.Debug|Any CPU.Build.0 = Debug|Any CPU\n".formatted(projectGuid));
+                    sb.append("        {%s}.Release|Any CPU.ActiveCfg = Release|Any CPU\n".formatted(projectGuid));
+                    sb.append("        {%s}.Release|Any CPU.Build.0 = Release|Any CPU\n".formatted(projectGuid));
                 }
                 sb.append("    EndGlobalSection\n");
             }
@@ -149,7 +146,7 @@ public abstract class RoslynRecipeTest implements RewriteTest {
         }
 
         public String getName() {
-            return Paths.get(path).getFileName().toString().replace(".csproj", "");
+            return Path.of(path).getFileName().toString().replace(".csproj", "");
         }
 
         public String getGuid() {
@@ -210,7 +207,7 @@ public abstract class RoslynRecipeTest implements RewriteTest {
         }
 
         private String generateProjectContent() {
-            return String.format("""
+            return """
                 <Project Sdk="Microsoft.NET.Sdk">
                     <PropertyGroup>
                         <TargetFramework>%s</TargetFramework>
@@ -218,10 +215,10 @@ public abstract class RoslynRecipeTest implements RewriteTest {
                         <Nullable>%s</Nullable>
                     </PropertyGroup>
                 </Project>
-                """,
-                targetFramework,
-                implicitUsings ? "enable" : "disable",
-                nullable ? "enable" : "disable"
+                """.formatted(
+                    targetFramework,
+                    implicitUsings ? "enable" : "disable",
+                    nullable ? "enable" : "disable"
             );
         }
 
@@ -244,7 +241,7 @@ public abstract class RoslynRecipeTest implements RewriteTest {
     protected SourceSpecs[] solutionToSpecs(Solution solution) {
         return solution.toSourceSpecs();
     }
-    
+
     /**
      * Helper method to combine multiple solutions into a single SourceSpecs array
      */

@@ -25,8 +25,9 @@ import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toSet;
 
 public class NormalizeNullCheckProviderRCS1248 extends RoslynRecipe {
 
@@ -53,6 +54,6 @@ public class NormalizeNullCheckProviderRCS1248 extends RoslynRecipe {
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "RCS1248", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "RCS1248", "roslynator", "csharp", "dotnet", "c#").collect(toSet());
     }
     }
