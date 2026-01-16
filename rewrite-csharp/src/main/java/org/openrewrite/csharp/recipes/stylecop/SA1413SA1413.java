@@ -51,8 +51,6 @@ public class SA1413SA1413 extends RoslynRecipe {
     @Getter
     final String description = "A multi-line initializer in a C# code file should use a comma on the last line.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1413", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1413", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

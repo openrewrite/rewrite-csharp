@@ -51,8 +51,6 @@ public class SA1308SA1308 extends RoslynRecipe {
     @Getter
     final String description = "A field name in C# is prefixed with 'm_', 's_', or 't_'.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1308", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1308", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

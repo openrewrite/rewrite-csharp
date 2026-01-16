@@ -51,8 +51,6 @@ public class SealMethodsThatSatisfyPrivateInterfacesCA2119 extends RoslynRecipe 
     @Getter
     final String description = "An inheritable public type provides an overridable method implementation of an internal (Friend in Visual Basic) interface. To fix a violation of this rule, prevent the method from being overridden outside the assembly.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2119", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2119", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

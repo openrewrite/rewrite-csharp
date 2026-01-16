@@ -51,8 +51,6 @@ public class ConstructorArgumentAttributeArgumentFixWPF0082 extends RoslynRecipe
     @Getter
     final String description = "[ConstructorArgument] must match the name of the constructor parameter.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0082", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0082", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

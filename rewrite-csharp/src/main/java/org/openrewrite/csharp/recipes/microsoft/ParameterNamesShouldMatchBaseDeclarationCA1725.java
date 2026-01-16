@@ -51,8 +51,6 @@ public class ParameterNamesShouldMatchBaseDeclarationCA1725 extends RoslynRecipe
     @Getter
     final String description = "Consistent naming of parameters in an override hierarchy increases the usability of the method overrides. A parameter name in a derived method that differs from the name in the base declaration can cause confusion about whether the method is an override of the base method or a new overload of the method.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1725", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1725", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

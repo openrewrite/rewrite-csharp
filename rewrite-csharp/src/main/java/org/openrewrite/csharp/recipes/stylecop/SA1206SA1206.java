@@ -51,8 +51,6 @@ public class SA1206SA1206 extends RoslynRecipe {
     @Getter
     final String description = "The keywords within the declaration of an element do not follow a standard ordering scheme.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1206", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1206", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

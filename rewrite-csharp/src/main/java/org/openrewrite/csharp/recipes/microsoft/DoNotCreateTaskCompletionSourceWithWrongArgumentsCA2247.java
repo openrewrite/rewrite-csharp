@@ -51,8 +51,6 @@ public class DoNotCreateTaskCompletionSourceWithWrongArgumentsCA2247 extends Ros
     @Getter
     final String description = "TaskCompletionSource has constructors that take TaskCreationOptions that control the underlying Task, and constructors that take object state that's stored in the task.  Accidentally passing a TaskContinuationOptions instead of a TaskCreationOptions will result in the call treating the options as state.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2247", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2247", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

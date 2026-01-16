@@ -51,8 +51,6 @@ public class RemoveEmptyFinalizersCA1821 extends RoslynRecipe {
     @Getter
     final String description = "Finalizers should be avoided where possible, to avoid the additional performance overhead involved in tracking object lifetime.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1821", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1821", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class DocumentationFixWPF0062 extends RoslynRecipe {
     @Getter
     final String description = "Property changed callback should have standard documentation text.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0062", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0062", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

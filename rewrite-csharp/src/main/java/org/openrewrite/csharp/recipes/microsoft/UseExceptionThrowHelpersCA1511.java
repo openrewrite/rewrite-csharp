@@ -51,8 +51,6 @@ public class UseExceptionThrowHelpersCA1511 extends RoslynRecipe {
     @Getter
     final String description = "Throw helpers are simpler and more efficient than an if block constructing a new exception instance.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1511", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1511", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class SA1103SA1103 extends RoslynRecipe {
     @Getter
     final String description = "The clauses within a C# query expression are not all placed on the same line, and each clause is not placed on its own line.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1103", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1103", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

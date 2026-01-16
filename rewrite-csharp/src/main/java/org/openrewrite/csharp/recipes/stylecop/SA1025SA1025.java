@@ -51,8 +51,6 @@ public class SA1025SA1025 extends RoslynRecipe {
     @Getter
     final String description = "The code contains multiple whitespace characters in a row.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1025", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1025", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

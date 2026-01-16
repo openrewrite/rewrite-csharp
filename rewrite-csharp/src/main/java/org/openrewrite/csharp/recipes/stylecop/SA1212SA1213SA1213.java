@@ -51,8 +51,6 @@ public class SA1212SA1213SA1213 extends RoslynRecipe {
     @Getter
     final String description = "An add accessor appears after a remove accessor within an event.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1213", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1213", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

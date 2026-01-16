@@ -51,8 +51,6 @@ public class PreferConstCharOverConstUnitStringCA1834 extends RoslynRecipe {
     @Getter
     final String description = "'StringBuilder.Append(char)' is more efficient than 'StringBuilder.Append(string)' when the string is a single character. When calling 'Append' with a constant, prefer using a constant char rather than a constant string containing one character.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1834", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1834", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

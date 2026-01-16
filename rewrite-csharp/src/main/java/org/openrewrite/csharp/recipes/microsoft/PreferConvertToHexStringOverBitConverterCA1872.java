@@ -51,8 +51,6 @@ public class PreferConvertToHexStringOverBitConverterCA1872 extends RoslynRecipe
     @Getter
     final String description = "Use 'Convert.ToHexString' or 'Convert.ToHexStringLower' when encoding bytes to a hexadecimal string representation. These methods are more efficient and allocation-friendly than using 'BitConverter.ToString' in combination with 'String.Replace' to replace dashes and 'String.ToLower'.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1872", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1872", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class CSharpUseOrdinalStringComparisonCA1309 extends RoslynRecipe {
     @Getter
     final String description = "A string comparison operation that is nonlinguistic does not set the StringComparison parameter to either Ordinal or OrdinalIgnoreCase. By explicitly setting the parameter to either StringComparison.Ordinal or StringComparison.OrdinalIgnoreCase, your code often gains speed, becomes more correct, and becomes more reliable.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1309", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1309", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class DoNotRemoveOriginalExceptionFromThrowStatementMA0027 extends Roslyn
     @Getter
     final String description = "";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "MA0027", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "MA0027", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

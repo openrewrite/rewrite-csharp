@@ -51,8 +51,6 @@ public class CSharpPreferHashDataOverComputeHashCA1850 extends RoslynRecipe {
     @Getter
     final String description = "It is more efficient to use the static 'HashData' method over creating and managing a HashAlgorithm instance to call 'ComputeHash'.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1850", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1850", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

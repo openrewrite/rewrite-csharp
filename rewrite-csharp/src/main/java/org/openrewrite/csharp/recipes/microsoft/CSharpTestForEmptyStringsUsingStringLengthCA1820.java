@@ -51,8 +51,6 @@ public class CSharpTestForEmptyStringsUsingStringLengthCA1820 extends RoslynReci
     @Getter
     final String description = "Comparing strings by using the String.Length property or the String.IsNullOrEmpty method is significantly faster than using Equals.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1820", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1820", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

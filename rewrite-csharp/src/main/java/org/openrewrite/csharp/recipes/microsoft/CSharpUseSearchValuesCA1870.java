@@ -51,8 +51,6 @@ public class CSharpUseSearchValuesCA1870 extends RoslynRecipe {
     @Getter
     final String description = "Using a cached 'SearchValues' instance is more efficient than passing values to 'IndexOfAny'/'ContainsAny' directly.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1870", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1870", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

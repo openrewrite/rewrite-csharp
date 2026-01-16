@@ -51,8 +51,6 @@ public class TokenSpacingSA1113 extends RoslynRecipe {
     @Getter
     final String description = "A comma between two parameters in a call to a C# method or indexer, or in the declaration of a method or indexer, is not placed on the same line as the previous parameter.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1113", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1113", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

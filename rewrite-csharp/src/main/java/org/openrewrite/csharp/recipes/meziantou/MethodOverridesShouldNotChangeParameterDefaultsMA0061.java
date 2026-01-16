@@ -51,8 +51,6 @@ public class MethodOverridesShouldNotChangeParameterDefaultsMA0061 extends Rosly
     @Getter
     final String description = "";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "MA0061", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "MA0061", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

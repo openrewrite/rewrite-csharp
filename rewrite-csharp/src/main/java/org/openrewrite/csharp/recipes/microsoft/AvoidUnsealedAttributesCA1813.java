@@ -51,8 +51,6 @@ public class AvoidUnsealedAttributesCA1813 extends RoslynRecipe {
     @Getter
     final String description = "The .NET Framework class library provides methods for retrieving custom attributes. By default, these methods search the attribute inheritance hierarchy. Sealing the attribute eliminates the search through the inheritance hierarchy and can improve performance.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1813", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1813", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

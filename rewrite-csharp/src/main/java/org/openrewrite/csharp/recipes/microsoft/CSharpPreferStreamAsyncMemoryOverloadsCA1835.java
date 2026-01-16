@@ -51,8 +51,6 @@ public class CSharpPreferStreamAsyncMemoryOverloadsCA1835 extends RoslynRecipe {
     @Getter
     final String description = "'Stream' has a 'ReadAsync' overload that takes a 'Memory<Byte>' as the first argument, and a 'WriteAsync' overload that takes a 'ReadOnlyMemory<Byte>' as the first argument. Prefer calling the memory based overloads, which are more efficient.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1835", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1835", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

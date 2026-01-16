@@ -51,8 +51,6 @@ public class RenameMemberFixWPF0090 extends RoslynRecipe {
     @Getter
     final String description = "Name the invoked method OnEventName.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0090", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0090", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

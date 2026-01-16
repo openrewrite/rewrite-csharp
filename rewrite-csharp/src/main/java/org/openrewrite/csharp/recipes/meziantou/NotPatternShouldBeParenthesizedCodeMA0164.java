@@ -51,8 +51,6 @@ public class NotPatternShouldBeParenthesizedCodeMA0164 extends RoslynRecipe {
     @Getter
     final String description = "";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "MA0164", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "MA0164", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

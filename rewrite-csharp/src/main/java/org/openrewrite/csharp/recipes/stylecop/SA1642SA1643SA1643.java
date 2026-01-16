@@ -51,8 +51,6 @@ public class SA1642SA1643SA1643 extends RoslynRecipe {
     @Getter
     final String description = "The XML documentation header for a C# finalizer does not contain the appropriate summary text.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1643", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1643", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

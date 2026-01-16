@@ -51,8 +51,6 @@ public class SA1101SA1101 extends RoslynRecipe {
     @Getter
     final String description = "A call to an instance member of the local class or a base class is not prefixed with 'this.', within a C# code file.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1101", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1101", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

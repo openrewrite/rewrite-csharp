@@ -51,8 +51,6 @@ public class SA1139SA1139 extends RoslynRecipe {
     @Getter
     final String description = "Use literal suffix notation instead of casting, in order to improve readability, avoid bugs related to illegal casts and ensure that optimal IL is produced.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1139", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1139", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

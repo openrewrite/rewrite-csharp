@@ -51,8 +51,6 @@ public class SA1407SA1408SA1408 extends RoslynRecipe {
     @Getter
     final String description = "A C# statement contains a complex conditional expression which omits parenthesis around operators.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1408", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1408", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

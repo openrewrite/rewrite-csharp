@@ -51,8 +51,6 @@ public class RenameToUpperCaseSA1300 extends RoslynRecipe {
     @Getter
     final String description = "The name of a C# element does not begin with an upper-case letter.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1300", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1300", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class SA1128SA1128 extends RoslynRecipe {
     @Getter
     final String description = "A constructor initializer, including the colon character, should be on its own line.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1128", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1128", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

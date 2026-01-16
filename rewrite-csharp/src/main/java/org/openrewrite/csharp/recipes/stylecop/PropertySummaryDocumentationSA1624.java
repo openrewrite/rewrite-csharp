@@ -51,8 +51,6 @@ public class PropertySummaryDocumentationSA1624 extends RoslynRecipe {
     @Getter
     final String description = "The documentation text within a C# property’s <summary> tag takes into account all of the accessors within the property, but one of the accessors has limited access.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1624", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1624", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

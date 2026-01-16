@@ -51,8 +51,6 @@ public class UseStringComparisonRCS1155 extends RoslynRecipe {
     @Getter
     final String description = "";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "RCS1155", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "RCS1155", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

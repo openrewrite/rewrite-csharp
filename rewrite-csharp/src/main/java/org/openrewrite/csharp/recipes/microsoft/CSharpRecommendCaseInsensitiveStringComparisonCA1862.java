@@ -51,8 +51,6 @@ public class CSharpRecommendCaseInsensitiveStringComparisonCA1862 extends Roslyn
     @Getter
     final String description = "Avoid calling 'ToLower', 'ToUpper', 'ToLowerInvariant' and 'ToUpperInvariant' to perform case-insensitive string comparisons because they lead to an allocation. Instead, prefer calling the method overloads of 'Contains', 'IndexOf' and 'StartsWith' that take a 'StringComparison' enum value to perform case-insensitive comparisons. Switching to using an overload that takes a 'StringComparison' might cause subtle changes in behavior, so it's important to conduct thorough testing after applying the suggestion. Additionally, if a culturally sensitive comparison is not required, consider using 'StringComparison.OrdinalIgnoreCase'.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1862", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1862", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

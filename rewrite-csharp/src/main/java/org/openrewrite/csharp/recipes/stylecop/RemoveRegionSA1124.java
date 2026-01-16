@@ -51,8 +51,6 @@ public class RemoveRegionSA1124 extends RoslynRecipe {
     @Getter
     final String description = "The C# code contains a region.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1124", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1124", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

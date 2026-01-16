@@ -51,8 +51,6 @@ public class SA1104SA1105SA1105 extends RoslynRecipe {
     @Getter
     final String description = "A clause within a C# query expression spans across multiple lines, and does not begin on its own line.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1105", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1105", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

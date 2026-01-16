@@ -51,8 +51,6 @@ public class CastFixWPF0021 extends RoslynRecipe {
     @Getter
     final String description = "Cast sender to correct type.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0021", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0021", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

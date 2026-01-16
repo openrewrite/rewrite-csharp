@@ -51,8 +51,6 @@ public class CSharpOverrideEqualsAndOperatorEqualsOnValueTypesCA1815 extends Ros
     @Getter
     final String description = "For value types, the inherited implementation of Equals uses the Reflection library and compares the contents of all fields. Reflection is computationally expensive, and comparing every field for equality might be unnecessary. If you expect users to compare or sort instances, or to use instances as hash table keys, your value type should implement Equals.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1815", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1815", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

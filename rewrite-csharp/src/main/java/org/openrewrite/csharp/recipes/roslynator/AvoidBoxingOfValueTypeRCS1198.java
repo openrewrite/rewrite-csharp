@@ -51,8 +51,6 @@ public class AvoidBoxingOfValueTypeRCS1198 extends RoslynRecipe {
     @Getter
     final String description = "";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "RCS1198", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "RCS1198", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

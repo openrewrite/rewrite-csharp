@@ -51,8 +51,6 @@ public class SettingsFileSA1637 extends RoslynRecipe {
     @Getter
     final String description = "The file header at the top of a C# code file is missing the file name.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1637", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1637", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

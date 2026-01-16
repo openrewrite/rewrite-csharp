@@ -51,8 +51,6 @@ public class TokenSpacingSA1111 extends RoslynRecipe {
     @Getter
     final String description = "The closing parenthesis or bracket in a call to or declaration of a C# method/indexer/attribute/array/constructor/delegate is not placed on the same line as the last parameter.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1111", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1111", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

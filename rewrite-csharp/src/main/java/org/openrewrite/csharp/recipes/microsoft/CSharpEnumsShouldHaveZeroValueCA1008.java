@@ -51,8 +51,6 @@ public class CSharpEnumsShouldHaveZeroValueCA1008 extends RoslynRecipe {
     @Getter
     final String description = "The default value of an uninitialized enumeration, just as other value types, is zero. A nonflags-attributed enumeration should define a member by using the value of zero so that the default value is a valid value of the enumeration. If an enumeration that has the FlagsAttribute attribute applied defines a zero-valued member, its name should be \"\"None\"\" to indicate that no values have been set in the enumeration.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1008", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1008", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

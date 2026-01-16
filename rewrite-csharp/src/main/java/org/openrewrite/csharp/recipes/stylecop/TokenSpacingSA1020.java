@@ -51,8 +51,6 @@ public class TokenSpacingSA1020 extends RoslynRecipe {
     @Getter
     final String description = "An increment or decrement symbol within a C# element is not spaced correctly.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1020", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1020", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

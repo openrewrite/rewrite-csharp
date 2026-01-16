@@ -51,8 +51,6 @@ public class SA1004SA1004 extends RoslynRecipe {
     @Getter
     final String description = "A line within a documentation header above a C# element does not begin with a single space.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1004", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1004", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

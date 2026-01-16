@@ -51,8 +51,6 @@ public class CSharpMarkMembersAsStaticCA1822 extends RoslynRecipe {
     @Getter
     final String description = "Members that do not access instance data or call instance methods can be marked as static. After you mark the methods as static, the compiler will emit nonvirtual call sites to these members. This can give you a measurable performance gain for performance-sensitive code.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1822", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1822", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

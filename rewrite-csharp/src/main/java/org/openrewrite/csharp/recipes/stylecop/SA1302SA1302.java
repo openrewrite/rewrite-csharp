@@ -51,8 +51,6 @@ public class SA1302SA1302 extends RoslynRecipe {
     @Getter
     final String description = "The name of a C# interface does not begin with the capital letter I.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1302", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1302", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class UsingSA1208 extends RoslynRecipe {
     @Getter
     final String description = "A using directive which declares a member of the 'System' namespace appears after a using directive which declares a member of a different namespace, within a C# code file.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1208", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1208", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

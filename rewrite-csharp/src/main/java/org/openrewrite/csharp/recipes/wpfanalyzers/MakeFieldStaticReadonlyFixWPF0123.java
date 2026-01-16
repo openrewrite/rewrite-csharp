@@ -51,8 +51,6 @@ public class MakeFieldStaticReadonlyFixWPF0123 extends RoslynRecipe {
     @Getter
     final String description = "Backing field for a RoutedCommand should be static and readonly.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0123", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0123", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

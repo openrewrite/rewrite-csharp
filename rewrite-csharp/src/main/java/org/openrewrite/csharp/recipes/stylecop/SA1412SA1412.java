@@ -51,8 +51,6 @@ public class SA1412SA1412 extends RoslynRecipe {
     @Getter
     final String description = "Source files should be saved using the UTF-8 encoding with a byte order mark";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1412", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1412", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class SA1119SA1119_p extends RoslynRecipe {
     @Getter
     final String description = "A C# statement contains parenthesis which are unnecessary and should be removed.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1119_p", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1119_p", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

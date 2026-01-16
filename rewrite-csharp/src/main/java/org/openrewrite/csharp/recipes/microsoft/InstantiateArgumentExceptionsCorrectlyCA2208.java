@@ -51,8 +51,6 @@ public class InstantiateArgumentExceptionsCorrectlyCA2208 extends RoslynRecipe {
     @Getter
     final String description = "A call is made to the default (parameterless) constructor of an exception type that is or derives from ArgumentException, or an incorrect string argument is passed to a parameterized constructor of an exception type that is or derives from ArgumentException.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2208", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2208", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

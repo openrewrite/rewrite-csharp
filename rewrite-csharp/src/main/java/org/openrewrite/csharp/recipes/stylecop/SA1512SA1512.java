@@ -51,8 +51,6 @@ public class SA1512SA1512 extends RoslynRecipe {
     @Getter
     final String description = "A single-line comment within C# code is followed by a blank line.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1512", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1512", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

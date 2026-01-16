@@ -51,8 +51,6 @@ public class SX1101SX1101 extends RoslynRecipe {
     @Getter
     final String description = "A call to an instance member of the local class or a base class is prefixed with `this.`.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SX1101", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SX1101", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

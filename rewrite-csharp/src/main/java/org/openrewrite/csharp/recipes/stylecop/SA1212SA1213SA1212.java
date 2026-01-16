@@ -51,8 +51,6 @@ public class SA1212SA1213SA1212 extends RoslynRecipe {
     @Getter
     final String description = "A get accessor appears after a set accessor within a property or indexer.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1212", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1212", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

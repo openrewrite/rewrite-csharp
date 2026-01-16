@@ -51,8 +51,6 @@ public class CSharpMakeTypesInternalCA1515 extends RoslynRecipe {
     @Getter
     final String description = "Unlike a class library, an application's API isn't typically referenced publicly, so types can be marked internal.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1515", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1515", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

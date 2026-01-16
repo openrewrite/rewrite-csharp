@@ -51,8 +51,6 @@ public class SA1100SA1100 extends RoslynRecipe {
     @Getter
     final String description = "A call to a member from an inherited class begins with 'base.', and the local class does not contain an override or implementation of the member.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1100", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1100", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

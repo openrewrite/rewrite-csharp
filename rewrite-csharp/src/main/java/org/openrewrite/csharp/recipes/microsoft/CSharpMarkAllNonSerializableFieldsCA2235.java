@@ -51,8 +51,6 @@ public class CSharpMarkAllNonSerializableFieldsCA2235 extends RoslynRecipe {
     @Getter
     final String description = "An instance field of a type that is not serializable is declared in a type that is serializable.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2235", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2235", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

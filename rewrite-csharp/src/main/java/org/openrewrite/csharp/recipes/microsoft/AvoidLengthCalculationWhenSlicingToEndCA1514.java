@@ -51,8 +51,6 @@ public class AvoidLengthCalculationWhenSlicingToEndCA1514 extends RoslynRecipe {
     @Getter
     final String description = "An explicit length calculation can be error-prone and can be avoided when slicing to end of the buffer.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1514", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1514", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class CSharpDoNotPassNonNullableValueToArgumentNullExceptionThrowIfNullCA
     @Getter
     final String description = "'ArgumentNullException.ThrowIfNull' accepts an 'object', so passing a nullable struct may cause the value to be boxed.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1871", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1871", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

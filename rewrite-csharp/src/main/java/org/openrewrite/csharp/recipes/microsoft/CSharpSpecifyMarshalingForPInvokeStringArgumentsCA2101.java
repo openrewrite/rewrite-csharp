@@ -51,8 +51,6 @@ public class CSharpSpecifyMarshalingForPInvokeStringArgumentsCA2101 extends Rosl
     @Getter
     final String description = "A platform invoke member allows partially trusted callers, has a string parameter, and does not explicitly marshal the string. This can cause a potential security vulnerability.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2101", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2101", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class CSharpForwardCancellationTokenToInvocationsCA2016 extends RoslynRec
     @Getter
     final String description = "Forward the 'CancellationToken' parameter to methods to ensure the operation cancellation notifications gets properly propagated, or pass in 'CancellationToken.None' explicitly to indicate intentionally not propagating the token.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2016", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2016", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

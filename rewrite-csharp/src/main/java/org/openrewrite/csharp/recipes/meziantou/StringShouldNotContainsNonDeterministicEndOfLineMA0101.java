@@ -51,8 +51,6 @@ public class StringShouldNotContainsNonDeterministicEndOfLineMA0101 extends Rosl
     @Getter
     final String description = "";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "MA0101", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "MA0101", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

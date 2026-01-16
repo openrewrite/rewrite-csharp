@@ -51,8 +51,6 @@ public class AddAttributeListFixWPF0176 extends RoslynRecipe {
     @Getter
     final String description = "StyleTypedProperty is missing.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0176", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0176", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

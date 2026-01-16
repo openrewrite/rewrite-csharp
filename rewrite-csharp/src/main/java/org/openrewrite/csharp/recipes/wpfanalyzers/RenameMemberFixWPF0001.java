@@ -51,8 +51,6 @@ public class RenameMemberFixWPF0001 extends RoslynRecipe {
     @Getter
     final String description = "A dependency property's backing field should be named with the name it is registered with suffixed by 'Property'.  This is the convention in the framework.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0001", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0001", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

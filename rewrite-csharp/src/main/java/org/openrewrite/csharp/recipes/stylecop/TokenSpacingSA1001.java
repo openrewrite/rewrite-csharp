@@ -51,8 +51,6 @@ public class TokenSpacingSA1001 extends RoslynRecipe {
     @Getter
     final String description = "The spacing around a comma is incorrect, within a C# code file.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1001", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1001", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

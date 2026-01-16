@@ -51,8 +51,6 @@ public class SA1651SA1651 extends RoslynRecipe {
     @Getter
     final String description = "The element documentation contains a <placeholder> element.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1651", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1651", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class UsingSA1200 extends RoslynRecipe {
     @Getter
     final String description = "A C# using directive is placed outside of a namespace element.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1200", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1200", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class UseSetValueFixWPF0043 extends RoslynRecipe {
     @Getter
     final String description = "Set DataContext and Style using SetValue.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0043", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0043", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

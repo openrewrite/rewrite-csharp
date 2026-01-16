@@ -51,8 +51,6 @@ public class SettingsFileSA1639 extends RoslynRecipe {
     @Getter
     final String description = "The file header at the top of a C# code file does not contain a filled-in summary tag.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1639", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1639", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

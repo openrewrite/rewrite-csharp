@@ -51,8 +51,6 @@ public class SA1516SA1516 extends RoslynRecipe {
     @Getter
     final String description = "Adjacent C# elements are not separated by a blank line.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1516", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1516", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

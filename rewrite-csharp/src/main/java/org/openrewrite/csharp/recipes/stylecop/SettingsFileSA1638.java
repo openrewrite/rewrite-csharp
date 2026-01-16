@@ -51,8 +51,6 @@ public class SettingsFileSA1638 extends RoslynRecipe {
     @Getter
     final String description = "The file attribute within copyright tag of the file header at the top of a C# code file does not contain the name of the file.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1638", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1638", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

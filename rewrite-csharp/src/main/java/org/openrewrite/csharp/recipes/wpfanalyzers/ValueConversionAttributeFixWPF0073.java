@@ -51,8 +51,6 @@ public class ValueConversionAttributeFixWPF0073 extends RoslynRecipe {
     @Getter
     final String description = "Add ValueConversion attribute (unknown types).";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0073", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0073", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

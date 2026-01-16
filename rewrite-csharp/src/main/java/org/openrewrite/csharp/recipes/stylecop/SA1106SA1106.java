@@ -51,8 +51,6 @@ public class SA1106SA1106 extends RoslynRecipe {
     @Getter
     final String description = "The C# code contains an extra semicolon.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1106", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1106", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

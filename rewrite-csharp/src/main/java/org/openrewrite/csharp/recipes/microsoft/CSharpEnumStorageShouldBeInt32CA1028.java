@@ -51,8 +51,6 @@ public class CSharpEnumStorageShouldBeInt32CA1028 extends RoslynRecipe {
     @Getter
     final String description = "An enumeration is a value type that defines a set of related named constants. By default, the System.Int32 data type is used to store the constant value. Although you can change this underlying type, it is not required or recommended for most scenarios.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1028", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1028", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

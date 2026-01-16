@@ -51,8 +51,6 @@ public class SA1131SA1131 extends RoslynRecipe {
     @Getter
     final String description = "When a comparison is made between a variable and a literal, the variable should be placed on the left-hand-side to maximize readability.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1131", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1131", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class UseNameofFixWPF0120 extends RoslynRecipe {
     @Getter
     final String description = "Register containing member name as name for routed command.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0120", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0120", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

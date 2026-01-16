@@ -51,8 +51,6 @@ public class SA1410SA1411SA1410 extends RoslynRecipe {
     @Getter
     final String description = "A call to a C# anonymous method does not contain any method parameters, yet the statement still includes parenthesis.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1410", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1410", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

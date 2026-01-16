@@ -51,8 +51,6 @@ public class PreferTypedStringBuilderAppendOverloadsCA1830 extends RoslynRecipe 
     @Getter
     final String description = "StringBuilder.Append and StringBuilder.Insert provide overloads for multiple types beyond System.String.  When possible, prefer the strongly-typed overloads over using ToString() and the string-based overload.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1830", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1830", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

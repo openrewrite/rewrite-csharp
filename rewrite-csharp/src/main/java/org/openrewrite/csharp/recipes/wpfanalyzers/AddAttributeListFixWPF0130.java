@@ -51,8 +51,6 @@ public class AddAttributeListFixWPF0130 extends RoslynRecipe {
     @Getter
     final String description = "Add [TemplatePart] to the type.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0130", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0130", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

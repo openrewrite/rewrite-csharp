@@ -51,8 +51,6 @@ public class UseEnvironmentMembersCA1837 extends RoslynRecipe {
     @Getter
     final String description = "'Environment.ProcessId' is simpler and faster than 'Process.GetCurrentProcess().Id'.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1837", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1837", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

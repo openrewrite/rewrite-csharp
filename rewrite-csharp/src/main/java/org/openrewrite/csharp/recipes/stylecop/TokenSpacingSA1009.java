@@ -51,8 +51,6 @@ public class TokenSpacingSA1009 extends RoslynRecipe {
     @Getter
     final String description = "A closing parenthesis within a C# statement is not spaced correctly.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1009", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1009", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class CSharpPreferDictionaryTryMethodsOverContainsKeyGuardCA1854 extends 
     @Getter
     final String description = "Prefer a 'TryGetValue' call over a Dictionary indexer access guarded by a 'ContainsKey' check. 'ContainsKey' and the indexer both would lookup the key under the hood, so using 'TryGetValue' removes the extra lookup.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1854", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1854", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class RenameMemberFixWPF0007 extends RoslynRecipe {
     @Getter
     final String description = "Name of ValidateValueCallback should match registered name.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0007", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0007", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

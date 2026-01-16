@@ -51,8 +51,6 @@ public class CSharpUsePropertyInsteadOfCountMethodWhenAvailableCA1829 extends Ro
     @Getter
     final String description = "Enumerable.Count() potentially enumerates the sequence while a Length/Count property is a direct access.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1829", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1829", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

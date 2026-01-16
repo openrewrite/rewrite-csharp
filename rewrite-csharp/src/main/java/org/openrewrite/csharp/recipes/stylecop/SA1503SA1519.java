@@ -51,8 +51,6 @@ public class SA1503SA1519 extends RoslynRecipe {
     @Getter
     final String description = "The opening and closing braces for a multi-line C# statement have been omitted.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1519", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1519", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

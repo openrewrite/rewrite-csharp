@@ -51,8 +51,6 @@ public class SA1136SA1136 extends RoslynRecipe {
     @Getter
     final String description = "Enum values should be placed on their own lines for maximum readability.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1136", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1136", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

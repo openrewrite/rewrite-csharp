@@ -51,8 +51,6 @@ public class CSharpPreferIsEmptyOverCountCA1836 extends RoslynRecipe {
     @Getter
     final String description = "For determining whether the object contains or not any items, prefer using 'IsEmpty' property rather than retrieving the number of items from the 'Count' property and comparing it to 0 or 1.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1836", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1836", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

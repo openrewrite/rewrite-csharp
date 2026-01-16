@@ -51,8 +51,6 @@ public class RegisterRoutedCommandFixWPF0122 extends RoslynRecipe {
     @Getter
     final String description = "Register containing type as owner for routed command.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0122", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0122", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

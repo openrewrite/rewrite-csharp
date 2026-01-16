@@ -51,8 +51,6 @@ public class CSharpDisableRuntimeMarshallingCA1421 extends RoslynRecipe {
     @Getter
     final String description = "This method uses runtime marshalling even when runtime marshalling is disabled, which can cause unexpected behavior differences at runtime due to different expectations of a type's native layout.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1421", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1421", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

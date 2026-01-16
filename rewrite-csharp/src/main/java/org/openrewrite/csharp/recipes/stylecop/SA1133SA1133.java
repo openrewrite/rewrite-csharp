@@ -51,8 +51,6 @@ public class SA1133SA1133 extends RoslynRecipe {
     @Getter
     final String description = "Each attribute usage should be placed in its own set of square brackets for maximum readability.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1133", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1133", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

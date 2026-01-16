@@ -51,8 +51,6 @@ public class XmlnsDefinitionFixWPF0052 extends RoslynRecipe {
     @Getter
     final String description = "XmlnsDefinitions does not map all namespaces with public types.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0052", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0052", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

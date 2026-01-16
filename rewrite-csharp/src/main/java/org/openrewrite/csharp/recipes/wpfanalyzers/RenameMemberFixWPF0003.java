@@ -51,8 +51,6 @@ public class RenameMemberFixWPF0003 extends RoslynRecipe {
     @Getter
     final String description = "A CLR property accessor for a DependencyProperty must have the same name as the DependencyProperty is registered with.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0003", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0003", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

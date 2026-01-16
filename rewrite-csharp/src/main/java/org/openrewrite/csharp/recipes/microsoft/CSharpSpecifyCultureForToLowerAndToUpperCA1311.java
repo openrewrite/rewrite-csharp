@@ -51,8 +51,6 @@ public class CSharpSpecifyCultureForToLowerAndToUpperCA1311 extends RoslynRecipe
     @Getter
     final String description = "Specify culture to help avoid accidental implicit dependency on current culture. Using an invariant version yields consistent results regardless of the culture of an application.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1311", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1311", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class UseContainingTypeFixWPF0101 extends RoslynRecipe {
     @Getter
     final String description = "When registering a RoutedEvent register containing type as owner type.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0101", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0101", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

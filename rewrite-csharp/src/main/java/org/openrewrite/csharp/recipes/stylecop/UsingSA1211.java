@@ -51,8 +51,6 @@ public class UsingSA1211 extends RoslynRecipe {
     @Getter
     final String description = "The using-alias directives within a C# code file are not sorted alphabetically by alias name.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1211", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1211", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

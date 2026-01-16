@@ -51,8 +51,6 @@ public class SA1506SA1506 extends RoslynRecipe {
     @Getter
     final String description = "An element documentation header above a C# element is followed by a blank line.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1506", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1506", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

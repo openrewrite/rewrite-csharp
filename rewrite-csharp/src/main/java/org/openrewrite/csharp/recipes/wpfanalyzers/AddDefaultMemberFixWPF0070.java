@@ -51,8 +51,6 @@ public class AddDefaultMemberFixWPF0070 extends RoslynRecipe {
     @Getter
     final String description = "Add default field to converter.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0070", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0070", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

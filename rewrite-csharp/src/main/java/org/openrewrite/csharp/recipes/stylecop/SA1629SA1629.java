@@ -51,8 +51,6 @@ public class SA1629SA1629 extends RoslynRecipe {
     @Getter
     final String description = "A section of the XML header documentation for a C# element does not end with a period.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1629", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1629", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class RenameToLowerCaseSA1313 extends RoslynRecipe {
     @Getter
     final String description = "The name of a parameter in C# does not begin with a lower-case letter.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1313", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1313", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

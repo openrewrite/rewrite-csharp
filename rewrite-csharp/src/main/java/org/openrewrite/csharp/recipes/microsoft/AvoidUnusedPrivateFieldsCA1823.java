@@ -51,8 +51,6 @@ public class AvoidUnusedPrivateFieldsCA1823 extends RoslynRecipe {
     @Getter
     final String description = "Private fields were detected that do not appear to be accessed in the assembly.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1823", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1823", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

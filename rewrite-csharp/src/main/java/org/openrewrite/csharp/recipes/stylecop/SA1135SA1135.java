@@ -51,8 +51,6 @@ public class SA1135SA1135 extends RoslynRecipe {
     @Getter
     final String description = "All using directives should be qualified.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1135", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1135", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

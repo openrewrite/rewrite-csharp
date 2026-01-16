@@ -51,8 +51,6 @@ public class DocumentationFixWPF0061 extends RoslynRecipe {
     @Getter
     final String description = "Accessor method for attached property should have standard documentation text.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0061", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0061", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

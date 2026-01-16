@@ -51,8 +51,6 @@ public class CSharpPreferGenericOverloadsCA2263 extends RoslynRecipe {
     @Getter
     final String description = "Using a generic overload is preferable to the 'System.Type' overload when the type is known, promoting cleaner and more type-safe code with improved compile-time checks.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2263", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2263", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class ProvidePublicParameterlessSafeHandleConstructorCA1419 extends Rosly
     @Getter
     final String description = "Providing a parameterless constructor that is as visible as the containing type for a type derived from 'System.Runtime.InteropServices.SafeHandle' enables better performance and usage with source-generated interop solutions.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1419", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1419", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class CSharpUseSpanClearInsteadOfFillCA1855 extends RoslynRecipe {
     @Getter
     final String description = "It is more efficient to use 'Clear', instead of 'Fill' with default value.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1855", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1855", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

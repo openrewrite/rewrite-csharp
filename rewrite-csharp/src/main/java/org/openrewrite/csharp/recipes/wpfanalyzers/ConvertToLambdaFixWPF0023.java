@@ -51,8 +51,6 @@ public class ConvertToLambdaFixWPF0023 extends RoslynRecipe {
     @Getter
     final String description = "The callback is trivial, convert to lambda for better locality.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0023", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0023", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

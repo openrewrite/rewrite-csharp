@@ -51,8 +51,6 @@ public class ImplementStandardExceptionConstructorsCA1032 extends RoslynRecipe {
     @Getter
     final String description = "Failure to provide the full set of constructors can make it difficult to correctly handle exceptions.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1032", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1032", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

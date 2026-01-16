@@ -51,8 +51,6 @@ public class CSharpPreferAsSpanOverSubstringCA1846 extends RoslynRecipe {
     @Getter
     final String description = "'AsSpan' is more efficient than 'Substring'. 'Substring' performs an O(n) string copy, while 'AsSpan' does not and has a constant cost.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1846", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1846", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

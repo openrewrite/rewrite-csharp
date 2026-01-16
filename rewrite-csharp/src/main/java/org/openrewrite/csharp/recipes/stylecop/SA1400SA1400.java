@@ -51,8 +51,6 @@ public class SA1400SA1400 extends RoslynRecipe {
     @Getter
     final String description = "The access modifier for a C# element has not been explicitly defined.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1400", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1400", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

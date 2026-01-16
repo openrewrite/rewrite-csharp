@@ -51,8 +51,6 @@ public class AttachedPropertyBrowsableForTypeAttributeFixWPF0071 extends RoslynR
     @Getter
     final String description = "Add ValueConversion attribute.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0071", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0071", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

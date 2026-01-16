@@ -51,8 +51,6 @@ public class CSharpUseLiteralsWhereAppropriateCA1802 extends RoslynRecipe {
     @Getter
     final String description = "A field is declared static and read-only (Shared and ReadOnly in Visual Basic), and is initialized by using a value that is computable at compile time. Because the value that is assigned to the targeted field is computable at compile time, change the declaration to a const (Const in Visual Basic) field so that the value is computed at compile time instead of at runtime.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1802", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1802", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

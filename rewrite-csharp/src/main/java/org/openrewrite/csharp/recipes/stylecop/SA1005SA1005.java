@@ -51,8 +51,6 @@ public class SA1005SA1005 extends RoslynRecipe {
     @Getter
     final String description = "A single-line comment within a C# code file does not begin with a single space.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1005", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1005", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

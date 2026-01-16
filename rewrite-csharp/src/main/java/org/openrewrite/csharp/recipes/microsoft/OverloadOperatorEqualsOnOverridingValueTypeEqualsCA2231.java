@@ -51,8 +51,6 @@ public class OverloadOperatorEqualsOnOverridingValueTypeEqualsCA2231 extends Ros
     @Getter
     final String description = "In most programming languages there is no default implementation of the equality operator (==) for value types. If your programming language supports operator overloads, you should consider implementing the equality operator. Its behavior should be identical to that of Equals.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2231", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2231", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

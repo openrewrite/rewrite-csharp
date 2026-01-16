@@ -51,8 +51,6 @@ public class InterfaceMethodsShouldBeCallableByChildTypesCA1033 extends RoslynRe
     @Getter
     final String description = "An unsealed externally visible type provides an explicit method implementation of a public interface and does not provide an alternative externally visible method that has the same name.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1033", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1033", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

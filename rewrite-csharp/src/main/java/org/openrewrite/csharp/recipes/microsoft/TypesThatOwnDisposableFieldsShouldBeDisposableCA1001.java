@@ -51,8 +51,6 @@ public class TypesThatOwnDisposableFieldsShouldBeDisposableCA1001 extends Roslyn
     @Getter
     final String description = "A class declares and implements an instance field that is a System.IDisposable type, and the class does not implement IDisposable. A class that declares an IDisposable field indirectly owns an unmanaged resource and should implement the IDisposable interface.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1001", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1001", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

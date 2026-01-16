@@ -51,8 +51,6 @@ public class CSharpDoNotPassNonNullableValueToArgumentNullExceptionThrowIfNullCA
     @Getter
     final String description = "'ArgumentNullException.ThrowIfNull' throws when the passed argument is 'null'. Certain constructs like non-nullable structs, 'nameof()' and 'new' expressions are known to never be null, so 'ArgumentNullException.ThrowIfNull' will never throw.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2264", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2264", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

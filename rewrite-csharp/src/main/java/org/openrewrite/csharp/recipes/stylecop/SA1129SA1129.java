@@ -51,8 +51,6 @@ public class SA1129SA1129 extends RoslynRecipe {
     @Getter
     final String description = "When creating a new instance of a value type T, the syntax 'default(T)' is functionally equivalent to the syntax 'new T()'. To avoid confusion regarding the behavior of the resulting instance, the first form is preferred.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1129", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1129", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

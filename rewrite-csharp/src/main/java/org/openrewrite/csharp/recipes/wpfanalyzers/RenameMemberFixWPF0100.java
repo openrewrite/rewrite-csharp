@@ -51,8 +51,6 @@ public class RenameMemberFixWPF0100 extends RoslynRecipe {
     @Getter
     final String description = "A routed event's backing field should be named with the name it is registered with suffixed by 'Event'.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0100", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0100", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

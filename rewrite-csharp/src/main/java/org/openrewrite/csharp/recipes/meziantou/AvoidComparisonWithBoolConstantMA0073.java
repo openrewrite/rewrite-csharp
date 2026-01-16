@@ -51,8 +51,6 @@ public class AvoidComparisonWithBoolConstantMA0073 extends RoslynRecipe {
     @Getter
     final String description = "";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "MA0073", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "MA0073", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

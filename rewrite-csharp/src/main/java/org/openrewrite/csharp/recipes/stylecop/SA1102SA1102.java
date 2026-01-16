@@ -51,8 +51,6 @@ public class SA1102SA1102 extends RoslynRecipe {
     @Getter
     final String description = "A C# query clause does not begin on the same line as the previous clause, or on the next line.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1102", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1102", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

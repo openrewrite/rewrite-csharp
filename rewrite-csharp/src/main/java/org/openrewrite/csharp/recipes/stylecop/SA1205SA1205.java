@@ -51,8 +51,6 @@ public class SA1205SA1205 extends RoslynRecipe {
     @Getter
     final String description = "The partial element does not have an access modifier defined.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1205", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1205", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

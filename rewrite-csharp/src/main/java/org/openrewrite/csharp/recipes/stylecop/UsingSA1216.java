@@ -51,8 +51,6 @@ public class UsingSA1216 extends RoslynRecipe {
     @Getter
     final String description = "A using static directive is positioned before a regular or after an alias using directive.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1216", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1216", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class SA1513SA1513 extends RoslynRecipe {
     @Getter
     final String description = "A closing brace within a C# element, statement, or expression is not followed by a blank line.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1513", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1513", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

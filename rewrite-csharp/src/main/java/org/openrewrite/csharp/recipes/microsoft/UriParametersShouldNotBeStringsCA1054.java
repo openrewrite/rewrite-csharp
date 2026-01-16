@@ -51,8 +51,6 @@ public class UriParametersShouldNotBeStringsCA1054 extends RoslynRecipe {
     @Getter
     final String description = "This rule assumes that the parameter represents a Uniform Resource Identifier (URI). A string representation or a URI is prone to parsing and encoding errors, and can lead to security vulnerabilities. 'System.Uri' class provides these services in a safe and secure manner.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1054", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1054", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

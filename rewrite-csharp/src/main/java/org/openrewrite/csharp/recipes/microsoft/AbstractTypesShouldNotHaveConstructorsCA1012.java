@@ -51,8 +51,6 @@ public class AbstractTypesShouldNotHaveConstructorsCA1012 extends RoslynRecipe {
     @Getter
     final String description = "Constructors on abstract types can be called only by derived types. Because public constructors create instances of a type, and you cannot create instances of an abstract type, an abstract type that has a public constructor is incorrectly designed.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1012", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1012", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

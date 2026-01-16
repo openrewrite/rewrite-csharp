@@ -51,8 +51,6 @@ public class SA1504SA1504 extends RoslynRecipe {
     @Getter
     final String description = "Within a C# property, indexer or event, at least one of the child accessors is written on a single line, and at least one of the child accessors is written across multiple lines.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1504", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1504", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

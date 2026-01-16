@@ -51,8 +51,6 @@ public class CSharpDoNotUseEnumerableMethodsOnIndexableCollectionsInsteadUseTheC
     @Getter
     final String description = "This collection is directly indexable. Going through LINQ here causes unnecessary allocations and CPU work.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1826", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1826", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

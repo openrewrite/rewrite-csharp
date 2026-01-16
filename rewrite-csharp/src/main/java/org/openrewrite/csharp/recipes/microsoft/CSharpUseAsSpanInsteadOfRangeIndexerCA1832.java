@@ -51,8 +51,6 @@ public class CSharpUseAsSpanInsteadOfRangeIndexerCA1832 extends RoslynRecipe {
     @Getter
     final String description = "The Range-based indexer on array values produces a copy of requested portion of the array. This copy is usually unnecessary when it is implicitly used as a ReadOnlySpan or ReadOnlyMemory value. Use the AsSpan method to avoid the unnecessary copy.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1832", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1832", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

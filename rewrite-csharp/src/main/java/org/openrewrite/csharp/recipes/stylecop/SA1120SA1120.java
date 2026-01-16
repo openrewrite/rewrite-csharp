@@ -51,8 +51,6 @@ public class SA1120SA1120 extends RoslynRecipe {
     @Getter
     final String description = "The C# comment does not contain any comment text.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1120", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1120", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

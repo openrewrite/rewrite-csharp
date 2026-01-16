@@ -51,8 +51,6 @@ public class CSharpUseStringMethodCharOverloadWithSingleCharactersCA1865 extends
     @Getter
     final String description = "The char overload is a better performing overload than a string with a single char.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1865", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1865", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

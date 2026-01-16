@@ -51,8 +51,6 @@ public class RenameMemberFixWPF0005 extends RoslynRecipe {
     @Getter
     final String description = "Name of PropertyChangedCallback should match registered name.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0005", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0005", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

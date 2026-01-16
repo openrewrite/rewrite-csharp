@@ -51,8 +51,6 @@ public class SA1134SA1134 extends RoslynRecipe {
     @Getter
     final String description = "Each attribute should be placed on its own line of code.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1134", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1134", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

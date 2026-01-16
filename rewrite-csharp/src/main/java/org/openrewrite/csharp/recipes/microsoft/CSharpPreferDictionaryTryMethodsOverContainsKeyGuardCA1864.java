@@ -51,8 +51,6 @@ public class CSharpPreferDictionaryTryMethodsOverContainsKeyGuardCA1864 extends 
     @Getter
     final String description = "Prefer a 'TryAdd' call over an 'Add' call guarded by a 'ContainsKey' check. 'TryAdd' behaves the same as 'Add', except that when the specified key already exists, it returns 'false' instead of throwing an exception.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1864", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1864", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

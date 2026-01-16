@@ -51,8 +51,6 @@ public class TokenSpacingSA1110 extends RoslynRecipe {
     @Getter
     final String description = "The opening parenthesis or bracket is not placed on the same line as the method/indexer/attribute/array name.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1110", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1110", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

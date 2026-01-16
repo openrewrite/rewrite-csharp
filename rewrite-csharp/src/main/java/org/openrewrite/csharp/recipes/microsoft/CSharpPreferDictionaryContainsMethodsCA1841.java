@@ -51,8 +51,6 @@ public class CSharpPreferDictionaryContainsMethodsCA1841 extends RoslynRecipe {
     @Getter
     final String description = "'ContainsKey' is usually O(1), while 'Keys.Contains' may be O(n) in some cases. Additionally, many dictionary implementations lazily initialize the Keys collection to cut back on allocations.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1841", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1841", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

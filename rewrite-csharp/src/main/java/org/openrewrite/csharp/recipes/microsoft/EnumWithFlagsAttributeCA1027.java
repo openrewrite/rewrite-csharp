@@ -51,8 +51,6 @@ public class EnumWithFlagsAttributeCA1027 extends RoslynRecipe {
     @Getter
     final String description = "An enumeration is a value type that defines a set of related named constants. Apply FlagsAttribute to an enumeration when its named constants can be meaningfully combined.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1027", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1027", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

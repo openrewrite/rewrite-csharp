@@ -51,8 +51,6 @@ public class AttachedPropertyBrowsableForTypeAttributeFixWPF0033 extends RoslynR
     @Getter
     final String description = "Add [AttachedPropertyBrowsableForType].";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0033", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0033", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class UseRegisteredTypeFixWPF0013 extends RoslynRecipe {
     @Getter
     final String description = "CLR accessor for attached property must match registered type.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0013", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0013", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

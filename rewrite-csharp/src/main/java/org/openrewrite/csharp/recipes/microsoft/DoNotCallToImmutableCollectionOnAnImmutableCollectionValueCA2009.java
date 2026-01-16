@@ -51,8 +51,6 @@ public class DoNotCallToImmutableCollectionOnAnImmutableCollectionValueCA2009 ex
     @Getter
     final String description = "";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2009", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2009", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

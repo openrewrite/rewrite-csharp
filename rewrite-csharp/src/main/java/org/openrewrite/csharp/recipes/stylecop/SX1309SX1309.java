@@ -51,8 +51,6 @@ public class SX1309SX1309 extends RoslynRecipe {
     @Getter
     final String description = "A field name in C# does not begin with an underscore.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SX1309", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SX1309", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class SA1609SA1610SA1609 extends RoslynRecipe {
     @Getter
     final String description = "The XML header documentation for a C# property does not contain a <value> tag.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1609", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1609", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

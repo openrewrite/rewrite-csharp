@@ -51,8 +51,6 @@ public class CSharpDoNotGuardCallCA1853 extends RoslynRecipe {
     @Getter
     final String description = "Do not guard 'Dictionary.Remove(key)' with 'Dictionary.ContainsKey(key)'. The former already checks whether the key exists, and will not throw if it does not.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1853", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1853", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class AvoidUnreliableStreamReadCA2022 extends RoslynRecipe {
     @Getter
     final String description = "A call to 'Stream.Read' may return fewer bytes than requested, resulting in unreliable code if the return value is not checked.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2022", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2022", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

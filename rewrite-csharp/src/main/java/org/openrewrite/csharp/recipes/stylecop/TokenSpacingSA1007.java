@@ -51,8 +51,6 @@ public class TokenSpacingSA1007 extends RoslynRecipe {
     @Getter
     final String description = "The operator keyword within a C# operator overload method is not followed by any whitespace.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1007", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1007", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

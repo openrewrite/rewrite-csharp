@@ -51,8 +51,6 @@ public class OverrideMethodsOnComparableTypesCA1036 extends RoslynRecipe {
     @Getter
     final String description = "A public or protected type implements the System.IComparable interface. It does not override Object.Equals nor does it overload the language-specific operator for equality, inequality, less than, less than or equal, greater than or greater than or equal.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1036", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1036", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

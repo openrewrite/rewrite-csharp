@@ -51,8 +51,6 @@ public class DocumentationFixWPF0108 extends RoslynRecipe {
     @Getter
     final String description = "Backing member for RoutedEvent should have standard documentation text.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0108", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0108", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

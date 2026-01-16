@@ -51,8 +51,6 @@ public class ClassDeclarationRCS1194 extends RoslynRecipe {
     @Getter
     final String description = "";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "RCS1194", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "RCS1194", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

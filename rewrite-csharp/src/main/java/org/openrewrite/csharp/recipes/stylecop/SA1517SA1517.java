@@ -51,8 +51,6 @@ public class SA1517SA1517 extends RoslynRecipe {
     @Getter
     final String description = "The code file has blank lines at the start.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1517", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1517", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

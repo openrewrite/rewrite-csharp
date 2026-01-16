@@ -51,8 +51,6 @@ public class SA1130SA1130 extends RoslynRecipe {
     @Getter
     final String description = "Lambda expressions are more succinct and easier to read than anonymous methods, so they should are preferred whenever the two are functionally equivalent.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1130", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1130", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

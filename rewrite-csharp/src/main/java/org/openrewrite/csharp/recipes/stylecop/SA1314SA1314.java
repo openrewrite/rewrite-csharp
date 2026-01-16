@@ -51,8 +51,6 @@ public class SA1314SA1314 extends RoslynRecipe {
     @Getter
     final String description = "The name of a C# type parameter does not begin with the capital letter T.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1314", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1314", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

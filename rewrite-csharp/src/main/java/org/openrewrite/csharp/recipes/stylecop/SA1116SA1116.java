@@ -51,8 +51,6 @@ public class SA1116SA1116 extends RoslynRecipe {
     @Getter
     final String description = "The parameters to a C# method or indexer call or declaration span across multiple lines, but the first parameter does not start on the line after the opening bracket.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1116", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1116", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

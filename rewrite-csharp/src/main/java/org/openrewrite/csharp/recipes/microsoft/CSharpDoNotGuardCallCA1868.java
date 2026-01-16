@@ -51,8 +51,6 @@ public class CSharpDoNotGuardCallCA1868 extends RoslynRecipe {
     @Getter
     final String description = "Do not guard 'Add(item)' or 'Remove(item)' with 'Contains(item)' for the set. The former two already check whether the item exists and will return if it was added or removed.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1868", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1868", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

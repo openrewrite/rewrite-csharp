@@ -51,8 +51,6 @@ public class ChangeTypeofFixWPF0081 extends RoslynRecipe {
     @Getter
     final String description = "MarkupExtensionReturnType must use correct return type.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0081", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0081", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

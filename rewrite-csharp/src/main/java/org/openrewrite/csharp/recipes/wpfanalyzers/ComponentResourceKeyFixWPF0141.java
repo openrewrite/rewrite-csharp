@@ -51,8 +51,6 @@ public class ComponentResourceKeyFixWPF0141 extends RoslynRecipe {
     @Getter
     final String description = "Use containing member as key when creating a ComponentResourceKey.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0141", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0141", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

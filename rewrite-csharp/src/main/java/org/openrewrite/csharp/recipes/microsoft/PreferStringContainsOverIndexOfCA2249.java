@@ -51,8 +51,6 @@ public class PreferStringContainsOverIndexOfCA2249 extends RoslynRecipe {
     @Getter
     final String description = "Calls to 'string.IndexOf' where the result is used to check for the presence/absence of a substring can be replaced by 'string.Contains'.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2249", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2249", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

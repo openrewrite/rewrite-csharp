@@ -51,8 +51,6 @@ public class AvoidConstArraysCA1861 extends RoslynRecipe {
     @Getter
     final String description = "Constant arrays passed as arguments are not reused when called repeatedly, which implies a new array is created each time. Consider extracting them to 'static readonly' fields to improve performance if the passed array is not mutated within the called method.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1861", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1861", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

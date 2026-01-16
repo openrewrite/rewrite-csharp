@@ -51,8 +51,6 @@ public class SA1617SA1617 extends RoslynRecipe {
     @Getter
     final String description = "A C# code element does not contain a return value, or returns void, but the documentation header for the element contains a <returns> tag.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1617", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1617", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

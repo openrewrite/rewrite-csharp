@@ -51,8 +51,6 @@ public class AvoidUsingRedundantElseMA0071 extends RoslynRecipe {
     @Getter
     final String description = "The 'if' block contains a jump statement (break, continue, goto, return, throw, yield break). Using 'else' is redundant and needlessly maintains a higher nesting level.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "MA0071", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "MA0071", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

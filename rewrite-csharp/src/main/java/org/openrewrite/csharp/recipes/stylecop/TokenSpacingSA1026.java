@@ -51,8 +51,6 @@ public class TokenSpacingSA1026 extends RoslynRecipe {
     @Getter
     final String description = "An implicitly typed array allocation within a C# code file is not spaced correctly.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1026", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1026", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class SA1503SA1520 extends RoslynRecipe {
     @Getter
     final String description = "The opening and closing braces of a chained if/else if/else construct were included for some clauses, but omitted for others.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1520", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1520", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class MarkTypesWithSerializableCA2237 extends RoslynRecipe {
     @Getter
     final String description = "To be recognized by the common language runtime as serializable, types must be marked by using the SerializableAttribute attribute even when the type uses a custom serialization routine through implementation of the ISerializable interface.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2237", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2237", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

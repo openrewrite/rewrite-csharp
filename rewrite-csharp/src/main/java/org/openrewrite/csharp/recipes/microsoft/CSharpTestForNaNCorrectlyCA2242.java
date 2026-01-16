@@ -51,8 +51,6 @@ public class CSharpTestForNaNCorrectlyCA2242 extends RoslynRecipe {
     @Getter
     final String description = "This expression tests a value against Single.Nan or Double.Nan. Use Single.IsNan(Single) or Double.IsNan(Double) to test the value.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2242", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2242", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

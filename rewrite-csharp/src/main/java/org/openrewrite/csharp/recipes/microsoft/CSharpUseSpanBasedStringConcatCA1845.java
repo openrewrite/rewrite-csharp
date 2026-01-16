@@ -51,8 +51,6 @@ public class CSharpUseSpanBasedStringConcatCA1845 extends RoslynRecipe {
     @Getter
     final String description = "It is more efficient to use 'AsSpan' and 'string.Concat', instead of 'Substring' and a concatenation operator.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1845", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1845", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class SettingsFileSA1602 extends RoslynRecipe {
     @Getter
     final String description = "An item within a C# enumeration is missing an Xml documentation header.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1602", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1602", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

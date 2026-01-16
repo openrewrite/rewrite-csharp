@@ -51,8 +51,6 @@ public class CSharpAvoidDuplicateElementInitializationCA2244 extends RoslynRecip
     @Getter
     final String description = "Indexed elements in objects initializers must initialize unique elements. A duplicate index might overwrite a previous element initialization.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2244", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2244", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

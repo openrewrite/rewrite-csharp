@@ -51,8 +51,6 @@ public class CSharpUseStringContainsCharOverloadWithSingleCharactersCA1847 exten
     @Getter
     final String description = "'string.Contains(char)' is available as a better performing overload for single char lookup.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1847", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1847", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

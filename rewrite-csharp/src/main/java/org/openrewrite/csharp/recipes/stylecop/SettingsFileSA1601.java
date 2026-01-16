@@ -51,8 +51,6 @@ public class SettingsFileSA1601 extends RoslynRecipe {
     @Getter
     final String description = "A C# partial element is missing a documentation header.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1601", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1601", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

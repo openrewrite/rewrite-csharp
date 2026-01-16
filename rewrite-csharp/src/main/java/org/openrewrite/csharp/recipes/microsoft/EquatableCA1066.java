@@ -51,8 +51,6 @@ public class EquatableCA1066 extends RoslynRecipe {
     @Getter
     final String description = "When a type T overrides Object.Equals(object), the implementation must cast the object argument to the correct type T before performing the comparison. If the type implements IEquatable<T>, and therefore offers the method T.Equals(T), and if the argument is known at compile time to be of type T, then the compiler can call IEquatable<T>.Equals(T) instead of Object.Equals(object), and no cast is necessary, improving performance.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1066", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1066", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

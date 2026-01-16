@@ -51,8 +51,6 @@ public class MoveFixWPF0031 extends RoslynRecipe {
     @Getter
     final String description = "DependencyPropertyKey member must be declared before DependencyProperty member.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0031", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0031", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

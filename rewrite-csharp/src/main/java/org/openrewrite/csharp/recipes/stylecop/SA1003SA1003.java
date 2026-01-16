@@ -51,8 +51,6 @@ public class SA1003SA1003 extends RoslynRecipe {
     @Getter
     final String description = "The spacing around an operator symbol is incorrect, within a C# code file.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1003", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1003", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

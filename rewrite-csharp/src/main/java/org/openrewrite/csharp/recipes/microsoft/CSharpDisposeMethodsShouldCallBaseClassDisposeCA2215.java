@@ -51,8 +51,6 @@ public class CSharpDisposeMethodsShouldCallBaseClassDisposeCA2215 extends Roslyn
     @Getter
     final String description = "A type that implements System.IDisposable inherits from a type that also implements IDisposable. The Dispose method of the inheriting type does not call the Dispose method of the parent type. To fix a violation of this rule, call base.Dispose in your Dispose method.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2215", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2215", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

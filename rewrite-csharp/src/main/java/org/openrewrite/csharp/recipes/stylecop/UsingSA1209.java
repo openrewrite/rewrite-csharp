@@ -51,8 +51,6 @@ public class UsingSA1209 extends RoslynRecipe {
     @Getter
     final String description = "A using-alias directive is positioned before a regular using directive.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1209", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1209", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

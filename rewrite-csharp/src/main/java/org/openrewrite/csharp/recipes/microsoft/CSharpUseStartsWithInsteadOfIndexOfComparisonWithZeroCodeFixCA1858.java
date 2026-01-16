@@ -51,8 +51,6 @@ public class CSharpUseStartsWithInsteadOfIndexOfComparisonWithZeroCodeFixCA1858 
     @Getter
     final String description = "It is both clearer and faster to use 'StartsWith' instead of comparing the result of 'IndexOf' to zero.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1858", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1858", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

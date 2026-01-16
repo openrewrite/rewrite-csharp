@@ -51,8 +51,6 @@ public class TokenSpacingSA1000 extends RoslynRecipe {
     @Getter
     final String description = "The spacing around a C# keyword is incorrect.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1000", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1000", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

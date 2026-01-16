@@ -51,8 +51,6 @@ public class SA1509SA1509 extends RoslynRecipe {
     @Getter
     final String description = "An opening brace within a C# element, statement, or expression is preceded by a blank line.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1509", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1509", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

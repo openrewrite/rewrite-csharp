@@ -51,8 +51,6 @@ public class ReturnTaskFromResultInsteadOfReturningNullMA0022 extends RoslynReci
     @Getter
     final String description = "";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "MA0022", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "MA0022", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

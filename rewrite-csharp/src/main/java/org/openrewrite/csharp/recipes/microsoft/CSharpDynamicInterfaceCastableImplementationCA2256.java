@@ -51,8 +51,6 @@ public class CSharpDynamicInterfaceCastableImplementationCA2256 extends RoslynRe
     @Getter
     final String description = "Types attributed with 'DynamicInterfaceCastableImplementationAttribute' act as an interface implementation for a type that implements the 'IDynamicInterfaceCastable' type. As a result, it must provide an implementation of all of the members defined in the inherited interfaces, because the type that implements 'IDynamicInterfaceCastable' will not provide them otherwise.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2256", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2256", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class SA1207SA1207 extends RoslynRecipe {
     @Getter
     final String description = "The keyword '{0}' is positioned after the keyword '{1}' within the declaration of a {0} {1} C# element.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1207", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1207", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

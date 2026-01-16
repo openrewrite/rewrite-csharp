@@ -51,8 +51,6 @@ public class SA1500SA1500 extends RoslynRecipe {
     @Getter
     final String description = "The opening or closing brace within a C# statement, element, or expression is not placed on its own line.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1500", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1500", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

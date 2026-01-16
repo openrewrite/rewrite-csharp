@@ -51,8 +51,6 @@ public class DocumentationFixWPF0060 extends RoslynRecipe {
     @Getter
     final String description = "Backing member for DependencyProperty should have standard documentation text.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0060", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0060", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

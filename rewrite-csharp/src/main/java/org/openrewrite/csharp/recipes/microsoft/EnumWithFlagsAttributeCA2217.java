@@ -51,8 +51,6 @@ public class EnumWithFlagsAttributeCA2217 extends RoslynRecipe {
     @Getter
     final String description = "An externally visible enumeration is marked by using FlagsAttribute, and it has one or more values that are not powers of two or a combination of the other defined values on the enumeration.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2217", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2217", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

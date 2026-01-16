@@ -51,8 +51,6 @@ public class TokenSpacingSA1006 extends RoslynRecipe {
     @Getter
     final String description = "A C# preprocessor-type keyword is preceded by space.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1006", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1006", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

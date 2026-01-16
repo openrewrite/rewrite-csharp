@@ -51,8 +51,6 @@ public class BinaryExpressionRCS1113 extends RoslynRecipe {
     @Getter
     final String description = "";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "RCS1113", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "RCS1113", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

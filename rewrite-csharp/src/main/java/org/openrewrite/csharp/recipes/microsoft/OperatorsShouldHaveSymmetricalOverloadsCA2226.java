@@ -51,8 +51,6 @@ public class OperatorsShouldHaveSymmetricalOverloadsCA2226 extends RoslynRecipe 
     @Getter
     final String description = "A type implements the equality or inequality operator and does not implement the opposite operator.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2226", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2226", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class SA1626SA1626 extends RoslynRecipe {
     @Getter
     final String description = "The C# code contains a single-line comment which begins with three forward slashes in a row.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1626", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1626", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class SA1028SA1028 extends RoslynRecipe {
     @Getter
     final String description = "There should not be any whitespace at the end of a line of code.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1028", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1028", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

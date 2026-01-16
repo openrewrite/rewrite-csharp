@@ -51,8 +51,6 @@ public class ValueConversionAttributeArgumentFixWPF0072 extends RoslynRecipe {
     @Getter
     final String description = "ValueConversion must use correct types.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0072", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0072", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

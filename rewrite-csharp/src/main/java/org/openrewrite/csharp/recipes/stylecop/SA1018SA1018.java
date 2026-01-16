@@ -51,8 +51,6 @@ public class SA1018SA1018 extends RoslynRecipe {
     @Getter
     final String description = "A nullable type symbol within a C# element is not spaced correctly.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1018", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1018", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

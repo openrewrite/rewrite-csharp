@@ -51,8 +51,6 @@ public class DefineAccessorsForAttributeArgumentsCA1019 extends RoslynRecipe {
     @Getter
     final String description = "";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1019", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1019", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

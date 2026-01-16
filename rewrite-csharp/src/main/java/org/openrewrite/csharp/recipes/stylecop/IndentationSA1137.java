@@ -51,8 +51,6 @@ public class IndentationSA1137 extends RoslynRecipe {
     @Getter
     final String description = "Elements at the same level in the syntax tree should have the same indentation.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1137", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1137", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

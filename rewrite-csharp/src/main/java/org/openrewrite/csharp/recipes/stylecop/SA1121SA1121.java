@@ -51,8 +51,6 @@ public class SA1121SA1121 extends RoslynRecipe {
     @Getter
     final String description = "The code uses one of the basic C# types, but does not use the built-in alias for the type.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1121", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1121", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

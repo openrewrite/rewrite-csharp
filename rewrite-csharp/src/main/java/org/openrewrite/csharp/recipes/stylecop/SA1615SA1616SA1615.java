@@ -51,8 +51,6 @@ public class SA1615SA1616SA1615 extends RoslynRecipe {
     @Getter
     final String description = "A C# element is missing documentation for its return value.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1615", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1615", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

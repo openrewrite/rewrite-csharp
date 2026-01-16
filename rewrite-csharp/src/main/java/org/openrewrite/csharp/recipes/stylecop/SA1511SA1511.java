@@ -51,8 +51,6 @@ public class SA1511SA1511 extends RoslynRecipe {
     @Getter
     final String description = "The while footer at the bottom of a do-while statement is separated from the statement by a blank line.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1511", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1511", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

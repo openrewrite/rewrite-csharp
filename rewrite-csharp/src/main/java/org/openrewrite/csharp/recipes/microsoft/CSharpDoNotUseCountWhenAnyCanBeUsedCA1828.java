@@ -51,8 +51,6 @@ public class CSharpDoNotUseCountWhenAnyCanBeUsedCA1828 extends RoslynRecipe {
     @Getter
     final String description = "For non-empty collections, CountAsync() and LongCountAsync() enumerate the entire sequence, while AnyAsync() stops at the first item or the first item that satisfies a condition.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1828", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1828", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

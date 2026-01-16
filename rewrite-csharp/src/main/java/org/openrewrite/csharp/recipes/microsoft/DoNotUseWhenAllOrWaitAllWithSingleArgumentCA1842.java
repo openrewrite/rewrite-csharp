@@ -51,8 +51,6 @@ public class DoNotUseWhenAllOrWaitAllWithSingleArgumentCA1842 extends RoslynReci
     @Getter
     final String description = "Using 'WhenAll' with a single task may result in performance loss, await or return the task instead.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1842", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1842", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

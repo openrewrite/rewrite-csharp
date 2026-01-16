@@ -51,8 +51,6 @@ public class SA1122SA1122 extends RoslynRecipe {
     @Getter
     final String description = "The C# code includes an empty string, written as \"\".";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1122", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1122", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

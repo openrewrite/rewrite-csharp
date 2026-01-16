@@ -51,8 +51,6 @@ public class ParameterNameDiffersFromBaseRCS1168 extends RoslynRecipe {
     @Getter
     final String description = "";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "RCS1168", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "RCS1168", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

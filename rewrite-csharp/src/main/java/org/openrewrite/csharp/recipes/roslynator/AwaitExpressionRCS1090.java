@@ -51,8 +51,6 @@ public class AwaitExpressionRCS1090 extends RoslynRecipe {
     @Getter
     final String description = "";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "RCS1090", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "RCS1090", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

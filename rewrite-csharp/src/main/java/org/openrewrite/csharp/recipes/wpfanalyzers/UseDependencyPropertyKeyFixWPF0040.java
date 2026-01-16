@@ -51,8 +51,6 @@ public class UseDependencyPropertyKeyFixWPF0040 extends RoslynRecipe {
     @Getter
     final String description = "A readonly DependencyProperty must be set with DependencyPropertyKey.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0040", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0040", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

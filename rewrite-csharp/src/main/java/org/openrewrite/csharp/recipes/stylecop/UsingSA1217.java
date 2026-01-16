@@ -51,8 +51,6 @@ public class UsingSA1217 extends RoslynRecipe {
     @Getter
     final String description = "All using static directives should be ordered alphabetically.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1217", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1217", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

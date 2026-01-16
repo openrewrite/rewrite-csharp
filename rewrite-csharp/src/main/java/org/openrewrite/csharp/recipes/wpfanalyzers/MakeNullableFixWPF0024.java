@@ -51,8 +51,6 @@ public class MakeNullableFixWPF0024 extends RoslynRecipe {
     @Getter
     final String description = "Parameter type should be nullable.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0024", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0024", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

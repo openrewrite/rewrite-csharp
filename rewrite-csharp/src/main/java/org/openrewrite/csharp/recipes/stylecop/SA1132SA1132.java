@@ -51,8 +51,6 @@ public class SA1132SA1132 extends RoslynRecipe {
     @Getter
     final String description = "Each field should be declared on its own line, in order to clearly see each field of a type and allow for proper documentation of the behavior of each field.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1132", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1132", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

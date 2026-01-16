@@ -51,8 +51,6 @@ public class SA1515SA1515 extends RoslynRecipe {
     @Getter
     final String description = "A single-line comment within C# code is not preceded by a blank line.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1515", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1515", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

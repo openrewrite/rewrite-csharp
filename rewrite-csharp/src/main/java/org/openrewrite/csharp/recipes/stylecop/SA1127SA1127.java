@@ -51,8 +51,6 @@ public class SA1127SA1127 extends RoslynRecipe {
     @Getter
     final String description = "Each type constraint clause for a generic type parameter should be listed on a line of code by itself.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1127", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1127", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

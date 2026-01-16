@@ -51,8 +51,6 @@ public class SA1107SA1107 extends RoslynRecipe {
     @Getter
     final String description = "The C# code contains more than one statement on a single line.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1107", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1107", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

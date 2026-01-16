@@ -51,8 +51,6 @@ public class UseNameofFixWPF0151 extends RoslynRecipe {
     @Getter
     final String description = "Use nameof() as it is less fragile than constant.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0151", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "WPF0151", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

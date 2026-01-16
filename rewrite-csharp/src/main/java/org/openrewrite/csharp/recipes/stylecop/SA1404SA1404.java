@@ -51,8 +51,6 @@ public class SA1404SA1404 extends RoslynRecipe {
     @Getter
     final String description = "A Code Analysis SuppressMessage attribute does not include a justification.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1404", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1404", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

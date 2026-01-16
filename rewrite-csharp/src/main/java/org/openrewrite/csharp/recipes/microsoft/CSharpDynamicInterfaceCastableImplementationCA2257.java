@@ -51,8 +51,6 @@ public class CSharpDynamicInterfaceCastableImplementationCA2257 extends RoslynRe
     @Getter
     final String description = "Since a type that implements 'IDynamicInterfaceCastable' may not implement a dynamic interface in metadata, calls to an instance interface member that is not an explicit implementation defined on this type are likely to fail at runtime. Mark new interface members 'static' to avoid runtime errors.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2257", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2257", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class TokenSpacingSA1017 extends RoslynRecipe {
     @Getter
     final String description = "A closing attribute bracket within a C# element is not spaced correctly.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1017", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1017", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

@@ -51,8 +51,6 @@ public class CSharpPreferLengthCountIsEmptyOverAnyCA1860 extends RoslynRecipe {
     @Getter
     final String description = "Prefer using 'IsEmpty', 'Count' or 'Length' properties whichever available, rather than calling 'Enumerable.Any()'. The intent is clearer and it is more performant than using 'Enumerable.Any()' extension method.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1860", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1860", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

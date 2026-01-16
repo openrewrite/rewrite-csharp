@@ -51,8 +51,6 @@ public class SA1027SA1027 extends RoslynRecipe {
     @Getter
     final String description = "The code contains a tab or space character which is not consistent with the current project settings.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1027", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1027", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

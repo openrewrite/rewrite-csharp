@@ -51,8 +51,6 @@ public class SettingsFileSA1649 extends RoslynRecipe {
     @Getter
     final String description = "The file name of a C# code file does not match the first type declared in the file.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1649", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1649", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

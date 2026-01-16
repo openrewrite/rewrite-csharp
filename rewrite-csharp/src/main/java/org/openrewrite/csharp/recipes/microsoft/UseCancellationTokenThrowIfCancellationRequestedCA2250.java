@@ -51,8 +51,6 @@ public class UseCancellationTokenThrowIfCancellationRequestedCA2250 extends Rosl
     @Getter
     final String description = "'ThrowIfCancellationRequested' automatically checks whether the token has been canceled, and throws an 'OperationCanceledException' if it has.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2250", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA2250", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

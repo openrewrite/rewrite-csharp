@@ -51,8 +51,6 @@ public class TokenSpacingSA1002 extends RoslynRecipe {
     @Getter
     final String description = "The spacing around a semicolon is incorrect, within a C# code file.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "SA1002", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "SA1002", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }

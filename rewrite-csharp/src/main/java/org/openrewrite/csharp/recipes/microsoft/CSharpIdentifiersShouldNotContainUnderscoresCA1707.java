@@ -51,8 +51,6 @@ public class CSharpIdentifiersShouldNotContainUnderscoresCA1707 extends RoslynRe
     @Getter
     final String description = "By convention, identifier names do not contain the underscore (_) character. This rule checks namespaces, types, members, and parameters.";
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1707", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "CA1707", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }
