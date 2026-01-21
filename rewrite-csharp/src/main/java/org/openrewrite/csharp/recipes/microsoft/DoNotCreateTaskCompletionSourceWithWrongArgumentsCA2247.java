@@ -35,27 +35,32 @@ public class DoNotCreateTaskCompletionSourceWithWrongArgumentsCA2247 extends Ros
     }
 
     @Override
+    public boolean getRunCodeFixup() {
+        return false;
+    }
+
+    @Override
     public String getNugetPackageName() {
         return "Microsoft.CodeAnalysis.NetAnalyzers";
     }
 
     @Override
     public String getNugetPackageVersion() {
-        return "9.0.0";
+        return "10.0.102";
     }
 
     @Override
     public String getDisplayName() {
-        return "Argument passed to TaskCompletionSource constructor should be TaskCreationOptions enum instead of TaskContinuationOptions enum";
+        return "Analysis: Argument passed to TaskCompletionSource constructor should be TaskCreationOptions enum instead of TaskContinuationOptions enum";
     }
 
     @Override
     public String getDescription() {
-        return "TaskCompletionSource has constructors that take TaskCreationOptions that control the underlying Task, and constructors that take object state that's stored in the task.  Accidentally passing a TaskContinuationOptions instead of a TaskCreationOptions will result in the call treating the options as state.";
+        return "This is a reporting only recipe. TaskCompletionSource has constructors that take TaskCreationOptions that control the underlying Task, and constructors that take object state that's stored in the task.  Accidentally passing a TaskContinuationOptions instead of a TaskCreationOptions will result in the call treating the options as state.";
     }
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2247", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "analyzer", "CA2247", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }
     }

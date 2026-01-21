@@ -13,7 +13,7 @@ public static partial class CSharpAnalyzerVerifier<TAnalyzer>
     {
         public Test()
         {
-            SolutionTransforms.Add((solution, projectId) =>
+            SolutionTransforms.Insert(0, (solution, projectId) =>
             {
                 var project = solution.GetProject(projectId);
 
@@ -34,6 +34,9 @@ public static partial class CSharpAnalyzerVerifier<TAnalyzer>
                     return solution;
                 }
                 
+                compilationOptions = compilationOptions.WithOutputKind(
+                    IsExecutable ? OutputKind.ConsoleApplication : OutputKind.DynamicallyLinkedLibrary);
+                
                 compilationOptions = compilationOptions
                     .WithNullableContextOptions(NullableContextOptions.Enable)
                     .WithSpecificDiagnosticOptions(compilationOptions.SpecificDiagnosticOptions.SetItems(CSharpVerifierHelper.NullableWarnings));
@@ -46,5 +49,6 @@ public static partial class CSharpAnalyzerVerifier<TAnalyzer>
                 return solution;
             });
         }
+        public bool IsExecutable { get; set; }
     }
 }

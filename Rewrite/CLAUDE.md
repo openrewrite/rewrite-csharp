@@ -6,11 +6,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The rewrite-csharp project is an OpenRewrite language module for C# that enables automated code refactoring and analysis. It uses a hybrid architecture combining Java and C# components, with a remoting mechanism for cross-runtime communication.
 
+## AI Mandatory Guidance
+
+- You're generating production grade code. You are to never take shortcuts that would only work in one narrow use case scenario rather then being generically applicable when code is executed under realistic conditions.
+
 ## High-Level Architecture
 
 The project consists of two main parts:
 
-1. **C# Components** (.NET 9.0/MSBuild-based):
+1. **C# Components** (.NET 10.0/MSBuild-based):
    - `Rewrite.Core` - Core framework port to C# (AST/visitor patterns)
    - `Rewrite.CSharp` - C# language-specific implementations (parser, printer, visitor)
    - `Rewrite.Remote` - Remoting infrastructure for Java-C# communication
@@ -23,7 +27,17 @@ The project consists of two main parts:
 
 The Java side communicates with the C# language server via JSON RPC over STDIO for recipe execution during CLI operations.
 
+### Testing
 
+  **MANDATORY: Before doing ANY test-related work (writing tests, fixing tests, running tests, debugging test failures), you MUST invoke the `testing-with-tunit` skill using the Skill tool.**
+
+  This includes:
+  - Fixing failing tests
+  - Writing new tests
+  - Modifying existing tests
+  - Debugging test issues
+
+**DO NOT** modify any test base classes, add new ignore codes, or modify common elements of test infrastructure on your own. If you need, stop what you're doing and consult the user
 
 ## Key Architectural Patterns
 
@@ -39,26 +53,7 @@ The Java side communicates with the C# language server via JSON RPC over STDIO f
 - Analyzers should follow the naming convention: `[Category][Action]Analyzer.cs` (e.g., `NamingConventionAnalyzer.cs`)
 - Associated code fix providers should be named: `[Category][Action]CodeFixProvider.cs`
 
-#### Analyzer / Code fixup implementation
-- Where possible, perform "low cost" syntax elimination first, and confirm correct targeting with semantic analysis
-- ALWAYS confirm correct targeting of nodes from semanitc model. Use `GetDocumentationCommentId()` on symbols as a way to establish fully qualified unique name for a symbol. Use pattern like this to do semantic confirmation:
-  ```
-  var symbolKey = methodSymbol.GetDocumentationCommentId();
-  if(symbolKey == null)
-      return;
-  
-  HashSet<string> targets = [
-      "M:Microsoft.AspNetCore.Builder.OpenApiEndpointConventionBuilderExtensions.WithOpenApi``1",
-      "M:Microsoft.AspNetCore.Builder.OpenApiEndpointConventionBuilderExtensions.WithOpenApi``1(System.Func{Microsoft.OpenApi.OpenApiOperation,Microsoft.OpenApi.OpenApiOperation})",
-      "M:Microsoft.AspNetCore.Builder.OpenApiEndpointConventionBuilderExtensions.WithOpenApi``1(System.Func{Microsoft.OpenApi.Models.OpenApiOperation,Microsoft.OpenApi.Models.OpenApiOperation})"
-  ]; 
-  if (targets.Contains(symbolKey) )
-  {
-      // logic to apply
-  }
-  ```
 
-  
 
 #### Test Requirements
 - **Always generate comprehensive tests for analyzers unless explicitly instructed otherwise**
@@ -186,3 +181,10 @@ public class NamingConventionAnalyzer : DiagnosticAnalyzer
 4. **Immutability**: Prefer immutable data structures where appropriate
 5. **Async/Await**: Use async patterns consistently for I/O operations
 6. **Logging**: Include appropriate logging for debugging and troubleshooting
+
+### Key AI constraints
+
+Unless explicitly told otherwise, the following rules apply. If you feel you're stuck and need to do this, stop and consult with user for guidance.
+
+- NEVER modify base classes, shared code, Directory.props.cs, etc when fixing specific analyzers / code fix providers or tests
+- Do not create new projects / launch configurations

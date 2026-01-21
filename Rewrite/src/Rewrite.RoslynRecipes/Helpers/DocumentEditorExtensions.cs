@@ -1,7 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
+using Microsoft.CodeAnalysis.Simplification;
 
 namespace Rewrite.RoslynRecipes.Helpers;
 
@@ -12,7 +14,7 @@ public static class DocumentEditorExtensions
         public void RenameSymbol(SemanticModel model, ISymbol symbol, string newName)
         {
             var compilationUnit = model.SyntaxTree.GetCompilationUnitRoot();
-            var usages = model.FindLocations( symbol).ToList();
+            var usages = model.FindLocations(symbol).ToList();
             foreach (var location in usages)
             {
                 var originalToken = compilationUnit.FindToken(location.SourceSpan.Start);
@@ -29,42 +31,82 @@ public static class DocumentEditorExtensions
             }
         }
 
-        public void ReplaceType(SemanticModel model, ITypeSymbol oldType, ITypeSymbol newType, SyntaxNode? scope = null)
+        // public void Remap(string oldSymbolDocumentationCommentId, string newSymbolDocumentationCommentId, SyntaxNode? scope = null)
+        // {
+        //     var model = editor.SemanticModel;
+        //     var oldSymbol = DocumentationCommentId.GetFirstSymbolForDeclarationId(oldSymbolDocumentationCommentId, editor.SemanticModel.Compilation) 
+        //                     ?? throw new InvalidOperationException($"Unable to resolve {oldSymbolDocumentationCommentId}");
+        //     var newSymbol = DocumentationCommentId.GetFirstSymbolForDeclarationId(newSymbolDocumentationCommentId, editor.SemanticModel.Compilation)
+        //                     ?? throw new InvalidOperationException($"Unable to resolve {newSymbolDocumentationCommentId}");
+        //     var usages = model.FindLocations(oldSymbol, scope).ToList();
+        //     if (!usages.Any())
+        //     {
+        //         return;
+        //     }
+        //     var compilationUnit = model.SyntaxTree.GetCompilationUnitRoot();
+        //
+        //     foreach (var location in usages)
+        //     {
+        //         
+        //         var oldTypeNameNode = compilationUnit.FindNode(location.SourceSpan);
+        //         var newSymbolQualifiedString = newSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+        //         var newNode = newSymbol.Kind switch
+        //         {
+        //             SymbolKind.NamedType => SyntaxFactory.ParseTypeName(newSymbolQualifiedString),
+        //             SymbolKind.Property or SymbolKind.Field => SyntaxFactory.ParseName(newSymbolQualifiedString),
+        //             _ => throw new InvalidOperationException($"Not supported")
+        //         };
+        //         newNode = newNode
+        //             .WithTriviaFrom(oldTypeNameNode)
+        //             .WithAdditionalAnnotations(
+        //                 Formatter.Annotation, 
+        //                 Simplifier.Annotation, 
+        //                 Simplifier.AddImportsAnnotation, 
+        //                 SymbolAnnotation.Create(newSymbol));
+        //
+        //         editor.ReplaceNode(oldTypeNameNode, (x, y) => newNode);
+        //
+        //     }
+        //     
+        // }
+
+        public void ReplaceType(ITypeSymbol oldType, ITypeSymbol newType, SyntaxNode? scope = null)
         {
-            var usages = model.FindLocations( oldType, scope).ToList();
-            if(!usages.Any())
+            var model = editor.SemanticModel;
+            var usages = model.FindLocations(oldType, scope).ToList();
+            if (!usages.Any())
             {
                 return;
             }
             //var currentCu = (CompilationUnitSyntax)await editor.GetChangedDocument().GetSyntaxRootAsync();
             //var currentNamespaces = currentCu.Usings.Select(x => x.Name.ToString()).ToHashSet();
             // var willAddUsing = false;
-        
+
             var compilationUnit = model.SyntaxTree.GetCompilationUnitRoot();
             //var namespacesToAdd = 
-            foreach(var location in usages)
+            foreach (var location in usages)
             {
 
                 var oldTypeNameNode = compilationUnit.FindNode(location.SourceSpan);
-            
-                // if(!willAddUsing)
-                // {
-                //     var typeAvailableAtCurrentLocation = model
-                //         .LookupSymbols(oldTypeNameNode.GetLocation().SourceSpan.Start, name: newType.Name)
-                //         .Any(x => SymbolEqualityComparer.Default.Equals(x, newType));
-                //     willAddUsing = !typeAvailableAtCurrentLocation;
-                // }
-            
-            
-                var newTypeNameNode = newType
-                    .ToIdentifierName()
-                    .WithTriviaFrom(oldTypeNameNode)
-                    .WithAdditionalAnnotations(Formatter.Annotation)
-                    .WithRequiredNamespace(newType.ContainingNamespace.ToString());
-                editor.ReplaceNode(oldTypeNameNode, (x,y) => newTypeNameNode);
+
+
+                // var newTypeNameNode = newType
+                //     .ToIdentifierName()
+                //     .WithTriviaFrom(oldTypeNameNode)
+                //     .WithAdditionalAnnotations(Formatter.Annotation)
+                //     .WithRequiredNamespace(newType.ContainingNamespace.ToString());
+                //
+                var newTypeNameNode = SyntaxFactory.ParseTypeName(newType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat))
+                        .WithTriviaFrom(oldTypeNameNode)
+                        .WithAdditionalAnnotations(Formatter.Annotation, Simplifier.Annotation, Simplifier.AddImportsAnnotation, SymbolAnnotation.Create(newType))
+                    // .WithRequiredNamespace(newType.ContainingNamespace.ToString())
+                    ;
+
+
+                editor.ReplaceNode(oldTypeNameNode, (x, y) => newTypeNameNode);
 
             }
-        
+
             // if(willAddUsing)
             // {
             //     var namespaceName = newType.ContainingNamespace.ToString();
@@ -152,29 +194,28 @@ public static class DocumentEditorExtensions
             // }
         }
 
-        public async Task EnsureNamespaces(SemanticModel semanticModel, CancellationToken cancellationToken)
-        {
-            var changedDocument = editor.GetChangedDocument();
-            var newTree = (await changedDocument.GetSyntaxTreeAsync(cancellationToken))!;
-            var newCompilationUnit = newTree.GetCompilationUnitRoot();
+        // public async Task EnsureNamespaces(SemanticModel semanticModel, CancellationToken cancellationToken)
+        // {
+        //     var changedDocument = editor.GetChangedDocument();
+        //     var newTree = (await changedDocument.GetSyntaxTreeAsync(cancellationToken))!;
+        //     var newCompilationUnit = newTree.GetCompilationUnitRoot();
+        //
+        //     var requiredNamespaces = newCompilationUnit.GetRequiredNamespaces()
+        //         .SelectMany(x => x.RequiredNamespaces)
+        //         .Distinct()
+        //         .ToList();
+        //     foreach (var requiredNamespace in requiredNamespaces)
+        //     {
+        //         editor.MaybeAddUsingAsync(semanticModel, requiredNamespace, cancellationToken);
+        //     }
+        // }
 
-            var requiredNamespaces = newCompilationUnit.GetRequiredNamespaces()
-                .SelectMany(x => x.RequiredNamespaces)
-                .Distinct()
-                .ToList();
-            foreach (var requiredNamespace in requiredNamespaces)
-            {
-                editor.MaybeAddUsingAsync(semanticModel, requiredNamespace, cancellationToken);
-            }
-        }
+        // public async Task<Document> GetChangedDocumentFormatted(CancellationToken cancellationToken)
+        // {
+        //     var document = editor.GetChangedDocument();
+        //     document = await RemoveUnusedImports(document, cancellationToken);
+        //     return document;
+        // }
 
-        public async Task<Document> GetChangedDocumentFormatted(CancellationToken cancellationToken)
-        {
-            var changedDocument = await Formatter.FormatAsync(
-                editor.GetChangedDocument(),
-                Formatter.Annotation,
-                cancellationToken: cancellationToken).ConfigureAwait(false);
-            return changedDocument;
-        }
     }
 }

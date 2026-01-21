@@ -35,27 +35,32 @@ public class CSharpUseStringMethodCharOverloadWithSingleCharactersCA1865 extends
     }
 
     @Override
+    public boolean getRunCodeFixup() {
+        return false;
+    }
+
+    @Override
     public String getNugetPackageName() {
         return "Microsoft.CodeAnalysis.NetAnalyzers";
     }
 
     @Override
     public String getNugetPackageVersion() {
-        return "9.0.0";
+        return "10.0.102";
     }
 
     @Override
     public String getDisplayName() {
-        return "Use char overload";
+        return "Analysis: Use char overload";
     }
 
     @Override
     public String getDescription() {
-        return "The char overload is a better performing overload than a string with a single char.";
+        return "This is a reporting only recipe. The char overload is a better performing overload than a string with a single char.";
     }
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1865", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "analyzer", "CA1865", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }
     }

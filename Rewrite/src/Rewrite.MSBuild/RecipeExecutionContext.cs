@@ -12,7 +12,6 @@ using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NMica.Utils.IO;
 using NuGet.Commands;
 using NuGet.Configuration;
 using NuGet.Frameworks;
@@ -23,6 +22,7 @@ using NuGet.ProjectModel;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
+using Nuke.Common.IO;
 using Rewrite.Core;
 using Rewrite.Core.Config;
 
@@ -32,7 +32,7 @@ public class RecipeExecutionContext : AssemblyLoadContext
 {
     private readonly ILoggerFactory _loggerFactory;
     private readonly ILogger<RecipeExecutionContext> _log;
-    private Dictionary<AssemblyName, AbsolutePath> _assemblies;
+    public Dictionary<AssemblyName, AbsolutePath> _assemblies { get; set; }
     private readonly HashSet<Assembly> _recipeAssemblies = [];
     public IReadOnlyList<RecipeDescriptor> Recipes { get; private set; }
 
@@ -40,9 +40,9 @@ public class RecipeExecutionContext : AssemblyLoadContext
 
     public RecipeExecutionContext(List<AbsolutePath> assemblies, ILoggerFactory loggerFactory)
     {
+        
         _loggerFactory = loggerFactory;
         _log = loggerFactory.CreateLogger<RecipeExecutionContext>();
-        SyntaxFactory.CompilationUnit();
         _assemblies = assemblies
             .Where(x => !x.Name.EndsWith(".resources.dll"))
             .ToDictionary(x => AssemblyName.GetAssemblyName(x), x => x, _assemblyNameEqualityComparer);
@@ -182,17 +182,22 @@ public class RecipeExecutionContext : AssemblyLoadContext
     
     private List<RecipeDescriptor> FindRecipesInAssemblies()
     {
-
+        var assembliesToLoad = _assemblies.ToDictionary();
+        // assembliesToLoad.Add(typeof(RecipesAttribute).Assembly.GetName(), typeof(RecipesAttribute).Assembly.Location);
+        
+        // assembliesToLoad.Add(typeof(RecipesAttribute).Assembly.GetName(), typeof(RecipesAttribute).Assembly.Location);
         var resolver = new RecipeAssemblyResolver(_assemblies.Values);
         using var mlc = new MetadataLoadContext(resolver);
         var mlcRecipeAttributeAssembly = mlc.LoadFromAssemblyPath(typeof(RecipesAttribute).Assembly.Location);
         var mlcRecipeAttributeType = mlcRecipeAttributeAssembly.GetType(typeof(RecipesAttribute).FullName!)!;
-        var mlcDiagnosticAnalyzerAssembly = mlc.LoadFromAssemblyPath(typeof(DiagnosticAnalyzer).Assembly.Location);
+        // var mlcDiagnosticAnalyzerAssembly = mlc.LoadFromAssemblyPath(typeof(DiagnosticAnalyzer).Assembly.Location);
+        var mlcDiagnosticAnalyzerAssembly = mlc.LoadFromAssemblyName(typeof(DiagnosticAnalyzer).Assembly.FullName!);
         var mlcDiagnosticAnalyzerAttributeType = mlcDiagnosticAnalyzerAssembly.GetType(typeof(DiagnosticAnalyzerAttribute).FullName!)!;
-        var mlcCodeFixupAssembly = mlc.LoadFromAssemblyPath(typeof(ExportCodeFixProviderAttribute).Assembly.Location);
+        // var mlcCodeFixupAssembly = mlc.LoadFromAssemblyPath(typeof(ExportCodeFixProviderAttribute).Assembly.Location);
+        var mlcCodeFixupAssembly = mlc.LoadFromAssemblyName(typeof(ExportCodeFixProviderAttribute).Assembly.FullName!);
         var mlcCodeFixupAttributeType = mlcCodeFixupAssembly.GetType(typeof(ExportCodeFixProviderAttribute).FullName!)!;
         // Load assembly into MetadataLoadContext.
-
+        
         var metadataAssemblies = _assemblies.Values.Select(x => mlc.LoadFromAssemblyPath(x)).ToList();
 
         var openRewriteRecipes = metadataAssemblies
@@ -241,7 +246,7 @@ public class RecipeExecutionContext : AssemblyLoadContext
                 DisplayName = x.Descriptor.Title.ToString(),
                 Description = x.Descriptor.Description.ToString(),
                 TypeName = TypeName.Parse(x.Analyzer.GetType().AssemblyQualifiedName!),
-                Tags = ["roslyn", x.Descriptor.Id],
+                Tags = ["roslyn", "analyzer", x.Descriptor.Id],
                 Options = OptionDescriptor.FromRecipeType<RoslynRecipe>() 
             })
             .ToList();
@@ -268,6 +273,7 @@ public class RecipeExecutionContext : AssemblyLoadContext
             {
                 Kind = RecipeKind.RoslynFixer,
                 TypeName = TypeName.Parse(x.Fixer.GetType().AssemblyQualifiedName!),
+                Tags = ["roslyn", "codefix", x.Descriptor.Id],
             })
             .ToList();
 

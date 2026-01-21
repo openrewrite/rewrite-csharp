@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NMica.Utils.IO;
 using NuGet.Configuration;
 using NuGet.LibraryModel;
 using NuGet.Packaging.Core;

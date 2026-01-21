@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.Extensions.Logging;
-using NMica.Utils.IO;
+using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Rewrite.Core;
 using Rewrite.Core.Config;
@@ -69,7 +69,7 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
         
    
         var allAnalyzers = RecipeAssemblies
-            .SelectMany(x => x.ExportedTypes)
+            .SelectMany(x => x.GetTypes())
             .Where(x => typeof(DiagnosticAnalyzer).IsAssignableFrom(x) && !x.IsAbstract)
             .Select(Activator.CreateInstance)
             .Cast<DiagnosticAnalyzer>()
@@ -78,7 +78,7 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
         var userSelectedDiagnosticIds = DiagnosticIdsToFix.Union(DiagnosticIdsToReport).ToHashSet();
         
         var fixers = RecipeAssemblies
-            .SelectMany(x => x.ExportedTypes)
+            .SelectMany(x => x.GetTypes())
             .Where(x => typeof(CodeFixProvider).IsAssignableFrom(x) && !x.IsAbstract)
             .Select(Activator.CreateInstance)
             .Cast<CodeFixProvider>()

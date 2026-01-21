@@ -35,27 +35,32 @@ public class PreferTypedStringBuilderAppendOverloadsCA1830 extends RoslynRecipe 
     }
 
     @Override
+    public boolean getRunCodeFixup() {
+        return false;
+    }
+
+    @Override
     public String getNugetPackageName() {
         return "Microsoft.CodeAnalysis.NetAnalyzers";
     }
 
     @Override
     public String getNugetPackageVersion() {
-        return "9.0.0";
+        return "10.0.102";
     }
 
     @Override
     public String getDisplayName() {
-        return "Prefer strongly-typed Append and Insert method overloads on StringBuilder";
+        return "Analysis: Prefer strongly-typed Append and Insert method overloads on StringBuilder";
     }
 
     @Override
     public String getDescription() {
-        return "StringBuilder.Append and StringBuilder.Insert provide overloads for multiple types beyond System.String.  When possible, prefer the strongly-typed overloads over using ToString() and the string-based overload.";
+        return "This is a reporting only recipe. StringBuilder.Append and StringBuilder.Insert provide overloads for multiple types beyond System.String.  When possible, prefer the strongly-typed overloads over using ToString() and the string-based overload.";
     }
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1830", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "analyzer", "CA1830", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }
     }

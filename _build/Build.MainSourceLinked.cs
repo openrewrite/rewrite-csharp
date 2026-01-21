@@ -9,9 +9,13 @@ using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Utilities;
 using Rewrite.Core;
+using Rewrite.Core.Config;
 using Rewrite.MSBuild;
 using Rewrite.RewriteXml.Tree;
 using Serilog;
+
+// This is a weird hack that allows us to use main codebase as part of compilation execution task to generate "java recipe stubs"
+// Since build project is USUALLY used for compiling purposes, we don't want to have it dependent on main project as it will cause file locks and build fialures
 
 partial class Build
 {
@@ -45,8 +49,9 @@ partial class Build
              // CA1861: Avoid constant arrays as arguments
              var packages =  new[]
              {
-                 "Microsoft.CodeAnalysis.NetAnalyzers", //https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/categories
+                 "Microsoft.CodeAnalysis.CSharp.CodeStyle",
                  "Roslynator.Analyzers", //https://github.com/dotnet/roslynator
+                 "Microsoft.CodeAnalysis.NetAnalyzers", //https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/categories
                  "Meziantou.Analyzer", //https://github.com/meziantou/Meziantou.Analyzer
                  "StyleCop.Analyzers", //https://github.com/DotNetAnalyzers/StyleCopAnalyzers/tree/master
                  "WpfAnalyzers",
@@ -54,6 +59,7 @@ partial class Build
              var recipesDir = RootDirectory / "rewrite-csharp" / "src" / "main" / "java" / "org" / "openrewrite" / "csharp" / "recipes";
              recipesDir.CreateOrCleanDirectory();
 
+             Dictionary<string, (int Analyzers, int Fixups)> summary = new();
              foreach (var package in packages)
              {
                  var libraryRange = new[] {new LibraryRange(package)};
@@ -63,10 +69,17 @@ partial class Build
 
                  // var installablePackages = await Task.WhenAll(packages.Select(x => recipeManager.InstallRecipePackage(x.Package, packageSources: packageSources)));
 
+                 var analyzerCount = executionContext.Recipes.Count(x => x.Kind == RecipeKind.RoslynAnalyzer);
+                 var fixupCount = executionContext.Recipes.Count(x => x.Kind == RecipeKind.RoslynFixer);
+                 Log.Information("Found {AnalyzerCount} analyzers and {FixupCount} fixups", analyzerCount, fixupCount);
+                 summary.Add(package, (analyzerCount, fixupCount));
+
+                 static string EscapeQuotesAndRemoveLineBreaks(string input) => input.Replace("\"", "\\\"").Replace('\r', ' ').Replace('\n', ' ');
                  var models = executionContext.Recipes.Select(recipe =>
                  {
                      var className = recipe.Id.StartsWith(recipe.TypeName) ? recipe.Id : recipe.TypeName.FullName.Split('.').Last();
-                     className = className.ReplaceRegex("(Analyzer|Fixer|CodeFixProvider)$", _ => "");
+                     // className = className.ReplaceRegex("(Analyzer|Fixer|CodeFixProvider)$", _ => "");
+                     className = className.ReplaceRegex("CodeFixProvider$", _ => "Fixer");
                      className = $"{className}{recipe.Id}";
                      var packageNameFirstSegment = resolvedPackage.Id.ToLower().Split('.').First();
                      // var packageNameFirstSegment = recipe.TypeName.FullName.Split('.').First();
@@ -76,16 +89,19 @@ partial class Build
                          .Append("dotnet")
                          .Append("c#")
                          .ToList();
+                     var displayNamePrefix = recipe.Kind == RecipeKind.RoslynAnalyzer ? "Analysis: " : "";
+                     var descriptionPostfix  = recipe.Kind == RecipeKind.RoslynAnalyzer ? "This is a reporting only recipe. " : "";
                      return new
                      {
                          recipe.Id,
-                         Description = recipe.Description.Replace("\"", "\\\"").Replace('\r', ' ').Replace('\n', ' '),
-                         DisplayName = recipe.DisplayName.Replace("\"", "\\\"").Replace('\r', ' ').Replace('\n', ' '),
+                         Description = $"{descriptionPostfix}{EscapeQuotesAndRemoveLineBreaks(recipe.Description)}",
+                         DisplayName = $"{displayNamePrefix}{EscapeQuotesAndRemoveLineBreaks(recipe.DisplayName)}",
                          PackageName = resolvedPackage.Id,
                          PackageVersion = resolvedPackage.Version,
                          Tags = tags,
                          ClassName = className,
                          Namespace = @namespace,
+                         RunCodeFixup = recipe.Kind == RecipeKind.RoslynFixer ? "true" : "false",
                          FileName = recipesDir / @namespace.Replace(".", "/") / $"{className}.java"
                      };
                  }).ToList();
@@ -114,6 +130,11 @@ partial class Build
                              @Override
                              public String getRecipeId() {
                                  return "{{model.Id}}";
+                             }
+
+                             @Override
+                             public boolean getRunCodeFixup() {
+                                 return {{model.RunCodeFixup}};
                              }
 
                              @Override
@@ -149,5 +170,12 @@ partial class Build
                      filename.WriteAllText(source);
                  }
              }
+
+             foreach (var (package, count) in summary)
+             {
+                 Log.Information($"{package}:  {count.Analyzers} analyzers / {count.Fixups} fixups");
+             }
+             Log.Information($"Total:  {summary.Select(x => x.Value.Analyzers).Sum()} analyzers / {summary.Select(x => x.Value.Fixups).Sum()}");
+
          });
 }

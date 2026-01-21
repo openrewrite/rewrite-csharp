@@ -35,27 +35,32 @@ public class DoNotUseWhenAllOrWaitAllWithSingleArgumentCA1843 extends RoslynReci
     }
 
     @Override
+    public boolean getRunCodeFixup() {
+        return false;
+    }
+
+    @Override
     public String getNugetPackageName() {
         return "Microsoft.CodeAnalysis.NetAnalyzers";
     }
 
     @Override
     public String getNugetPackageVersion() {
-        return "9.0.0";
+        return "10.0.102";
     }
 
     @Override
     public String getDisplayName() {
-        return "Do not use 'WaitAll' with a single task";
+        return "Analysis: Do not use 'WaitAll' with a single task";
     }
 
     @Override
     public String getDescription() {
-        return "Using 'WaitAll' with a single task may result in performance loss, await or return the task instead.";
+        return "This is a reporting only recipe. Using 'WaitAll' with a single task may result in performance loss, await or return the task instead.";
     }
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1843", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "analyzer", "CA1843", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }
     }

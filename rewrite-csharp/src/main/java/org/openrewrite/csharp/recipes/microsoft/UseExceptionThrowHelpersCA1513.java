@@ -35,27 +35,32 @@ public class UseExceptionThrowHelpersCA1513 extends RoslynRecipe {
     }
 
     @Override
+    public boolean getRunCodeFixup() {
+        return false;
+    }
+
+    @Override
     public String getNugetPackageName() {
         return "Microsoft.CodeAnalysis.NetAnalyzers";
     }
 
     @Override
     public String getNugetPackageVersion() {
-        return "9.0.0";
+        return "10.0.102";
     }
 
     @Override
     public String getDisplayName() {
-        return "Use ObjectDisposedException throw helper";
+        return "Analysis: Use ObjectDisposedException throw helper";
     }
 
     @Override
     public String getDescription() {
-        return "Throw helpers are simpler and more efficient than an if block constructing a new exception instance.";
+        return "This is a reporting only recipe. Throw helpers are simpler and more efficient than an if block constructing a new exception instance.";
     }
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1513", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "analyzer", "CA1513", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }
     }

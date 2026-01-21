@@ -35,27 +35,32 @@ public class UseCancellationTokenThrowIfCancellationRequestedCA2250 extends Rosl
     }
 
     @Override
+    public boolean getRunCodeFixup() {
+        return false;
+    }
+
+    @Override
     public String getNugetPackageName() {
         return "Microsoft.CodeAnalysis.NetAnalyzers";
     }
 
     @Override
     public String getNugetPackageVersion() {
-        return "9.0.0";
+        return "10.0.102";
     }
 
     @Override
     public String getDisplayName() {
-        return "Use 'ThrowIfCancellationRequested'";
+        return "Analysis: Use 'ThrowIfCancellationRequested'";
     }
 
     @Override
     public String getDescription() {
-        return "'ThrowIfCancellationRequested' automatically checks whether the token has been canceled, and throws an 'OperationCanceledException' if it has.";
+        return "This is a reporting only recipe. 'ThrowIfCancellationRequested' automatically checks whether the token has been canceled, and throws an 'OperationCanceledException' if it has.";
     }
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2250", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "analyzer", "CA2250", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }
     }

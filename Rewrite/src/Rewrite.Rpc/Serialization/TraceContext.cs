@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using NMica.Utils;
+using Nuke.Common.Utilities;
 
 namespace Rewrite.Rpc.Serialization;
 

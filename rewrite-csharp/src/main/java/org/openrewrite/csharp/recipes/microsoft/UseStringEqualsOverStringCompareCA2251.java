@@ -35,27 +35,32 @@ public class UseStringEqualsOverStringCompareCA2251 extends RoslynRecipe {
     }
 
     @Override
+    public boolean getRunCodeFixup() {
+        return false;
+    }
+
+    @Override
     public String getNugetPackageName() {
         return "Microsoft.CodeAnalysis.NetAnalyzers";
     }
 
     @Override
     public String getNugetPackageVersion() {
-        return "9.0.0";
+        return "10.0.102";
     }
 
     @Override
     public String getDisplayName() {
-        return "Use 'string.Equals'";
+        return "Analysis: Use 'string.Equals'";
     }
 
     @Override
     public String getDescription() {
-        return "It is both clearer and likely faster to use 'string.Equals' instead of comparing the result of 'string.Compare' to zero.";
+        return "This is a reporting only recipe. It is both clearer and likely faster to use 'string.Equals' instead of comparing the result of 'string.Compare' to zero.";
     }
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "CA2251", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "analyzer", "CA2251", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }
     }

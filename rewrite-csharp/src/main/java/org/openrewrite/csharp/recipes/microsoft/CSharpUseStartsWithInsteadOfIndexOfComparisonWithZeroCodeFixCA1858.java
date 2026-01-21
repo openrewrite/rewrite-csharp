@@ -35,13 +35,18 @@ public class CSharpUseStartsWithInsteadOfIndexOfComparisonWithZeroCodeFixCA1858 
     }
 
     @Override
+    public boolean getRunCodeFixup() {
+        return true;
+    }
+
+    @Override
     public String getNugetPackageName() {
         return "Microsoft.CodeAnalysis.NetAnalyzers";
     }
 
     @Override
     public String getNugetPackageVersion() {
-        return "9.0.0";
+        return "10.0.102";
     }
 
     @Override
@@ -56,6 +61,6 @@ public class CSharpUseStartsWithInsteadOfIndexOfComparisonWithZeroCodeFixCA1858 
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1858", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "codefix", "CA1858", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }
     }

@@ -7,27 +7,22 @@ namespace Rewrite.RoslynRecipes.Helpers;
 
 public static class SemanticModelExtensions
 {
-    public static IEnumerable<Location> FindLocations(this SemanticModel model, ISymbol symbol, SyntaxNode? scope = null)
+    extension(SemanticModel model)
     {
-        if (scope == null)
-            scope = model.SyntaxTree.GetCompilationUnitRoot();
-        return scope.DescendantTokens()
-            .Where(x =>
-            {
-                if (symbol == null)
+        public IEnumerable<Location> FindLocations(ISymbol symbol, SyntaxNode? scope = null)
+        {
+            scope ??= model.SyntaxTree.GetCompilationUnitRoot();
+            return scope.DescendantTokens()
+                .Where(x => TokenMaybeRelatedToSymbol(x, symbol!.Name) && SymbolEqualityComparer.Default.Equals(model.GetTypeSymbol(x), symbol))
+                .Select(token => 
                 {
-                    Debugger.Break();
-                }
-                return TokenMaybeRelatedToSymbol(x, symbol!.Name) && SymbolEqualityComparer.Default.Equals(model.GetTypeSymbol(x), symbol);
-            })
-            .Select(token => 
-            {
-                if(symbol is ITypeSymbol)
-                {
-                    return GetTypeSyntaxNode(token)!.GetLocation();
-                }
-                return token.GetLocation();
-            });
+                    if(symbol is ITypeSymbol)
+                    {
+                        return GetTypeSyntaxNode(token)!.GetLocation();
+                    }
+                    return token.GetLocation();
+                });
+        }
     }
     
     private static TypeSyntax? GetTypeSyntaxNode(SyntaxToken token)

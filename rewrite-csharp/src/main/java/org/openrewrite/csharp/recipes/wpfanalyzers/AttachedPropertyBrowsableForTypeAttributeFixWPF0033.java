@@ -35,6 +35,11 @@ public class AttachedPropertyBrowsableForTypeAttributeFixWPF0033 extends RoslynR
     }
 
     @Override
+    public boolean getRunCodeFixup() {
+        return true;
+    }
+
+    @Override
     public String getNugetPackageName() {
         return "WpfAnalyzers";
     }
@@ -56,6 +61,6 @@ public class AttachedPropertyBrowsableForTypeAttributeFixWPF0033 extends RoslynR
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0033", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "codefix", "WPF0033", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }
     }

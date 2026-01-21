@@ -35,27 +35,32 @@ public class CSharpPreferDictionaryContainsMethodsCA1841 extends RoslynRecipe {
     }
 
     @Override
+    public boolean getRunCodeFixup() {
+        return false;
+    }
+
+    @Override
     public String getNugetPackageName() {
         return "Microsoft.CodeAnalysis.NetAnalyzers";
     }
 
     @Override
     public String getNugetPackageVersion() {
-        return "9.0.0";
+        return "10.0.102";
     }
 
     @Override
     public String getDisplayName() {
-        return "Prefer Dictionary.Contains methods";
+        return "Analysis: Prefer Dictionary.Contains methods";
     }
 
     @Override
     public String getDescription() {
-        return "'ContainsKey' is usually O(1), while 'Keys.Contains' may be O(n) in some cases. Additionally, many dictionary implementations lazily initialize the Keys collection to cut back on allocations.";
+        return "This is a reporting only recipe. 'ContainsKey' is usually O(1), while 'Keys.Contains' may be O(n) in some cases. Additionally, many dictionary implementations lazily initialize the Keys collection to cut back on allocations.";
     }
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1841", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "analyzer", "CA1841", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }
     }

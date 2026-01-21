@@ -1,13 +1,14 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
-using NMica.Utils.IO;
+using Nuke.Common.IO;
 
 namespace Rewrite.MSBuild;
 
 public class RecipeAssemblyResolver : MetadataAssemblyResolver
 {
     private PathAssemblyResolver _resolver;
+    private Dictionary<string, Assembly> _loaded = new();
     public RecipeAssemblyResolver(IEnumerable<AbsolutePath> additionalAssemblies)
     {
         
@@ -15,12 +16,18 @@ public class RecipeAssemblyResolver : MetadataAssemblyResolver
         var currentDirAssemblies = Directory.EnumerateFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "*.dll");
         var allAssemblies = runtimeAssemblies.Union(currentDirAssemblies).Union(additionalAssemblies.Select(x => (string)x));
         
-        _resolver = new PathAssemblyResolver(allAssemblies);
+        _resolver = new PathAssemblyResolver(allAssemblies.Distinct());
     }
 
     public override Assembly? Resolve(MetadataLoadContext context, AssemblyName assemblyName)
     {
-        var result = AssemblyResolution.Resolve(assemblyName);
+        if (_loaded.TryGetValue(assemblyName.FullName, out var result))
+            return result;
+        //
+        // var result = context.GetAssemblies().FirstOrDefault(x => x.GetName().FullName == assemblyName.FullName);
+        // if (result != null)
+        //     return result;
+        result = AssemblyResolution.Resolve(assemblyName);
         if (result != null)
         {
             result = context.LoadFromAssemblyPath(result.Location);
@@ -30,6 +37,7 @@ public class RecipeAssemblyResolver : MetadataAssemblyResolver
             result = _resolver.Resolve(context, assemblyName);
         }
 
+        _loaded.Add(assemblyName.FullName, result!);
         return result;
     }
 }

@@ -35,7 +35,6 @@ public class ActionContextAccessorObsoleteCodeFixTests
 
         const string fixedSource = """
             using Microsoft.AspNetCore.Http;
-            using Microsoft.AspNetCore.Mvc.Infrastructure;
 
             public class MyService
             {
@@ -80,7 +79,6 @@ public class ActionContextAccessorObsoleteCodeFixTests
             """;
 
         const string fixedSource = """
-            using Microsoft.AspNetCore.Mvc.Infrastructure;
             using Microsoft.AspNetCore.Http;
 
             public class MyService
@@ -132,7 +130,6 @@ public class ActionContextAccessorObsoleteCodeFixTests
 
         const string fixedSource = """
             using Microsoft.AspNetCore.Http;
-            using Microsoft.AspNetCore.Mvc.Infrastructure;
             using Microsoft.AspNetCore.Mvc.Abstractions;
 
             public class MyService
@@ -184,7 +181,6 @@ public class ActionContextAccessorObsoleteCodeFixTests
 
         const string fixedSource = """
             using Microsoft.AspNetCore.Http;
-            using Microsoft.AspNetCore.Mvc.Infrastructure;
             using Microsoft.AspNetCore.Routing;
 
             public class MyService
@@ -281,7 +277,6 @@ public class ActionContextAccessorObsoleteCodeFixTests
 
         const string fixedSource = """
             using Microsoft.AspNetCore.Http;
-            using Microsoft.AspNetCore.Mvc.Infrastructure;
 
             public class MyService
             {
@@ -347,7 +342,6 @@ public class ActionContextAccessorObsoleteCodeFixTests
             """;
 
         const string fixedSource = """
-            using Microsoft.AspNetCore.Mvc.Infrastructure;
             using Microsoft.AspNetCore.Mvc.Abstractions;
             using Microsoft.AspNetCore.Routing;
             using Microsoft.AspNetCore.Http;
@@ -453,9 +447,7 @@ public class ActionContextAccessorObsoleteCodeFixTests
             """;
 
         const string fixedSource = """
-            #nullable enable
             using Microsoft.AspNetCore.Http;
-            using Microsoft.AspNetCore.Mvc.Infrastructure;
 
             public class MyService
             {
@@ -509,7 +501,6 @@ public class ActionContextAccessorObsoleteCodeFixTests
             """;
 
         const string fixedSource = """
-            using Microsoft.AspNetCore.Mvc.Infrastructure;
             using Microsoft.AspNetCore.Http;
             using Microsoft.AspNetCore.Routing;
 
@@ -593,7 +584,6 @@ public class ActionContextAccessorObsoleteCodeFixTests
 
         const string fixedSource = """
             using Microsoft.AspNetCore.Http;
-            using Microsoft.AspNetCore.Mvc.Infrastructure;
             using Microsoft.Extensions.Logging;
 
             public class MyService

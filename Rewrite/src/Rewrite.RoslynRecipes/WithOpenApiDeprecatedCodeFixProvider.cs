@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.Formatting;
 using Rewrite.RoslynRecipes.Helpers;
@@ -68,11 +69,14 @@ namespace Rewrite.RoslynRecipes
         /// <returns>A task representing the asynchronous registration operation.</returns>
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
+            
+            
             var documentEditor = await DocumentEditor.CreateAsync(context.Document);
             
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
             if (root == null)
                 return;
+            
 
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;

@@ -28,4 +28,19 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
+    <ItemGroup>
+      <Reference Include="Microsoft.CodeAnalysis.CodeStyle">
+        <HintPath>libs\Microsoft.CodeAnalysis.CodeStyle.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.CodeAnalysis.CodeStyle.Fixes">
+        <HintPath>libs\Microsoft.CodeAnalysis.CodeStyle.Fixes.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle">
+        <HintPath>libs\Microsoft.CodeAnalysis.CSharp.CodeStyle.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle.Fixes">
+        <HintPath>libs\Microsoft.CodeAnalysis.CSharp.CodeStyle.Fixes.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

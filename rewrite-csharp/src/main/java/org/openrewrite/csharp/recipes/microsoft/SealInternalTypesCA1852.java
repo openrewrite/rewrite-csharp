@@ -35,27 +35,32 @@ public class SealInternalTypesCA1852 extends RoslynRecipe {
     }
 
     @Override
+    public boolean getRunCodeFixup() {
+        return false;
+    }
+
+    @Override
     public String getNugetPackageName() {
         return "Microsoft.CodeAnalysis.NetAnalyzers";
     }
 
     @Override
     public String getNugetPackageVersion() {
-        return "9.0.0";
+        return "10.0.102";
     }
 
     @Override
     public String getDisplayName() {
-        return "Seal internal types";
+        return "Analysis: Seal internal types";
     }
 
     @Override
     public String getDescription() {
-        return "When a type is not accessible outside its assembly and has no subtypes within its containing assembly, it can be safely sealed. Sealing types can improve performance.";
+        return "This is a reporting only recipe. When a type is not accessible outside its assembly and has no subtypes within its containing assembly, it can be safely sealed. Sealing types can improve performance.";
     }
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1852", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "analyzer", "CA1852", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }
     }

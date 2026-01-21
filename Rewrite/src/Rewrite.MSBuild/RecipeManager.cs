@@ -4,7 +4,8 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Logging;
-using NMica.Utils.IO;
+using Microsoft.NET.Build.Tasks;
+using Microsoft.NET.Build.Tasks.ConflictResolution;
 using NuGet.Commands;
 using NuGet.Configuration;
 using NuGet.Frameworks;
@@ -16,6 +17,7 @@ using NuGet.ProjectModel;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
+using Nuke.Common.IO;
 using Rewrite.Core;
 using Rewrite.Core.Config;
 
@@ -179,10 +181,34 @@ public class RecipeManager
         var projectDefinition = CreatePackageRestoreSpec(selectedPackages);
         var lockFile = await RestoreProject(projectDefinition, cachingSourceProvider, cancellationToken);
         var requiredAssemblies = GetRequiredAssemblies(lockFile, settings);
+        
         var recipeExecutionContext = new RecipeExecutionContext(requiredAssemblies.Select(x => x.AssemblyPath).ToList(), _loggerFactory);
         _log.LogInformation("{@Recipes}", recipeExecutionContext.Recipes.Select(x => new {x.Id, x.TypeName, x.DisplayName}));
         return recipeExecutionContext;
 
+    }
+
+    public async Task<LockFile> CreateLockFile(
+        IReadOnlyCollection<LibraryRange> requestedPackages,
+        CancellationToken cancellationToken,
+        bool includePrerelease = false,
+        IReadOnlyCollection<PackageSource>? packageSources = null)
+    {
+        var settings = GetNugetSettings();
+        var cachingSourceProvider = GetCachingProvider(packageSources);
+
+        var selectedPackages = await ResolvePackages(requestedPackages, cancellationToken, includePrerelease, packageSources);
+        var requestedVsSelected = requestedPackages.Join(selectedPackages, x => x.Name, x => x.Id, (requested, selected) => new
+        {
+            PackageId = requested.Name,
+            RequestedRange = requested.VersionRange?.ToString(),
+            SelectedVersion = selected.Version
+        });
+        _log.LogDebug("Resolved packages: {@ResolvedPackages}", requestedVsSelected);
+
+        var projectDefinition = CreatePackageRestoreSpec(selectedPackages);
+        var lockFile = await RestoreProject(projectDefinition, cachingSourceProvider, cancellationToken);
+        return lockFile;
     }
 
     private ISettings GetNugetSettings() => NullSettings.Instance;
@@ -253,7 +279,9 @@ public class RecipeManager
     private PackageSpec CreatePackageRestoreSpec(IReadOnlyCollection<PackageIdentity> packagesToInstall)
     {
         var deps = DependencyContext.Default!;
-        var framework = NuGetFramework.ParseFrameworkName(deps.Target.Framework, DefaultFrameworkNameProvider.Instance);
+        // var framework = NuGetFramework.ParseFrameworkName(deps.Target.Framework, DefaultFrameworkNameProvider.Instance);
+        var framework = NuGetFramework.ParseFrameworkName(".NETStandard,Version=v2.0", DefaultFrameworkNameProvider.Instance);
+        // var framework = new NuGetFramework("netstandard2.0", Version.Parse("2.0"));
 
         // remove Rewrite projects in this solution from restore, because they will be already present in the host app.
         // We only want to restore package itself and any third party dependencies it relies on 
@@ -345,50 +373,66 @@ public class RecipeManager
     /// For a given lock file, returns all the assemblies required at runtime and resolves their absolute path to Global nuget cache
     /// </summary>
     /// <returns></returns>
-    private static List<(PackageIdentity PackageIdentity, AbsolutePath AssemblyPath)> GetRequiredAssemblies(LockFile lockFile, ISettings settings)
+    public static List<(PackageIdentity PackageIdentity, AbsolutePath AssemblyPath)> GetRequiredAssemblies(LockFile lockFile, ISettings settings)
     {
-        var globalPackagesPath = SettingsUtility.GetGlobalPackagesFolder(settings);
-        
-        var libsToPath = lockFile.Libraries.ToDictionary(x => (x.Name, x.Version), x => x.Path);
-        var libraryDlls = lockFile.Targets.First()
-            .Libraries
-            .SelectMany(targetLib => targetLib.RuntimeAssemblies
-                .Select(assembly => (Folder: libsToPath[(targetLib.Name!, targetLib.Version!)], File: assembly.Path, PackageIdentity: new PackageIdentity(targetLib.Name, targetLib.Version))))
-            
+        var task = new ResolvePackageAssets();
+        task.LockFile = lockFile;
+        task.TargetFramework = "netstandard2.0";
+        task.ProjectLanguage = "C#";
+        task.CompilerApiVersion = CompilerUtils.GetCompilerApiVersion();
+        task.Execute();
+    
+        var conflictResolver = new ResolvePackageFileConflicts();
+        conflictResolver.Analyzers = task.Analyzers;
+        conflictResolver.Execute();
+
+        var result = (conflictResolver.AnalyzersWithoutConflicts ?? [])
+            .Select(x => (new PackageIdentity(x.GetMetadata("NuGetPackageId"),NuGetVersion.Parse(x.GetMetadata("NuGetPackageVersion"))), (AbsolutePath)x.ItemSpec))
             .ToList();
-        // var targetFolderRegex = new Regex(@"^analyzers/dotnet/(roslyn[0-9]\.[0-9]/)?(cs/)?");
-        var dllRegex = new Regex(@"^analyzers/dotnet/(roslyn[0-9]\.[0-9]/)?(cs/)?.+\.dll$");
-        
-        var analyzerDlls = lockFile.Libraries.SelectMany(lib =>
-            {
-                // we may have folder structure like this, so we need to just pick files from one folder
-                // "analyzers/dotnet/roslyn4.7/cs/test.dll",
-                // "analyzers/dotnet/roslyn4.7/cs/test2.dll",
-                // "analyzers/dotnet/roslyn4.3/cs/test.dll",
-                // "analyzers/dotnet/cs/test.dll"
-                // var targetFolder = lib.Files
-                //     .Select(x => dllRegex.Match(x).Value)
-                //     .Distinct()
-                //     .Where(x => x != "")
-                //     .OrderBy(x => x)
-                //     .LastOrDefault();
-                // if(targetFolder is null)
-                //     return [];
-                // var targetFilesRegex = new Regex($"^{targetFolder}.+");
-                var files =  lib.Files.Where(x => dllRegex.IsMatch(x) & x.EndsWith(".dll")).ToList();
-                
-                return files.Select(file => (Folder: lib.Path, File: file, PackageIdentity: new PackageIdentity(lib.Name, lib.Version)));
-            })
-            // .Where(x => dllsInAnalyzerSubfolder.IsMatch(x.File))
-            .ToList();
-        
+        return result;
         //
-        var combined = libraryDlls
-            .Union(analyzerDlls)
-            .Select(x => (x.PackageIdentity, AssemblyPath: (AbsolutePath)globalPackagesPath / x.Folder / x.File))
-            .Where(x => x.AssemblyPath.Name != "_._")
-            .ToList();
-        return combined;
+        // var globalPackagesPath = SettingsUtility.GetGlobalPackagesFolder(settings);
+        //
+        // var libsToPath = lockFile.Libraries.ToDictionary(x => (x.Name, x.Version), x => x.Path);
+        // var libraryDlls = lockFile.Targets.First()
+        //     .Libraries
+        //     .SelectMany(targetLib => targetLib.RuntimeAssemblies
+        //         .Select(assembly => (Folder: libsToPath[(targetLib.Name!, targetLib.Version!)], File: assembly.Path, PackageIdentity: new PackageIdentity(targetLib.Name, targetLib.Version))))
+        //     
+        //     .ToList();
+        // // var targetFolderRegex = new Regex(@"^analyzers/dotnet/(roslyn[0-9]\.[0-9]/)?(cs/)?");
+        // var dllRegex = new Regex(@"^analyzers/dotnet/(roslyn[0-9]\.[0-9]/)?(cs/)?.+\.dll$");
+        //
+        // var analyzerDlls = lockFile.Libraries.SelectMany(lib =>
+        //     {
+        //         // we may have folder structure like this, so we need to just pick files from one folder
+        //         // "analyzers/dotnet/roslyn4.7/cs/test.dll",
+        //         // "analyzers/dotnet/roslyn4.7/cs/test2.dll",
+        //         // "analyzers/dotnet/roslyn4.3/cs/test.dll",
+        //         // "analyzers/dotnet/cs/test.dll"
+        //         // var targetFolder = lib.Files
+        //         //     .Select(x => dllRegex.Match(x).Value)
+        //         //     .Distinct()
+        //         //     .Where(x => x != "")
+        //         //     .OrderBy(x => x)
+        //         //     .LastOrDefault();
+        //         // if(targetFolder is null)
+        //         //     return [];
+        //         // var targetFilesRegex = new Regex($"^{targetFolder}.+");
+        //         var files =  lib.Files.Where(x => dllRegex.IsMatch(x) & x.EndsWith(".dll")).ToList();
+        //         
+        //         return files.Select(file => (Folder: lib.Path, File: file, PackageIdentity: new PackageIdentity(lib.Name, lib.Version)));
+        //     })
+        //     // .Where(x => dllsInAnalyzerSubfolder.IsMatch(x.File))
+        //     .ToList();
+        //
+        // //
+        // var combined = libraryDlls
+        //     .Union(analyzerDlls)
+        //     .Select(x => (x.PackageIdentity, AssemblyPath: (AbsolutePath)globalPackagesPath / x.Folder / x.File))
+        //     .Where(x => x.AssemblyPath.Name != "_._")
+        //     .ToList();
+        // return combined;
     }
     
 }

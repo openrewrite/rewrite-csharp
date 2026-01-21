@@ -1,6 +1,8 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
@@ -56,9 +58,14 @@ public static partial class CSharpAnalyzerVerifier<TAnalyzer>
     /// <inheritdoc cref="AnalyzerVerifier{TAnalyzer, TTest, TVerifier}.VerifyAnalyzerAsync(string, DiagnosticResult[])"/>
     public static async Task VerifyAnalyzerAsync([StringSyntax("c#-test")] string source, ReferenceAssemblies referenceAssemblies, params DiagnosticResult[] expected)
     {
+        var cu = (CompilationUnitSyntax)await CSharpSyntaxTree.ParseText(CSharpVerifierHelper.StripAnalyzerBoundaryMarkers(source)).GetRootAsync();
+
+        var hasGlobalStatements = cu.DescendantNodes().OfType<GlobalStatementSyntax>().Any();
+        
         // referenceAssemblies = referenceAssemblies.AddPackage("TUnit.Core")
         var test = new Test
         {
+            IsExecutable = hasGlobalStatements,
             TestCode = source,
             ReferenceAssemblies = referenceAssemblies,
             TestState =

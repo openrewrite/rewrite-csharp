@@ -39,29 +39,39 @@ internal static class CSharpVerifierHelper
     /// <returns>The C# code with all analyzer boundary markers removed.</returns>
     /// <remarks>
     /// This method removes diagnostic markers like {|DiagnosticId:code|} used in analyzer tests,
-    /// leaving only the code portion. For example:
+    /// leaving only the code portion. Supports nested markers by processing from innermost outward.
+    /// For example:
     /// - Input: "{|ORNETX0009:IActionContextAccessor|}"
     /// - Output: "IActionContextAccessor"
+    /// - Input: "{|CS9168:{|ORNETX0004:Int8InlineArray|}|}"
+    /// - Output: "Int8InlineArray"
     ///
-    /// The pattern matches:
-    /// - Opening: {|
-    /// - Diagnostic ID: Any characters except : and |
-    /// - Separator: :
-    /// - Code: Any characters except |
-    /// - Closing: |}
+    /// The pattern handles nested markers by first stripping innermost markers (those without
+    /// nested {| inside), then repeating until all markers are removed.
     /// </remarks>
     public static string StripAnalyzerBoundaryMarkers(string code)
     {
-
         // Pattern explanation:
-        // \{\|      - Matches the opening {|
-        // [^:|]+    - Matches the diagnostic ID (one or more characters that are not : or |)
-        // :         - Matches the colon separator
-        // ([^|]+)   - Captures the code content (one or more characters that are not |)
-        // \|\}      - Matches the closing |}
+        // \{\|           - Matches the opening {|
+        // [^:|]+         - Matches the diagnostic ID (one or more characters that are not : or |)
+        // :              - Matches the colon separator
+        // ((?:(?!\{\|)(?!\|\}).)+)  - Captures content using negative lookahead:
+        //                  - (?!\{\|) - not followed by {| (not starting a nested marker)
+        //                  - (?!\|\}) - not followed by |} (not ending this marker prematurely)
+        //                  - . - any character
+        //                  This ensures we match innermost markers first
+        // \|\}           - Matches the closing |}
         //
-        // The captured group (1) contains the code we want to keep
-        var pattern = @"\{\|[^:|]+:([^|]+)\|\}";
-        return Regex.Replace(code, pattern, "$1");
+        // Loop to handle nested markers from innermost to outermost
+        var pattern = @"\{\|[^:|]+:((?:(?!\{\|)(?!\|\}).)+)\|\}";
+        string result = code;
+        string previous;
+        do
+        {
+            previous = result;
+            result = Regex.Replace(result, pattern, "$1", RegexOptions.Singleline);
+        } while (result != previous);
+
+        return result;
     }
 }

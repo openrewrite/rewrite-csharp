@@ -23,7 +23,7 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
                 .WithChangedOption(CSharpFormattingOptions.NewLinesForBracesInMethods, true)
             );
             
-            SolutionTransforms.Add((solution, projectId) =>
+            SolutionTransforms.Insert(0, (solution, projectId) =>
             {
                 var project = solution.GetProject(projectId);
                 
@@ -43,10 +43,8 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
                     return solution;
                 }
 
-                if (IsExecutable)
-                {
-                    compilationOptions = compilationOptions.WithOutputKind(OutputKind.ConsoleApplication);
-                }
+                compilationOptions = compilationOptions.WithOutputKind(
+                    IsExecutable ? OutputKind.ConsoleApplication : OutputKind.DynamicallyLinkedLibrary);
 
                 compilationOptions = compilationOptions
                     .WithNullableContextOptions(NullableContextOptions.Enable)

@@ -35,27 +35,32 @@ public class UseEnvironmentMembersCA1839 extends RoslynRecipe {
     }
 
     @Override
+    public boolean getRunCodeFixup() {
+        return false;
+    }
+
+    @Override
     public String getNugetPackageName() {
         return "Microsoft.CodeAnalysis.NetAnalyzers";
     }
 
     @Override
     public String getNugetPackageVersion() {
-        return "9.0.0";
+        return "10.0.102";
     }
 
     @Override
     public String getDisplayName() {
-        return "Use 'Environment.ProcessPath'";
+        return "Analysis: Use 'Environment.ProcessPath'";
     }
 
     @Override
     public String getDescription() {
-        return "'Environment.ProcessPath' is simpler and faster than 'Process.GetCurrentProcess().MainModule.FileName'.";
+        return "This is a reporting only recipe. 'Environment.ProcessPath' is simpler and faster than 'Process.GetCurrentProcess().MainModule.FileName'.";
     }
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "CA1839", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "analyzer", "CA1839", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }
     }

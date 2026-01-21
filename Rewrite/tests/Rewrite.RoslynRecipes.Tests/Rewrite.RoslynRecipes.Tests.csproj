@@ -12,6 +12,8 @@
 
     <ItemGroup>
 
+        <PackageReference Include="Microsoft.AspNetCore.HttpOverrides" Version="2.3.9" />
+
         <PackageReference Include="TUnit" Version="1.9.2" />
         <PackageReference Include="Microsoft.CodeAnalysis" Version="$(MicrosoftCodeAnalysisVersion)" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisVersion)" />

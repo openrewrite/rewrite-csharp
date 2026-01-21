@@ -211,7 +211,7 @@ namespace Rewrite.RoslynRecipe.Tests
 }
 ```
 
-- Note that if the package comes from a Microsoft package that is part of the same version scheme as the runtime, explicit version number can be ommited. For example `Assemblies.Net100.AddPackage("Microsoft.Extensions.Options")` the version will be set to `10.0.0` automatically and should be omitted. 
+- Note that if the package comes from a Microsoft package that is part of the same version scheme as the runtime, explicit version number can be ommited. For example `Assemblies.Net100.AddPackage("Microsoft.Extensions.Options")` the version will be set to `10.0.0` automatically and should be omitted. However, if the package version is does not follow the same version train as the target framework, then explicit version should be specified like this: `Assemblies.Net90.AddPackage("Microsoft.AspNetCore.HttpOverrides","2.3.9")`. If you see an error in tests that a particular package is not available when using version-less overload, find the latest version of the package on `nuget.org` (ex: https://www.nuget.org/packages/microsoft.aspnetcore.httpoverrides) and use explicit version number when calling `AddPackage`
 - Test code should target code and packages in the BEFORE state. For example if the recipe is intended to migrate code from .net 9 to 10, use `Net90` reference assemblies. 
 
 ### 3. Special Test Cases for Delegates
@@ -267,7 +267,8 @@ const string source = """
 
 - Unless explicitly being tested for as part of the testcase, use top level statements when doing entrypoint code
 
-  
+
+5. All test case code must be written under assumption that nullable types are enabled, meaning that all null checks must be performed and all non nullable types must be initialized. Analyzer base classes ensure that the code is fully compilable - NEVER alter these rules. If there's a specific warning / error that shows up by analyzer related to the test code that may need to be added to an exclusion list, stop and prompt user on what to do. 
 
 ## XML Documentation Requirements
 

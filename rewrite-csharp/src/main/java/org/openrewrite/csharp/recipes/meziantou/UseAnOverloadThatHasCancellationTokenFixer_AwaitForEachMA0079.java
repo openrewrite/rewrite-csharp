@@ -35,13 +35,18 @@ public class UseAnOverloadThatHasCancellationTokenFixer_AwaitForEachMA0079 exten
     }
 
     @Override
+    public boolean getRunCodeFixup() {
+        return true;
+    }
+
+    @Override
     public String getNugetPackageName() {
         return "Meziantou.Analyzer";
     }
 
     @Override
     public String getNugetPackageVersion() {
-        return "2.0.221";
+        return "2.0.284";
     }
 
     @Override
@@ -56,6 +61,6 @@ public class UseAnOverloadThatHasCancellationTokenFixer_AwaitForEachMA0079 exten
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "MA0079", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "codefix", "MA0079", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }
     }

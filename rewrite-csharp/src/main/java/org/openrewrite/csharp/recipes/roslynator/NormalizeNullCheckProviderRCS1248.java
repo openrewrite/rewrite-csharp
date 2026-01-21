@@ -35,13 +35,18 @@ public class NormalizeNullCheckProviderRCS1248 extends RoslynRecipe {
     }
 
     @Override
+    public boolean getRunCodeFixup() {
+        return true;
+    }
+
+    @Override
     public String getNugetPackageName() {
         return "Roslynator.Analyzers";
     }
 
     @Override
     public String getNugetPackageVersion() {
-        return "4.14.0";
+        return "4.15.0";
     }
 
     @Override
@@ -56,6 +61,6 @@ public class NormalizeNullCheckProviderRCS1248 extends RoslynRecipe {
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "RCS1248", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "codefix", "RCS1248", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }
     }

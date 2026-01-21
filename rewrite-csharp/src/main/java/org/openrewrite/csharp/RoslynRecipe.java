@@ -86,6 +86,14 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
     public abstract String getNugetPackageVersion();
 
     /**
+     * Gets the flag indicating if the recipe has a CodeFix Provider that should be run for issues found by the analyzer
+     * In practical terms, if this is false, any issues found by analyzer will result in marker comment being placed at location
+     * (aka search recipe in OpenRewrite terminology)
+     * If true, the codefix provider will be invoked to perform actual refactoring of code.
+     */
+    public abstract boolean getRunCodeFixup();
+
+    /**
      * Initializes the accumulator and registers this recipe in the batch.
      * Multiple RoslynRecipe instances are collected during scanning to be executed together.
      * @param executionContext The execution context
@@ -188,7 +196,10 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
                 .collect(Collectors.joining(" "));
 
         String recipeIdsArg = recipes.stream()
-                .map(RoslynRecipe::getRecipeId)
+                .map(recipe -> {
+                        var analyzerOnlyFlag = recipe.getRunCodeFixup() ? "" : ":A";
+                    return recipe.getRecipeId() + analyzerOnlyFlag;
+                })
                 .distinct()
                 .map(id -> "--id " + id)
                 .collect(Collectors.joining(" "));

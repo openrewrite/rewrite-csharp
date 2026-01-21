@@ -35,6 +35,11 @@ public class ValueConversionAttributeArgumentFixWPF0072 extends RoslynRecipe {
     }
 
     @Override
+    public boolean getRunCodeFixup() {
+        return true;
+    }
+
+    @Override
     public String getNugetPackageName() {
         return "WpfAnalyzers";
     }
@@ -56,6 +61,6 @@ public class ValueConversionAttributeArgumentFixWPF0072 extends RoslynRecipe {
 
     @Override
     public Set<String> getTags() {
-        return Stream.of("roslyn", "WPF0072", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+        return Stream.of("roslyn", "codefix", "WPF0072", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
     }
     }

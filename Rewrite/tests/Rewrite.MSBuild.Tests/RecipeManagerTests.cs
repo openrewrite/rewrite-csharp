@@ -58,7 +58,7 @@ public class RecipeManagerTests : BaseTests
     //     }
     // }
     //
-#if NET9_0_OR_GREATER
+
     [Test]
     public async Task InstallRecipe(CancellationToken cancellationToken)
     {
@@ -97,7 +97,7 @@ public class RecipeManagerTests : BaseTests
         var afterLst = visitor.Visit(lst, executionContext);
         afterLst!.ToString().ShouldBeSameAs($"/*~~(!!--->)~~>*/{lst}");
     }
-#endif
+
     
     /// <summary>
     /// Verifies that we can act on multiple solutions via one invocation of the command

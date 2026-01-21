@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Rewrite.RoslynRecipes.Helpers;
 
 namespace Rewrite.RoslynRecipes
 {
@@ -67,33 +68,23 @@ namespace Rewrite.RoslynRecipes
         {
             var assignment = (AssignmentExpressionSyntax)context.Node;
 
-            // Get the symbol being assigned to
-            var symbolInfo = context.SemanticModel.GetSymbolInfo(assignment.Left);
-            if (symbolInfo.Symbol is not IEventSymbol eventSymbol)
-                return;
-
-            // Check for AppDomain.ProcessExit
-            if (eventSymbol.ContainingType?.ToString() == "System.AppDomain" &&
-                eventSymbol.Name == "ProcessExit")
+            DiagnosticDescriptor? descriptor = null;
+            if (assignment.Left.IsSymbolOneOf(context.SemanticModel, "E:System.AppDomain.ProcessExit"))
             {
-                var location = assignment.Left is MemberAccessExpressionSyntax memberAccess
-                    ? memberAccess.Name.GetLocation()
-                    : assignment.Left.GetLocation();
-
-                var diagnostic = Diagnostic.Create(ProcessExitRule, location);
-                context.ReportDiagnostic(diagnostic);
-                return;
+                descriptor = ProcessExitRule;
+            }
+            if (assignment.Left.IsSymbolOneOf(context.SemanticModel, "E:System.Runtime.Loader.AssemblyLoadContext.Unloading"))
+            {
+                descriptor = UnloadingRule;
             }
 
-            // Check for AssemblyLoadContext.Unloading
-            if (eventSymbol.ContainingType?.ToString() == "System.Runtime.Loader.AssemblyLoadContext" &&
-                eventSymbol.Name == "Unloading")
+            if (descriptor != null)
             {
                 var location = assignment.Left is MemberAccessExpressionSyntax memberAccess
                     ? memberAccess.Name.GetLocation()
                     : assignment.Left.GetLocation();
 
-                var diagnostic = Diagnostic.Create(UnloadingRule, location);
+                var diagnostic = Diagnostic.Create(descriptor, location);
                 context.ReportDiagnostic(diagnostic);
             }
         }
