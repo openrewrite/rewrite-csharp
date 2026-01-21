@@ -1,1 +1,2 @@
 *.sh text eol=lf
+rewrite-csharp/src/main/java/org/openrewrite/csharp/recipes/**  merge=ours
