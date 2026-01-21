@@ -322,7 +322,7 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
      * @param path The directory path
      * @return The path with trailing separator
      */
-    public static String ensureTrailingSeparator(String path) {
+    public static String ensureTrailingSeparator(@Nullable String path) {
         if (path == null || path.isEmpty()) return File.separator;
         String separator = File.separator;
         if (path.endsWith("/") || path.endsWith("\\")) {

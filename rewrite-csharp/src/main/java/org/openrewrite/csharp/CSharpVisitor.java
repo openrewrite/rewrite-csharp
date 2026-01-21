@@ -1425,7 +1425,7 @@ public class CSharpVisitor<P> extends JavaVisitor<P>
                 right : new JRightPadded<>(t, after, markers);
     }
 
-    public Space visitSpace(Space space, CsSpace.Location loc, P p) {
+    public Space visitSpace(@Nullable Space space, CsSpace.Location loc, P p) {
         //noinspection ConstantValue
         if (space == Space.EMPTY || space == Space.SINGLE_SPACE || space == null) {
             return space;

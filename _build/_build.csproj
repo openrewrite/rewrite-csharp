@@ -14,6 +14,9 @@
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Generate'">
+    <DefineConstants>$(DefineConstants);LINK_MAIN_SOURCE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Generate'">
     <DefineConstants>$(DefineConstants);LINK_MAIN_SOURCE;Generate</DefineConstants>
   </PropertyGroup>
 

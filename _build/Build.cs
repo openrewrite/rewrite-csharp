@@ -344,7 +344,14 @@ partial class Build : NukeBuild
             // InjectLogsIntoTrx();
         });
 
+#if Generate
 
+
+
+                 string RenderTags(IEnumerable<string> tags) => $"\"{string.Join("\", \"", tags)}\"";
+
+                                 return Stream.of{{model.Tags.RenderParameters()}}.collect(Collectors.toSet());
+#endif
     void InjectLogsIntoTrx()
     {
         var trxFiles = TestResultsDirectory.GlobFiles("*.trx");
@@ -399,8 +406,8 @@ partial class Build : NukeBuild
         {
             var hasTrx = TestResultsDirectory.GlobFiles("*.trx").Any();
             var hasJavaTest = (RootDirectory / "rewrite-csharp" / "build" / "test-results" / "test").GlobFiles("*.xml").Any();
-            GitHubActions?.SetVariable("dotnet_tests_found", hasTrx);
-            GitHubActions?.SetVariable("java_tests_found", hasJavaTest);
+            GitHubActions?.SetVariable("dotnet_tests_found", hasTrx ? "true" : "false");
+            GitHubActions?.SetVariable("java_tests_found", hasJavaTest ? "true" : "false");
         });
 
 
@@ -618,7 +625,8 @@ partial class Build : NukeBuild
     Target GradlePublishSnapshot => _ => _
         .Description("Invokes Gradle to create a SNAPSHOT release and push it to maven repositories")
         // .OnlyWhenStatic(() => IsAllowedToPushToFeed)
-        .Requires(() => IsGitCommitted, () => !IsPullRequest)
+        .Requires(() => IsGitCommitted)
+        .OnlyWhenStatic(() => !IsPullRequest)
         .After(Pack, NugetPush)
         .Before(GradleExecute)
         .Triggers(GradleExecute)

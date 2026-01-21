@@ -30,7 +30,7 @@ jobs:
       - name: Set git config
         run: git config --global init.defaultBranch main
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: set-up-jdk
@@ -39,7 +39,7 @@ jobs:
           distribution: temurin
           java-version: 21
       - name: set-up-gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
 
       - uses: actions/setup-dotnet@v4
         name: Install .NET 8
