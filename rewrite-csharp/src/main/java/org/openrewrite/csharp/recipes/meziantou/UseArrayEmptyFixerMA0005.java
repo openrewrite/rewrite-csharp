@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class UseArrayEmptyFixerMA0005 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "MA0005";
 
-    @Override
-    public String getRecipeId() {
-        return "MA0005";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "Meziantou.Analyzer";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Meziantou.Analyzer";
-    }
+    @Getter
+    final String nugetPackageVersion = "2.0.285";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "2.0.284";
-    }
+    @Getter
+    final String displayName = "Use Array.Empty<T>()";
 
-    @Override
-    public String getDisplayName() {
-        return "Use Array.Empty<T>()";
-    }
+    @Getter
+    final String description = "";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "MA0005", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "MA0005", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

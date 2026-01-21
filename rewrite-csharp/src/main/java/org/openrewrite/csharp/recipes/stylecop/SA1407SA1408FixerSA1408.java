@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1407SA1408FixerSA1408 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1408";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1408";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Conditional expressions should declare precedence";
 
-    @Override
-    public String getDisplayName() {
-        return "Conditional expressions should declare precedence";
-    }
+    @Getter
+    final String description = "A C# statement contains a complex conditional expression which omits parenthesis around operators.";
 
-    @Override
-    public String getDescription() {
-        return "A C# statement contains a complex conditional expression which omits parenthesis around operators.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1408", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "SA1408", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

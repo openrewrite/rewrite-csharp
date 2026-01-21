@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class CSharpSpecifyMarshalingForPInvokeStringArgumentsFixerCA2101 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA2101";
 
-    @Override
-    public String getRecipeId() {
-        return "CA2101";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Specify marshaling for P/Invoke string arguments";
 
-    @Override
-    public String getDisplayName() {
-        return "Specify marshaling for P/Invoke string arguments";
-    }
+    @Getter
+    final String description = "A platform invoke member allows partially trusted callers, has a string parameter, and does not explicitly marshal the string. This can cause a potential security vulnerability.";
 
-    @Override
-    public String getDescription() {
-        return "A platform invoke member allows partially trusted callers, has a string parameter, and does not explicitly marshal the string. This can cause a potential security vulnerability.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "CA2101", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "CA2101", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

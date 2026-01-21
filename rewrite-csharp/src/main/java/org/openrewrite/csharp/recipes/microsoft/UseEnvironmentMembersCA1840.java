@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class UseEnvironmentMembersCA1840 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1840";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1840";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Use 'Environment.CurrentManagedThreadId'";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Use 'Environment.CurrentManagedThreadId'";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. 'Environment.CurrentManagedThreadId' is simpler and faster than 'Thread.CurrentThread.ManagedThreadId'.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. 'Environment.CurrentManagedThreadId' is simpler and faster than 'Thread.CurrentThread.ManagedThreadId'.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1840", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA1840", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1628DocumentationTextMustBeginWithACapitalLetterSA1628 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1628";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1628";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Documentation text should begin with a capital letter";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Documentation text should begin with a capital letter";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. A section of the XML header documentation for a C# element does not begin with a capital letter.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. A section of the XML header documentation for a C# element does not begin with a capital letter.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1628", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1628", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

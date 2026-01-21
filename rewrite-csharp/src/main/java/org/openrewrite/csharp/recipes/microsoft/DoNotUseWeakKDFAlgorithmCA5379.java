@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class DoNotUseWeakKDFAlgorithmCA5379 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA5379";
 
-    @Override
-    public String getRecipeId() {
-        return "CA5379";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Ensure Key Derivation Function algorithm is sufficiently strong";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Ensure Key Derivation Function algorithm is sufficiently strong";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Some implementations of the Rfc2898DeriveBytes class allow for a hash algorithm to be specified in a constructor parameter or overwritten in the HashAlgorithm property. If a hash algorithm is specified, then it should be SHA-256 or higher.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Some implementations of the Rfc2898DeriveBytes class allow for a hash algorithm to be specified in a constructor parameter or overwritten in the HashAlgorithm property. If a hash algorithm is specified, then it should be SHA-256 or higher.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5379", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA5379", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

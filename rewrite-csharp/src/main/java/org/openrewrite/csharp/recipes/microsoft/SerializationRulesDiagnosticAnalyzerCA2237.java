@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SerializationRulesDiagnosticAnalyzerCA2237 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA2237";
 
-    @Override
-    public String getRecipeId() {
-        return "CA2237";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Mark ISerializable types with serializable";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Mark ISerializable types with serializable";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. To be recognized by the common language runtime as serializable, types must be marked by using the SerializableAttribute attribute even when the type uses a custom serialization routine through implementation of the ISerializable interface.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. To be recognized by the common language runtime as serializable, types must be marked by using the SerializableAttribute attribute even when the type uses a custom serialization routine through implementation of the ISerializable interface.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2237", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA2237", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

@@ -152,9 +152,9 @@ public class RunRecipeCommand(RecipeManager recipeManager, ILogger<RunRecipeComm
                     // );
                 }
             }
-            catch (Exception )
+            catch (Exception ex)
             {
-                //logger.LogWarning(ex, "Solution {Solution} cannot be opened due to error {Error}", solutionPath, ex.Message);
+                logger.LogWarning(ex, "Error running recipe in {Solution} due to {Error}", solutionPath, ex.Message);
                 continue;
             }
             

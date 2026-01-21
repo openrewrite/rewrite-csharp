@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1205FixerSA1205 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1205";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1205";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Partial elements should declare access";
 
-    @Override
-    public String getDisplayName() {
-        return "Partial elements should declare access";
-    }
+    @Getter
+    final String description = "The partial element does not have an access modifier defined.";
 
-    @Override
-    public String getDescription() {
-        return "The partial element does not have an access modifier defined.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1205", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "SA1205", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

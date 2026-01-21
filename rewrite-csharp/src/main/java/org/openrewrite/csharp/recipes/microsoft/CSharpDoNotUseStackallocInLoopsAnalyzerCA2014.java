@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class CSharpDoNotUseStackallocInLoopsAnalyzerCA2014 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA2014";
 
-    @Override
-    public String getRecipeId() {
-        return "CA2014";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Do not use stackalloc in loops";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Do not use stackalloc in loops";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Stack space allocated by a stackalloc is only released at the end of the current method's invocation.  Using it in a loop can result in unbounded stack growth and eventual stack overflow conditions.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Stack space allocated by a stackalloc is only released at the end of the current method's invocation.  Using it in a loop can result in unbounded stack growth and eventual stack overflow conditions.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2014", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA2014", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

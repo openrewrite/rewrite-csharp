@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class GenericTypeParameterDocumentationAnalyzerSA1620 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1620";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1620";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Generic type parameter documentation should match type parameters";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Generic type parameter documentation should match type parameters";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. The <typeparam> tags within the Xml header documentation for a generic C# element do not match the generic type parameters on the element.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. The <typeparam> tags within the Xml header documentation for a generic C# element do not match the generic type parameters on the element.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1620", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1620", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class CSharpOverrideEqualsAndOperatorEqualsOnValueTypesFixerCA1815 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1815";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1815";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Override equals and operator equals on value types";
 
-    @Override
-    public String getDisplayName() {
-        return "Override equals and operator equals on value types";
-    }
+    @Getter
+    final String description = "For value types, the inherited implementation of Equals uses the Reflection library and compares the contents of all fields. Reflection is computationally expensive, and comparing every field for equality might be unnecessary. If you expect users to compare or sort instances, or to use instances as hash table keys, your value type should implement Equals.";
 
-    @Override
-    public String getDescription() {
-        return "For value types, the inherited implementation of Equals uses the Reflection library and compares the contents of all fields. Reflection is computationally expensive, and comparing every field for equality might be unnecessary. If you expect users to compare or sort instances, or to use instances as hash table keys, your value type should implement Equals.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "CA1815", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "CA1815", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class AttributeAnalyzerWPF0081 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0081";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0081";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "Analysis: MarkupExtensionReturnType must use correct return type";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: MarkupExtensionReturnType must use correct return type";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. MarkupExtensionReturnType must use correct return type.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. MarkupExtensionReturnType must use correct return type.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0081", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "WPF0081", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

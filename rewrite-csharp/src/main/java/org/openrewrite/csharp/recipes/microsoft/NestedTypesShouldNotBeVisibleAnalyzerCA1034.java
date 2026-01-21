@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class NestedTypesShouldNotBeVisibleAnalyzerCA1034 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1034";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1034";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Nested types should not be visible";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Nested types should not be visible";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. A nested type is a type that is declared in the scope of another type. Nested types are useful to encapsulate private implementation details of the containing type. Used for this purpose, nested types should not be externally visible.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. A nested type is a type that is declared in the scope of another type. Nested types are useful to encapsulate private implementation details of the containing type. Used for this purpose, nested types should not be externally visible.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1034", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA1034", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

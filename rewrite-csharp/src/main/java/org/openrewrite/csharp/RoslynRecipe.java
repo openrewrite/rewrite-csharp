@@ -91,7 +91,7 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
      * (aka search recipe in OpenRewrite terminology)
      * If true, the codefix provider will be invoked to perform actual refactoring of code.
      */
-    public abstract boolean getRunCodeFixup();
+    public abstract boolean isRunCodeFixup();
 
     /**
      * Initializes the accumulator and registers this recipe in the batch.
@@ -197,7 +197,7 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
 
         String recipeIdsArg = recipes.stream()
                 .map(recipe -> {
-                        var analyzerOnlyFlag = recipe.getRunCodeFixup() ? "" : ":A";
+                        var analyzerOnlyFlag = recipe.isRunCodeFixup() ? "" : ":A";
                     return recipe.getRecipeId() + analyzerOnlyFlag;
                 })
                 .distinct()
@@ -313,6 +313,10 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
             executable = ensureTrailingSeparator(executable) + "Rewrite.Server.dll";
         }
         var dir = new File(executable).getParentFile();
+        var skipExtract = System.getenv("ROSLYN_RECIPE_EXECUTABLE_SKIP_EXTRACT");
+        if (skipExtract != null && skipExtract.equalsIgnoreCase("true")) {
+            return executable;
+        }
         EmbeddedResourceHelper.installDotnetServer(dir);
         return executable;
     }

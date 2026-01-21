@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SX1309FieldNamesMustBeginWithUnderscoreSX1309 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SX1309";
 
-    @Override
-    public String getRecipeId() {
-        return "SX1309";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Field names should begin with underscore";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Field names should begin with underscore";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. A field name in C# does not begin with an underscore.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. A field name in C# does not begin with an underscore.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SX1309", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SX1309", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

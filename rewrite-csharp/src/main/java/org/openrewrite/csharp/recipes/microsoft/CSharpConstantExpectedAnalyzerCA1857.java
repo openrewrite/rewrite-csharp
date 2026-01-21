@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class CSharpConstantExpectedAnalyzerCA1857 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1857";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1857";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: A constant is expected for the parameter";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: A constant is expected for the parameter";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. The parameter expects a constant for optimal performance.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. The parameter expects a constant for optimal performance.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1857", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA1857", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

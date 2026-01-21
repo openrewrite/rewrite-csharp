@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1130FixerSA1130 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1130";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1130";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Use lambda syntax";
 
-    @Override
-    public String getDisplayName() {
-        return "Use lambda syntax";
-    }
+    @Getter
+    final String description = "Lambda expressions are more succinct and easier to read than anonymous methods, so they should are preferred whenever the two are functionally equivalent.";
 
-    @Override
-    public String getDescription() {
-        return "Lambda expressions are more succinct and easier to read than anonymous methods, so they should are preferred whenever the two are functionally equivalent.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1130", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "SA1130", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

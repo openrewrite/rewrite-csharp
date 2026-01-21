@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class UsingFixerSA1209 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1209";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1209";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Using alias directives should be placed after other using directives";
 
-    @Override
-    public String getDisplayName() {
-        return "Using alias directives should be placed after other using directives";
-    }
+    @Getter
+    final String description = "A using-alias directive is positioned before a regular using directive.";
 
-    @Override
-    public String getDescription() {
-        return "A using-alias directive is positioned before a regular using directive.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1209", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "SA1209", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

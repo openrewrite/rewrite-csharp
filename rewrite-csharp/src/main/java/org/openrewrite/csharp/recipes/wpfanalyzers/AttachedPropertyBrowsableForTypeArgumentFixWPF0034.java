@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class AttachedPropertyBrowsableForTypeArgumentFixWPF0034 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0034";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0034";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "Use correct argument for [AttachedPropertyBrowsableForType]";
 
-    @Override
-    public String getDisplayName() {
-        return "Use correct argument for [AttachedPropertyBrowsableForType]";
-    }
+    @Getter
+    final String description = "Use correct argument for [AttachedPropertyBrowsableForType].";
 
-    @Override
-    public String getDescription() {
-        return "Use correct argument for [AttachedPropertyBrowsableForType].";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0034", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "WPF0034", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

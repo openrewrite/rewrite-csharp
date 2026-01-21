@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class OverrideMetadataAnalyzerWPF0018 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0018";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0018";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "Analysis: Use containing type";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Use containing type";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Call DefaultStyleKeyProperty.OverrideMetadata with containing type as argument.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Call DefaultStyleKeyProperty.OverrideMetadata with containing type as argument.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0018", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "WPF0018", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

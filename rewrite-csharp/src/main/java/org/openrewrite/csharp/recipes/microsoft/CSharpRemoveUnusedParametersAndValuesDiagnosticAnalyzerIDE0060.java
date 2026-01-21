@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class CSharpRemoveUnusedParametersAndValuesDiagnosticAnalyzerIDE0060 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "IDE0060";
 
-    @Override
-    public String getRecipeId() {
-        return "IDE0060";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-    }
+    @Getter
+    final String nugetPackageVersion = "5.0.0";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "5.0.0";
-    }
+    @Getter
+    final String displayName = "Analysis: Remove unused parameter";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Remove unused parameter";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Avoid unused parameters in your code. If the parameter cannot be removed, then change its name so it starts with an underscore and is optionally followed by an integer, such as '_', '_1', '_2', etc. These are treated as special discard symbol names.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Avoid unused parameters in your code. If the parameter cannot be removed, then change its name so it starts with an underscore and is optionally followed by an integer, such as '_', '_1', '_2', etc. These are treated as special discard symbol names.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "IDE0060", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "IDE0060", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

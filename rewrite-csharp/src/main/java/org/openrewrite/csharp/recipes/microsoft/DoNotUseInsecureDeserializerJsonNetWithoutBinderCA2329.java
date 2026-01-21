@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class DoNotUseInsecureDeserializerJsonNetWithoutBinderCA2329 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA2329";
 
-    @Override
-    public String getRecipeId() {
-        return "CA2329";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Do not deserialize with JsonSerializer using an insecure configuration";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Do not deserialize with JsonSerializer using an insecure configuration";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. ";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. ";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2329", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA2329", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

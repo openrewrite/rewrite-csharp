@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class DependencyPropertyBackingFieldOrPropertyAnalyzerWPF0002 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0002";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0002";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "Analysis: Backing field for a DependencyPropertyKey should match registered name";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Backing field for a DependencyPropertyKey should match registered name";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. A DependencyPropertyKey's backing field must be named with the name it is registered with suffixed by 'PropertyKey'.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. A DependencyPropertyKey's backing field must be named with the name it is registered with suffixed by 'PropertyKey'.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0002", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "WPF0002", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

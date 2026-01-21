@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1121FixerSA1121 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1121";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1121";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Use built-in type alias";
 
-    @Override
-    public String getDisplayName() {
-        return "Use built-in type alias";
-    }
+    @Getter
+    final String description = "The code uses one of the basic C# types, but does not use the built-in alias for the type.";
 
-    @Override
-    public String getDescription() {
-        return "The code uses one of the basic C# types, but does not use the built-in alias for the type.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1121", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "SA1121", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

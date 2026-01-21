@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class DynamicInterfaceCastableImplementationAnalyzerCA2257 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA2257";
 
-    @Override
-    public String getRecipeId() {
-        return "CA2257";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Members defined on an interface with the 'DynamicInterfaceCastableImplementationAttribute' should be 'static'";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Members defined on an interface with the 'DynamicInterfaceCastableImplementationAttribute' should be 'static'";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Since a type that implements 'IDynamicInterfaceCastable' may not implement a dynamic interface in metadata, calls to an instance interface member that is not an explicit implementation defined on this type are likely to fail at runtime. Mark new interface members 'static' to avoid runtime errors.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Since a type that implements 'IDynamicInterfaceCastable' may not implement a dynamic interface in metadata, calls to an instance interface member that is not an explicit implementation defined on this type are likely to fail at runtime. Mark new interface members 'static' to avoid runtime errors.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2257", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA2257", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

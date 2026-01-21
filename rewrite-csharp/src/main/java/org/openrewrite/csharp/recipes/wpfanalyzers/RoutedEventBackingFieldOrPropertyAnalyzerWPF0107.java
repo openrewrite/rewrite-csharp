@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class RoutedEventBackingFieldOrPropertyAnalyzerWPF0107 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0107";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0107";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "Analysis: Backing member for a RoutedEvent should be static and readonly";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Backing member for a RoutedEvent should be static and readonly";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Backing member for a RoutedEvent should be static and readonly.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Backing member for a RoutedEvent should be static and readonly.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0107", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "WPF0107", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class MarkupExtensionReturnTypeAttributeFixWPF0080 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0080";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0080";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "Add MarkupExtensionReturnType attribute";
 
-    @Override
-    public String getDisplayName() {
-        return "Add MarkupExtensionReturnType attribute";
-    }
+    @Getter
+    final String description = "Add MarkupExtensionReturnType attribute.";
 
-    @Override
-    public String getDescription() {
-        return "Add MarkupExtensionReturnType attribute.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0080", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "WPF0080", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

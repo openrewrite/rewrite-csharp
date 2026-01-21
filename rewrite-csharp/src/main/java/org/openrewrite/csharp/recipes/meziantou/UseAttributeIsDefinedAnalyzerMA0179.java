@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class UseAttributeIsDefinedAnalyzerMA0179 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "MA0179";
 
-    @Override
-    public String getRecipeId() {
-        return "MA0179";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Meziantou.Analyzer";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Meziantou.Analyzer";
-    }
+    @Getter
+    final String nugetPackageVersion = "2.0.285";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "2.0.284";
-    }
+    @Getter
+    final String displayName = "Analysis: Use Attribute.IsDefined instead of GetCustomAttribute(s)";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Use Attribute.IsDefined instead of GetCustomAttribute(s)";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Detects inefficient attribute existence checks that can be replaced with Attribute.IsDefined for better performance.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Detects inefficient attribute existence checks that can be replaced with Attribute.IsDefined for better performance.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0179", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "MA0179", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

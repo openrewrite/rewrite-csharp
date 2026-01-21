@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1404FixerSA1404 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1404";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1404";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Code analysis suppression should have justification";
 
-    @Override
-    public String getDisplayName() {
-        return "Code analysis suppression should have justification";
-    }
+    @Getter
+    final String description = "A Code Analysis SuppressMessage attribute does not include a justification.";
 
-    @Override
-    public String getDescription() {
-        return "A Code Analysis SuppressMessage attribute does not include a justification.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1404", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "SA1404", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1301ElementMustBeginWithLowerCaseLetterSA1301 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1301";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1301";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Element should begin with lower-case letter";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Element should begin with lower-case letter";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. There are currently no situations in which this rule will fire.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. There are currently no situations in which this rule will fire.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1301", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1301", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

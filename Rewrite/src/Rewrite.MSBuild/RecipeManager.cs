@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Logging;
 using Microsoft.NET.Build.Tasks;
-using Microsoft.NET.Build.Tasks.ConflictResolution;
 using NuGet.Commands;
 using NuGet.Configuration;
 using NuGet.Frameworks;
@@ -20,6 +19,8 @@ using NuGet.Versioning;
 using Nuke.Common.IO;
 using Rewrite.Core;
 using Rewrite.Core.Config;
+using Rewrite.MSBuild.Restore;
+using Rewrite.MSBuild.Restore.ConflictResolution;
 
 
 namespace Rewrite.MSBuild;
@@ -280,7 +281,8 @@ public class RecipeManager
     {
         var deps = DependencyContext.Default!;
         // var framework = NuGetFramework.ParseFrameworkName(deps.Target.Framework, DefaultFrameworkNameProvider.Instance);
-        var framework = NuGetFramework.ParseFrameworkName(".NETStandard,Version=v2.0", DefaultFrameworkNameProvider.Instance);
+        // var framework = NuGetFramework.ParseFrameworkName(".NETStandard,Version=v2.0", DefaultFrameworkNameProvider.Instance);
+        var framework2 = NuGetFramework.ParseFrameworkName(".NETCoreApp,Version=v10.0", DefaultFrameworkNameProvider.Instance);
         // var framework = new NuGetFramework("netstandard2.0", Version.Parse("2.0"));
 
         // remove Rewrite projects in this solution from restore, because they will be already present in the host app.
@@ -305,9 +307,15 @@ public class RecipeManager
             
         var packageSpec = new PackageSpec(new List<TargetFrameworkInformation>
         {
+            // new TargetFrameworkInformation
+            // {
+            //     FrameworkName = framework,
+            //     Dependencies = libDependencies,
+            //     PackagesToPrune = packagesToPrune.ToDictionary(x => x, x => new PrunePackageReference(x, VersionRange.Combine([NuGetVersion.Parse("0.0.1"),NuGetVersion.Parse("9999.1.1")])))
+            // },
             new TargetFrameworkInformation
             {
-                FrameworkName = framework,
+                FrameworkName = framework2,
                 Dependencies = libDependencies,
                 PackagesToPrune = packagesToPrune.ToDictionary(x => x, x => new PrunePackageReference(x, VersionRange.Combine([NuGetVersion.Parse("0.0.1"),NuGetVersion.Parse("9999.1.1")])))
             }
@@ -324,7 +332,8 @@ public class RecipeManager
                 OutputPath = "obj",
                 TargetFrameworks = new List<ProjectRestoreMetadataFrameworkInfo>
                 {
-                    new(framework)
+                    // new(framework),
+                    new(framework2),
                 }
             }
         };
@@ -377,16 +386,17 @@ public class RecipeManager
     {
         var task = new ResolvePackageAssets();
         task.LockFile = lockFile;
-        task.TargetFramework = "netstandard2.0";
+        task.TargetFramework = "net10.0";
         task.ProjectLanguage = "C#";
         task.CompilerApiVersion = CompilerUtils.GetCompilerApiVersion();
         task.Execute();
     
         var conflictResolver = new ResolvePackageFileConflicts();
         conflictResolver.Analyzers = task.Analyzers;
+        conflictResolver.References = task.CompileTimeAssemblies;
         conflictResolver.Execute();
 
-        var result = (conflictResolver.AnalyzersWithoutConflicts ?? [])
+        var result = (conflictResolver.AnalyzersWithoutConflicts ?? []).Union(conflictResolver.References ?? [])
             .Select(x => (new PackageIdentity(x.GetMetadata("NuGetPackageId"),NuGetVersion.Parse(x.GetMetadata("NuGetPackageVersion"))), (AbsolutePath)x.ItemSpec))
             .ToList();
         return result;

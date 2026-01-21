@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class IdentifiersShouldHaveCorrectPrefixAnalyzerCA1715 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1715";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1715";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Identifiers should have correct prefix";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Identifiers should have correct prefix";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. The name of an externally visible interface does not start with an uppercase \"\"I\"\". The name of a generic type parameter on an externally visible type or method does not start with an uppercase \"\"T\"\".";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. The name of an externally visible interface does not start with an uppercase \"\"I\"\". The name of a generic type parameter on an externally visible type or method does not start with an uppercase \"\"T\"\".";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1715", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA1715", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

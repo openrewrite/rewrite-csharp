@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1124DoNotUseRegionsSA1124 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1124";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1124";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Do not use regions";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Do not use regions";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. The C# code contains a region.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. The C# code contains a region.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1124", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1124", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

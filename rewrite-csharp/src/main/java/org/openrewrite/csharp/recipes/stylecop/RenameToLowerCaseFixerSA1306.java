@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class RenameToLowerCaseFixerSA1306 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1306";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1306";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Field names should begin with lower-case letter";
 
-    @Override
-    public String getDisplayName() {
-        return "Field names should begin with lower-case letter";
-    }
+    @Getter
+    final String description = "The name of a field in C# does not begin with a lower-case letter.";
 
-    @Override
-    public String getDescription() {
-        return "The name of a field in C# does not begin with a lower-case letter.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1306", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "SA1306", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

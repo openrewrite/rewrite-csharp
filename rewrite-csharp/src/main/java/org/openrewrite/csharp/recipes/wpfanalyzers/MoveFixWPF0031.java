@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class MoveFixWPF0031 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0031";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0031";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "DependencyPropertyKey member must be declared before DependencyProperty member";
 
-    @Override
-    public String getDisplayName() {
-        return "DependencyPropertyKey member must be declared before DependencyProperty member";
-    }
+    @Getter
+    final String description = "DependencyPropertyKey member must be declared before DependencyProperty member.";
 
-    @Override
-    public String getDescription() {
-        return "DependencyPropertyKey member must be declared before DependencyProperty member.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0031", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "WPF0031", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

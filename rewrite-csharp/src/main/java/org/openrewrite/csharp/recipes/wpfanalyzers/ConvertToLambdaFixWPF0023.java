@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class ConvertToLambdaFixWPF0023 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0023";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0023";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "The callback is trivial, convert to lambda";
 
-    @Override
-    public String getDisplayName() {
-        return "The callback is trivial, convert to lambda";
-    }
+    @Getter
+    final String description = "The callback is trivial, convert to lambda for better locality.";
 
-    @Override
-    public String getDescription() {
-        return "The callback is trivial, convert to lambda for better locality.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0023", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "WPF0023", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

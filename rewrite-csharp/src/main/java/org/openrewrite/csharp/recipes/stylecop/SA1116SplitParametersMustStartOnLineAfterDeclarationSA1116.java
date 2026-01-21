@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1116SplitParametersMustStartOnLineAfterDeclarationSA1116 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1116";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1116";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Split parameters should start on line after declaration";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Split parameters should start on line after declaration";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. The parameters to a C# method or indexer call or declaration span across multiple lines, but the first parameter does not start on the line after the opening bracket.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. The parameters to a C# method or indexer call or declaration span across multiple lines, but the first parameter does not start on the line after the opening bracket.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1116", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1116", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

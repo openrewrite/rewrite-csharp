@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1127GenericTypeConstraintsMustBeOnOwnLineSA1127 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1127";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1127";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Generic type constraints should be on their own line";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Generic type constraints should be on their own line";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Each type constraint clause for a generic type parameter should be listed on a line of code by itself.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Each type constraint clause for a generic type parameter should be listed on a line of code by itself.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1127", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1127", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

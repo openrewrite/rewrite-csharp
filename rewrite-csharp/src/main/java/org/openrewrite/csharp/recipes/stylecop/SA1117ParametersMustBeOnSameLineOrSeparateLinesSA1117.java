@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1117ParametersMustBeOnSameLineOrSeparateLinesSA1117 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1117";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1117";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Parameters should be on same line or separate lines";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Parameters should be on same line or separate lines";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. The parameters to a C# method or indexer call or declaration are not all on the same line or each on a separate line.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. The parameters to a C# method or indexer call or declaration are not all on the same line or each on a separate line.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1117", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1117", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

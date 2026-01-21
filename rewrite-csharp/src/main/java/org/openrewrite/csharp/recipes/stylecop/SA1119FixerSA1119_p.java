@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1119FixerSA1119_p extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1119_p";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1119_p";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Statement should not use unnecessary parenthesis";
 
-    @Override
-    public String getDisplayName() {
-        return "Statement should not use unnecessary parenthesis";
-    }
+    @Getter
+    final String description = "A C# statement contains parenthesis which are unnecessary and should be removed.";
 
-    @Override
-    public String getDescription() {
-        return "A C# statement contains parenthesis which are unnecessary and should be removed.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1119_p", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "SA1119_p", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

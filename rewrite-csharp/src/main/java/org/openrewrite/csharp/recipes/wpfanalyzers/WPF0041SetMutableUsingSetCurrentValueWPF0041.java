@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class WPF0041SetMutableUsingSetCurrentValueWPF0041 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0041";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0041";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "Analysis: Set mutable dependency properties using SetCurrentValue";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Set mutable dependency properties using SetCurrentValue";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Prefer setting mutable dependency properties using SetCurrentValue.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Prefer setting mutable dependency properties using SetCurrentValue.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0041", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "WPF0041", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

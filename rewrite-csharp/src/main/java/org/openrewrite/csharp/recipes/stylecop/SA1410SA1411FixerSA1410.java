@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1410SA1411FixerSA1410 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1410";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1410";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Remove delegate parenthesis when possible";
 
-    @Override
-    public String getDisplayName() {
-        return "Remove delegate parenthesis when possible";
-    }
+    @Getter
+    final String description = "A call to a C# anonymous method does not contain any method parameters, yet the statement still includes parenthesis.";
 
-    @Override
-    public String getDescription() {
-        return "A call to a C# anonymous method does not contain any method parameters, yet the statement still includes parenthesis.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1410", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "SA1410", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

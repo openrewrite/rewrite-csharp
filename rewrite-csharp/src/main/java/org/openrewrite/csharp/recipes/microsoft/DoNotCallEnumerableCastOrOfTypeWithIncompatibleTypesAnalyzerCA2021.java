@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class DoNotCallEnumerableCastOrOfTypeWithIncompatibleTypesAnalyzerCA2021 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA2021";
 
-    @Override
-    public String getRecipeId() {
-        return "CA2021";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Do not call Enumerable.Cast<T> or Enumerable.OfType<T> with incompatible types";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Do not call Enumerable.Cast<T> or Enumerable.OfType<T> with incompatible types";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Enumerable.Cast<T> and Enumerable.OfType<T> require compatible types to function expectedly.    The generic cast (IL 'unbox.any') used by the sequence returned by Enumerable.Cast<T> will throw InvalidCastException at runtime on elements of the types specified.    The generic type check (C# 'is' operator/IL 'isinst') used by Enumerable.OfType<T> will never succeed with elements of types specified, resulting in an empty sequence.    Widening and user defined conversions are not supported with generic types.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Enumerable.Cast<T> and Enumerable.OfType<T> require compatible types to function expectedly.    The generic cast (IL 'unbox.any') used by the sequence returned by Enumerable.Cast<T> will throw InvalidCastException at runtime on elements of the types specified.    The generic type check (C# 'is' operator/IL 'isinst') used by Enumerable.OfType<T> will never succeed with elements of types specified, resulting in an empty sequence.    Widening and user defined conversions are not supported with generic types.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2021", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA2021", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

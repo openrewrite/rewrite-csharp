@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class DoNotPassDisposablesIntoUnawaitedTasksAnalyzerCA2025 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA2025";
 
-    @Override
-    public String getRecipeId() {
-        return "CA2025";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Do not pass 'IDisposable' instances into unawaited tasks";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Do not pass 'IDisposable' instances into unawaited tasks";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Unawaited tasks that use 'IDisposable' instances may use those instances long after they have been disposed. Ensure tasks using those instances are completed before the instances are disposed.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Unawaited tasks that use 'IDisposable' instances may use those instances long after they have been disposed. Ensure tasks using those instances are completed before the instances are disposed.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2025", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA2025", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

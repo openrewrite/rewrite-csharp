@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class WPF0052XmlnsDefinitionsDoesNotMapAllNamespacesWPF0052 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0052";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0052";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "Analysis: XmlnsDefinitions does not map all namespaces with public types";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: XmlnsDefinitions does not map all namespaces with public types";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. XmlnsDefinitions does not map all namespaces with public types.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. XmlnsDefinitions does not map all namespaces with public types.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0052", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "WPF0052", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

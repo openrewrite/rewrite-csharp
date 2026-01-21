@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class CSharpIdentifiersShouldNotContainUnderscoresFixerCA1707 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1707";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1707";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Identifiers should not contain underscores";
 
-    @Override
-    public String getDisplayName() {
-        return "Identifiers should not contain underscores";
-    }
+    @Getter
+    final String description = "By convention, identifier names do not contain the underscore (_) character. This rule checks namespaces, types, members, and parameters.";
 
-    @Override
-    public String getDescription() {
-        return "By convention, identifier names do not contain the underscore (_) character. This rule checks namespaces, types, members, and parameters.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "CA1707", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "CA1707", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

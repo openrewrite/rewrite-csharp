@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class UsePropertiesWhereAppropriateAnalyzerCA1024 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1024";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1024";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Use properties where appropriate";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Use properties where appropriate";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. A public or protected method has a name that starts with \"\"Get\"\", takes no parameters, and returns a value that is not an array. The method might be a good candidate to become a property.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. A public or protected method has a name that starts with \"\"Get\"\", takes no parameters, and returns a value that is not an array. The method might be a good candidate to become a property.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1024", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA1024", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

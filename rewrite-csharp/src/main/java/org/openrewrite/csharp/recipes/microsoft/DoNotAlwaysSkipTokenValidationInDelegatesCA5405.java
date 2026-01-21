@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class DoNotAlwaysSkipTokenValidationInDelegatesCA5405 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA5405";
 
-    @Override
-    public String getRecipeId() {
-        return "CA5405";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Do not always skip token validation in delegates";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Do not always skip token validation in delegates";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. By setting critical TokenValidationParameter validation delegates to true, important authentication safeguards are disabled which can lead to tokens from any issuer or expired tokens being wrongly validated.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. By setting critical TokenValidationParameter validation delegates to true, important authentication safeguards are disabled which can lead to tokens from any issuer or expired tokens being wrongly validated.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5405", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA5405", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

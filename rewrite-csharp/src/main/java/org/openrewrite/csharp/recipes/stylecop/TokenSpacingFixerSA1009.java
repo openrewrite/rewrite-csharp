@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class TokenSpacingFixerSA1009 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1009";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1009";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Closing parenthesis should be spaced correctly";
 
-    @Override
-    public String getDisplayName() {
-        return "Closing parenthesis should be spaced correctly";
-    }
+    @Getter
+    final String description = "A closing parenthesis within a C# statement is not spaced correctly.";
 
-    @Override
-    public String getDescription() {
-        return "A closing parenthesis within a C# statement is not spaced correctly.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1009", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "SA1009", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

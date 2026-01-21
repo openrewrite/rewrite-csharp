@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class PreferHashDataOverComputeHashAnalyzerCA1850 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1850";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1850";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Prefer static 'HashData' method over 'ComputeHash'";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Prefer static 'HashData' method over 'ComputeHash'";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. It is more efficient to use the static 'HashData' method over creating and managing a HashAlgorithm instance to call 'ComputeHash'.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. It is more efficient to use the static 'HashData' method over creating and managing a HashAlgorithm instance to call 'ComputeHash'.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1850", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA1850", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

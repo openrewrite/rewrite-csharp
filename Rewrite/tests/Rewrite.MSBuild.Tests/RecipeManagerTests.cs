@@ -134,7 +134,6 @@ public class RecipeManagerTests : BaseTests
         {
             Ids = [
                 "CA1861:A", // Avoid constant arrays as arguments,
-                "CA1311"  // Specify a culture or use an invariant version
             ], 
             Packages = ["Microsoft.CodeAnalysis.NetAnalyzers:10.0.101"],
             Path = directory

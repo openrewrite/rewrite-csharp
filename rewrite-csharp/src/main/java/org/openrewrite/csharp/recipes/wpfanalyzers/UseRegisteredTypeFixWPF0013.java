@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class UseRegisteredTypeFixWPF0013 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0013";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0013";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "CLR accessor for attached property must match registered type";
 
-    @Override
-    public String getDisplayName() {
-        return "CLR accessor for attached property must match registered type";
-    }
+    @Getter
+    final String description = "CLR accessor for attached property must match registered type.";
 
-    @Override
-    public String getDescription() {
-        return "CLR accessor for attached property must match registered type.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0013", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "WPF0013", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

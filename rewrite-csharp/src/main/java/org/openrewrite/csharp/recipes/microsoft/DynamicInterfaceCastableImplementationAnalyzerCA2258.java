@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class DynamicInterfaceCastableImplementationAnalyzerCA2258 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA2258";
 
-    @Override
-    public String getRecipeId() {
-        return "CA2258";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Providing a 'DynamicInterfaceCastableImplementation' interface in Visual Basic is unsupported";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Providing a 'DynamicInterfaceCastableImplementation' interface in Visual Basic is unsupported";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Providing a functional 'DynamicInterfaceCastableImplementationAttribute'-attributed interface requires the Default Interface Members feature, which is unsupported in Visual Basic.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Providing a functional 'DynamicInterfaceCastableImplementationAttribute'-attributed interface requires the Default Interface Members feature, which is unsupported in Visual Basic.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2258", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA2258", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

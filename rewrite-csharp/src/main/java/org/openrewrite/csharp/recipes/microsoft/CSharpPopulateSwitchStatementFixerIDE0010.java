@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class CSharpPopulateSwitchStatementFixerIDE0010 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "IDE0010";
 
-    @Override
-    public String getRecipeId() {
-        return "IDE0010";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-    }
+    @Getter
+    final String nugetPackageVersion = "5.0.0";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "5.0.0";
-    }
+    @Getter
+    final String displayName = "Add missing cases";
 
-    @Override
-    public String getDisplayName() {
-        return "Add missing cases";
-    }
+    @Getter
+    final String description = "";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "IDE0010", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "IDE0010", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

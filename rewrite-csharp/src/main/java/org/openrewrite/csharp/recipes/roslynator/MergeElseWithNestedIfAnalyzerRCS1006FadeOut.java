@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class MergeElseWithNestedIfAnalyzerRCS1006FadeOut extends RoslynRecipe {
+    @Getter
+    final String recipeId = "RCS1006FadeOut";
 
-    @Override
-    public String getRecipeId() {
-        return "RCS1006FadeOut";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Roslynator.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Roslynator.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.15.0";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.15.0";
-    }
+    @Getter
+    final String displayName = "Analysis: Merge 'else' with nested 'if'";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Merge 'else' with nested 'if'";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. ";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. ";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1006FadeOut", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "RCS1006FadeOut", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

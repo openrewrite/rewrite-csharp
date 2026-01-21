@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1101PrefixLocalCallsWithThisSA1101 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1101";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1101";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Prefix local calls with this";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Prefix local calls with this";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. A call to an instance member of the local class or a base class is not prefixed with 'this.', within a C# code file.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. A call to an instance member of the local class or a base class is not prefixed with 'this.', within a C# code file.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1101", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1101", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

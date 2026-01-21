@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class ValueConverterAnalyzerWPF0073 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0073";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0073";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "Analysis: Add ValueConversion attribute (unknown types)";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Add ValueConversion attribute (unknown types)";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Add ValueConversion attribute (unknown types).";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Add ValueConversion attribute (unknown types).";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0073", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "WPF0073", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

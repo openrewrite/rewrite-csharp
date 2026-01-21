@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1206DeclarationKeywordsMustFollowOrderSA1206 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1206";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1206";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Declaration keywords should follow order";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Declaration keywords should follow order";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. The keywords within the declaration of an element do not follow a standard ordering scheme.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. The keywords within the declaration of an element do not follow a standard ordering scheme.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1206", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1206", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class CSharpAvoidDuplicateElementInitializationFixerCA2244 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA2244";
 
-    @Override
-    public String getRecipeId() {
-        return "CA2244";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Do not duplicate indexed element initializations";
 
-    @Override
-    public String getDisplayName() {
-        return "Do not duplicate indexed element initializations";
-    }
+    @Getter
+    final String description = "Indexed elements in objects initializers must initialize unique elements. A duplicate index might overwrite a previous element initialization.";
 
-    @Override
-    public String getDescription() {
-        return "Indexed elements in objects initializers must initialize unique elements. A duplicate index might overwrite a previous element initialization.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "CA2244", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "CA2244", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

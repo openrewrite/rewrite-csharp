@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class PropertySummaryDocumentationFixerSA1624 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1624";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1624";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Property summary documentation should omit accessor with restricted access";
 
-    @Override
-    public String getDisplayName() {
-        return "Property summary documentation should omit accessor with restricted access";
-    }
+    @Getter
+    final String description = "The documentation text within a C# property’s <summary> tag takes into account all of the accessors within the property, but one of the accessors has limited access.";
 
-    @Override
-    public String getDescription() {
-        return "The documentation text within a C# property’s <summary> tag takes into account all of the accessors within the property, but one of the accessors has limited access.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1624", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "SA1624", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

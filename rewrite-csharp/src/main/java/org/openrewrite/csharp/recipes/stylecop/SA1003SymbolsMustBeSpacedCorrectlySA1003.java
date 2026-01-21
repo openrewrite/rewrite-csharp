@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1003SymbolsMustBeSpacedCorrectlySA1003 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1003";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1003";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Symbols should be spaced correctly";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Symbols should be spaced correctly";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. The spacing around an operator symbol is incorrect, within a C# code file.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. The spacing around an operator symbol is incorrect, within a C# code file.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1003", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1003", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

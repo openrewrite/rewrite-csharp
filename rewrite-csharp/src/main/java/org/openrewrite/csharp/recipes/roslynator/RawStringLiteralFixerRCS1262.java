@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class RawStringLiteralFixerRCS1262 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "RCS1262";
 
-    @Override
-    public String getRecipeId() {
-        return "RCS1262";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "Roslynator.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Roslynator.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.15.0";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.15.0";
-    }
+    @Getter
+    final String displayName = "Unnecessary raw string literal";
 
-    @Override
-    public String getDisplayName() {
-        return "Unnecessary raw string literal";
-    }
+    @Getter
+    final String description = "";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "RCS1262", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "RCS1262", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

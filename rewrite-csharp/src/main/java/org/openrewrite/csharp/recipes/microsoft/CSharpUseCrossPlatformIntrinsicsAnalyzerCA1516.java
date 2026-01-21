@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class CSharpUseCrossPlatformIntrinsicsAnalyzerCA1516 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1516";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1516";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Use cross-platform intrinsics";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Use cross-platform intrinsics";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. This rule detects usage of platform-specific intrinsics that can be replaced with an equivalent cross-platform intrinsic instead.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. This rule detects usage of platform-specific intrinsics that can be replaced with an equivalent cross-platform intrinsic instead.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1516", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA1516", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class DoNotNameEnumValuesReservedCA1700 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1700";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1700";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Do not name enum values 'Reserved'";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Do not name enum values 'Reserved'";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. This rule assumes that an enumeration member that has a name that contains \"reserved\" is not currently used but is a placeholder to be renamed or removed in a future version. Renaming or removing a member is a breaking change.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. This rule assumes that an enumeration member that has a name that contains \"reserved\" is not currently used but is a placeholder to be renamed or removed in a future version. Renaming or removing a member is a breaking change.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1700", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA1700", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

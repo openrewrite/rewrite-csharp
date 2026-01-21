@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA0002InvalidSettingsFileSA0002 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA0002";
 
-    @Override
-    public String getRecipeId() {
-        return "SA0002";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Invalid settings file";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Invalid settings file";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Various errors in the stylecop.json file can prevent the file from being loaded by the analyzers. In this case, the default settings are used instead.    {0}";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Various errors in the stylecop.json file can prevent the file from being loaded by the analyzers. In this case, the default settings are used instead.    {0}";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA0002", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA0002", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

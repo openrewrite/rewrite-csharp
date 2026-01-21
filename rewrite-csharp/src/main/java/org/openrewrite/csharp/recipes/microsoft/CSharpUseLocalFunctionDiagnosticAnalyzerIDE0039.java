@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class CSharpUseLocalFunctionDiagnosticAnalyzerIDE0039 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "IDE0039";
 
-    @Override
-    public String getRecipeId() {
-        return "IDE0039";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-    }
+    @Getter
+    final String nugetPackageVersion = "5.0.0";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "5.0.0";
-    }
+    @Getter
+    final String displayName = "Analysis: Use local function";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Use local function";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. ";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. ";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "IDE0039", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "IDE0039", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

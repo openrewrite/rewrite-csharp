@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class CSharpStaticHolderTypesFixerCA1052 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1052";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1052";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Static holder types should be Static or NotInheritable";
 
-    @Override
-    public String getDisplayName() {
-        return "Static holder types should be Static or NotInheritable";
-    }
+    @Getter
+    final String description = "";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "CA1052", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "CA1052", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

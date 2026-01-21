@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class DisableRuntimeMarshallingAnalyzerCA1421 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1421";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1421";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: This method uses runtime marshalling even when the 'DisableRuntimeMarshallingAttribute' is applied";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: This method uses runtime marshalling even when the 'DisableRuntimeMarshallingAttribute' is applied";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. This method uses runtime marshalling even when runtime marshalling is disabled, which can cause unexpected behavior differences at runtime due to different expectations of a type's native layout.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. This method uses runtime marshalling even when runtime marshalling is disabled, which can cause unexpected behavior differences at runtime due to different expectations of a type's native layout.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1421", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA1421", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

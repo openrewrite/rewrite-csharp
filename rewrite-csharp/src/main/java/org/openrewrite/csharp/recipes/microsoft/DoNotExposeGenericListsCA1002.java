@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class DoNotExposeGenericListsCA1002 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1002";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1002";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Do not expose generic lists";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Do not expose generic lists";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. System.Collections.Generic.List<T> is a generic collection that's designed for performance and not inheritance. List<T> does not contain virtual members that make it easier to change the behavior of an inherited class.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. System.Collections.Generic.List<T> is a generic collection that's designed for performance and not inheritance. List<T> does not contain virtual members that make it easier to change the behavior of an inherited class.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1002", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA1002", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

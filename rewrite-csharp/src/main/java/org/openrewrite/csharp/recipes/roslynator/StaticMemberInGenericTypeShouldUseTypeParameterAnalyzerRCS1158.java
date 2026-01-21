@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class StaticMemberInGenericTypeShouldUseTypeParameterAnalyzerRCS1158 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "RCS1158";
 
-    @Override
-    public String getRecipeId() {
-        return "RCS1158";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Roslynator.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Roslynator.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.15.0";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.15.0";
-    }
+    @Getter
+    final String displayName = "Analysis: Static member in generic type should use a type parameter";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Static member in generic type should use a type parameter";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. ";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. ";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1158", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "RCS1158", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

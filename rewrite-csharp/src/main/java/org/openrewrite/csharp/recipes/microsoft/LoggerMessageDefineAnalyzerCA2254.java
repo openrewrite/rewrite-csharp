@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class LoggerMessageDefineAnalyzerCA2254 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA2254";
 
-    @Override
-    public String getRecipeId() {
-        return "CA2254";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Template should be a static expression";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Template should be a static expression";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. The logging message template should not vary between calls.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. The logging message template should not vary between calls.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2254", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA2254", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

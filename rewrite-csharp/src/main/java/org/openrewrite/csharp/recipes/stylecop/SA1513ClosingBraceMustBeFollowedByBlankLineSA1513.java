@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1513ClosingBraceMustBeFollowedByBlankLineSA1513 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1513";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1513";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Closing brace should be followed by blank line";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Closing brace should be followed by blank line";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. A closing brace within a C# element, statement, or expression is not followed by a blank line.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. A closing brace within a C# element, statement, or expression is not followed by a blank line.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1513", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1513", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

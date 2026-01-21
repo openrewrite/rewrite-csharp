@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1615ElementReturnValueMustBeDocumentedSA1615 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1615";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1615";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Element return value should be documented";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Element return value should be documented";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. A C# element is missing documentation for its return value.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. A C# element is missing documentation for its return value.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1615", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1615", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1412StoreFilesAsUtf8SA1412 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1412";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1412";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Store files as UTF-8 with byte order mark";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Store files as UTF-8 with byte order mark";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Source files should be saved using the UTF-8 encoding with a byte order mark";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Source files should be saved using the UTF-8 encoding with a byte order mark";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1412", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1412", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

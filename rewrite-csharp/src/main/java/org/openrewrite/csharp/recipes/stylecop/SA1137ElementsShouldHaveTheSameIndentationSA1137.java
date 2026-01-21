@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1137ElementsShouldHaveTheSameIndentationSA1137 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1137";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1137";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Elements should have the same indentation";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Elements should have the same indentation";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Elements at the same level in the syntax tree should have the same indentation.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Elements at the same level in the syntax tree should have the same indentation.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1137", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1137", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

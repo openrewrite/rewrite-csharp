@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class TokenSpacingFixerSA1026 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1026";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1026";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Code should not contain space after new or stackalloc keyword in implicitly typed array allocation";
 
-    @Override
-    public String getDisplayName() {
-        return "Code should not contain space after new or stackalloc keyword in implicitly typed array allocation";
-    }
+    @Getter
+    final String description = "An implicitly typed array allocation within a C# code file is not spaced correctly.";
 
-    @Override
-    public String getDescription() {
-        return "An implicitly typed array allocation within a C# code file is not spaced correctly.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1026", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "SA1026", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

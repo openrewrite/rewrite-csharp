@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class CSharpMarkAllNonSerializableFieldsFixerCA2235 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA2235";
 
-    @Override
-    public String getRecipeId() {
-        return "CA2235";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Mark all non-serializable fields";
 
-    @Override
-    public String getDisplayName() {
-        return "Mark all non-serializable fields";
-    }
+    @Getter
+    final String description = "An instance field of a type that is not serializable is declared in a type that is serializable.";
 
-    @Override
-    public String getDescription() {
-        return "An instance field of a type that is not serializable is declared in a type that is serializable.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "CA2235", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "CA2235", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

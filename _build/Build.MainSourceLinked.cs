@@ -49,6 +49,7 @@ partial class Build
              // CA1861: Avoid constant arrays as arguments
              var packages =  new[]
              {
+                 "Microsoft.CodeAnalysis.CSharp.CodeStyle",
                  "Roslynator.Analyzers", //https://github.com/dotnet/roslynator
                  "Microsoft.CodeAnalysis.NetAnalyzers", //https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/categories
                  "Meziantou.Analyzer", //https://github.com/meziantou/Meziantou.Analyzer
@@ -78,6 +79,7 @@ partial class Build
                  {
                      var className = recipe.Id.StartsWith(recipe.TypeName) ? recipe.Id : recipe.TypeName.FullName.Split('.').Last();
                      // className = className.ReplaceRegex("(Analyzer|Fixer|CodeFixProvider)$", _ => "");
+                     className = className.ReplaceRegex("CodeFixProvider$", _ => "Fixer");
                      className = $"{className}{recipe.Id}";
                      var packageNameFirstSegment = resolvedPackage.Id.ToLower().Split('.').First();
                      // var packageNameFirstSegment = recipe.TypeName.FullName.Split('.').First();
@@ -92,6 +94,8 @@ partial class Build
                      return new
                      {
                          recipe.Id,
+                         Description = $"{descriptionPostfix}{EscapeQuotesAndRemoveLineBreaks(recipe.Description)}",
+                         DisplayName = $"{displayNamePrefix}{EscapeQuotesAndRemoveLineBreaks(recipe.DisplayName)}",
                          PackageName = resolvedPackage.Id,
                          PackageVersion = resolvedPackage.Version,
                          Tags = tags,
@@ -120,44 +124,31 @@ partial class Build
                          import java.util.Set;
                          import java.util.stream.Collectors;
                          import java.util.stream.Stream;
+                         import lombok.Getter;
 
                          public class {{model.ClassName}} extends RoslynRecipe {
+                             @Getter
+                             final String recipeId = "{{model.Id}}";
 
-                             @Override
-                             public String getRecipeId() {
-                                 return "{{model.Id}}";
-                             }
+                             @Getter
+                             final boolean runCodeFixup = {{model.RunCodeFixup}};
 
-                             @Override
-                             public boolean getRunCodeFixup() {
-                                 return {{model.RunCodeFixup}};
-                             }
+                             @Getter
+                             final String nugetPackageName = "{{model.PackageName}}";
 
-                             @Override
-                             public String getNugetPackageName() {
-                                 return "{{model.PackageName}}";
-                             }
+                             @Getter
+                             final String nugetPackageVersion = "{{model.PackageVersion}}";
 
-                             @Override
-                             public String getNugetPackageVersion() {
-                                 return "{{model.PackageVersion}}";
-                             }
+                             @Getter
+                             final String displayName = "{{model.DisplayName}}";
 
-                             @Override
-                             public String getDisplayName() {
-                                 return "{{model.DisplayName}}";
-                             }
+                             @Getter
+                             final String description = "{{model.Description}}";
 
-                             @Override
-                             public String getDescription() {
-                                 return "{{model.Description}}";
-                             }
+                             @Getter
+                             final Set<String> tags = Stream.of({{RenderTags(model.Tags)}}).collect(Collectors.toSet());
 
-                             @Override
-                             public Set<String> getTags() {
-                                 return Stream.of({{RenderTags(model.Tags)}}).collect(Collectors.toSet());
-                             }
-                             }
+                         }
 
                          """"))
                      .ToList();

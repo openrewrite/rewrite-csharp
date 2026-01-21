@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1508FixerSA1508 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1508";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1508";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Closing braces should not be preceded by blank line";
 
-    @Override
-    public String getDisplayName() {
-        return "Closing braces should not be preceded by blank line";
-    }
+    @Getter
+    final String description = "A closing brace within a C# element, statement, or expression is preceded by a blank line.";
 
-    @Override
-    public String getDescription() {
-        return "A closing brace within a C# element, statement, or expression is preceded by a blank line.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1508", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "SA1508", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class LoggerMessageDefineAnalyzerCA2017 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA2017";
 
-    @Override
-    public String getRecipeId() {
-        return "CA2017";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Parameter count mismatch";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Parameter count mismatch";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Number of parameters supplied in the logging message template do not match the number of named placeholders.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Number of parameters supplied in the logging message template do not match the number of named placeholders.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2017", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA2017", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

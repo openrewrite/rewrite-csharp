@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class TestForEmptyStringsUsingStringLengthAnalyzerCA1820 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1820";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1820";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Test for empty strings using string length";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Test for empty strings using string length";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Comparing strings by using the String.Length property or the String.IsNullOrEmpty method is significantly faster than using Equals.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Comparing strings by using the String.Length property or the String.IsNullOrEmpty method is significantly faster than using Equals.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1820", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA1820", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

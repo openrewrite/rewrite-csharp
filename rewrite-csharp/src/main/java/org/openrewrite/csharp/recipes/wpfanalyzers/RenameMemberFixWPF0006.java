@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class RenameMemberFixWPF0006 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0006";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0006";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "Name of CoerceValueCallback should match registered name";
 
-    @Override
-    public String getDisplayName() {
-        return "Name of CoerceValueCallback should match registered name";
-    }
+    @Getter
+    final String description = "Name of CoerceValueCallback should match registered name.";
 
-    @Override
-    public String getDescription() {
-        return "Name of CoerceValueCallback should match registered name.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0006", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "WPF0006", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

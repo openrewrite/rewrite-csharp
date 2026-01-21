@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class CSharpPreferDictionaryContainsMethodsCA1841 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1841";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1841";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Prefer Dictionary.Contains methods";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Prefer Dictionary.Contains methods";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. 'ContainsKey' is usually O(1), while 'Keys.Contains' may be O(n) in some cases. Additionally, many dictionary implementations lazily initialize the Keys collection to cut back on allocations.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. 'ContainsKey' is usually O(1), while 'Keys.Contains' may be O(n) in some cases. Additionally, many dictionary implementations lazily initialize the Keys collection to cut back on allocations.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1841", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA1841", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class UseSetValueFixWPF0043 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0043";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0043";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "Don't set DataContext and Style using SetCurrentValue";
 
-    @Override
-    public String getDisplayName() {
-        return "Don't set DataContext and Style using SetCurrentValue";
-    }
+    @Getter
+    final String description = "Set DataContext and Style using SetValue.";
 
-    @Override
-    public String getDescription() {
-        return "Set DataContext and Style using SetValue.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0043", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "WPF0043", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

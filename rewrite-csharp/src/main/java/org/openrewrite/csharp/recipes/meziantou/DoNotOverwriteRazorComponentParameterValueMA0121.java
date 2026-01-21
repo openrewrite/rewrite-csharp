@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class DoNotOverwriteRazorComponentParameterValueMA0121 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "MA0121";
 
-    @Override
-    public String getRecipeId() {
-        return "MA0121";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Meziantou.Analyzer";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Meziantou.Analyzer";
-    }
+    @Getter
+    final String nugetPackageVersion = "2.0.285";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "2.0.284";
-    }
+    @Getter
+    final String displayName = "Analysis: Do not overwrite parameter value";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Do not overwrite parameter value";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. ";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. ";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0121", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "MA0121", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

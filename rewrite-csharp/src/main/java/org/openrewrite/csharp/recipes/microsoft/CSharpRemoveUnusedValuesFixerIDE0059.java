@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class CSharpRemoveUnusedValuesFixerIDE0059 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "IDE0059";
 
-    @Override
-    public String getRecipeId() {
-        return "IDE0059";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-    }
+    @Getter
+    final String nugetPackageVersion = "5.0.0";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "5.0.0";
-    }
+    @Getter
+    final String displayName = "Unnecessary assignment of a value";
 
-    @Override
-    public String getDisplayName() {
-        return "Unnecessary assignment of a value";
-    }
+    @Getter
+    final String description = "Avoid unnecessary value assignments in your code, as these likely indicate redundant value computations. If the value computation is not redundant and you intend to retain the assignment, then change the assignment target to a local variable whose name starts with an underscore and is optionally followed by an integer, such as '_', '_1', '_2', etc. These are treated as special discard symbol names.";
 
-    @Override
-    public String getDescription() {
-        return "Avoid unnecessary value assignments in your code, as these likely indicate redundant value computations. If the value computation is not redundant and you intend to retain the assignment, then change the assignment target to a local variable whose name starts with an underscore and is optionally followed by an integer, such as '_', '_1', '_2', etc. These are treated as special discard symbol names.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "IDE0059", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "IDE0059", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

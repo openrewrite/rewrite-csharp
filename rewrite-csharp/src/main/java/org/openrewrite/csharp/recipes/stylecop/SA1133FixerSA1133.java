@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1133FixerSA1133 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1133";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1133";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Do not combine attributes";
 
-    @Override
-    public String getDisplayName() {
-        return "Do not combine attributes";
-    }
+    @Getter
+    final String description = "Each attribute usage should be placed in its own set of square brackets for maximum readability.";
 
-    @Override
-    public String getDescription() {
-        return "Each attribute usage should be placed in its own set of square brackets for maximum readability.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1133", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "SA1133", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

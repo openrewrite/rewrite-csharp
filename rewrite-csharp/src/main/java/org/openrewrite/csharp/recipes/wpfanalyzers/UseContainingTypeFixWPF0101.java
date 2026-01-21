@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class UseContainingTypeFixWPF0101 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0101";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0101";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "Containing type should be used as registered owner";
 
-    @Override
-    public String getDisplayName() {
-        return "Containing type should be used as registered owner";
-    }
+    @Getter
+    final String description = "When registering a RoutedEvent register containing type as owner type.";
 
-    @Override
-    public String getDescription() {
-        return "When registering a RoutedEvent register containing type as owner type.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0101", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "WPF0101", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

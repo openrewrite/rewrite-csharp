@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SetValueAnalyzerWPF0040 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0040";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0040";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "Analysis: A readonly DependencyProperty must be set with DependencyPropertyKey";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: A readonly DependencyProperty must be set with DependencyPropertyKey";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. A readonly DependencyProperty must be set with DependencyPropertyKey.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. A readonly DependencyProperty must be set with DependencyPropertyKey.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0040", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "WPF0040", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

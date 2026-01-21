@@ -168,6 +168,8 @@ public class RoslynRecipe(IEnumerable<Assembly> recipeAssemblies, ILogger<Roslyn
 
     private async Task ApplyAnalyzerHighlights(Dictionary<string, DiagnosticAnalyzer> analyzersToHighlight, SolutionEditor solution, CancellationToken cancellationToken)
     {
+        if (analyzersToHighlight.Count == 0)
+            return;
         var diagnostics = await GetDiagnostics(solution, analyzersToHighlight.Values.ToImmutableArray(), cancellationToken);
         var diagnosticsByDocument = diagnostics
             .Select(x => (Diagnostic: x, Document: solution.CurrentSolution.GetDocument(x.Location.SourceTree)))

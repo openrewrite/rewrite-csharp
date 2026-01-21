@@ -36,6 +36,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Microsoft.NET.Build.Tasks\Resources\Strings.resx" LinkBase="Resources" GenerateSource="True" Namespace="Microsoft.NET.Build.Tasks" LogicalName="Microsoft.NET.Build.Tasks.Strings.resources" />
+        <EmbeddedResource Include="Restore\Resources\Strings.resx" LinkBase="Resources" GenerateSource="True" Namespace="Microsoft.NET.Build.Tasks" LogicalName="Microsoft.NET.Build.Tasks.Strings.resources" />
     </ItemGroup>
 </Project>

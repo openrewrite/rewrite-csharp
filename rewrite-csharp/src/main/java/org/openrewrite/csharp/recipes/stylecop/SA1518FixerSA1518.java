@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1518FixerSA1518 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1518";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1518";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Use line endings correctly at end of file";
 
-    @Override
-    public String getDisplayName() {
-        return "Use line endings correctly at end of file";
-    }
+    @Getter
+    final String description = "Code should not contain blank lines at the end of the file";
 
-    @Override
-    public String getDescription() {
-        return "Code should not contain blank lines at the end of the file";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1518", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "SA1518", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

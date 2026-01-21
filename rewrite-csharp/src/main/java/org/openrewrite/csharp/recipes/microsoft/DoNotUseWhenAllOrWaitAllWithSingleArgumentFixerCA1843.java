@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class DoNotUseWhenAllOrWaitAllWithSingleArgumentFixerCA1843 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1843";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1843";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Do not use 'WaitAll' with a single task";
 
-    @Override
-    public String getDisplayName() {
-        return "Do not use 'WaitAll' with a single task";
-    }
+    @Getter
+    final String description = "Using 'WaitAll' with a single task may result in performance loss, await or return the task instead.";
 
-    @Override
-    public String getDescription() {
-        return "Using 'WaitAll' with a single task may result in performance loss, await or return the task instead.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "CA1843", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "CA1843", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

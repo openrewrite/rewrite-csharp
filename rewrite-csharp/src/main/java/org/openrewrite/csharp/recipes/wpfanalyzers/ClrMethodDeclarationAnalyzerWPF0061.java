@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class ClrMethodDeclarationAnalyzerWPF0061 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0061";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0061";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "Analysis: Accessor method for attached property should have standard documentation text";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Accessor method for attached property should have standard documentation text";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Accessor method for attached property should have standard documentation text.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Accessor method for attached property should have standard documentation text.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0061", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "WPF0061", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

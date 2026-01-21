@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class CSharpDynamicInterfaceCastableImplementationFixerCA2256 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA2256";
 
-    @Override
-    public String getRecipeId() {
-        return "CA2256";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "All members declared in parent interfaces must have an implementation in a DynamicInterfaceCastableImplementation-attributed interface";
 
-    @Override
-    public String getDisplayName() {
-        return "All members declared in parent interfaces must have an implementation in a DynamicInterfaceCastableImplementation-attributed interface";
-    }
+    @Getter
+    final String description = "Types attributed with 'DynamicInterfaceCastableImplementationAttribute' act as an interface implementation for a type that implements the 'IDynamicInterfaceCastable' type. As a result, it must provide an implementation of all of the members defined in the inherited interfaces, because the type that implements 'IDynamicInterfaceCastable' will not provide them otherwise.";
 
-    @Override
-    public String getDescription() {
-        return "Types attributed with 'DynamicInterfaceCastableImplementationAttribute' act as an interface implementation for a type that implements the 'IDynamicInterfaceCastable' type. As a result, it must provide an implementation of all of the members defined in the inherited interfaces, because the type that implements 'IDynamicInterfaceCastable' will not provide them otherwise.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "CA2256", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "CA2256", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

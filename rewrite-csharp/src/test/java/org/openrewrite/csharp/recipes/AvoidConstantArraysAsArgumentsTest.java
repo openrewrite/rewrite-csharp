@@ -18,8 +18,8 @@ package org.openrewrite.csharp.recipes;
 import org.junit.jupiter.api.Test;
 import org.openrewrite.Recipe;
 import org.openrewrite.config.CompositeRecipe;
-import org.openrewrite.csharp.recipes.microsoft.AbstractTypesShouldNotHaveConstructorsCA1012;
-import org.openrewrite.csharp.recipes.microsoft.AvoidConstArraysCA1861;
+import org.openrewrite.csharp.recipes.microsoft.AbstractTypesShouldNotHaveConstructorsFixerCA1012;
+import org.openrewrite.csharp.recipes.microsoft.AvoidConstArraysFixerCA1861;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.TypeValidation;
 
@@ -30,7 +30,7 @@ public class AvoidConstantArraysAsArgumentsTest extends RoslynRecipeTest {
     @Override
     public void defaults(RecipeSpec spec) {
         spec
-          .recipe(new AvoidConstArraysCA1861())
+          .recipe(new AvoidConstArraysFixerCA1861())
           .typeValidationOptions(TypeValidation.builder()
             .immutableExecutionContext(false).build());
     }
@@ -166,8 +166,8 @@ public class AvoidConstantArraysAsArgumentsTest extends RoslynRecipeTest {
                 """));
 
         Recipe recipe = new CompositeRecipe(List.of(
-          new AvoidConstArraysCA1861(),
-          new AbstractTypesShouldNotHaveConstructorsCA1012())
+          new AvoidConstArraysFixerCA1861(),
+          new AbstractTypesShouldNotHaveConstructorsFixerCA1012())
         );
 
         var sources = this.combineSolutions(solution1, solution2);

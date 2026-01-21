@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class CSharpRemoveUnnecessaryLambdaExpressionFixerIDE0200 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "IDE0200";
 
-    @Override
-    public String getRecipeId() {
-        return "IDE0200";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-    }
+    @Getter
+    final String nugetPackageVersion = "5.0.0";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "5.0.0";
-    }
+    @Getter
+    final String displayName = "Remove unnecessary lambda expression";
 
-    @Override
-    public String getDisplayName() {
-        return "Remove unnecessary lambda expression";
-    }
+    @Getter
+    final String description = "";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "IDE0200", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "IDE0200", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

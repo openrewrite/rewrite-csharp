@@ -87,6 +87,8 @@ var httpContextAccessorType = semanticModel.Compilation.GetTypeByMetadataName("M
 editor.ReplaceType(semanticModel, actionContextAccessorType, httpContextAccessorType);
 ```
 
+
+
 #### Rename symbol
 
 Accurately renames a symbol using semantic model

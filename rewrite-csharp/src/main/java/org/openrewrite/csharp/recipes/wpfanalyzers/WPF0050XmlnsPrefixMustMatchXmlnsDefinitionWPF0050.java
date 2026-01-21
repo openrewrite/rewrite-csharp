@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class WPF0050XmlnsPrefixMustMatchXmlnsDefinitionWPF0050 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0050";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0050";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "Analysis: XmlnsPrefix must map to the same url as XmlnsDefinition";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: XmlnsPrefix must map to the same url as XmlnsDefinition";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. [XmlnsPrefix] must have a corresponding [XmlnsDefinition] mapping to the same url.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. [XmlnsPrefix] must have a corresponding [XmlnsDefinition] mapping to the same url.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0050", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "WPF0050", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

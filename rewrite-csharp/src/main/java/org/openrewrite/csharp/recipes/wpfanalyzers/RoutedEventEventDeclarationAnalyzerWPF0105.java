@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class RoutedEventEventDeclarationAnalyzerWPF0105 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0105";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0105";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "Analysis: Call RemoveHandler in remove";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Call RemoveHandler in remove";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Call RemoveHandler in remove.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Call RemoveHandler in remove.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0105", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "WPF0105", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class DoNotUseWeakKDFInsufficientIterationCountCA5388 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA5388";
 
-    @Override
-    public String getRecipeId() {
-        return "CA5388";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Ensure Sufficient Iteration Count When Using Weak Key Derivation Function";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Ensure Sufficient Iteration Count When Using Weak Key Derivation Function";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. When deriving cryptographic keys from user-provided inputs such as password, use sufficient iteration count (at least 100k).";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. When deriving cryptographic keys from user-provided inputs such as password, use sufficient iteration count (at least 100k).";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5388", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA5388", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

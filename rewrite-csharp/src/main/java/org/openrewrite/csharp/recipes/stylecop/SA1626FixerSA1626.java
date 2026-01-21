@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1626FixerSA1626 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1626";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1626";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Single-line comments should not use documentation style slashes";
 
-    @Override
-    public String getDisplayName() {
-        return "Single-line comments should not use documentation style slashes";
-    }
+    @Getter
+    final String description = "The C# code contains a single-line comment which begins with three forward slashes in a row.";
 
-    @Override
-    public String getDescription() {
-        return "The C# code contains a single-line comment which begins with three forward slashes in a row.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1626", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "SA1626", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class UsePatternMatchingForEqualityComparisonsFixerMA0149 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "MA0149";
 
-    @Override
-    public String getRecipeId() {
-        return "MA0149";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "Meziantou.Analyzer";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Meziantou.Analyzer";
-    }
+    @Getter
+    final String nugetPackageVersion = "2.0.285";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "2.0.284";
-    }
+    @Getter
+    final String displayName = "Use pattern matching instead of inequality operators for discrete value";
 
-    @Override
-    public String getDisplayName() {
-        return "Use pattern matching instead of inequality operators for discrete value";
-    }
+    @Getter
+    final String description = "";
 
-    @Override
-    public String getDescription() {
-        return "";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "MA0149", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "MA0149", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

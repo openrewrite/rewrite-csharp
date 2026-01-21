@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class UseConcreteTypeAnalyzerCA1859 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1859";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1859";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Use concrete types when possible for improved performance";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Use concrete types when possible for improved performance";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Using concrete types avoids virtual or interface call overhead and enables inlining.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Using concrete types avoids virtual or interface call overhead and enables inlining.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1859", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA1859", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1648InheritDocMustBeUsedWithInheritingClassSA1648 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1648";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1648";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: inheritdoc should be used with inheriting class";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: inheritdoc should be used with inheriting class";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. <inheritdoc> has been used on an element that doesn't inherit from a base class or implement an interface.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. <inheritdoc> has been used on an element that doesn't inherit from a base class or implement an interface.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1648", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1648", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class PropertyNamesShouldNotMatchGetMethodsAnalyzerCA1721 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA1721";
 
-    @Override
-    public String getRecipeId() {
-        return "CA1721";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Property names should not match get methods";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Property names should not match get methods";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. The name of a public or protected member starts with \"\"Get\"\" and otherwise matches the name of a public or protected property. \"\"Get\"\" methods and properties should have names that clearly distinguish their function.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. The name of a public or protected member starts with \"\"Get\"\" and otherwise matches the name of a public or protected property. \"\"Get\"\" methods and properties should have names that clearly distinguish their function.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1721", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA1721", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

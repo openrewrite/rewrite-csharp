@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1207ProtectedMustComeBeforeInternalSA1207 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1207";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1207";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Protected should come before internal";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Protected should come before internal";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. The keyword '{0}' is positioned after the keyword '{1}' within the declaration of a {0} {1} C# element.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. The keyword '{0}' is positioned after the keyword '{1}' within the declaration of a {0} {1} C# element.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1207", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1207", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

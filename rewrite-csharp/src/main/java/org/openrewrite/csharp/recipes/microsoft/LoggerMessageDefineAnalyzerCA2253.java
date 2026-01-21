@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class LoggerMessageDefineAnalyzerCA2253 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA2253";
 
-    @Override
-    public String getRecipeId() {
-        return "CA2253";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Named placeholders should not be numeric values";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Named placeholders should not be numeric values";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. Named placeholders in the logging message template should not be comprised of only numeric characters.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. Named placeholders in the logging message template should not be comprised of only numeric characters.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2253", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA2253", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

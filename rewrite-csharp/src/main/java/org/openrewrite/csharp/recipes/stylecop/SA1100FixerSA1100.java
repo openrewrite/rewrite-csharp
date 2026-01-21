@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA1100FixerSA1100 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1100";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1100";
-    }
+    @Getter
+    final boolean runCodeFixup = true;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return true;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Do not prefix calls with base unless local implementation exists";
 
-    @Override
-    public String getDisplayName() {
-        return "Do not prefix calls with base unless local implementation exists";
-    }
+    @Getter
+    final String description = "A call to a member from an inherited class begins with 'base.', and the local class does not contain an override or implementation of the member.";
 
-    @Override
-    public String getDescription() {
-        return "A call to a member from an inherited class begins with 'base.', and the local class does not contain an override or implementation of the member.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1100", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "codefix", "SA1100", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

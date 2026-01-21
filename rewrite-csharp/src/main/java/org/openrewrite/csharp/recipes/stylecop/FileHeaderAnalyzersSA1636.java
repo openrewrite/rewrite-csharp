@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class FileHeaderAnalyzersSA1636 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1636";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1636";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: File header copyright text should match";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: File header copyright text should match";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. The file header at the top of a C# code file does not contain the appropriate copyright text.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. The file header at the top of a C# code file does not contain the appropriate copyright text.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1636", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1636", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

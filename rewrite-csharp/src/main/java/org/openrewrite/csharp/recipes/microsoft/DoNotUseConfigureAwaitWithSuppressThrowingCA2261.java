@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class DoNotUseConfigureAwaitWithSuppressThrowingCA2261 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA2261";
 
-    @Override
-    public String getRecipeId() {
-        return "CA2261";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Do not use ConfigureAwaitOptions.SuppressThrowing with Task<TResult>";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Do not use ConfigureAwaitOptions.SuppressThrowing with Task<TResult>";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. The ConfigureAwaitOptions.SuppressThrowing option is only supported with the non-generic Task, not a Task<TResult>.  To use it with a Task<TResult>, first cast to the base Task.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. The ConfigureAwaitOptions.SuppressThrowing option is only supported with the non-generic Task, not a Task<TResult>.  To use it with a Task<TResult>, first cast to the base Task.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2261", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA2261", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

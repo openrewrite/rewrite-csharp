@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.NET.Build.Tasks;
-using Microsoft.NET.Build.Tasks.ConflictResolution;
 using NuGet.LibraryModel;
 using NuGet.Versioning;
 using Nuke.Common.IO;
@@ -25,8 +24,8 @@ public class ReceiptExecutionContextTests
         LibraryRange[] requestedPackages =
         [
             new LibraryRange("Microsoft.CodeAnalysis.CSharp.CodeStyle", VersionRange.AllStable, LibraryDependencyTarget.Package),
-            new LibraryRange("Microsoft.CodeAnalysis.Common", VersionRange.AllStable, LibraryDependencyTarget.Package),
-            new LibraryRange("Microsoft.CodeAnalysis.Workspaces.Common", VersionRange.AllStable, LibraryDependencyTarget.Package),
+            // new LibraryRange("Microsoft.CodeAnalysis.Common", VersionRange.AllStable, LibraryDependencyTarget.Package),
+            // new LibraryRange("Microsoft.CodeAnalysis.Workspaces.Common", VersionRange.AllStable, LibraryDependencyTarget.Package),
             //new LibraryRange("Microsoft.CodeAnalysis.Common", VersionRange.Parse("3.11.0"), LibraryDependencyTarget.Package),
             //new LibraryRange("Microsoft.Extensions.Logging", VersionRange.Parse("10.0.0"), LibraryDependencyTarget.Package)
         ];

@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class OverrideMetadataAnalyzerWPF0017 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "WPF0017";
 
-    @Override
-    public String getRecipeId() {
-        return "WPF0017";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "WpfAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "WpfAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "4.1.1";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "4.1.1";
-    }
+    @Getter
+    final String displayName = "Analysis: Metadata must be of same type or super type";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Metadata must be of same type or super type";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. When overriding metadata must be of the same type or subtype of the overridden property's metadata.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. When overriding metadata must be of the same type or subtype of the overridden property's metadata.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0017", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "WPF0017", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class SA110xQueryClausesSA1103 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "SA1103";
 
-    @Override
-    public String getRecipeId() {
-        return "SA1103";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "StyleCop.Analyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "StyleCop.Analyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "1.1.118";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "1.1.118";
-    }
+    @Getter
+    final String displayName = "Analysis: Query clauses should be on separate lines or all on one line";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Query clauses should be on separate lines or all on one line";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. The clauses within a C# query expression are not all placed on the same line, and each clause is not placed on its own line.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. The clauses within a C# query expression are not all placed on the same line, and each clause is not placed on its own line.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1103", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "SA1103", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}

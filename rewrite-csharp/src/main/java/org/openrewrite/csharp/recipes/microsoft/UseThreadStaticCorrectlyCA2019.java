@@ -26,41 +26,28 @@ import org.openrewrite.csharp.RoslynRecipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 
 public class UseThreadStaticCorrectlyCA2019 extends RoslynRecipe {
+    @Getter
+    final String recipeId = "CA2019";
 
-    @Override
-    public String getRecipeId() {
-        return "CA2019";
-    }
+    @Getter
+    final boolean runCodeFixup = false;
 
-    @Override
-    public boolean getRunCodeFixup() {
-        return false;
-    }
+    @Getter
+    final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
 
-    @Override
-    public String getNugetPackageName() {
-        return "Microsoft.CodeAnalysis.NetAnalyzers";
-    }
+    @Getter
+    final String nugetPackageVersion = "10.0.102";
 
-    @Override
-    public String getNugetPackageVersion() {
-        return "10.0.102";
-    }
+    @Getter
+    final String displayName = "Analysis: Improper 'ThreadStatic' field initialization";
 
-    @Override
-    public String getDisplayName() {
-        return "Analysis: Improper 'ThreadStatic' field initialization";
-    }
+    @Getter
+    final String description = "This is a reporting only recipe. 'ThreadStatic' fields should be initialized lazily on use, not with inline initialization nor explicitly in a static constructor, which would only initialize the field on the thread that runs the type's static constructor.";
 
-    @Override
-    public String getDescription() {
-        return "This is a reporting only recipe. 'ThreadStatic' fields should be initialized lazily on use, not with inline initialization nor explicitly in a static constructor, which would only initialize the field on the thread that runs the type's static constructor.";
-    }
+    @Getter
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2019", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
-    @Override
-    public Set<String> getTags() {
-        return Stream.of("roslyn", "analyzer", "CA2019", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
-    }
-    }
+}
