@@ -56,9 +56,16 @@ Commands are executed from `moderneinc/rewrite-remote:Rewrite.Remote`.
    dotnet pack --output ~/localNuGetFeed
    ```
    
+
 Commands are executed from `openrewrite/rewrite-csharp:Rewrite`.
 
 3. Run Rewrite Integration tests with the latest `Rewrite.CShapr.Test` bundle to see all tests passes 
 
-### Publish to NuGet
+### Testing Locally with mod
 
+1. Run `publishNebulaPublicationToMavenLocal` task on `rewrite-csharp` to publish recipes into local maven cache
+2. Register them with mod using `mod config recipes jar install org.openrewrite:rewrite-csharp:0.28.4-SNAPSHOT` (adjust version)
+3. Ensure that environmental variable `ROSLYN_RECIPE_EXECUTABLE` points to folder where `Rewrite.Server.dll` lives. Ex `C:\Projects\openrewrite\rewrite-csharp\Rewrite\src\Rewrite.Server\bin\Debug\net10.0\`. 
+4. If you don't want the version of `Rewrite.Server` that is bundled into the jar file to be extracted to that location but instead use what's already in the folder, set environmental variable `ROSLYN_RECIPE_EXECUTABLE_SKIP_EXTRACT` to `true`
+5. Ensure you have a test project code in folder that is git initialized AND has a remote `origin` configured
+6. Execute `mod run C:\temp\TwoSolutions --recipe=org.openrewrite.csharp.recipes.microsoft.AvoidConstArraysAnalyzerCA1861`

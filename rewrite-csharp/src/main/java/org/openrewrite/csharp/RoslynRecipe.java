@@ -454,9 +454,9 @@ public abstract class RoslynRecipe extends ScanningRecipe<RoslynRecipe.Accumulat
             try {
                 Path path = getCodeDir().resolve(tree.getSourcePath());
                 Files.createDirectories(path.getParent());
-                PrintOutputCapture.MarkerPrinter markerPrinter = new PrintOutputCapture.MarkerPrinter() {
-                };
-                Path written = Files.write(path, tree.printAll(new PrintOutputCapture<>(0, markerPrinter)).getBytes(tree.getCharset() != null ? tree.getCharset() : StandardCharsets.UTF_8));
+
+
+                Path written = Files.write(path, tree.printAll(new PrintOutputCapture<>(0,                 PrintOutputCapture.MarkerPrinter.DEFAULT)).getBytes(tree.getCharset() != null ? tree.getCharset() : StandardCharsets.UTF_8));
                 getBeforeModificationTimestamps().put(written, Files.getLastModifiedTime(written).toMillis());
             } catch (IOException e) {
                 throw new UncheckedIOException(e);
