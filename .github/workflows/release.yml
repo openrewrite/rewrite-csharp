@@ -41,15 +41,11 @@ jobs:
       - name: set-up-gradle
         uses: gradle/actions/setup-gradle@v5
 
-      - uses: actions/setup-dotnet@v4
-        name: Install .NET 8
-        with:
-          dotnet-version: '8.0.x'
 
       - uses: actions/setup-dotnet@v4
-        name: Install .NET 9
+        name: Install .NET 10
         with:
-            dotnet-version: '9.0.x'
+            dotnet-version: '10.0.x'
 
       - name: build
         run: ./build.sh CIRelease
