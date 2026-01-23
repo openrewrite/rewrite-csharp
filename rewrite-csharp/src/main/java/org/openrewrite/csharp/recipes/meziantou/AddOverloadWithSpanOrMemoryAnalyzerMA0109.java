@@ -17,7 +17,7 @@
  * -------------------THIS FILE IS AUTO GENERATED--------------------------
  * Changes to this file may cause incorrect behavior and will be lost if
  * the code is regenerated.
-*/
+ */
 
 package org.openrewrite.csharp.recipes.meziantou;
 
@@ -25,8 +25,9 @@ import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toSet;
 
 @Getter
 public class AddOverloadWithSpanOrMemoryAnalyzerMA0109 extends RoslynRecipe {
@@ -39,6 +40,6 @@ public class AddOverloadWithSpanOrMemoryAnalyzerMA0109 extends RoslynRecipe {
 
     final String displayName = "Consider adding an overload with a Span<T> or Memory<T> (search)";
     final String description = "This is a reporting only recipe. ";
-    final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0109", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0109", "meziantou", "csharp", "dotnet", "c#").collect(toSet());
 
 }
