@@ -21,12 +21,12 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.Getter;
 
 public class CSharpUseThrowExpressionDiagnosticAnalyzerIDE0016 extends RoslynRecipe {
     @Getter

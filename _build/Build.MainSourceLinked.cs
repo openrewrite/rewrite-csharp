@@ -119,12 +119,12 @@ partial class Build
 
                          package org.openrewrite.csharp.recipes.{{model.Namespace}};
 
+                         import lombok.Getter;
                          import org.openrewrite.csharp.RoslynRecipe;
 
                          import java.util.Set;
                          import java.util.stream.Collectors;
                          import java.util.stream.Stream;
-                         import lombok.Getter;
 
                          public class {{model.ClassName}} extends RoslynRecipe {
                              @Getter

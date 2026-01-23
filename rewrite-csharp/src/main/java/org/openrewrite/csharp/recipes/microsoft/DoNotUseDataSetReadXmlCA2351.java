@@ -21,12 +21,12 @@
 
 package org.openrewrite.csharp.recipes.microsoft;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.Getter;
 
 public class DoNotUseDataSetReadXmlCA2351 extends RoslynRecipe {
     @Getter

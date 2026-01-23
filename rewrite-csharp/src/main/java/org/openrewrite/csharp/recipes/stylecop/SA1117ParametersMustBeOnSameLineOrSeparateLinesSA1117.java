@@ -21,12 +21,12 @@
 
 package org.openrewrite.csharp.recipes.stylecop;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.Getter;
 
 public class SA1117ParametersMustBeOnSameLineOrSeparateLinesSA1117 extends RoslynRecipe {
     @Getter

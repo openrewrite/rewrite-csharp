@@ -21,12 +21,12 @@
 
 package org.openrewrite.csharp.recipes.meziantou;
 
+import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.Getter;
 
 public class DoNotCallVirtualMethodInConstructorAnalyzerMA0056 extends RoslynRecipe {
     @Getter
