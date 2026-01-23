@@ -126,26 +126,17 @@ partial class Build
                          import java.util.stream.Collectors;
                          import java.util.stream.Stream;
 
+                         @Getter
                          public class {{model.ClassName}} extends RoslynRecipe {
-                             @Getter
-                             final String recipeId = "{{model.Id}}";
 
-                             @Getter
+                             final String recipeId = "{{model.Id}}";
                              final boolean runCodeFixup = {{model.RunCodeFixup}};
 
-                             @Getter
                              final String nugetPackageName = "{{model.PackageName}}";
-
-                             @Getter
                              final String nugetPackageVersion = "{{model.PackageVersion}}";
 
-                             @Getter
                              final String displayName = "{{model.DisplayName}}";
-
-                             @Getter
                              final String description = "{{model.Description}}";
-
-                             @Getter
                              final Set<String> tags = Stream.of({{RenderTags(model.Tags)}}).collect(Collectors.toSet());
 
                          }
