@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1021NegativeSignsMustBeSpacedCorrectlySA1021 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1021";
 
-    @Getter
+    final String recipeId = "SA1021";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Negative signs should be spaced correctly";
-
-    @Getter
+    final String displayName = "Negative signs should be spaced correctly (search)";
     final String description = "This is a reporting only recipe. A negative sign within a C# element is not spaced correctly.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1021", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

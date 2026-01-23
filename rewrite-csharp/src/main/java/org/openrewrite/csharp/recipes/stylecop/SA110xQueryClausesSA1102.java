@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA110xQueryClausesSA1102 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1102";
 
-    @Getter
+    final String recipeId = "SA1102";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Query clause should follow previous clause";
-
-    @Getter
+    final String displayName = "Query clause should follow previous clause (search)";
     final String description = "This is a reporting only recipe. A C# query clause does not begin on the same line as the previous clause, or on the next line.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1102", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

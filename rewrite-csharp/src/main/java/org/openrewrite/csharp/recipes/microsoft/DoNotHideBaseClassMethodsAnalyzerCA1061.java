@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotHideBaseClassMethodsAnalyzerCA1061 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1061";
 
-    @Getter
+    final String recipeId = "CA1061";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not hide base class methods";
-
-    @Getter
+    final String displayName = "Do not hide base class methods (search)";
     final String description = "This is a reporting only recipe. A method in a base type is hidden by an identically named method in a derived type when the parameter signature of the derived method differs only by types that are more weakly derived than the corresponding types in the parameter signature of the base method.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1061", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

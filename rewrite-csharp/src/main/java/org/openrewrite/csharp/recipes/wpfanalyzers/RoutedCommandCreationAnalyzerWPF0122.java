@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class RoutedCommandCreationAnalyzerWPF0122 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0122";
 
-    @Getter
+    final String recipeId = "WPF0122";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: Register name and owning type for routed command";
-
-    @Getter
+    final String displayName = "Register name and owning type for routed command (search)";
     final String description = "This is a reporting only recipe. Register containing type as owner for routed command.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0122", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

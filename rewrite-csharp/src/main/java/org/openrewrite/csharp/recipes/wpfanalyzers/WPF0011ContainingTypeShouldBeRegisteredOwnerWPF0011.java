@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class WPF0011ContainingTypeShouldBeRegisteredOwnerWPF0011 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0011";
 
-    @Getter
+    final String recipeId = "WPF0011";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: Containing type should be used as registered owner";
-
-    @Getter
+    final String displayName = "Containing type should be used as registered owner (search)";
     final String description = "This is a reporting only recipe. When registering a DependencyProperty register containing type as owner type.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0011", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

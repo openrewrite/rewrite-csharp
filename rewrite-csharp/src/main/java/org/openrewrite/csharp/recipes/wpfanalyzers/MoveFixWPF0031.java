@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class MoveFixWPF0031 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0031";
 
-    @Getter
+    final String recipeId = "WPF0031";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "DependencyPropertyKey member must be declared before DependencyProperty member";
-
-    @Getter
     final String description = "DependencyPropertyKey member must be declared before DependencyProperty member.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0031", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

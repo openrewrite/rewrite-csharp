@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1632DocumentationTextMustMeetMinimumCharacterLengthSA1632 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1632";
 
-    @Getter
+    final String recipeId = "SA1632";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Documentation text should meet minimum character length";
-
-    @Getter
+    final String displayName = "Documentation text should meet minimum character length (search)";
     final String description = "This is a reporting only recipe. A section of the Xml header documentation for a C# element is too short.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1632", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

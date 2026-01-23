@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SealMethodsThatSatisfyPrivateInterfacesFixerCA2119 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2119";
 
-    @Getter
+    final String recipeId = "CA2119";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Seal methods that satisfy private interfaces";
-
-    @Getter
     final String description = "An inheritable public type provides an overridable method implementation of an internal (Friend in Visual Basic) interface. To fix a violation of this rule, prevent the method from being overridden outside the assembly.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA2119", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

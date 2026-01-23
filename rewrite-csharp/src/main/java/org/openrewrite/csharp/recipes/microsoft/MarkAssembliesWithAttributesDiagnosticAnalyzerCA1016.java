@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class MarkAssembliesWithAttributesDiagnosticAnalyzerCA1016 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1016";
 
-    @Getter
+    final String recipeId = "CA1016";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Mark assemblies with assembly version";
-
-    @Getter
+    final String displayName = "Mark assemblies with assembly version (search)";
     final String description = "This is a reporting only recipe. The .NET Framework uses the version number to uniquely identify an assembly, and to bind to types in strongly named assemblies. The version number is used together with version and publisher policy. By default, applications run only with the assembly version with which they were built.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1016", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

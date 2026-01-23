@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseDSACA5384 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5384";
 
-    @Getter
+    final String recipeId = "CA5384";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do Not Use Digital Signature Algorithm (DSA)";
-
-    @Getter
+    final String displayName = "Do Not Use Digital Signature Algorithm (DSA) (search)";
     final String description = "This is a reporting only recipe. DSA is too weak to use.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5384", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

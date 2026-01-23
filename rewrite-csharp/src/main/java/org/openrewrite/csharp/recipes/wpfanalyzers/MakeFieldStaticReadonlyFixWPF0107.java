@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class MakeFieldStaticReadonlyFixWPF0107 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0107";
 
-    @Getter
+    final String recipeId = "WPF0107";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "Backing member for a RoutedEvent should be static and readonly";
-
-    @Getter
     final String description = "Backing member for a RoutedEvent should be static and readonly.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0107", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

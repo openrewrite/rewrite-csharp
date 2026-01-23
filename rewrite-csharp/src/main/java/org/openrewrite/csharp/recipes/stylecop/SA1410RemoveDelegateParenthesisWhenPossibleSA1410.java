@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1410RemoveDelegateParenthesisWhenPossibleSA1410 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1410";
 
-    @Getter
+    final String recipeId = "SA1410";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Remove delegate parenthesis when possible";
-
-    @Getter
+    final String displayName = "Remove delegate parenthesis when possible (search)";
     final String description = "This is a reporting only recipe. A call to a C# anonymous method does not contain any method parameters, yet the statement still includes parenthesis.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1410", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

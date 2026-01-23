@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseAsSpanInsteadOfRangeIndexerAnalyzerCA1833 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1833";
 
-    @Getter
+    final String recipeId = "CA1833";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Use AsSpan or AsMemory instead of Range-based indexers when appropriate";
-
-    @Getter
+    final String displayName = "Use AsSpan or AsMemory instead of Range-based indexers when appropriate (search)";
     final String description = "This is a reporting only recipe. The Range-based indexer on array values produces a copy of requested portion of the array. This copy is often unwanted when it is implicitly used as a Span or Memory value. Use the AsSpan method to avoid the copy.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1833", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1011ClosingSquareBracketsMustBeSpacedCorrectlySA1011 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1011";
 
-    @Getter
+    final String recipeId = "SA1011";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Closing square brackets should be spaced correctly";
-
-    @Getter
+    final String displayName = "Closing square brackets should be spaced correctly (search)";
     final String description = "This is a reporting only recipe. A closing square bracket within a C# statement is not spaced correctly.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1011", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

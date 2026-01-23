@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotThrowFromFinallyBlockAnalyzerMA0072 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0072";
 
-    @Getter
+    final String recipeId = "MA0072";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Do not throw from a finally block";
-
-    @Getter
+    final String displayName = "Do not throw from a finally block (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0072", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

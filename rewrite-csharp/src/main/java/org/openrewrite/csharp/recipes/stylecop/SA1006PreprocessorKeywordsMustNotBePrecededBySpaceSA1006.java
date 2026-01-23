@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1006PreprocessorKeywordsMustNotBePrecededBySpaceSA1006 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1006";
 
-    @Getter
+    final String recipeId = "SA1006";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Preprocessor keywords should not be preceded by space";
-
-    @Getter
+    final String displayName = "Preprocessor keywords should not be preceded by space (search)";
     final String description = "This is a reporting only recipe. A C# preprocessor-type keyword is preceded by space.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1006", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

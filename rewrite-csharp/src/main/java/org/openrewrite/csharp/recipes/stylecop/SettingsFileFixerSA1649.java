@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SettingsFileFixerSA1649 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1649";
 
-    @Getter
+    final String recipeId = "SA1649";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "File name should match first type name";
-
-    @Getter
     final String description = "The file name of a C# code file does not match the first type declared in the file.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1649", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

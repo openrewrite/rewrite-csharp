@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotDisableRequestValidationCA5363 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5363";
 
-    @Getter
+    final String recipeId = "CA5363";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do Not Disable Request Validation";
-
-    @Getter
+    final String displayName = "Do Not Disable Request Validation (search)";
     final String description = "This is a reporting only recipe. Request validation is a feature in ASP.NET that examines HTTP requests and determines whether they contain potentially dangerous content. This check adds protection from markup or code in the URL query string, cookies, or posted form values that might have been added for malicious purposes. So, it is generally desirable and should be left enabled for defense in depth.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5363", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

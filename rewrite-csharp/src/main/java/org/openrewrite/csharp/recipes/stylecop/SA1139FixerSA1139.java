@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1139FixerSA1139 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1139";
 
-    @Getter
+    final String recipeId = "SA1139";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Use literal suffix notation instead of casting";
-
-    @Getter
     final String description = "Use literal suffix notation instead of casting, in order to improve readability, avoid bugs related to illegal casts and ensure that optimal IL is produced.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1139", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

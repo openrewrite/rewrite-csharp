@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class TokenSpacingFixerSA1022 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1022";
 
-    @Getter
+    final String recipeId = "SA1022";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Positive signs should be spaced correctly";
-
-    @Getter
     final String description = "A positive sign within a C# element is not spaced correctly.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1022", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

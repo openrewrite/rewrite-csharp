@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SetViewStateUserKeyCA5368 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5368";
 
-    @Getter
+    final String recipeId = "CA5368";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Set ViewStateUserKey For Classes Derived From Page";
-
-    @Getter
+    final String displayName = "Set ViewStateUserKey For Classes Derived From Page (search)";
     final String description = "This is a reporting only recipe. Setting the ViewStateUserKey property can help you prevent attacks on your application by allowing you to assign an identifier to the view-state variable for individual users so that they cannot use the variable to generate an attack. Otherwise, there will be cross-site request forgery vulnerabilities.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5368", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

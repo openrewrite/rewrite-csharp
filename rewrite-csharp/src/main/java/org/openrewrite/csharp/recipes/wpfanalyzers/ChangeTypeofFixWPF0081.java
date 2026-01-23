@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ChangeTypeofFixWPF0081 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0081";
 
-    @Getter
+    final String recipeId = "WPF0081";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "MarkupExtensionReturnType must use correct return type";
-
-    @Getter
     final String description = "MarkupExtensionReturnType must use correct return type.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0081", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

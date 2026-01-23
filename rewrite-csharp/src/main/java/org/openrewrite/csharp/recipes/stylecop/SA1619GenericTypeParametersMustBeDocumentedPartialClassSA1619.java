@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1619GenericTypeParametersMustBeDocumentedPartialClassSA1619 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1619";
 
-    @Getter
+    final String recipeId = "SA1619";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Generic type parameters should be documented partial class";
-
-    @Getter
+    final String displayName = "Generic type parameters should be documented partial class (search)";
     final String description = "This is a reporting only recipe. A generic, partial C# element is missing documentation for one or more of its generic type parameters, and the documentation for the element contains a <summary> tag.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1619", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

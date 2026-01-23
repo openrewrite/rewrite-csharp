@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpIdentifiersShouldNotContainUnderscoresFixerCA1707 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1707";
 
-    @Getter
+    final String recipeId = "CA1707";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Identifiers should not contain underscores";
-
-    @Getter
     final String description = "By convention, identifier names do not contain the underscore (_) character. This rule checks namespaces, types, members, and parameters.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1707", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SealInternalTypesFixerCA1852 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1852";
 
-    @Getter
+    final String recipeId = "CA1852";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Seal internal types";
-
-    @Getter
     final String description = "When a type is not accessible outside its assembly and has no subtypes within its containing assembly, it can be safely sealed. Sealing types can improve performance.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1852", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

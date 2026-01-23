@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseStringEqualsOverStringCompareCA2251 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2251";
 
-    @Getter
+    final String recipeId = "CA2251";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Use 'string.Equals'";
-
-    @Getter
+    final String displayName = "Use 'string.Equals' (search)";
     final String description = "This is a reporting only recipe. It is both clearer and likely faster to use 'string.Equals' instead of comparing the result of 'string.Compare' to zero.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2251", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

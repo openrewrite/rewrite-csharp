@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1314FixerSA1314 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1314";
 
-    @Getter
+    final String recipeId = "SA1314";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Type parameter names should begin with T";
-
-    @Getter
     final String description = "The name of a C# type parameter does not begin with the capital letter T.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1314", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

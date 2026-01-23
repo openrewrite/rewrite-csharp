@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotHardCodeEncryptionKeyCA5390 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5390";
 
-    @Getter
+    final String recipeId = "CA5390";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not hard-code encryption key";
-
-    @Getter
+    final String displayName = "Do not hard-code encryption key (search)";
     final String description = "This is a reporting only recipe. SymmetricAlgorithm's .Key property, or a method's rgbKey parameter, should never be a hard-coded value.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5390", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

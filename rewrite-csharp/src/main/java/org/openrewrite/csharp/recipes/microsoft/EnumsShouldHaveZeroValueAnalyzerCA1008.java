@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class EnumsShouldHaveZeroValueAnalyzerCA1008 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1008";
 
-    @Getter
+    final String recipeId = "CA1008";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Enums should have zero value";
-
-    @Getter
+    final String displayName = "Enums should have zero value (search)";
     final String description = "This is a reporting only recipe. The default value of an uninitialized enumeration, just as other value types, is zero. A nonflags-attributed enumeration should define a member by using the value of zero so that the default value is a valid value of the enumeration. If an enumeration that has the FlagsAttribute attribute applied defines a zero-valued member, its name should be \"\"None\"\" to indicate that no values have been set in the enumeration.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1008", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

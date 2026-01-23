@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseFinalizerAnalyzerMA0055 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0055";
 
-    @Getter
+    final String recipeId = "MA0055";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Do not use finalizer";
-
-    @Getter
+    final String displayName = "Do not use finalizer (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0055", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

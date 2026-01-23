@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpUseConditionalExpressionForReturnFixerIDE0046 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "IDE0046";
 
-    @Getter
+    final String recipeId = "IDE0046";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-
-    @Getter
     final String nugetPackageVersion = "5.0.0";
 
-    @Getter
     final String displayName = "Convert to conditional expression";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "IDE0046", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

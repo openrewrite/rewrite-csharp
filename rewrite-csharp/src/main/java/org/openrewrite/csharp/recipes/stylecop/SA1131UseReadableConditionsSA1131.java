@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1131UseReadableConditionsSA1131 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1131";
 
-    @Getter
+    final String recipeId = "SA1131";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Use readable conditions";
-
-    @Getter
+    final String displayName = "Use readable conditions (search)";
     final String description = "This is a reporting only recipe. When a comparison is made between a variable and a literal, the variable should be placed on the left-hand-side to maximize readability.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1131", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class PreferJaggedArraysOverMultidimensionalAnalyzerCA1814 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1814";
 
-    @Getter
+    final String recipeId = "CA1814";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Prefer jagged arrays over multidimensional";
-
-    @Getter
+    final String displayName = "Prefer jagged arrays over multidimensional (search)";
     final String description = "This is a reporting only recipe. A jagged array is an array whose elements are arrays. The arrays that make up the elements can be of different sizes, leading to less wasted space for some sets of data.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1814", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

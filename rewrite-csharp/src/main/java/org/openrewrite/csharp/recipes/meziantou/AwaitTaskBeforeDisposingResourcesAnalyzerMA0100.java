@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AwaitTaskBeforeDisposingResourcesAnalyzerMA0100 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0100";
 
-    @Getter
+    final String recipeId = "MA0100";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Await task before disposing of resources";
-
-    @Getter
+    final String displayName = "Await task before disposing of resources (search)";
     final String description = "This is a reporting only recipe. Await the task before the end of the enclosing using block.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0100", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

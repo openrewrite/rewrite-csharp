@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1617VoidReturnValueMustNotBeDocumentedSA1617 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1617";
 
-    @Getter
+    final String recipeId = "SA1617";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Void return value should not be documented";
-
-    @Getter
+    final String displayName = "Void return value should not be documented (search)";
     final String description = "This is a reporting only recipe. A C# code element does not contain a return value, or returns void, but the documentation header for the element contains a <returns> tag.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1617", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

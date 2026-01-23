@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AddStaticModifierToAllPartialClassDeclarationsAnalyzerRCS1108 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1108";
 
-    @Getter
+    final String recipeId = "RCS1108";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Add 'static' modifier to all partial class declarations";
-
-    @Getter
+    final String displayName = "Add 'static' modifier to all partial class declarations (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1108", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

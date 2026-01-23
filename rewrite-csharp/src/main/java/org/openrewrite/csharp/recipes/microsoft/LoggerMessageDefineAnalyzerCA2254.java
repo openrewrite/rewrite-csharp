@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class LoggerMessageDefineAnalyzerCA2254 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2254";
 
-    @Getter
+    final String recipeId = "CA2254";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Template should be a static expression";
-
-    @Getter
+    final String displayName = "Template should be a static expression (search)";
     final String description = "This is a reporting only recipe. The logging message template should not vary between calls.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2254", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

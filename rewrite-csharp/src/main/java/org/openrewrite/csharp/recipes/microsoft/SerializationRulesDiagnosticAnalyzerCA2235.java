@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SerializationRulesDiagnosticAnalyzerCA2235 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2235";
 
-    @Getter
+    final String recipeId = "CA2235";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Mark all non-serializable fields";
-
-    @Getter
+    final String displayName = "Mark all non-serializable fields (search)";
     final String description = "This is a reporting only recipe. An instance field of a type that is not serializable is declared in a type that is serializable.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2235", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

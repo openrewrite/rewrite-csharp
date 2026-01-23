@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AddBracesToIfElseAnalyzerRCS1126 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1126";
 
-    @Getter
+    final String recipeId = "RCS1126";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Add braces to if-else";
-
-    @Getter
+    final String displayName = "Add braces to if-else (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1126", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

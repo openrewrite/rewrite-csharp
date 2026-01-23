@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA0002InvalidSettingsFileSA0002 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA0002";
 
-    @Getter
+    final String recipeId = "SA0002";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Invalid settings file";
-
-    @Getter
+    final String displayName = "Invalid settings file (search)";
     final String description = "This is a reporting only recipe. Various errors in the stylecop.json file can prevent the file from being loaded by the analyzers. In this case, the default settings are used instead.    {0}";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA0002", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

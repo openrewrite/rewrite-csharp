@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class RemoveEmptyNamespaceDeclarationAnalyzerRCS1072 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1072";
 
-    @Getter
+    final String recipeId = "RCS1072";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: [deprecated] Remove empty namespace declaration";
-
-    @Getter
+    final String displayName = "[deprecated] Remove empty namespace declaration (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1072", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

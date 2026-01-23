@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseConcreteTypeAnalyzerCA1859 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1859";
 
-    @Getter
+    final String recipeId = "CA1859";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Use concrete types when possible for improved performance";
-
-    @Getter
+    final String displayName = "Use concrete types when possible for improved performance (search)";
     final String description = "This is a reporting only recipe. Using concrete types avoids virtual or interface call overhead and enables inlining.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1859", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

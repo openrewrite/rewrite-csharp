@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotCatchCorruptedStateExceptionsAnalyzerCA2153 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2153";
 
-    @Getter
+    final String recipeId = "CA2153";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do Not Catch Corrupted State Exceptions";
-
-    @Getter
+    final String displayName = "Do Not Catch Corrupted State Exceptions (search)";
     final String description = "This is a reporting only recipe. Catching corrupted state exceptions could mask errors (such as access violations), resulting in inconsistent state of execution or making it easier for attackers to compromise system. Instead, catch and handle a more specific set of exception type(s) or re-throw the exception.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2153", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

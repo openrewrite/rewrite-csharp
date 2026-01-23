@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UnconstrainedTypeParameterCheckedForNullAnalyzerRCS1165 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1165";
 
-    @Getter
+    final String recipeId = "RCS1165";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Unconstrained type parameter checked for null";
-
-    @Getter
+    final String displayName = "Unconstrained type parameter checked for null (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1165", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

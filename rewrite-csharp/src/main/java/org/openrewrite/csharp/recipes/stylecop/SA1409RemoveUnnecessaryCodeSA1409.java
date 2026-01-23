@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1409RemoveUnnecessaryCodeSA1409 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1409";
 
-    @Getter
+    final String recipeId = "SA1409";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Remove unnecessary code";
-
-    @Getter
+    final String displayName = "Remove unnecessary code (search)";
     final String description = "This is a reporting only recipe. A C# file contains code which is unnecessary and can be removed without changing the overall logic of the code.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1409", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

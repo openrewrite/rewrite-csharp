@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseIntegralOrStringArgumentForIndexersAnalyzerCA1043 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1043";
 
-    @Getter
+    final String recipeId = "CA1043";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Use Integral Or String Argument For Indexers";
-
-    @Getter
+    final String displayName = "Use Integral Or String Argument For Indexers (search)";
     final String description = "This is a reporting only recipe. Indexers, that is, indexed properties, should use integer or string types for the index. These types are typically used for indexing data structures and increase the usability of the library. Use of the Object type should be restricted to those cases where the specific integer or string type cannot be specified at design time. If the design requires other types for the index, reconsider whether the type represents a logical data store. If it does not represent a logical data store, use a method.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1043", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

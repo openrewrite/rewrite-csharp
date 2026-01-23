@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1106FixerSA1106 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1106";
 
-    @Getter
+    final String recipeId = "SA1106";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Code should not contain empty statements";
-
-    @Getter
     final String description = "The C# code contains an extra semicolon.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1106", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

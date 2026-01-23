@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class TypesShouldNotExtendCertainBaseTypesAnalyzerCA1058 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1058";
 
-    @Getter
+    final String recipeId = "CA1058";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Types should not extend certain base types";
-
-    @Getter
+    final String displayName = "Types should not extend certain base types (search)";
     final String description = "This is a reporting only recipe. An externally visible type extends certain base types. Use one of the alternatives.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1058", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

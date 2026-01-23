@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1644DocumentationHeadersMustNotContainBlankLinesSA1644 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1644";
 
-    @Getter
+    final String recipeId = "SA1644";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Documentation headers should not contain blank lines";
-
-    @Getter
+    final String displayName = "Documentation headers should not contain blank lines (search)";
     final String description = "This is a reporting only recipe. A section within the XML documentation header for a C# element contains blank lines.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1644", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

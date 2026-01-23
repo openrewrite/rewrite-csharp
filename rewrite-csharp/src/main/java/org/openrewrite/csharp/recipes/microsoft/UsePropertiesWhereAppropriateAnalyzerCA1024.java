@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UsePropertiesWhereAppropriateAnalyzerCA1024 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1024";
 
-    @Getter
+    final String recipeId = "CA1024";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Use properties where appropriate";
-
-    @Getter
+    final String displayName = "Use properties where appropriate (search)";
     final String description = "This is a reporting only recipe. A public or protected method has a name that starts with \"\"Get\"\", takes no parameters, and returns a value that is not an array. The method might be a good candidate to become a property.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1024", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

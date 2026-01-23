@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1410SA1411FixerSA1411 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1411";
 
-    @Getter
+    final String recipeId = "SA1411";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Attribute constructor should not use unnecessary parenthesis";
-
-    @Getter
     final String description = "TODO.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1411", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

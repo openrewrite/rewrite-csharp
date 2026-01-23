@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SX1101DoNotPrefixLocalMembersWithThisSX1101 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SX1101";
 
-    @Getter
+    final String recipeId = "SX1101";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Do not prefix local calls with 'this.'";
-
-    @Getter
+    final String displayName = "Do not prefix local calls with 'this.' (search)";
     final String description = "This is a reporting only recipe. A call to an instance member of the local class or a base class is prefixed with `this.`.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SX1101", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

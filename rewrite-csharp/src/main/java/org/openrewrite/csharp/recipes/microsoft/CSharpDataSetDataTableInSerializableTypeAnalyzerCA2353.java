@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpDataSetDataTableInSerializableTypeAnalyzerCA2353 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2353";
 
-    @Getter
+    final String recipeId = "CA2353";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Unsafe DataSet or DataTable in serializable type";
-
-    @Getter
+    final String displayName = "Unsafe DataSet or DataTable in serializable type (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2353", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

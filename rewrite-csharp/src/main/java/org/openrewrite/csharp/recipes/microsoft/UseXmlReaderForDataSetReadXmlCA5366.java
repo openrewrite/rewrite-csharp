@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseXmlReaderForDataSetReadXmlCA5366 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5366";
 
-    @Getter
+    final String recipeId = "CA5366";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Use XmlReader for 'DataSet.ReadXml()'";
-
-    @Getter
+    final String displayName = "Use XmlReader for 'DataSet.ReadXml()' (search)";
     final String description = "This is a reporting only recipe. Processing XML from untrusted data may load dangerous external references, which should be restricted by using an XmlReader with a secure resolver or with DTD processing disabled.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5366", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

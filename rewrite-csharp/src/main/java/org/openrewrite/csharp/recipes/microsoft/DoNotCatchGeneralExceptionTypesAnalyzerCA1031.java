@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotCatchGeneralExceptionTypesAnalyzerCA1031 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1031";
 
-    @Getter
+    final String recipeId = "CA1031";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not catch general exception types";
-
-    @Getter
+    final String displayName = "Do not catch general exception types (search)";
     final String description = "This is a reporting only recipe. A general exception such as System.Exception or System.SystemException or a disallowed exception type is caught in a catch statement, or a general catch clause is used. General and disallowed exceptions should not be caught.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1031", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotCreateTaskCompletionSourceWithWrongArgumentsCA2247 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2247";
 
-    @Getter
+    final String recipeId = "CA2247";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Argument passed to TaskCompletionSource constructor should be TaskCreationOptions enum instead of TaskContinuationOptions enum";
-
-    @Getter
+    final String displayName = "Argument passed to TaskCompletionSource constructor should be TaskCreationOptions enum instead of TaskContinuationOptions enum (search)";
     final String description = "This is a reporting only recipe. TaskCompletionSource has constructors that take TaskCreationOptions that control the underlying Task, and constructors that take object state that's stored in the task.  Accidentally passing a TaskContinuationOptions instead of a TaskCreationOptions will result in the call treating the options as state.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2247", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

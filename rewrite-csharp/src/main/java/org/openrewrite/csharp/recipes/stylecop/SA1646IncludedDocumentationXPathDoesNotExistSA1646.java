@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1646IncludedDocumentationXPathDoesNotExistSA1646 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1646";
 
-    @Getter
+    final String recipeId = "SA1646";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Included documentation XPath does not exist";
-
-    @Getter
+    final String displayName = "Included documentation XPath does not exist (search)";
     final String description = "This is a reporting only recipe. An included XML documentation link contains an invalid path.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1646", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

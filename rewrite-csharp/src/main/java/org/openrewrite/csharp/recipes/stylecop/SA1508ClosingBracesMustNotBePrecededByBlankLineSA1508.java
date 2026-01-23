@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1508ClosingBracesMustNotBePrecededByBlankLineSA1508 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1508";
 
-    @Getter
+    final String recipeId = "SA1508";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Closing braces should not be preceded by blank line";
-
-    @Getter
+    final String displayName = "Closing braces should not be preceded by blank line (search)";
     final String description = "This is a reporting only recipe. A closing brace within a C# element, statement, or expression is preceded by a blank line.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1508", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

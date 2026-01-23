@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class TokenSpacingFixerSA1110 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1110";
 
-    @Getter
+    final String recipeId = "SA1110";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Opening parenthesis or bracket should be on declaration line";
-
-    @Getter
     final String description = "The opening parenthesis or bracket is not placed on the same line as the method/indexer/attribute/array name.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1110", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

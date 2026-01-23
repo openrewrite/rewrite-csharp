@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class IdentifiersShouldDifferByMoreThanCaseAnalyzerCA1708 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1708";
 
-    @Getter
+    final String recipeId = "CA1708";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Identifiers should differ by more than case";
-
-    @Getter
+    final String displayName = "Identifiers should differ by more than case (search)";
     final String description = "This is a reporting only recipe. Identifiers for namespaces, types, members, and parameters cannot differ only by case because languages that target the common language runtime are not required to be case-sensitive.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1708", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

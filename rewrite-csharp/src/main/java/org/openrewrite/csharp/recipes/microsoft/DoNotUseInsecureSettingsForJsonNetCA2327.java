@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseInsecureSettingsForJsonNetCA2327 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2327";
 
-    @Getter
+    final String recipeId = "CA2327";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not use insecure JsonSerializerSettings";
-
-    @Getter
+    final String displayName = "Do not use insecure JsonSerializerSettings (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2327", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

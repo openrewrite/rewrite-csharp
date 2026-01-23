@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class PreferDictionaryTryMethodsOverContainsKeyGuardAnalyzerCA1854 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1854";
 
-    @Getter
+    final String recipeId = "CA1854";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Prefer the 'IDictionary.TryGetValue(TKey, out TValue)' method";
-
-    @Getter
+    final String displayName = "Prefer the 'IDictionary.TryGetValue(TKey, out TValue)' method (search)";
     final String description = "This is a reporting only recipe. Prefer a 'TryGetValue' call over a Dictionary indexer access guarded by a 'ContainsKey' check. 'ContainsKey' and the indexer both would lookup the key under the hood, so using 'TryGetValue' removes the extra lookup.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1854", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

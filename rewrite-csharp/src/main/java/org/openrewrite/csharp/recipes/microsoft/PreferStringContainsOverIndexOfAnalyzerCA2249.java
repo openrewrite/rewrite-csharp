@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class PreferStringContainsOverIndexOfAnalyzerCA2249 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2249";
 
-    @Getter
+    final String recipeId = "CA2249";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Consider using 'string.Contains' instead of 'string.IndexOf'";
-
-    @Getter
+    final String displayName = "Consider using 'string.Contains' instead of 'string.IndexOf' (search)";
     final String description = "This is a reporting only recipe. Calls to 'string.IndexOf' where the result is used to check for the presence/absence of a substring can be replaced by 'string.Contains'.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2249", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

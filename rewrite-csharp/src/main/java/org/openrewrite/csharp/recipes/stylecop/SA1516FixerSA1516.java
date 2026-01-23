@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1516FixerSA1516 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1516";
 
-    @Getter
+    final String recipeId = "SA1516";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Elements should be separated by blank line";
-
-    @Getter
     final String description = "Adjacent C# elements are not separated by a blank line.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1516", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

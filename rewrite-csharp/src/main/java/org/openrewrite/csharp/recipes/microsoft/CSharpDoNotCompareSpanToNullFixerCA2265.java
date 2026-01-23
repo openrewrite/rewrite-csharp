@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpDoNotCompareSpanToNullFixerCA2265 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2265";
 
-    @Getter
+    final String recipeId = "CA2265";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Do not compare Span<T> to 'null' or 'default'";
-
-    @Getter
     final String description = "Comparing a span to 'null' or 'default' might not do what you intended. 'default' and the 'null' literal are implicitly converted to 'Span<T>.Empty'. Remove the redundant comparison or make the code more explicit by using 'IsEmpty'.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA2265", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

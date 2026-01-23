@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseAsyncMethodInAsyncContextCA1849 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1849";
 
-    @Getter
+    final String recipeId = "CA1849";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Call async methods when in an async method";
-
-    @Getter
+    final String displayName = "Call async methods when in an async method (search)";
     final String description = "This is a reporting only recipe. When inside a Task-returning method, use the async version of methods, if they exist.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1849", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

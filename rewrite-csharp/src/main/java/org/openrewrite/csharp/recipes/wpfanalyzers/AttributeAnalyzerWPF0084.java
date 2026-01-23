@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AttributeAnalyzerWPF0084 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0084";
 
-    @Getter
+    final String recipeId = "WPF0084";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: Target of [XamlSetMarkupExtension] should exist and have correct signature";
-
-    @Getter
+    final String displayName = "Target of [XamlSetMarkupExtension] should exist and have correct signature (search)";
     final String description = "This is a reporting only recipe. Target of [XamlSetMarkupExtension] should exist and have correct signature.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0084", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

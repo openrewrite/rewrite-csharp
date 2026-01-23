@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AddAttributeListFixWPF0176 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0176";
 
-    @Getter
+    final String recipeId = "WPF0176";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "StyleTypedProperty is missing";
-
-    @Getter
     final String description = "StyleTypedProperty is missing.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0176", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

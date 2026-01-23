@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseStartsWithInsteadOfIndexOfComparisonWithZeroCA1858 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1858";
 
-    @Getter
+    final String recipeId = "CA1858";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Use 'StartsWith' instead of 'IndexOf'";
-
-    @Getter
+    final String displayName = "Use 'StartsWith' instead of 'IndexOf' (search)";
     final String description = "This is a reporting only recipe. It is both clearer and faster to use 'StartsWith' instead of comparing the result of 'IndexOf' to zero.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1858", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

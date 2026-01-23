@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class OverrideMethodsOnComparableTypesAnalyzerCA1036 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1036";
 
-    @Getter
+    final String recipeId = "CA1036";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Override methods on comparable types";
-
-    @Getter
+    final String displayName = "Override methods on comparable types (search)";
     final String description = "This is a reporting only recipe. A public or protected type implements the System.IComparable interface. It does not override Object.Equals nor does it overload the language-specific operator for equality, inequality, less than, less than or equal, greater than or greater than or equal.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1036", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

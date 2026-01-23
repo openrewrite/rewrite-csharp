@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1301ElementMustBeginWithLowerCaseLetterSA1301 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1301";
 
-    @Getter
+    final String recipeId = "SA1301";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Element should begin with lower-case letter";
-
-    @Getter
+    final String displayName = "Element should begin with lower-case letter (search)";
     final String description = "This is a reporting only recipe. There are currently no situations in which this rule will fire.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1301", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

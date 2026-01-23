@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1518FixerSA1518 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1518";
 
-    @Getter
+    final String recipeId = "SA1518";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Use line endings correctly at end of file";
-
-    @Getter
     final String description = "Code should not contain blank lines at the end of the file";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1518", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

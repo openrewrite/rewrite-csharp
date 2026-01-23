@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SimplifyNullCheckAnalyzerRCS1206 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1206";
 
-    @Getter
+    final String recipeId = "RCS1206";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Use conditional access instead of conditional expression";
-
-    @Getter
+    final String displayName = "Use conditional access instead of conditional expression (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1206", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

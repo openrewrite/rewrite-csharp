@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpUseOrdinalStringComparisonFixerCA1309 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1309";
 
-    @Getter
+    final String recipeId = "CA1309";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Use ordinal string comparison";
-
-    @Getter
     final String description = "A string comparison operation that is nonlinguistic does not set the StringComparison parameter to either Ordinal or OrdinalIgnoreCase. By explicitly setting the parameter to either StringComparison.Ordinal or StringComparison.OrdinalIgnoreCase, your code often gains speed, becomes more correct, and becomes more reliable.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1309", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

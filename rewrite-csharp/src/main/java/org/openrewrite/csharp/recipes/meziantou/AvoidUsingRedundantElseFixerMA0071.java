@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AvoidUsingRedundantElseFixerMA0071 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0071";
 
-    @Getter
+    final String recipeId = "MA0071";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
     final String displayName = "Avoid using redundant else";
-
-    @Getter
     final String description = "The 'if' block contains a jump statement (break, continue, goto, return, throw, yield break). Using 'else' is redundant and needlessly maintains a higher nesting level.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "MA0071", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

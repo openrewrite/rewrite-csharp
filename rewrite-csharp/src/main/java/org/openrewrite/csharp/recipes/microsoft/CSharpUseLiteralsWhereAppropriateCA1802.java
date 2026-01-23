@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpUseLiteralsWhereAppropriateCA1802 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1802";
 
-    @Getter
+    final String recipeId = "CA1802";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Use literals where appropriate";
-
-    @Getter
+    final String displayName = "Use literals where appropriate (search)";
     final String description = "This is a reporting only recipe. A field is declared static and read-only (Shared and ReadOnly in Visual Basic), and is initialized by using a value that is computable at compile time. Because the value that is assigned to the targeted field is computable at compile time, change the declaration to a const (Const in Visual Basic) field so that the value is computed at compile time instead of at runtime.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1802", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

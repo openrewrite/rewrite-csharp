@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1127FixerSA1127 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1127";
 
-    @Getter
+    final String recipeId = "SA1127";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Generic type constraints should be on their own line";
-
-    @Getter
     final String description = "Each type constraint clause for a generic type parameter should be listed on a line of code by itself.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1127", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

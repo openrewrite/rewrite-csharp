@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ClrPropertyDeclarationAnalyzerWPF0036 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0036";
 
-    @Getter
+    final String recipeId = "WPF0036";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: Avoid side effects in CLR accessors";
-
-    @Getter
+    final String displayName = "Avoid side effects in CLR accessors (search)";
     final String description = "This is a reporting only recipe. Avoid side effects in CLR accessors.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0036", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

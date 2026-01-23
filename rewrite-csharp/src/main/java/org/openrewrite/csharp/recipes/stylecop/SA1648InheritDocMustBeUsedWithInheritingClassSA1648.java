@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1648InheritDocMustBeUsedWithInheritingClassSA1648 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1648";
 
-    @Getter
+    final String recipeId = "SA1648";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: inheritdoc should be used with inheriting class";
-
-    @Getter
+    final String displayName = "inheritdoc should be used with inheriting class (search)";
     final String description = "This is a reporting only recipe. <inheritdoc> has been used on an element that doesn't inherit from a base class or implement an interface.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1648", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseInsecureDtdProcessingAnalyzerCA3075 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA3075";
 
-    @Getter
+    final String recipeId = "CA3075";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Insecure DTD processing in XML";
-
-    @Getter
+    final String displayName = "Insecure DTD processing in XML (search)";
     final String description = "This is a reporting only recipe. Using XmlTextReader.Load(), creating an insecure XmlReaderSettings instance when invoking XmlReader.Create(), setting the InnerXml property of the XmlDocument and enabling DTD processing using XmlUrlResolver insecurely can lead to information disclosure. Replace it with a call to the Load() method overload that takes an XmlReader instance, use XmlReader.Create() to accept XmlReaderSettings arguments or consider explicitly setting secure values. The DataViewSettingCollectionString property of DataViewManager should always be assigned from a trusted source, the DtdProcessing property should be set to false, and the XmlResolver property should be changed to XmlSecureResolver or null.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA3075", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

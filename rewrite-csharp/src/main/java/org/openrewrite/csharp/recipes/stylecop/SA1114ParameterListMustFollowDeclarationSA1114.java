@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1114ParameterListMustFollowDeclarationSA1114 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1114";
 
-    @Getter
+    final String recipeId = "SA1114";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Parameter list should follow declaration";
-
-    @Getter
+    final String displayName = "Parameter list should follow declaration (search)";
     final String description = "This is a reporting only recipe. The start of the parameter list for a method/constructor/indexer/array/operator call or declaration does not begin on the same line as the opening bracket, or on the line after the opening bracket.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1114", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

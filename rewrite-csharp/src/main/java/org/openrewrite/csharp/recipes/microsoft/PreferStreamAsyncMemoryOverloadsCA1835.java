@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class PreferStreamAsyncMemoryOverloadsCA1835 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1835";
 
-    @Getter
+    final String recipeId = "CA1835";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Prefer the 'Memory'-based overloads for 'ReadAsync' and 'WriteAsync'";
-
-    @Getter
+    final String displayName = "Prefer the 'Memory'-based overloads for 'ReadAsync' and 'WriteAsync' (search)";
     final String description = "This is a reporting only recipe. 'Stream' has a 'ReadAsync' overload that takes a 'Memory<Byte>' as the first argument, and a 'WriteAsync' overload that takes a 'ReadOnlyMemory<Byte>' as the first argument. Prefer calling the memory based overloads, which are more efficient.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1835", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

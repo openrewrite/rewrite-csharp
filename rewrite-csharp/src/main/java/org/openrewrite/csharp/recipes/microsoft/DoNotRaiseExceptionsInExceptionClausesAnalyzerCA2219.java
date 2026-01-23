@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotRaiseExceptionsInExceptionClausesAnalyzerCA2219 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2219";
 
-    @Getter
+    final String recipeId = "CA2219";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not raise exceptions in finally clauses";
-
-    @Getter
+    final String displayName = "Do not raise exceptions in finally clauses (search)";
     final String description = "This is a reporting only recipe. When an exception is raised in a finally clause, the new exception hides the active exception. This makes the original error difficult to detect and debug.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2219", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

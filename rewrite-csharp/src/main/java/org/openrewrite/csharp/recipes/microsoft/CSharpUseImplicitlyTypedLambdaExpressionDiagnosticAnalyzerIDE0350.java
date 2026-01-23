@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpUseImplicitlyTypedLambdaExpressionDiagnosticAnalyzerIDE0350 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "IDE0350";
 
-    @Getter
+    final String recipeId = "IDE0350";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-
-    @Getter
     final String nugetPackageVersion = "5.0.0";
 
-    @Getter
-    final String displayName = "Analysis: Use implicitly typed lambda";
-
-    @Getter
+    final String displayName = "Use implicitly typed lambda (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "IDE0350", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

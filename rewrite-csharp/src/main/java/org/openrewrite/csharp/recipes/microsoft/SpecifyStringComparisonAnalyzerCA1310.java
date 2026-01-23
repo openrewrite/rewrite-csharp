@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SpecifyStringComparisonAnalyzerCA1310 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1310";
 
-    @Getter
+    final String recipeId = "CA1310";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Specify StringComparison for correctness";
-
-    @Getter
+    final String displayName = "Specify StringComparison for correctness (search)";
     final String description = "This is a reporting only recipe. A string comparison operation uses a method overload that does not set a StringComparison parameter, hence its behavior could vary based on the current user's locale settings. It is strongly recommended to use the overload with StringComparison parameter for correctness and clarity of intent. If the result will be displayed to the user, such as when sorting a list of items for display in a list box, specify 'StringComparison.CurrentCulture' or 'StringComparison.CurrentCultureIgnoreCase' as the 'StringComparison' parameter. If comparing case-insensitive identifiers, such as file paths, environment variables, or registry keys and values, specify 'StringComparison.OrdinalIgnoreCase'. Otherwise, if comparing case-sensitive identifiers, specify 'StringComparison.Ordinal'.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1310", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

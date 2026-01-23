@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SingleLineDocumentationCommentTriviaAnalyzerRCS1228 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1228";
 
-    @Getter
+    final String recipeId = "RCS1228";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Unused element in a documentation comment";
-
-    @Getter
+    final String displayName = "Unused element in a documentation comment (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1228", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

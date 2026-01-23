@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseExplicitTypeInsteadOfVarWhenTypeIsNotObviousAnalyzerRCS1008 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1008";
 
-    @Getter
+    final String recipeId = "RCS1008";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: [deprecated] Use explicit type instead of 'var' (when the type is not obvious)";
-
-    @Getter
+    final String displayName = "[deprecated] Use explicit type instead of 'var' (when the type is not obvious) (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1008", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

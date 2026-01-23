@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpPopulateSwitchExpressionFixerIDE0072 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "IDE0072";
 
-    @Getter
+    final String recipeId = "IDE0072";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-
-    @Getter
     final String nugetPackageVersion = "5.0.0";
 
-    @Getter
     final String displayName = "Add missing cases";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "IDE0072", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

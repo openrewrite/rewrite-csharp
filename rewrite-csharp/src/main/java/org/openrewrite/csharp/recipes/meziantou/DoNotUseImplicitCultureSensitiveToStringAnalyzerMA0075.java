@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseImplicitCultureSensitiveToStringAnalyzerMA0075 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0075";
 
-    @Getter
+    final String recipeId = "MA0075";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Do not use implicit culture-sensitive ToString";
-
-    @Getter
+    final String displayName = "Do not use implicit culture-sensitive ToString (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0075", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

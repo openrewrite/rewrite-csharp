@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1503FixerSA1503 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1503";
 
-    @Getter
+    final String recipeId = "SA1503";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Braces should not be omitted";
-
-    @Getter
     final String description = "The opening and closing braces for a C# statement have been omitted.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1503", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseCountProperlyAnalyzerCA1827 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1827";
 
-    @Getter
+    final String recipeId = "CA1827";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not use Count() or LongCount() when Any() can be used";
-
-    @Getter
+    final String displayName = "Do not use Count() or LongCount() when Any() can be used (search)";
     final String description = "This is a reporting only recipe. For non-empty collections, Count() and LongCount() enumerate the entire sequence, while Any() stops at the first item or the first item that satisfies a condition.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1827", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

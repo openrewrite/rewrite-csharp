@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DisableRuntimeMarshallingAnalyzerCA1421 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1421";
 
-    @Getter
+    final String recipeId = "CA1421";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: This method uses runtime marshalling even when the 'DisableRuntimeMarshallingAttribute' is applied";
-
-    @Getter
+    final String displayName = "This method uses runtime marshalling even when the 'DisableRuntimeMarshallingAttribute' is applied (search)";
     final String description = "This is a reporting only recipe. This method uses runtime marshalling even when runtime marshalling is disabled, which can cause unexpected behavior differences at runtime due to different expectations of a type's native layout.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1421", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotInstallRootCertCA5380 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5380";
 
-    @Getter
+    final String recipeId = "CA5380";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do Not Add Certificates To Root Store";
-
-    @Getter
+    final String displayName = "Do Not Add Certificates To Root Store (search)";
     final String description = "This is a reporting only recipe. By default, the Trusted Root Certification Authorities certificate store is configured with a set of public CAs that has met the requirements of the Microsoft Root Certificate Program. Since all trusted root CAs can issue certificates for any domain, an attacker can pick a weak or coercible CA that you install by yourself to target for an attack - and a single vulnerable, malicious or coercible CA undermines the security of the entire system. To make matters worse, these attacks can go unnoticed quite easily.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5380", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

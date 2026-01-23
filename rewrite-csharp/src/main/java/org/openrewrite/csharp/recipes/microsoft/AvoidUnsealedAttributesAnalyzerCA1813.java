@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AvoidUnsealedAttributesAnalyzerCA1813 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1813";
 
-    @Getter
+    final String recipeId = "CA1813";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Avoid unsealed attributes";
-
-    @Getter
+    final String displayName = "Avoid unsealed attributes (search)";
     final String description = "This is a reporting only recipe. The .NET Framework class library provides methods for retrieving custom attributes. By default, these methods search the attribute inheritance hierarchy. Sealing the attribute eliminates the search through the inheritance hierarchy and can improve performance.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1813", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

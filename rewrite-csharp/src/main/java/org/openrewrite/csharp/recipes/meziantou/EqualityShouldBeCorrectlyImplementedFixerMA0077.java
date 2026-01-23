@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class EqualityShouldBeCorrectlyImplementedFixerMA0077 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0077";
 
-    @Getter
+    final String recipeId = "MA0077";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
     final String displayName = "A class that provides Equals(T) should implement IEquatable<T>";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "MA0077", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

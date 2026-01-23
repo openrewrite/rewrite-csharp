@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotRemoveOriginalExceptionFromThrowStatementAnalyzerMA0027 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0027";
 
-    @Getter
+    final String recipeId = "MA0027";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Prefer rethrowing an exception implicitly";
-
-    @Getter
+    final String displayName = "Prefer rethrowing an exception implicitly (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0027", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

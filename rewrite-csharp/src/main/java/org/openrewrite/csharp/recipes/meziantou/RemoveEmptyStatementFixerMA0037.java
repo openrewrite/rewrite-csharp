@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class RemoveEmptyStatementFixerMA0037 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0037";
 
-    @Getter
+    final String recipeId = "MA0037";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
     final String displayName = "Remove empty statement";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "MA0037", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

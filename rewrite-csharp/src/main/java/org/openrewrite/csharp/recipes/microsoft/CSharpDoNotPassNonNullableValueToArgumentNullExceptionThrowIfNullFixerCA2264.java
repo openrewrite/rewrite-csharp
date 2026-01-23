@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpDoNotPassNonNullableValueToArgumentNullExceptionThrowIfNullFixerCA2264 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2264";
 
-    @Getter
+    final String recipeId = "CA2264";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Do not pass a non-nullable value to 'ArgumentNullException.ThrowIfNull'";
-
-    @Getter
     final String description = "'ArgumentNullException.ThrowIfNull' throws when the passed argument is 'null'. Certain constructs like non-nullable structs, 'nameof()' and 'new' expressions are known to never be null, so 'ArgumentNullException.ThrowIfNull' will never throw.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA2264", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

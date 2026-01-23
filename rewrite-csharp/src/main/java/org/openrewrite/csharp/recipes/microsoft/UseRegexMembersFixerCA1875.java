@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseRegexMembersFixerCA1875 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1875";
 
-    @Getter
+    final String recipeId = "CA1875";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Use 'Regex.Count'";
-
-    @Getter
     final String description = "'Regex.Count' is simpler and faster than 'Regex.Matches(...).Count'.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1875", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

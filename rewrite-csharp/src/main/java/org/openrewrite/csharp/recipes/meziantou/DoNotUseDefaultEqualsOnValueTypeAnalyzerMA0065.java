@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseDefaultEqualsOnValueTypeAnalyzerMA0065 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0065";
 
-    @Getter
+    final String recipeId = "MA0065";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Default ValueType.Equals or HashCode is used for struct equality";
-
-    @Getter
+    final String displayName = "Default ValueType.Equals or HashCode is used for struct equality (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0065", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

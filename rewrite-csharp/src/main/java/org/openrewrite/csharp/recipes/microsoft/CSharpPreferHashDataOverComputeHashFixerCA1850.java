@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpPreferHashDataOverComputeHashFixerCA1850 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1850";
 
-    @Getter
+    final String recipeId = "CA1850";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Prefer static 'HashData' method over 'ComputeHash'";
-
-    @Getter
     final String description = "It is more efficient to use the static 'HashData' method over creating and managing a HashAlgorithm instance to call 'ComputeHash'.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1850", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

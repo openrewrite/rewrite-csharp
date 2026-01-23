@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class InvocationExpressionAnalyzerRCS1246 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1246";
 
-    @Getter
+    final String recipeId = "RCS1246";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Use element access";
-
-    @Getter
+    final String displayName = "Use element access (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1246", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

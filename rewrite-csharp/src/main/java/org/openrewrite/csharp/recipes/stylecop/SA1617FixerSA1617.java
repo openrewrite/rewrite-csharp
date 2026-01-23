@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1617FixerSA1617 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1617";
 
-    @Getter
+    final String recipeId = "SA1617";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Void return value should not be documented";
-
-    @Getter
     final String description = "A C# code element does not contain a return value, or returns void, but the documentation header for the element contains a <returns> tag.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1617", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

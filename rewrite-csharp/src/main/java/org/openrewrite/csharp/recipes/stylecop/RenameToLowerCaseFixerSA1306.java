@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class RenameToLowerCaseFixerSA1306 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1306";
 
-    @Getter
+    final String recipeId = "SA1306";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Field names should begin with lower-case letter";
-
-    @Getter
     final String description = "The name of a field in C# does not begin with a lower-case letter.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1306", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ComponentResourceKeyFixWPF0140 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0140";
 
-    @Getter
+    final String recipeId = "WPF0140";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "Use containing type when creating a ComponentResourceKey";
-
-    @Getter
     final String description = "Use containing type when creating a ComponentResourceKey.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0140", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

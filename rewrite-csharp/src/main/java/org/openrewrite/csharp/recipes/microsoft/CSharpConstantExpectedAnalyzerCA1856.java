@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpConstantExpectedAnalyzerCA1856 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1856";
 
-    @Getter
+    final String recipeId = "CA1856";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Incorrect usage of ConstantExpected attribute";
-
-    @Getter
+    final String displayName = "Incorrect usage of ConstantExpected attribute (search)";
     final String description = "This is a reporting only recipe. ConstantExpected attribute is not applied correctly on the parameter.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1856", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

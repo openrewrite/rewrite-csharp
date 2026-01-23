@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1504AllAccessorsMustBeSingleLineOrMultiLineSA1504 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1504";
 
-    @Getter
+    final String recipeId = "SA1504";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: All accessors should be single-line or multi-line";
-
-    @Getter
+    final String displayName = "All accessors should be single-line or multi-line (search)";
     final String description = "This is a reporting only recipe. Within a C# property, indexer or event, at least one of the child accessors is written on a single line, and at least one of the child accessors is written across multiple lines.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1504", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class MakeClassStaticFixerMA0036 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0036";
 
-    @Getter
+    final String recipeId = "MA0036";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
     final String displayName = "Make class static";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "MA0036", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

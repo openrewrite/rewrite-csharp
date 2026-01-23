@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SX1309SStaticFieldNamesMustBeginWithUnderscoreSX1309S extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SX1309S";
 
-    @Getter
+    final String recipeId = "SX1309S";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Static field names should begin with underscore";
-
-    @Getter
+    final String displayName = "Static field names should begin with underscore (search)";
     final String description = "This is a reporting only recipe. A static field name in C# does not begin with an underscore.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SX1309S", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

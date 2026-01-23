@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA0001XmlCommentAnalysisDisabledSA0001 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA0001";
 
-    @Getter
+    final String recipeId = "SA0001";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: XML comment analysis disabled";
-
-    @Getter
+    final String displayName = "XML comment analysis disabled (search)";
     final String description = "This is a reporting only recipe. XML comment analysis can only be performed when the project is configured to parse documentation comments. To enable this functionality, update the project to produce an XML documentation file as part of the build.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA0001", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

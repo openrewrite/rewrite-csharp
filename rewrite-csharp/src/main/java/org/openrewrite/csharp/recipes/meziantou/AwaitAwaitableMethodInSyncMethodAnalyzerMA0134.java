@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AwaitAwaitableMethodInSyncMethodAnalyzerMA0134 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0134";
 
-    @Getter
+    final String recipeId = "MA0134";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Observe result of async calls";
-
-    @Getter
+    final String displayName = "Observe result of async calls (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0134", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

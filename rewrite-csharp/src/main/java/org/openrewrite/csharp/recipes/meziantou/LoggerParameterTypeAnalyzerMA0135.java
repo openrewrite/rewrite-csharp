@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class LoggerParameterTypeAnalyzerMA0135 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0135";
 
-    @Getter
+    final String recipeId = "MA0135";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: The log parameter has no configured type";
-
-    @Getter
+    final String displayName = "The log parameter has no configured type (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0135", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

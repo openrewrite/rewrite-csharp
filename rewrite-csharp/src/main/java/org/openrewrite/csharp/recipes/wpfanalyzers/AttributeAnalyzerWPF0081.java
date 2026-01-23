@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AttributeAnalyzerWPF0081 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0081";
 
-    @Getter
+    final String recipeId = "WPF0081";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: MarkupExtensionReturnType must use correct return type";
-
-    @Getter
+    final String displayName = "MarkupExtensionReturnType must use correct return type (search)";
     final String description = "This is a reporting only recipe. MarkupExtensionReturnType must use correct return type.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0081", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

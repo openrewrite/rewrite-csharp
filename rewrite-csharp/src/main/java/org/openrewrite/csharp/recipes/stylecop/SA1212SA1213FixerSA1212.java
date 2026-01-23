@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1212SA1213FixerSA1212 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1212";
 
-    @Getter
+    final String recipeId = "SA1212";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Property accessors should follow order";
-
-    @Getter
     final String description = "A get accessor appears after a set accessor within a property or indexer.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1212", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ApprovedCipherModeAnalyzerCA5358 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5358";
 
-    @Getter
+    final String recipeId = "CA5358";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Review cipher mode usage with cryptography experts";
-
-    @Getter
+    final String displayName = "Review cipher mode usage with cryptography experts (search)";
     final String description = "This is a reporting only recipe. These cipher modes might be vulnerable to attacks. Consider using recommended modes (CBC, CTS).";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5358", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

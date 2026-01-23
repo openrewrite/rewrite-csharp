@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class PInvokeDiagnosticAnalyzerCA2101 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2101";
 
-    @Getter
+    final String recipeId = "CA2101";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Specify marshaling for P/Invoke string arguments";
-
-    @Getter
+    final String displayName = "Specify marshaling for P/Invoke string arguments (search)";
     final String description = "This is a reporting only recipe. A platform invoke member allows partially trusted callers, has a string parameter, and does not explicitly marshal the string. This can cause a potential security vulnerability.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2101", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

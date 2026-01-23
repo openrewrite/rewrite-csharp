@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseRegisteredTypeFixWPF0012 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0012";
 
-    @Getter
+    final String recipeId = "WPF0012";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "CLR property type should match registered type";
-
-    @Getter
     final String description = "CLR property type should match registered type.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0012", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

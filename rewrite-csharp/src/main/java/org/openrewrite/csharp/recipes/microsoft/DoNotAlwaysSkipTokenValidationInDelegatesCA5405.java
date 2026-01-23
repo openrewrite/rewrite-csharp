@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotAlwaysSkipTokenValidationInDelegatesCA5405 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5405";
 
-    @Getter
+    final String recipeId = "CA5405";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not always skip token validation in delegates";
-
-    @Getter
+    final String displayName = "Do not always skip token validation in delegates (search)";
     final String description = "This is a reporting only recipe. By setting critical TokenValidationParameter validation delegates to true, important authentication safeguards are disabled which can lead to tokens from any issuer or expired tokens being wrongly validated.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5405", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

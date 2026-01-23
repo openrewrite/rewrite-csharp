@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1208SystemUsingDirectivesMustBePlacedBeforeOtherUsingDirectivesSA1208 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1208";
 
-    @Getter
+    final String recipeId = "SA1208";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: System using directives should be placed before other using directives";
-
-    @Getter
+    final String displayName = "System using directives should be placed before other using directives (search)";
     final String description = "This is a reporting only recipe. A using directive which declares a member of the 'System' namespace appears after a using directive which declares a member of a different namespace, within a C# code file.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1208", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

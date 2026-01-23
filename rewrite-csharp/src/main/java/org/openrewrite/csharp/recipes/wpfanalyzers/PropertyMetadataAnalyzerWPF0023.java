@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class PropertyMetadataAnalyzerWPF0023 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0023";
 
-    @Getter
+    final String recipeId = "WPF0023";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: The callback is trivial, convert to lambda";
-
-    @Getter
+    final String displayName = "The callback is trivial, convert to lambda (search)";
     final String description = "This is a reporting only recipe. The callback is trivial, convert to lambda for better locality.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0023", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

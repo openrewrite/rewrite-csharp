@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1025FixerSA1025 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1025";
 
-    @Getter
+    final String recipeId = "SA1025";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Code should not contain multiple whitespace in a row";
-
-    @Getter
     final String description = "The code contains multiple whitespace characters in a row.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1025", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

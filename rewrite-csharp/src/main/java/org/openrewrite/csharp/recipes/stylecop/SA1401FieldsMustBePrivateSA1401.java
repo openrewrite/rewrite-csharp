@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1401FieldsMustBePrivateSA1401 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1401";
 
-    @Getter
+    final String recipeId = "SA1401";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Fields should be private";
-
-    @Getter
+    final String displayName = "Fields should be private (search)";
     final String description = "This is a reporting only recipe. A field within a C# class has an access modifier other than private.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1401", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

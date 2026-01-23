@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1137ElementsShouldHaveTheSameIndentationSA1137 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1137";
 
-    @Getter
+    final String recipeId = "SA1137";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Elements should have the same indentation";
-
-    @Getter
+    final String displayName = "Elements should have the same indentation (search)";
     final String description = "This is a reporting only recipe. Elements at the same level in the syntax tree should have the same indentation.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1137", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

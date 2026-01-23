@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseConfigureAwaitWithSuppressThrowingCA2261 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2261";
 
-    @Getter
+    final String recipeId = "CA2261";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not use ConfigureAwaitOptions.SuppressThrowing with Task<TResult>";
-
-    @Getter
+    final String displayName = "Do not use ConfigureAwaitOptions.SuppressThrowing with Task<TResult> (search)";
     final String description = "This is a reporting only recipe. The ConfigureAwaitOptions.SuppressThrowing option is only supported with the non-generic Task, not a Task<TResult>.  To use it with a Task<TResult>, first cast to the base Task.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2261", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

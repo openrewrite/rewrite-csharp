@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class RenameMemberFixWPF0002 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0002";
 
-    @Getter
+    final String recipeId = "WPF0002";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "Backing field for a DependencyPropertyKey should match registered name";
-
-    @Getter
     final String description = "A DependencyPropertyKey's backing field must be named with the name it is registered with suffixed by 'PropertyKey'.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0002", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

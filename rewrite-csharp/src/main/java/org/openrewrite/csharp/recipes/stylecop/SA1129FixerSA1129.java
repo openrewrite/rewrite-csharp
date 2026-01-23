@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1129FixerSA1129 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1129";
 
-    @Getter
+    final String recipeId = "SA1129";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Do not use default value type constructor";
-
-    @Getter
     final String description = "When creating a new instance of a value type T, the syntax 'default(T)' is functionally equivalent to the syntax 'new T()'. To avoid confusion regarding the behavior of the resulting instance, the first form is preferred.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1129", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

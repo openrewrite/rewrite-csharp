@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1205PartialElementsMustDeclareAccessSA1205 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1205";
 
-    @Getter
+    final String recipeId = "SA1205";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Partial elements should declare access";
-
-    @Getter
+    final String displayName = "Partial elements should declare access (search)";
     final String description = "This is a reporting only recipe. The partial element does not have an access modifier defined.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1205", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

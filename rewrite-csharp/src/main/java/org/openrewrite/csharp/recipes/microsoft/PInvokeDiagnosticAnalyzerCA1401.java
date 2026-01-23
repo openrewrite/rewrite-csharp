@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class PInvokeDiagnosticAnalyzerCA1401 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1401";
 
-    @Getter
+    final String recipeId = "CA1401";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: P/Invokes should not be visible";
-
-    @Getter
+    final String displayName = "P/Invokes should not be visible (search)";
     final String description = "This is a reporting only recipe. A public or protected method in a public type has the System.Runtime.InteropServices.DllImportAttribute attribute (also implemented by the Declare keyword in Visual Basic). Such methods should not be exposed.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1401", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

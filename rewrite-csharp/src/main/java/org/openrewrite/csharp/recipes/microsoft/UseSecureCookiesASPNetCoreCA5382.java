@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseSecureCookiesASPNetCoreCA5382 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5382";
 
-    @Getter
+    final String recipeId = "CA5382";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Use Secure Cookies In ASP.NET Core";
-
-    @Getter
+    final String displayName = "Use Secure Cookies In ASP.NET Core (search)";
     final String description = "This is a reporting only recipe. Applications available over HTTPS must use secure cookies.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5382", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

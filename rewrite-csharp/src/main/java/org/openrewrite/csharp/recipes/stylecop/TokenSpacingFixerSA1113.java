@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class TokenSpacingFixerSA1113 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1113";
 
-    @Getter
+    final String recipeId = "SA1113";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Comma should be on the same line as previous parameter";
-
-    @Getter
     final String description = "A comma between two parameters in a call to a C# method or indexer, or in the declaration of a method or indexer, is not placed on the same line as the previous parameter.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1113", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

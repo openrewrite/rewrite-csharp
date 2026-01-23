@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class TokenSpacingFixerSA1019 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1019";
 
-    @Getter
+    final String recipeId = "SA1019";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Member access symbols should be spaced correctly";
-
-    @Getter
     final String description = "The spacing around a member access symbol is incorrect, within a C# code file.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1019", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

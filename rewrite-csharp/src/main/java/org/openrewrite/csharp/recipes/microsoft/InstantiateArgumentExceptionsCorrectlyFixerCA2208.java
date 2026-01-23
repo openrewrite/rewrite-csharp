@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class InstantiateArgumentExceptionsCorrectlyFixerCA2208 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2208";
 
-    @Getter
+    final String recipeId = "CA2208";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Instantiate argument exceptions correctly";
-
-    @Getter
     final String description = "A call is made to the default (parameterless) constructor of an exception type that is or derives from ArgumentException, or an incorrect string argument is passed to a parameterized constructor of an exception type that is or derives from ArgumentException.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA2208", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

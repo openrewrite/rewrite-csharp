@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotDisableCertificateValidationCA5359 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5359";
 
-    @Getter
+    final String recipeId = "CA5359";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do Not Disable Certificate Validation";
-
-    @Getter
+    final String displayName = "Do Not Disable Certificate Validation (search)";
     final String description = "This is a reporting only recipe. A certificate can help authenticate the identity of the server. Clients should validate the server certificate to ensure requests are sent to the intended server. If the ServerCertificateValidationCallback always returns 'true', any certificate will pass validation.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5359", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

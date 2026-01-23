@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AvoidExcessiveParametersOnGenericTypesCA1005 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1005";
 
-    @Getter
+    final String recipeId = "CA1005";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Avoid excessive parameters on generic types";
-
-    @Getter
+    final String displayName = "Avoid excessive parameters on generic types (search)";
     final String description = "This is a reporting only recipe. The more type parameters a generic type contains, the more difficult it is to know and remember what each type parameter represents.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1005", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

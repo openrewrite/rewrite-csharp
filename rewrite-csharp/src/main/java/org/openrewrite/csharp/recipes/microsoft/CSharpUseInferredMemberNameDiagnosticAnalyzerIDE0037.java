@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpUseInferredMemberNameDiagnosticAnalyzerIDE0037 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "IDE0037";
 
-    @Getter
+    final String recipeId = "IDE0037";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-
-    @Getter
     final String nugetPackageVersion = "5.0.0";
 
-    @Getter
-    final String displayName = "Analysis: Use inferred member name";
-
-    @Getter
+    final String displayName = "Use inferred member name (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "IDE0037", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

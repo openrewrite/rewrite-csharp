@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpPreferGenericOverloadsAnalyzerCA2263 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2263";
 
-    @Getter
+    final String recipeId = "CA2263";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Prefer generic overload when type is known";
-
-    @Getter
+    final String displayName = "Prefer generic overload when type is known (search)";
     final String description = "This is a reporting only recipe. Using a generic overload is preferable to the 'System.Type' overload when the type is known, promoting cleaner and more type-safe code with improved compile-time checks.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2263", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

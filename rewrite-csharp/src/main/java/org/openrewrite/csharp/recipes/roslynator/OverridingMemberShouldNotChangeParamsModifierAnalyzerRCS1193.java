@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class OverridingMemberShouldNotChangeParamsModifierAnalyzerRCS1193 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1193";
 
-    @Getter
+    final String recipeId = "RCS1193";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Overriding member should not change 'params' modifier";
-
-    @Getter
+    final String displayName = "Overriding member should not change 'params' modifier (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1193", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

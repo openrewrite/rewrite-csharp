@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CallbackAnalyzerWPF0021 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0021";
 
-    @Getter
+    final String recipeId = "WPF0021";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: Cast sender to containing type";
-
-    @Getter
+    final String displayName = "Cast sender to containing type (search)";
     final String description = "This is a reporting only recipe. Cast sender to correct type.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0021", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseDateTimeUnixEpochFixerMA0114 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0114";
 
-    @Getter
+    final String recipeId = "MA0114";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
     final String displayName = "Use DateTimeOffset.UnixEpoch";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "MA0114", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

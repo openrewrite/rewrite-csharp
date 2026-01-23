@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseCoalesceExpressionForTernaryConditionalCheckFixerIDE0029 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "IDE0029";
 
-    @Getter
+    final String recipeId = "IDE0029";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-
-    @Getter
     final String nugetPackageVersion = "5.0.0";
 
-    @Getter
     final String displayName = "Use coalesce expression";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "IDE0029", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class TokenSpacingFixerSA1001 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1001";
 
-    @Getter
+    final String recipeId = "SA1001";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Commas should be spaced correctly";
-
-    @Getter
     final String description = "The spacing around a comma is incorrect, within a C# code file.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1001", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

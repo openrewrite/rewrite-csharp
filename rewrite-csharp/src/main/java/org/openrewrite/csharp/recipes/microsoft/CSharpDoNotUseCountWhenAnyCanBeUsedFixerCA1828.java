@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpDoNotUseCountWhenAnyCanBeUsedFixerCA1828 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1828";
 
-    @Getter
+    final String recipeId = "CA1828";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Do not use CountAsync() or LongCountAsync() when AnyAsync() can be used";
-
-    @Getter
     final String description = "For non-empty collections, CountAsync() and LongCountAsync() enumerate the entire sequence, while AnyAsync() stops at the first item or the first item that satisfies a condition.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1828", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

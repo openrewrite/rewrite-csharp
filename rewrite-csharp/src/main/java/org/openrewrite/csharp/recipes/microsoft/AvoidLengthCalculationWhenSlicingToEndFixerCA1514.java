@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AvoidLengthCalculationWhenSlicingToEndFixerCA1514 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1514";
 
-    @Getter
+    final String recipeId = "CA1514";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Avoid redundant length argument";
-
-    @Getter
     final String description = "An explicit length calculation can be error-prone and can be avoided when slicing to end of the buffer.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1514", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

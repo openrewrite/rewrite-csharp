@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1625ElementDocumentationMustNotBeCopiedAndPastedSA1625 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1625";
 
-    @Getter
+    final String recipeId = "SA1625";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Element documentation should not be copied and pasted";
-
-    @Getter
+    final String displayName = "Element documentation should not be copied and pasted (search)";
     final String description = "This is a reporting only recipe. The Xml documentation for a C# element contains two or more identical entries, indicating that the documentation has been copied and pasted. This can sometimes indicate invalid or poorly written documentation.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1625", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

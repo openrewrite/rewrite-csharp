@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1643DestructorSummaryDocumentationMustBeginWithStandardTextSA1643 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1643";
 
-    @Getter
+    final String recipeId = "SA1643";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Destructor summary documentation should begin with standard text";
-
-    @Getter
+    final String displayName = "Destructor summary documentation should begin with standard text (search)";
     final String description = "This is a reporting only recipe. The XML documentation header for a C# finalizer does not contain the appropriate summary text.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1643", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

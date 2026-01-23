@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpSpecifyCultureForToLowerAndToUpperAnalyzerCA1311 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1311";
 
-    @Getter
+    final String recipeId = "CA1311";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Specify a culture or use an invariant version";
-
-    @Getter
+    final String displayName = "Specify a culture or use an invariant version (search)";
     final String description = "This is a reporting only recipe. Specify culture to help avoid accidental implicit dependency on current culture. Using an invariant version yields consistent results regardless of the culture of an application.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1311", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

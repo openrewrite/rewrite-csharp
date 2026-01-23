@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpUseNameofInPlaceOfStringAnalyzerCA1507 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1507";
 
-    @Getter
+    final String recipeId = "CA1507";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Use nameof to express symbol names";
-
-    @Getter
+    final String displayName = "Use nameof to express symbol names (search)";
     final String description = "This is a reporting only recipe. Using nameof helps keep your code valid when refactoring.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1507", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseIsPatternInsteadOfSequenceEqualFixerMA0128 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0128";
 
-    @Getter
+    final String recipeId = "MA0128";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
     final String displayName = "Use 'is' operator instead of SequenceEqual";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "MA0128", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

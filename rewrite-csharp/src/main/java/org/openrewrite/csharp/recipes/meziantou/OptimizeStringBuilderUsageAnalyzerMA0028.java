@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class OptimizeStringBuilderUsageAnalyzerMA0028 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0028";
 
-    @Getter
+    final String recipeId = "MA0028";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Optimize StringBuilder usage";
-
-    @Getter
+    final String displayName = "Optimize StringBuilder usage (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0028", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

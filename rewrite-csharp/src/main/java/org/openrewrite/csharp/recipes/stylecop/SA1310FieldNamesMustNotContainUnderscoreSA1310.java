@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1310FieldNamesMustNotContainUnderscoreSA1310 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1310";
 
-    @Getter
+    final String recipeId = "SA1310";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Field names should not contain underscore";
-
-    @Getter
+    final String displayName = "Field names should not contain underscore (search)";
     final String description = "This is a reporting only recipe. A field name in C# contains an underscore.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1310", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

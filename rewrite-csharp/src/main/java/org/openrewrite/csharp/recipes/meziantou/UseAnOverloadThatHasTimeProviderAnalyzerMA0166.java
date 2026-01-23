@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseAnOverloadThatHasTimeProviderAnalyzerMA0166 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0166";
 
-    @Getter
+    final String recipeId = "MA0166";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Forward the TimeProvider to methods that take one";
-
-    @Getter
+    final String displayName = "Forward the TimeProvider to methods that take one (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0166", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

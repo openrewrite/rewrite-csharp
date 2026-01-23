@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DisposeObjectsBeforeLosingScopeCA2000 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2000";
 
-    @Getter
+    final String recipeId = "CA2000";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Dispose objects before losing scope";
-
-    @Getter
+    final String displayName = "Dispose objects before losing scope (search)";
     final String description = "This is a reporting only recipe. If a disposable object is not explicitly disposed before all references to it are out of scope, the object will be disposed at some indeterminate time when the garbage collector runs the finalizer of the object. Because an exceptional event might occur that will prevent the finalizer of the object from running, the object should be explicitly disposed instead.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2000", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

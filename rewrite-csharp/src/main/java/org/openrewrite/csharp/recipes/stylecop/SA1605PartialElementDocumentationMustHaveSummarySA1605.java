@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1605PartialElementDocumentationMustHaveSummarySA1605 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1605";
 
-    @Getter
+    final String recipeId = "SA1605";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Partial element documentation should have summary";
-
-    @Getter
+    final String displayName = "Partial element documentation should have summary (search)";
     final String description = "This is a reporting only recipe. The <summary> or <content> tag within the documentation header for a C# code element is missing or empty.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1605", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

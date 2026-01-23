@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AvoidBoxingOfValueTypeAnalyzerRCS1198 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1198";
 
-    @Getter
+    final String recipeId = "RCS1198";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Avoid unnecessary boxing of value type";
-
-    @Getter
+    final String displayName = "Avoid unnecessary boxing of value type (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1198", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

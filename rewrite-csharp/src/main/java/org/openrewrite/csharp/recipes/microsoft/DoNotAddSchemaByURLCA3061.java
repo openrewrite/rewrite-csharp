@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotAddSchemaByURLCA3061 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA3061";
 
-    @Getter
+    final String recipeId = "CA3061";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do Not Add Schema By URL";
-
-    @Getter
+    final String displayName = "Do Not Add Schema By URL (search)";
     final String description = "This is a reporting only recipe. This overload of XmlSchemaCollection.Add method internally enables DTD processing on the XML reader instance used, and uses UrlResolver for resolving external XML entities. The outcome is information disclosure. Content from file system or network shares for the machine processing the XML can be exposed to attacker. In addition, an attacker can use this as a DoS vector.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA3061", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

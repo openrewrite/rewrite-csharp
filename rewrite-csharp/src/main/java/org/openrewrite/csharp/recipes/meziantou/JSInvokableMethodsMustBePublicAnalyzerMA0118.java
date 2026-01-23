@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class JSInvokableMethodsMustBePublicAnalyzerMA0118 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0118";
 
-    @Getter
+    final String recipeId = "MA0118";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: [JSInvokable] methods must be public";
-
-    @Getter
+    final String displayName = "[JSInvokable] methods must be public (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0118", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

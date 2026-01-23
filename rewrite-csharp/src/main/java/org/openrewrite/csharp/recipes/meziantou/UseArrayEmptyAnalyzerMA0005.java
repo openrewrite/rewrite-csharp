@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseArrayEmptyAnalyzerMA0005 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0005";
 
-    @Getter
+    final String recipeId = "MA0005";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Use Array.Empty<T>()";
-
-    @Getter
+    final String displayName = "Use Array.Empty<T>() (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0005", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

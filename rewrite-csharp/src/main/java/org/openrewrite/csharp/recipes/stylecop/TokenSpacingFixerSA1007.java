@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class TokenSpacingFixerSA1007 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1007";
 
-    @Getter
+    final String recipeId = "SA1007";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Operator keyword should be followed by space";
-
-    @Getter
     final String description = "The operator keyword within a C# operator overload method is not followed by any whitespace.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1007", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

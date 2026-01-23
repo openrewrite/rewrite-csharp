@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotCallToImmutableCollectionOnAnImmutableCollectionValueFixerCA2009 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2009";
 
-    @Getter
+    final String recipeId = "CA2009";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Do not call ToImmutableCollection on an ImmutableCollection value";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA2009", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

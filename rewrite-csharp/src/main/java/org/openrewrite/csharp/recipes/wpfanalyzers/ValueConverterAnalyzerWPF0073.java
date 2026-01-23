@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ValueConverterAnalyzerWPF0073 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0073";
 
-    @Getter
+    final String recipeId = "WPF0073";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: Add ValueConversion attribute (unknown types)";
-
-    @Getter
+    final String displayName = "Add ValueConversion attribute (unknown types) (search)";
     final String description = "This is a reporting only recipe. Add ValueConversion attribute (unknown types).";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0073", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

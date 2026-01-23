@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class EnumWithFlagsAttributeFixerCA2217 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2217";
 
-    @Getter
+    final String recipeId = "CA2217";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Do not mark enums with FlagsAttribute";
-
-    @Getter
     final String description = "An externally visible enumeration is marked by using FlagsAttribute, and it has one or more values that are not powers of two or a combination of the other defined values on the enumeration.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA2217", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

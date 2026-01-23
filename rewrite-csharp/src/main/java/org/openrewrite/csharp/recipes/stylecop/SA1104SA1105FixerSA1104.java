@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1104SA1105FixerSA1104 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1104";
 
-    @Getter
+    final String recipeId = "SA1104";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Query clause should begin on new line when previous clause spans multiple lines";
-
-    @Getter
     final String description = "A clause within a C# query expression begins on the same line as the previous clause, when the previous clause spans across multiple lines.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1104", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

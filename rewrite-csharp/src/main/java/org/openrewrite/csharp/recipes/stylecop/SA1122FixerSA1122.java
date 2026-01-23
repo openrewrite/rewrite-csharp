@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1122FixerSA1122 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1122";
 
-    @Getter
+    final String recipeId = "SA1122";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Use string.Empty for empty strings";
-
-    @Getter
     final String description = "The C# code includes an empty string, written as \"\".";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1122", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

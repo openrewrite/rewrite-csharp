@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseAutoValidateAntiforgeryTokenCA5391 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5391";
 
-    @Getter
+    final String recipeId = "CA5391";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Use antiforgery tokens in ASP.NET Core MVC controllers";
-
-    @Getter
+    final String displayName = "Use antiforgery tokens in ASP.NET Core MVC controllers (search)";
     final String description = "This is a reporting only recipe. Handling a POST, PUT, PATCH, or DELETE request without validating an antiforgery token may be vulnerable to cross-site request forgery attacks. A cross-site request forgery attack can send malicious requests from an authenticated user to your ASP.NET Core MVC controller.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5391", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1304NonPrivateReadonlyFieldsMustBeginWithUpperCaseLetterSA1304 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1304";
 
-    @Getter
+    final String recipeId = "SA1304";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Non-private readonly fields should begin with upper-case letter";
-
-    @Getter
+    final String displayName = "Non-private readonly fields should begin with upper-case letter (search)";
     final String description = "This is a reporting only recipe. The name of a non-private readonly C# field should being with an upper-case letter.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1304", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

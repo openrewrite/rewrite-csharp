@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1305FieldNamesMustNotUseHungarianNotationSA1305 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1305";
 
-    @Getter
+    final String recipeId = "SA1305";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Field names should not use Hungarian notation";
-
-    @Getter
+    final String displayName = "Field names should not use Hungarian notation (search)";
     final String description = "This is a reporting only recipe. The name of a field or variable in C# uses Hungarian notation.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1305", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

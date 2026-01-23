@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpUseSpanBasedStringConcatFixerCA1845 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1845";
 
-    @Getter
+    final String recipeId = "CA1845";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Use span-based 'string.Concat'";
-
-    @Getter
     final String description = "It is more efficient to use 'AsSpan' and 'string.Concat', instead of 'Substring' and a concatenation operator.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1845", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class IdentifiersShouldHaveCorrectPrefixAnalyzerCA1715 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1715";
 
-    @Getter
+    final String recipeId = "CA1715";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Identifiers should have correct prefix";
-
-    @Getter
+    final String displayName = "Identifiers should have correct prefix (search)";
     final String description = "This is a reporting only recipe. The name of an externally visible interface does not start with an uppercase \"\"I\"\". The name of a generic type parameter on an externally visible type or method does not start with an uppercase \"\"T\"\".";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1715", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

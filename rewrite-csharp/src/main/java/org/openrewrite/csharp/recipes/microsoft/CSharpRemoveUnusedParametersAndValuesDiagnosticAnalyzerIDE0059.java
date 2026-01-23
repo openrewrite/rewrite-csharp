@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpRemoveUnusedParametersAndValuesDiagnosticAnalyzerIDE0059 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "IDE0059";
 
-    @Getter
+    final String recipeId = "IDE0059";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-
-    @Getter
     final String nugetPackageVersion = "5.0.0";
 
-    @Getter
-    final String displayName = "Analysis: Unnecessary assignment of a value";
-
-    @Getter
+    final String displayName = "Unnecessary assignment of a value (search)";
     final String description = "This is a reporting only recipe. Avoid unnecessary value assignments in your code, as these likely indicate redundant value computations. If the value computation is not redundant and you intend to retain the assignment, then change the assignment target to a local variable whose name starts with an underscore and is optionally followed by an integer, such as '_', '_1', '_2', etc. These are treated as special discard symbol names.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "IDE0059", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

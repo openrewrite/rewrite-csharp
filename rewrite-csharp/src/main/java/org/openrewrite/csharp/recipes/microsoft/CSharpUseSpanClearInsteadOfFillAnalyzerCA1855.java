@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpUseSpanClearInsteadOfFillAnalyzerCA1855 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1855";
 
-    @Getter
+    final String recipeId = "CA1855";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Prefer 'Clear' over 'Fill'";
-
-    @Getter
+    final String displayName = "Prefer 'Clear' over 'Fill' (search)";
     final String description = "This is a reporting only recipe. It is more efficient to use 'Clear', instead of 'Fill' with default value.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1855", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

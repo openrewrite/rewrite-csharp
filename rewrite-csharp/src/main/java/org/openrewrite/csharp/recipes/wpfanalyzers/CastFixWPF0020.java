@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CastFixWPF0020 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0020";
 
-    @Getter
+    final String recipeId = "WPF0020";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "Cast value to correct type";
-
-    @Getter
     final String description = "Cast value to correct type.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0020", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

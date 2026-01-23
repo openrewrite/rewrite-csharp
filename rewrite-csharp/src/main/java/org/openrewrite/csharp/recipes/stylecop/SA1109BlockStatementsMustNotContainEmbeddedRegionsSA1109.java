@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1109BlockStatementsMustNotContainEmbeddedRegionsSA1109 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1109";
 
-    @Getter
+    final String recipeId = "SA1109";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Block statements should not contain embedded regions";
-
-    @Getter
+    final String displayName = "Block statements should not contain embedded regions (search)";
     final String description = "This is a reporting only recipe. A C# statement contains a region tag between the declaration of the statement and the opening brace of the statement.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1109", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

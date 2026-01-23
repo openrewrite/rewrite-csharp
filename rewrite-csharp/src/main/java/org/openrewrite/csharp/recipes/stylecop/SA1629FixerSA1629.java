@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1629FixerSA1629 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1629";
 
-    @Getter
+    final String recipeId = "SA1629";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Documentation text should end with a period";
-
-    @Getter
     final String description = "A section of the XML header documentation for a C# element does not end with a period.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1629", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

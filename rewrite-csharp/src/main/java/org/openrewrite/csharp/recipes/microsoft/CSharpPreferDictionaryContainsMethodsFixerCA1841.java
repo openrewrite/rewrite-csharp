@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpPreferDictionaryContainsMethodsFixerCA1841 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1841";
 
-    @Getter
+    final String recipeId = "CA1841";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Prefer Dictionary.Contains methods";
-
-    @Getter
     final String description = "'ContainsKey' is usually O(1), while 'Keys.Contains' may be O(n) in some cases. Additionally, many dictionary implementations lazily initialize the Keys collection to cut back on allocations.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1841", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

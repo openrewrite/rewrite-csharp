@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1631DocumentationMustMeetCharacterPercentageSA1631 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1631";
 
-    @Getter
+    final String recipeId = "SA1631";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Documentation should meet character percentage";
-
-    @Getter
+    final String displayName = "Documentation should meet character percentage (search)";
     final String description = "This is a reporting only recipe. A section of the Xml header documentation for a C# element does not contain enough alphabetic characters.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1631", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

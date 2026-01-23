@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1505OpeningBracesMustNotBeFollowedByBlankLineSA1505 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1505";
 
-    @Getter
+    final String recipeId = "SA1505";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Opening braces should not be followed by blank line";
-
-    @Getter
+    final String displayName = "Opening braces should not be followed by blank line (search)";
     final String description = "This is a reporting only recipe. An opening brace within a C# element, statement, or expression is followed by a blank line.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1505", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

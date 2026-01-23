@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1100FixerSA1100 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1100";
 
-    @Getter
+    final String recipeId = "SA1100";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Do not prefix calls with base unless local implementation exists";
-
-    @Getter
     final String description = "A call to a member from an inherited class begins with 'base.', and the local class does not contain an override or implementation of the member.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1100", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

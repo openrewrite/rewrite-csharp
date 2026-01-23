@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1206DeclarationKeywordsMustFollowOrderSA1206 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1206";
 
-    @Getter
+    final String recipeId = "SA1206";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Declaration keywords should follow order";
-
-    @Getter
+    final String displayName = "Declaration keywords should follow order (search)";
     final String description = "This is a reporting only recipe. The keywords within the declaration of an element do not follow a standard ordering scheme.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1206", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

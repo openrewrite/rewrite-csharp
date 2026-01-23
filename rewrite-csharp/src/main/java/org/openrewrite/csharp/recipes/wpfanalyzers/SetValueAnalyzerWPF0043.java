@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SetValueAnalyzerWPF0043 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0043";
 
-    @Getter
+    final String recipeId = "WPF0043";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: Don't set DataContext and Style using SetCurrentValue";
-
-    @Getter
+    final String displayName = "Don't set DataContext and Style using SetCurrentValue (search)";
     final String description = "This is a reporting only recipe. Set DataContext and Style using SetValue.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0043", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

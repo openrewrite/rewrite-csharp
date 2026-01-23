@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseCountProperlyAnalyzerCA1829 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1829";
 
-    @Getter
+    final String recipeId = "CA1829";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Use Length/Count property instead of Count() when available";
-
-    @Getter
+    final String displayName = "Use Length/Count property instead of Count() when available (search)";
     final String description = "This is a reporting only recipe. Enumerable.Count() potentially enumerates the sequence while a Length/Count property is a direct access.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1829", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

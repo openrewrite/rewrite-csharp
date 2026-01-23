@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class PropertiesShouldNotReturnArraysAnalyzerCA1819 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1819";
 
-    @Getter
+    final String recipeId = "CA1819";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Properties should not return arrays";
-
-    @Getter
+    final String displayName = "Properties should not return arrays (search)";
     final String description = "This is a reporting only recipe. Arrays that are returned by properties are not write-protected, even when the property is read-only. To keep the array tamper-proof, the property must return a copy of the array. Typically, users will not understand the adverse performance implications of calling such a property.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1819", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

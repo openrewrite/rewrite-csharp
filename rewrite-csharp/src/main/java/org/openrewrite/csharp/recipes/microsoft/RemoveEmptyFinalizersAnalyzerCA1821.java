@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class RemoveEmptyFinalizersAnalyzerCA1821 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1821";
 
-    @Getter
+    final String recipeId = "CA1821";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Remove empty Finalizers";
-
-    @Getter
+    final String displayName = "Remove empty Finalizers (search)";
     final String description = "This is a reporting only recipe. Finalizers should be avoided where possible, to avoid the additional performance overhead involved in tracking object lifetime.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1821", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1413FixerSA1413 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1413";
 
-    @Getter
+    final String recipeId = "SA1413";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Use trailing comma in multi-line initializers";
-
-    @Getter
     final String description = "A multi-line initializer in a C# code file should use a comma on the last line.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1413", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

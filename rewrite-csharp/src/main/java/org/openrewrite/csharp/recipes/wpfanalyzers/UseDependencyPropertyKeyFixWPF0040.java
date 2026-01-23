@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseDependencyPropertyKeyFixWPF0040 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0040";
 
-    @Getter
+    final String recipeId = "WPF0040";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "A readonly DependencyProperty must be set with DependencyPropertyKey";
-
-    @Getter
     final String description = "A readonly DependencyProperty must be set with DependencyPropertyKey.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0040", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

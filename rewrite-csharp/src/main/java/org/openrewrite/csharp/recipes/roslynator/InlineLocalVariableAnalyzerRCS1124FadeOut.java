@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class InlineLocalVariableAnalyzerRCS1124FadeOut extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1124FadeOut";
 
-    @Getter
+    final String recipeId = "RCS1124FadeOut";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Inline local variable";
-
-    @Getter
+    final String displayName = "Inline local variable (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1124FadeOut", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

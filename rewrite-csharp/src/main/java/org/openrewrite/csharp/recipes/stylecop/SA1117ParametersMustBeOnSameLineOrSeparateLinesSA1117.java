@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1117ParametersMustBeOnSameLineOrSeparateLinesSA1117 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1117";
 
-    @Getter
+    final String recipeId = "SA1117";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Parameters should be on same line or separate lines";
-
-    @Getter
+    final String displayName = "Parameters should be on same line or separate lines (search)";
     final String description = "This is a reporting only recipe. The parameters to a C# method or indexer call or declaration are not all on the same line or each on a separate line.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1117", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

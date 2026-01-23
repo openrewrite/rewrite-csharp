@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpMarkMembersAsStaticFixerCA1822 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1822";
 
-    @Getter
+    final String recipeId = "CA1822";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Mark members as static";
-
-    @Getter
     final String description = "Members that do not access instance data or call instance methods can be marked as static. After you mark the methods as static, the compiler will emit nonvirtual call sites to these members. This can give you a measurable performance gain for performance-sensitive code.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1822", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

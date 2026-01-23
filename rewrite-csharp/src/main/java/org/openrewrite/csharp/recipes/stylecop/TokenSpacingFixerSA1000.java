@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class TokenSpacingFixerSA1000 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1000";
 
-    @Getter
+    final String recipeId = "SA1000";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Keywords should be spaced correctly";
-
-    @Getter
     final String description = "The spacing around a C# keyword is incorrect.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1000", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

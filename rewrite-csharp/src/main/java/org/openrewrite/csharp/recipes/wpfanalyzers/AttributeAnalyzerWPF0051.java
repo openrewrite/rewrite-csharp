@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AttributeAnalyzerWPF0051 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0051";
 
-    @Getter
+    final String recipeId = "WPF0051";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: XmlnsDefinition must map to existing namespace";
-
-    @Getter
+    final String displayName = "XmlnsDefinition must map to existing namespace (search)";
     final String description = "This is a reporting only recipe. XmlnsDefinition must map to existing namespace.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0051", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

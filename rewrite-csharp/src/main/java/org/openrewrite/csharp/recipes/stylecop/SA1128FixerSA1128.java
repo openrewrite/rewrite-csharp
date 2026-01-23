@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1128FixerSA1128 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1128";
 
-    @Getter
+    final String recipeId = "SA1128";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Put constructor initializers on their own line";
-
-    @Getter
     final String description = "A constructor initializer, including the colon character, should be on its own line.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1128", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotDirectlyAwaitATaskFixerCA2007 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2007";
 
-    @Getter
+    final String recipeId = "CA2007";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Consider calling ConfigureAwait on the awaited task";
-
-    @Getter
     final String description = "When an asynchronous method awaits a Task directly, continuation occurs in the same thread that created the task. Consider calling Task.ConfigureAwait(Boolean) to signal your intention for continuation. Call ConfigureAwait(false) on the task to schedule continuations to the thread pool, thereby avoiding a deadlock on the UI thread. Passing false is a good option for app-independent libraries. Calling ConfigureAwait(true) on the task has the same behavior as not explicitly calling ConfigureAwait. By explicitly calling this method, you're letting readers know you intentionally want to perform the continuation on the original synchronization context.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA2007", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DisposableTypesShouldDeclareFinalizerAnalyzerCA2216 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2216";
 
-    @Getter
+    final String recipeId = "CA2216";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Disposable types should declare finalizer";
-
-    @Getter
+    final String displayName = "Disposable types should declare finalizer (search)";
     final String description = "This is a reporting only recipe. A type that implements System.IDisposable and has fields that suggest the use of unmanaged resources does not implement a finalizer, as described by Object.Finalize.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2216", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotSetSwitchCA5361 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5361";
 
-    @Getter
+    final String recipeId = "CA5361";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do Not Disable SChannel Use of Strong Crypto";
-
-    @Getter
+    final String displayName = "Do Not Disable SChannel Use of Strong Crypto (search)";
     final String description = "This is a reporting only recipe. Starting with the .NET Framework 4.6, the System.Net.ServicePointManager and System.Net.Security.SslStream classes are recommended to use new protocols. The old ones have protocol weaknesses and are not supported. Setting Switch.System.Net.DontEnableSchUseStrongCrypto with true will use the old weak crypto check and opt out of the protocol migration.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5361", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

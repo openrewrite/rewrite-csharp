@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1116SplitParametersMustStartOnLineAfterDeclarationSA1116 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1116";
 
-    @Getter
+    final String recipeId = "SA1116";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Split parameters should start on line after declaration";
-
-    @Getter
+    final String displayName = "Split parameters should start on line after declaration (search)";
     final String description = "This is a reporting only recipe. The parameters to a C# method or indexer call or declaration span across multiple lines, but the first parameter does not start on the line after the opening bracket.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1116", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

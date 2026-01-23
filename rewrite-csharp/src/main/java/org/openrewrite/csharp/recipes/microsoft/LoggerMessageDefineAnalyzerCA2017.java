@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class LoggerMessageDefineAnalyzerCA2017 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2017";
 
-    @Getter
+    final String recipeId = "CA2017";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Parameter count mismatch";
-
-    @Getter
+    final String displayName = "Parameter count mismatch (search)";
     final String description = "This is a reporting only recipe. Number of parameters supplied in the logging message template do not match the number of named placeholders.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2017", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

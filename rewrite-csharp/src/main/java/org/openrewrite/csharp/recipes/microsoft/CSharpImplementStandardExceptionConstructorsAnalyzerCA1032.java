@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpImplementStandardExceptionConstructorsAnalyzerCA1032 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1032";
 
-    @Getter
+    final String recipeId = "CA1032";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Implement standard exception constructors";
-
-    @Getter
+    final String displayName = "Implement standard exception constructors (search)";
     final String description = "This is a reporting only recipe. Failure to provide the full set of constructors can make it difficult to correctly handle exceptions.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1032", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

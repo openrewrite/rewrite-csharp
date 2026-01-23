@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotGuardCallAnalyzerCA1868 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1868";
 
-    @Getter
+    final String recipeId = "CA1868";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Unnecessary call to 'Contains(item)'";
-
-    @Getter
+    final String displayName = "Unnecessary call to 'Contains(item)' (search)";
     final String description = "This is a reporting only recipe. Do not guard 'Add(item)' or 'Remove(item)' with 'Contains(item)' for the set. The former two already check whether the item exists and will return if it was added or removed.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1868", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

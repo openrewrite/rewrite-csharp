@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class WPF0083UseConstructorArgumentAttributeWPF0083 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0083";
 
-    @Getter
+    final String recipeId = "WPF0083";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: Add [ConstructorArgument]";
-
-    @Getter
+    final String displayName = "Add [ConstructorArgument] (search)";
     final String description = "This is a reporting only recipe. Add [ConstructorArgument] for the property.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0083", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

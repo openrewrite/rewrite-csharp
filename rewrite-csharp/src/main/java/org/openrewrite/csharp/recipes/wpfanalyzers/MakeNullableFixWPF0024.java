@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class MakeNullableFixWPF0024 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0024";
 
-    @Getter
+    final String recipeId = "WPF0024";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "Parameter type should be nullable";
-
-    @Getter
     final String description = "Parameter type should be nullable.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0024", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1309FixerSA1309 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1309";
 
-    @Getter
+    final String recipeId = "SA1309";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Field names should not begin with underscore";
-
-    @Getter
     final String description = "A field name in C# begins with an underscore.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1309", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

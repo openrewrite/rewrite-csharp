@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseWeakKDFAlgorithmCA5379 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5379";
 
-    @Getter
+    final String recipeId = "CA5379";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Ensure Key Derivation Function algorithm is sufficiently strong";
-
-    @Getter
+    final String displayName = "Ensure Key Derivation Function algorithm is sufficiently strong (search)";
     final String description = "This is a reporting only recipe. Some implementations of the Rfc2898DeriveBytes class allow for a hash algorithm to be specified in a constructor parameter or overwritten in the HashAlgorithm property. If a hash algorithm is specified, then it should be SHA-256 or higher.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5379", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

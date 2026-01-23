@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class WPF0050XmlnsPrefixMustMatchXmlnsDefinitionWPF0050 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0050";
 
-    @Getter
+    final String recipeId = "WPF0050";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: XmlnsPrefix must map to the same url as XmlnsDefinition";
-
-    @Getter
+    final String displayName = "XmlnsPrefix must map to the same url as XmlnsDefinition (search)";
     final String description = "This is a reporting only recipe. [XmlnsPrefix] must have a corresponding [XmlnsDefinition] mapping to the same url.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0050", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

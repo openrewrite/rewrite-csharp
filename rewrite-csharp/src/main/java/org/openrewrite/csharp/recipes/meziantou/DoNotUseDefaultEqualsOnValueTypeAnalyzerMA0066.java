@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseDefaultEqualsOnValueTypeAnalyzerMA0066 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0066";
 
-    @Getter
+    final String recipeId = "MA0066";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Hash table unfriendly type is used in a hash table";
-
-    @Getter
+    final String displayName = "Hash table unfriendly type is used in a hash table (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0066", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

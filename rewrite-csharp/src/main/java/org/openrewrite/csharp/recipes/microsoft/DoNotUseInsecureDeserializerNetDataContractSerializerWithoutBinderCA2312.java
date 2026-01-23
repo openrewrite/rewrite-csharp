@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseInsecureDeserializerNetDataContractSerializerWithoutBinderCA2312 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2312";
 
-    @Getter
+    final String recipeId = "CA2312";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Ensure NetDataContractSerializer.Binder is set before deserializing";
-
-    @Getter
+    final String displayName = "Ensure NetDataContractSerializer.Binder is set before deserializing (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2312", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

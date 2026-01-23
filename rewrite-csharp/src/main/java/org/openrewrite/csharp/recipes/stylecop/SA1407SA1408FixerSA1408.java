@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1407SA1408FixerSA1408 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1408";
 
-    @Getter
+    final String recipeId = "SA1408";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Conditional expressions should declare precedence";
-
-    @Getter
     final String description = "A C# statement contains a complex conditional expression which omits parenthesis around operators.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1408", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

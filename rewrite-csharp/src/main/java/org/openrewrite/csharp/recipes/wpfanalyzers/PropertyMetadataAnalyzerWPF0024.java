@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class PropertyMetadataAnalyzerWPF0024 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0024";
 
-    @Getter
+    final String recipeId = "WPF0024";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: Parameter type should be nullable";
-
-    @Getter
+    final String displayName = "Parameter type should be nullable (search)";
     final String description = "This is a reporting only recipe. Parameter type should be nullable.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0024", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1614ElementParameterDocumentationMustHaveTextSA1614 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1614";
 
-    @Getter
+    final String recipeId = "SA1614";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Element parameter documentation should have text";
-
-    @Getter
+    final String displayName = "Element parameter documentation should have text (search)";
     final String description = "This is a reporting only recipe. A <param> tag within a C# element's documentation header is empty.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1614", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1520UseBracesConsistentlySA1520 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1520";
 
-    @Getter
+    final String recipeId = "SA1520";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Use braces consistently";
-
-    @Getter
+    final String displayName = "Use braces consistently (search)";
     final String description = "This is a reporting only recipe. The opening and closing braces of a chained if/else if/else construct were included for some clauses, but omitted for others.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1520", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

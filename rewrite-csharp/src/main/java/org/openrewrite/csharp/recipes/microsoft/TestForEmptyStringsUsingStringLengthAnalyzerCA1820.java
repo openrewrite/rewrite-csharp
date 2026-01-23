@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class TestForEmptyStringsUsingStringLengthAnalyzerCA1820 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1820";
 
-    @Getter
+    final String recipeId = "CA1820";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Test for empty strings using string length";
-
-    @Getter
+    final String displayName = "Test for empty strings using string length (search)";
     final String description = "This is a reporting only recipe. Comparing strings by using the String.Length property or the String.IsNullOrEmpty method is significantly faster than using Equals.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1820", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

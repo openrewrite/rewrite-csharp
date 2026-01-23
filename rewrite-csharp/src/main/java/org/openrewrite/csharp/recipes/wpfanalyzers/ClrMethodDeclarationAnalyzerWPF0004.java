@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ClrMethodDeclarationAnalyzerWPF0004 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0004";
 
-    @Getter
+    final String recipeId = "WPF0004";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: CLR method for a DependencyProperty must match registered name";
-
-    @Getter
+    final String displayName = "CLR method for a DependencyProperty must match registered name (search)";
     final String description = "This is a reporting only recipe. CLR methods for accessing a DependencyProperty must have names matching the name the DependencyProperty is registered with.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0004", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class InitializeStaticFieldsInlineAnalyzerCA1810 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1810";
 
-    @Getter
+    final String recipeId = "CA1810";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Initialize reference type static fields inline";
-
-    @Getter
+    final String displayName = "Initialize reference type static fields inline (search)";
     final String description = "This is a reporting only recipe. A reference type declares an explicit static constructor. To fix a violation of this rule, initialize all static data when it is declared and remove the static constructor.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1810", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

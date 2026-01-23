@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ClrMethodDeclarationAnalyzerWPF0033 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0033";
 
-    @Getter
+    final String recipeId = "WPF0033";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: Add [AttachedPropertyBrowsableForType]";
-
-    @Getter
+    final String displayName = "Add [AttachedPropertyBrowsableForType] (search)";
     final String description = "This is a reporting only recipe. Add [AttachedPropertyBrowsableForType].";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0033", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

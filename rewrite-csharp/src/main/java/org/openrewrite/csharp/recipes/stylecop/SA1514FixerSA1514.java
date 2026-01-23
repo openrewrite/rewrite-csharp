@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1514FixerSA1514 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1514";
 
-    @Getter
+    final String recipeId = "SA1514";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Element documentation header should be preceded by blank line";
-
-    @Getter
     final String description = "An element documentation header above a C# element is not preceded by a blank line.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1514", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

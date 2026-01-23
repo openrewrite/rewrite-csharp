@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UsingFixerSA1208 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1208";
 
-    @Getter
+    final String recipeId = "SA1208";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "System using directives should be placed before other using directives";
-
-    @Getter
     final String description = "A using directive which declares a member of the 'System' namespace appears after a using directive which declares a member of a different namespace, within a C# code file.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1208", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

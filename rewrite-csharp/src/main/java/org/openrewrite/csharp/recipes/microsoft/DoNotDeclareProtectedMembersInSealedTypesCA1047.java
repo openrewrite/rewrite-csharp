@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotDeclareProtectedMembersInSealedTypesCA1047 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1047";
 
-    @Getter
+    final String recipeId = "CA1047";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not declare protected member in sealed type";
-
-    @Getter
+    final String displayName = "Do not declare protected member in sealed type (search)";
     final String description = "This is a reporting only recipe. Types declare protected members so that inheriting types can access or override the member. By definition, you cannot inherit from a sealed type, which means that protected methods on sealed types cannot be called.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1047", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

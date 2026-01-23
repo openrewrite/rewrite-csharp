@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1402FixerSA1402 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1402";
 
-    @Getter
+    final String recipeId = "SA1402";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "File may only contain a single type";
-
-    @Getter
     final String description = "A C# code file contains more than one unique type.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1402", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

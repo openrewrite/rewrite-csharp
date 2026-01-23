@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseInsecureDeserializerBinaryFormatterWithoutBinderCA2302 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2302";
 
-    @Getter
+    final String recipeId = "CA2302";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Ensure BinaryFormatter.Binder is set before calling BinaryFormatter.Deserialize";
-
-    @Getter
+    final String displayName = "Ensure BinaryFormatter.Binder is set before calling BinaryFormatter.Deserialize (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2302", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

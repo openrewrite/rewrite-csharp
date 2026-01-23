@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotDisableHttpClientCRLCheckCA5399 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5399";
 
-    @Getter
+    final String recipeId = "CA5399";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: HttpClients should enable certificate revocation list checks";
-
-    @Getter
+    final String displayName = "HttpClients should enable certificate revocation list checks (search)";
     final String description = "This is a reporting only recipe. Using HttpClient without providing a platform specific handler (WinHttpHandler or CurlHandler or HttpClientHandler) where the CheckCertificateRevocationList property is set to true, will allow revoked certificates to be accepted by the HttpClient as valid.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5399", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

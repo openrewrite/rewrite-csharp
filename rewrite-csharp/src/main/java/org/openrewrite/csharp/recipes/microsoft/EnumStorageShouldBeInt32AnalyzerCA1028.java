@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class EnumStorageShouldBeInt32AnalyzerCA1028 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1028";
 
-    @Getter
+    final String recipeId = "CA1028";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Enum Storage should be Int32";
-
-    @Getter
+    final String displayName = "Enum Storage should be Int32 (search)";
     final String description = "This is a reporting only recipe. An enumeration is a value type that defines a set of related named constants. By default, the System.Int32 data type is used to store the constant value. Although you can change this underlying type, it is not required or recommended for most scenarios.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1028", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

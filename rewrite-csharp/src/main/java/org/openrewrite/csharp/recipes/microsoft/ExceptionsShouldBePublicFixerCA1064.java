@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ExceptionsShouldBePublicFixerCA1064 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1064";
 
-    @Getter
+    final String recipeId = "CA1064";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Exceptions should be public";
-
-    @Getter
     final String description = "An internal exception is visible only inside its own internal scope. After the exception falls outside the internal scope, only the base exception can be used to catch the exception. If the internal exception is inherited from T:System.Exception, T:System.SystemException, or T:System.ApplicationException, the external code will not have sufficient information to know what to do with the exception.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1064", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

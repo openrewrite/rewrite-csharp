@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotCallDangerousMethodsInDeserializationCA5360 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5360";
 
-    @Getter
+    final String recipeId = "CA5360";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do Not Call Dangerous Methods In Deserialization";
-
-    @Getter
+    final String displayName = "Do Not Call Dangerous Methods In Deserialization (search)";
     final String description = "This is a reporting only recipe. Insecure Deserialization is a vulnerability which occurs when untrusted data is used to abuse the logic of an application, inflict a Denial-of-Service (DoS) attack, or even execute arbitrary code upon it being deserialized. It’s frequently possible for malicious users to abuse these deserialization features when the application is deserializing untrusted data which is under their control. Specifically, invoke dangerous methods in the process of deserialization. Successful insecure deserialization attacks could allow an attacker to carry out attacks such as DoS attacks, authentication bypasses, and remote code execution.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5360", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

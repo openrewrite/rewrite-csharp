@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UriParametersShouldNotBeStringsFixerCA1054 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1054";
 
-    @Getter
+    final String recipeId = "CA1054";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "URI-like parameters should not be strings";
-
-    @Getter
     final String description = "This rule assumes that the parameter represents a Uniform Resource Identifier (URI). A string representation or a URI is prone to parsing and encoding errors, and can lead to security vulnerabilities. 'System.Uri' class provides these services in a safe and secure manner.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1054", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

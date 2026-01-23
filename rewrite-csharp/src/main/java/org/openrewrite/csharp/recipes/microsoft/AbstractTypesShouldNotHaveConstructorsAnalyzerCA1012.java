@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AbstractTypesShouldNotHaveConstructorsAnalyzerCA1012 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1012";
 
-    @Getter
+    final String recipeId = "CA1012";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Abstract types should not have public constructors";
-
-    @Getter
+    final String displayName = "Abstract types should not have public constructors (search)";
     final String description = "This is a reporting only recipe. Constructors on abstract types can be called only by derived types. Because public constructors create instances of a type, and you cannot create instances of an abstract type, an abstract type that has a public constructor is incorrectly designed.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1012", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

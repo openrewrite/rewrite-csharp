@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class WPF0015RegisteredOwnerTypeMustBeDependencyObjectWPF0015 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0015";
 
-    @Getter
+    final String recipeId = "WPF0015";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: Registered owner type must inherit DependencyObject";
-
-    @Getter
+    final String displayName = "Registered owner type must inherit DependencyObject (search)";
     final String description = "This is a reporting only recipe. When registering a DependencyProperty owner type must be a subclass of DependencyObject.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0015", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1626SingleLineCommentsMustNotUseDocumentationStyleSlashesSA1626 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1626";
 
-    @Getter
+    final String recipeId = "SA1626";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Single-line comments should not use documentation style slashes";
-
-    @Getter
+    final String displayName = "Single-line comments should not use documentation style slashes (search)";
     final String description = "This is a reporting only recipe. The C# code contains a single-line comment which begins with three forward slashes in a row.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1626", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

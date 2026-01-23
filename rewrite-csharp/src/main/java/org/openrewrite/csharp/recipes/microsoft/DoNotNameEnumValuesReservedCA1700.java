@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotNameEnumValuesReservedCA1700 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1700";
 
-    @Getter
+    final String recipeId = "CA1700";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not name enum values 'Reserved'";
-
-    @Getter
+    final String displayName = "Do not name enum values 'Reserved' (search)";
     final String description = "This is a reporting only recipe. This rule assumes that an enumeration member that has a name that contains \"reserved\" is not currently used but is a placeholder to be renamed or removed in a future version. Renaming or removing a member is a breaking change.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1700", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

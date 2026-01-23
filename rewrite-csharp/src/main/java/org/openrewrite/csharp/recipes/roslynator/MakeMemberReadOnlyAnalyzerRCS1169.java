@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class MakeMemberReadOnlyAnalyzerRCS1169 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1169";
 
-    @Getter
+    final String recipeId = "RCS1169";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Make field read-only";
-
-    @Getter
+    final String displayName = "Make field read-only (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1169", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

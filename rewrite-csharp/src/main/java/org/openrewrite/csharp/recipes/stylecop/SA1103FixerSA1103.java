@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1103FixerSA1103 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1103";
 
-    @Getter
+    final String recipeId = "SA1103";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Query clauses should be on separate lines or all on one line";
-
-    @Getter
     final String description = "The clauses within a C# query expression are not all placed on the same line, and each clause is not placed on its own line.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1103", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

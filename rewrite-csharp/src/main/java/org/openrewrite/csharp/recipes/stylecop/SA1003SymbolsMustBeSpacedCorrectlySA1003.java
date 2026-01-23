@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1003SymbolsMustBeSpacedCorrectlySA1003 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1003";
 
-    @Getter
+    final String recipeId = "SA1003";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Symbols should be spaced correctly";
-
-    @Getter
+    final String displayName = "Symbols should be spaced correctly (search)";
     final String description = "This is a reporting only recipe. The spacing around an operator symbol is incorrect, within a C# code file.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1003", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpDoNotUseEnumerableMethodsOnIndexableCollectionsInsteadUseTheCollectionDirectlyFixerCA1826 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1826";
 
-    @Getter
+    final String recipeId = "CA1826";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Do not use Enumerable methods on indexable collections";
-
-    @Getter
     final String description = "This collection is directly indexable. Going through LINQ here causes unnecessary allocations and CPU work.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1826", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AttachedPropertyBrowsableForTypeAttributeFixWPF0033 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0033";
 
-    @Getter
+    final String recipeId = "WPF0033";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "Add [AttachedPropertyBrowsableForType]";
-
-    @Getter
     final String description = "Add [AttachedPropertyBrowsableForType].";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0033", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

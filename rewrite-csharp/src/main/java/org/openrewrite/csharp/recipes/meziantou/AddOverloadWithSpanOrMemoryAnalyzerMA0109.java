@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AddOverloadWithSpanOrMemoryAnalyzerMA0109 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0109";
 
-    @Getter
+    final String recipeId = "MA0109";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Consider adding an overload with a Span<T> or Memory<T>";
-
-    @Getter
+    final String displayName = "Consider adding an overload with a Span<T> or Memory<T> (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0109", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

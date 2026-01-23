@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpUseSearchValuesAnalyzerCA1870 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1870";
 
-    @Getter
+    final String recipeId = "CA1870";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Use a cached 'SearchValues' instance";
-
-    @Getter
+    final String displayName = "Use a cached 'SearchValues' instance (search)";
     final String description = "This is a reporting only recipe. Using a cached 'SearchValues' instance is more efficient than passing values to 'IndexOfAny'/'ContainsAny' directly.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1870", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

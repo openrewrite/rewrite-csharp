@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class PreferConvertToHexStringOverBitConverterFixerCA1872 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1872";
 
-    @Getter
+    final String recipeId = "CA1872";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Prefer 'Convert.ToHexString' and 'Convert.ToHexStringLower' over call chains based on 'BitConverter.ToString'";
-
-    @Getter
     final String description = "Use 'Convert.ToHexString' or 'Convert.ToHexStringLower' when encoding bytes to a hexadecimal string representation. These methods are more efficient and allocation-friendly than using 'BitConverter.ToString' in combination with 'String.Replace' to replace dashes and 'String.ToLower'.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1872", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

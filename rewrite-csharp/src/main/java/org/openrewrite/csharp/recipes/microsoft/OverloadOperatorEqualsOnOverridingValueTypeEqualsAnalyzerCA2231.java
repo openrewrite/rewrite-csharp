@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class OverloadOperatorEqualsOnOverridingValueTypeEqualsAnalyzerCA2231 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2231";
 
-    @Getter
+    final String recipeId = "CA2231";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Overload operator equals on overriding value type Equals";
-
-    @Getter
+    final String displayName = "Overload operator equals on overriding value type Equals (search)";
     final String description = "This is a reporting only recipe. In most programming languages there is no default implementation of the equality operator (==) for value types. If your programming language supports operator overloads, you should consider implementing the equality operator. Its behavior should be identical to that of Equals.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2231", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

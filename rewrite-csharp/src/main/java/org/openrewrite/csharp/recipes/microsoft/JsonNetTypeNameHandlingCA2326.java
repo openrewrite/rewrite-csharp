@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class JsonNetTypeNameHandlingCA2326 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2326";
 
-    @Getter
+    final String recipeId = "CA2326";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not use TypeNameHandling values other than None";
-
-    @Getter
+    final String displayName = "Do not use TypeNameHandling values other than None (search)";
     final String description = "This is a reporting only recipe. Deserializing JSON when using a TypeNameHandling value other than None can be insecure.  If you need to instead detect Json.NET deserialization when a SerializationBinder isn't specified, then disable rule CA2326, and enable rules CA2327, CA2328, CA2329, and CA2330.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2326", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

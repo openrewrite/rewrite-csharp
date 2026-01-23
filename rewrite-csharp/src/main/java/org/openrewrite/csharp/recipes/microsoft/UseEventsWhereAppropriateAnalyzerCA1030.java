@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseEventsWhereAppropriateAnalyzerCA1030 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1030";
 
-    @Getter
+    final String recipeId = "CA1030";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Use events where appropriate";
-
-    @Getter
+    final String displayName = "Use events where appropriate (search)";
     final String description = "This is a reporting only recipe. This rule detects methods that have names that ordinarily would be used for events. If a method is called in response to a clearly defined state change, the method should be invoked by an event handler. Objects that call the method should raise events instead of calling the method directly.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1030", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

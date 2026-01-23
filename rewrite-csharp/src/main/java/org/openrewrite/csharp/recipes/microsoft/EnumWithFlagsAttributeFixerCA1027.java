@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class EnumWithFlagsAttributeFixerCA1027 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1027";
 
-    @Getter
+    final String recipeId = "CA1027";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Mark enums with FlagsAttribute";
-
-    @Getter
     final String description = "An enumeration is a value type that defines a set of related named constants. Apply FlagsAttribute to an enumeration when its named constants can be meaningfully combined.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1027", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

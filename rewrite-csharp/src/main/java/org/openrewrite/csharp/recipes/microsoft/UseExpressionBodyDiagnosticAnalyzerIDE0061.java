@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseExpressionBodyDiagnosticAnalyzerIDE0061 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "IDE0061";
 
-    @Getter
+    final String recipeId = "IDE0061";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-
-    @Getter
     final String nugetPackageVersion = "5.0.0";
 
-    @Getter
-    final String displayName = "Analysis: Use expression body for local function";
-
-    @Getter
+    final String displayName = "Use expression body for local function (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "IDE0061", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

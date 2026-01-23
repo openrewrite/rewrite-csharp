@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1603DocumentationMustContainValidXmlSA1603 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1603";
 
-    @Getter
+    final String recipeId = "SA1603";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Documentation should contain valid XML";
-
-    @Getter
+    final String displayName = "Documentation should contain valid XML (search)";
     final String description = "This is a reporting only recipe. The XML within a C# element’s document header is badly formed.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1603", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

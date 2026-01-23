@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class MarkTypesWithSerializableFixerCA2237 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2237";
 
-    @Getter
+    final String recipeId = "CA2237";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Mark ISerializable types with serializable";
-
-    @Getter
     final String description = "To be recognized by the common language runtime as serializable, types must be marked by using the SerializableAttribute attribute even when the type uses a custom serialization routine through implementation of the ISerializable interface.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA2237", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

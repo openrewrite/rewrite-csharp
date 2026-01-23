@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1130FixerSA1130 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1130";
 
-    @Getter
+    final String recipeId = "SA1130";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Use lambda syntax";
-
-    @Getter
     final String description = "Lambda expressions are more succinct and easier to read than anonymous methods, so they should are preferred whenever the two are functionally equivalent.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1130", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

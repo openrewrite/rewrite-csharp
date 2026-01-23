@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class NestedTypesShouldNotBeVisibleAnalyzerCA1034 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1034";
 
-    @Getter
+    final String recipeId = "CA1034";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Nested types should not be visible";
-
-    @Getter
+    final String displayName = "Nested types should not be visible (search)";
     final String description = "This is a reporting only recipe. A nested type is a type that is declared in the scope of another type. Nested types are useful to encapsulate private implementation details of the containing type. Used for this purpose, nested types should not be externally visible.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1034", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpSpecifyMarshalingForPInvokeStringArgumentsFixerCA2101 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2101";
 
-    @Getter
+    final String recipeId = "CA2101";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Specify marshaling for P/Invoke string arguments";
-
-    @Getter
     final String description = "A platform invoke member allows partially trusted callers, has a string parameter, and does not explicitly marshal the string. This can cause a potential security vulnerability.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA2101", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

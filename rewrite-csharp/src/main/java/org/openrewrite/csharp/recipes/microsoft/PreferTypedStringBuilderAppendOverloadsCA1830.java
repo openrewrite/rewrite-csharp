@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class PreferTypedStringBuilderAppendOverloadsCA1830 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1830";
 
-    @Getter
+    final String recipeId = "CA1830";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Prefer strongly-typed Append and Insert method overloads on StringBuilder";
-
-    @Getter
+    final String displayName = "Prefer strongly-typed Append and Insert method overloads on StringBuilder (search)";
     final String description = "This is a reporting only recipe. StringBuilder.Append and StringBuilder.Insert provide overloads for multiple types beyond System.String.  When possible, prefer the strongly-typed overloads over using ToString() and the string-based overload.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1830", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

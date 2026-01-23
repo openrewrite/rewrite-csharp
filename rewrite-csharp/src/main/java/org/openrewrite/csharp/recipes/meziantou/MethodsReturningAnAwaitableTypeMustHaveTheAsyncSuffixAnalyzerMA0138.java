@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class MethodsReturningAnAwaitableTypeMustHaveTheAsyncSuffixAnalyzerMA0138 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0138";
 
-    @Getter
+    final String recipeId = "MA0138";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Do not use 'Async' suffix when a method does not return an awaitable type";
-
-    @Getter
+    final String displayName = "Do not use 'Async' suffix when a method does not return an awaitable type (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0138", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

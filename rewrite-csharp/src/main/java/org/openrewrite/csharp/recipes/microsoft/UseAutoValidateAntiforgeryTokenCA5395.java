@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseAutoValidateAntiforgeryTokenCA5395 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5395";
 
-    @Getter
+    final String recipeId = "CA5395";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Miss HttpVerb attribute for action methods";
-
-    @Getter
+    final String displayName = "Miss HttpVerb attribute for action methods (search)";
     final String description = "This is a reporting only recipe. All the methods that create, edit, delete, or otherwise modify data do so in the [HttpPost] overload of the method, which needs to be protected with the anti forgery attribute from request forgery. Performing a GET operation should be a safe operation that has no side effects and doesn't modify your persisted data.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5395", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

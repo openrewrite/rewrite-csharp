@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class TokenSpacingFixerSA1009 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1009";
 
-    @Getter
+    final String recipeId = "SA1009";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Closing parenthesis should be spaced correctly";
-
-    @Getter
     final String description = "A closing parenthesis within a C# statement is not spaced correctly.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1009", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

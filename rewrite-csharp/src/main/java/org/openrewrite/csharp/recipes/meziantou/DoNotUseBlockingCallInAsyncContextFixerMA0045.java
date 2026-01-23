@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseBlockingCallInAsyncContextFixerMA0045 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0045";
 
-    @Getter
+    final String recipeId = "MA0045";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
     final String displayName = "Do not use blocking calls in a sync method (need to make calling method async)";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "MA0045", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

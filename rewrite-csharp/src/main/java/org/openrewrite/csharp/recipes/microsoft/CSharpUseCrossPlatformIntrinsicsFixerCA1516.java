@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpUseCrossPlatformIntrinsicsFixerCA1516 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1516";
 
-    @Getter
+    final String recipeId = "CA1516";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Use cross-platform intrinsics";
-
-    @Getter
     final String description = "This rule detects usage of platform-specific intrinsics that can be replaced with an equivalent cross-platform intrinsic instead.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1516", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

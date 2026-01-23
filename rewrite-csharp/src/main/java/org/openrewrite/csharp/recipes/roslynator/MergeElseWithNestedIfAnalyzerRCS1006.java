@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class MergeElseWithNestedIfAnalyzerRCS1006 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1006";
 
-    @Getter
+    final String recipeId = "RCS1006";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Merge 'else' with nested 'if'";
-
-    @Getter
+    final String displayName = "Merge 'else' with nested 'if' (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1006", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

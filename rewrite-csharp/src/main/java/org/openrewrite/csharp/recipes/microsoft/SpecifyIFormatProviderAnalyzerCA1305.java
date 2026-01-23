@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SpecifyIFormatProviderAnalyzerCA1305 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1305";
 
-    @Getter
+    final String recipeId = "CA1305";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Specify IFormatProvider";
-
-    @Getter
+    final String displayName = "Specify IFormatProvider (search)";
     final String description = "This is a reporting only recipe. A method or constructor calls one or more members that have overloads that accept a System.IFormatProvider parameter, and the method or constructor does not call the overload that takes the IFormatProvider parameter. When a System.Globalization.CultureInfo or IFormatProvider object is not supplied, the default value that is supplied by the overloaded member might not have the effect that you want in all locales. If the result will be based on the input from/output displayed to the user, specify 'CultureInfo.CurrentCulture' as the 'IFormatProvider'. Otherwise, if the result will be stored and accessed by software, such as when it is loaded from disk/database and when it is persisted to disk/database, specify 'CultureInfo.InvariantCulture'.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1305", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

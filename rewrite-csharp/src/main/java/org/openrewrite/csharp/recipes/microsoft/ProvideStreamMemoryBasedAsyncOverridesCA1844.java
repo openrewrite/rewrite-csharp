@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ProvideStreamMemoryBasedAsyncOverridesCA1844 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1844";
 
-    @Getter
+    final String recipeId = "CA1844";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Provide memory-based overrides of async methods when subclassing 'Stream'";
-
-    @Getter
+    final String displayName = "Provide memory-based overrides of async methods when subclassing 'Stream' (search)";
     final String description = "This is a reporting only recipe. To improve performance, override the memory-based async methods when subclassing 'Stream'. Then implement the array-based methods in terms of the memory-based methods.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1844", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

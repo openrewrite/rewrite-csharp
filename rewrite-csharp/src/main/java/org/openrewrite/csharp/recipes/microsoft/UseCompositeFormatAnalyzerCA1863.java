@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseCompositeFormatAnalyzerCA1863 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1863";
 
-    @Getter
+    final String recipeId = "CA1863";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Use 'CompositeFormat'";
-
-    @Getter
+    final String displayName = "Use 'CompositeFormat' (search)";
     final String description = "This is a reporting only recipe. Cache and use a 'CompositeFormat' instance as the argument to this formatting operation, rather than passing in the original format string. This reduces the cost of the formatting operation.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1863", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

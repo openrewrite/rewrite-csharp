@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DisposeMethodsShouldCallBaseClassDisposeCA2215 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2215";
 
-    @Getter
+    final String recipeId = "CA2215";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Dispose methods should call base class dispose";
-
-    @Getter
+    final String displayName = "Dispose methods should call base class dispose (search)";
     final String description = "This is a reporting only recipe. A type that implements System.IDisposable inherits from a type that also implements IDisposable. The Dispose method of the inheriting type does not call the Dispose method of the parent type. To fix a violation of this rule, call base.Dispose in your Dispose method.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2215", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

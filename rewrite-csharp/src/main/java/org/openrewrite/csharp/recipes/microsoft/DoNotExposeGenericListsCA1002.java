@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotExposeGenericListsCA1002 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1002";
 
-    @Getter
+    final String recipeId = "CA1002";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not expose generic lists";
-
-    @Getter
+    final String displayName = "Do not expose generic lists (search)";
     final String description = "This is a reporting only recipe. System.Collections.Generic.List<T> is a generic collection that's designed for performance and not inheritance. List<T> does not contain virtual members that make it easier to change the behavior of an inherited class.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1002", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

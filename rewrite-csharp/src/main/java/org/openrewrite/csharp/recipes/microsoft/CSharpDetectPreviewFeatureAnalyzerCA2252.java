@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpDetectPreviewFeatureAnalyzerCA2252 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2252";
 
-    @Getter
+    final String recipeId = "CA2252";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: This API requires opting into preview features";
-
-    @Getter
+    final String displayName = "This API requires opting into preview features (search)";
     final String description = "This is a reporting only recipe. An assembly has to opt into preview features before using them.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2252", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

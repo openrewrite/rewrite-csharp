@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ConvertInterpolatedStringToConcatenationAnalyzerRCS1217FadeOut extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1217FadeOut";
 
-    @Getter
+    final String recipeId = "RCS1217FadeOut";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Convert interpolated string to concatenation";
-
-    @Getter
+    final String displayName = "Convert interpolated string to concatenation (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1217FadeOut", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class GetTemplateChildAnalyzerWPF0130 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0130";
 
-    @Getter
+    final String recipeId = "WPF0130";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: Add [TemplatePart] to the type";
-
-    @Getter
+    final String displayName = "Add [TemplatePart] to the type (search)";
     final String description = "This is a reporting only recipe. Add [TemplatePart] to the type.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0130", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

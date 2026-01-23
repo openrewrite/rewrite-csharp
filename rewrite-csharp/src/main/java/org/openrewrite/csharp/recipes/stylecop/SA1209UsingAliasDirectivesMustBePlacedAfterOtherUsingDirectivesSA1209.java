@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1209UsingAliasDirectivesMustBePlacedAfterOtherUsingDirectivesSA1209 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1209";
 
-    @Getter
+    final String recipeId = "SA1209";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Using alias directives should be placed after other using directives";
-
-    @Getter
+    final String displayName = "Using alias directives should be placed after other using directives (search)";
     final String description = "This is a reporting only recipe. A using-alias directive is positioned before a regular using directive.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1209", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

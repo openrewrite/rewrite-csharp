@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpUseStringContainsCharOverloadWithSingleCharactersFixerCA1847 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1847";
 
-    @Getter
+    final String recipeId = "CA1847";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Use char literal for a single character lookup";
-
-    @Getter
     final String description = "'string.Contains(char)' is available as a better performing overload for single char lookup.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1847", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

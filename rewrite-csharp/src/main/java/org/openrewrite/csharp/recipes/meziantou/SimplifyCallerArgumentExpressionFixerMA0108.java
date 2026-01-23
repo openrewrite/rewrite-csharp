@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SimplifyCallerArgumentExpressionFixerMA0108 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0108";
 
-    @Getter
+    final String recipeId = "MA0108";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
     final String displayName = "Remove redundant argument value";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "MA0108", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

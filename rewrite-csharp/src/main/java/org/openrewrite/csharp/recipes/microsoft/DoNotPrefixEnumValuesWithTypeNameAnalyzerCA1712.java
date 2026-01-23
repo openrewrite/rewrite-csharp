@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotPrefixEnumValuesWithTypeNameAnalyzerCA1712 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1712";
 
-    @Getter
+    final String recipeId = "CA1712";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not prefix enum values with type name";
-
-    @Getter
+    final String displayName = "Do not prefix enum values with type name (search)";
     final String description = "This is a reporting only recipe. An enumeration's values should not start with the type name of the enumeration.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1712", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

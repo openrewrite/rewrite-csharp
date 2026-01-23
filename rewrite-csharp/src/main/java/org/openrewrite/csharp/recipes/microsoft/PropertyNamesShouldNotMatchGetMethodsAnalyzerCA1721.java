@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class PropertyNamesShouldNotMatchGetMethodsAnalyzerCA1721 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1721";
 
-    @Getter
+    final String recipeId = "CA1721";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Property names should not match get methods";
-
-    @Getter
+    final String displayName = "Property names should not match get methods (search)";
     final String description = "This is a reporting only recipe. The name of a public or protected member starts with \"\"Get\"\" and otherwise matches the name of a public or protected property. \"\"Get\"\" methods and properties should have names that clearly distinguish their function.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1721", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

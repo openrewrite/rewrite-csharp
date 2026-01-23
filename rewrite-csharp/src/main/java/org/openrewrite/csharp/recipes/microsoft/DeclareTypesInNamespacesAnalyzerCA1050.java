@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DeclareTypesInNamespacesAnalyzerCA1050 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1050";
 
-    @Getter
+    final String recipeId = "CA1050";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Declare types in namespaces";
-
-    @Getter
+    final String displayName = "Declare types in namespaces (search)";
     final String description = "This is a reporting only recipe. Types are declared in namespaces to prevent name collisions and as a way to organize related types in an object hierarchy.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1050", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

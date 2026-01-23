@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class PropertySummaryDocumentationAnalyzerSA1624 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1624";
 
-    @Getter
+    final String recipeId = "SA1624";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Property summary documentation should omit accessor with restricted access";
-
-    @Getter
+    final String displayName = "Property summary documentation should omit accessor with restricted access (search)";
     final String description = "This is a reporting only recipe. The documentation text within a C# property’s <summary> tag takes into account all of the accessors within the property, but one of the accessors has limited access.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1624", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

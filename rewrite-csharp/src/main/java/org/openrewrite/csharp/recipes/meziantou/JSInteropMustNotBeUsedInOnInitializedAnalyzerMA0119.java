@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class JSInteropMustNotBeUsedInOnInitializedAnalyzerMA0119 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0119";
 
-    @Getter
+    final String recipeId = "MA0119";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: JSRuntime must not be used in OnInitialized or OnInitializedAsync";
-
-    @Getter
+    final String displayName = "JSRuntime must not be used in OnInitialized or OnInitializedAsync (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0119", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

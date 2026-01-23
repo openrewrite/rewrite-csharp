@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class LoggerMessageDefineAnalyzerCA2023 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2023";
 
-    @Getter
+    final String recipeId = "CA2023";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Invalid braces in message template";
-
-    @Getter
+    final String displayName = "Invalid braces in message template (search)";
     final String description = "This is a reporting only recipe. The braces present in the message template are invalid. Ensure any braces in the message template are valid opening/closing braces, or are escaped.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2023", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

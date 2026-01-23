@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1135FixerSA1135 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1135";
 
-    @Getter
+    final String recipeId = "SA1135";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Using directives should be qualified";
-
-    @Getter
     final String description = "All using directives should be qualified.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1135", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

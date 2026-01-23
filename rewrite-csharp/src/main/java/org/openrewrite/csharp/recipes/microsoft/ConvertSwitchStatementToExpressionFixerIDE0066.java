@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ConvertSwitchStatementToExpressionFixerIDE0066 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "IDE0066";
 
-    @Getter
+    final String recipeId = "IDE0066";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-
-    @Getter
     final String nugetPackageVersion = "5.0.0";
 
-    @Getter
     final String displayName = "Convert switch statement to expression";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "IDE0066", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

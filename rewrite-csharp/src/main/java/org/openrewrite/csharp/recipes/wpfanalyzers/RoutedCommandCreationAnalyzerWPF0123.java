@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class RoutedCommandCreationAnalyzerWPF0123 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0123";
 
-    @Getter
+    final String recipeId = "WPF0123";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: Backing field for a RoutedCommand should be static and readonly";
-
-    @Getter
+    final String displayName = "Backing field for a RoutedCommand should be static and readonly (search)";
     final String description = "This is a reporting only recipe. Backing field for a RoutedCommand should be static and readonly.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0123", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

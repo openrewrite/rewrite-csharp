@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class XmlnsDefinitionFixWPF0052 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0052";
 
-    @Getter
+    final String recipeId = "WPF0052";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "XmlnsDefinitions does not map all namespaces with public types";
-
-    @Getter
     final String description = "XmlnsDefinitions does not map all namespaces with public types.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0052", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

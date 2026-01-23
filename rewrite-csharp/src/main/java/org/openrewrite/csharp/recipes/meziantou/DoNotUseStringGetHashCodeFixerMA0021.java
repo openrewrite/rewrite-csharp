@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseStringGetHashCodeFixerMA0021 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0021";
 
-    @Getter
+    final String recipeId = "MA0021";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
     final String displayName = "Use StringComparer.GetHashCode instead of string.GetHashCode";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "MA0021", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

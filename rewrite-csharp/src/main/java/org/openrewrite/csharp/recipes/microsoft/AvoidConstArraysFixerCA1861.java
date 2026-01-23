@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AvoidConstArraysFixerCA1861 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1861";
 
-    @Getter
+    final String recipeId = "CA1861";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Avoid constant arrays as arguments";
-
-    @Getter
     final String description = "Constant arrays passed as arguments are not reused when called repeatedly, which implies a new array is created each time. Consider extracting them to 'static readonly' fields to improve performance if the passed array is not mutated within the called method.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1861", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

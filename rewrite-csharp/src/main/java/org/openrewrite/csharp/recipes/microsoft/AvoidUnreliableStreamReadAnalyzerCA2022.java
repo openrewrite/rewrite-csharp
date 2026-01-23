@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AvoidUnreliableStreamReadAnalyzerCA2022 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2022";
 
-    @Getter
+    final String recipeId = "CA2022";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Avoid inexact read with 'Stream.Read'";
-
-    @Getter
+    final String displayName = "Avoid inexact read with 'Stream.Read' (search)";
     final String description = "This is a reporting only recipe. A call to 'Stream.Read' may return fewer bytes than requested, resulting in unreliable code if the return value is not checked.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2022", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

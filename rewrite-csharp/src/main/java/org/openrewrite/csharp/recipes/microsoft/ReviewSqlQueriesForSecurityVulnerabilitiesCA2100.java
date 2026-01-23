@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ReviewSqlQueriesForSecurityVulnerabilitiesCA2100 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2100";
 
-    @Getter
+    final String recipeId = "CA2100";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Review SQL queries for security vulnerabilities";
-
-    @Getter
+    final String displayName = "Review SQL queries for security vulnerabilities (search)";
     final String description = "This is a reporting only recipe. SQL queries that directly use user input can be vulnerable to SQL injection attacks. Review this SQL query for potential vulnerabilities, and consider using a parameterized SQL query.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2100", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

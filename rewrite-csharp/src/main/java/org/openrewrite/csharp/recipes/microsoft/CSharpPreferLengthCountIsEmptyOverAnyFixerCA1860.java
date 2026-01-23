@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpPreferLengthCountIsEmptyOverAnyFixerCA1860 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1860";
 
-    @Getter
+    final String recipeId = "CA1860";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Avoid using 'Enumerable.Any()' extension method";
-
-    @Getter
     final String description = "Prefer using 'IsEmpty', 'Count' or 'Length' properties whichever available, rather than calling 'Enumerable.Any()'. The intent is clearer and it is more performant than using 'Enumerable.Any()' extension method.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1860", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

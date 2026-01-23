@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class EnumSymbolAnalyzerRCS1157 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1157";
 
-    @Getter
+    final String recipeId = "RCS1157";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Composite enum value contains undefined flag";
-
-    @Getter
+    final String displayName = "Composite enum value contains undefined flag (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1157", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

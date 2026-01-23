@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class MarkAssembliesWithAttributesDiagnosticAnalyzerCA1014 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1014";
 
-    @Getter
+    final String recipeId = "CA1014";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Mark assemblies with CLSCompliant";
-
-    @Getter
+    final String displayName = "Mark assemblies with CLSCompliant (search)";
     final String description = "This is a reporting only recipe. The Common Language Specification (CLS) defines naming restrictions, data types, and rules to which assemblies must conform if they will be used across programming languages. Good design dictates that all assemblies explicitly indicate CLS compliance by using CLSCompliantAttribute . If this attribute is not present on an assembly, the assembly is not compliant.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1014", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

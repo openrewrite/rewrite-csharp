@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class InvocationExpressionFixerRCS1267 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1267";
 
-    @Getter
+    final String recipeId = "RCS1267";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
     final String displayName = "Use string interpolation instead of 'string.Concat'";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "RCS1267", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

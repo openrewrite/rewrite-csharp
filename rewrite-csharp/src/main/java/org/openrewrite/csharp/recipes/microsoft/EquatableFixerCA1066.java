@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class EquatableFixerCA1066 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1066";
 
-    @Getter
+    final String recipeId = "CA1066";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Implement IEquatable when overriding Object.Equals";
-
-    @Getter
     final String description = "When a type T overrides Object.Equals(object), the implementation must cast the object argument to the correct type T before performing the comparison. If the type implements IEquatable<T>, and therefore offers the method T.Equals(T), and if the argument is known at compile time to be of type T, then the compiler can call IEquatable<T>.Equals(T) instead of Object.Equals(object), and no cast is necessary, improving performance.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1066", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

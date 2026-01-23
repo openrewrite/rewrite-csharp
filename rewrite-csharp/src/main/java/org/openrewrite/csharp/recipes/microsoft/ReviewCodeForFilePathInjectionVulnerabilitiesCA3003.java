@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ReviewCodeForFilePathInjectionVulnerabilitiesCA3003 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA3003";
 
-    @Getter
+    final String recipeId = "CA3003";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Review code for file path injection vulnerabilities";
-
-    @Getter
+    final String displayName = "Review code for file path injection vulnerabilities (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA3003", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

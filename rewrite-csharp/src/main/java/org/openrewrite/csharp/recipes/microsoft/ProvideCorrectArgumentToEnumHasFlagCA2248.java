@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ProvideCorrectArgumentToEnumHasFlagCA2248 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2248";
 
-    @Getter
+    final String recipeId = "CA2248";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Provide correct 'enum' argument to 'Enum.HasFlag'";
-
-    @Getter
+    final String displayName = "Provide correct 'enum' argument to 'Enum.HasFlag' (search)";
     final String description = "This is a reporting only recipe. 'Enum.HasFlag' method expects the 'enum' argument to be of the same 'enum' type as the instance on which the method is invoked and that this 'enum' is marked with 'System.FlagsAttribute'. If these are different 'enum' types, an unhandled exception will be thrown at runtime. If the 'enum' type is not marked with 'System.FlagsAttribute' the call will always return 'false' at runtime.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2248", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

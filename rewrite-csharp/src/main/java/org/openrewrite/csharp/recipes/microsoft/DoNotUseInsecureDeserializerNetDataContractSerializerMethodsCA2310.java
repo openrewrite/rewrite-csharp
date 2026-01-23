@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseInsecureDeserializerNetDataContractSerializerMethodsCA2310 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2310";
 
-    @Getter
+    final String recipeId = "CA2310";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not use insecure deserializer NetDataContractSerializer";
-
-    @Getter
+    final String displayName = "Do not use insecure deserializer NetDataContractSerializer (search)";
     final String description = "This is a reporting only recipe. The method '{0}' is insecure when deserializing untrusted data.  If you need to instead detect NetDataContractSerializer deserialization without a SerializationBinder set, then disable rule CA2310, and enable rules CA2311 and CA2312.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2310", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

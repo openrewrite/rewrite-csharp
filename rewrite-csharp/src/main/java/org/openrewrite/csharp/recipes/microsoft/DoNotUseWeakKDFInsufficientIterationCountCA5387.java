@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseWeakKDFInsufficientIterationCountCA5387 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5387";
 
-    @Getter
+    final String recipeId = "CA5387";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do Not Use Weak Key Derivation Function With Insufficient Iteration Count";
-
-    @Getter
+    final String displayName = "Do Not Use Weak Key Derivation Function With Insufficient Iteration Count (search)";
     final String description = "This is a reporting only recipe. When deriving cryptographic keys from user-provided inputs such as password, use sufficient iteration count (at least 100k).";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5387", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

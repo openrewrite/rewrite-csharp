@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1510FixerSA1510 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1510";
 
-    @Getter
+    final String recipeId = "SA1510";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Chained statement blocks should not be preceded by blank line";
-
-    @Getter
     final String description = "Chained C# statements are separated by a blank line.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1510", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

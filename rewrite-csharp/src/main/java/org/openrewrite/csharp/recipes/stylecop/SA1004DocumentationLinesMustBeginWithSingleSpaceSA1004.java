@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1004DocumentationLinesMustBeginWithSingleSpaceSA1004 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1004";
 
-    @Getter
+    final String recipeId = "SA1004";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Documentation lines should begin with single space";
-
-    @Getter
+    final String displayName = "Documentation lines should begin with single space (search)";
     final String description = "This is a reporting only recipe. A line within a documentation header above a C# element does not begin with a single space.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1004", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

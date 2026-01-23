@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class RethrowToPreserveStackDetailsFixerCA2200 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2200";
 
-    @Getter
+    final String recipeId = "CA2200";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Rethrow to preserve stack details";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA2200", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

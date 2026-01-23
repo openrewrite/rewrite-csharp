@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseAnOverloadThatHasCancellationTokenAnalyzerMA0032 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0032";
 
-    @Getter
+    final String recipeId = "MA0032";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Use an overload with a CancellationToken argument";
-
-    @Getter
+    final String displayName = "Use an overload with a CancellationToken argument (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0032", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

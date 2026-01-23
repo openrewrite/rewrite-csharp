@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class BufferBlockCopyLengthAnalyzerCA2018 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2018";
 
-    @Getter
+    final String recipeId = "CA2018";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: 'Buffer.BlockCopy' expects the number of bytes to be copied for the 'count' argument";
-
-    @Getter
+    final String displayName = "'Buffer.BlockCopy' expects the number of bytes to be copied for the 'count' argument (search)";
     final String description = "This is a reporting only recipe. 'Buffer.BlockCopy' expects the number of bytes to be copied for the 'count' argument. Using 'Array.Length' may not match the number of bytes that needs to be copied.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2018", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

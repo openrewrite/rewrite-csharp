@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotRaiseReservedExceptionTypesAnalyzerCA2201 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2201";
 
-    @Getter
+    final String recipeId = "CA2201";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not raise reserved exception types";
-
-    @Getter
+    final String displayName = "Do not raise reserved exception types (search)";
     final String description = "This is a reporting only recipe. An exception of type that is not sufficiently specific or reserved by the runtime should never be raised by user code. This makes the original error difficult to detect and debug. If this exception instance might be thrown, use a different exception type.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2201", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

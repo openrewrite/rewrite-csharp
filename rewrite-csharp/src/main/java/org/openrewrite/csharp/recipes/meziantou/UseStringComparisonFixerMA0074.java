@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseStringComparisonFixerMA0074 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0074";
 
-    @Getter
+    final String recipeId = "MA0074";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
     final String displayName = "Avoid implicit culture-sensitive methods";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "MA0074", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpConstantExpectedAnalyzerCA1857 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1857";
 
-    @Getter
+    final String recipeId = "CA1857";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: A constant is expected for the parameter";
-
-    @Getter
+    final String displayName = "A constant is expected for the parameter (search)";
     final String description = "This is a reporting only recipe. The parameter expects a constant for optimal performance.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1857", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

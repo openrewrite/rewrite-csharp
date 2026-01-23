@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1410SA1411FixerSA1410 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1410";
 
-    @Getter
+    final String recipeId = "SA1410";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Remove delegate parenthesis when possible";
-
-    @Getter
     final String description = "A call to a C# anonymous method does not contain any method parameters, yet the statement still includes parenthesis.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1410", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

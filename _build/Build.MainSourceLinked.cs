@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using NuGet.Configuration;
@@ -60,8 +61,12 @@ partial class Build
              recipesDir.CreateOrCleanDirectory();
 
              Dictionary<string, (int Analyzers, int Fixups)> summary = new();
+
+
              foreach (var package in packages)
              {
+
+
                  var libraryRange = new[] {new LibraryRange(package)};
                  var resolvedPackage = (await recipeManager.ResolvePackages(libraryRange, ct, includePrerelease:false, packageSources: packageSources)).First();
                  // var libraryRange = packages.Select(x => new LibraryRange(x)).ToList();
@@ -73,15 +78,32 @@ partial class Build
                  var fixupCount = executionContext.Recipes.Count(x => x.Kind == RecipeKind.RoslynFixer);
                  Log.Information("Found {AnalyzerCount} analyzers and {FixupCount} fixups", analyzerCount, fixupCount);
                  summary.Add(package, (analyzerCount, fixupCount));
+                 var packageNameFirstSegment = resolvedPackage.Id.ToLower().Split('.').First();
+                 var compositeRecipe = new StringBuilder($$"""
+                     # -------------------THIS FILE IS AUTO GENERATED--------------------------
+                     # Changes to this file may cause incorrect behavior and will be lost if
+                     # the code is regenerated.
+                     #
+                     ---
+                     type: specs.openrewrite.org/v1beta/recipe
+                     name: org.openrewrite.csharp.recipes.{{packageNameFirstSegment}}.{{package.Replace(".","")}}
+                     displayName: All '{{resolvedPackage.Id}}' Recipes
+                     description: All '{{resolvedPackage.Id}}' Recipes.
+                     recipeList:
 
+                     """);
+
+                 static string GetClassName(RecipeDescriptor recipe) => recipe.Id.StartsWith(recipe.TypeName) ? recipe.Id : recipe.TypeName.FullName.Split('.').Last();
                  static string EscapeQuotesAndRemoveLineBreaks(string input) => input.Replace("\"", "\\\"").Replace('\r', ' ').Replace('\n', ' ');
-                 var models = executionContext.Recipes.Select(recipe =>
+                 var models = executionContext.Recipes
+                     .OrderBy(GetClassName)
+                     .Select(recipe =>
                  {
-                     var className = recipe.Id.StartsWith(recipe.TypeName) ? recipe.Id : recipe.TypeName.FullName.Split('.').Last();
+                     var className = GetClassName(recipe);
                      // className = className.ReplaceRegex("(Analyzer|Fixer|CodeFixProvider)$", _ => "");
                      className = className.ReplaceRegex("CodeFixProvider$", _ => "Fixer");
                      className = $"{className}{recipe.Id}";
-                     var packageNameFirstSegment = resolvedPackage.Id.ToLower().Split('.').First();
+
                      // var packageNameFirstSegment = recipe.TypeName.FullName.Split('.').First();
                      var @namespace = packageNameFirstSegment;
                      var tags = recipe.Tags.Append(packageNameFirstSegment)
@@ -89,13 +111,13 @@ partial class Build
                          .Append("dotnet")
                          .Append("c#")
                          .ToList();
-                     var displayNamePrefix = recipe.Kind == RecipeKind.RoslynAnalyzer ? "Analysis: " : "";
+                     var displayNamePostfix = recipe.Kind == RecipeKind.RoslynAnalyzer ? " (search)" : "";
                      var descriptionPostfix  = recipe.Kind == RecipeKind.RoslynAnalyzer ? "This is a reporting only recipe. " : "";
                      return new
                      {
                          recipe.Id,
                          Description = $"{descriptionPostfix}{EscapeQuotesAndRemoveLineBreaks(recipe.Description)}",
-                         DisplayName = $"{displayNamePrefix}{EscapeQuotesAndRemoveLineBreaks(recipe.DisplayName)}",
+                         DisplayName = $"{EscapeQuotesAndRemoveLineBreaks(recipe.DisplayName)}{displayNamePostfix}",
                          PackageName = resolvedPackage.Id,
                          PackageVersion = resolvedPackage.Version,
                          Tags = tags,
@@ -108,7 +130,13 @@ partial class Build
                  var license = File.ReadAllText(Solution._solution._build.Directory / "License.txt").Trim();
 
                  string RenderTags(IEnumerable<string> tags) => $"\"{string.Join("\", \"", tags)}\"";
+                 foreach (var model in models)
+                 {
+                     compositeRecipe.AppendLine($"  - org.openrewrite.csharp.recipes.{model.Namespace}.{model.ClassName}");
+                 }
 
+                 var compositeRecipePath = RootDirectory / "rewrite-csharp" / "src" / "main" / "resources" / "META-INF" / "rewrite" / $"{package}.yml";
+                 compositeRecipePath.WriteAllText(compositeRecipe.ToString());
                  var result = models.Select(model => (model.FileName, Content: $$""""
                          {{license}}
                          /*

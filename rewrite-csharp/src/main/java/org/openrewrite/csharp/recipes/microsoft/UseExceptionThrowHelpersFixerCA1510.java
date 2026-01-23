@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseExceptionThrowHelpersFixerCA1510 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1510";
 
-    @Getter
+    final String recipeId = "CA1510";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Use ArgumentNullException throw helper";
-
-    @Getter
     final String description = "Throw helpers are simpler and more efficient than an if block constructing a new exception instance.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1510", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

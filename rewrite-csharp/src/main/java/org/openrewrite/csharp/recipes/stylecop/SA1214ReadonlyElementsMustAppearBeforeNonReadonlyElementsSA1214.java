@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1214ReadonlyElementsMustAppearBeforeNonReadonlyElementsSA1214 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1214";
 
-    @Getter
+    final String recipeId = "SA1214";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Readonly fields should appear before non-readonly fields";
-
-    @Getter
+    final String displayName = "Readonly fields should appear before non-readonly fields (search)";
     final String description = "This is a reporting only recipe. A readonly field is positioned beneath a non-readonly field.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1214", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

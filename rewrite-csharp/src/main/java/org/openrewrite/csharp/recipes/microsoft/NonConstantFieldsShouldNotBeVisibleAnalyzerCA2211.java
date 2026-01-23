@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class NonConstantFieldsShouldNotBeVisibleAnalyzerCA2211 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2211";
 
-    @Getter
+    final String recipeId = "CA2211";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Non-constant fields should not be visible";
-
-    @Getter
+    final String displayName = "Non-constant fields should not be visible (search)";
     final String description = "This is a reporting only recipe. Static fields that are neither constants nor read-only are not thread-safe. Access to such a field must be carefully controlled and requires advanced programming techniques to synchronize access to the class object.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2211", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

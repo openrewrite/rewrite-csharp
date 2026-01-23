@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class TokenSpacingFixerSA1026 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1026";
 
-    @Getter
+    final String recipeId = "SA1026";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Code should not contain space after new or stackalloc keyword in implicitly typed array allocation";
-
-    @Getter
     final String description = "An implicitly typed array allocation within a C# code file is not spaced correctly.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1026", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

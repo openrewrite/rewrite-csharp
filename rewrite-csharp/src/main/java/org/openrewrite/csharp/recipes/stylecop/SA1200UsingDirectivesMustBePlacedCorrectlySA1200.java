@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1200UsingDirectivesMustBePlacedCorrectlySA1200 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1200";
 
-    @Getter
+    final String recipeId = "SA1200";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Using directives should be placed correctly";
-
-    @Getter
+    final String displayName = "Using directives should be placed correctly (search)";
     final String description = "This is a reporting only recipe. A C# using directive is placed outside of a namespace element.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1200", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

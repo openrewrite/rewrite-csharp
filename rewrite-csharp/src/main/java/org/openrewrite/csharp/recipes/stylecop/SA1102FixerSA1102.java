@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1102FixerSA1102 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1102";
 
-    @Getter
+    final String recipeId = "SA1102";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Query clause should follow previous clause";
-
-    @Getter
     final String description = "A C# query clause does not begin on the same line as the previous clause, or on the next line.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1102", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotDeclareStaticMembersOnGenericTypesAnalyzerCA1000 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1000";
 
-    @Getter
+    final String recipeId = "CA1000";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not declare static members on generic types";
-
-    @Getter
+    final String displayName = "Do not declare static members on generic types (search)";
     final String description = "This is a reporting only recipe. When a static member of a generic type is called, the type argument must be specified for the type. When a generic instance member that does not support inference is called, the type argument must be specified for the member. In these two cases, the syntax for specifying the type argument is different and easily confused.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1000", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

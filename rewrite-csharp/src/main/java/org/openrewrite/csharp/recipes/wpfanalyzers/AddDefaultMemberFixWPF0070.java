@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AddDefaultMemberFixWPF0070 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0070";
 
-    @Getter
+    final String recipeId = "WPF0070";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "Add default field to converter";
-
-    @Getter
     final String description = "Add default field to converter.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0070", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

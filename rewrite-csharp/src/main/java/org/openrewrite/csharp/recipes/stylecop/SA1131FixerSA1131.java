@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1131FixerSA1131 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1131";
 
-    @Getter
+    final String recipeId = "SA1131";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Use readable conditions";
-
-    @Getter
     final String description = "When a comparison is made between a variable and a literal, the variable should be placed on the left-hand-side to maximize readability.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1131", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

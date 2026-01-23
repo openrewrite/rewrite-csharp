@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpForwardCancellationTokenToInvocationsFixerCA2016 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2016";
 
-    @Getter
+    final String recipeId = "CA2016";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Forward the 'CancellationToken' parameter to methods";
-
-    @Getter
     final String description = "Forward the 'CancellationToken' parameter to methods to ensure the operation cancellation notifications gets properly propagated, or pass in 'CancellationToken.None' explicitly to indicate intentionally not propagating the token.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA2016", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

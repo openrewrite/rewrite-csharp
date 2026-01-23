@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1308FixerSA1308 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1308";
 
-    @Getter
+    final String recipeId = "SA1308";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Variable names should not be prefixed";
-
-    @Getter
     final String description = "A field name in C# is prefixed with 'm_', 's_', or 't_'.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1308", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

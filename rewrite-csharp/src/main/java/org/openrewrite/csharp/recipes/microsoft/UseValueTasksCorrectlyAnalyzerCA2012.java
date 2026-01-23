@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseValueTasksCorrectlyAnalyzerCA2012 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2012";
 
-    @Getter
+    final String recipeId = "CA2012";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Use ValueTasks correctly";
-
-    @Getter
+    final String displayName = "Use ValueTasks correctly (search)";
     final String description = "This is a reporting only recipe. ValueTasks returned from member invocations are intended to be directly awaited.  Attempts to consume a ValueTask multiple times or to directly access one's result before it's known to be completed may result in an exception or corruption.  Ignoring such a ValueTask is likely an indication of a functional bug and may degrade performance.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2012", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

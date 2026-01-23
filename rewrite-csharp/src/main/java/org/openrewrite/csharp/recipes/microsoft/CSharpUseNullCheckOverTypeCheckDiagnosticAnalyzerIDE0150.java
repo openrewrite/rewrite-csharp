@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpUseNullCheckOverTypeCheckDiagnosticAnalyzerIDE0150 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "IDE0150";
 
-    @Getter
+    final String recipeId = "IDE0150";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-
-    @Getter
     final String nugetPackageVersion = "5.0.0";
 
-    @Getter
-    final String displayName = "Analysis: Prefer 'null' check over type check";
-
-    @Getter
+    final String displayName = "Prefer 'null' check over type check (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "IDE0150", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

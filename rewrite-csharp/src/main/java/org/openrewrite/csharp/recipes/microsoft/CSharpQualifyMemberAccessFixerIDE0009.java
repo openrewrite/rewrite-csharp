@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpQualifyMemberAccessFixerIDE0009 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "IDE0009";
 
-    @Getter
+    final String recipeId = "IDE0009";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-
-    @Getter
     final String nugetPackageVersion = "5.0.0";
 
-    @Getter
     final String displayName = "Member access should be qualified.";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "IDE0009", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AvoidClosureWhenUsingConcurrentDictionaryAnalyzerMA0106 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0106";
 
-    @Getter
+    final String recipeId = "MA0106";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Avoid closure by using an overload with the 'factoryArgument' parameter";
-
-    @Getter
+    final String displayName = "Avoid closure by using an overload with the 'factoryArgument' parameter (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0106", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

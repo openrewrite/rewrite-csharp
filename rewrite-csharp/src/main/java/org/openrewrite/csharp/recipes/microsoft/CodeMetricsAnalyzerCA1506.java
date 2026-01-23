@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CodeMetricsAnalyzerCA1506 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1506";
 
-    @Getter
+    final String recipeId = "CA1506";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Avoid excessive class coupling";
-
-    @Getter
+    final String displayName = "Avoid excessive class coupling (search)";
     final String description = "This is a reporting only recipe. This rule measures class coupling by counting the number of unique type references that a symbol contains. Symbols that have a high degree of class coupling can be difficult to maintain. It is a good practice to have types and methods that exhibit low coupling and high cohesion. To fix this violation, try to redesign the code to reduce the number of types to which it is coupled.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1506", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

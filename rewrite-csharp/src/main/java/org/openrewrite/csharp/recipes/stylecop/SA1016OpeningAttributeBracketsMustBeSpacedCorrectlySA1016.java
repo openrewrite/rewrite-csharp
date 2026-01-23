@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1016OpeningAttributeBracketsMustBeSpacedCorrectlySA1016 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1016";
 
-    @Getter
+    final String recipeId = "SA1016";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Opening attribute brackets should be spaced correctly";
-
-    @Getter
+    final String displayName = "Opening attribute brackets should be spaced correctly (search)";
     final String description = "This is a reporting only recipe. An opening attribute bracket within a C# element is not spaced correctly.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1016", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpDoNotGuardCallFixerCA1853 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1853";
 
-    @Getter
+    final String recipeId = "CA1853";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Unnecessary call to 'Dictionary.ContainsKey(key)'";
-
-    @Getter
     final String description = "Do not guard 'Dictionary.Remove(key)' with 'Dictionary.ContainsKey(key)'. The former already checks whether the key exists, and will not throw if it does not.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1853", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

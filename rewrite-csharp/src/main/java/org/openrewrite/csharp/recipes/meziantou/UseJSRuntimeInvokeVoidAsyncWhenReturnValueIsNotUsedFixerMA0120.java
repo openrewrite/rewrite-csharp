@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseJSRuntimeInvokeVoidAsyncWhenReturnValueIsNotUsedFixerMA0120 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0120";
 
-    @Getter
+    final String recipeId = "MA0120";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
     final String displayName = "Use InvokeVoidAsync when the returned value is not used";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "MA0120", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

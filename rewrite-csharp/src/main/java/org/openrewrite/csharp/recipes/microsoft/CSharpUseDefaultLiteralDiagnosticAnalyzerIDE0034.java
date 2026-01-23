@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpUseDefaultLiteralDiagnosticAnalyzerIDE0034 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "IDE0034";
 
-    @Getter
+    final String recipeId = "IDE0034";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-
-    @Getter
     final String nugetPackageVersion = "5.0.0";
 
-    @Getter
-    final String displayName = "Analysis: Simplify 'default' expression";
-
-    @Getter
+    final String displayName = "Simplify 'default' expression (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "IDE0034", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

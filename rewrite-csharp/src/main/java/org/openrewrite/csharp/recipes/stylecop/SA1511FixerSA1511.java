@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1511FixerSA1511 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1511";
 
-    @Getter
+    final String recipeId = "SA1511";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "While-do footer should not be preceded by blank line";
-
-    @Getter
     final String description = "The while footer at the bottom of a do-while statement is separated from the statement by a blank line.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1511", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

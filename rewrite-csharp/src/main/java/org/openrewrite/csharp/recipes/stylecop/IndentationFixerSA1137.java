@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class IndentationFixerSA1137 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1137";
 
-    @Getter
+    final String recipeId = "SA1137";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Elements should have the same indentation";
-
-    @Getter
     final String description = "Elements at the same level in the syntax tree should have the same indentation.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1137", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

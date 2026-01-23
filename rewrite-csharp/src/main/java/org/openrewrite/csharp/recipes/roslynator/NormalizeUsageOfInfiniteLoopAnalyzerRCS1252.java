@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class NormalizeUsageOfInfiniteLoopAnalyzerRCS1252 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1252";
 
-    @Getter
+    final String recipeId = "RCS1252";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Normalize usage of infinite loop";
-
-    @Getter
+    final String displayName = "Normalize usage of infinite loop (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1252", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DocumentationFixWPF0061 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0061";
 
-    @Getter
+    final String recipeId = "WPF0061";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "Accessor method for attached property should have standard documentation text";
-
-    @Getter
     final String description = "Accessor method for attached property should have standard documentation text.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0061", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

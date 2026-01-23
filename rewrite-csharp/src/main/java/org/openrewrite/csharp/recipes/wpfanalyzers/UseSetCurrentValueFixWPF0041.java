@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseSetCurrentValueFixWPF0041 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0041";
 
-    @Getter
+    final String recipeId = "WPF0041";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "Set mutable dependency properties using SetCurrentValue";
-
-    @Getter
     final String description = "Prefer setting mutable dependency properties using SetCurrentValue.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0041", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

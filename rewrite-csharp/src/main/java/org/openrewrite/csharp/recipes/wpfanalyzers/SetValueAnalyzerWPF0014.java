@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SetValueAnalyzerWPF0014 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0014";
 
-    @Getter
+    final String recipeId = "WPF0014";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: SetValue must use registered type";
-
-    @Getter
+    final String displayName = "SetValue must use registered type (search)";
     final String description = "This is a reporting only recipe. Use a type that matches registered type when setting the value of a DependencyProperty.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0014", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

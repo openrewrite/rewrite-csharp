@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseInsecureDeserializerJavaScriptSerializerWithSimpleTypeResolverCA2322 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2322";
 
-    @Getter
+    final String recipeId = "CA2322";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Ensure JavaScriptSerializer is not initialized with SimpleTypeResolver before deserializing";
-
-    @Getter
+    final String displayName = "Ensure JavaScriptSerializer is not initialized with SimpleTypeResolver before deserializing (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2322", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

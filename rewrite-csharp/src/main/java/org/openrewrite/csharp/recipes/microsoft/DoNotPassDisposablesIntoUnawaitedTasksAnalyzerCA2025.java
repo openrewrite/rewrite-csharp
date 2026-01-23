@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotPassDisposablesIntoUnawaitedTasksAnalyzerCA2025 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2025";
 
-    @Getter
+    final String recipeId = "CA2025";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not pass 'IDisposable' instances into unawaited tasks";
-
-    @Getter
+    final String displayName = "Do not pass 'IDisposable' instances into unawaited tasks (search)";
     final String description = "This is a reporting only recipe. Unawaited tasks that use 'IDisposable' instances may use those instances long after they have been disposed. Ensure tasks using those instances are completed before the instances are disposed.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2025", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

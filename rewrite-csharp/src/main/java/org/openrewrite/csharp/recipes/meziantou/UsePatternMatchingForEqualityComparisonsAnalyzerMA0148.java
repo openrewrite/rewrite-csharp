@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UsePatternMatchingForEqualityComparisonsAnalyzerMA0148 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0148";
 
-    @Getter
+    final String recipeId = "MA0148";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Use pattern matching instead of equality operators for discrete value";
-
-    @Getter
+    final String displayName = "Use pattern matching instead of equality operators for discrete value (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0148", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class RenameMemberFixWPF0100 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0100";
 
-    @Getter
+    final String recipeId = "WPF0100";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "Backing field for a RoutedEvent should match registered name";
-
-    @Getter
     final String description = "A routed event's backing field should be named with the name it is registered with suffixed by 'Event'.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0100", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

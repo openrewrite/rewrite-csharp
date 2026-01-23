@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1505FixerSA1505 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1505";
 
-    @Getter
+    final String recipeId = "SA1505";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Opening braces should not be followed by blank line";
-
-    @Getter
     final String description = "An opening brace within a C# element, statement, or expression is followed by a blank line.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1505", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

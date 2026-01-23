@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ArgumentExceptionShouldSpecifyArgumentNameAnalyzerMA0015 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0015";
 
-    @Getter
+    final String recipeId = "MA0015";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Specify the parameter name in ArgumentException";
-
-    @Getter
+    final String displayName = "Specify the parameter name in ArgumentException (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0015", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

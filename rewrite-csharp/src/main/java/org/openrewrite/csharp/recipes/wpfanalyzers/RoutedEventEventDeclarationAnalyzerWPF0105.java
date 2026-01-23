@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class RoutedEventEventDeclarationAnalyzerWPF0105 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0105";
 
-    @Getter
+    final String recipeId = "WPF0105";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: Call RemoveHandler in remove";
-
-    @Getter
+    final String displayName = "Call RemoveHandler in remove (search)";
     final String description = "This is a reporting only recipe. Call RemoveHandler in remove.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0105", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseSetValueFixWPF0035 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0035";
 
-    @Getter
+    final String recipeId = "WPF0035";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "Use SetValue in setter";
-
-    @Getter
     final String description = "Use SetValue in setter.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0035", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

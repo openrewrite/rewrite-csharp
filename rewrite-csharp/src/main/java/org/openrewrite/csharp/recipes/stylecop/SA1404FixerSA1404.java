@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1404FixerSA1404 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1404";
 
-    @Getter
+    final String recipeId = "SA1404";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Code analysis suppression should have justification";
-
-    @Getter
     final String description = "A Code Analysis SuppressMessage attribute does not include a justification.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1404", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseCancellationTokenThrowIfCancellationRequestedFixerCA2250 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2250";
 
-    @Getter
+    final String recipeId = "CA2250";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Use 'ThrowIfCancellationRequested'";
-
-    @Getter
     final String description = "'ThrowIfCancellationRequested' automatically checks whether the token has been canceled, and throws an 'OperationCanceledException' if it has.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA2250", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

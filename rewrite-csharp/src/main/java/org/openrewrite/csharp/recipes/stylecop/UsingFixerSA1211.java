@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UsingFixerSA1211 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1211";
 
-    @Getter
+    final String recipeId = "SA1211";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Using alias directives should be ordered alphabetically by alias name";
-
-    @Getter
     final String description = "The using-alias directives within a C# code file are not sorted alphabetically by alias name.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1211", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

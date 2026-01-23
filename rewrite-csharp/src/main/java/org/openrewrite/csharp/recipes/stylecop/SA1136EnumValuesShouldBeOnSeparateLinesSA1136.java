@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1136EnumValuesShouldBeOnSeparateLinesSA1136 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1136";
 
-    @Getter
+    final String recipeId = "SA1136";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Enum values should be on separate lines";
-
-    @Getter
+    final String displayName = "Enum values should be on separate lines (search)";
     final String description = "This is a reporting only recipe. Enum values should be placed on their own lines for maximum readability.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1136", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

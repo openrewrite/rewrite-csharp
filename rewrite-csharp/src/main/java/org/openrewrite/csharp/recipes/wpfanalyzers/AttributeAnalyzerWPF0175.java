@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AttributeAnalyzerWPF0175 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0175";
 
-    @Getter
+    final String recipeId = "WPF0175";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: StyleTypedProperty.Property must be specified only once";
-
-    @Getter
+    final String displayName = "StyleTypedProperty.Property must be specified only once (search)";
     final String description = "This is a reporting only recipe. StyleTypedProperty.Property must be specified only once.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0175", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

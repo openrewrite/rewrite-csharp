@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1601PartialElementsMustBeDocumentedSA1601 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1601";
 
-    @Getter
+    final String recipeId = "SA1601";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Partial elements should be documented";
-
-    @Getter
+    final String displayName = "Partial elements should be documented (search)";
     final String description = "This is a reporting only recipe. A C# partial element is missing a documentation header.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1601", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

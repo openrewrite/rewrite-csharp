@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1201ElementsMustAppearInTheCorrectOrderSA1201 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1201";
 
-    @Getter
+    final String recipeId = "SA1201";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Elements should appear in the correct order";
-
-    @Getter
+    final String displayName = "Elements should appear in the correct order (search)";
     final String description = "This is a reporting only recipe. An element within a C# code file is out of order in relation to the other elements in the code.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1201", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

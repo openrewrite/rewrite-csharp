@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1611ElementParametersMustBeDocumentedSA1611 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1611";
 
-    @Getter
+    final String recipeId = "SA1611";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Element parameters should be documented";
-
-    @Getter
+    final String displayName = "Element parameters should be documented (search)";
     final String description = "This is a reporting only recipe. A C# method, constructor, delegate or indexer element is missing documentation for one or more of its parameters.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1611", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1101FixerSA1101 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1101";
 
-    @Getter
+    final String recipeId = "SA1101";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Prefix local calls with this";
-
-    @Getter
     final String description = "A call to an instance member of the local class or a base class is not prefixed with 'this.', within a C# code file.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1101", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

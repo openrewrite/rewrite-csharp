@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1115ParameterMustFollowCommaSA1115 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1115";
 
-    @Getter
+    final String recipeId = "SA1115";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Parameter should follow comma";
-
-    @Getter
+    final String displayName = "Parameter should follow comma (search)";
     final String description = "This is a reporting only recipe. A parameter within a C# method or indexer call or declaration does not begin on the same line as the previous parameter, or on the next line.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1115", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

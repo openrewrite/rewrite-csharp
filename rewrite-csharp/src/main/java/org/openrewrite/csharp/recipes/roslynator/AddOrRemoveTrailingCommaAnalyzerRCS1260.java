@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AddOrRemoveTrailingCommaAnalyzerRCS1260 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1260";
 
-    @Getter
+    final String recipeId = "RCS1260";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Add/remove trailing comma";
-
-    @Getter
+    final String displayName = "Add/remove trailing comma (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1260", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

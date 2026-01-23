@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotDefineFinalizersForTypesDerivedFromMemoryManagerCA2015 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2015";
 
-    @Getter
+    final String recipeId = "CA2015";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not define finalizers for types derived from MemoryManager<T>";
-
-    @Getter
+    final String displayName = "Do not define finalizers for types derived from MemoryManager<T> (search)";
     final String description = "This is a reporting only recipe. Adding a finalizer to a type derived from MemoryManager<T> may permit memory to be freed while it is still in use by a Span<T>.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2015", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

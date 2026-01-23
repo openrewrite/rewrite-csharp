@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ModuleInitializerAttributeShouldNotBeUsedInLibrariesCA2255 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2255";
 
-    @Getter
+    final String recipeId = "CA2255";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: The 'ModuleInitializer' attribute should not be used in libraries";
-
-    @Getter
+    final String displayName = "The 'ModuleInitializer' attribute should not be used in libraries (search)";
     final String description = "This is a reporting only recipe. Module initializers are intended to be used by application code to ensure an application's components are initialized before the application code begins executing. If library code declares a method with the 'ModuleInitializerAttribute', it can interfere with application initialization and also lead to limitations in that application's trimming abilities. Instead of using methods marked with 'ModuleInitializerAttribute', the library should expose methods that can be used to initialize any components within the library and allow the application to invoke the method during application initialization.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2255", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

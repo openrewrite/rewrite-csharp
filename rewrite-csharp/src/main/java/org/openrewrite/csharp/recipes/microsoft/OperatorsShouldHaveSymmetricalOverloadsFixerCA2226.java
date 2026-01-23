@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class OperatorsShouldHaveSymmetricalOverloadsFixerCA2226 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2226";
 
-    @Getter
+    final String recipeId = "CA2226";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Operators should have symmetrical overloads";
-
-    @Getter
     final String description = "A type implements the equality or inequality operator and does not implement the opposite operator.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA2226", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

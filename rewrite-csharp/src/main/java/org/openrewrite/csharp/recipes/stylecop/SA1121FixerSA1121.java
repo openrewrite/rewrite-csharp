@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1121FixerSA1121 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1121";
 
-    @Getter
+    final String recipeId = "SA1121";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Use built-in type alias";
-
-    @Getter
     final String description = "The code uses one of the basic C# types, but does not use the built-in alias for the type.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1121", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

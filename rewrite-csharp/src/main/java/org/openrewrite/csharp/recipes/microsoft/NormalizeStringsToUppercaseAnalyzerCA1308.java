@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class NormalizeStringsToUppercaseAnalyzerCA1308 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1308";
 
-    @Getter
+    final String recipeId = "CA1308";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Normalize strings to uppercase";
-
-    @Getter
+    final String displayName = "Normalize strings to uppercase (search)";
     final String description = "This is a reporting only recipe. Strings should be normalized to uppercase. A small group of characters cannot make a round trip when they are converted to lowercase. To make a round trip means to convert the characters from one locale to another locale that represents character data differently, and then to accurately retrieve the original characters from the converted characters.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1308", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

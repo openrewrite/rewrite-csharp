@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1630DocumentationTextMustContainWhitespaceSA1630 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1630";
 
-    @Getter
+    final String recipeId = "SA1630";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Documentation text should contain whitespace";
-
-    @Getter
+    final String displayName = "Documentation text should contain whitespace (search)";
     final String description = "This is a reporting only recipe. A section of the XML header documentation for a C# element does not contain any whitespace between words.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1630", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

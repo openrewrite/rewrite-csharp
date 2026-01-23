@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UsePatternMatchingInsteadOfIsAndCastFixerRCS1220 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1220";
 
-    @Getter
+    final String recipeId = "RCS1220";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
     final String displayName = "Use pattern matching instead of combination of 'is' operator and cast operator";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "RCS1220", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

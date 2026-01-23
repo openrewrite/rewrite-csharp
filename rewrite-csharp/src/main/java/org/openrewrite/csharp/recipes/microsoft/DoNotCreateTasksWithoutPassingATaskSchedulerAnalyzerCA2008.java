@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotCreateTasksWithoutPassingATaskSchedulerAnalyzerCA2008 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2008";
 
-    @Getter
+    final String recipeId = "CA2008";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not create tasks without passing a TaskScheduler";
-
-    @Getter
+    final String displayName = "Do not create tasks without passing a TaskScheduler (search)";
     final String description = "This is a reporting only recipe. Do not create tasks unless you are using one of the overloads that takes a TaskScheduler. The default is to schedule on TaskScheduler.Current, which would lead to deadlocks. Either use TaskScheduler.Default to schedule on the thread pool, or explicitly pass TaskScheduler.Current to make your intentions clear.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2008", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpAvoidDuplicateElementInitializationFixerCA2244 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2244";
 
-    @Getter
+    final String recipeId = "CA2244";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Do not duplicate indexed element initializations";
-
-    @Getter
     final String description = "Indexed elements in objects initializers must initialize unique elements. A duplicate index might overwrite a previous element initialization.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA2244", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

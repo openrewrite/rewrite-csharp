@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpUseImplicitTypeDiagnosticAnalyzerIDE0007 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "IDE0007";
 
-    @Getter
+    final String recipeId = "IDE0007";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-
-    @Getter
     final String nugetPackageVersion = "5.0.0";
 
-    @Getter
-    final String displayName = "Analysis: Use implicit type";
-
-    @Getter
+    final String displayName = "Use implicit type (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "IDE0007", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

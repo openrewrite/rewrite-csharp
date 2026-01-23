@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class MarkAttributesWithAttributeUsageAttributeFixerMA0010 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0010";
 
-    @Getter
+    final String recipeId = "MA0010";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
     final String displayName = "Mark attributes with AttributeUsageAttribute";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "MA0010", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

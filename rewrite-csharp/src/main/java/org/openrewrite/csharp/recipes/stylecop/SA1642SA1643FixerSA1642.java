@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1642SA1643FixerSA1642 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1642";
 
-    @Getter
+    final String recipeId = "SA1642";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Constructor summary documentation should begin with standard text";
-
-    @Getter
     final String description = "The XML documentation header for a C# constructor does not contain the appropriate summary text.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1642", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

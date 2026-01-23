@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class RemoveRedundantAsyncAwaitAnalyzerRCS1174FadeOut extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1174FadeOut";
 
-    @Getter
+    final String recipeId = "RCS1174FadeOut";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Remove redundant async/await";
-
-    @Getter
+    final String displayName = "Remove redundant async/await (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1174FadeOut", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

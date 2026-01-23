@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class RequiredConfigOptionNotSetAnalyzerROS0003 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "ROS0003";
 
-    @Getter
+    final String recipeId = "ROS0003";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Analyzer requires config option to be specified";
-
-    @Getter
+    final String displayName = "Analyzer requires config option to be specified (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "ROS0003", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpRemoveUnusedParametersAndValuesDiagnosticAnalyzerIDE0060 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "IDE0060";
 
-    @Getter
+    final String recipeId = "IDE0060";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-
-    @Getter
     final String nugetPackageVersion = "5.0.0";
 
-    @Getter
-    final String displayName = "Analysis: Remove unused parameter";
-
-    @Getter
+    final String displayName = "Remove unused parameter (search)";
     final String description = "This is a reporting only recipe. Avoid unused parameters in your code. If the parameter cannot be removed, then change its name so it starts with an underscore and is optionally followed by an integer, such as '_', '_1', '_2', etc. These are treated as special discard symbol names.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "IDE0060", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

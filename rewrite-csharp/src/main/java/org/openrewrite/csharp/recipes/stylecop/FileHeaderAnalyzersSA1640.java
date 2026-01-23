@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class FileHeaderAnalyzersSA1640 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1640";
 
-    @Getter
+    final String recipeId = "SA1640";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: File header should have valid company text";
-
-    @Getter
+    final String displayName = "File header should have valid company text (search)";
     final String description = "This is a reporting only recipe. The file header at the top of a C# code file does not contain company name text.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1640", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

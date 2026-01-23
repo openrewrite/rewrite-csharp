@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class PreferConstCharOverConstUnitStringFixerCA1834 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1834";
 
-    @Getter
+    final String recipeId = "CA1834";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Consider using 'StringBuilder.Append(char)' when applicable";
-
-    @Getter
     final String description = "'StringBuilder.Append(char)' is more efficient than 'StringBuilder.Append(string)' when the string is a single character. When calling 'Append' with a constant, prefer using a constant char rather than a constant string containing one character.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1834", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1005FixerSA1005 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1005";
 
-    @Getter
+    final String recipeId = "SA1005";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Single line comments should begin with single space";
-
-    @Getter
     final String description = "A single-line comment within a C# code file does not begin with a single space.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1005", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

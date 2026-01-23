@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotLockOnObjectsWithWeakIdentityAnalyzerCA2002 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2002";
 
-    @Getter
+    final String recipeId = "CA2002";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not lock on objects with weak identity";
-
-    @Getter
+    final String displayName = "Do not lock on objects with weak identity (search)";
     final String description = "This is a reporting only recipe. An object is said to have a weak identity when it can be directly accessed across application domain boundaries. A thread that tries to acquire a lock on an object that has a weak identity can be blocked by a second thread in a different application domain that has a lock on the same object.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2002", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

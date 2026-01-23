@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AttributeAnalyzerWPF0008 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0008";
 
-    @Getter
+    final String recipeId = "WPF0008";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: [DependsOn(target)] must exist";
-
-    @Getter
+    final String displayName = "[DependsOn(target)] must exist (search)";
     final String description = "This is a reporting only recipe. [DependsOn(target)] must exist.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0008", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

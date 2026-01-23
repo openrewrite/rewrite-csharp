@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DefaultLabelShouldBeLastLabelInSwitchSectionAnalyzerRCS1099 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1099";
 
-    @Getter
+    final String recipeId = "RCS1099";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Default label should be the last label in a switch section";
-
-    @Getter
+    final String displayName = "Default label should be the last label in a switch section (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1099", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

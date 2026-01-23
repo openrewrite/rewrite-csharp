@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class LoggerMessageDefineAnalyzerCA2253 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2253";
 
-    @Getter
+    final String recipeId = "CA2253";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Named placeholders should not be numeric values";
-
-    @Getter
+    final String displayName = "Named placeholders should not be numeric values (search)";
     final String description = "This is a reporting only recipe. Named placeholders in the logging message template should not be comprised of only numeric characters.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2253", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

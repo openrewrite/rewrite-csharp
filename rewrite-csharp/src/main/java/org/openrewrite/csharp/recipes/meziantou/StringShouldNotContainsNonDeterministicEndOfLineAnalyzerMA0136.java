@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class StringShouldNotContainsNonDeterministicEndOfLineAnalyzerMA0136 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0136";
 
-    @Getter
+    final String recipeId = "MA0136";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Raw String contains an implicit end of line character";
-
-    @Getter
+    final String displayName = "Raw String contains an implicit end of line character (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0136", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

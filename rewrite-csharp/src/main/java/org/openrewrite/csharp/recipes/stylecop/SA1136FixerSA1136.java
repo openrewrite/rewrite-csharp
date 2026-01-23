@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1136FixerSA1136 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1136";
 
-    @Getter
+    final String recipeId = "SA1136";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Enum values should be on separate lines";
-
-    @Getter
     final String description = "Enum values should be placed on their own lines for maximum readability.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1136", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

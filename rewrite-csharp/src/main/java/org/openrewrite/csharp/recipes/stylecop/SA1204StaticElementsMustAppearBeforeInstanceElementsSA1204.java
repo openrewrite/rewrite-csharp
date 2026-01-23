@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1204StaticElementsMustAppearBeforeInstanceElementsSA1204 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1204";
 
-    @Getter
+    final String recipeId = "SA1204";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Static elements should appear before instance elements";
-
-    @Getter
+    final String displayName = "Static elements should appear before instance elements (search)";
     final String description = "This is a reporting only recipe. A static element is positioned beneath an instance element.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1204", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

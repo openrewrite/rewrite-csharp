@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class JoinStringExpressionsAnalyzerRCS1190 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1190";
 
-    @Getter
+    final String recipeId = "RCS1190";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Join string expressions";
-
-    @Getter
+    final String displayName = "Join string expressions (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1190", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpMarkAssembliesWithNeutralResourcesLanguageAnalyzerCA1824 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1824";
 
-    @Getter
+    final String recipeId = "CA1824";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Mark assemblies with NeutralResourcesLanguageAttribute";
-
-    @Getter
+    final String displayName = "Mark assemblies with NeutralResourcesLanguageAttribute (search)";
     final String description = "This is a reporting only recipe. The NeutralResourcesLanguage attribute informs the ResourceManager of the language that was used to display the resources of a neutral culture for an assembly. This improves lookup performance for the first resource that you load and can reduce your working set.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1824", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

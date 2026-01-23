@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DynamicInterfaceCastableImplementationAnalyzerCA2257 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2257";
 
-    @Getter
+    final String recipeId = "CA2257";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Members defined on an interface with the 'DynamicInterfaceCastableImplementationAttribute' should be 'static'";
-
-    @Getter
+    final String displayName = "Members defined on an interface with the 'DynamicInterfaceCastableImplementationAttribute' should be 'static' (search)";
     final String description = "This is a reporting only recipe. Since a type that implements 'IDynamicInterfaceCastable' may not implement a dynamic interface in metadata, calls to an instance interface member that is not an explicit implementation defined on this type are likely to fail at runtime. Mark new interface members 'static' to avoid runtime errors.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2257", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

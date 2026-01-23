@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class NotPatternShouldBeParenthesizedCodeFixerMA0164 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0164";
 
-    @Getter
+    final String recipeId = "MA0164";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
     final String displayName = "Use parentheses to make not pattern clearer";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "MA0164", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

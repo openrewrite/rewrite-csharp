@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1501FixerSA1501 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1501";
 
-    @Getter
+    final String recipeId = "SA1501";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Statement should not be on a single line";
-
-    @Getter
     final String description = "A C# statement containing opening and closing braces is written completely on a single line.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1501", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

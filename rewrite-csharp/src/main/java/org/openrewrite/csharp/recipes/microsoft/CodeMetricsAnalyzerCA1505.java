@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CodeMetricsAnalyzerCA1505 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1505";
 
-    @Getter
+    final String recipeId = "CA1505";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Avoid unmaintainable code";
-
-    @Getter
+    final String displayName = "Avoid unmaintainable code (search)";
     final String description = "This is a reporting only recipe. The maintainability index is calculated by using the following metrics: lines of code, program volume, and cyclomatic complexity. Program volume is a measure of the difficulty of understanding of a symbol that is based on the number of operators and operands in the code. Cyclomatic complexity is a measure of the structural complexity of the type or method. A low maintainability index indicates that code is probably difficult to maintain and would be a good candidate to redesign.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1505", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

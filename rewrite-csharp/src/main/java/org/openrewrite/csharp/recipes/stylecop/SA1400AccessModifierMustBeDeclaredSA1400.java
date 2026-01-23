@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1400AccessModifierMustBeDeclaredSA1400 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1400";
 
-    @Getter
+    final String recipeId = "SA1400";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Access modifier should be declared";
-
-    @Getter
+    final String displayName = "Access modifier should be declared (search)";
     final String description = "This is a reporting only recipe. The access modifier for a C# element has not been explicitly defined.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1400", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

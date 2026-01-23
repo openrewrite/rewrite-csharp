@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class TypeNamesShouldNotMatchNamespacesAnalyzerCA1724 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1724";
 
-    @Getter
+    final String recipeId = "CA1724";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Type names should not match namespaces";
-
-    @Getter
+    final String displayName = "Type names should not match namespaces (search)";
     final String description = "This is a reporting only recipe. Type names should not match the names of namespaces that are defined in the .NET Framework class library. Violating this rule can reduce the usability of the library.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1724", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

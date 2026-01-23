@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AvoidZeroLengthArrayAllocationsFixerCA1825 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1825";
 
-    @Getter
+    final String recipeId = "CA1825";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Avoid zero-length array allocations";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1825", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

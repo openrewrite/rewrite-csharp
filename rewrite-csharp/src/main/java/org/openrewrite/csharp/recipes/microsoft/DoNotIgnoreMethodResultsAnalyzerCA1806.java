@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotIgnoreMethodResultsAnalyzerCA1806 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1806";
 
-    @Getter
+    final String recipeId = "CA1806";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not ignore method results";
-
-    @Getter
+    final String displayName = "Do not ignore method results (search)";
     final String description = "This is a reporting only recipe. A new object is created but never used; or a method that creates and returns a new string is called and the new string is never used; or a COM or P/Invoke method returns an HRESULT or error code that is never used.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1806", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

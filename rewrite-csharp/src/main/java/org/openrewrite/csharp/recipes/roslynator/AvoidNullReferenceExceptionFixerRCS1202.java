@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AvoidNullReferenceExceptionFixerRCS1202 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1202";
 
-    @Getter
+    final String recipeId = "RCS1202";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
     final String displayName = "Avoid NullReferenceException";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "RCS1202", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

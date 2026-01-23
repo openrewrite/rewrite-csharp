@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class LocalVariablesShouldNotHideSymbolsAnalyzerMA0084 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0084";
 
-    @Getter
+    final String recipeId = "MA0084";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Local variables should not hide other symbols";
-
-    @Getter
+    final String displayName = "Local variables should not hide other symbols (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0084", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

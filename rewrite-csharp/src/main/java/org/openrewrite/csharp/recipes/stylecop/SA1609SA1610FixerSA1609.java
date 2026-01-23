@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1609SA1610FixerSA1609 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1609";
 
-    @Getter
+    final String recipeId = "SA1609";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Property documentation should have value";
-
-    @Getter
     final String description = "The XML header documentation for a C# property does not contain a <value> tag.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1609", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

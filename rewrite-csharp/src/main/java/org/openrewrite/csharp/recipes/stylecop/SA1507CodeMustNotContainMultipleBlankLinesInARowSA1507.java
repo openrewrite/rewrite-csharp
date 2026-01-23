@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1507CodeMustNotContainMultipleBlankLinesInARowSA1507 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1507";
 
-    @Getter
+    final String recipeId = "SA1507";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Code should not contain multiple blank lines in a row";
-
-    @Getter
+    final String displayName = "Code should not contain multiple blank lines in a row (search)";
     final String description = "This is a reporting only recipe. The C# code contains multiple blank lines in a row.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1507", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

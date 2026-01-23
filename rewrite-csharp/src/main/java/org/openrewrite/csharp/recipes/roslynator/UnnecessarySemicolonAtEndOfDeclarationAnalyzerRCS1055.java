@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UnnecessarySemicolonAtEndOfDeclarationAnalyzerRCS1055 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1055";
 
-    @Getter
+    final String recipeId = "RCS1055";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Unnecessary semicolon at the end of declaration";
-
-    @Getter
+    final String displayName = "Unnecessary semicolon at the end of declaration (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1055", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

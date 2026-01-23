@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ProvideObsoleteAttributeMessageAnalyzerCA1041 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1041";
 
-    @Getter
+    final String recipeId = "CA1041";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Provide ObsoleteAttribute message";
-
-    @Getter
+    final String displayName = "Provide ObsoleteAttribute message (search)";
     final String description = "This is a reporting only recipe. A type or member is marked by using a System.ObsoleteAttribute attribute that does not have its ObsoleteAttribute.Message property specified. When a type or member that is marked by using ObsoleteAttribute is compiled, the Message property of the attribute is displayed. This gives the user information about the obsolete type or member.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1041", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class OperatorOverloadsHaveNamedAlternatesFixerCA2225 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2225";
 
-    @Getter
+    final String recipeId = "CA2225";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Operator overloads have named alternates";
-
-    @Getter
     final String description = "An operator overload was detected, and the expected named alternative method was not found. The named alternative member provides access to the same functionality as the operator and is provided for developers who program in languages that do not support overloaded operators.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA2225", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

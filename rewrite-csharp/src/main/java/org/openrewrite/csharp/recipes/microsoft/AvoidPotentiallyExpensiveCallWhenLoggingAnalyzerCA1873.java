@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AvoidPotentiallyExpensiveCallWhenLoggingAnalyzerCA1873 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1873";
 
-    @Getter
+    final String recipeId = "CA1873";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Avoid potentially expensive logging";
-
-    @Getter
+    final String displayName = "Avoid potentially expensive logging (search)";
     final String description = "This is a reporting only recipe. In many situations, logging is disabled or set to a log level that results in an unnecessary evaluation for this argument.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1873", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

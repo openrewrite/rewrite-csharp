@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1111ClosingParenthesisMustBeOnLineOfLastParameterSA1111 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1111";
 
-    @Getter
+    final String recipeId = "SA1111";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Closing parenthesis should be on line of last parameter";
-
-    @Getter
+    final String displayName = "Closing parenthesis should be on line of last parameter (search)";
     final String description = "This is a reporting only recipe. The closing parenthesis or bracket in a call to or declaration of a C# method/indexer/attribute/array/constructor/delegate is not placed on the same line as the last parameter.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1111", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

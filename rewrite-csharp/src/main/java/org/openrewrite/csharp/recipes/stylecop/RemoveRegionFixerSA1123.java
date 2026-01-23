@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class RemoveRegionFixerSA1123 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1123";
 
-    @Getter
+    final String recipeId = "SA1123";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Do not place regions within elements";
-
-    @Getter
     final String description = "The C# code contains a region within the body of a code element.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1123", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

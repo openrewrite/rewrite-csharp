@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseTimeSpanZeroFixerMA0178 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0178";
 
-    @Getter
+    final String recipeId = "MA0178";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
     final String displayName = "Use TimeSpan.Zero instead of TimeSpan.FromXXX(0)";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "MA0178", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpTestForNaNCorrectlyFixerCA2242 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2242";
 
-    @Getter
+    final String recipeId = "CA2242";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Test for NaN correctly";
-
-    @Getter
     final String description = "This expression tests a value against Single.Nan or Double.Nan. Use Single.IsNan(Single) or Double.IsNan(Double) to test the value.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA2242", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ConvertToBlockScopedNamespaceDiagnosticAnalyzerIDE0160 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "IDE0160";
 
-    @Getter
+    final String recipeId = "IDE0160";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-
-    @Getter
     final String nugetPackageVersion = "5.0.0";
 
-    @Getter
-    final String displayName = "Analysis: Convert to block scoped namespace";
-
-    @Getter
+    final String displayName = "Convert to block scoped namespace (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "IDE0160", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

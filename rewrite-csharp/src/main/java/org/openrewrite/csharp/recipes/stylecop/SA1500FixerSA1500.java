@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1500FixerSA1500 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1500";
 
-    @Getter
+    final String recipeId = "SA1500";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Braces for multi-line statements should not share line";
-
-    @Getter
     final String description = "The opening or closing brace within a C# statement, element, or expression is not placed on its own line.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1500", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

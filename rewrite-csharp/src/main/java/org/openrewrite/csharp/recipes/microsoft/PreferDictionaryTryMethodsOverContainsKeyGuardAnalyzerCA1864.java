@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class PreferDictionaryTryMethodsOverContainsKeyGuardAnalyzerCA1864 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1864";
 
-    @Getter
+    final String recipeId = "CA1864";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Prefer the 'IDictionary.TryAdd(TKey, TValue)' method";
-
-    @Getter
+    final String displayName = "Prefer the 'IDictionary.TryAdd(TKey, TValue)' method (search)";
     final String description = "This is a reporting only recipe. Prefer a 'TryAdd' call over an 'Add' call guarded by a 'ContainsKey' check. 'TryAdd' behaves the same as 'Add', except that when the specified key already exists, it returns 'false' instead of throwing an exception.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1864", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class WhitespaceTriviaFixerRCS1036 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1036";
 
-    @Getter
+    final String recipeId = "RCS1036";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
     final String displayName = "[deprecated] Remove unnecessary blank line";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "RCS1036", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

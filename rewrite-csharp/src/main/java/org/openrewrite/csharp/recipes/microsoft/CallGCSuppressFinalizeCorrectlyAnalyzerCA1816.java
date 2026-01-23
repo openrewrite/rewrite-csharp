@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CallGCSuppressFinalizeCorrectlyAnalyzerCA1816 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1816";
 
-    @Getter
+    final String recipeId = "CA1816";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Dispose methods should call SuppressFinalize";
-
-    @Getter
+    final String displayName = "Dispose methods should call SuppressFinalize (search)";
     final String description = "This is a reporting only recipe. A method that is an implementation of Dispose does not call GC.SuppressFinalize; or a method that is not an implementation of Dispose calls GC.SuppressFinalize; or a method calls GC.SuppressFinalize and passes something other than this (Me in Visual Basic).";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1816", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

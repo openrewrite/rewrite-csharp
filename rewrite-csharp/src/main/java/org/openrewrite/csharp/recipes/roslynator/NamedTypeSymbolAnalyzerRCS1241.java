@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class NamedTypeSymbolAnalyzerRCS1241 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1241";
 
-    @Getter
+    final String recipeId = "RCS1241";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: Implement non-generic counterpart";
-
-    @Getter
+    final String displayName = "Implement non-generic counterpart (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1241", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

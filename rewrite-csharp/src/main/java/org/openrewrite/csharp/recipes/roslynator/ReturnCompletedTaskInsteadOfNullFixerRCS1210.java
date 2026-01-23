@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ReturnCompletedTaskInsteadOfNullFixerRCS1210 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1210";
 
-    @Getter
+    final String recipeId = "RCS1210";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
     final String displayName = "Return completed task instead of returning null";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "RCS1210", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ProvideCorrectArgumentsToFormattingMethodsAnalyzerCA2241 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2241";
 
-    @Getter
+    final String recipeId = "CA2241";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Provide correct arguments to formatting methods";
-
-    @Getter
+    final String displayName = "Provide correct arguments to formatting methods (search)";
     final String description = "This is a reporting only recipe. The format argument that is passed to System.String.Format does not contain a format item that corresponds to each object argument, or vice versa.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2241", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

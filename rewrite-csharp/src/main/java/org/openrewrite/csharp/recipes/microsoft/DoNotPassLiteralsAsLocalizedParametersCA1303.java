@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotPassLiteralsAsLocalizedParametersCA1303 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1303";
 
-    @Getter
+    final String recipeId = "CA1303";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not pass literals as localized parameters";
-
-    @Getter
+    final String displayName = "Do not pass literals as localized parameters (search)";
     final String description = "This is a reporting only recipe. A method passes a string literal as a parameter to a constructor or method in the .NET Framework class library and that string should be localizable. To fix a violation of this rule, replace the string literal with a string retrieved through an instance of the ResourceManager class.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1303", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

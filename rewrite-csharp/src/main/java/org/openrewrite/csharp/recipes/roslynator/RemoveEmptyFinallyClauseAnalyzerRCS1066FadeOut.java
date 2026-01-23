@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class RemoveEmptyFinallyClauseAnalyzerRCS1066FadeOut extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1066FadeOut";
 
-    @Getter
+    final String recipeId = "RCS1066FadeOut";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
-    final String displayName = "Analysis: [deprecated] Remove empty 'finally' clause";
-
-    @Getter
+    final String displayName = "[deprecated] Remove empty 'finally' clause (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "RCS1066FadeOut", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

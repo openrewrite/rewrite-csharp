@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ConstructorArgumentParametersShouldExistInConstructorsAnalyzerMA0083 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0083";
 
-    @Getter
+    final String recipeId = "MA0083";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: ConstructorArgument parameters should exist in constructors";
-
-    @Getter
+    final String displayName = "ConstructorArgument parameters should exist in constructors (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0083", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

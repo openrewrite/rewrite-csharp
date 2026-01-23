@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseEqualsMethodInsteadOfOperatorAnalyzerMA0169 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0169";
 
-    @Getter
+    final String recipeId = "MA0169";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Use Equals method instead of operator";
-
-    @Getter
+    final String displayName = "Use Equals method instead of operator (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0169", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

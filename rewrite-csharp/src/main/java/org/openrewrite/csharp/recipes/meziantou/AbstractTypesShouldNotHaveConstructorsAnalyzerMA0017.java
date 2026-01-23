@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AbstractTypesShouldNotHaveConstructorsAnalyzerMA0017 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0017";
 
-    @Getter
+    final String recipeId = "MA0017";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Abstract types should not have public or internal constructors";
-
-    @Getter
+    final String displayName = "Abstract types should not have public or internal constructors (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0017", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

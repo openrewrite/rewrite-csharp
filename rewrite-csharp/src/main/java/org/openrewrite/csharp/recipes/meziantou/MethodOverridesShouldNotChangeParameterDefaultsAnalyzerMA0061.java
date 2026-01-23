@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class MethodOverridesShouldNotChangeParameterDefaultsAnalyzerMA0061 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0061";
 
-    @Getter
+    final String recipeId = "MA0061";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Method overrides should not change default values";
-
-    @Getter
+    final String displayName = "Method overrides should not change default values (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0061", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

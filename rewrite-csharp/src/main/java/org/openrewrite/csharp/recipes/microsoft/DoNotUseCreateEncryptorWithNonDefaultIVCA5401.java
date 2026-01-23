@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseCreateEncryptorWithNonDefaultIVCA5401 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5401";
 
-    @Getter
+    final String recipeId = "CA5401";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not use CreateEncryptor with non-default IV";
-
-    @Getter
+    final String displayName = "Do not use CreateEncryptor with non-default IV (search)";
     final String description = "This is a reporting only recipe. Symmetric encryption should always use a non-repeatable initialization vector to prevent dictionary attacks.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5401", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

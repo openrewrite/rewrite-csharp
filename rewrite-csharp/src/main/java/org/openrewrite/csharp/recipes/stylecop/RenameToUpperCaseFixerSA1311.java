@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class RenameToUpperCaseFixerSA1311 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1311";
 
-    @Getter
+    final String recipeId = "SA1311";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Static readonly fields should begin with upper-case letter";
-
-    @Getter
     final String description = "The name of a static readonly field does not begin with an upper-case letter.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1311", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UsingFixerSA1216 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1216";
 
-    @Getter
+    final String recipeId = "SA1216";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Using static directives should be placed at the correct location.";
-
-    @Getter
     final String description = "A using static directive is positioned before a regular or after an alias using directive.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1216", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

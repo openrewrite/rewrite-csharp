@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class RawStringLiteralFixerRCS1262 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1262";
 
-    @Getter
+    final String recipeId = "RCS1262";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
     final String displayName = "Unnecessary raw string literal";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "RCS1262", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

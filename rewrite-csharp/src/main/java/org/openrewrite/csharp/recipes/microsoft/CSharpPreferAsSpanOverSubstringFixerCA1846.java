@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CSharpPreferAsSpanOverSubstringFixerCA1846 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1846";
 
-    @Getter
+    final String recipeId = "CA1846";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Prefer 'AsSpan' over 'Substring'";
-
-    @Getter
     final String description = "'AsSpan' is more efficient than 'Substring'. 'Substring' performs an O(n) string copy, while 'AsSpan' does not and has a constant cost.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1846", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ConditionalExpressionPlacementFixerIDE2005 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "IDE2005";
 
-    @Getter
+    final String recipeId = "IDE2005";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.CSharp.CodeStyle";
-
-    @Getter
     final String nugetPackageVersion = "5.0.0";
 
-    @Getter
     final String displayName = "Blank line not allowed after conditional expression token";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "IDE2005", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseEnvironmentMembersFixerCA1837 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1837";
 
-    @Getter
+    final String recipeId = "CA1837";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
     final String displayName = "Use 'Environment.ProcessId'";
-
-    @Getter
     final String description = "'Environment.ProcessId' is simpler and faster than 'Process.GetCurrentProcess().Id'.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "CA1837", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

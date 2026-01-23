@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseThreadStaticCorrectlyCA2019 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA2019";
 
-    @Getter
+    final String recipeId = "CA2019";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Improper 'ThreadStatic' field initialization";
-
-    @Getter
+    final String displayName = "Improper 'ThreadStatic' field initialization (search)";
     final String description = "This is a reporting only recipe. 'ThreadStatic' fields should be initialized lazily on use, not with inline initialization nor explicitly in a static constructor, which would only initialize the field on the thread that runs the type's static constructor.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2019", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

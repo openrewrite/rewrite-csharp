@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1129DoNotUseDefaultValueTypeConstructorSA1129 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1129";
 
-    @Getter
+    final String recipeId = "SA1129";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Do not use default value type constructor";
-
-    @Getter
+    final String displayName = "Do not use default value type constructor (search)";
     final String description = "This is a reporting only recipe. When creating a new instance of a value type T, the syntax 'default(T)' is functionally equivalent to the syntax 'new T()'. To avoid confusion regarding the behavior of the resulting instance, the first form is preferred.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1129", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

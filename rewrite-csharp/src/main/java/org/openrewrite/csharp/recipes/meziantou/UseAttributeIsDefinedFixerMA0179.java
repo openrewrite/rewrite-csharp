@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UseAttributeIsDefinedFixerMA0179 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0179";
 
-    @Getter
+    final String recipeId = "MA0179";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
     final String displayName = "Use Attribute.IsDefined instead of GetCustomAttribute(s)";
-
-    @Getter
     final String description = "Detects inefficient attribute existence checks that can be replaced with Attribute.IsDefined for better performance.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "MA0179", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ValueConversionAttributeFixWPF0073 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0073";
 
-    @Getter
+    final String recipeId = "WPF0073";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "Add ValueConversion attribute (unknown types)";
-
-    @Getter
     final String description = "Add ValueConversion attribute (unknown types).";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0073", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

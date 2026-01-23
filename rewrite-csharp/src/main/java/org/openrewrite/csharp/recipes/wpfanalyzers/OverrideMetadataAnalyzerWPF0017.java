@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class OverrideMetadataAnalyzerWPF0017 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0017";
 
-    @Getter
+    final String recipeId = "WPF0017";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
-    final String displayName = "Analysis: Metadata must be of same type or super type";
-
-    @Getter
+    final String displayName = "Metadata must be of same type or super type (search)";
     final String description = "This is a reporting only recipe. When overriding metadata must be of the same type or subtype of the overridden property's metadata.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "WPF0017", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

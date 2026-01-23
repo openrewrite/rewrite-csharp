@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class DoNotUseWhenAllOrWaitAllWithSingleArgumentCA1843 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1843";
 
-    @Getter
+    final String recipeId = "CA1843";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Do not use 'WaitAll' with a single task";
-
-    @Getter
+    final String displayName = "Do not use 'WaitAll' with a single task (search)";
     final String description = "This is a reporting only recipe. Using 'WaitAll' with a single task may result in performance loss, await or return the task instead.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1843", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

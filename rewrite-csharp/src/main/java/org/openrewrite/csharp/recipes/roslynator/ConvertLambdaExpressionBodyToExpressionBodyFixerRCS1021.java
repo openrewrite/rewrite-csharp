@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ConvertLambdaExpressionBodyToExpressionBodyFixerRCS1021 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "RCS1021";
 
-    @Getter
+    final String recipeId = "RCS1021";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "Roslynator.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.15.0";
 
-    @Getter
     final String displayName = "Convert lambda expression body to expression body";
-
-    @Getter
     final String description = "";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "RCS1021", "roslynator", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

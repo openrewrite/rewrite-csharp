@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1027FixerSA1027 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1027";
 
-    @Getter
+    final String recipeId = "SA1027";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
     final String displayName = "Use tabs correctly";
-
-    @Getter
     final String description = "The code contains a tab or space character which is not consistent with the current project settings.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "SA1027", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

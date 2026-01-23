@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class PotentialReferenceCycleInDeserializedObjectGraphCA5362 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA5362";
 
-    @Getter
+    final String recipeId = "CA5362";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Potential reference cycle in deserialized object graph";
-
-    @Getter
+    final String displayName = "Potential reference cycle in deserialized object graph (search)";
     final String description = "This is a reporting only recipe. Review code that processes untrusted deserialized data for handling of unexpected reference cycles. An unexpected reference cycle should not cause the code to enter an infinite loop. Otherwise, an unexpected reference cycle can allow an attacker to DOS or exhaust the memory of the process when deserializing untrusted data.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5362", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

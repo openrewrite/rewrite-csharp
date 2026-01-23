@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1125UseShorthandForNullableTypesSA1125 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1125";
 
-    @Getter
+    final String recipeId = "SA1125";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Use shorthand for nullable types";
-
-    @Getter
+    final String displayName = "Use shorthand for nullable types (search)";
     final String description = "This is a reporting only recipe. The Nullable<T> type has been defined not using the C# shorthand. For example, Nullable<DateTime> has been used instead of the preferred DateTime?";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1125", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

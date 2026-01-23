@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class AvoidStringBuilderPInvokeParametersAnalyzerCA1838 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1838";
 
-    @Getter
+    final String recipeId = "CA1838";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Avoid 'StringBuilder' parameters for P/Invokes";
-
-    @Getter
+    final String displayName = "Avoid 'StringBuilder' parameters for P/Invokes (search)";
     final String description = "This is a reporting only recipe. Marshalling of 'StringBuilder' always creates a native buffer copy, resulting in multiple allocations for one marshalling operation.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1838", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

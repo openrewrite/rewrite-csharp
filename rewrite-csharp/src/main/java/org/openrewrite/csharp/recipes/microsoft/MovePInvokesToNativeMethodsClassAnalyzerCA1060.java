@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class MovePInvokesToNativeMethodsClassAnalyzerCA1060 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1060";
 
-    @Getter
+    final String recipeId = "CA1060";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Move pinvokes to native methods class";
-
-    @Getter
+    final String displayName = "Move pinvokes to native methods class (search)";
     final String description = "This is a reporting only recipe. Platform Invocation methods, such as those that are marked by using the System.Runtime.InteropServices.DllImportAttribute attribute, or methods that are defined by using the Declare keyword in Visual Basic, access unmanaged code. These methods should be of the NativeMethods, SafeNativeMethods, or UnsafeNativeMethods class.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1060", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

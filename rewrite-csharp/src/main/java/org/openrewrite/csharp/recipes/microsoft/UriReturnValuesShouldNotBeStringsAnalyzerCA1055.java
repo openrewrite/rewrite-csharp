@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class UriReturnValuesShouldNotBeStringsAnalyzerCA1055 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1055";
 
-    @Getter
+    final String recipeId = "CA1055";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: URI-like return values should not be strings";
-
-    @Getter
+    final String displayName = "URI-like return values should not be strings (search)";
     final String description = "This is a reporting only recipe. This rule assumes that the method returns a URI. A string representation of a URI is prone to parsing and encoding errors, and can lead to security vulnerabilities. The System.Uri class provides these services in a safe and secure manner.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1055", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

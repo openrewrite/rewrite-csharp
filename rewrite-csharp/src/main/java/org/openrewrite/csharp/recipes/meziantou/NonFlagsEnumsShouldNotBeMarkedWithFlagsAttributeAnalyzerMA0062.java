@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class NonFlagsEnumsShouldNotBeMarkedWithFlagsAttributeAnalyzerMA0062 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "MA0062";
 
-    @Getter
+    final String recipeId = "MA0062";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Meziantou.Analyzer";
-
-    @Getter
     final String nugetPackageVersion = "2.0.285";
 
-    @Getter
-    final String displayName = "Analysis: Non-flags enums should not be marked with \"FlagsAttribute\"";
-
-    @Getter
+    final String displayName = "Non-flags enums should not be marked with \"FlagsAttribute\" (search)";
     final String description = "This is a reporting only recipe. ";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "MA0062", "meziantou", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

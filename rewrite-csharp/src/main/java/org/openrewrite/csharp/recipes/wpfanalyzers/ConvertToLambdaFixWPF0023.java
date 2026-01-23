@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class ConvertToLambdaFixWPF0023 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "WPF0023";
 
-    @Getter
+    final String recipeId = "WPF0023";
     final boolean runCodeFixup = true;
 
-    @Getter
     final String nugetPackageName = "WpfAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "4.1.1";
 
-    @Getter
     final String displayName = "The callback is trivial, convert to lambda";
-
-    @Getter
     final String description = "The callback is trivial, convert to lambda for better locality.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "codefix", "WPF0023", "wpfanalyzers", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

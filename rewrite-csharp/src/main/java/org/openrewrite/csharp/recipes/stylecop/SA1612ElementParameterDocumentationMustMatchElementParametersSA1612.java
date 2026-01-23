@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class SA1612ElementParameterDocumentationMustMatchElementParametersSA1612 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "SA1612";
 
-    @Getter
+    final String recipeId = "SA1612";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "StyleCop.Analyzers";
-
-    @Getter
     final String nugetPackageVersion = "1.1.118";
 
-    @Getter
-    final String displayName = "Analysis: Element parameter documentation should match element parameters";
-
-    @Getter
+    final String displayName = "Element parameter documentation should match element parameters (search)";
     final String description = "This is a reporting only recipe. The documentation describing the parameters to a C# method, constructor, delegate or indexer element does not match the actual parameters on the element.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "SA1612", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }

@@ -28,26 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Getter
 public class CollectionsShouldImplementGenericInterfaceAnalyzerCA1010 extends RoslynRecipe {
-    @Getter
-    final String recipeId = "CA1010";
 
-    @Getter
+    final String recipeId = "CA1010";
     final boolean runCodeFixup = false;
 
-    @Getter
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-
-    @Getter
     final String nugetPackageVersion = "10.0.102";
 
-    @Getter
-    final String displayName = "Analysis: Generic interface should also be implemented";
-
-    @Getter
+    final String displayName = "Generic interface should also be implemented (search)";
     final String description = "This is a reporting only recipe. To broaden the usability of a type, implement one of the generic interfaces. This is especially true for collections as they can then be used to populate generic collection types.";
-
-    @Getter
     final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1010", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
 
 }
