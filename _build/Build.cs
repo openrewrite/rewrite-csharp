@@ -431,7 +431,8 @@ partial class Build : NukeBuild
     Target DevRelease => _ => _
         .Description("Creates package releases and uploads them to feeds")
         .After(Pack, Test)
-        .DependsOn(GradlePublishSnapshot);
+        .DependsOn(GradlePublishSnapshot)
+        .Executes(async () => await CreateGitHubRelease($"latest"));
 
 
     Target GitPush => _ => _
@@ -635,6 +636,26 @@ partial class Build : NukeBuild
                 .AddExcludeTasks(KnownGradleTasks.Assemble, KnownGradleTasks.Test)
                 .SetVersion(Version.MavenSnapshotVersion())
                 .AddTasks(KnownGradleTasks.Snapshot);;
+        });
+
+    Target GradlePublishMavenLocal => _ => _
+        .Description("Invokes Gradle to create a SNAPSHOT release and push it to maven repositories")
+        // .OnlyWhenStatic(() => IsAllowedToPushToFeed)
+        .DependsOn(Pack)
+        .Before(GradleExecute)
+        .Triggers(GradleExecute)
+        .Executes(() =>
+        {
+            GradleSettings = GradleSettings
+                .AddProjectProperty(
+                    "releasing",
+                    "release.disableGitChecks=true"
+                )
+                // .AddTasks(KnownGradleTasks.Publish)
+                // .EnableForceSigning()
+                // .AddExcludeTasks(KnownGradleTasks.Assemble, KnownGradleTasks.Test)
+                .SetVersion(Version.MavenSnapshotVersion())
+                .AddTasks(KnownGradleTasks.PublishToMavenLocal);;
         });
 
 

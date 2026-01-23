@@ -84,6 +84,7 @@
         "GradleProcessTestResources",
         "GradleProjects",
         "GradleProperties",
+        "GradlePublishMavenLocal",
         "GradlePublishRelease",
         "GradlePublishSnapshot",
         "GradleRelease",

@@ -39,6 +39,7 @@ partial class KnownGradleTasks
     /// Pushes them to the target repository (usually defined in publishing.repositories)
     /// </summary>
     public static KnownGradleTasks Publish = (KnownGradleTasks)"publish";
+    public static KnownGradleTasks PublishToMavenLocal = (KnownGradleTasks)"publishToMavenLocal";
     public override string ToString()
     {
         var str = base.ToString();
