@@ -431,6 +431,7 @@ partial class Build : NukeBuild
     Target DevRelease => _ => _
         .Description("Creates package releases and uploads them to feeds")
         .After(Pack, Test)
+        .OnlyWhenDynamic(() => !IsPullRequest && IsOnMainBranch)
         .DependsOn(GradlePublishSnapshot)
         .Executes(async () => await CreateGitHubRelease($"latest"));
 
@@ -620,7 +621,8 @@ partial class Build : NukeBuild
     Target GradlePublishSnapshot => _ => _
         .Description("Invokes Gradle to create a SNAPSHOT release and push it to maven repositories")
         // .OnlyWhenStatic(() => IsAllowedToPushToFeed)
-        .Requires(() => IsGitCommitted, () => !IsPullRequest)
+        .Requires(() => IsGitCommitted)
+        .OnlyWhenDynamic(() => !IsPullRequest)
         .After(Pack, NugetPush)
         .Before(GradleExecute)
         .Triggers(GradleExecute)
@@ -662,7 +664,8 @@ partial class Build : NukeBuild
     Target GradlePublishRelease => _ => _
         .Description("Invokes Gradle to create a Java release and push it to maven repositories")
         // .OnlyWhenStatic(() => IsAllowedToPushToFeed)
-        .Requires(() => IsGitCommitted, () => !IsPullRequest, () => !IsOnMainBranch)
+        .Requires(() => IsGitCommitted)
+        .OnlyWhenDynamic(() => !IsPullRequest && !IsOnMainBranch)
         .After(Pack, NugetPush)
         .Before(GradleExecute)
         .Triggers(GradleExecute)
