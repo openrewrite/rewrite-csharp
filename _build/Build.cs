@@ -761,7 +761,14 @@ partial class Build : NukeBuild
             await CreateGitHubRelease($"v{Version.SemVer1}");
             await CreateGitHubRelease($"latest");
         });
-
+#if !LINK_MAIN_SOURCE
+    // dummy stub so that build.schema.json doesn't get modified if the partial file that defines this target is not included
+    Target GenerateRoslynRecipes => _ => _
+        .Description("Generates Java recipe classes per .NET roslyn recipe found in common packages")
+        .Executes(() =>
+        {
+        });
+#endif
 
 
     public async Task CreateGitHubRelease(string releaseName)
