@@ -663,7 +663,8 @@ partial class Build : NukeBuild
     Target GradlePublishRelease => _ => _
         .Description("Invokes Gradle to create a Java release and push it to maven repositories")
         // .OnlyWhenStatic(() => IsAllowedToPushToFeed)
-        .Requires(() => IsGitCommitted, () => !IsPullRequest, () => !IsOnMainBranch)
+        .Requires(() => IsGitCommitted)
+        .OnlyWhenDynamic(() => !IsPullRequest && !IsOnMainBranch)
         .After(Pack, NugetPush)
         .Before(GradleExecute)
         .Triggers(GradleExecute)
