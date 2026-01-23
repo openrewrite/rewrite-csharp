@@ -159,7 +159,7 @@ partial class Build
                           * -------------------THIS FILE IS AUTO GENERATED--------------------------
                           * Changes to this file may cause incorrect behavior and will be lost if
                           * the code is regenerated.
-                         */
+                          */
 
                          package org.openrewrite.csharp.recipes.{{model.Namespace}};
 
@@ -167,8 +167,9 @@ partial class Build
                          import org.openrewrite.csharp.RoslynRecipe;
 
                          import java.util.Set;
-                         import java.util.stream.Collectors;
                          import java.util.stream.Stream;
+
+                         import static java.util.stream.Collectors.toSet;
 
                          @Getter
                          public class {{model.ClassName}} extends RoslynRecipe {
@@ -181,7 +182,7 @@ partial class Build
 
                              final String displayName = "{{model.DisplayName}}";
                              final String description = "{{model.Description}}";
-                             final Set<String> tags = Stream.of({{RenderTags(model.Tags)}}).collect(Collectors.toSet());
+                             final Set<String> tags = Stream.of({{RenderTags(model.Tags)}}).collect(toSet());
 
                          }
 
