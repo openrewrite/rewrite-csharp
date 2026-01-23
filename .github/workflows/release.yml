@@ -42,7 +42,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v5
 
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v5
         name: Install .NET 10
         with:
             dotnet-version: '10.0.x'
