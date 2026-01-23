@@ -431,6 +431,7 @@ partial class Build : NukeBuild
     Target DevRelease => _ => _
         .Description("Creates package releases and uploads them to feeds")
         .After(Pack, Test)
+        .OnlyWhenDynamic(() => !IsPullRequest && IsOnMainBranch)
         .DependsOn(GradlePublishSnapshot)
         .Executes(async () => await CreateGitHubRelease($"latest"));
 
