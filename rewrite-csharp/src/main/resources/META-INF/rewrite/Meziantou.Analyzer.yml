@@ -1,4 +1,3 @@
-#
 # Copyright 2026 the original author or authors.
 # <p>
 # Licensed under the Moderne Source Available License (the "License");
@@ -12,12 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
 # -------------------THIS FILE IS AUTO GENERATED--------------------------
 # Changes to this file may cause incorrect behavior and will be lost if
 # the code is regenerated.
-#
+
 ---
 type: specs.openrewrite.org/v1beta/recipe
 name: org.openrewrite.csharp.recipes.meziantou.MeziantouAnalyzer
@@ -82,6 +80,8 @@ recipeList:
   - org.openrewrite.csharp.recipes.meziantou.DoNotUseImplicitCultureSensitiveToStringAnalyzerMA0075
   - org.openrewrite.csharp.recipes.meziantou.DoNotUseImplicitCultureSensitiveToStringAnalyzerMA0076
   - org.openrewrite.csharp.recipes.meziantou.DoNotUseImplicitCultureSensitiveToStringAnalyzerMA0107
+  - org.openrewrite.csharp.recipes.meziantou.DoNotUseInterpolatedStringWithoutParametersAnalyzerMA0184
+  - org.openrewrite.csharp.recipes.meziantou.DoNotUseInterpolatedStringWithoutParametersFixerMA0184
   - org.openrewrite.csharp.recipes.meziantou.DoNotUseServerCertificateValidationCallbackAnalyzerMA0039
   - org.openrewrite.csharp.recipes.meziantou.DoNotUseStringGetHashCodeAnalyzerMA0021
   - org.openrewrite.csharp.recipes.meziantou.DoNotUseStringGetHashCodeFixerMA0021
@@ -136,6 +136,7 @@ recipeList:
   - org.openrewrite.csharp.recipes.meziantou.MethodsReturningAnAwaitableTypeMustHaveTheAsyncSuffixAnalyzerMA0138
   - org.openrewrite.csharp.recipes.meziantou.MethodsReturningAnAwaitableTypeMustHaveTheAsyncSuffixAnalyzerMA0156
   - org.openrewrite.csharp.recipes.meziantou.MethodsReturningAnAwaitableTypeMustHaveTheAsyncSuffixAnalyzerMA0157
+  - org.openrewrite.csharp.recipes.meziantou.MissingNotNullWhenAttributeOnEqualsAnalyzerMA0186
   - org.openrewrite.csharp.recipes.meziantou.NamedParameterAnalyzerMA0003
   - org.openrewrite.csharp.recipes.meziantou.NamedParameterFixerMA0003
   - org.openrewrite.csharp.recipes.meziantou.NonConstantStaticFieldsShouldNotBeVisibleAnalyzerMA0069
@@ -195,6 +196,9 @@ recipeList:
   - org.openrewrite.csharp.recipes.meziantou.SequenceNumberMustBeAConstantAnalyzerMA0123
   - org.openrewrite.csharp.recipes.meziantou.SimplifyCallerArgumentExpressionAnalyzerMA0108
   - org.openrewrite.csharp.recipes.meziantou.SimplifyCallerArgumentExpressionFixerMA0108
+  - org.openrewrite.csharp.recipes.meziantou.SimplifyStringCreateWhenAllParametersAreCultureInvariantAnalyzerMA0185
+  - org.openrewrite.csharp.recipes.meziantou.SimplifyStringCreateWhenAllParametersAreCultureInvariantFixerMA0185
+  - org.openrewrite.csharp.recipes.meziantou.StringFormatShouldBeConstantAnalyzerMA0183
   - org.openrewrite.csharp.recipes.meziantou.StringShouldNotContainsNonDeterministicEndOfLineAnalyzerMA0101
   - org.openrewrite.csharp.recipes.meziantou.StringShouldNotContainsNonDeterministicEndOfLineAnalyzerMA0136
   - org.openrewrite.csharp.recipes.meziantou.StringShouldNotContainsNonDeterministicEndOfLineFixerMA0101

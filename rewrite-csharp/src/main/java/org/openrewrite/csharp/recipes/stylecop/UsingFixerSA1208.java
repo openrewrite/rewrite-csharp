@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 the original author or authors.
+ * Copyright 2026 the original author or authors.
  * <p>
  * Licensed under the Moderne Source Available License (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+*/
+
 /*
  * -------------------THIS FILE IS AUTO GENERATED--------------------------
  * Changes to this file may cause incorrect behavior and will be lost if
@@ -25,8 +26,9 @@ import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toSet;
 
 @Getter
 public class UsingFixerSA1208 extends RoslynRecipe {
@@ -39,6 +41,6 @@ public class UsingFixerSA1208 extends RoslynRecipe {
 
     final String displayName = "System using directives should be placed before other using directives";
     final String description = "A using directive which declares a member of the 'System' namespace appears after a using directive which declares a member of a different namespace, within a C# code file.";
-    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1208", "stylecop", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+    final Set<String> tags = Stream.of("roslyn", "codefix", "SA1208", "stylecop", "csharp", "dotnet", "c#").collect(toSet());
 
 }

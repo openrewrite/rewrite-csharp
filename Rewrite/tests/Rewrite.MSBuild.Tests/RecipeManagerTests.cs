@@ -19,6 +19,7 @@ using Serilog.Sinks.SystemConsole.Themes;
 using Spectre.Console.Cli;
 using TUnit.Core;
 using AbsolutePath = Nuke.Common.IO.AbsolutePath;
+using Assembly = System.Reflection.Assembly;
 
 namespace Rewrite.MSBuild.Tests;
 
@@ -64,18 +65,25 @@ public class RecipeManagerTests : BaseTests
     {
         var recipeManager = CreateObject<RecipeManager>();
         
-        string[] packageSources =
-        [
-            DirectoryHelper.RepositoryRoot / "artifacts",
-            DirectoryHelper.RepositoryRoot / "artifacts" / "test",
-            "https://api.nuget.org/v3/index.json"
-        ];
-        
+//         string[] packageSources =
+//         [
+//             DirectoryHelper.RepositoryRoot / "artifacts",
+//             DirectoryHelper.RepositoryRoot / "artifacts" / "test",
+//             "https://api.nuget.org/v3/index.json"
+//         ];
+//         
+//         var nugetSettings = recipeManager.GetNugetSettings(null);
+//         var packageSourcesSection = nugetSettings.GetSection("packageSources");
+// ISettings
+//         foreach (var packageSource in packageSources)
+//         {
+//             nugetSettings.AddOrUpdate("packageSources", new AddItem(packageSource,packageSource));
+//         }
+//         
         var recipeIdentity = new InstallableRecipe("Rewrite.Recipes.FindClass", "Rewrite.Recipes", "0.0.1");
         var recipeExecutionContext = await recipeManager.CreateExecutionContext(
             [recipeIdentity.GetLibraryRange()], 
-            cancellationToken, 
-            packageSources: packageSources.Select(x => new PackageSource(x)).ToList());
+            cancellationToken);
 
         var lst = Assertions.CSharp(
             """

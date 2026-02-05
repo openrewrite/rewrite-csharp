@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 the original author or authors.
+ * Copyright 2026 the original author or authors.
  * <p>
  * Licensed under the Moderne Source Available License (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+*/
+
 /*
  * -------------------THIS FILE IS AUTO GENERATED--------------------------
  * Changes to this file may cause incorrect behavior and will be lost if
@@ -25,8 +26,9 @@ import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toSet;
 
 @Getter
 public class PreferJaggedArraysOverMultidimensionalAnalyzerCA1814 extends RoslynRecipe {
@@ -39,6 +41,6 @@ public class PreferJaggedArraysOverMultidimensionalAnalyzerCA1814 extends Roslyn
 
     final String displayName = "Prefer jagged arrays over multidimensional (search)";
     final String description = "This is a reporting only recipe. A jagged array is an array whose elements are arrays. The arrays that make up the elements can be of different sizes, leading to less wasted space for some sets of data.";
-    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1814", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA1814", "microsoft", "csharp", "dotnet", "c#").collect(toSet());
 
 }

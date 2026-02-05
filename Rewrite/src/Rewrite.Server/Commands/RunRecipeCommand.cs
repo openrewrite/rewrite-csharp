@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 using System.Text.RegularExpressions;
 // using Microsoft.Build.Exceptions;
 using Microsoft.Extensions.Logging;
@@ -46,10 +47,6 @@ public class RunRecipeCommand(RecipeManager recipeManager, ILogger<RunRecipeComm
                      "Can be specified multiple times.")]
         public required string[] Packages { get; set; }
 
-        [CommandOption("--feed <NUGET_FEED>")]
-        [Description("Nuget feed URL. Can be specified multiple times If omitted, defaults to https://api.nuget.org/v3/index.json")]
-        public string[] FeedUrls { get; set; } = ["https://api.nuget.org/v3/index.json"];
-        
         [CommandOption("--dry-run")]
         [Description("Does not commit changes to disk")]
         public bool DryRun { get; set; } = false;
@@ -95,16 +92,15 @@ public class RunRecipeCommand(RecipeManager recipeManager, ILogger<RunRecipeComm
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         logger.LogInformation("Executing {CommandName} with settings {@Settings}", nameof(RunRecipeCommand), settings);
-        var packageSources = settings.FeedUrls.Select(x => new PackageSource(x)).ToList();
         // var recipeManager = new RecipeManager();
         // CA1802: Use Literals Where Appropriate
         // CA1861: Avoid constant arrays as arguments
         var packages = settings.Packages.Select(InstallableRecipeExtensions.GetLibraryRange).ToList();
-        
+        // settings.NugetConfigRoot
         // var installableRecipes = settings.Ids
         //     .Select(id =>  new InstallableRecipe(id, settings.PackageName, settings.PackageVersion).GetLibraryRange())
         //     .ToList();
-        var recipeExecutionContext = await recipeManager.CreateExecutionContext(packages, cancellationToken, packageSources: packageSources);
+        var recipeExecutionContext = await recipeManager.CreateExecutionContext(packages, cancellationToken);
         // var recipesPackage = await recipeManager.InstallRecipePackage(installableRecipe, packageSources);
 
         List<string> solutionPaths = new();

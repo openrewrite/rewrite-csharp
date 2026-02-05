@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,10 +10,8 @@ using NuGet.LibraryModel;
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Utilities;
-using Rewrite.Core;
 using Rewrite.Core.Config;
 using Rewrite.MSBuild;
-using Rewrite.RewriteXml.Tree;
 using Serilog;
 
 // This is a weird hack that allows us to use main codebase as part of compilation execution task to generate "java recipe stubs"
@@ -20,11 +19,19 @@ using Serilog;
 
 partial class Build
 {
+     string[] NugetRecipePackages =
+     [
+         "Microsoft.CodeAnalysis.CSharp.CodeStyle",
+         "Roslynator.Analyzers", //https://github.com/dotnet/roslynator
+         "Microsoft.CodeAnalysis.NetAnalyzers", //https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/categories
+         "Meziantou.Analyzer", //https://github.com/meziantou/Meziantou.Analyzer
+         "StyleCop.Analyzers", //https://github.com/DotNetAnalyzers/StyleCopAnalyzers/tree/master
+         "WpfAnalyzers" // https://github.com/DotNetAnalyzers/WpfAnalyzers
+     ];
 
      Target GenerateRoslynRecipes => _ => _
          .Description("Generates Java recipe classes per .NET roslyn recipe found in common packages")
          .DependsOn(CleanNugetCache, Pack)
-         // .DependsOn(Restore)
          .Executes(async () =>
          {
              CancellationToken ct = CancellationToken.None;
@@ -33,46 +40,22 @@ partial class Build
                  .AddSerilog());
              services.AddSingleton<RecipeManager>();
              services.AddSingleton<NuGet.Common.ILogger, NugetLogger>();
+             services.AddSingleton(provider => Settings.LoadDefaultSettings(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
              var serviceProvider = services.BuildServiceProvider();
              T CreateObject<T>(params object[] args) => ActivatorUtilities.CreateInstance<T>(serviceProvider, args);
 
              var recipeManager = CreateObject<RecipeManager>();
-
-             string[] feeds =
-             [
-                 ArtifactsDirectory / "test",
-                 NugetFeed
-             ];
-
-             var packageSources = feeds.Select(x => new PackageSource(x)).ToList();
-             // var recipeManager = new RecipeManager();
-             // CA1802: Use Literals Where Appropriate
-             // CA1861: Avoid constant arrays as arguments
-             var packages =  new[]
-             {
-                 "Microsoft.CodeAnalysis.CSharp.CodeStyle",
-                 "Roslynator.Analyzers", //https://github.com/dotnet/roslynator
-                 "Microsoft.CodeAnalysis.NetAnalyzers", //https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/categories
-                 "Meziantou.Analyzer", //https://github.com/meziantou/Meziantou.Analyzer
-                 "StyleCop.Analyzers", //https://github.com/DotNetAnalyzers/StyleCopAnalyzers/tree/master
-                 "WpfAnalyzers",
-             };
              var recipesDir = RootDirectory / "rewrite-csharp" / "src" / "main" / "java" / "org" / "openrewrite" / "csharp" / "recipes";
              recipesDir.CreateOrCleanDirectory();
 
              Dictionary<string, (int Analyzers, int Fixups)> summary = new();
 
 
-             foreach (var package in packages)
+             foreach (var package in NugetRecipePackages)
              {
-
-
                  var libraryRange = new[] {new LibraryRange(package)};
-                 var resolvedPackage = (await recipeManager.ResolvePackages(libraryRange, ct, includePrerelease:false, packageSources: packageSources)).First();
-                 // var libraryRange = packages.Select(x => new LibraryRange(x)).ToList();
-                 var executionContext = await recipeManager.CreateExecutionContext(libraryRange, includePrerelease: false, packageSources: packageSources, cancellationToken: CancellationToken.None);
-
-                 // var installablePackages = await Task.WhenAll(packages.Select(x => recipeManager.InstallRecipePackage(x.Package, packageSources: packageSources)));
+                 var resolvedPackage = (await recipeManager.ResolvePackages(libraryRange, ct, includePrerelease:false)).First();
+                 var executionContext = await recipeManager.CreateExecutionContext(libraryRange, includePrerelease: false, cancellationToken: ct);
 
                  var analyzerCount = executionContext.Recipes.Count(x => x.Kind == RecipeKind.RoslynAnalyzer);
                  var fixupCount = executionContext.Recipes.Count(x => x.Kind == RecipeKind.RoslynFixer);
@@ -80,26 +63,6 @@ partial class Build
                  summary.Add(package, (analyzerCount, fixupCount));
                  var packageNameFirstSegment = resolvedPackage.Id.ToLower().Split('.').First();
                  var compositeRecipe = new StringBuilder($$"""
-                     #
-                     # Copyright 2026 the original author or authors.
-                     # <p>
-                     # Licensed under the Moderne Source Available License (the "License");
-                     # you may not use this file except in compliance with the License.
-                     # You may obtain a copy of the License at
-                     # <p>
-                     # https://docs.moderne.io/licensing/moderne-source-available-license
-                     # <p>
-                     # Unless required by applicable law or agreed to in writing, software
-                     # distributed under the License is distributed on an "AS IS" BASIS,
-                     # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-                     # See the License for the specific language governing permissions and
-                     # limitations under the License.
-                     #
-
-                     # -------------------THIS FILE IS AUTO GENERATED--------------------------
-                     # Changes to this file may cause incorrect behavior and will be lost if
-                     # the code is regenerated.
-                     #
                      ---
                      type: specs.openrewrite.org/v1beta/recipe
                      name: org.openrewrite.csharp.recipes.{{packageNameFirstSegment}}.{{package.Replace(".","")}}
@@ -116,11 +79,9 @@ partial class Build
                      .Select(recipe =>
                  {
                      var className = GetClassName(recipe);
-                     // className = className.ReplaceRegex("(Analyzer|Fixer|CodeFixProvider)$", _ => "");
                      className = className.ReplaceRegex("CodeFixProvider$", _ => "Fixer");
                      className = $"{className}{recipe.Id}";
 
-                     // var packageNameFirstSegment = recipe.TypeName.FullName.Split('.').First();
                      var @namespace = packageNameFirstSegment;
                      var tags = recipe.Tags.Append(packageNameFirstSegment)
                          .Append("csharp")
@@ -143,7 +104,6 @@ partial class Build
                          FileName = recipesDir / @namespace.Replace(".", "/") / $"{className}.java"
                      };
                  }).ToList();
-                 var license = File.ReadAllText(Solution._solution._build.Directory / "License.txt").Trim();
 
                  string RenderTags(IEnumerable<string> tags) => $"\"{string.Join("\", \"", tags)}\"";
                  foreach (var model in models)
@@ -151,16 +111,10 @@ partial class Build
                      compositeRecipe.AppendLine($"  - org.openrewrite.csharp.recipes.{model.Namespace}.{model.ClassName}");
                  }
 
+                 var compositeRecipeText = SourceFileHeader.Apply(compositeRecipe.ToString(), SourceFileHeader.DocumentType.Yaml, true);
                  var compositeRecipePath = RootDirectory / "rewrite-csharp" / "src" / "main" / "resources" / "META-INF" / "rewrite" / $"{package}.yml";
-                 compositeRecipePath.WriteAllText(compositeRecipe.ToString());
-                 var result = models.Select(model => (model.FileName, Content: $$""""
-                         {{license}}
-                         /*
-                          * -------------------THIS FILE IS AUTO GENERATED--------------------------
-                          * Changes to this file may cause incorrect behavior and will be lost if
-                          * the code is regenerated.
-                          */
-
+                 compositeRecipePath.WriteAllText(compositeRecipeText);
+                 var result = models.Select(model => (model.FileName, Content: SourceFileHeader.Apply($$""""
                          package org.openrewrite.csharp.recipes.{{model.Namespace}};
 
                          import lombok.Getter;
@@ -186,7 +140,7 @@ partial class Build
 
                          }
 
-                         """"))
+                         """", SourceFileHeader.DocumentType.Java, true)))
                      .ToList();
                  foreach (var (filename, source) in result)
                  {

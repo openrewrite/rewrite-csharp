@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 the original author or authors.
+ * Copyright 2026 the original author or authors.
  * <p>
  * Licensed under the Moderne Source Available License (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+*/
+
 /*
  * -------------------THIS FILE IS AUTO GENERATED--------------------------
  * Changes to this file may cause incorrect behavior and will be lost if
@@ -25,8 +26,9 @@ import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toSet;
 
 @Getter
 public class UseValueTasksCorrectlyAnalyzerCA2012 extends RoslynRecipe {
@@ -39,6 +41,6 @@ public class UseValueTasksCorrectlyAnalyzerCA2012 extends RoslynRecipe {
 
     final String displayName = "Use ValueTasks correctly (search)";
     final String description = "This is a reporting only recipe. ValueTasks returned from member invocations are intended to be directly awaited.  Attempts to consume a ValueTask multiple times or to directly access one's result before it's known to be completed may result in an exception or corruption.  Ignoring such a ValueTask is likely an indication of a functional bug and may degrade performance.";
-    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2012", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2012", "microsoft", "csharp", "dotnet", "c#").collect(toSet());
 
 }

@@ -1,7 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-<!--    <PropertyGroup>-->
-<!--        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>-->
-<!--    </PropertyGroup>-->
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <DefineConstants>$(DefineConstants);USE_NUKE</DefineConstants>

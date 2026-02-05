@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 the original author or authors.
+ * Copyright 2026 the original author or authors.
  * <p>
  * Licensed under the Moderne Source Available License (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+*/
+
 /*
  * -------------------THIS FILE IS AUTO GENERATED--------------------------
  * Changes to this file may cause incorrect behavior and will be lost if
@@ -25,8 +26,9 @@ import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toSet;
 
 @Getter
 public class DoNotDisableRequestValidationCA5363 extends RoslynRecipe {
@@ -39,6 +41,6 @@ public class DoNotDisableRequestValidationCA5363 extends RoslynRecipe {
 
     final String displayName = "Do Not Disable Request Validation (search)";
     final String description = "This is a reporting only recipe. Request validation is a feature in ASP.NET that examines HTTP requests and determines whether they contain potentially dangerous content. This check adds protection from markup or code in the URL query string, cookies, or posted form values that might have been added for malicious purposes. So, it is generally desirable and should be left enabled for defense in depth.";
-    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5363", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA5363", "microsoft", "csharp", "dotnet", "c#").collect(toSet());
 
 }

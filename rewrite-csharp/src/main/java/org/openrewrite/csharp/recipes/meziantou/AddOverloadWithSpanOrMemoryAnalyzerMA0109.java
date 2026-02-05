@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 the original author or authors.
+ * Copyright 2026 the original author or authors.
  * <p>
  * Licensed under the Moderne Source Available License (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,12 +12,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+*/
+
 /*
  * -------------------THIS FILE IS AUTO GENERATED--------------------------
  * Changes to this file may cause incorrect behavior and will be lost if
  * the code is regenerated.
- */
+*/
 
 package org.openrewrite.csharp.recipes.meziantou;
 
@@ -36,7 +37,7 @@ public class AddOverloadWithSpanOrMemoryAnalyzerMA0109 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.285";
+    final String nugetPackageVersion = "2.0.298";
 
     final String displayName = "Consider adding an overload with a Span<T> or Memory<T> (search)";
     final String description = "This is a reporting only recipe. ";

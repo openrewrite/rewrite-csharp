@@ -22,22 +22,19 @@ public class ReportingTests :  BaseTests
             "https://api.nuget.org/v3/index.json"
         ];
         
-        var packageSources = feeds.Select(x => new PackageSource(x)).ToList();
         var packages =  new []
         {
             "Microsoft.CodeAnalysis.NetAnalyzers", //https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/categories
             "Roslynator.Analyzers", //https://github.com/dotnet/roslynator
             "Meziantou.Analyzer", //https://github.com/meziantou/Meziantou.Analyzer
             "StyleCop.Analyzers",
-            // "SonarAnalyzer.CSharp", 
-            // "AsyncFixer", 
-            // "ErrorProne.NET.CoreAnalyzers",
             "WpfAnalyzers",
         };
         var totalRecipes = 0;
         foreach (var nugetPackage in packages)
         {
-            var executionContext = await recipeManager.CreateExecutionContext([new LibraryRange(nugetPackage, VersionRange.AllStable, LibraryDependencyTarget.Package)], cancellationToken);
+            var executionContext = await recipeManager.CreateExecutionContext([new LibraryRange(nugetPackage, VersionRange.AllStable, LibraryDependencyTarget.Package)], 
+                cancellationToken);
             
             totalRecipes += executionContext.Recipes.Count;
             Console.WriteLine($"{nugetPackage}: {executionContext.Recipes.Count}");

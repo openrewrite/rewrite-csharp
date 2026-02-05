@@ -33,12 +33,21 @@ public class RecipeManager
     private NuGet.Common.ILogger _nugetLogger;
     // private SortedDictionary<PackageIdentity, RecipeExecutionContext> _loadedRecipes = new();
     public static string NugetOrgRepository = "https://api.nuget.org/v3/index.json";
+    private ISettings _nugetSettings;
+    private CachingSourceProvider _cachingSourceProvider;
 
-    public RecipeManager(ILoggerFactory loggerFactory, NuGet.Common.ILogger nugetLogger)
+    public RecipeManager(ILoggerFactory loggerFactory, NuGet.Common.ILogger nugetLogger) :
+        this(Settings.LoadDefaultSettings(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)), loggerFactory, nugetLogger)
+    {
+    }
+
+    public RecipeManager(ISettings nugetSettings, ILoggerFactory loggerFactory, NuGet.Common.ILogger nugetLogger)
     {
         _log = loggerFactory.CreateLogger<RecipeManager>();
+        _nugetSettings = nugetSettings;
         _loggerFactory = loggerFactory;
         _nugetLogger = nugetLogger;
+        _cachingSourceProvider = GetCachingProvider();
     }
     // [Obsolete]
     // public RecipeDescriptor FindRecipeDescriptor(InstallableRecipe installableRecipeId)
@@ -110,34 +119,29 @@ public class RecipeManager
     //         cancellationToken);
     // }
 
+
+
     /// <summary>
-    /// Resolves actual packages that will be used from the requested ones as per <param name="requestedPackages"></param>
+    /// Resolves actual packages that will be used from the requested ones as per <param name="requestedPackages"/>
+    /// It does this by querying the underlying nuget source(s) to find the highest version that falls within the <param name="requestedPackages"/> range
     /// </summary>
     /// <param name="requestedPackages">Packages that are being requested</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <param name="includePrerelease">Whether to use pre-release packages</param>
-    /// <param name="packageSources">List of nuget sources to use</param>
     /// <returns></returns>
     public async Task<IReadOnlyCollection<PackageIdentity>> ResolvePackages(
         IReadOnlyCollection<LibraryRange> requestedPackages,
         CancellationToken cancellationToken,
-        bool includePrerelease = false,
-        IReadOnlyCollection<PackageSource>? packageSources = null)
+        bool includePrerelease = false)
     {
         requestedPackages = requestedPackages
             .Select(x => x.VersionRange != null ? x : new LibraryRange(x.Name, VersionRange.AllStable, LibraryDependencyTarget.Package))
             .ToList();
 
-        packageSources ??= [new PackageSource(NugetOrgRepository)];
-        
-        var settings = NullSettings.Instance;
-        var sourceProvider = new PackageSourceProvider(settings, packageSources);
-        var cachingSourceProvider = new CachingSourceProvider(sourceProvider);
-
         var selectedPackages = await Task.WhenAll(requestedPackages
             .Select(async requestedPackage =>
             {
-                var bestAvailableVersion = await FindHighestCompatibleVersion(requestedPackage, includePrerelease, cachingSourceProvider, cancellationToken);
+                var bestAvailableVersion = await FindHighestCompatibleVersion(requestedPackage, includePrerelease, _cachingSourceProvider, cancellationToken);
                 if (bestAvailableVersion == null || !bestAvailableVersion.HasVersion)
                 {
                     throw new InvalidOperationException($"Could not find a compatible version for {requestedPackage.Name}");
@@ -155,22 +159,14 @@ public class RecipeManager
     /// Installs the requested recipe packages that satisfy requested library range and creates an isolated execution context.
     /// This isolation context allows clean separation of all recipe packages that need to run together as a single batch
     /// </summary>
-    /// <param name="requestedPackages"></param>
-    /// <param name="includePrerelease"></param>
-    /// <param name="packageSources"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    /// <exception cref="InvalidOperationException"></exception>
     public async Task<RecipeExecutionContext> CreateExecutionContext(
         IReadOnlyCollection<LibraryRange> requestedPackages,
         CancellationToken cancellationToken,
-        bool includePrerelease = false,
-        IReadOnlyCollection<PackageSource>? packageSources = null)
+        bool includePrerelease = false)
     {
-        var settings = GetNugetSettings();
-        var cachingSourceProvider = GetCachingProvider(packageSources);
+        var cachingSourceProvider = GetCachingProvider();
         
-        var selectedPackages = await ResolvePackages(requestedPackages, cancellationToken, includePrerelease, packageSources);
+        var selectedPackages = await ResolvePackages(requestedPackages, cancellationToken, includePrerelease);
         var requestedVsSelected = requestedPackages.Join(selectedPackages, x => x.Name, x => x.Id, (requested, selected) => new
         {
             PackageId = requested.Name,
@@ -181,7 +177,7 @@ public class RecipeManager
         
         var projectDefinition = CreatePackageRestoreSpec(selectedPackages);
         var lockFile = await RestoreProject(projectDefinition, cachingSourceProvider, cancellationToken);
-        var requiredAssemblies = GetRequiredAssemblies(lockFile, settings);
+        var requiredAssemblies = GetRequiredAssemblies(lockFile, _nugetSettings);
         
         var recipeExecutionContext = new RecipeExecutionContext(requiredAssemblies.Select(x => x.AssemblyPath).ToList(), _loggerFactory);
         _log.LogInformation("{@Recipes}", recipeExecutionContext.Recipes.Select(x => new {x.Id, x.TypeName, x.DisplayName}));
@@ -189,35 +185,15 @@ public class RecipeManager
 
     }
 
-    public async Task<LockFile> CreateLockFile(
-        IReadOnlyCollection<LibraryRange> requestedPackages,
-        CancellationToken cancellationToken,
-        bool includePrerelease = false,
-        IReadOnlyCollection<PackageSource>? packageSources = null)
+    // public ISettings GetNugetSettings(string? nugetConfigRoot)
+    // {
+    //     return Settings.LoadDefaultSettings(nugetConfigRoot);
+    // }
+
+    private CachingSourceProvider GetCachingProvider()
     {
-        var settings = GetNugetSettings();
-        var cachingSourceProvider = GetCachingProvider(packageSources);
-
-        var selectedPackages = await ResolvePackages(requestedPackages, cancellationToken, includePrerelease, packageSources);
-        var requestedVsSelected = requestedPackages.Join(selectedPackages, x => x.Name, x => x.Id, (requested, selected) => new
-        {
-            PackageId = requested.Name,
-            RequestedRange = requested.VersionRange?.ToString(),
-            SelectedVersion = selected.Version
-        });
-        _log.LogDebug("Resolved packages: {@ResolvedPackages}", requestedVsSelected);
-
-        var projectDefinition = CreatePackageRestoreSpec(selectedPackages);
-        var lockFile = await RestoreProject(projectDefinition, cachingSourceProvider, cancellationToken);
-        return lockFile;
-    }
-
-    private ISettings GetNugetSettings() => NullSettings.Instance;
-    private CachingSourceProvider GetCachingProvider(IReadOnlyCollection<PackageSource>? packageSources = null)
-    {
-        packageSources ??= [new PackageSource(NugetOrgRepository)];
-        var settings = GetNugetSettings();
-        var sourceProvider = new PackageSourceProvider(settings, packageSources);
+        
+        var sourceProvider = new PackageSourceProvider(_nugetSettings);
         var cachingSourceProvider = new CachingSourceProvider(sourceProvider);
         return cachingSourceProvider;
     }

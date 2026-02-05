@@ -15,7 +15,6 @@ public class ReceiptExecutionContextTests
     {
 
         var recipeManager = new RecipeManager(NullLoggerFactory.Instance, new NugetLogger(NullLogger<NugetLogger>.Instance));
-        var settings = NuGet.Configuration.Settings.LoadDefaultSettings(null);
         var deps = DependencyContext.Default!;
     
         //NuGetFramework.ParseFrameworkName(".NETStandard,Version=v2.0", DefaultFrameworkNameProvider.Instance).Dump();
@@ -38,8 +37,7 @@ public class ReceiptExecutionContextTests
         //         //new LibraryRange("Microsoft.Extensions.Logging", VersionRange.Parse("10.0.0"), LibraryDependencyTarget.Package)
         //     ],
         //     ct);
-
-        var executionContext = await recipeManager.CreateExecutionContext(requestedPackages, ct);
+        var executionContext = await recipeManager.CreateExecutionContext(requestedPackages,  ct);
         Console.WriteLine($"{executionContext.Recipes.Count(x => x.Kind == RecipeKind.RoslynAnalyzer)}/{executionContext.Recipes.Count(x => x.Kind != RecipeKind.RoslynAnalyzer)}");
         // var task = new ResolvePackageAssets();
         // task.LockFile = lockFile;

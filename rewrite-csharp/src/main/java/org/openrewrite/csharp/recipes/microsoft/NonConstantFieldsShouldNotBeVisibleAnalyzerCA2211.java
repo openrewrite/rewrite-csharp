@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 the original author or authors.
+ * Copyright 2026 the original author or authors.
  * <p>
  * Licensed under the Moderne Source Available License (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+*/
+
 /*
  * -------------------THIS FILE IS AUTO GENERATED--------------------------
  * Changes to this file may cause incorrect behavior and will be lost if
@@ -25,8 +26,9 @@ import lombok.Getter;
 import org.openrewrite.csharp.RoslynRecipe;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toSet;
 
 @Getter
 public class NonConstantFieldsShouldNotBeVisibleAnalyzerCA2211 extends RoslynRecipe {
@@ -39,6 +41,6 @@ public class NonConstantFieldsShouldNotBeVisibleAnalyzerCA2211 extends RoslynRec
 
     final String displayName = "Non-constant fields should not be visible (search)";
     final String description = "This is a reporting only recipe. Static fields that are neither constants nor read-only are not thread-safe. Access to such a field must be carefully controlled and requires advanced programming techniques to synchronize access to the class object.";
-    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2211", "microsoft", "csharp", "dotnet", "c#").collect(Collectors.toSet());
+    final Set<String> tags = Stream.of("roslyn", "analyzer", "CA2211", "microsoft", "csharp", "dotnet", "c#").collect(toSet());
 
 }
