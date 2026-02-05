@@ -8,7 +8,10 @@
       <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Rewrite.Analyzers\Rewrite.Analyzers.csproj" OutputItemType="Analyzer"/>
-
+        <ProjectReference Include="..\Rewrite.Analyzers\Rewrite.Analyzers.csproj"
+                          OutputItemType="Analyzer">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </ProjectReference>
     </ItemGroup>
 </Project>

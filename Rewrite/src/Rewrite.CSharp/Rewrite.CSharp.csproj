@@ -12,7 +12,11 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Rewrite.Core\Rewrite.Core.csproj"/>
-        <ProjectReference Include="..\Rewrite.Analyzers\Rewrite.Analyzers.csproj" OutputItemType="Analyzer"/>
+        <ProjectReference Include="..\Rewrite.Analyzers\Rewrite.Analyzers.csproj"
+                          OutputItemType="Analyzer">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </ProjectReference>
         <PackageReference Include="Nerdbank.GitVersioning" Version="3.9.50">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

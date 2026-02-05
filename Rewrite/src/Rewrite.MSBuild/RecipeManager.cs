@@ -129,7 +129,7 @@ public class RecipeManager
     /// <param name="cancellationToken">Cancellation token</param>
     /// <param name="includePrerelease">Whether to use pre-release packages</param>
     /// <returns></returns>
-    public async Task<IReadOnlyCollection<PackageIdentity>> ResolvePackages(
+    public async Task<IReadOnlyCollection<SourcePackageDependencyInfo>> ResolvePackages(
         IReadOnlyCollection<LibraryRange> requestedPackages,
         CancellationToken cancellationToken,
         bool includePrerelease = false)
@@ -146,8 +146,9 @@ public class RecipeManager
                 {
                     throw new InvalidOperationException($"Could not find a compatible version for {requestedPackage.Name}");
                 }
-                
-                return new PackageIdentity(requestedPackage.Name, bestAvailableVersion.Version);
+
+                return bestAvailableVersion;
+                // return new PackageIdentity(requestedPackage.Name, bestAvailableVersion.Version);
             }));
         
 
@@ -221,7 +222,7 @@ public class RecipeManager
 
         foreach (var repo in repositories)
         {
-            repository = repo;
+            
             var metadataResource = await repo.GetResourceAsync<MetadataResource>(cancellationToken);
             var availableVersions = await metadataResource.GetVersions(
                 libraryRange.Name,
@@ -240,6 +241,7 @@ public class RecipeManager
             if (matched != null && (highest == null || matched > highest))
             {
                 highest = matched;
+                repository = repo;
             }
         }
 
