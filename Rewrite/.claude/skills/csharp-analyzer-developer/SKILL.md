@@ -45,12 +45,12 @@ When targeting specific APIs, semantic analysis must ALWAYS be performed to dete
 
 1. If the codefix only targets the immediate code marked by the analyzer, semantic confirmation is not required since it's already guaranteed to have been done in the analyzer. However, if the refactoring requires nodes outside of what was selected by the diagnostic (other areas of the document), semantic model should always be used to ensure accurate targeting.
 
-1. When introducing symbol usages from other namespaces that are not guaranteed to be in the document, they an annotation must be placed on the node to indicate which namespace(s) must be imported. Use `WithRequiredNamespace` extension method for this. Example
+1. When introducing symbol usages from other namespaces that are not guaranteed to be in the document, they an annotation must be placed on the node to indicate semantic type it resolves to. Use `SymbolAnnotation.Create` method for this. Example
 
    ```csharp
    editor.ReplaceNode(memberAccess.Node, (current, gen) =>
    	SyntaxFactory.ParseExpression($"HttpContext?.GetRouteData()")
-       .WithRequiredNamespace("Microsoft.AspNetCore.Routing")
+       .SymbolAnnotation.Create("T:Microsoft.AspNetCore.Routing.RoutingHttpContextExtensions")
        .FormatterAnnotated());
    ```
    
@@ -58,7 +58,6 @@ When targeting specific APIs, semantic analysis must ALWAYS be performed to dete
 ```csharp
 editor.ReplaceNode(oldNode, (current, gen) =>
                         SyntaxFactory.ParseExpression($"HttpContext?.GetRouteData()")
-                            .WithRequiredNamespace("Microsoft.AspNetCore.Http")
                             .FormatterAnnotated());
 var changedDocument = await editor.GetChangedDocumentFormatted(cancellationToken);
 ```

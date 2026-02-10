@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Rewrite.RoslynRecipes.Helpers;
 
 namespace Rewrite.RoslynRecipes
 {
@@ -45,31 +46,9 @@ namespace Rewrite.RoslynRecipes
         private void AnalyzeObjectCreation(SyntaxNodeAnalysisContext context)
         {
             var objectCreation = (ObjectCreationExpressionSyntax)context.Node;
-
-            // Get the symbol for the constructor being called
-            var symbolInfo = context.SemanticModel.GetSymbolInfo(objectCreation);
-            if (symbolInfo.Symbol is not IMethodSymbol constructorSymbol)
+            if(!objectCreation.IsSymbolOneOf(context.SemanticModel, "M:Microsoft.Extensions.FileSystemGlobbing.FilePatternMatch.#ctor(System.String,System.String)"))
                 return;
-
-            // Check if it's the FilePatternMatch constructor
-            if (constructorSymbol.ContainingType?.ToString() != "Microsoft.Extensions.FileSystemGlobbing.FilePatternMatch")
-                return;
-
-            // Check if it's the constructor with 2 parameters (path, stem)
-            if (constructorSymbol.Parameters.Length != 2)
-                return;
-
-            // Verify parameter names match expected signature
-            if (constructorSymbol.Parameters[0].Name != "path" ||
-                constructorSymbol.Parameters[1].Name != "stem")
-                return;
-
-            // Check if we have arguments
-            if (objectCreation.ArgumentList == null || objectCreation.ArgumentList.Arguments.Count < 2)
-                return;
-
-            // Get the stem argument (second parameter)
-            var stemArgument = objectCreation.ArgumentList.Arguments[1];
+            var stemArgument = objectCreation.ArgumentList!.Arguments[1];
 
             // Check if the stem argument is null
             if (IsNullLiteral(stemArgument.Expression, context.SemanticModel))

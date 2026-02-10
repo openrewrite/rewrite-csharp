@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Rewrite.RoslynRecipes.Helpers;
 
 namespace Rewrite.RoslynRecipes
 {
@@ -46,18 +47,7 @@ namespace Rewrite.RoslynRecipes
         private void AnalyzeMemberAccess(SyntaxNodeAnalysisContext context)
         {
             var memberAccess = (MemberAccessExpressionSyntax)context.Node;
-
-            // Check if the member being accessed is "DriveFormat"
-            if (memberAccess.Name.Identifier.Text != "DriveFormat")
-                return;
-
-            // Get the symbol information
-            var symbolInfo = context.SemanticModel.GetSymbolInfo(memberAccess);
-            if (symbolInfo.Symbol is not IPropertySymbol propertySymbol)
-                return;
-
-            // Check if it's System.IO.DriveInfo.DriveFormat
-            if (propertySymbol.ContainingType?.ToString() != "System.IO.DriveInfo")
+            if(!memberAccess.IsSymbolOneOf(context.SemanticModel, "P:System.IO.DriveInfo.DriveFormat"))
                 return;
 
             // Report diagnostic
