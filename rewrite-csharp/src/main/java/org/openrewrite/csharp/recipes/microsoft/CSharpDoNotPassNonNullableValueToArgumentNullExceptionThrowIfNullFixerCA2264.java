@@ -37,7 +37,7 @@ public class CSharpDoNotPassNonNullableValueToArgumentNullExceptionThrowIfNullFi
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not pass a non-nullable value to 'ArgumentNullException.ThrowIfNull'";
     final String description = "'ArgumentNullException.ThrowIfNull' throws when the passed argument is 'null'. Certain constructs like non-nullable structs, 'nameof()' and 'new' expressions are known to never be null, so 'ArgumentNullException.ThrowIfNull' will never throw.";

@@ -37,7 +37,7 @@ public class SealMethodsThatSatisfyPrivateInterfacesFixerCA2119 extends RoslynRe
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Seal methods that satisfy private interfaces";
     final String description = "An inheritable public type provides an overridable method implementation of an internal (Friend in Visual Basic) interface. To fix a violation of this rule, prevent the method from being overridden outside the assembly.";

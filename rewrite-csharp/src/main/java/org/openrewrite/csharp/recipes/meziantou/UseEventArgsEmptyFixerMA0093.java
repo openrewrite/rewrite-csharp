@@ -37,7 +37,7 @@ public class UseEventArgsEmptyFixerMA0093 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "EventArgs should not be null when raising an event";
     final String description = "";

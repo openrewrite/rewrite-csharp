@@ -37,7 +37,7 @@ public class UseGenericEventHandlerInstancesAnalyzerCA1003 extends RoslynRecipe 
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use generic event handler instances (search)";
     final String description = "This is a reporting only recipe. A type contains a delegate that returns void, whose signature contains two parameters (the first an object and the second a type that is assignable to EventArgs), and the containing assembly targets Microsoft .NET Framework?2.0.";

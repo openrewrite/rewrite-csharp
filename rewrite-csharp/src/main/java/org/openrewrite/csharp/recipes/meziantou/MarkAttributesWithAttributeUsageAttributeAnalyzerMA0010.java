@@ -37,7 +37,7 @@ public class MarkAttributesWithAttributeUsageAttributeAnalyzerMA0010 extends Ros
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Mark attributes with AttributeUsageAttribute (search)";
     final String description = "This is a reporting only recipe. ";

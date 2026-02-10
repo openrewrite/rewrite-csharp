@@ -37,7 +37,7 @@ public class CSharpTestForNaNCorrectlyFixerCA2242 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Test for NaN correctly";
     final String description = "This expression tests a value against Single.Nan or Double.Nan. Use Single.IsNan(Single) or Double.IsNan(Double) to test the value.";

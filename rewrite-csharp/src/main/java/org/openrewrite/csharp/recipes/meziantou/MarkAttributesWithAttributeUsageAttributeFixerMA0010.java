@@ -37,7 +37,7 @@ public class MarkAttributesWithAttributeUsageAttributeFixerMA0010 extends Roslyn
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Mark attributes with AttributeUsageAttribute";
     final String description = "";

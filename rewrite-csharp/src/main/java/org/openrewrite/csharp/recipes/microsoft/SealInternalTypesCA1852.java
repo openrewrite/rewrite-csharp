@@ -37,7 +37,7 @@ public class SealInternalTypesCA1852 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Seal internal types (search)";
     final String description = "This is a reporting only recipe. When a type is not accessible outside its assembly and has no subtypes within its containing assembly, it can be safely sealed. Sealing types can improve performance.";

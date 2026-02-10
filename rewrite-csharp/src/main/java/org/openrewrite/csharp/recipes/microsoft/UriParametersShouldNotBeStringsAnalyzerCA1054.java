@@ -37,7 +37,7 @@ public class UriParametersShouldNotBeStringsAnalyzerCA1054 extends RoslynRecipe 
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "URI-like parameters should not be strings (search)";
     final String description = "This is a reporting only recipe. This rule assumes that the parameter represents a Uniform Resource Identifier (URI). A string representation or a URI is prone to parsing and encoding errors, and can lead to security vulnerabilities. 'System.Uri' class provides these services in a safe and secure manner.";

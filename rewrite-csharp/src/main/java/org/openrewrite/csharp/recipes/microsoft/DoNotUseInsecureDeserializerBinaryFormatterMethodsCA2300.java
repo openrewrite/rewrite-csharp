@@ -37,7 +37,7 @@ public class DoNotUseInsecureDeserializerBinaryFormatterMethodsCA2300 extends Ro
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not use insecure deserializer BinaryFormatter (search)";
     final String description = "This is a reporting only recipe. The method '{0}' is insecure when deserializing untrusted data.  If you need to instead detect BinaryFormatter deserialization without a SerializationBinder set, then disable rule CA2300, and enable rules CA2301 and CA2302.";

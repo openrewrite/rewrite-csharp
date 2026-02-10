@@ -37,7 +37,7 @@ public class TestForEmptyStringsUsingStringLengthAnalyzerCA1820 extends RoslynRe
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Test for empty strings using string length (search)";
     final String description = "This is a reporting only recipe. Comparing strings by using the String.Length property or the String.IsNullOrEmpty method is significantly faster than using Equals.";

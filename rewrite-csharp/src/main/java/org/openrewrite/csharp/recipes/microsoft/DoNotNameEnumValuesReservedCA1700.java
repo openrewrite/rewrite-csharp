@@ -37,7 +37,7 @@ public class DoNotNameEnumValuesReservedCA1700 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not name enum values 'Reserved' (search)";
     final String description = "This is a reporting only recipe. This rule assumes that an enumeration member that has a name that contains \"reserved\" is not currently used but is a placeholder to be renamed or removed in a future version. Renaming or removing a member is a breaking change.";

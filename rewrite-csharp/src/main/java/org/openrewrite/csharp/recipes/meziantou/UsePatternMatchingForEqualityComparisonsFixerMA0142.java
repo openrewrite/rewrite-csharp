@@ -37,7 +37,7 @@ public class UsePatternMatchingForEqualityComparisonsFixerMA0142 extends RoslynR
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use pattern matching instead of equality operators for null check";
     final String description = "";

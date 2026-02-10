@@ -37,7 +37,7 @@ public class CSharpDoNotGuardCallFixerCA1853 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Unnecessary call to 'Dictionary.ContainsKey(key)'";
     final String description = "Do not guard 'Dictionary.Remove(key)' with 'Dictionary.ContainsKey(key)'. The former already checks whether the key exists, and will not throw if it does not.";

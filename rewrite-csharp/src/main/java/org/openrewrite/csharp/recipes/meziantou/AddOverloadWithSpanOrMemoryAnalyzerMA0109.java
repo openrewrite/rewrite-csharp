@@ -37,7 +37,7 @@ public class AddOverloadWithSpanOrMemoryAnalyzerMA0109 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Consider adding an overload with a Span<T> or Memory<T> (search)";
     final String description = "This is a reporting only recipe. ";

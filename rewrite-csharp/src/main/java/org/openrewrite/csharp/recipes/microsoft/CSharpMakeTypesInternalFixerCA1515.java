@@ -37,7 +37,7 @@ public class CSharpMakeTypesInternalFixerCA1515 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Consider making public types internal";
     final String description = "Unlike a class library, an application's API isn't typically referenced publicly, so types can be marked internal.";

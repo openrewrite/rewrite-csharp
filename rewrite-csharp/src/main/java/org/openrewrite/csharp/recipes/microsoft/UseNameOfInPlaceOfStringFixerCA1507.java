@@ -37,7 +37,7 @@ public class UseNameOfInPlaceOfStringFixerCA1507 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use nameof to express symbol names";
     final String description = "Using nameof helps keep your code valid when refactoring.";

@@ -37,7 +37,7 @@ public class DoNotRaiseExceptionsInExceptionClausesAnalyzerCA2219 extends Roslyn
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not raise exceptions in finally clauses (search)";
     final String description = "This is a reporting only recipe. When an exception is raised in a finally clause, the new exception hides the active exception. This makes the original error difficult to detect and debug.";

@@ -37,7 +37,7 @@ public class DoNotUseDataTableReadXmlCA2350 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not use DataTable.ReadXml() with untrusted data (search)";
     final String description = "This is a reporting only recipe. ";

@@ -37,7 +37,7 @@ public class UseExceptionThrowHelpersFixerCA1513 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use ObjectDisposedException throw helper";
     final String description = "Throw helpers are simpler and more efficient than an if block constructing a new exception instance.";

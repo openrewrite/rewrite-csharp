@@ -37,7 +37,7 @@ public class DoNotUseCreateEncryptorWithNonDefaultIVCA5401 extends RoslynRecipe 
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not use CreateEncryptor with non-default IV (search)";
     final String description = "This is a reporting only recipe. Symmetric encryption should always use a non-repeatable initialization vector to prevent dictionary attacks.";

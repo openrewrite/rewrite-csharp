@@ -37,7 +37,7 @@ public class ProvideCorrectArgumentsToFormattingMethodsAnalyzerCA2241 extends Ro
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Provide correct arguments to formatting methods (search)";
     final String description = "This is a reporting only recipe. The format argument that is passed to System.String.Format does not contain a format item that corresponds to each object argument, or vice versa.";

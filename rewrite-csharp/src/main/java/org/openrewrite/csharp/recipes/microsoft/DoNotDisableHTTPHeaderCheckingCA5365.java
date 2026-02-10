@@ -37,7 +37,7 @@ public class DoNotDisableHTTPHeaderCheckingCA5365 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do Not Disable HTTP Header Checking (search)";
     final String description = "This is a reporting only recipe. HTTP header checking enables encoding of the carriage return and newline characters, \r and \n, that are found in response headers. This encoding can help to avoid injection attacks that exploit an application that echoes untrusted data contained by the header.";

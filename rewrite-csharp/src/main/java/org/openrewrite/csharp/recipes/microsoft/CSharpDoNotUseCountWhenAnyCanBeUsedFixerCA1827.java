@@ -37,7 +37,7 @@ public class CSharpDoNotUseCountWhenAnyCanBeUsedFixerCA1827 extends RoslynRecipe
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not use Count() or LongCount() when Any() can be used";
     final String description = "For non-empty collections, Count() and LongCount() enumerate the entire sequence, while Any() stops at the first item or the first item that satisfies a condition.";

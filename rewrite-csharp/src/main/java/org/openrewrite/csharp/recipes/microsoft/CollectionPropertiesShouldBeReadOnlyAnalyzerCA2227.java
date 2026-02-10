@@ -37,7 +37,7 @@ public class CollectionPropertiesShouldBeReadOnlyAnalyzerCA2227 extends RoslynRe
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Collection properties should be read only (search)";
     final String description = "This is a reporting only recipe. A writable collection property allows a user to replace the collection with a different collection. A read-only property stops the collection from being replaced but still allows the individual members to be set.";

@@ -37,7 +37,7 @@ public class AnonymousDelegatesShouldNotBeUsedToUnsubscribeFromEventsAnalyzerMA0
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Anonymous delegates should not be used to unsubscribe from Events (search)";
     final String description = "This is a reporting only recipe. ";

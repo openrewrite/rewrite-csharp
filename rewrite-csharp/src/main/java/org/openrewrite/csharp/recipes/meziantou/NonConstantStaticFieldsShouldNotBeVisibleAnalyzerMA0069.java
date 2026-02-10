@@ -37,7 +37,7 @@ public class NonConstantStaticFieldsShouldNotBeVisibleAnalyzerMA0069 extends Ros
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Non-constant static fields should not be visible (search)";
     final String description = "This is a reporting only recipe. ";

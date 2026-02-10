@@ -37,7 +37,7 @@ public class UseExceptionThrowHelpersCA1510 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use ArgumentNullException throw helper (search)";
     final String description = "This is a reporting only recipe. Throw helpers are simpler and more efficient than an if block constructing a new exception instance.";

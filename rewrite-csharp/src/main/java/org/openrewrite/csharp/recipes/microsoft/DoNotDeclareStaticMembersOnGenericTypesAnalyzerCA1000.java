@@ -37,7 +37,7 @@ public class DoNotDeclareStaticMembersOnGenericTypesAnalyzerCA1000 extends Rosly
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not declare static members on generic types (search)";
     final String description = "This is a reporting only recipe. When a static member of a generic type is called, the type argument must be specified for the type. When a generic instance member that does not support inference is called, the type argument must be specified for the member. In these two cases, the syntax for specifying the type argument is different and easily confused.";

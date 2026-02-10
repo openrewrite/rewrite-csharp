@@ -37,7 +37,7 @@ public class AvoidComparisonWithBoolConstantFixerMA0073 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Avoid comparison with bool constant";
     final String description = "";

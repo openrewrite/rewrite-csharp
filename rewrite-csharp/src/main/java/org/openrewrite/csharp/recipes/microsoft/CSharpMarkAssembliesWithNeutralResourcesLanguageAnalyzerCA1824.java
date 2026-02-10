@@ -37,7 +37,7 @@ public class CSharpMarkAssembliesWithNeutralResourcesLanguageAnalyzerCA1824 exte
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Mark assemblies with NeutralResourcesLanguageAttribute (search)";
     final String description = "This is a reporting only recipe. The NeutralResourcesLanguage attribute informs the ResourceManager of the language that was used to display the resources of a neutral culture for an assembly. This improves lookup performance for the first resource that you load and can reduce your working set.";

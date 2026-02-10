@@ -37,7 +37,7 @@ public class AvoidLengthCalculationWhenSlicingToEndAnalyzerCA1514 extends Roslyn
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Avoid redundant length argument (search)";
     final String description = "This is a reporting only recipe. An explicit length calculation can be error-prone and can be avoided when slicing to end of the buffer.";

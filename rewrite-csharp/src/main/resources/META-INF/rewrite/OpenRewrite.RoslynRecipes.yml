@@ -1,0 +1,56 @@
+# Copyright 2026 the original author or authors.
+# <p>
+# Licensed under the Moderne Source Available License (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# <p>
+# https://docs.moderne.io/licensing/moderne-source-available-license
+# <p>
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# -------------------THIS FILE IS AUTO GENERATED--------------------------
+# Changes to this file may cause incorrect behavior and will be lost if
+# the code is regenerated.
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: org.openrewrite.csharp.recipes.openrewrite.OpenRewriteRoslynRecipes
+displayName: All 'OpenRewrite.RoslynRecipes' Recipes
+description: All 'OpenRewrite.RoslynRecipes' Recipes.
+recipeList:
+  - org.openrewrite.csharp.recipes.openrewrite.ActionContextAccessorObsoleteAnalyzerORNETX0009
+  - org.openrewrite.csharp.recipes.openrewrite.ActionContextAccessorObsoleteFixerORNETX0009
+  - org.openrewrite.csharp.recipes.openrewrite.ActivitySamplingAnalyzerORNETX0002
+  - org.openrewrite.csharp.recipes.openrewrite.BackgroundServiceExecuteAsyncAnalyzerORNETX0018
+  - org.openrewrite.csharp.recipes.openrewrite.BufferedStreamWriteByteAnalyzerORNETX0012
+  - org.openrewrite.csharp.recipes.openrewrite.DistributedContextPropagatorAnalyzerORNETX0003
+  - org.openrewrite.csharp.recipes.openrewrite.DllImportSearchPathAnalyzerORNETX0023
+  - org.openrewrite.csharp.recipes.openrewrite.DllImportSearchPathAnalyzerORNETX0024
+  - org.openrewrite.csharp.recipes.openrewrite.DllImportSearchPathFixerORNETX0023
+  - org.openrewrite.csharp.recipes.openrewrite.DllImportSearchPathFixerORNETX0024
+  - org.openrewrite.csharp.recipes.openrewrite.DriveInfoDriveFormatAnalyzerORNETX0001
+  - org.openrewrite.csharp.recipes.openrewrite.FilePatternMatchStemAnalyzerORNETX0005
+  - org.openrewrite.csharp.recipes.openrewrite.GenericMathShiftAnalyzerORNETX0013
+  - org.openrewrite.csharp.recipes.openrewrite.GetKeyedServiceAnyKeyAnalyzerORNETX0021
+  - org.openrewrite.csharp.recipes.openrewrite.InlineArrayExplicitSizeAnalyzerORNETX0004
+  - org.openrewrite.csharp.recipes.openrewrite.IPNetworkObsoleteAnalyzerORNETX0010
+  - org.openrewrite.csharp.recipes.openrewrite.IPNetworkObsoleteAnalyzerORNETX0011
+  - org.openrewrite.csharp.recipes.openrewrite.IPNetworkObsoleteFixerORNETX0010
+  - org.openrewrite.csharp.recipes.openrewrite.IPNetworkObsoleteFixerORNETX0011
+  - org.openrewrite.csharp.recipes.openrewrite.MacCatalystVersionNormalizationAnalyzerORNETX0014
+  - org.openrewrite.csharp.recipes.openrewrite.MacCatalystVersionNormalizationAnalyzerORNETX0015
+  - org.openrewrite.csharp.recipes.openrewrite.MacCatalystVersionNormalizationAnalyzerORNETX0016
+  - org.openrewrite.csharp.recipes.openrewrite.OpenSslVersionOverrideEnvVarAnalyzerORNETX0017
+  - org.openrewrite.csharp.recipes.openrewrite.OpenSslVersionOverrideEnvVarFixerORNETX0017
+  - org.openrewrite.csharp.recipes.openrewrite.ReflectDamtAnnotationsAnalyzerORNETX0022
+  - org.openrewrite.csharp.recipes.openrewrite.ReflectDamtAnnotationsFixerORNETX0022
+  - org.openrewrite.csharp.recipes.openrewrite.SignalTerminationHandlerAnalyzerORNETX0006
+  - org.openrewrite.csharp.recipes.openrewrite.SignalTerminationHandlerAnalyzerORNETX0007
+  - org.openrewrite.csharp.recipes.openrewrite.WithOpenApiDeprecatedAnalyzerORNETX0008
+  - org.openrewrite.csharp.recipes.openrewrite.WithOpenApiDeprecatedFixerORNETX0008
+  - org.openrewrite.csharp.recipes.openrewrite.X509PublicKeyNullParametersAnalyzerORNETX0019
+  - org.openrewrite.csharp.recipes.openrewrite.X509PublicKeyNullParametersAnalyzerORNETX0020

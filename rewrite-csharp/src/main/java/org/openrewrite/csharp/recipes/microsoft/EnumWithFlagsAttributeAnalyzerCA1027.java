@@ -37,7 +37,7 @@ public class EnumWithFlagsAttributeAnalyzerCA1027 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Mark enums with FlagsAttribute (search)";
     final String description = "This is a reporting only recipe. An enumeration is a value type that defines a set of related named constants. Apply FlagsAttribute to an enumeration when its named constants can be meaningfully combined.";

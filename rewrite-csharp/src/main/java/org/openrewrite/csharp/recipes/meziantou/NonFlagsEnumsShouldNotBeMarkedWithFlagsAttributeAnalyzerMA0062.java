@@ -37,7 +37,7 @@ public class NonFlagsEnumsShouldNotBeMarkedWithFlagsAttributeAnalyzerMA0062 exte
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Non-flags enums should not be marked with \"FlagsAttribute\" (search)";
     final String description = "This is a reporting only recipe. ";

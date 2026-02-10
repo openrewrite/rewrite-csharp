@@ -37,7 +37,7 @@ public class InstantiateArgumentExceptionsCorrectlyAnalyzerCA2208 extends Roslyn
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Instantiate argument exceptions correctly (search)";
     final String description = "This is a reporting only recipe. A call is made to the default (parameterless) constructor of an exception type that is or derives from ArgumentException, or an incorrect string argument is passed to a parameterized constructor of an exception type that is or derives from ArgumentException.";

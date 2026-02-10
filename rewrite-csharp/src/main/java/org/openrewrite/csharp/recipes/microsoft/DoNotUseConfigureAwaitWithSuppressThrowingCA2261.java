@@ -37,7 +37,7 @@ public class DoNotUseConfigureAwaitWithSuppressThrowingCA2261 extends RoslynReci
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not use ConfigureAwaitOptions.SuppressThrowing with Task<TResult> (search)";
     final String description = "This is a reporting only recipe. The ConfigureAwaitOptions.SuppressThrowing option is only supported with the non-generic Task, not a Task<TResult>.  To use it with a Task<TResult>, first cast to the base Task.";

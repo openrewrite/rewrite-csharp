@@ -37,7 +37,7 @@ public class UseEnvironmentMembersCA1840 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use 'Environment.CurrentManagedThreadId' (search)";
     final String description = "This is a reporting only recipe. 'Environment.CurrentManagedThreadId' is simpler and faster than 'Thread.CurrentThread.ManagedThreadId'.";

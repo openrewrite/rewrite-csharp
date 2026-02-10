@@ -37,7 +37,7 @@ public class CSharpUseStringContainsCharOverloadWithSingleCharactersFixerCA1847 
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use char literal for a single character lookup";
     final String description = "'string.Contains(char)' is available as a better performing overload for single char lookup.";

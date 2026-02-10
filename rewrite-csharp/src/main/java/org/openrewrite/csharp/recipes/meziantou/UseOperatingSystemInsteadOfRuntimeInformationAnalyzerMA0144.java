@@ -37,7 +37,7 @@ public class UseOperatingSystemInsteadOfRuntimeInformationAnalyzerMA0144 extends
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use System.OperatingSystem to check the current OS (search)";
     final String description = "This is a reporting only recipe. ";

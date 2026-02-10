@@ -37,7 +37,7 @@ public class EqualityShouldBeCorrectlyImplementedAnalyzerMA0094 extends RoslynRe
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "A class that provides CompareTo(T) should implement IComparable<T> (search)";
     final String description = "This is a reporting only recipe. ";

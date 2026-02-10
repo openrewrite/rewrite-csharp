@@ -37,7 +37,7 @@ public class DoNotUseEqualityComparerDefaultOfStringFixerMA0024 extends RoslynRe
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use an explicit StringComparer when possible";
     final String description = "";

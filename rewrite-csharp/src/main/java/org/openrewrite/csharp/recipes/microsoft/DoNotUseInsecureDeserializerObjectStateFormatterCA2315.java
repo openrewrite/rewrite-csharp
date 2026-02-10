@@ -37,7 +37,7 @@ public class DoNotUseInsecureDeserializerObjectStateFormatterCA2315 extends Rosl
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not use insecure deserializer ObjectStateFormatter (search)";
     final String description = "This is a reporting only recipe. ";

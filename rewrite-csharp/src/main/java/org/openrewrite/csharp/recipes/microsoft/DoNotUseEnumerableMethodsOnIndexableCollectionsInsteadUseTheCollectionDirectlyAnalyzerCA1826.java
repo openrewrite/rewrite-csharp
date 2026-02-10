@@ -37,7 +37,7 @@ public class DoNotUseEnumerableMethodsOnIndexableCollectionsInsteadUseTheCollect
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not use Enumerable methods on indexable collections (search)";
     final String description = "This is a reporting only recipe. This collection is directly indexable. Going through LINQ here causes unnecessary allocations and CPU work.";

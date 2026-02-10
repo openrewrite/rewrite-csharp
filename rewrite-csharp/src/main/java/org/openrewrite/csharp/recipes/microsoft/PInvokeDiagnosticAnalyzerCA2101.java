@@ -37,7 +37,7 @@ public class PInvokeDiagnosticAnalyzerCA2101 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Specify marshaling for P/Invoke string arguments (search)";
     final String description = "This is a reporting only recipe. A platform invoke member allows partially trusted callers, has a string parameter, and does not explicitly marshal the string. This can cause a potential security vulnerability.";

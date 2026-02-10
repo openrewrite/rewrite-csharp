@@ -37,7 +37,7 @@ public class PreferJaggedArraysOverMultidimensionalAnalyzerCA1814 extends Roslyn
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Prefer jagged arrays over multidimensional (search)";
     final String description = "This is a reporting only recipe. A jagged array is an array whose elements are arrays. The arrays that make up the elements can be of different sizes, leading to less wasted space for some sets of data.";

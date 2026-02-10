@@ -37,7 +37,7 @@ public class MissingNotNullWhenAttributeOnEqualsAnalyzerMA0186 extends RoslynRec
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Equals method should use [NotNullWhen(true)] on the parameter (search)";
     final String description = "This is a reporting only recipe. ";

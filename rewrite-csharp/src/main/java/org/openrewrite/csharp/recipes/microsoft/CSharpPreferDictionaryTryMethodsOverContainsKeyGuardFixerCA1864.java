@@ -37,7 +37,7 @@ public class CSharpPreferDictionaryTryMethodsOverContainsKeyGuardFixerCA1864 ext
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Prefer the 'IDictionary.TryAdd(TKey, TValue)' method";
     final String description = "Prefer a 'TryAdd' call over an 'Add' call guarded by a 'ContainsKey' check. 'TryAdd' behaves the same as 'Add', except that when the specified key already exists, it returns 'false' instead of throwing an exception.";

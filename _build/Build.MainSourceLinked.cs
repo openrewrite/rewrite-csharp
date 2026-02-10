@@ -19,14 +19,15 @@ using Serilog;
 
 partial class Build
 {
-     string[] NugetRecipePackages =
+     (string Package, bool IncludePreRelease)[] NugetRecipePackages =
      [
-         "Microsoft.CodeAnalysis.CSharp.CodeStyle",
-         "Roslynator.Analyzers", //https://github.com/dotnet/roslynator
-         "Microsoft.CodeAnalysis.NetAnalyzers", //https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/categories
-         "Meziantou.Analyzer", //https://github.com/meziantou/Meziantou.Analyzer
-         "StyleCop.Analyzers", //https://github.com/DotNetAnalyzers/StyleCopAnalyzers/tree/master
-         "WpfAnalyzers" // https://github.com/DotNetAnalyzers/WpfAnalyzers
+         ("OpenRewrite.RoslynRecipes", true),
+         ("Microsoft.CodeAnalysis.CSharp.CodeStyle", false),
+         ("Roslynator.Analyzers", false), //https://github.com/dotnet/roslynator
+         ("Microsoft.CodeAnalysis.NetAnalyzers", false), //https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/categories
+         ("Meziantou.Analyzer", false), //https://github.com/meziantou/Meziantou.Analyzer
+         ("StyleCop.Analyzers", false), //https://github.com/DotNetAnalyzers/StyleCopAnalyzers/tree/master
+         ("WpfAnalyzers", false), // https://github.com/DotNetAnalyzers/WpfAnalyzers
      ];
 
      Target GenerateRoslynRecipes => _ => _
@@ -50,13 +51,21 @@ partial class Build
 
              Dictionary<string, (int Analyzers, int Fixups)> summary = new();
 
-
-             foreach (var package in NugetRecipePackages)
+             var nugetCacheFolder = (AbsolutePath)SettingsUtility.GetGlobalPackagesFolder(Settings.LoadDefaultSettings(null));
+             foreach (var (package, includePreRelease) in NugetRecipePackages)
              {
                  var libraryRange = new[] {new LibraryRange(package)};
-                 var resolvedPackage = (await recipeManager.ResolvePackages(libraryRange, ct, includePrerelease:false)).First();
-                 var executionContext = await recipeManager.CreateExecutionContext(libraryRange, includePrerelease: false, cancellationToken: ct);
+                 var resolvedPackage = (await recipeManager.ResolvePackages(libraryRange, ct, includePrerelease:includePreRelease)).First();
 
+                // if this package is coming from a local folder and not a remote feed, clear it out from nuget cache as want to force a restore from the .nupkg file
+                 // this addresses the issue with local builds where we may create a package multiple times during development without bumping up the version
+                 // we want to ensure it's always using the latest build, not whatever it cached into the global nuget cache
+                 if (resolvedPackage.Source.PackageSource.IsLocal)
+                 {
+                     var packageCacheFolder = nugetCacheFolder / resolvedPackage.Id.ToLowerInvariant() / resolvedPackage.Version.ToNormalizedString();
+                     packageCacheFolder.DeleteDirectory();
+                 }
+                 var executionContext = await recipeManager.CreateExecutionContext(libraryRange, includePrerelease: includePreRelease, cancellationToken: ct);
                  var analyzerCount = executionContext.Recipes.Count(x => x.Kind == RecipeKind.RoslynAnalyzer);
                  var fixupCount = executionContext.Recipes.Count(x => x.Kind == RecipeKind.RoslynFixer);
                  Log.Information("Found {AnalyzerCount} analyzers and {FixupCount} fixups", analyzerCount, fixupCount);

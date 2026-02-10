@@ -37,7 +37,7 @@ public class UriReturnValuesShouldNotBeStringsAnalyzerCA1055 extends RoslynRecip
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "URI-like return values should not be strings (search)";
     final String description = "This is a reporting only recipe. This rule assumes that the method returns a URI. A string representation of a URI is prone to parsing and encoding errors, and can lead to security vulnerabilities. The System.Uri class provides these services in a safe and secure manner.";

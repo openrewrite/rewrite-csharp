@@ -37,7 +37,7 @@ public class DoNotUseInterpolatedStringWithoutParametersFixerMA0184 extends Rosl
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Do not use interpolated string without parameters";
     final String description = "";

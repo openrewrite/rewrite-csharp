@@ -37,7 +37,7 @@ public class DoNotUseToStringIfObjectAnalyzerMA0150 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Do not call the default object.ToString explicitly (search)";
     final String description = "This is a reporting only recipe. ";

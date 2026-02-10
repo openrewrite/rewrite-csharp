@@ -62,6 +62,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.Rpc", "src\Rewrite.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.RoslynRecipes.Tests", "tests\Rewrite.RoslynRecipes.Tests\Rewrite.RoslynRecipes.Tests.csproj", "{F9AA44ED-0D43-4359-9647-A9A69848A8C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewrite.RoslynRecipes.Package", "src\Rewrite.RoslynRecipes.Package\Rewrite.RoslynRecipes.Package.csproj", "{452E142D-2A42-4DEE-83D2-80EDF658CE3F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -224,7 +226,13 @@ Global
 		{F9AA44ED-0D43-4359-9647-A9A69848A8C1}.Analyzers|Any CPU.ActiveCfg = Debug|Any CPU
 		{F9AA44ED-0D43-4359-9647-A9A69848A8C1}.Analyzers|Any CPU.Build.0 = Debug|Any CPU
 		{F9AA44ED-0D43-4359-9647-A9A69848A8C1}.Generate|Any CPU.ActiveCfg = Generate|Any CPU
-		{F9AA44ED-0D43-4359-9647-A9A69848A8C1}.Generate|Any CPU.Build.0 = Generate|Any CPU
+		{452E142D-2A42-4DEE-83D2-80EDF658CE3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{452E142D-2A42-4DEE-83D2-80EDF658CE3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{452E142D-2A42-4DEE-83D2-80EDF658CE3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{452E142D-2A42-4DEE-83D2-80EDF658CE3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{452E142D-2A42-4DEE-83D2-80EDF658CE3F}.Analyzers|Any CPU.ActiveCfg = Debug|Any CPU
+		{452E142D-2A42-4DEE-83D2-80EDF658CE3F}.Analyzers|Any CPU.Build.0 = Debug|Any CPU
+		{452E142D-2A42-4DEE-83D2-80EDF658CE3F}.Generate|Any CPU.ActiveCfg = Generate|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{25EEACCB-9BAE-4361-A980-9E9CDA37602E} = {7B268266-B9CD-4D85-ABC5-3B2C4611FD74}
@@ -251,5 +259,6 @@ Global
 		{A9DA7715-ABCF-4973-B0F6-5C691FB2F8C9} = {C7A4A8F9-0343-4A3E-AB77-101C458C23B5}
 		{DA626A07-E03D-4F24-A240-9D1D00F72256} = {C7A4A8F9-0343-4A3E-AB77-101C458C23B5}
 		{F9AA44ED-0D43-4359-9647-A9A69848A8C1} = {7B268266-B9CD-4D85-ABC5-3B2C4611FD74}
+		{452E142D-2A42-4DEE-83D2-80EDF658CE3F} = {C7A4A8F9-0343-4A3E-AB77-101C458C23B5}
 	EndGlobalSection
 EndGlobal

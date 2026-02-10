@@ -37,7 +37,7 @@ public class DoNotImplicitlyConvertDateTimeToDateTimeOffsetAnalyzerMA0133 extend
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use DateTimeOffset instead of relying on the implicit conversion (search)";
     final String description = "This is a reporting only recipe. ";

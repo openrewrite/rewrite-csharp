@@ -37,7 +37,7 @@ public class DoNotLockOnObjectsWithWeakIdentityAnalyzerCA2002 extends RoslynReci
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not lock on objects with weak identity (search)";
     final String description = "This is a reporting only recipe. An object is said to have a weak identity when it can be directly accessed across application domain boundaries. A thread that tries to acquire a lock on an object that has a weak identity can be blocked by a second thread in a different application domain that has a lock on the same object.";

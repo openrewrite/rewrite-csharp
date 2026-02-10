@@ -37,7 +37,7 @@ public class SimplifyCallerArgumentExpressionAnalyzerMA0108 extends RoslynRecipe
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Remove redundant argument value (search)";
     final String description = "This is a reporting only recipe. ";

@@ -37,7 +37,7 @@ public class UseStringEqualsOverStringCompareCA2251 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use 'string.Equals' (search)";
     final String description = "This is a reporting only recipe. It is both clearer and likely faster to use 'string.Equals' instead of comparing the result of 'string.Compare' to zero.";

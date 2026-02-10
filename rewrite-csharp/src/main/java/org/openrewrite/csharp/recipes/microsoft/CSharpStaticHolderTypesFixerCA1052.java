@@ -37,7 +37,7 @@ public class CSharpStaticHolderTypesFixerCA1052 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Static holder types should be Static or NotInheritable";
     final String description = "";

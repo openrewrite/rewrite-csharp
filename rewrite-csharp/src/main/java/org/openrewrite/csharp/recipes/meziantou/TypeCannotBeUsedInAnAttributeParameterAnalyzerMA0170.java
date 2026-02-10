@@ -37,7 +37,7 @@ public class TypeCannotBeUsedInAnAttributeParameterAnalyzerMA0170 extends Roslyn
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Type cannot be used as an attribute argument (search)";
     final String description = "This is a reporting only recipe. ";

@@ -37,7 +37,7 @@ public class CSharpSpecifyMarshalingForPInvokeStringArgumentsFixerCA2101 extends
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Specify marshaling for P/Invoke string arguments";
     final String description = "A platform invoke member allows partially trusted callers, has a string parameter, and does not explicitly marshal the string. This can cause a potential security vulnerability.";

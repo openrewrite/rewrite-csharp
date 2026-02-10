@@ -37,7 +37,7 @@ public class RethrowToPreserveStackDetailsFixerCA2200 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Rethrow to preserve stack details";
     final String description = "";

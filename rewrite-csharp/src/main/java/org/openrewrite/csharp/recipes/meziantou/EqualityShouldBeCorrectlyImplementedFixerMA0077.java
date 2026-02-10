@@ -37,7 +37,7 @@ public class EqualityShouldBeCorrectlyImplementedFixerMA0077 extends RoslynRecip
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "A class that provides Equals(T) should implement IEquatable<T>";
     final String description = "";

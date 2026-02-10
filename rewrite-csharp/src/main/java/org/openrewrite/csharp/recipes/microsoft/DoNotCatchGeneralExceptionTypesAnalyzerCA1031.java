@@ -37,7 +37,7 @@ public class DoNotCatchGeneralExceptionTypesAnalyzerCA1031 extends RoslynRecipe 
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not catch general exception types (search)";
     final String description = "This is a reporting only recipe. A general exception such as System.Exception or System.SystemException or a disallowed exception type is caught in a catch statement, or a general catch clause is used. General and disallowed exceptions should not be caught.";

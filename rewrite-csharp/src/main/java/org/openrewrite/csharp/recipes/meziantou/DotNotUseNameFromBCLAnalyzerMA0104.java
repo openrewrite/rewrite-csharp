@@ -37,7 +37,7 @@ public class DotNotUseNameFromBCLAnalyzerMA0104 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Do not create a type with a name from the BCL (search)";
     final String description = "This is a reporting only recipe. ";

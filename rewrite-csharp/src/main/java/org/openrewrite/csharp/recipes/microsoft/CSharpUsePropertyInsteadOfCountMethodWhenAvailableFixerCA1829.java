@@ -37,7 +37,7 @@ public class CSharpUsePropertyInsteadOfCountMethodWhenAvailableFixerCA1829 exten
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use Length/Count property instead of Count() when available";
     final String description = "Enumerable.Count() potentially enumerates the sequence while a Length/Count property is a direct access.";

@@ -37,7 +37,7 @@ public class DoNotDeclareProtectedMembersInSealedTypesCA1047 extends RoslynRecip
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not declare protected member in sealed type (search)";
     final String description = "This is a reporting only recipe. Types declare protected members so that inheriting types can access or override the member. By definition, you cannot inherit from a sealed type, which means that protected methods on sealed types cannot be called.";

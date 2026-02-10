@@ -37,7 +37,7 @@ public class DoNotDeclareVisibleInstanceFieldsAnalyzerCA1051 extends RoslynRecip
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not declare visible instance fields (search)";
     final String description = "This is a reporting only recipe. The primary use of a field should be as an implementation detail. Fields should be private or internal and should be exposed by using properties.";

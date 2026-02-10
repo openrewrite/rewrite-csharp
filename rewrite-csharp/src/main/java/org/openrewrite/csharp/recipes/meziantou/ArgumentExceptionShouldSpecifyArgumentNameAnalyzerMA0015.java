@@ -37,7 +37,7 @@ public class ArgumentExceptionShouldSpecifyArgumentNameAnalyzerMA0015 extends Ro
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Specify the parameter name in ArgumentException (search)";
     final String description = "This is a reporting only recipe. ";

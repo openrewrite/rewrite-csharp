@@ -37,7 +37,7 @@ public class LoggerMessageDefineAnalyzerCA2017 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Parameter count mismatch (search)";
     final String description = "This is a reporting only recipe. Number of parameters supplied in the logging message template do not match the number of named placeholders.";

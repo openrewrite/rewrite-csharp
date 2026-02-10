@@ -37,7 +37,7 @@ public class ConstructorArgumentParametersShouldExistInConstructorsAnalyzerMA008
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "ConstructorArgument parameters should exist in constructors (search)";
     final String description = "This is a reporting only recipe. ";

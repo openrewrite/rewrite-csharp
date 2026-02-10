@@ -37,7 +37,7 @@ public class PreferTypedStringBuilderAppendOverloadsCA1830 extends RoslynRecipe 
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Prefer strongly-typed Append and Insert method overloads on StringBuilder (search)";
     final String description = "This is a reporting only recipe. StringBuilder.Append and StringBuilder.Insert provide overloads for multiple types beyond System.String.  When possible, prefer the strongly-typed overloads over using ToString() and the string-based overload.";

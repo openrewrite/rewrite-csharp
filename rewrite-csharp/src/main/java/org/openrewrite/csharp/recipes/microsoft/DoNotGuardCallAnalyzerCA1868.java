@@ -37,7 +37,7 @@ public class DoNotGuardCallAnalyzerCA1868 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Unnecessary call to 'Contains(item)' (search)";
     final String description = "This is a reporting only recipe. Do not guard 'Add(item)' or 'Remove(item)' with 'Contains(item)' for the set. The former two already check whether the item exists and will return if it was added or removed.";

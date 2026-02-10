@@ -37,7 +37,7 @@ public class CSharpDetectPreviewFeatureAnalyzerCA2252 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "This API requires opting into preview features (search)";
     final String description = "This is a reporting only recipe. An assembly has to opt into preview features before using them.";

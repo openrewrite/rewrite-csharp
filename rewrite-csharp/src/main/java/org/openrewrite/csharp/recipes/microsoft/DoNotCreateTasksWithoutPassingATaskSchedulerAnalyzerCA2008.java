@@ -37,7 +37,7 @@ public class DoNotCreateTasksWithoutPassingATaskSchedulerAnalyzerCA2008 extends 
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not create tasks without passing a TaskScheduler (search)";
     final String description = "This is a reporting only recipe. Do not create tasks unless you are using one of the overloads that takes a TaskScheduler. The default is to schedule on TaskScheduler.Current, which would lead to deadlocks. Either use TaskScheduler.Default to schedule on the thread pool, or explicitly pass TaskScheduler.Current to make your intentions clear.";

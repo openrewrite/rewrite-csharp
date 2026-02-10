@@ -37,7 +37,7 @@ public class IdentifiersShouldHaveCorrectSuffixAnalyzerCA1710 extends RoslynReci
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Identifiers should have correct suffix (search)";
     final String description = "This is a reporting only recipe. By convention, the names of types that extend certain base types or that implement certain interfaces, or types that are derived from these types, have a suffix that is associated with the base type or interface.";

@@ -37,7 +37,7 @@ public class DoNotUseOutAttributeStringPInvokeParametersAnalyzerCA1417 extends R
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not use 'OutAttribute' on string parameters for P/Invokes (search)";
     final String description = "This is a reporting only recipe. String parameters passed by value with the 'OutAttribute' can destabilize the runtime if the string is an interned string.";

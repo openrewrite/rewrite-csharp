@@ -37,7 +37,7 @@ public class InterfaceMethodsShouldBeCallableByChildTypesAnalyzerCA1033 extends 
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Interface methods should be callable by child types (search)";
     final String description = "This is a reporting only recipe. An unsealed externally visible type provides an explicit method implementation of a public interface and does not provide an alternative externally visible method that has the same name.";

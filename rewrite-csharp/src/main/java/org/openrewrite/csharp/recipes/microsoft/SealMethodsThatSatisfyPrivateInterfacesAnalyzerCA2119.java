@@ -37,7 +37,7 @@ public class SealMethodsThatSatisfyPrivateInterfacesAnalyzerCA2119 extends Rosly
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Seal methods that satisfy private interfaces (search)";
     final String description = "This is a reporting only recipe. An inheritable public type provides an overridable method implementation of an internal (Friend in Visual Basic) interface. To fix a violation of this rule, prevent the method from being overridden outside the assembly.";

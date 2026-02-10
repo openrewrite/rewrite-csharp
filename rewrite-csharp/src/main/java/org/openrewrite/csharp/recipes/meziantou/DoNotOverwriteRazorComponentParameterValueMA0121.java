@@ -37,7 +37,7 @@ public class DoNotOverwriteRazorComponentParameterValueMA0121 extends RoslynReci
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Do not overwrite parameter value (search)";
     final String description = "This is a reporting only recipe. ";

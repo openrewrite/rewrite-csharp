@@ -37,7 +37,7 @@ public class UseStringEqualsFixerMA0006 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use String.Equals instead of equality operator";
     final String description = "";

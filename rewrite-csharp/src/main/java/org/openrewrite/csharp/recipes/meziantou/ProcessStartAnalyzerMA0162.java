@@ -37,7 +37,7 @@ public class ProcessStartAnalyzerMA0162 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use Process.Start overload with ProcessStartInfo (search)";
     final String description = "This is a reporting only recipe. ";

@@ -37,7 +37,7 @@ public class PreferConstCharOverConstUnitStringFixerCA1834 extends RoslynRecipe 
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Consider using 'StringBuilder.Append(char)' when applicable";
     final String description = "'StringBuilder.Append(char)' is more efficient than 'StringBuilder.Append(string)' when the string is a single character. When calling 'Append' with a constant, prefer using a constant char rather than a constant string containing one character.";

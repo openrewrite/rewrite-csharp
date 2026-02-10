@@ -37,7 +37,7 @@ public class UseInlineXmlCommentSyntaxWhenPossibleFixerMA0177 extends RoslynReci
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use single-line XML comment syntax when possible";
     final String description = "";

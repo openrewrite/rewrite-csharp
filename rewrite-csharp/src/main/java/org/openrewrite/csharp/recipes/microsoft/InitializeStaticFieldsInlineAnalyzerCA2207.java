@@ -37,7 +37,7 @@ public class InitializeStaticFieldsInlineAnalyzerCA2207 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Initialize value type static fields inline (search)";
     final String description = "This is a reporting only recipe. A value type declares an explicit static constructor. To fix a violation of this rule, initialize all static data when it is declared and remove the static constructor.";

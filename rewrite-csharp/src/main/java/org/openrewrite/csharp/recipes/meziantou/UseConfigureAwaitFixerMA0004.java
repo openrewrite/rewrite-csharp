@@ -37,7 +37,7 @@ public class UseConfigureAwaitFixerMA0004 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use Task.ConfigureAwait";
     final String description = "";

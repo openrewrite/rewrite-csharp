@@ -37,7 +37,7 @@ public class OptimizeStringBuilderUsageFixerMA0028 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Optimize StringBuilder usage";
     final String description = "";

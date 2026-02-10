@@ -37,7 +37,7 @@ public class DoNotCallOverridableMethodsInConstructorsAnalyzerCA2214 extends Ros
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not call overridable methods in constructors (search)";
     final String description = "This is a reporting only recipe. Virtual methods defined on the class should not be called from constructors. If a derived class has overridden the method, the derived class version will be called (before the derived class constructor is called).";

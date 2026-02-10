@@ -37,7 +37,7 @@ public class UseCountProperlyAnalyzerCA1829 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use Length/Count property instead of Count() when available (search)";
     final String description = "This is a reporting only recipe. Enumerable.Count() potentially enumerates the sequence while a Length/Count property is a direct access.";

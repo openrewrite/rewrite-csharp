@@ -37,7 +37,7 @@ public class ImplementStandardExceptionConstructorsFixerCA1032 extends RoslynRec
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Implement standard exception constructors";
     final String description = "Failure to provide the full set of constructors can make it difficult to correctly handle exceptions.";

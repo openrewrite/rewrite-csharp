@@ -37,7 +37,7 @@ public class CSharpMarkAllNonSerializableFieldsFixerCA2235 extends RoslynRecipe 
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Mark all non-serializable fields";
     final String description = "An instance field of a type that is not serializable is declared in a type that is serializable.";

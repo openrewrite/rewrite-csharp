@@ -37,7 +37,7 @@ public class ApprovedCipherModeAnalyzerCA5358 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Review cipher mode usage with cryptography experts (search)";
     final String description = "This is a reporting only recipe. These cipher modes might be vulnerable to attacks. Consider using recommended modes (CBC, CTS).";

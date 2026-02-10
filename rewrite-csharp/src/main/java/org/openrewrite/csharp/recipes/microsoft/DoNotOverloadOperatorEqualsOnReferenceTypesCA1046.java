@@ -37,7 +37,7 @@ public class DoNotOverloadOperatorEqualsOnReferenceTypesCA1046 extends RoslynRec
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not overload equality operator on reference types (search)";
     final String description = "This is a reporting only recipe. For reference types, the default implementation of the equality operator is almost always correct. By default, two references are equal only if they point to the same object. If the operator is providing meaningful value equality, the type should implement the generic 'System.IEquatable' interface.";

@@ -37,7 +37,7 @@ public class AvoidExcessiveParametersOnGenericTypesCA1005 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Avoid excessive parameters on generic types (search)";
     final String description = "This is a reporting only recipe. The more type parameters a generic type contains, the more difficult it is to know and remember what each type parameter represents.";

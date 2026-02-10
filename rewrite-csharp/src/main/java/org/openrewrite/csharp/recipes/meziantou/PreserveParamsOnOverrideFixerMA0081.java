@@ -37,7 +37,7 @@ public class PreserveParamsOnOverrideFixerMA0081 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Method overrides should not omit params keyword";
     final String description = "";

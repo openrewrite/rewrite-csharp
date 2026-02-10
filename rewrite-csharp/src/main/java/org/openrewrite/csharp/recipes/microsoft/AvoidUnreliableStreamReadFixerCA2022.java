@@ -37,7 +37,7 @@ public class AvoidUnreliableStreamReadFixerCA2022 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Avoid inexact read with 'Stream.Read'";
     final String description = "A call to 'Stream.Read' may return fewer bytes than requested, resulting in unreliable code if the return value is not checked.";

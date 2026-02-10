@@ -37,7 +37,7 @@ public class UseAnOverloadThatHasCancellationTokenFixer_ArgumentMA0040 extends R
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Forward the CancellationToken parameter to methods that take one";
     final String description = "";

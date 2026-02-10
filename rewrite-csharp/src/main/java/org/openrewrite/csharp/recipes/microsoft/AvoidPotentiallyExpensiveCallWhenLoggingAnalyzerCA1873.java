@@ -37,7 +37,7 @@ public class AvoidPotentiallyExpensiveCallWhenLoggingAnalyzerCA1873 extends Rosl
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Avoid potentially expensive logging (search)";
     final String description = "This is a reporting only recipe. In many situations, logging is disabled or set to a log level that results in an unnecessary evaluation for this argument.";

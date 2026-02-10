@@ -37,7 +37,7 @@ public class AvoidUnusedPrivateFieldsFixerCA1823 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Avoid unused private fields";
     final String description = "Private fields were detected that do not appear to be accessed in the assembly.";

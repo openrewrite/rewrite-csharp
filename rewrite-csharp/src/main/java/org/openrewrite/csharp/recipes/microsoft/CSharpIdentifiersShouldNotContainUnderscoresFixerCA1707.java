@@ -37,7 +37,7 @@ public class CSharpIdentifiersShouldNotContainUnderscoresFixerCA1707 extends Ros
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Identifiers should not contain underscores";
     final String description = "By convention, identifier names do not contain the underscore (_) character. This rule checks namespaces, types, members, and parameters.";

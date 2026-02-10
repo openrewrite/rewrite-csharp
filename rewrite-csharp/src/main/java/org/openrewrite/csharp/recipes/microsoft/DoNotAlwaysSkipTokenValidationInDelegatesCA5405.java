@@ -37,7 +37,7 @@ public class DoNotAlwaysSkipTokenValidationInDelegatesCA5405 extends RoslynRecip
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not always skip token validation in delegates (search)";
     final String description = "This is a reporting only recipe. By setting critical TokenValidationParameter validation delegates to true, important authentication safeguards are disabled which can lead to tokens from any issuer or expired tokens being wrongly validated.";

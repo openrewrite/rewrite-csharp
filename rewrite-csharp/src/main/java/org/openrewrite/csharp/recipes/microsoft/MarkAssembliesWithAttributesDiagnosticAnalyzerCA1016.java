@@ -37,7 +37,7 @@ public class MarkAssembliesWithAttributesDiagnosticAnalyzerCA1016 extends Roslyn
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Mark assemblies with assembly version (search)";
     final String description = "This is a reporting only recipe. The .NET Framework uses the version number to uniquely identify an assembly, and to bind to types in strongly named assemblies. The version number is used together with version and publisher policy. By default, applications run only with the assembly version with which they were built.";

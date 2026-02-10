@@ -37,7 +37,7 @@ public class PreferHashDataOverComputeHashAnalyzerCA1850 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Prefer static 'HashData' method over 'ComputeHash' (search)";
     final String description = "This is a reporting only recipe. It is more efficient to use the static 'HashData' method over creating and managing a HashAlgorithm instance to call 'ComputeHash'.";

@@ -37,7 +37,7 @@ public class ValueReturnedByStreamReadShouldBeUsedAnalyzerMA0060 extends RoslynR
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "The value returned by Stream.Read/Stream.ReadAsync is not used (search)";
     final String description = "This is a reporting only recipe. ";

@@ -37,7 +37,7 @@ public class UseDefaultDllImportSearchPathsAttributeCA5392 extends RoslynRecipe 
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use DefaultDllImportSearchPaths attribute for P/Invokes (search)";
     final String description = "This is a reporting only recipe. By default, P/Invokes using DllImportAttribute probe a number of directories, including the current working directory for the library to load. This can be a security issue for certain applications, leading to DLL hijacking.";

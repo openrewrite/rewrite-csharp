@@ -37,7 +37,7 @@ public class CSharpUseSpanBasedStringConcatFixerCA1845 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use span-based 'string.Concat'";
     final String description = "It is more efficient to use 'AsSpan' and 'string.Concat', instead of 'Substring' and a concatenation operator.";

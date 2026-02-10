@@ -37,7 +37,7 @@ public class DoNotRaiseNotImplementedExceptionAnalyzerMA0025 extends RoslynRecip
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Implement the functionality instead of throwing NotImplementedException (search)";
     final String description = "This is a reporting only recipe. ";

@@ -37,7 +37,7 @@ public class AvoidUsingRedundantElseAnalyzerMA0071 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Avoid using redundant else (search)";
     final String description = "This is a reporting only recipe. The 'if' block contains a jump statement (break, continue, goto, return, throw, yield break). Using 'else' is redundant and needlessly maintains a higher nesting level.";

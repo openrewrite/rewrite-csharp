@@ -37,7 +37,7 @@ public class TypeNamesShouldNotMatchNamespacesAnalyzerCA1724 extends RoslynRecip
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Type names should not match namespaces (search)";
     final String description = "This is a reporting only recipe. Type names should not match the names of namespaces that are defined in the .NET Framework class library. Violating this rule can reduce the usability of the library.";

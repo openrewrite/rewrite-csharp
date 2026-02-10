@@ -37,7 +37,7 @@ public class ILoggerParameterTypeShouldMatchContainingTypeFixerMA0180 extends Ro
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "ILogger type parameter should match containing type";
     final String description = "";

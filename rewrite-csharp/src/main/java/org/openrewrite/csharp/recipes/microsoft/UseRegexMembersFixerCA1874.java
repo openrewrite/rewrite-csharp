@@ -37,7 +37,7 @@ public class UseRegexMembersFixerCA1874 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use 'Regex.IsMatch'";
     final String description = "'Regex.IsMatch' is simpler and faster than 'Regex.Match(...).Success'.";

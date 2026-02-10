@@ -37,7 +37,7 @@ public class PropertyNamesShouldNotMatchGetMethodsAnalyzerCA1721 extends RoslynR
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Property names should not match get methods (search)";
     final String description = "This is a reporting only recipe. The name of a public or protected member starts with \"\"Get\"\" and otherwise matches the name of a public or protected property. \"\"Get\"\" methods and properties should have names that clearly distinguish their function.";

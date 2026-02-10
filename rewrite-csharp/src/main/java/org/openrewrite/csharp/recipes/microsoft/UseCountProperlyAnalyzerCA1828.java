@@ -37,7 +37,7 @@ public class UseCountProperlyAnalyzerCA1828 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not use CountAsync() or LongCountAsync() when AnyAsync() can be used (search)";
     final String description = "This is a reporting only recipe. For non-empty collections, CountAsync() and LongCountAsync() enumerate the entire sequence, while AnyAsync() stops at the first item or the first item that satisfies a condition.";

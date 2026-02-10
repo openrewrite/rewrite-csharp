@@ -37,7 +37,7 @@ public class ProvideStreamMemoryBasedAsyncOverridesCA1844 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Provide memory-based overrides of async methods when subclassing 'Stream' (search)";
     final String description = "This is a reporting only recipe. To improve performance, override the memory-based async methods when subclassing 'Stream'. Then implement the array-based methods in terms of the memory-based methods.";

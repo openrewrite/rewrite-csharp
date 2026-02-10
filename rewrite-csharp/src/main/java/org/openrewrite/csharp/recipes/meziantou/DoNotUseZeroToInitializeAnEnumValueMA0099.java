@@ -37,7 +37,7 @@ public class DoNotUseZeroToInitializeAnEnumValueMA0099 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use Explicit enum value instead of 0 (search)";
     final String description = "This is a reporting only recipe. ";

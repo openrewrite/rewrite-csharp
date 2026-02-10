@@ -37,7 +37,7 @@ public class DoNotCompareSpanToNullAnalyzerCA2265 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not compare Span<T> to 'null' or 'default' (search)";
     final String description = "This is a reporting only recipe. Comparing a span to 'null' or 'default' might not do what you intended. 'default' and the 'null' literal are implicitly converted to 'Span<T>.Empty'. Remove the redundant comparison or make the code more explicit by using 'IsEmpty'.";

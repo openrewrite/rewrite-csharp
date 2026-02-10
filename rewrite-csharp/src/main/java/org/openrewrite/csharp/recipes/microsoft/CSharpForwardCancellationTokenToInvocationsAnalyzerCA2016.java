@@ -37,7 +37,7 @@ public class CSharpForwardCancellationTokenToInvocationsAnalyzerCA2016 extends R
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Forward the 'CancellationToken' parameter to methods (search)";
     final String description = "This is a reporting only recipe. Forward the 'CancellationToken' parameter to methods to ensure the operation cancellation notifications gets properly propagated, or pass in 'CancellationToken.None' explicitly to indicate intentionally not propagating the token.";

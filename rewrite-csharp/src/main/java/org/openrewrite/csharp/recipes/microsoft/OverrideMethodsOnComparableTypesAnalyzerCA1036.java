@@ -37,7 +37,7 @@ public class OverrideMethodsOnComparableTypesAnalyzerCA1036 extends RoslynRecipe
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Override methods on comparable types (search)";
     final String description = "This is a reporting only recipe. A public or protected type implements the System.IComparable interface. It does not override Object.Equals nor does it overload the language-specific operator for equality, inequality, less than, less than or equal, greater than or greater than or equal.";

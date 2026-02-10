@@ -37,7 +37,7 @@ public class DoNotPassDisposablesIntoUnawaitedTasksAnalyzerCA2025 extends Roslyn
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not pass 'IDisposable' instances into unawaited tasks (search)";
     final String description = "This is a reporting only recipe. Unawaited tasks that use 'IDisposable' instances may use those instances long after they have been disposed. Ensure tasks using those instances are completed before the instances are disposed.";

@@ -37,7 +37,7 @@ public class DoNotAddArchiveItemPathToTheTargetFileSystemPathCA5389 extends Rosl
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do Not Add Archive Item's Path To The Target File System Path (search)";
     final String description = "This is a reporting only recipe. When extracting files from an archive and using the archive item's path, check if the path is safe. Archive path can be relative and can lead to file system access outside of the expected file system target path, leading to malicious config changes and remote code execution via lay-and-wait technique.";

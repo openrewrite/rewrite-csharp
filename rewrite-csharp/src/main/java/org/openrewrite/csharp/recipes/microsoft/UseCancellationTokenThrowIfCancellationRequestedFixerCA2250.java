@@ -37,7 +37,7 @@ public class UseCancellationTokenThrowIfCancellationRequestedFixerCA2250 extends
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use 'ThrowIfCancellationRequested'";
     final String description = "'ThrowIfCancellationRequested' automatically checks whether the token has been canceled, and throws an 'OperationCanceledException' if it has.";

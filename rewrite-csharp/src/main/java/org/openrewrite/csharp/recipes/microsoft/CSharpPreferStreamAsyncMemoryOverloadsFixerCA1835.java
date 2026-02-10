@@ -37,7 +37,7 @@ public class CSharpPreferStreamAsyncMemoryOverloadsFixerCA1835 extends RoslynRec
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Prefer the 'Memory'-based overloads for 'ReadAsync' and 'WriteAsync'";
     final String description = "'Stream' has a 'ReadAsync' overload that takes a 'Memory<Byte>' as the first argument, and a 'WriteAsync' overload that takes a 'ReadOnlyMemory<Byte>' as the first argument. Prefer calling the memory based overloads, which are more efficient.";

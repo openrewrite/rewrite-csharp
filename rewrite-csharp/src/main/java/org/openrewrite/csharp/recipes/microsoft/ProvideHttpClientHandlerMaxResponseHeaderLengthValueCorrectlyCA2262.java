@@ -37,7 +37,7 @@ public class ProvideHttpClientHandlerMaxResponseHeaderLengthValueCorrectlyCA2262
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Set 'MaxResponseHeadersLength' properly (search)";
     final String description = "This is a reporting only recipe. The property 'MaxResponseHeadersLength' is measured in kilobytes, not in bytes. The provided value is multiplied by 1024, which might be greater than your intended maximum length.";

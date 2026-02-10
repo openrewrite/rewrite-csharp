@@ -37,7 +37,7 @@ public class UseStringCreateInsteadOfFormattableStringFixerMA0111 extends Roslyn
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use string.Create instead of FormattableString";
     final String description = "";

@@ -37,7 +37,7 @@ public class IdentifiersShouldNotContainUnderscoresAnalyzerCA1707 extends Roslyn
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Identifiers should not contain underscores (search)";
     final String description = "This is a reporting only recipe. By convention, identifier names do not contain the underscore (_) character. This rule checks namespaces, types, members, and parameters.";

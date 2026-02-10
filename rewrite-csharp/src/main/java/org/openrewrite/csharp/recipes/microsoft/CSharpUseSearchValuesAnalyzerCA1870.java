@@ -37,7 +37,7 @@ public class CSharpUseSearchValuesAnalyzerCA1870 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use a cached 'SearchValues' instance (search)";
     final String description = "This is a reporting only recipe. Using a cached 'SearchValues' instance is more efficient than passing values to 'IndexOfAny'/'ContainsAny' directly.";

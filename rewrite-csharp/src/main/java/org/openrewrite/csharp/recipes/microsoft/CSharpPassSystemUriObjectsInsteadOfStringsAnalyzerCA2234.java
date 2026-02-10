@@ -37,7 +37,7 @@ public class CSharpPassSystemUriObjectsInsteadOfStringsAnalyzerCA2234 extends Ro
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Pass system uri objects instead of strings (search)";
     final String description = "This is a reporting only recipe. A call is made to a method that has a string parameter whose name contains \"uri\", \"URI\", \"urn\", \"URN\", \"url\", or \"URL\". The declaring type of the method contains a corresponding method overload that has a System.Uri parameter.";

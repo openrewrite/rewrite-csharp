@@ -37,7 +37,7 @@ public class MethodsReturningAnAwaitableTypeMustHaveTheAsyncSuffixAnalyzerMA0137
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use 'Async' suffix when a method returns an awaitable type (search)";
     final String description = "This is a reporting only recipe. ";

@@ -37,7 +37,7 @@ public class ReturnTaskFromResultInsteadOfReturningNullFixerMA0022 extends Rosly
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Return Task.FromResult instead of returning null";
     final String description = "";

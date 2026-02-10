@@ -37,7 +37,7 @@ public class LoggerMessageDefineAnalyzerCA2023 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Invalid braces in message template (search)";
     final String description = "This is a reporting only recipe. The braces present in the message template are invalid. Ensure any braces in the message template are valid opening/closing braces, or are escaped.";

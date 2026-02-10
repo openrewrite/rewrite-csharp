@@ -37,7 +37,7 @@ public class AssigningSymbolAndItsMemberInSameStatementCA2246 extends RoslynReci
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Assigning symbol and its member in the same statement (search)";
     final String description = "This is a reporting only recipe. Assigning to a symbol and its member (field/property) in the same statement is not recommended. It is not clear if the member access was intended to use symbol's old value prior to the assignment or new value from the assignment in this statement. For clarity, consider splitting the assignments into separate statements.";

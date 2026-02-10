@@ -37,7 +37,7 @@ public class DoNotRaiseReservedExceptionTypesAnalyzerCA2201 extends RoslynRecipe
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not raise reserved exception types (search)";
     final String description = "This is a reporting only recipe. An exception of type that is not sufficiently specific or reserved by the runtime should never be raised by user code. This makes the original error difficult to detect and debug. If this exception instance might be thrown, use a different exception type.";

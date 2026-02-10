@@ -37,7 +37,7 @@ public class UseCancellationTokenThrowIfCancellationRequestedCA2250 extends Rosl
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use 'ThrowIfCancellationRequested' (search)";
     final String description = "This is a reporting only recipe. 'ThrowIfCancellationRequested' automatically checks whether the token has been canceled, and throws an 'OperationCanceledException' if it has.";

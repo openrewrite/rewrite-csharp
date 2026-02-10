@@ -37,7 +37,7 @@ public class UsePropertiesWhereAppropriateAnalyzerCA1024 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use properties where appropriate (search)";
     final String description = "This is a reporting only recipe. A public or protected method has a name that starts with \"\"Get\"\", takes no parameters, and returns a value that is not an array. The method might be a good candidate to become a property.";

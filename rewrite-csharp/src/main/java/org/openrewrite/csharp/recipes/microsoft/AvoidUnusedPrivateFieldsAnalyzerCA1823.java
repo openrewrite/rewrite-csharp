@@ -37,7 +37,7 @@ public class AvoidUnusedPrivateFieldsAnalyzerCA1823 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Avoid unused private fields (search)";
     final String description = "This is a reporting only recipe. Private fields were detected that do not appear to be accessed in the assembly.";

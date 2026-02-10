@@ -37,7 +37,7 @@ public class CSharpUseSpanClearInsteadOfFillFixerCA1855 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Prefer 'Clear' over 'Fill'";
     final String description = "It is more efficient to use 'Clear', instead of 'Fill' with default value.";

@@ -37,7 +37,7 @@ public class DoNotUseStringGetHashCodeFixerMA0021 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use StringComparer.GetHashCode instead of string.GetHashCode";
     final String description = "";

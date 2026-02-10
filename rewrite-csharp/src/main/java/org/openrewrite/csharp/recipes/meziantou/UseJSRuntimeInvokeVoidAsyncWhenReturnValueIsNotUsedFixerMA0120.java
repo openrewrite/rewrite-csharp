@@ -37,7 +37,7 @@ public class UseJSRuntimeInvokeVoidAsyncWhenReturnValueIsNotUsedFixerMA0120 exte
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use InvokeVoidAsync when the returned value is not used";
     final String description = "";

@@ -37,7 +37,7 @@ public class InterfaceMethodsShouldBeCallableByChildTypesFixerCA1033 extends Ros
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Interface methods should be callable by child types";
     final String description = "An unsealed externally visible type provides an explicit method implementation of a public interface and does not provide an alternative externally visible method that has the same name.";

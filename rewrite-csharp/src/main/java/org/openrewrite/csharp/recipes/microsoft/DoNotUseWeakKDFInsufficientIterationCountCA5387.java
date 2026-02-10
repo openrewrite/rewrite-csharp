@@ -37,7 +37,7 @@ public class DoNotUseWeakKDFInsufficientIterationCountCA5387 extends RoslynRecip
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do Not Use Weak Key Derivation Function With Insufficient Iteration Count (search)";
     final String description = "This is a reporting only recipe. When deriving cryptographic keys from user-provided inputs such as password, use sufficient iteration count (at least 100k).";

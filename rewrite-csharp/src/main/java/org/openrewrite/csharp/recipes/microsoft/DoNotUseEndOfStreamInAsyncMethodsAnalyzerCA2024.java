@@ -37,7 +37,7 @@ public class DoNotUseEndOfStreamInAsyncMethodsAnalyzerCA2024 extends RoslynRecip
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not use 'StreamReader.EndOfStream' in async methods (search)";
     final String description = "This is a reporting only recipe. The property 'StreamReader.EndOfStream' can cause unintended synchronous blocking when no data is buffered. Instead, use 'StreamReader.ReadLineAsync' directly, which returns 'null' when reaching the end of the stream.";

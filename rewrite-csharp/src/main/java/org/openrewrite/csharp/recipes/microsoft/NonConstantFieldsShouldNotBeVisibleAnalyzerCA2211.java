@@ -37,7 +37,7 @@ public class NonConstantFieldsShouldNotBeVisibleAnalyzerCA2211 extends RoslynRec
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Non-constant fields should not be visible (search)";
     final String description = "This is a reporting only recipe. Static fields that are neither constants nor read-only are not thread-safe. Access to such a field must be carefully controlled and requires advanced programming techniques to synchronize access to the class object.";

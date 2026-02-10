@@ -37,7 +37,7 @@ public class UseXmlReaderForDataSetReadXmlCA5366 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use XmlReader for 'DataSet.ReadXml()' (search)";
     final String description = "This is a reporting only recipe. Processing XML from untrusted data may load dangerous external references, which should be restricted by using an XmlReader with a secure resolver or with DTD processing disabled.";

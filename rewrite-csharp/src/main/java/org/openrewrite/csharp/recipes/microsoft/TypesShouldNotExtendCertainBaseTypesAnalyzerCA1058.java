@@ -37,7 +37,7 @@ public class TypesShouldNotExtendCertainBaseTypesAnalyzerCA1058 extends RoslynRe
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Types should not extend certain base types (search)";
     final String description = "This is a reporting only recipe. An externally visible type extends certain base types. Use one of the alternatives.";

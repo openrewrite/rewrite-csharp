@@ -37,7 +37,7 @@ public class ReviewSqlQueriesForSecurityVulnerabilitiesCA2100 extends RoslynReci
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Review SQL queries for security vulnerabilities (search)";
     final String description = "This is a reporting only recipe. SQL queries that directly use user input can be vulnerable to SQL injection attacks. Review this SQL query for potential vulnerabilities, and consider using a parameterized SQL query.";

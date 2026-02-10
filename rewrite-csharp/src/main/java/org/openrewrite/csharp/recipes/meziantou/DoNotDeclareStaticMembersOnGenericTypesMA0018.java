@@ -37,7 +37,7 @@ public class DoNotDeclareStaticMembersOnGenericTypesMA0018 extends RoslynRecipe 
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Do not declare static members on generic types (deprecated; use CA1000 instead) (search)";
     final String description = "This is a reporting only recipe. ";

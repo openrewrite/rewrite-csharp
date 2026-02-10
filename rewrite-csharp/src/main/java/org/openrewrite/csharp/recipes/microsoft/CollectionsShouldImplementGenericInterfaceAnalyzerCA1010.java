@@ -37,7 +37,7 @@ public class CollectionsShouldImplementGenericInterfaceAnalyzerCA1010 extends Ro
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Generic interface should also be implemented (search)";
     final String description = "This is a reporting only recipe. To broaden the usability of a type, implement one of the generic interfaces. This is especially true for collections as they can then be used to populate generic collection types.";

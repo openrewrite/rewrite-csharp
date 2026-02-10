@@ -37,7 +37,7 @@ public class ProcessStartAnalyzerMA0163 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "UseShellExecute must be false when redirecting standard input or output (search)";
     final String description = "This is a reporting only recipe. ";

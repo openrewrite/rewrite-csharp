@@ -37,7 +37,7 @@ public class AbstractTypesShouldNotHaveConstructorsAnalyzerCA1012 extends Roslyn
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Abstract types should not have public constructors (search)";
     final String description = "This is a reporting only recipe. Constructors on abstract types can be called only by derived types. Because public constructors create instances of a type, and you cannot create instances of an abstract type, an abstract type that has a public constructor is incorrectly designed.";

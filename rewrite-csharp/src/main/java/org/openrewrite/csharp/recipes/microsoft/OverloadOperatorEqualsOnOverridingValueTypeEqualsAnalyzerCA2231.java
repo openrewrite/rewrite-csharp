@@ -37,7 +37,7 @@ public class OverloadOperatorEqualsOnOverridingValueTypeEqualsAnalyzerCA2231 ext
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Overload operator equals on overriding value type Equals (search)";
     final String description = "This is a reporting only recipe. In most programming languages there is no default implementation of the equality operator (==) for value types. If your programming language supports operator overloads, you should consider implementing the equality operator. Its behavior should be identical to that of Equals.";

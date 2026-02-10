@@ -37,7 +37,7 @@ public class DisposableTypesShouldDeclareFinalizerAnalyzerCA2216 extends RoslynR
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Disposable types should declare finalizer (search)";
     final String description = "This is a reporting only recipe. A type that implements System.IDisposable and has fields that suggest the use of unmanaged resources does not implement a finalizer, as described by Object.Finalize.";

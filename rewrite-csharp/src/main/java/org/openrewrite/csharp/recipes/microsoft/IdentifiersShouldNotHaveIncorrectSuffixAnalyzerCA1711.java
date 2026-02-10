@@ -37,7 +37,7 @@ public class IdentifiersShouldNotHaveIncorrectSuffixAnalyzerCA1711 extends Rosly
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Identifiers should not have incorrect suffix (search)";
     final String description = "This is a reporting only recipe. By convention, only the names of types that extend certain base types or that implement certain interfaces, or types that are derived from these types, should end with specific reserved suffixes. Other type names should not use these reserved suffixes.";

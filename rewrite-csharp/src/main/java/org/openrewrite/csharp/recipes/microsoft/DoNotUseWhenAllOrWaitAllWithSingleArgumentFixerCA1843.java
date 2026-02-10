@@ -37,7 +37,7 @@ public class DoNotUseWhenAllOrWaitAllWithSingleArgumentFixerCA1843 extends Rosly
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not use 'WaitAll' with a single task";
     final String description = "Using 'WaitAll' with a single task may result in performance loss, await or return the task instead.";

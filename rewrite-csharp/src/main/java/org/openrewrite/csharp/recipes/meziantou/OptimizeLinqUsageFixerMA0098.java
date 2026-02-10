@@ -37,7 +37,7 @@ public class OptimizeLinqUsageFixerMA0098 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use indexer instead of LINQ methods";
     final String description = "";

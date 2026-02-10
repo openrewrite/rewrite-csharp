@@ -37,7 +37,7 @@ public class CSharpSpecifyCultureForToLowerAndToUpperFixerCA1311 extends RoslynR
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Specify a culture or use an invariant version";
     final String description = "Specify culture to help avoid accidental implicit dependency on current culture. Using an invariant version yields consistent results regardless of the culture of an application.";

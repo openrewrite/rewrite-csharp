@@ -37,7 +37,7 @@ public class UseSharedAccessProtocolHttpsOnlyCA5376 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use SharedAccessProtocol HttpsOnly (search)";
     final String description = "This is a reporting only recipe. HTTPS encrypts network traffic. Use HttpsOnly, rather than HttpOrHttps, to ensure network traffic is always encrypted to help prevent disclosure of sensitive data.";

@@ -37,7 +37,7 @@ public class DoNotUseWhenAllOrWaitAllWithSingleArgumentCA1842 extends RoslynReci
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not use 'WhenAll' with a single task (search)";
     final String description = "This is a reporting only recipe. Using 'WhenAll' with a single task may result in performance loss, await or return the task instead.";

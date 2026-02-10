@@ -37,7 +37,7 @@ public class RemoveEmptyFinalizersFixerCA1821 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Remove empty Finalizers";
     final String description = "Finalizers should be avoided where possible, to avoid the additional performance overhead involved in tracking object lifetime.";

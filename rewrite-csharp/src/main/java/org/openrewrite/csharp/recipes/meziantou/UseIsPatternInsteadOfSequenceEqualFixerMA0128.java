@@ -37,7 +37,7 @@ public class UseIsPatternInsteadOfSequenceEqualFixerMA0128 extends RoslynRecipe 
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use 'is' operator instead of SequenceEqual";
     final String description = "";

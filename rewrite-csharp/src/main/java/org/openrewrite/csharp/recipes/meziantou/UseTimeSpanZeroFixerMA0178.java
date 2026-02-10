@@ -37,7 +37,7 @@ public class UseTimeSpanZeroFixerMA0178 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use TimeSpan.Zero instead of TimeSpan.FromXXX(0)";
     final String description = "";

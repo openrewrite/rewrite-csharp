@@ -37,7 +37,7 @@ public class PreferStringContainsOverIndexOfFixerCA2249 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Consider using 'string.Contains' instead of 'string.IndexOf'";
     final String description = "Calls to 'string.IndexOf' where the result is used to check for the presence/absence of a substring can be replaced by 'string.Contains'.";

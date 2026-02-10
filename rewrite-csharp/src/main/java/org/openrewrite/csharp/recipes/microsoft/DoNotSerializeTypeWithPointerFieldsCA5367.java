@@ -37,7 +37,7 @@ public class DoNotSerializeTypeWithPointerFieldsCA5367 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do Not Serialize Types With Pointer Fields (search)";
     final String description = "This is a reporting only recipe. Pointers are not \"type safe\" in the sense that you cannot guarantee the correctness of the memory they point at. So, serializing types with pointer fields is dangerous, as it may allow an attacker to control the pointer.";

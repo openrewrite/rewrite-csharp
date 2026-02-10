@@ -37,7 +37,7 @@ public class DynamicInterfaceCastableImplementationAnalyzerCA2258 extends Roslyn
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Providing a 'DynamicInterfaceCastableImplementation' interface in Visual Basic is unsupported (search)";
     final String description = "This is a reporting only recipe. Providing a functional 'DynamicInterfaceCastableImplementationAttribute'-attributed interface requires the Default Interface Members feature, which is unsupported in Visual Basic.";

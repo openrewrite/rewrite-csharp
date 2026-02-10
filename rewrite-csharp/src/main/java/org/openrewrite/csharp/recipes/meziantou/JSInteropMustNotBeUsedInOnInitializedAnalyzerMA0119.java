@@ -37,7 +37,7 @@ public class JSInteropMustNotBeUsedInOnInitializedAnalyzerMA0119 extends RoslynR
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "JSRuntime must not be used in OnInitialized or OnInitializedAsync (search)";
     final String description = "This is a reporting only recipe. ";

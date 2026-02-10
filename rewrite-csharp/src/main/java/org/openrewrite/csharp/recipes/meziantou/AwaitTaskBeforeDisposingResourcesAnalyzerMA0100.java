@@ -37,7 +37,7 @@ public class AwaitTaskBeforeDisposingResourcesAnalyzerMA0100 extends RoslynRecip
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Await task before disposing of resources (search)";
     final String description = "This is a reporting only recipe. Await the task before the end of the enclosing using block.";

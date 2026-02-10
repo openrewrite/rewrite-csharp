@@ -37,7 +37,7 @@ public class ArgumentExceptionShouldSpecifyArgumentNameFixerMA0043 extends Rosly
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use nameof operator in ArgumentException";
     final String description = "";

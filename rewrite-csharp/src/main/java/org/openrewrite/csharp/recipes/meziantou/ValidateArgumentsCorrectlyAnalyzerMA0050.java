@@ -37,7 +37,7 @@ public class ValidateArgumentsCorrectlyAnalyzerMA0050 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Validate arguments correctly in iterator methods (search)";
     final String description = "This is a reporting only recipe. ";

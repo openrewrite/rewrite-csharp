@@ -37,7 +37,7 @@ public class DoNotPassNonNullableValueToArgumentNullExceptionThrowIfNullCA1871 e
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not pass a nullable struct to 'ArgumentNullException.ThrowIfNull' (search)";
     final String description = "This is a reporting only recipe. 'ArgumentNullException.ThrowIfNull' accepts an 'object', so passing a nullable struct may cause the value to be boxed.";

@@ -37,7 +37,7 @@ public class CSharpUseStartsWithInsteadOfIndexOfComparisonWithZeroCodeFixCA1858 
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use 'StartsWith' instead of 'IndexOf'";
     final String description = "It is both clearer and faster to use 'StartsWith' instead of comparing the result of 'IndexOf' to zero.";

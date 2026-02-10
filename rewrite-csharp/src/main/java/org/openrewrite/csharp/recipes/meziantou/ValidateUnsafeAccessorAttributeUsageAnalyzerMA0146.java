@@ -37,7 +37,7 @@ public class ValidateUnsafeAccessorAttributeUsageAnalyzerMA0146 extends RoslynRe
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Name must be set explicitly on local functions (search)";
     final String description = "This is a reporting only recipe. ";

@@ -37,7 +37,7 @@ public class ExceptionNameShouldEndWithExceptionAnalyzerMA0058 extends RoslynRec
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Class name should end with 'Exception' (search)";
     final String description = "This is a reporting only recipe. ";

@@ -37,7 +37,7 @@ public class CSharpConstantExpectedAnalyzerCA1857 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "A constant is expected for the parameter (search)";
     final String description = "This is a reporting only recipe. The parameter expects a constant for optimal performance.";

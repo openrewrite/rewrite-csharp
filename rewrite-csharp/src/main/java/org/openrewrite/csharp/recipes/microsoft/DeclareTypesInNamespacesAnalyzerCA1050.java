@@ -37,7 +37,7 @@ public class DeclareTypesInNamespacesAnalyzerCA1050 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Declare types in namespaces (search)";
     final String description = "This is a reporting only recipe. Types are declared in namespaces to prevent name collisions and as a way to organize related types in an object hierarchy.";

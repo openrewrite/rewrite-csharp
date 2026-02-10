@@ -37,7 +37,7 @@ public class UseAttributeIsDefinedAnalyzerMA0179 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use Attribute.IsDefined instead of GetCustomAttribute(s) (search)";
     final String description = "This is a reporting only recipe. Detects inefficient attribute existence checks that can be replaced with Attribute.IsDefined for better performance.";

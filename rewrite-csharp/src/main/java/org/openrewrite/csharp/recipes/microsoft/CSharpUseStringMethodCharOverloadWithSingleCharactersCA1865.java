@@ -37,7 +37,7 @@ public class CSharpUseStringMethodCharOverloadWithSingleCharactersCA1865 extends
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use char overload (search)";
     final String description = "This is a reporting only recipe. The char overload is a better performing overload than a string with a single char.";

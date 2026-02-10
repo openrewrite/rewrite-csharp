@@ -37,7 +37,7 @@ public class AbstractTypesShouldNotHaveConstructorsFixerMA0017 extends RoslynRec
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Abstract types should not have public or internal constructors";
     final String description = "";

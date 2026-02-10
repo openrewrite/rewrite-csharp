@@ -37,7 +37,7 @@ public class DoNotNaNInComparisonsAnalyzerMA0082 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "NaN should not be used in comparisons (search)";
     final String description = "This is a reporting only recipe. ";

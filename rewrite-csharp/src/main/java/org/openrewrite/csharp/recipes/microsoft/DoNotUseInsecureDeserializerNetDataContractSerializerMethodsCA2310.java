@@ -37,7 +37,7 @@ public class DoNotUseInsecureDeserializerNetDataContractSerializerMethodsCA2310 
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not use insecure deserializer NetDataContractSerializer (search)";
     final String description = "This is a reporting only recipe. The method '{0}' is insecure when deserializing untrusted data.  If you need to instead detect NetDataContractSerializer deserialization without a SerializationBinder set, then disable rule CA2310, and enable rules CA2311 and CA2312.";

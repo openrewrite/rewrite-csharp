@@ -37,7 +37,7 @@ public class DefineAccessorsForAttributeArgumentsFixerCA1019 extends RoslynRecip
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Define accessors for attribute arguments";
     final String description = "";

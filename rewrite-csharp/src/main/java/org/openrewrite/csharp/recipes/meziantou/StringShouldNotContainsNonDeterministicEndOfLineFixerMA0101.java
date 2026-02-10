@@ -37,7 +37,7 @@ public class StringShouldNotContainsNonDeterministicEndOfLineFixerMA0101 extends
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "String contains an implicit end of line character";
     final String description = "";

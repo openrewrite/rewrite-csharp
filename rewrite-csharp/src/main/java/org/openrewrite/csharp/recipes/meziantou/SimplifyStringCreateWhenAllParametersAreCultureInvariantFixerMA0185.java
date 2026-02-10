@@ -37,7 +37,7 @@ public class SimplifyStringCreateWhenAllParametersAreCultureInvariantFixerMA0185
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Simplify string.Create when all parameters are culture invariant";
     final String description = "";

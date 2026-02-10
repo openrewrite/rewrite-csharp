@@ -37,7 +37,7 @@ public class PlatformCompatibilityAnalyzerCA1422 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Validate platform compatibility (search)";
     final String description = "This is a reporting only recipe. Using platform dependent API on a component makes the code no longer work across all platforms.";

@@ -37,7 +37,7 @@ public class UseAnOverloadThatHasCancellationTokenAnalyzerMA0080 extends RoslynR
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use a cancellation token using .WithCancellation() (search)";
     final String description = "This is a reporting only recipe. ";

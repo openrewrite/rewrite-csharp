@@ -37,7 +37,7 @@ public class NotPatternShouldBeParenthesizedAnalyzerMA0164 extends RoslynRecipe 
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use parentheses to make not pattern clearer (search)";
     final String description = "This is a reporting only recipe. ";

@@ -37,7 +37,7 @@ public class OperatorsShouldHaveSymmetricalOverloadsFixerCA2226 extends RoslynRe
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Operators should have symmetrical overloads";
     final String description = "A type implements the equality or inequality operator and does not implement the opposite operator.";

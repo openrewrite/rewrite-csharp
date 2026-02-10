@@ -37,7 +37,7 @@ public class DoNotPassNonNullableValueToArgumentNullExceptionThrowIfNullCA2264 e
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not pass a non-nullable value to 'ArgumentNullException.ThrowIfNull' (search)";
     final String description = "This is a reporting only recipe. 'ArgumentNullException.ThrowIfNull' throws when the passed argument is 'null'. Certain constructs like non-nullable structs, 'nameof()' and 'new' expressions are known to never be null, so 'ArgumentNullException.ThrowIfNull' will never throw.";

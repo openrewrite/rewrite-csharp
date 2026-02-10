@@ -37,7 +37,7 @@ public class DoNotRaiseExceptionsInUnexpectedLocationsAnalyzerCA1065 extends Ros
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Do not raise exceptions in unexpected locations (search)";
     final String description = "This is a reporting only recipe. A method that is not expected to throw exceptions throws an exception.";

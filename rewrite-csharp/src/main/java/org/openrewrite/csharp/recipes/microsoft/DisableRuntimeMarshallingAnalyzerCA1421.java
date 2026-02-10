@@ -37,7 +37,7 @@ public class DisableRuntimeMarshallingAnalyzerCA1421 extends RoslynRecipe {
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "This method uses runtime marshalling even when the 'DisableRuntimeMarshallingAttribute' is applied (search)";
     final String description = "This is a reporting only recipe. This method uses runtime marshalling even when runtime marshalling is disabled, which can cause unexpected behavior differences at runtime due to different expectations of a type's native layout.";

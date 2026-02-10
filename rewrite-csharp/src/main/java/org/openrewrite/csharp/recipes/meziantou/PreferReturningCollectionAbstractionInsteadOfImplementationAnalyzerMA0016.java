@@ -37,7 +37,7 @@ public class PreferReturningCollectionAbstractionInsteadOfImplementationAnalyzer
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Prefer using collection abstraction instead of implementation (search)";
     final String description = "This is a reporting only recipe. ";

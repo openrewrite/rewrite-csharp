@@ -67,6 +67,9 @@ jobs:
             dotnet --version
             dotnet --info
 
+      - name: Ensure artifacts/test directory exists
+        run: mkdir -p artifacts/test
+
       - name: Build & Test
         id: build
         run: |

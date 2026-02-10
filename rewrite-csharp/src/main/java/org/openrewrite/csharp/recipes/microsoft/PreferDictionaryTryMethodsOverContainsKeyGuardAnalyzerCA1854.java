@@ -37,7 +37,7 @@ public class PreferDictionaryTryMethodsOverContainsKeyGuardAnalyzerCA1854 extend
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Prefer the 'IDictionary.TryGetValue(TKey, out TValue)' method (search)";
     final String description = "This is a reporting only recipe. Prefer a 'TryGetValue' call over a Dictionary indexer access guarded by a 'ContainsKey' check. 'ContainsKey' and the indexer both would lookup the key under the hood, so using 'TryGetValue' removes the extra lookup.";

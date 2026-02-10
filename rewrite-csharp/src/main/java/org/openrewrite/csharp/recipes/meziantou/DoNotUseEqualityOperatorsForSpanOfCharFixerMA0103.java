@@ -37,7 +37,7 @@ public class DoNotUseEqualityOperatorsForSpanOfCharFixerMA0103 extends RoslynRec
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Use SequenceEqual instead of equality operator";
     final String description = "";

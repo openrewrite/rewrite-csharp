@@ -37,7 +37,7 @@ public class CSharpImplementGenericMathInterfacesCorrectlyCA2260 extends RoslynR
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use correct type parameter (search)";
     final String description = "This is a reporting only recipe. Generic math interfaces require the derived type itself to be used for the self recurring type parameter.";

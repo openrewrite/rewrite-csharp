@@ -37,7 +37,7 @@ public class MakeMethodStaticFixerMA0041 extends RoslynRecipe {
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Make property static (deprecated, use CA1822 instead)";
     final String description = "";

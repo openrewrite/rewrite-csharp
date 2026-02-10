@@ -37,7 +37,7 @@ public class CSharpUseAsSpanInsteadOfRangeIndexerFixerCA1831 extends RoslynRecip
     final boolean runCodeFixup = true;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Use AsSpan or AsMemory instead of Range-based indexers when appropriate";
     final String description = "The Range-based indexer on string values produces a copy of requested portion of the string. This copy is usually unnecessary when it is implicitly used as a ReadOnlySpan or ReadOnlyMemory value. Use the AsSpan method to avoid the unnecessary copy.";

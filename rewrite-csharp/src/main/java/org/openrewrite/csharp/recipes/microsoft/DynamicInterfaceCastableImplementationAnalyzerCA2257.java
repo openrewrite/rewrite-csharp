@@ -37,7 +37,7 @@ public class DynamicInterfaceCastableImplementationAnalyzerCA2257 extends Roslyn
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Microsoft.CodeAnalysis.NetAnalyzers";
-    final String nugetPackageVersion = "10.0.102";
+    final String nugetPackageVersion = "10.0.103";
 
     final String displayName = "Members defined on an interface with the 'DynamicInterfaceCastableImplementationAttribute' should be 'static' (search)";
     final String description = "This is a reporting only recipe. Since a type that implements 'IDynamicInterfaceCastable' may not implement a dynamic interface in metadata, calls to an instance interface member that is not an explicit implementation defined on this type are likely to fail at runtime. Mark new interface members 'static' to avoid runtime errors.";

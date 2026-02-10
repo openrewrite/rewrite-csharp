@@ -37,7 +37,7 @@ public class DoNotUseBlockingCallInAsyncContextAnalyzerMA0045 extends RoslynReci
     final boolean runCodeFixup = false;
 
     final String nugetPackageName = "Meziantou.Analyzer";
-    final String nugetPackageVersion = "2.0.298";
+    final String nugetPackageVersion = "2.0.299";
 
     final String displayName = "Do not use blocking calls in a sync method (need to make calling method async) (search)";
     final String description = "This is a reporting only recipe. ";
