@@ -97,7 +97,7 @@ jobs:
 
       - name: Upload Test logs
         if: always()  # ensures logs are uploaded even if tests fail
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: Test Logs
           path: |
